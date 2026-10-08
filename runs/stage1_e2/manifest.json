@@ -1,0 +1,35 @@
+{
+  "analysis_code": {
+    "commit": "6fffdf7f57eadba409ee1700be60efbf6ddd541d",
+    "dirty": false
+  },
+  "created_utc": "2026-09-28T18:19:08Z",
+  "experiment": "merged-e2",
+  "files_sha256": {
+    "analysis/e2_metrics.json": "d1b25378c29ca04d22a64bd7e2d5b6f90f8b2ef383effd9f5f76718058a5cddd"
+  },
+  "run_id": "stage1_e2",
+  "sources": [
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "3ac98d1cf94b5f1e5d23b637564c340b603a988b2519d02055423996fc8459ce",
+      "run_id": "e2_dev_same_20260928T171953Z",
+      "worlds": [
+        "w0000",
+        "w0001",
+        "w0002",
+        "w0003",
+        "w0004",
+        "w0005",
+        "w0006",
+        "w0007",
+        "w0008",
+        "w0009"
+      ]
+    }
+  ]
+}

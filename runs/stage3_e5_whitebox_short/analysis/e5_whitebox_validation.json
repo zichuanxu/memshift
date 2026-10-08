@@ -1,0 +1,946 @@
+{
+ "pooled": {
+  "holdmem_D0B0": {
+   "B": {
+    "label": 0,
+    "rate": 0.8972332015810277,
+    "n": 253
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.950381679389313,
+    "n": 262
+   }
+  },
+  "holdmem_D1B0": {
+   "B": {
+    "label": 0,
+    "rate": 0.8893280632411067,
+    "n": 253
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9583333333333334,
+    "n": 264
+   }
+  },
+  "holdmem_D0B1_source": {
+   "B": {
+    "label": 1,
+    "rate": 0.16996047430830039,
+    "n": 253
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9764309764309764,
+    "n": 297
+   }
+  },
+  "holdmem_D1B1_source": {
+   "B": {
+    "label": 1,
+    "rate": 0.13438735177865613,
+    "n": 253
+   },
+   "D": {
+    "label": 1,
+    "rate": 0.9932885906040269,
+    "n": 298
+   }
+  }
+ },
+ "truth": {
+  "holdmem_D0B0": {
+   "D": 0,
+   "B": 0
+  },
+  "holdmem_D1B0": {
+   "D": 1,
+   "B": 0
+  },
+  "holdmem_D0B1_source": {
+   "D": 0,
+   "B": 1
+  },
+  "holdmem_D1B1_source": {
+   "D": 1,
+   "B": 1
+  }
+ },
+ "confusion_cells": {
+  "D0B0": "D0B0",
+  "D1B0": "D0B0",
+  "D0B1": "D0B1",
+  "D1B1": "D1B1"
+ },
+ "kappa": {
+  "B": 1.0,
+  "D": 0.5
+ },
+ "usable_for_natives": {
+  "B": true,
+  "D": false
+ },
+ "supplement_cell_x_world": {
+  "confusion": {
+   "B": {
+    "true0_inferred0": 30,
+    "true0_inferred1": 0,
+    "true1_inferred0": 0,
+    "true1_inferred1": 30
+   },
+   "D": {
+    "true0_inferred0": 30,
+    "true0_inferred1": 0,
+    "true1_inferred0": 6,
+    "true1_inferred1": 24
+   }
+  },
+  "kappa": {
+   "B": 1.0,
+   "D": 0.8
+  }
+ },
+ "units": [
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1000",
+   "B": {
+    "label": 0,
+    "rate": 0.6,
+    "n": 20
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 22
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1001",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 24
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.95,
+    "n": 20
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1002",
+   "B": {
+    "label": 0,
+    "rate": 0.8235294117647058,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 15
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1003",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 15
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9523809523809523,
+    "n": 21
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1004",
+   "B": {
+    "label": 0,
+    "rate": 0.8125,
+    "n": 16
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 23
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1005",
+   "B": {
+    "label": 0,
+    "rate": 0.9375,
+    "n": 16
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9090909090909091,
+    "n": 11
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1006",
+   "B": {
+    "label": 0,
+    "rate": 0.7692307692307693,
+    "n": 13
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 13
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1007",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 19
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1008",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.7,
+    "n": 20
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1009",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 9
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 9
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1010",
+   "B": {
+    "label": 0,
+    "rate": 0.9565217391304348,
+    "n": 23
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 14
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1011",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 16
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 14
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1012",
+   "B": {
+    "label": 0,
+    "rate": 0.9444444444444444,
+    "n": 18
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.8636363636363636,
+    "n": 22
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1013",
+   "B": {
+    "label": 0,
+    "rate": 0.8333333333333334,
+    "n": 18
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9565217391304348,
+    "n": 23
+   }
+  },
+  {
+   "cell": "holdmem_D0B0",
+   "world_id": "w1014",
+   "B": {
+    "label": 0,
+    "rate": 0.7857142857142857,
+    "n": 14
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 16
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1000",
+   "B": {
+    "label": 0,
+    "rate": 0.6,
+    "n": 20
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 22
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1001",
+   "B": {
+    "label": 0,
+    "rate": 0.9166666666666666,
+    "n": 24
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9473684210526315,
+    "n": 19
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1002",
+   "B": {
+    "label": 0,
+    "rate": 0.8235294117647058,
+    "n": 17
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 15
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1003",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 15
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.95,
+    "n": 20
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1004",
+   "B": {
+    "label": 0,
+    "rate": 0.875,
+    "n": 16
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 22
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1005",
+   "B": {
+    "label": 0,
+    "rate": 0.875,
+    "n": 16
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9090909090909091,
+    "n": 11
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1006",
+   "B": {
+    "label": 0,
+    "rate": 0.7692307692307693,
+    "n": 13
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 13
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1007",
+   "B": {
+    "label": 0,
+    "rate": 0.9411764705882353,
+    "n": 17
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 19
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1008",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.7,
+    "n": 20
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1009",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 9
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 9
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1010",
+   "B": {
+    "label": 0,
+    "rate": 0.9565217391304348,
+    "n": 23
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 14
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1011",
+   "B": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 16
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 15
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1012",
+   "B": {
+    "label": 0,
+    "rate": 0.8888888888888888,
+    "n": 18
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.9130434782608695,
+    "n": 23
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1013",
+   "B": {
+    "label": 0,
+    "rate": 0.9444444444444444,
+    "n": 18
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 25
+   }
+  },
+  {
+   "cell": "holdmem_D1B0",
+   "world_id": "w1014",
+   "B": {
+    "label": 0,
+    "rate": 0.7857142857142857,
+    "n": 14
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 17
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1000",
+   "B": {
+    "label": 1,
+    "rate": 0.3,
+    "n": 20
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 22
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1001",
+   "B": {
+    "label": 1,
+    "rate": 0.041666666666666664,
+    "n": 24
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 26
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1002",
+   "B": {
+    "label": 1,
+    "rate": 0.29411764705882354,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.8947368421052632,
+    "n": 19
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1003",
+   "B": {
+    "label": 1,
+    "rate": 0.2,
+    "n": 15
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 21
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1004",
+   "B": {
+    "label": 1,
+    "rate": 0.375,
+    "n": 16
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 30
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1005",
+   "B": {
+    "label": 1,
+    "rate": 0.125,
+    "n": 16
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 12
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1006",
+   "B": {
+    "label": 1,
+    "rate": 0.15384615384615385,
+    "n": 13
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 12
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1007",
+   "B": {
+    "label": 1,
+    "rate": 0.23529411764705882,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.8947368421052632,
+    "n": 19
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1008",
+   "B": {
+    "label": 1,
+    "rate": 0.0,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 20
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1009",
+   "B": {
+    "label": 1,
+    "rate": 0.3333333333333333,
+    "n": 9
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.75,
+    "n": 12
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1010",
+   "B": {
+    "label": 1,
+    "rate": 0.08695652173913043,
+    "n": 23
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 14
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1011",
+   "B": {
+    "label": 1,
+    "rate": 0.25,
+    "n": 16
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 15
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1012",
+   "B": {
+    "label": 1,
+    "rate": 0.1111111111111111,
+    "n": 18
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 31
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1013",
+   "B": {
+    "label": 1,
+    "rate": 0.1111111111111111,
+    "n": 18
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 27
+   }
+  },
+  {
+   "cell": "holdmem_D0B1_source",
+   "world_id": "w1014",
+   "B": {
+    "label": 1,
+    "rate": 0.07142857142857142,
+    "n": 14
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 17
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1000",
+   "B": {
+    "label": 1,
+    "rate": 0.2,
+    "n": 20
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 22
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1001",
+   "B": {
+    "label": 1,
+    "rate": 0.041666666666666664,
+    "n": 24
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 26
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1002",
+   "B": {
+    "label": 1,
+    "rate": 0.23529411764705882,
+    "n": 17
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 20
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1003",
+   "B": {
+    "label": 1,
+    "rate": 0.2,
+    "n": 15
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 21
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1004",
+   "B": {
+    "label": 1,
+    "rate": 0.3125,
+    "n": 16
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 30
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1005",
+   "B": {
+    "label": 1,
+    "rate": 0.0625,
+    "n": 16
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 12
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1006",
+   "B": {
+    "label": 1,
+    "rate": 0.15384615384615385,
+    "n": 13
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 12
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1007",
+   "B": {
+    "label": 1,
+    "rate": 0.23529411764705882,
+    "n": 17
+   },
+   "D": {
+    "label": 0,
+    "rate": 0.8947368421052632,
+    "n": 19
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1008",
+   "B": {
+    "label": 1,
+    "rate": 0.0,
+    "n": 17
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 20
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1009",
+   "B": {
+    "label": 1,
+    "rate": 0.1111111111111111,
+    "n": 9
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 12
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1010",
+   "B": {
+    "label": 1,
+    "rate": 0.08695652173913043,
+    "n": 23
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 14
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1011",
+   "B": {
+    "label": 1,
+    "rate": 0.1875,
+    "n": 16
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 15
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1012",
+   "B": {
+    "label": 1,
+    "rate": 0.1111111111111111,
+    "n": 18
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 31
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1013",
+   "B": {
+    "label": 1,
+    "rate": 0.05555555555555555,
+    "n": 18
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 27
+   }
+  },
+  {
+   "cell": "holdmem_D1B1_source",
+   "world_id": "w1014",
+   "B": {
+    "label": 1,
+    "rate": 0.07142857142857142,
+    "n": 14
+   },
+   "D": {
+    "label": 1,
+    "rate": 1.0,
+    "n": 17
+   }
+  }
+ ]
+}

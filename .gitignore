@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+.python-version.local
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.ipynb_checkpoints/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Experiment data and outputs (regenerate from seeds; keep manifests in runs/README.md)
+worlds/
+runs/*/*
+!runs/README.md
+!runs/*/manifest.json
+!runs/*/env.json
+!runs/*/analysis/
+!runs/*/hash_check_*.json
+data/
+*.jsonl.gz
+*.parquet
+*.safetensors
+*.bin
+hf_cache/
+.cache/
+
+# Paper build artifacts
+paper/build/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.out
+*.toc
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Run-time caches and container logs (kept on the compute host)
+cache/
+logs/
+.snapshots/
+paper/*.log
+paper/*.pdf
+runs/*/analysis/*_item_table.jsonl

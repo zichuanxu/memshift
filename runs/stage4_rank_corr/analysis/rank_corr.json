@@ -1,0 +1,543 @@
+{
+ "status": "exploratory: prereg v2 section 6, not a pre-registered test, no verdict",
+ "definitions": "Update / Stability as analysis.e5.carry_samples: measurement-half items, changed / unchanged, pooled per world; interval: world bootstrap",
+ "worlds": [
+  "w1000",
+  "w1001",
+  "w1002",
+  "w1003",
+  "w1004",
+  "w1005",
+  "w1006",
+  "w1007",
+  "w1008",
+  "w1009",
+  "w1010",
+  "w1011",
+  "w1012",
+  "w1013",
+  "w1014"
+ ],
+ "excluded_systems": [
+  "holdmem_json_arm"
+ ],
+ "systems": [
+  {
+   "system": "amem",
+   "kind": "native",
+   "update_src": {
+    "est": 0.6926605504587156,
+    "lo": 0.6373056994818653,
+    "hi": 0.7396694214876033,
+    "width": 0.10236372200573796,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 12.0,
+   "update_def": {
+    "est": 0.5063829787234042,
+    "lo": 0.42924528301886794,
+    "hi": 0.5689655172413793,
+    "width": 0.1397202342225114,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 13.0,
+   "stability_orphan": {
+    "est": 0.8086642599277978,
+    "lo": 0.7563636363636363,
+    "hi": 0.8598484848484849,
+    "width": 0.10348484848484851,
+    "n_worlds": 15,
+    "n_items": 277
+   },
+   "rank_stability_orphan": 8.5
+  },
+  {
+   "system": "cognee",
+   "kind": "native",
+   "update_src": {
+    "est": 0.6880733944954128,
+    "lo": 0.6443298969072165,
+    "hi": 0.7297297297297297,
+    "width": 0.08539983282251318,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 13.0,
+   "update_def": {
+    "est": 0.5617021276595745,
+    "lo": 0.4732142857142857,
+    "hi": 0.6336206896551724,
+    "width": 0.16040640394088668,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 11.0,
+   "stability_orphan": {
+    "est": 0.9566787003610109,
+    "lo": 0.9267399267399268,
+    "hi": 0.986159169550173,
+    "width": 0.05941924281024624,
+    "n_worlds": 15,
+    "n_items": 277
+   },
+   "rank_stability_orphan": 5.0
+  },
+  {
+   "system": "hipporag",
+   "kind": "native",
+   "update_src": {
+    "est": 0.7431192660550459,
+    "lo": 0.6883852691218131,
+    "hi": 0.7920997920997921,
+    "width": 0.103714522977979,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 7.0,
+   "update_def": {
+    "est": 0.5829787234042553,
+    "lo": 0.49261083743842365,
+    "hi": 0.6532258064516129,
+    "width": 0.16061496901318922,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 8.5,
+   "stability_orphan": {
+    "est": 0.8267148014440433,
+    "lo": 0.8007518796992481,
+    "hi": 0.851985559566787,
+    "width": 0.051233679867538906,
+    "n_worlds": 15,
+    "n_items": 277
+   },
+   "rank_stability_orphan": 7.0
+  },
+  {
+   "system": "lightrag",
+   "kind": "native",
+   "update_src": {
+    "est": 0.6490825688073395,
+    "lo": 0.5974358974358974,
+    "hi": 0.6918238993710691,
+    "width": 0.09438800193517172,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 14.0,
+   "update_def": {
+    "est": 0.5063829787234042,
+    "lo": 0.41363636363636364,
+    "hi": 0.5754385964912281,
+    "width": 0.16180223285486445,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 13.0,
+   "stability_orphan": {
+    "est": 0.8086642599277978,
+    "lo": 0.7636363636363637,
+    "hi": 0.8549019607843137,
+    "width": 0.09126559714795002,
+    "n_worlds": 15,
+    "n_items": 277
+   },
+   "rank_stability_orphan": 8.5
+  },
+  {
+   "system": "mem0",
+   "kind": "native",
+   "update_src": {
+    "est": 0.7064220183486238,
+    "lo": 0.6419753086419753,
+    "hi": 0.7616033755274262,
+    "width": 0.11962806688545091,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 10.0,
+   "update_def": {
+    "est": 0.5063829787234042,
+    "lo": 0.405,
+    "hi": 0.5857740585774058,
+    "width": 0.1807740585774058,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 13.0,
+   "stability_orphan": {
+    "est": 0.7003610108303249,
+    "lo": 0.6630824372759857,
+    "hi": 0.7389705882352942,
+    "width": 0.07588815095930845,
+    "n_worlds": 15,
+    "n_items": 277
+   },
+   "rank_stability_orphan": 13.0
+  },
+  {
+   "system": "memos",
+   "kind": "native",
+   "update_src": {
+    "est": 0.7041284403669725,
+    "lo": 0.6501240694789082,
+    "hi": 0.7541766109785203,
+    "width": 0.10405254149961207,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 11.0,
+   "update_def": {
+    "est": 0.574468085106383,
+    "lo": 0.49783549783549785,
+    "hi": 0.6330645161290323,
+    "width": 0.1352290182935344,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 10.0,
+   "stability_orphan": {
+    "est": 0.6859205776173285,
+    "lo": 0.6384615384615384,
+    "hi": 0.7318007662835249,
+    "width": 0.09333922782198645,
+    "n_worlds": 15,
+    "n_items": 277
+   },
+   "rank_stability_orphan": 14.0
+  },
+  {
+   "system": "oracle",
+   "kind": "baseline",
+   "update_src": {
+    "est": 0.9380733944954128,
+    "lo": 0.908695652173913,
+    "hi": 0.9674185463659147,
+    "width": 0.05872289419200172,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 2.0,
+   "update_def": {
+    "est": 0.9106382978723404,
+    "lo": 0.8571428571428571,
+    "hi": 0.9518072289156626,
+    "width": 0.09466437177280551,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 2.0,
+   "stability_orphan": {
+    "est": 0.9155251141552512,
+    "lo": 0.8865406006674083,
+    "hi": 0.9423328964613368,
+    "width": 0.055792295793928526,
+    "n_worlds": 15,
+    "n_items": 876
+   },
+   "rank_stability_orphan": 6.0
+  },
+  {
+   "system": "rag",
+   "kind": "baseline",
+   "update_src": {
+    "est": 0.7339449541284404,
+    "lo": 0.685785536159601,
+    "hi": 0.7795918367346939,
+    "width": 0.09380630057509287,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 8.0,
+   "update_def": {
+    "est": 0.5914893617021276,
+    "lo": 0.5234042553191489,
+    "hi": 0.6618705035971223,
+    "width": 0.13846624827797338,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 7.0,
+   "stability_orphan": {
+    "est": 0.6757990867579908,
+    "lo": 0.6340023612750886,
+    "hi": 0.7150537634408602,
+    "width": 0.08105140216577167,
+    "n_worlds": 15,
+    "n_items": 876
+   },
+   "rank_stability_orphan": 15.0
+  },
+  {
+   "system": "zero",
+   "kind": "baseline",
+   "update_src": {
+    "est": 0.7110091743119266,
+    "lo": 0.6586538461538461,
+    "hi": 0.7553956834532374,
+    "width": 0.09674183729939123,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 9.0,
+   "update_def": {
+    "est": 0.5829787234042553,
+    "lo": 0.5151515151515151,
+    "hi": 0.6442687747035574,
+    "width": 0.12911725955204223,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 8.5,
+   "stability_orphan": {
+    "est": 0.7214611872146118,
+    "lo": 0.6761229314420804,
+    "hi": 0.7635294117647059,
+    "width": 0.08740648032262555,
+    "n_worlds": 15,
+    "n_items": 876
+   },
+   "rank_stability_orphan": 12.0
+  },
+  {
+   "system": "holdmem_D0B0",
+   "kind": "white-box",
+   "update_src": {
+    "est": 0.5756880733944955,
+    "lo": 0.5154639175257731,
+    "hi": 0.6336206896551724,
+    "width": 0.11815677212939923,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 15.0,
+   "update_def": {
+    "est": 0.4723404255319149,
+    "lo": 0.3991228070175439,
+    "hi": 0.5280373831775701,
+    "width": 0.12891457616002622,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 15.0,
+   "stability_orphan": {
+    "est": 0.7407407407407407,
+    "lo": 0.6791907514450867,
+    "hi": 0.8002008032128514,
+    "width": 0.12101005176776469,
+    "n_worlds": 15,
+    "n_items": 1026
+   },
+   "rank_stability_orphan": 11.0
+  },
+  {
+   "system": "holdmem_D0B1_cited",
+   "kind": "white-box",
+   "update_src": {
+    "est": 0.7775229357798165,
+    "lo": 0.7270471464019851,
+    "hi": 0.8251599147121536,
+    "width": 0.09811276831016846,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 6.0,
+   "update_def": {
+    "est": 0.6553191489361702,
+    "lo": 0.583710407239819,
+    "hi": 0.71280276816609,
+    "width": 0.12909236092627097,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 6.0,
+   "stability_orphan": {
+    "est": 0.9717348927875243,
+    "lo": 0.9454722492697176,
+    "hi": 0.990152193375112,
+    "width": 0.04467994410539433,
+    "n_worlds": 15,
+    "n_items": 1026
+   },
+   "rank_stability_orphan": 3.0
+  },
+  {
+   "system": "holdmem_D0B1_source",
+   "kind": "white-box",
+   "update_src": {
+    "est": 0.8004587155963303,
+    "lo": 0.7505938242280285,
+    "hi": 0.8461538461538461,
+    "width": 0.0955600219258177,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 4.0,
+   "update_def": {
+    "est": 0.6723404255319149,
+    "lo": 0.5909090909090909,
+    "hi": 0.7368421052631579,
+    "width": 0.14593301435406691,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 5.0,
+   "stability_orphan": {
+    "est": 0.9873294346978557,
+    "lo": 0.9682539682539683,
+    "hi": 1.0,
+    "width": 0.031746031746031744,
+    "n_worlds": 15,
+    "n_items": 1026
+   },
+   "rank_stability_orphan": 2.0
+  },
+  {
+   "system": "holdmem_D1B0",
+   "kind": "white-box",
+   "update_src": {
+    "est": 0.7935779816513762,
+    "lo": 0.7424593967517401,
+    "hi": 0.8467532467532467,
+    "width": 0.1042938500015066,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 5.0,
+   "update_def": {
+    "est": 0.8170212765957446,
+    "lo": 0.7682926829268293,
+    "hi": 0.8695652173913043,
+    "width": 0.10127253446447504,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 4.0,
+   "stability_orphan": {
+    "est": 0.7719298245614035,
+    "lo": 0.7062200956937799,
+    "hi": 0.835603112840467,
+    "width": 0.1293830171466871,
+    "n_worlds": 15,
+    "n_items": 1026
+   },
+   "rank_stability_orphan": 10.0
+  },
+  {
+   "system": "holdmem_D1B1_cited",
+   "kind": "white-box",
+   "update_src": {
+    "est": 0.8807339449541285,
+    "lo": 0.8329297820823245,
+    "hi": 0.92018779342723,
+    "width": 0.08725801134490552,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 3.0,
+   "update_def": {
+    "est": 0.8297872340425532,
+    "lo": 0.7766497461928934,
+    "hi": 0.8780487804878049,
+    "width": 0.10139903429491148,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 3.0,
+   "stability_orphan": {
+    "est": 0.9590643274853801,
+    "lo": 0.9389312977099237,
+    "hi": 0.9770114942528736,
+    "width": 0.03808019654294992,
+    "n_worlds": 15,
+    "n_items": 1026
+   },
+   "rank_stability_orphan": 4.0
+  },
+  {
+   "system": "holdmem_D1B1_source",
+   "kind": "white-box",
+   "update_src": {
+    "est": 0.981651376146789,
+    "lo": 0.9655913978494624,
+    "hi": 0.9952718676122931,
+    "width": 0.029680469762830786,
+    "n_worlds": 15,
+    "n_items": 436
+   },
+   "rank_update_src": 1.0,
+   "update_def": {
+    "est": 0.9744680851063829,
+    "lo": 0.9482758620689655,
+    "hi": 0.995575221238938,
+    "width": 0.04729935916997252,
+    "n_worlds": 15,
+    "n_items": 235
+   },
+   "rank_update_def": 1.0,
+   "stability_orphan": {
+    "est": 0.9922027290448343,
+    "lo": 0.9798994974874372,
+    "hi": 1.0,
+    "width": 0.02010050251256279,
+    "n_worlds": 15,
+    "n_items": 1026
+   },
+   "rank_stability_orphan": 1.0
+  }
+ ],
+ "correlations": {
+  "update_src_vs_update_def": {
+   "rho": 0.9614446444677947,
+   "lo": 0.8522832421714919,
+   "hi": 0.9776386404293381,
+   "n_worlds": 15,
+   "n_systems": 15,
+   "systems": [
+    "amem",
+    "cognee",
+    "hipporag",
+    "holdmem_D0B0",
+    "holdmem_D0B1_cited",
+    "holdmem_D0B1_source",
+    "holdmem_D1B0",
+    "holdmem_D1B1_cited",
+    "holdmem_D1B1_source",
+    "lightrag",
+    "mem0",
+    "memos",
+    "oracle",
+    "rag",
+    "zero"
+   ],
+   "left_out": []
+  },
+  "update_src_vs_stability_orphan": {
+   "rho": 0.5469171084697645,
+   "lo": 0.43214285714285705,
+   "hi": 0.6642857142857141,
+   "n_worlds": 15,
+   "n_systems": 15,
+   "systems": [
+    "amem",
+    "cognee",
+    "hipporag",
+    "holdmem_D0B0",
+    "holdmem_D0B1_cited",
+    "holdmem_D0B1_source",
+    "holdmem_D1B0",
+    "holdmem_D1B1_cited",
+    "holdmem_D1B1_source",
+    "lightrag",
+    "mem0",
+    "memos",
+    "oracle",
+    "rag",
+    "zero"
+   ],
+   "left_out": []
+  }
+ }
+}

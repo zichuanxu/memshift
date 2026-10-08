@@ -1,0 +1,234 @@
+{
+  "code": {
+    "commit": "dd9886fb0c11876cf19290d5213c442985cff92e",
+    "dirty": false
+  },
+  "created_utc": "2026-09-28T18:07:08Z",
+  "experiment": "E4",
+  "files_sha256": {
+    "answers.jsonl": "204a801a0bdd35e94d816cab1a2b762425861cd0f01616f91f23b065557720a6",
+    "calls.jsonl": "416c41a36474339b7f94f483eb5bf6a581506f5eafc13d21c8e78450e90a43fe",
+    "divergence.jsonl": "9ecaf95d56ee9c0a48865536c700d48238147ea50273328c3c9fa1d8793764b2",
+    "env.json": "a729cf8130755ae56b8ab57f0a9c6d17104ab78ef4032389c2f3ebf33d98c26f",
+    "polls.jsonl": "334f57e60160f0658712ae6af76f3911ffc5cfde2353cf58b2d975b2fc9ea0e4",
+    "probes.jsonl": "4b5af857068b87526e808b23fa7699586eb44c34714493ab43988f98df56cbd0",
+    "world_summaries.jsonl": "d0e89074075f96809c1abbec28e5368e3074c813c64e9f9e56e7e9f68ce3a710"
+  },
+  "llm_calls_expected": 4482,
+  "models": {
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "branch": "src",
+    "calendar_slots": "sources == (calendar,) | series | appointment | u.timezone | kappa in ['important_contact', 'working_hours']",
+    "cells": [
+      "holdmem_D1B0",
+      "holdmem_D1B1_source"
+    ],
+    "gone_prob_per_poll": 0.001,
+    "lags_minutes": [
+      1,
+      5,
+      30
+    ],
+    "maintain": "at probe times where the delivered log changed since last maintenance",
+    "max_events_per_world": 10,
+    "modes": [
+      "ideal",
+      "official"
+    ],
+    "page_size": 50,
+    "poll_minutes": 15,
+    "probe_deltas_minutes": [
+      2,
+      10,
+      60
+    ],
+    "probe_filter": "gold deps all calendar objects",
+    "reader_budget_tokens": 4096,
+    "seeds": [
+      2,
+      3,
+      4
+    ],
+    "source": "calendar",
+    "sync_seed": "world.seed * 7919 + 4 (shared across lags); poll phase from it",
+    "systems": [
+      "holdmem_D1B0",
+      "holdmem_D1B1_source",
+      "zero"
+    ],
+    "t0": "fork - 1 minute",
+    "token_ttl_days": 7.0,
+    "window_weeks": 8
+  },
+  "run_id": "e4_dev_v2_s2-4_20260928T173130Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "7b57263f2acafe2150b19de6aacbf7e3a576574cad512c43420e59c1199d5d77",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1567,
+      "seed": 2,
+      "shift_targets": [
+        "c.p14.employer",
+        "c.p17.city",
+        "c.p23.city",
+        "c.p25.employer",
+        "k.close_friend",
+        "k.important_contact",
+        "s.series_team_sync",
+        "t.t019",
+        "u.home_city",
+        "u.timezone"
+      ],
+      "world_id": "w0002"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "7e85123946ae1184e7b9117a854eb17ca94b984b19404db49242b6d3d7d05717",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1499,
+      "seed": 3,
+      "shift_targets": [
+        "a.doctor",
+        "c.p05.city",
+        "c.p05.employer",
+        "c.p06.city",
+        "c.p06.employer",
+        "c.p27.city",
+        "c.p30.employer",
+        "s.series_piano_lesson",
+        "s.series_team_sync",
+        "t.t024"
+      ],
+      "world_id": "w0003"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "eb794da36a9dd34a481245b6205b13157f86374ed191ea80b0a591911abfc0d0",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1603,
+      "seed": 4,
+      "shift_targets": [
+        "c.p07.employer",
+        "c.p12.employer",
+        "c.p13.employer",
+        "c.p17.city",
+        "c.p26.city",
+        "c.p27.city",
+        "c.p27.employer",
+        "t.t017",
+        "u.commute",
+        "u.employer"
+      ],
+      "world_id": "w0004"
+    }
+  ]
+}

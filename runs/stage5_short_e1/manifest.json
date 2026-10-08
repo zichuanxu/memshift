@@ -1,0 +1,93 @@
+{
+  "analysis_code": {
+    "commit": "25d5fccbbbec6ac0a611380e0d9249b427f3b940",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T13:57:29Z",
+  "experiment": "merged-e1",
+  "files_sha256": {
+    "analysis/e1_item_table.jsonl": "e295499a63a58be74aaa0cc0479dcbaeb3ea5d43421583d48308bc4c4d7785ab",
+    "analysis/e1_metrics.json": "3f2511fbc248b0200cb6358581e782a10d79c7bdc572a6c01a390d99700c58c2"
+  },
+  "run_id": "stage5_short_e1",
+  "sources": [
+    {
+      "code": {
+        "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8599339aef330c7fab9b4b4f221dd7becb2f135708a1d64b6af7b9c19cda53bb",
+      "run_id": "e5_whitebox_short_s1000-1004_20260929T024709Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5c1febe033e7a4adece2744a10327846f261599477005178d9d37581cb71a7ee",
+      "run_id": "e5_whitebox_short_s1005-1009_20260929T024709Z",
+      "worlds": [
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007",
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c250001bbaceeae40b249a10ed51731bc2968dfd5642c16d585af9f295d28d13",
+      "run_id": "e5_whitebox_short_s1010-1014_20260929T024709Z",
+      "worlds": [
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011",
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014"
+      ]
+    }
+  ]
+}

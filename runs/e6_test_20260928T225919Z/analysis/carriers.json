@@ -1,0 +1,100 @@
+{
+ "issues": [],
+ "issues_after_reexport": [],
+ "carriers": {
+  "kind": {
+   "records_written": 48,
+   "fields_written": [
+    "bind",
+    "det",
+    "id",
+    "item_id",
+    "kappa_version",
+    "readset",
+    "readset_clusters",
+    "s_k",
+    "slot_id",
+    "source_refs",
+    "spans",
+    "status",
+    "theta_w_id",
+    "written"
+   ],
+   "records_imported": 48,
+   "fields_dropped_on_import": [],
+   "records_after_reexport": 48,
+   "records_after_second_import": 48,
+   "survives": true
+  },
+  "episode": {
+   "records_written": 48,
+   "fields_written": [
+    "bind",
+    "det",
+    "id",
+    "item_id",
+    "kappa_version",
+    "readset",
+    "readset_clusters",
+    "s_k",
+    "slot_id",
+    "source_refs",
+    "spans",
+    "status",
+    "theta_w_id",
+    "written"
+   ],
+   "records_imported": 48,
+   "fields_dropped_on_import": [],
+   "records_after_reexport": 48,
+   "records_after_second_import": 48,
+   "survives": true
+  },
+  "fact": {
+   "records_written": 48,
+   "fields_written": [
+    "bind",
+    "det",
+    "id",
+    "item_id",
+    "kappa_version",
+    "readset",
+    "readset_clusters",
+    "s_k",
+    "slot_id",
+    "source_refs",
+    "spans",
+    "status",
+    "theta_w_id",
+    "written"
+   ],
+   "records_imported": 0,
+   "fields_dropped_on_import": [
+    "bind",
+    "det",
+    "id",
+    "item_id",
+    "kappa_version",
+    "readset",
+    "readset_clusters",
+    "s_k",
+    "slot_id",
+    "source_refs",
+    "spans",
+    "status",
+    "theta_w_id",
+    "written"
+   ],
+   "records_after_reexport": 0,
+   "records_after_second_import": 0,
+   "survives": false
+  }
+ },
+ "native": {
+  "facts": 48,
+  "facts_with_source_episode": 48,
+  "facts_closed": 0,
+  "source_episodes": 35,
+  "facts_after_reexport": 48
+ }
+}

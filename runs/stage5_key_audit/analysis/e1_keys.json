@@ -1,0 +1,243 @@
+{
+ "seeds": [
+  1000,
+  1001,
+  1002,
+  1003,
+  1004,
+  1005,
+  1006,
+  1007,
+  1008,
+  1009,
+  1010,
+  1011,
+  1012,
+  1013,
+  1014,
+  1015,
+  1016,
+  1017,
+  1018,
+  1019
+ ],
+ "branches": [
+  "src",
+  "def",
+  "orphan"
+ ],
+ "months": 12,
+ "def": {
+  "gold": {
+   "definition": {
+    "unchanged": 93,
+    "changed_detected": 387,
+    "unchanged_detected": 57,
+    "rederivations": 415,
+    "changed": 387,
+    "missed": 0.0,
+    "false_invalidation": 0.6129032258064516
+   },
+   "norule": {
+    "unchanged": 378,
+    "changed_detected": 22,
+    "unchanged_detected": 4,
+    "rederivations": 14,
+    "changed": 22,
+    "missed": 0.0,
+    "false_invalidation": 0.010582010582010581
+   },
+   "rule": {
+    "unchanged": 2811,
+    "changed_detected": 149,
+    "unchanged_detected": 81,
+    "rederivations": 124,
+    "changed": 149,
+    "missed": 0.0,
+    "false_invalidation": 0.0288153681963714
+   }
+  },
+  "scope": {
+   "definition": {
+    "rederivations": 429,
+    "unchanged": 93,
+    "changed_detected": 387,
+    "unchanged_detected": 60,
+    "changed": 387,
+    "missed": 0.0,
+    "false_invalidation": 0.6451612903225806
+   }
+  },
+  "source": {
+   "definition": {
+    "rederivations": 469,
+    "unchanged": 93,
+    "changed_detected": 387,
+    "unchanged_detected": 89,
+    "changed": 387,
+    "missed": 0.0,
+    "false_invalidation": 0.956989247311828
+   },
+   "norule": {
+    "rederivations": 400,
+    "unchanged": 378,
+    "changed_detected": 22,
+    "unchanged_detected": 378,
+    "changed": 22,
+    "missed": 0.0,
+    "false_invalidation": 1.0
+   },
+   "rule": {
+    "rederivations": 2923,
+    "unchanged": 2811,
+    "changed_detected": 149,
+    "unchanged_detected": 2792,
+    "changed": 149,
+    "missed": 0.0,
+    "false_invalidation": 0.9932408395588759
+   }
+  }
+ },
+ "orphan": {
+  "gold": {
+   "definition": {
+    "unchanged": 172,
+    "changed_detected": 308,
+    "unchanged_detected": 85,
+    "rederivations": 373,
+    "changed": 308,
+    "missed": 0.0,
+    "false_invalidation": 0.4941860465116279
+   },
+   "norule": {
+    "unchanged": 378,
+    "changed_detected": 22,
+    "unchanged_detected": 4,
+    "rederivations": 14,
+    "changed": 22,
+    "missed": 0.0,
+    "false_invalidation": 0.010582010582010581
+   },
+   "rule": {
+    "unchanged": 1523,
+    "changed_detected": 1437,
+    "unchanged_detected": 56,
+    "rederivations": 418,
+    "changed": 1437,
+    "missed": 0.0,
+    "false_invalidation": 0.036769533814839134
+   }
+  },
+  "scope": {
+   "definition": {
+    "rederivations": 379,
+    "unchanged": 172,
+    "changed_detected": 308,
+    "unchanged_detected": 90,
+    "changed": 308,
+    "missed": 0.0,
+    "false_invalidation": 0.5232558139534884
+   }
+  },
+  "source": {
+   "definition": {
+    "rederivations": 472,
+    "unchanged": 172,
+    "changed_detected": 308,
+    "unchanged_detected": 172,
+    "changed": 308,
+    "missed": 0.0,
+    "false_invalidation": 1.0
+   },
+   "norule": {
+    "rederivations": 400,
+    "unchanged": 378,
+    "changed_detected": 22,
+    "unchanged_detected": 378,
+    "changed": 22,
+    "missed": 0.0,
+    "false_invalidation": 1.0
+   },
+   "rule": {
+    "rederivations": 2936,
+    "unchanged": 1523,
+    "changed_detected": 1437,
+    "unchanged_detected": 1523,
+    "changed": 1437,
+    "missed": 0.0,
+    "false_invalidation": 1.0
+   }
+  }
+ },
+ "src": {
+  "gold": {
+   "definition": {
+    "unchanged": 147,
+    "changed_detected": 333,
+    "unchanged_detected": 74,
+    "rederivations": 377,
+    "changed": 333,
+    "missed": 0.0,
+    "false_invalidation": 0.5034013605442177
+   },
+   "norule": {
+    "unchanged": 269,
+    "changed_detected": 131,
+    "unchanged_detected": 4,
+    "rederivations": 43,
+    "changed": 131,
+    "missed": 0.0,
+    "false_invalidation": 0.01486988847583643
+   },
+   "rule": {
+    "unchanged": 2256,
+    "changed_detected": 704,
+    "unchanged_detected": 370,
+    "rederivations": 344,
+    "changed": 704,
+    "missed": 0.0,
+    "false_invalidation": 0.16400709219858156
+   }
+  },
+  "scope": {
+   "definition": {
+    "rederivations": 382,
+    "unchanged": 147,
+    "changed_detected": 333,
+    "unchanged_detected": 78,
+    "changed": 333,
+    "missed": 0.0,
+    "false_invalidation": 0.5306122448979592
+   }
+  },
+  "source": {
+   "definition": {
+    "rederivations": 470,
+    "unchanged": 147,
+    "changed_detected": 333,
+    "unchanged_detected": 145,
+    "changed": 333,
+    "missed": 0.0,
+    "false_invalidation": 0.9863945578231292
+   },
+   "norule": {
+    "rederivations": 400,
+    "unchanged": 269,
+    "changed_detected": 131,
+    "unchanged_detected": 269,
+    "changed": 131,
+    "missed": 0.0,
+    "false_invalidation": 1.0
+   },
+   "rule": {
+    "rederivations": 2930,
+    "unchanged": 2256,
+    "changed_detected": 704,
+    "unchanged_detected": 2250,
+    "changed": 704,
+    "missed": 0.0,
+    "false_invalidation": 0.9973404255319149
+   }
+  }
+ }
+}

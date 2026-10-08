@@ -1,0 +1,53 @@
+# HippoRAG 2 (hipporag 2.0.0a4) for src/memshift/adapters/native_hipporag.py, on top of
+# docker/requirements.lock. Install in this order:
+#
+#   pip install --no-cache-dir -r docker/requirements.lock
+#   pip install --no-cache-dir --no-deps -r docker/native/hipporag.txt
+#
+# --no-deps is required. hipporag's metadata pins torch==2.5.1, transformers==4.45.2,
+# vllm==0.6.6.post1, openai==1.91.1, litellm==1.73.1, pydantic==2.10.4, ... which conflict with the
+# lock and would pull vllm (GPU-bound). The lines below are the closure that
+# `from hipporag import HippoRAG` and the online path (OpenAI-compatible LLM and embedding
+# endpoints, CPU) need, resolved with
+#   uv pip compile -c docker/requirements.lock --python-version 3.12 \
+#     --python-platform x86_64-manylinux_2_28 --extra-index-url https://download.pytorch.org/whl/cpu
+# minus what the lock already pins. `pip check` reports hipporag's unmet pins (vllm, litellm, ...);
+# that is expected.
+#
+# Not installed on purpose: vllm (GPU-bound; only its offline OpenIE path uses it) and litellm
+# (Bedrock only; it fetches a price table over HTTP when imported). hipporag imports both at load
+# time, so `import_hipporag()` registers inert stand-ins for them when they are missing.
+#
+# torch is the CPU wheel (`+cpu` exists on the extra index only, and keeps the CUDA wheels of
+# PyPI out); it serves the synonymy nearest-neighbour search (hipporag/utils/embed_utils.py).
+# The import path and the adapter tests were run on macOS arm64 with these versions (torch
+# without the +cpu suffix); the Linux wheels are the ones resolved above, not yet built here.
+--extra-index-url https://download.pytorch.org/whl/cpu
+boto3==1.43.104
+botocore==1.43.104
+click==8.5.0
+filelock==4.0.6
+fsspec==2026.9.0
+gritlm==1.0.2
+hf-xet==1.6.0
+hipporag==2.0.0a4
+huggingface-hub==1.33.0
+igraph==0.11.8
+jinja2==3.1.6
+jmespath==1.1.0
+markupsafe==3.0.3
+mpmath==1.3.0
+networkx==3.7
+pandas==3.0.6
+pyarrow==25.0.1
+python-igraph==0.11.8
+regex==2026.9.29
+s3transfer==0.19.2
+safetensors==0.8.0
+setuptools==84.0.0
+sympy==1.14.0
+texttable==1.7.0
+tokenizers==0.23.2
+torch==2.14.0+cpu
+tqdm==4.70.1
+transformers==5.17.0

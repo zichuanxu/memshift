@@ -1,0 +1,28 @@
+{
+  "analysis_code": {
+    "commit": "30ccb0cfa56f91bef05d0593df56df398623e665",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T23:10:01Z",
+  "experiment": "merged-multiplicity",
+  "files_sha256": {
+    "analysis/multiplicity.json": "5906f068c7a00d4e30b696ccbddcf20f07feb1cea7094b574fce3ca543c9a8f5"
+  },
+  "run_id": "stage4_multiplicity",
+  "sources": [
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "531628e6162924e81089d90b785717883ff6ae82a93094e95bba0f4bf7e33259",
+      "run_id": "stage2_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "3aacf4c4f6ac153cf86b41711590e7ab2a1084b147f5fe62351fcfb303dd77c8",
+      "run_id": "stage4_rep_e1",
+      "worlds": []
+    }
+  ]
+}

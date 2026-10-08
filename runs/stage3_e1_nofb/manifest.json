@@ -1,0 +1,192 @@
+{
+  "analysis_code": {
+    "commit": "be5320f817d82ae5944cea1031c93b9f3c5d8927",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T02:31:36Z",
+  "experiment": "merged-e1",
+  "files_sha256": {
+    "analysis/e1_item_table.jsonl": "dad9c3571cb7e3a147903b98c2de6677b545595145ae3b461316584644de7341",
+    "analysis/e1_metrics.json": "4d89782935d79e29bb0072833f64dc95ce63cbfd0f65778f8208e3f4ec0e4f99"
+  },
+  "run_id": "stage3_e1_nofb",
+  "sources": [
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f23dd396bd1d75aec9fd76e152c737bc94d98b156a10d9c2aa77a81e557b6bde",
+      "run_id": "e1_test_s1000-1003_20260928T202242Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e141a7dd876dbe51d59033abb3e84d4ff3df5516555958648226d92c68ee3664",
+      "run_id": "e1_test_s1004-1007_20260928T202243Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "da0e33f9dbaedec49e23b3db5440160586fda9255eb4d56079f415dbae219981",
+      "run_id": "e1_test_s1008-1011_20260928T202244Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "682d15956e332dd808d923c3f324883e1bc0dff14e4a9c87cd9a71f4f58dcd8f",
+      "run_id": "e1_test_s1012-1015_20260928T202245Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "2b083f03da9226f72cea05cf05470885dffee6fc69ace74ad321206a7a73c167",
+      "run_id": "e1_test_s1016-1019_20260928T202246Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f68b48ec878d79bd20d9627c31f9652f0a353dfb",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c57cca9c2b7c849ce6adafdeed069090cf78846f847288a592304363de61383f",
+      "run_id": "e1_test_nofb_s1000-1009_20260929T021438Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f68b48ec878d79bd20d9627c31f9652f0a353dfb",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f1752788cde0167f1ec1c0963ade41ef57ccc4ed4556868ae181b858a6a63b51",
+      "run_id": "e1_test_nofb_s1010-1019_20260929T021438Z",
+      "worlds": [
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019"
+      ]
+    }
+  ]
+}

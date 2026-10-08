@@ -1,0 +1,20 @@
+{
+  "analysis_code": {
+    "commit": "6dd1d6df7b5e5339a6bc14bf309eee584b1f6283",
+    "dirty": false
+  },
+  "branches": [
+    "src",
+    "def",
+    "orphan"
+  ],
+  "command": "python -m memshift.analysis.e1_keys --seeds 1000-1019 --branches src,def,orphan --months 12",
+  "created_utc": "2026-09-30T21:48:21Z",
+  "experiment": "merged-key_audit",
+  "files_sha256": {
+    "analysis/e1_keys.json": "806b6cd07c914cec5544a37f266108b5fcd476b3daf0017eeb3df775eee18155"
+  },
+  "run_id": "stage5_key_audit",
+  "seeds": "1000-1019",
+  "sources": []
+}

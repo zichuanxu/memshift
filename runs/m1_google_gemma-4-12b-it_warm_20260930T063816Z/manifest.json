@@ -1,0 +1,58 @@
+{
+  "code": {
+    "commit": "c69847ba60a1814ee48a7676a0de28fe62183e65",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T09:01:04Z",
+  "experiment": "E2-warm",
+  "files_sha256": {
+    "calls.jsonl": "21dd233bfe2c04482eab97893daa997dd4056eff9190b4379f2b477ec5424a2d",
+    "warm.json": "6d84320d10aab51c3bea8f7a4bc50bf75149d89e135b9d7a90cabb5816bae646"
+  },
+  "models": {
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "google/gemma-4-12B-it",
+      "revision": "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7"
+    }
+  },
+  "params": {
+    "cal_seeds": [
+      900,
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909
+    ],
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ]
+  },
+  "run_id": "m1_google_gemma-4-12b-it_warm_20260930T063816Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": []
+}

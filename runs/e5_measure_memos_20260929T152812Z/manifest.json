@@ -1,0 +1,114 @@
+{
+  "code": {
+    "commit": "bbd6152604326be95ed23e1bef345ddd25249c6f",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T16:38:23Z",
+  "experiment": "E5-measure",
+  "files_sha256": {
+    "analysis/e5_native.json": "96fb48fb5f569889fa930ccab32187fe355bc945419c8a96550ea7fcbba470bd",
+    "env.json": "981bed81902e8de7f69a1efcde37884a2f5718283eca4f1c5c3203d15fb5c7fe",
+    "stores/w1000_memos/prefix/ledger.jsonl": "458f625d037167e127f132284feec1ff8f03f140efa74c4143166e8279a9f8e4",
+    "stores/w1000_memos/prefix/memshift_native.json": "01f66743f1ff054e590be68da34b6a64914649bf8d829bec741aeec5aa12bf64",
+    "stores/w1000_memos/prefix/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1000_memos/prefix/qdrant/collection/memshift/storage.sqlite": "4cb471bbf42930676efa1e8c1427bb247248b719ffeb5678ba2017da296e4038",
+    "stores/w1000_memos/prefix/qdrant/meta.json": "891700f1f3171b5f5cdf94258c13c681859f03bd31208a09c8f1f266ffa092f4",
+    "stores/w1000_memos/prefix/state.json": "9d307472385dd8ceae6ee7a461f2689e74f16783c95cd75e30ad6d3b0af63ec9",
+    "world_results.jsonl": "c4edb99e6ef6c04d22788347d58117c41a6dd6382f807469769e5405432ffc9f"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "graphiti_batch": 1,
+    "measure_events": 60,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "seeds": [
+      1000
+    ],
+    "systems": [
+      "memos"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_measure_memos_20260929T152812Z",
+  "run_image": "sha256:fbd9a3586c83c71c4364d7cac030984d742fd028db217157a59e7f2d5c8af2c5",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "da2a934e970d58d74c8566ddc060d57bca753fa59d8509e90acbf0249108d298",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 490,
+      "seed": 1000,
+      "shift_targets": null,
+      "world_id": "w1000"
+    }
+  ]
+}

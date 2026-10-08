@@ -1,0 +1,862 @@
+[
+ {
+  "seed": 5,
+  "world": {
+   "world_id": "w0005",
+   "seed": 5,
+   "branch": "natural",
+   "n_events": 1550,
+   "events_sha256": "e5317dae24412b46c1f8f00a5cfb96b1085cedb15ef2f689e9bc56c4da6144ae",
+   "shift_targets": null,
+   "kappa_log": [
+    [
+     "2026-01-01 00:00:00",
+     "important_contact",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "close_friend",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "active_project",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "working_hours",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "vip_sender",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "overdue_task",
+     "v1"
+    ]
+   ],
+   "consent_log": []
+  },
+  "horizons": {
+   "1": {
+    "t": "2026-01-31 23:59:00",
+    "days": 31,
+    "queries": 620,
+    "full_reread_tokens_per_query": 192841,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4242.75,
+     "zero": 3529.6666666666665,
+     "oracle": 277.4166666666667,
+     "rag": 3646.125
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 169969,
+      "maintain_tokens": 3746400.041666667,
+      "maintain_writes_counted": 1058,
+      "serve_tokens": 2630505.0,
+      "verify_cpu_s": 1.4245641293332758,
+      "storage_bytes": 93339
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 2188393.333333333,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 201739,
+      "maintain_tokens": 192908,
+      "serve_tokens": 2260597.5,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 6651904
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8541666666666666,
+     "zero": 0.875,
+     "oracle": 0.8333333333333334,
+     "rag": 0.7291666666666666
+    }
+   },
+   "3": {
+    "t": "2026-03-31 23:59:00",
+    "days": 90,
+    "queries": 1800,
+    "full_reread_tokens_per_query": 561210,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4170.625,
+     "zero": 3722.0208333333335,
+     "oracle": 323.7083333333333,
+     "rag": 3946.25
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 212849,
+      "maintain_tokens": 14482600.708333334,
+      "maintain_writes_counted": 3266,
+      "serve_tokens": 7507125.0,
+      "verify_cpu_s": 8.003659972208043,
+      "storage_bytes": 97577
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 6699637.5,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 586986,
+      "maintain_tokens": 561955,
+      "serve_tokens": 7103250.0,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 19230720
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8333333333333334,
+     "zero": 0.625,
+     "oracle": 0.8333333333333334,
+     "rag": 0.5625
+    }
+   },
+   "12": {
+    "t": "2026-12-31 23:59:00",
+    "days": 365,
+    "queries": 7300,
+    "full_reread_tokens_per_query": 2240262,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4194.083333333333,
+     "zero": 4036.8541666666665,
+     "oracle": 312.3958333333333,
+     "rag": 4125.375
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 276028,
+      "maintain_tokens": 77201581.25,
+      "maintain_writes_counted": 13425,
+      "serve_tokens": 30616808.333333332,
+      "verify_cpu_s": 17.31930038943618,
+      "storage_bytes": 136384
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 29469035.416666664,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 2343378,
+      "maintain_tokens": 2243956,
+      "serve_tokens": 30115237.5,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 76369920
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8958333333333334,
+     "zero": 0.6041666666666666,
+     "oracle": 0.8125,
+     "rag": 0.6041666666666666
+    }
+   }
+  }
+ },
+ {
+  "seed": 6,
+  "world": {
+   "world_id": "w0006",
+   "seed": 6,
+   "branch": "natural",
+   "n_events": 1521,
+   "events_sha256": "39650070fd6d804699a6ad1bcea645ce1a58369be5e4959f32fe27dd90962d77",
+   "shift_targets": null,
+   "kappa_log": [
+    [
+     "2026-01-01 00:00:00",
+     "important_contact",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "close_friend",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "active_project",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "working_hours",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "vip_sender",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "overdue_task",
+     "v1"
+    ]
+   ],
+   "consent_log": []
+  },
+  "horizons": {
+   "1": {
+    "t": "2026-01-31 23:59:00",
+    "days": 31,
+    "queries": 620,
+    "full_reread_tokens_per_query": 200768,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4102.854166666667,
+     "zero": 3511.2083333333335,
+     "oracle": 275.1041666666667,
+     "rag": 3516.8958333333335
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 169754,
+      "maintain_tokens": 3801782.2916666665,
+      "maintain_writes_counted": 1075,
+      "serve_tokens": 2543769.5833333335,
+      "verify_cpu_s": 0.6349048716041471,
+      "storage_bytes": 90236
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 2176949.166666667,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 209984,
+      "maintain_tokens": 200825,
+      "serve_tokens": 2180475.416666667,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 6840320
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8541666666666666,
+     "zero": 0.8541666666666666,
+     "oracle": 0.8541666666666666,
+     "rag": 0.6875
+    }
+   },
+   "3": {
+    "t": "2026-03-31 23:59:00",
+    "days": 90,
+    "queries": 1800,
+    "full_reread_tokens_per_query": 559485,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4267.9375,
+     "zero": 3553.7083333333335,
+     "oracle": 297.375,
+     "rag": 3854.3333333333335
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 211306,
+      "maintain_tokens": 13950598.208333332,
+      "maintain_writes_counted": 3169,
+      "serve_tokens": 7682287.5,
+      "verify_cpu_s": 2.7374600396664777,
+      "storage_bytes": 97015
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 6396675.0,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 585261,
+      "maintain_tokens": 560231,
+      "serve_tokens": 6937800.0,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 19103744
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8541666666666666,
+     "zero": 0.625,
+     "oracle": 0.875,
+     "rag": 0.5208333333333334
+    }
+   },
+   "12": {
+    "t": "2026-12-31 23:59:00",
+    "days": 365,
+    "queries": 7300,
+    "full_reread_tokens_per_query": 2236665,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4181.583333333333,
+     "zero": 4105.895833333333,
+     "oracle": 343.2291666666667,
+     "rag": 4185.5625
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 276652,
+      "maintain_tokens": 77618176.75,
+      "maintain_writes_counted": 13467,
+      "serve_tokens": 30525558.333333332,
+      "verify_cpu_s": 19.4893355956306,
+      "storage_bytes": 137185
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 29973039.583333332,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 2339775,
+      "maintain_tokens": 2241014,
+      "serve_tokens": 30554606.25,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 76197888
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8958333333333334,
+     "zero": 0.6458333333333334,
+     "oracle": 0.7708333333333334,
+     "rag": 0.625
+    }
+   }
+  }
+ },
+ {
+  "seed": 7,
+  "world": {
+   "world_id": "w0007",
+   "seed": 7,
+   "branch": "natural",
+   "n_events": 1543,
+   "events_sha256": "b8c77937f22ee79fb28ca0712ef11d5172deeb954f65cc055861e7ac422c559f",
+   "shift_targets": null,
+   "kappa_log": [
+    [
+     "2026-01-01 00:00:00",
+     "important_contact",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "close_friend",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "active_project",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "working_hours",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "vip_sender",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "overdue_task",
+     "v1"
+    ]
+   ],
+   "consent_log": []
+  },
+  "horizons": {
+   "1": {
+    "t": "2026-01-31 23:59:00",
+    "days": 31,
+    "queries": 620,
+    "full_reread_tokens_per_query": 194353,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4109.166666666667,
+     "zero": 3476.7708333333335,
+     "oracle": 276.375,
+     "rag": 3599.8333333333335
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 167290,
+      "maintain_tokens": 3558397.7083333335,
+      "maintain_writes_counted": 1021,
+      "serve_tokens": 2547683.3333333335,
+      "verify_cpu_s": 0.9850282237916437,
+      "storage_bytes": 89788
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 2155597.916666667,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 203257,
+      "maintain_tokens": 194580,
+      "serve_tokens": 2231896.666666667,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 6651904
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8125,
+     "zero": 0.8333333333333334,
+     "oracle": 0.875,
+     "rag": 0.7083333333333334
+    }
+   },
+   "3": {
+    "t": "2026-03-31 23:59:00",
+    "days": 90,
+    "queries": 1800,
+    "full_reread_tokens_per_query": 560121,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4169.9375,
+     "zero": 3557.75,
+     "oracle": 301.8333333333333,
+     "rag": 3938.2708333333335
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 210019,
+      "maintain_tokens": 14023143.645833332,
+      "maintain_writes_counted": 3205,
+      "serve_tokens": 7505887.5,
+      "verify_cpu_s": 4.8490342318135236,
+      "storage_bytes": 93322
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 6403950.0,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 585891,
+      "maintain_tokens": 560927,
+      "serve_tokens": 7088887.5,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 19107840
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.8125,
+     "zero": 0.5833333333333334,
+     "oracle": 0.8541666666666666,
+     "rag": 0.6041666666666666
+    }
+   },
+   "12": {
+    "t": "2026-12-31 23:59:00",
+    "days": 365,
+    "queries": 7300,
+    "full_reread_tokens_per_query": 2236340,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4110.75,
+     "zero": 4088.8541666666665,
+     "oracle": 329.1875,
+     "rag": 4183.541666666667
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 273994,
+      "maintain_tokens": 76718320.0,
+      "maintain_writes_counted": 13440,
+      "serve_tokens": 30008475.0,
+      "verify_cpu_s": 22.377647716991554,
+      "storage_bytes": 132115
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 29848635.416666664,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 2339462,
+      "maintain_tokens": 2240419,
+      "serve_tokens": 30539854.166666668,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 76300288
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.9166666666666666,
+     "zero": 0.6875,
+     "oracle": 0.7916666666666666,
+     "rag": 0.5416666666666666
+    }
+   }
+  }
+ },
+ {
+  "seed": 8,
+  "world": {
+   "world_id": "w0008",
+   "seed": 8,
+   "branch": "natural",
+   "n_events": 1593,
+   "events_sha256": "fddc1cbf8d4af083910dc507069c82efcdd5894566dc8b8f447bfcbd832f1e66",
+   "shift_targets": null,
+   "kappa_log": [
+    [
+     "2026-01-01 00:00:00",
+     "important_contact",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "close_friend",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "active_project",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "working_hours",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "vip_sender",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "overdue_task",
+     "v1"
+    ]
+   ],
+   "consent_log": []
+  },
+  "horizons": {
+   "1": {
+    "t": "2026-01-31 23:59:00",
+    "days": 31,
+    "queries": 620,
+    "full_reread_tokens_per_query": 214125,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4208.625,
+     "zero": 3327.3541666666665,
+     "oracle": 287.7291666666667,
+     "rag": 3635.6875
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 181421,
+      "maintain_tokens": 4199140.229166666,
+      "maintain_writes_counted": 1111,
+      "serve_tokens": 2609347.5,
+      "verify_cpu_s": 1.015147865791412,
+      "storage_bytes": 95547
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 2062959.5833333333,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 223941,
+      "maintain_tokens": 214325,
+      "serve_tokens": 2254126.25,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 7348224
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.875,
+     "zero": 0.75,
+     "oracle": 0.875,
+     "rag": 0.5833333333333334
+    }
+   },
+   "3": {
+    "t": "2026-03-31 23:59:00",
+    "days": 90,
+    "queries": 1800,
+    "full_reread_tokens_per_query": 559894,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4146.5,
+     "zero": 3504.3541666666665,
+     "oracle": 294.6875,
+     "rag": 3903.0625
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 207088,
+      "maintain_tokens": 14125127.333333332,
+      "maintain_writes_counted": 3274,
+      "serve_tokens": 7463700.0,
+      "verify_cpu_s": 4.960145470492617,
+      "storage_bytes": 93175
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 6307837.5,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 585664,
+      "maintain_tokens": 560507,
+      "serve_tokens": 7025512.5,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 19136512
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.875,
+     "zero": 0.7291666666666666,
+     "oracle": 0.8541666666666666,
+     "rag": 0.6666666666666666
+    }
+   },
+   "12": {
+    "t": "2026-12-31 23:59:00",
+    "days": 365,
+    "queries": 7300,
+    "full_reread_tokens_per_query": 2241210,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4101.708333333333,
+     "zero": 4128.375,
+     "oracle": 332.1041666666667,
+     "rag": 4210.895833333333
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 280671,
+      "maintain_tokens": 80786469.5,
+      "maintain_writes_counted": 13816,
+      "serve_tokens": 29942470.833333332,
+      "verify_cpu_s": 29.913174071158455,
+      "storage_bytes": 139184
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 30137137.5,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 2344326,
+      "maintain_tokens": 2245164,
+      "serve_tokens": 30739539.583333332,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 76529664
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.9166666666666666,
+     "zero": 0.7291666666666666,
+     "oracle": 0.7708333333333334,
+     "rag": 0.625
+    }
+   }
+  }
+ },
+ {
+  "seed": 9,
+  "world": {
+   "world_id": "w0009",
+   "seed": 9,
+   "branch": "natural",
+   "n_events": 1559,
+   "events_sha256": "55c74278317fecf9071aafdd1c42feb0b31bfdf8287e82be0a617e81bfdceccc",
+   "shift_targets": null,
+   "kappa_log": [
+    [
+     "2026-01-01 00:00:00",
+     "important_contact",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "close_friend",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "active_project",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "working_hours",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "vip_sender",
+     "v1"
+    ],
+    [
+     "2026-01-01 00:00:00",
+     "overdue_task",
+     "v1"
+    ]
+   ],
+   "consent_log": []
+  },
+  "horizons": {
+   "1": {
+    "t": "2026-01-31 23:59:00",
+    "days": 31,
+    "queries": 620,
+    "full_reread_tokens_per_query": 193968,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4120.333333333333,
+     "zero": 3576.5625,
+     "oracle": 266.75,
+     "rag": 3772.1875
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 173587,
+      "maintain_tokens": 3981651.8125,
+      "maintain_writes_counted": 1101,
+      "serve_tokens": 2554606.6666666665,
+      "verify_cpu_s": 0.7226277634397249,
+      "storage_bytes": 92355
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 2217468.75,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 202866,
+      "maintain_tokens": 194184,
+      "serve_tokens": 2338756.25,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 6680576
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.875,
+     "zero": 0.7916666666666666,
+     "oracle": 0.8541666666666666,
+     "rag": 0.7291666666666666
+    }
+   },
+   "3": {
+    "t": "2026-03-31 23:59:00",
+    "days": 90,
+    "queries": 1800,
+    "full_reread_tokens_per_query": 559524,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4142.0,
+     "zero": 3618.75,
+     "oracle": 306.0833333333333,
+     "rag": 3911.2083333333335
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 211850,
+      "maintain_tokens": 14825086.458333334,
+      "maintain_writes_counted": 3359,
+      "serve_tokens": 7455600.0,
+      "verify_cpu_s": 4.067987740260657,
+      "storage_bytes": 94303
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 6513750.0,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 585300,
+      "maintain_tokens": 560599,
+      "serve_tokens": 7040175.0,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 19132416
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.875,
+     "zero": 0.6666666666666666,
+     "oracle": 0.8333333333333334,
+     "rag": 0.625
+    }
+   },
+   "12": {
+    "t": "2026-12-31 23:59:00",
+    "days": 365,
+    "queries": 7300,
+    "full_reread_tokens_per_query": 2238115,
+    "reader_tokens_per_probe": {
+     "holdmem_D1B1_source": 4072.7916666666665,
+     "zero": 4115.541666666667,
+     "oracle": 310.1041666666667,
+     "rag": 4084.4375
+    },
+    "costs": {
+     "holdmem_D1B1_source": {
+      "ingest_tokens": 272961,
+      "maintain_tokens": 75945711.5625,
+      "maintain_writes_counted": 13355,
+      "serve_tokens": 29731379.166666664,
+      "verify_cpu_s": 24.014016043862352,
+      "storage_bytes": 131795
+     },
+     "zero": {
+      "ingest_tokens": 0,
+      "maintain_tokens": 0,
+      "serve_tokens": 30043454.166666668,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 0
+     },
+     "rag": {
+      "ingest_tokens": 2341255,
+      "maintain_tokens": 2241627,
+      "serve_tokens": 29816393.75,
+      "verify_cpu_s": 0.0,
+      "storage_bytes": 76439552
+     }
+    },
+    "contract_valid": {
+     "holdmem_D1B1_source": 0.9166666666666666,
+     "zero": 0.5625,
+     "oracle": 0.7291666666666666,
+     "rag": 0.5833333333333334
+    }
+   }
+  }
+ }
+]

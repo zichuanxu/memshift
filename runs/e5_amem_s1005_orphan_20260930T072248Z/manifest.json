@@ -1,0 +1,129 @@
+{
+  "code": {
+    "commit": "c69847ba60a1814ee48a7676a0de28fe62183e65",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T13:11:35Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "219956facb64bdccd1a920aa5bc53a5c6ea5bca0c560dee02afac8abb56bb1ff",
+    "answers.jsonl": "c75d761ccf4ce7a5d1754777fe1f80623b45e5c83aff910af060d5a1e1e5b6ac",
+    "calls.jsonl": "a933b7f3ddef970002adf9d11625b9acdcebe5f184bc248f06761778477c52cf",
+    "env.json": "621e943d47d182188a8085c8b54492201833febb069e03f22230613cb5dad7f1",
+    "probes.jsonl": "1fb8d95997a0695f33a2dfa75231cc5fc25eee333c2ceb02fe4a55e9bcc93393",
+    "stores/w1005_amem/orphan/chroma/433e562c-aa03-4177-bbff-fd2dd44ab4a0/data_level0.bin": "f161bb92c801219783ea712e6da8ffb86e1c0270cb70a7b85e1c926d818edf2f",
+    "stores/w1005_amem/orphan/chroma/433e562c-aa03-4177-bbff-fd2dd44ab4a0/header.bin": "2cf1280036fecafbdcb6c8ba949aa1ede2c8d5b6b5493dbccfd314d0d2b1e673",
+    "stores/w1005_amem/orphan/chroma/433e562c-aa03-4177-bbff-fd2dd44ab4a0/index_metadata.pickle": "7518e6e52d901d31e37f3e185e624f0436ebf74ed426ccac42acdd326dae97d3",
+    "stores/w1005_amem/orphan/chroma/433e562c-aa03-4177-bbff-fd2dd44ab4a0/length.bin": "42adef674cf18facd81db82380cec71e2fd73ccf6cbe4df059f1bcf6aab7f422",
+    "stores/w1005_amem/orphan/chroma/433e562c-aa03-4177-bbff-fd2dd44ab4a0/link_lists.bin": "12088bee0fbaec590058925b2c72d8c2fe085d6de14a3602b3cddae3ba8226a2",
+    "stores/w1005_amem/orphan/chroma/chroma.sqlite3": "e2e7c052338bdaa7772971886e74ed12dae63b7468a8b26919985472a705c23a",
+    "stores/w1005_amem/orphan/failures.jsonl": "346a88f979ab34a2f4bd6c9a184f07b5c15e5c072fe50eb3a7d981ac3ef409d1",
+    "stores/w1005_amem/orphan/ledger.jsonl": "66ea9fafc781d9f0cf2e93081de1c2ec973d2aa32e36a5fc8bbc77db2979f484",
+    "stores/w1005_amem/orphan/memshift_native.json": "848a7d37dcda82c8f34042baad88bce6ad4e4ad06e383d7b5a0cb0e2eeb83403",
+    "stores/w1005_amem/orphan/notes.json": "ae0120b3ffd4362bdcc5024f27d8f0b1740403deed806b6076ff910f359c3886",
+    "stores/w1005_amem/orphan/state.json": "79df4e6a8e6ee263dbea87174af07fefb5bd95b9b1632e0882be8cb6591c21c0",
+    "world_results.jsonl": "405e5650e251f0a534e393e0230ad4df6db4ce092cbe2555cc20518c8612dc8f"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "branches": [
+      "orphan"
+    ],
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "native_batch": 1,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "phase": "branch",
+    "prefix_run": "e5_amem_s1005_pre_20260930T040804Z",
+    "resume_from": null,
+    "seeds": [
+      1005
+    ],
+    "systems": [
+      "amem"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_amem_s1005_orphan_20260930T072248Z",
+  "run_image": "sha256:118fd86eac3ec820195af2864cf98cb8ed610ed59318dc298fa6b2a76e782638",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "6730fc2e551469bcdb26774ee847aa3e9895992fa14dfb556e2ab278eb8847db",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 517,
+      "seed": 1005,
+      "shift_targets": null,
+      "world_id": "w1005"
+    }
+  ]
+}

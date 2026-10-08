@@ -1,0 +1,117 @@
+{
+  "code": {
+    "commit": "bbd6152604326be95ed23e1bef345ddd25249c6f",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T17:23:36Z",
+  "experiment": "E5-measure",
+  "files_sha256": {
+    "analysis/e5_native.json": "31449e5e8c6174c089128ddad8e95b89d1fed5ebbaa503a2a72f642c7e8799fb",
+    "env.json": "58ad31fd26359f3f2c648d61fc9f2b1fe0289155daf2755e40884feaf631bf15",
+    "stores/w1000_amem/prefix/chroma/2c5ef29e-9534-4a72-bffb-85eb6dd384a9/data_level0.bin": "ea9ac6972cb4666769a17755f17c5727f676f11a742e9553bf3a21119ab54394",
+    "stores/w1000_amem/prefix/chroma/2c5ef29e-9534-4a72-bffb-85eb6dd384a9/header.bin": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150",
+    "stores/w1000_amem/prefix/chroma/2c5ef29e-9534-4a72-bffb-85eb6dd384a9/length.bin": "f07d4f7710e86842f9ff5929ba49b617416c9192d1c4a0897e3f3c529017d192",
+    "stores/w1000_amem/prefix/chroma/2c5ef29e-9534-4a72-bffb-85eb6dd384a9/link_lists.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1000_amem/prefix/chroma/chroma.sqlite3": "0f25dcee8c3f739eab1c4047987b96cc407d80d87a56a8ce3df43bb023857a36",
+    "stores/w1000_amem/prefix/ledger.jsonl": "4eb1b6f4af6abbd65b147efb1aab7b38e7ac7ad656ae3cdee8d8d07ddf62b641",
+    "stores/w1000_amem/prefix/memshift_native.json": "91d621ffb00e6c42bb73b013d783f3b3ff46190058abf018ca98f2f81f7a3193",
+    "stores/w1000_amem/prefix/notes.json": "a74811786ac5613e7575428d27f7d7d39e7dab390e7b175ba9b9a9011e4d58c1",
+    "stores/w1000_amem/prefix/state.json": "179e8083f9183b47568f56c568c18d004ddc84e48b11f1c1ada8a8e9c85761d8",
+    "world_results.jsonl": "a7f7d8eb6aacb1e2cfd22241e7cf922ad728c430ff5b9b2e4ad8195b09768f7e"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "graphiti_batch": 1,
+    "measure_events": 60,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "seeds": [
+      1000
+    ],
+    "systems": [
+      "amem"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_measure_amem_20260929T152806Z",
+  "run_image": "sha256:118fd86eac3ec820195af2864cf98cb8ed610ed59318dc298fa6b2a76e782638",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "da2a934e970d58d74c8566ddc060d57bca753fa59d8509e90acbf0249108d298",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 490,
+      "seed": 1000,
+      "shift_targets": null,
+      "world_id": "w1000"
+    }
+  ]
+}

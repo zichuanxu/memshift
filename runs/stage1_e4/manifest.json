@@ -1,0 +1,41 @@
+{
+  "analysis_code": {
+    "commit": "77584022bc8f5f60713d8ef81cd3e11a6921aa42",
+    "dirty": false
+  },
+  "created_utc": "2026-09-28T18:08:07Z",
+  "experiment": "merged-e4",
+  "files_sha256": {
+    "analysis/e4_metrics.json": "b6d6529e5c7bd7e950d2e306afe749721acd1a23cd738ca6e1f3f5ad59fe3a51"
+  },
+  "run_id": "stage1_e4",
+  "sources": [
+    {
+      "code": {
+        "commit": "dd9886fb0c11876cf19290d5213c442985cff92e",
+        "dirty": false
+      },
+      "experiment": "E4",
+      "manifest_sha256": "50dc3c3621a10847a4165aa90194604fdb728001624fb8341193647f482db747",
+      "run_id": "e4_dev_v2_s0-1_20260928T173128Z",
+      "worlds": [
+        "w0000",
+        "w0001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "dd9886fb0c11876cf19290d5213c442985cff92e",
+        "dirty": false
+      },
+      "experiment": "E4",
+      "manifest_sha256": "aa0eb0beee1bc81f9a39a7e588cb3ea9962fc499fdbe5b1d535690667e95c1ce",
+      "run_id": "e4_dev_v2_s2-4_20260928T173130Z",
+      "worlds": [
+        "w0002",
+        "w0003",
+        "w0004"
+      ]
+    }
+  ]
+}

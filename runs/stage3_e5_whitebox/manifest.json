@@ -1,0 +1,121 @@
+{
+  "analysis_code": {
+    "commit": "5199bda9e43fede8da5de6c8b18f24feeda31278",
+    "dirty": false
+  },
+  "created_utc": "2026-09-28T18:44:44Z",
+  "experiment": "merged-e5_infer",
+  "files_sha256": {
+    "analysis/e5_whitebox_validation.json": "3390dbe5c4a38cf4a61f5addbf2b09464b8afa10ce20cead99f70407d7a943d3"
+  },
+  "run_id": "stage3_e5_whitebox",
+  "sources": [
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "9eda8e886f94e44d936db7a5b0202cf6614e908c8572d0411a4cab9e63c7f21f",
+      "run_id": "e1_dev_v3_s0-1_20260928T171939Z",
+      "worlds": [
+        "w0000",
+        "w0000",
+        "w0001",
+        "w0001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5fff35414efc12f118e94ca4e6b99b0e8a844e7210c039589d6098909a16e69e",
+      "run_id": "e1_dev_v3_s2-3_20260928T171941Z",
+      "worlds": [
+        "w0002",
+        "w0002",
+        "w0003",
+        "w0003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "4df06abf3db3087a3922a939da2a6c145773ca716a3b9efdeeff53778b10c03f",
+      "run_id": "e1_dev_v3_s4-5_20260928T171943Z",
+      "worlds": [
+        "w0004",
+        "w0004",
+        "w0005",
+        "w0005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "0985377bf8153c108ec7d8ed5d65e11014b732eff4e102a22ad1e88cccf8bf4f",
+      "run_id": "e1_dev_v3_s6-7_20260928T171945Z",
+      "worlds": [
+        "w0006",
+        "w0006",
+        "w0007",
+        "w0007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "41d39566f52c1a6f976ef4cf61914b2a07ec805b05d70db7e419431e6af7cb8a",
+      "run_id": "e1_dev_v3_s8-9_20260928T171947Z",
+      "worlds": [
+        "w0008",
+        "w0008",
+        "w0009",
+        "w0009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "230b65a99fe0f1273a52c5dc460d24285cc855911b165700f5a2c1dc126ad5a3",
+      "run_id": "e1_dev_orphan_v3_s0-4_20260928T171949Z",
+      "worlds": [
+        "w0000",
+        "w0001",
+        "w0002",
+        "w0003",
+        "w0004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f831b00bc4b1f3746e38227f3e2f9e844d6b074763dbc3242e3142c60076da52",
+      "run_id": "e1_dev_orphan_v3_s5-9_20260928T171951Z",
+      "worlds": [
+        "w0005",
+        "w0006",
+        "w0007",
+        "w0008",
+        "w0009"
+      ]
+    }
+  ]
+}

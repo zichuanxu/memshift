@@ -1,0 +1,93 @@
+[project]
+name = "memshift"
+version = "0.1.0"
+description = "MemShift: per-item carryover of a personal data layer under source, definition, writer-model and implementation shift."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "TBD" }
+authors = [{ name = "MemShift team" }]
+keywords = ["agent memory", "personal data layer", "benchmark", "incremental maintenance"]
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "pydantic>=2.7",
+  "jsonschema>=4.22",
+  "numpy>=2.0",
+  "polars>=1.0",
+  "scipy>=1.13",
+  "rank-bm25>=0.2.2",
+  "openai>=1.40",
+  "httpx>=0.27",
+  "pyyaml>=6.0",
+  "typer>=0.12",
+  "rich>=13.7",
+  "matplotlib>=3.11.2",
+]
+
+[project.scripts]
+memshift = "memshift.cli:app"
+
+[project.optional-dependencies]
+# Native memory systems for E5 / E6 (src/memshift/adapters/native.py, mem_export.py), pinned to the
+# versions whose source the adapters were checked against. Install with `uv sync --extra native`.
+native = [
+    "graphiti-core==0.30.2",
+    "kuzu==0.11.3",
+    "mem0ai==2.2.1",
+    "portable-memory==0.3.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.2",
+  "pytest-cov>=5.0",
+  "ruff>=0.6",
+  "mypy>=1.11",
+  "pre-commit>=3.7",
+  "types-PyYAML",
+  "types-jsonschema",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/memshift"]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+extend-exclude = ["reference", "runs", "worlds", "paper", ".claude", ".omc"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "N", "W"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["typer.Option", "typer.Argument"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["memshift"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/memshift", "tests"]
+strict = false
+warn_unused_ignores = true
+warn_return_any = true
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source = ["memshift"]

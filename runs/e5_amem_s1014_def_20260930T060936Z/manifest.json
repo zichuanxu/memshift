@@ -1,0 +1,129 @@
+{
+  "code": {
+    "commit": "c69847ba60a1814ee48a7676a0de28fe62183e65",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T15:43:59Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "0335514b6f84cee691da6bdfd47f8900be0357fa034eb98f440c3f373af476dc",
+    "answers.jsonl": "f4ed9dc0f57eb41965221b54cfb9903a5f41c20581ffa88a337e03c5cd61af90",
+    "calls.jsonl": "d2544003d97e002544ca85ce4fe9ea573beac2174e58b42aeccd399b6f06c2fc",
+    "env.json": "621e943d47d182188a8085c8b54492201833febb069e03f22230613cb5dad7f1",
+    "probes.jsonl": "6f465806092b32c72fab0265bd389b670276729034486f981e3d244e55bf4097",
+    "stores/w1014_amem/def/chroma/7e6407e7-7978-4e94-9991-a84bbba9e9af/data_level0.bin": "843fb869768e0e77579fe147569b943a922c28a4f532af2451aac4b90abb888b",
+    "stores/w1014_amem/def/chroma/7e6407e7-7978-4e94-9991-a84bbba9e9af/header.bin": "18f20be7de07692b1d1a9ad9a4b01636e9eac3cb236bef46ddfb21c131eea98c",
+    "stores/w1014_amem/def/chroma/7e6407e7-7978-4e94-9991-a84bbba9e9af/index_metadata.pickle": "7512ace770041d71b3ab4d527c577ec1bb8e833dcc0902b1de5fe990b3404e82",
+    "stores/w1014_amem/def/chroma/7e6407e7-7978-4e94-9991-a84bbba9e9af/length.bin": "217f3cac000b017ab0381cecefd890aa566a298fd300cdea24639e809450c5fd",
+    "stores/w1014_amem/def/chroma/7e6407e7-7978-4e94-9991-a84bbba9e9af/link_lists.bin": "8e666e824a018fd73bfd6db8e70373b8c890eecdb9e13d80146ba339326d8e12",
+    "stores/w1014_amem/def/chroma/chroma.sqlite3": "1da80418da9fd3f1554036a3bf7b0c4ef1b46236afbaa6b23b4a02ca3fb8e9ef",
+    "stores/w1014_amem/def/failures.jsonl": "e2f2d27a316dca366c3a8fc3095d1b8ec21b505fbd49c1c1ddb7cb8484add3b0",
+    "stores/w1014_amem/def/ledger.jsonl": "9406b28d1e102a66c55207764fb95be9d40af4ade0ca2eb02a4ff467ad3f9d45",
+    "stores/w1014_amem/def/memshift_native.json": "f9276d9c0286d7968bc114f11e786f198d614edd3568bc003ad2a586e96fde7c",
+    "stores/w1014_amem/def/notes.json": "ead17ace43b9f0b1b80516eb29671d134a0c46f8f9ae3fd0e1a8c59b2045dab4",
+    "stores/w1014_amem/def/state.json": "c72e3954494df0d1d7ced7398bb309d93d8188d24449ced01f13d506f18496f8",
+    "world_results.jsonl": "6600831a6bc737cd0cd367cd3deb40643484f1f7bf20524ecd3828296a28bab5"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "branches": [
+      "def"
+    ],
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "native_batch": 1,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "phase": "branch",
+    "prefix_run": "e5_amem_s1014_pre_20260930T040814Z",
+    "resume_from": null,
+    "seeds": [
+      1014
+    ],
+    "systems": [
+      "amem"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_amem_s1014_def_20260930T060936Z",
+  "run_image": "sha256:118fd86eac3ec820195af2864cf98cb8ed610ed59318dc298fa6b2a76e782638",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c3cf20edc2963e6f35a699f9b1e64b361999df4ddc77f20907488fddf8ba41e4",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 513,
+      "seed": 1014,
+      "shift_targets": null,
+      "world_id": "w1014"
+    }
+  ]
+}

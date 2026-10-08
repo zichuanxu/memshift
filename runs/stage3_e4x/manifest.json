@@ -1,0 +1,30 @@
+{
+  "analysis_code": {
+    "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T02:47:48Z",
+  "experiment": "merged-e4x",
+  "files_sha256": {
+    "analysis/e4x_metrics.json": "1ca8780cff903bfaf692f213d8811c91816ab93910ba72e90c0ef2f1e1c2a9d4"
+  },
+  "run_id": "stage3_e4x",
+  "sources": [
+    {
+      "code": {
+        "commit": "022a8828d7873ed7c6b0b86420b47055bf977302",
+        "dirty": false
+      },
+      "experiment": "E4X",
+      "manifest_sha256": "199312df27d0d782d5d86f96680fabbe69a11605c924d1b39bb4b60928302c3a",
+      "run_id": "e4x_test_20260928T225919Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004"
+      ]
+    }
+  ]
+}

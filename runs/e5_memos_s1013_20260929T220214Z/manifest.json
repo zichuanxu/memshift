@@ -1,0 +1,142 @@
+{
+  "code": {
+    "commit": "65f62c8e4ad91bc7240210700a151b8cd8bc7539",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T01:14:16Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "6eb1cb3a2e00c1d481f0bb0be4495e2a6b51bbe3c3b3b573ead99ff09131a1e6",
+    "answers.jsonl": "e781bd759cb08921f3203bc8ba901ef9efb4d05e1d13e31b0da5990b298c6077",
+    "calls.jsonl": "5e551cf126f5111e65bae3c6550a0f1642b59ab96f5f3e50d990565161e77192",
+    "env.json": "0b311cb40773595b4e3d61b2277ec021f4364abb98ede7f2ba62bd3831748734",
+    "probes.jsonl": "f05de12b2735c166d501ea7cfb34bb4bd59d118a3b32fdf3c586bea20740f7ea",
+    "stores/w1013_memos/def/ledger.jsonl": "b7f57cab83e0b0a03a0eaea26177697566850f44a715c5b099e9abd3ca23a039",
+    "stores/w1013_memos/def/memshift_native.json": "d0e94b3535884d6bfdc7f33fce4b9047d9ca1a1c96b64197e8b8bce1ec1ce3e1",
+    "stores/w1013_memos/def/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1013_memos/def/qdrant/collection/memshift/storage.sqlite": "0064f2d71f1fd4a9b27feaaeb921e5d7cf6d6d22fe7892c40d8f9d83e12d9149",
+    "stores/w1013_memos/def/qdrant/meta.json": "891700f1f3171b5f5cdf94258c13c681859f03bd31208a09c8f1f266ffa092f4",
+    "stores/w1013_memos/def/state.json": "7b92459a230d8261557adf74e3bec036f4c38adb2acac05a7ad02ce42e92ed00",
+    "stores/w1013_memos/orphan/ledger.jsonl": "8bf9c6789f338a25916cb44bcfbd28fbe0e56ccf6cd8a67f3dfcdf8b5b817be4",
+    "stores/w1013_memos/orphan/memshift_native.json": "d0e94b3535884d6bfdc7f33fce4b9047d9ca1a1c96b64197e8b8bce1ec1ce3e1",
+    "stores/w1013_memos/orphan/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1013_memos/orphan/qdrant/collection/memshift/storage.sqlite": "1c99704fb199d99579ad3ea71b4398da8993ab8829bd3716b9f6fca40aee132f",
+    "stores/w1013_memos/orphan/qdrant/meta.json": "891700f1f3171b5f5cdf94258c13c681859f03bd31208a09c8f1f266ffa092f4",
+    "stores/w1013_memos/orphan/state.json": "150bcad8b01c8cbf011e380882f943a132a1aaa641a3c3a960b7b91da32b2cd4",
+    "stores/w1013_memos/prefix/ledger.jsonl": "d824f970ef16c7125d1243d68b6fb413d0046a03a63aa78b67c3883ec39a981e",
+    "stores/w1013_memos/prefix/memshift_native.json": "d0e94b3535884d6bfdc7f33fce4b9047d9ca1a1c96b64197e8b8bce1ec1ce3e1",
+    "stores/w1013_memos/prefix/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1013_memos/prefix/qdrant/collection/memshift/storage.sqlite": "29c54faf527dd599c24721e0ca63b1c5139e3b2c38788df9e92644cffee58d77",
+    "stores/w1013_memos/prefix/qdrant/meta.json": "891700f1f3171b5f5cdf94258c13c681859f03bd31208a09c8f1f266ffa092f4",
+    "stores/w1013_memos/prefix/state.json": "97d80e1df0d63876d0a6b58771565c5227c0567b3655d6a60ab8b5d53532068c",
+    "stores/w1013_memos/snapshot/ledger.jsonl": "d824f970ef16c7125d1243d68b6fb413d0046a03a63aa78b67c3883ec39a981e",
+    "stores/w1013_memos/snapshot/memshift_native.json": "d0e94b3535884d6bfdc7f33fce4b9047d9ca1a1c96b64197e8b8bce1ec1ce3e1",
+    "stores/w1013_memos/snapshot/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1013_memos/snapshot/qdrant/collection/memshift/storage.sqlite": "29c54faf527dd599c24721e0ca63b1c5139e3b2c38788df9e92644cffee58d77",
+    "stores/w1013_memos/snapshot/qdrant/meta.json": "891700f1f3171b5f5cdf94258c13c681859f03bd31208a09c8f1f266ffa092f4",
+    "stores/w1013_memos/snapshot/state.json": "6bdf0a4aa9a9151a387981a51ed29fb2bd641d76d07a9872ccedeb0dec4dc434",
+    "stores/w1013_memos/src/ledger.jsonl": "e4544809005ffa1c6c9fc091a97d044978c44ce7c68a919fa1d7349661da413e",
+    "stores/w1013_memos/src/memshift_native.json": "d0e94b3535884d6bfdc7f33fce4b9047d9ca1a1c96b64197e8b8bce1ec1ce3e1",
+    "stores/w1013_memos/src/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1013_memos/src/qdrant/collection/memshift/storage.sqlite": "ed6960374f22e742bffc3e88c73dc6c05ce30a590c8924fd57543db4379a6919",
+    "stores/w1013_memos/src/qdrant/meta.json": "891700f1f3171b5f5cdf94258c13c681859f03bd31208a09c8f1f266ffa092f4",
+    "stores/w1013_memos/src/state.json": "76891e238da3fae0ffa526e7108a53661584f190b09b973b8a40df21dfddaea2",
+    "world_results.jsonl": "77f6fb3057d82b9cef5fa1acdfc569d67b7b0feb587aa56faa04a6fc3fc9eff3"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "native_batch": 2,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "seeds": [
+      1013
+    ],
+    "systems": [
+      "memos"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_memos_s1013_20260929T220214Z",
+  "run_image": "sha256:fbd9a3586c83c71c4364d7cac030984d742fd028db217157a59e7f2d5c8af2c5",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c902f4fd5ffb40f550a9d01e71e68bc77b285e01b776bad6f4a76232d41ffd06",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 523,
+      "seed": 1013,
+      "shift_targets": null,
+      "world_id": "w1013"
+    }
+  ]
+}

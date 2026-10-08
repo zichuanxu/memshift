@@ -1,0 +1,522 @@
+{
+ "retention": {
+  "downgrade:holdmem_D0B0": {
+   "est": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "width": 0.0,
+   "n_worlds": 20,
+   "n_items": 830
+  },
+  "downgrade:holdmem_D0B1_source": {
+   "est": 0.9698795180722891,
+   "lo": 0.9615846338535414,
+   "hi": 0.9769975786924939,
+   "width": 0.015412944838952503,
+   "n_worlds": 20,
+   "n_items": 830
+  },
+  "downgrade:holdmem_D1B0": {
+   "est": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "width": 0.0,
+   "n_worlds": 20,
+   "n_items": 830
+  },
+  "downgrade:holdmem_D1B1_source": {
+   "est": 0.9963855421686747,
+   "lo": 0.9902912621359223,
+   "hi": 1.0,
+   "width": 0.009708737864077666,
+   "n_worlds": 20,
+   "n_items": 830
+  },
+  "upgrade:holdmem_D0B0": {
+   "est": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "width": 0.0,
+   "n_worlds": 20,
+   "n_items": 808
+  },
+  "upgrade:holdmem_D0B1_source": {
+   "est": 0.9962871287128713,
+   "lo": 0.9925187032418953,
+   "hi": 1.0,
+   "width": 0.007481296758104716,
+   "n_worlds": 20,
+   "n_items": 808
+  },
+  "upgrade:holdmem_D1B0": {
+   "est": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "width": 0.0,
+   "n_worlds": 20,
+   "n_items": 808
+  },
+  "upgrade:holdmem_D1B1_source": {
+   "est": 0.9962871287128713,
+   "lo": 0.9900744416873449,
+   "hi": 1.0,
+   "width": 0.00992555831265507,
+   "n_worlds": 20,
+   "n_items": 808
+  }
+ },
+ "calibration": {
+  "downgrade": {
+   "slope": {
+    "est": 1.0868557622741246,
+    "n_items": 830,
+    "n_worlds": 20,
+    "lo95": 0.9134173382873971,
+    "lo90": 0.9453443951490067,
+    "hi90": 1.3854741248916431,
+    "hi95": 1.464583609405321
+   },
+   "auroc": {
+    "est": 0.930360248447205,
+    "n_items": 830,
+    "n_worlds": 20,
+    "lo95": 0.8648561057816956,
+    "lo90": 0.8762779156327544,
+    "hi90": 0.9893522626441881,
+    "hi95": 0.9915029208709506
+   },
+   "per_type": {
+    "appointment": {
+     "predicted": 0.3,
+     "observed": 1.0,
+     "n": 13
+    },
+    "contact.city": {
+     "predicted": 0.9888888888888889,
+     "observed": 1.0,
+     "n": 239
+    },
+    "contact.employer": {
+     "predicted": 0.9944444444444445,
+     "observed": 0.9915966386554622,
+     "n": 238
+    },
+    "kappa.active_project": {
+     "predicted": 0.8333333333333334,
+     "observed": 0.85,
+     "n": 20
+    },
+    "kappa.close_friend": {
+     "predicted": 0.9666666666666667,
+     "observed": 0.0,
+     "n": 2
+    },
+    "kappa.overdue_task": {
+     "predicted": 0.3,
+     "observed": 0.0,
+     "n": 18
+    },
+    "kappa.working_hours": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "series": {
+     "predicted": 0.9916666666666667,
+     "observed": 1.0,
+     "n": 73
+    },
+    "task_due": {
+     "predicted": 0.9722222222222222,
+     "observed": 1.0,
+     "n": 120
+    },
+    "u.commute": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.diet": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.employer": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 7
+    },
+    "u.manager": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.timezone": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    }
+   }
+  },
+  "upgrade": {
+   "slope": {
+    "est": -3.5226258762351272,
+    "n_items": 808,
+    "n_worlds": 20,
+    "lo95": -99.4303623947659,
+    "lo90": -99.28678796875336,
+    "hi90": -0.9597595805254325,
+    "hi95": -0.9542771719192844
+   },
+   "auroc": {
+    "est": 0.4720496894409938,
+    "n_items": 808,
+    "n_worlds": 20,
+    "lo95": 0.2781908302354399,
+    "lo90": 0.2804726368159204,
+    "hi90": 0.6660493827160494,
+    "hi95": 0.6685254027261462
+   },
+   "per_type": {
+    "appointment": {
+     "predicted": 0.3,
+     "observed": 1.0,
+     "n": 13
+    },
+    "contact.city": {
+     "predicted": 0.9888888888888889,
+     "observed": 0.9958333333333333,
+     "n": 240
+    },
+    "contact.employer": {
+     "predicted": 0.9944444444444445,
+     "observed": 0.9957805907172996,
+     "n": 237
+    },
+    "kappa.active_project": {
+     "predicted": 0.8333333333333334,
+     "observed": 1.0,
+     "n": 17
+    },
+    "kappa.working_hours": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "series": {
+     "predicted": 0.9916666666666667,
+     "observed": 0.9864864864864865,
+     "n": 74
+    },
+    "task_due": {
+     "predicted": 0.9722222222222222,
+     "observed": 1.0,
+     "n": 120
+    },
+    "u.commute": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.diet": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.employer": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 7
+    },
+    "u.manager": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.timezone": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    }
+   }
+  }
+ },
+ "d1_vs_checker": {
+  "downgrade": {
+   "checker_pass_rate_calibration": 0.7701388888888889,
+   "new_writer_correct_calibration": 0.8395833333333333,
+   "d1_b1_survival": 0.9963855421686747,
+   "agreement_by_type": {
+    "appointment": {
+     "n": 60,
+     "agree": 0.3,
+     "old_correct": 0.8833333333333333,
+     "new_correct": 0.18333333333333332
+    },
+    "contact.city": {
+     "n": 360,
+     "agree": 0.9888888888888889,
+     "old_correct": 0.9916666666666667,
+     "new_correct": 0.9972222222222222
+    },
+    "contact.employer": {
+     "n": 360,
+     "agree": 0.9944444444444445,
+     "old_correct": 1.0,
+     "new_correct": 0.9944444444444445
+    },
+    "kappa.active_project": {
+     "n": 30,
+     "agree": 0.8333333333333334,
+     "old_correct": 1.0,
+     "new_correct": 0.8333333333333334
+    },
+    "kappa.close_friend": {
+     "n": 30,
+     "agree": 0.9666666666666667,
+     "old_correct": 0.03333333333333333,
+     "new_correct": 0.0
+    },
+    "kappa.important_contact": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.03333333333333333,
+     "new_correct": 0.03333333333333333
+    },
+    "kappa.overdue_task": {
+     "n": 30,
+     "agree": 0.3,
+     "old_correct": 0.9333333333333333,
+     "new_correct": 0.23333333333333334
+    },
+    "kappa.vip_sender": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.0,
+     "new_correct": 0.0
+    },
+    "kappa.working_hours": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "series": {
+     "n": 120,
+     "agree": 0.9916666666666667,
+     "old_correct": 0.9916666666666667,
+     "new_correct": 0.9833333333333333
+    },
+    "task_due": {
+     "n": 180,
+     "agree": 0.9722222222222222,
+     "old_correct": 0.9777777777777777,
+     "new_correct": 0.9722222222222222
+    },
+    "u.commute": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.diet": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.employer": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.16666666666666666,
+     "new_correct": 0.16666666666666666
+    },
+    "u.home_city": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.0,
+     "new_correct": 0.0
+    },
+    "u.manager": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.timezone": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    }
+   }
+  },
+  "upgrade": {
+   "checker_pass_rate_calibration": 0.8201388888888889,
+   "new_writer_correct_calibration": 0.8888888888888888,
+   "d1_b1_survival": 0.9962871287128713,
+   "agreement_by_type": {
+    "appointment": {
+     "n": 60,
+     "agree": 0.3,
+     "old_correct": 0.18333333333333332,
+     "new_correct": 0.8833333333333333
+    },
+    "contact.city": {
+     "n": 360,
+     "agree": 0.9888888888888889,
+     "old_correct": 0.9972222222222222,
+     "new_correct": 0.9916666666666667
+    },
+    "contact.employer": {
+     "n": 360,
+     "agree": 0.9944444444444445,
+     "old_correct": 0.9944444444444445,
+     "new_correct": 1.0
+    },
+    "kappa.active_project": {
+     "n": 30,
+     "agree": 0.8333333333333334,
+     "old_correct": 0.8333333333333334,
+     "new_correct": 1.0
+    },
+    "kappa.close_friend": {
+     "n": 30,
+     "agree": 0.9666666666666667,
+     "old_correct": 0.0,
+     "new_correct": 0.03333333333333333
+    },
+    "kappa.important_contact": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.03333333333333333,
+     "new_correct": 0.03333333333333333
+    },
+    "kappa.overdue_task": {
+     "n": 30,
+     "agree": 0.3,
+     "old_correct": 0.23333333333333334,
+     "new_correct": 0.9333333333333333
+    },
+    "kappa.vip_sender": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.0,
+     "new_correct": 0.0
+    },
+    "kappa.working_hours": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "series": {
+     "n": 120,
+     "agree": 0.9916666666666667,
+     "old_correct": 0.9833333333333333,
+     "new_correct": 0.9916666666666667
+    },
+    "task_due": {
+     "n": 180,
+     "agree": 0.9722222222222222,
+     "old_correct": 0.9722222222222222,
+     "new_correct": 0.9777777777777777
+    },
+    "u.commute": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.diet": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.employer": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.16666666666666666,
+     "new_correct": 0.16666666666666666
+    },
+    "u.home_city": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.0,
+     "new_correct": 0.0
+    },
+    "u.manager": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.timezone": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    }
+   }
+  }
+ },
+ "t1": {
+  "downgrade": {
+   "delta_90": {
+    "est": -0.0036144578313253013,
+    "lo": -0.008464328899637243,
+    "hi": 0.0,
+    "width": 0.008464328899637243,
+    "n_worlds": 20,
+    "n_items": 830
+   },
+   "margin": 0.03,
+   "equivalent": true
+  },
+  "upgrade": {
+   "delta_90": {
+    "est": -0.0037128712871287127,
+    "lo": -0.00865265760197775,
+    "hi": 0.0,
+    "width": 0.00865265760197775,
+    "n_worlds": 20,
+    "n_items": 808
+   },
+   "margin": 0.03,
+   "equivalent": true
+  }
+ },
+ "path3_quantitative_prediction_holds": {
+  "downgrade": true,
+  "upgrade": false
+ },
+ "path3": {
+  "tiers": [
+   "downgrade",
+   "upgrade"
+  ],
+  "pooled_slope": {
+   "est": 0.9707937977783204,
+   "n_items": 1638,
+   "n_worlds": 20,
+   "lo95": 0.8238402466137893,
+   "lo90": 0.8458793807041579,
+   "hi90": 1.191080212802526,
+   "hi95": 1.2530789402184068
+  },
+  "pooled_auroc": {
+   "est": 0.8812555456965395,
+   "n_items": 1638,
+   "n_worlds": 20,
+   "lo95": 0.80743422214374,
+   "lo90": 0.8183877296236847,
+   "hi90": 0.954071773636991,
+   "hi95": 0.9626054510058404
+  },
+  "triggered": false,
+  "tier_caveats": [
+   "upgrade"
+  ]
+ }
+}

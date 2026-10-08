@@ -1,0 +1,46 @@
+{
+  "analysis_code": {
+    "commit": "27b7a0efda41b8a3149b0df191489eed0efcc0e3",
+    "dirty": false
+  },
+  "created_utc": "2026-09-28T16:37:03Z",
+  "experiment": "merged-e3",
+  "files_sha256": {
+    "analysis/e3_metrics.json": "0fd40b3c32a90d8a7e862ae09b38562208d8f4a0bb9cddd3cdf2bce47be722e9"
+  },
+  "run_id": "stage1_e3",
+  "sources": [
+    {
+      "code": {
+        "commit": "1503688e6c48680e821d4438a8c826a399b56ab6",
+        "dirty": false
+      },
+      "experiment": "E3",
+      "manifest_sha256": "b183ec795bf155d961de9f177b1a7e98d4e7a4c8076e06216d7941aafb8ef114",
+      "run_id": "e3_dev_s0-4_20260928T154338Z",
+      "worlds": [
+        "w0000",
+        "w0001",
+        "w0002",
+        "w0003",
+        "w0004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "1503688e6c48680e821d4438a8c826a399b56ab6",
+        "dirty": false
+      },
+      "experiment": "E3",
+      "manifest_sha256": "8d722719c7419e306660cc00b781641cee28b9a4d5fb88060d1f696f5157987f",
+      "run_id": "e3_dev_s5-9_20260928T154342Z",
+      "worlds": [
+        "w0005",
+        "w0006",
+        "w0007",
+        "w0008",
+        "w0009"
+      ]
+    }
+  ]
+}

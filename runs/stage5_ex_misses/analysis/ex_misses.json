@@ -1,0 +1,3097 @@
+{
+ "explore_status": "exploratory: not part of prereg v0-v2 and changes no registered contrast, margin, threshold or verdict (prereg/decisions.md 2026-09-30)",
+ "explore_draws": 2000,
+ "explore_seed": 996,
+ "explore_miss_classes": {
+  "main": {
+   "checks": {
+    "world_branches": 60,
+    "events_hash_matches": 60,
+    "missed": 426,
+    "missed_same_at_D0": 426
+   },
+   "worlds": 20,
+   "def": {
+    "definition": {
+     "missed_item_times": 54,
+     "a": {
+      "est": 0.14814814814814814,
+      "lo": 0.0,
+      "hi": 0.2857142857142857,
+      "width": 0.2857142857142857,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "a_count": 8,
+     "b": {
+      "est": 0.7407407407407407,
+      "lo": 0.582089552238806,
+      "hi": 0.9393939393939394,
+      "width": 0.35730438715513346,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "b_count": 40,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.7407407407407407,
+      "lo": 0.582089552238806,
+      "hi": 0.9393939393939394,
+      "width": 0.35730438715513346,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "b_new_count": 40,
+     "c": {
+      "est": 0.1111111111111111,
+      "lo": 0.021739130434782608,
+      "hi": 0.2,
+      "width": 0.17826086956521742,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "c_count": 6,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.1111111111111111,
+      "lo": 0.021739130434782608,
+      "hi": 0.2,
+      "width": 0.17826086956521742,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "c_left_scope_count": 6,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.09259259259259259,
+      "lo": 0.0,
+      "hi": 0.21176470588235294,
+      "width": 0.21176470588235294,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "a_and_b_count": 5,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 54
+     },
+     "cited_touched_count": 0
+    },
+    "other": {
+     "missed_item_times": 62,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.43548387096774194,
+      "lo": 0.2441860465116279,
+      "hi": 0.6666666666666666,
+      "width": 0.42248062015503873,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "b_count": 27,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.43548387096774194,
+      "lo": 0.2441860465116279,
+      "hi": 0.6666666666666666,
+      "width": 0.42248062015503873,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "b_new_count": 27,
+     "c": {
+      "est": 0.5645161290322581,
+      "lo": 0.3333333333333333,
+      "hi": 0.7536231884057971,
+      "width": 0.4202898550724638,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_count": 35,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.5645161290322581,
+      "lo": 0.3333333333333333,
+      "hi": 0.7536231884057971,
+      "width": 0.4202898550724638,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_left_scope_count": 35,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "cited_touched_count": 0
+    },
+    "rule": {
+     "missed_item_times": 55,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.36363636363636365,
+      "lo": 0.21311475409836064,
+      "hi": 0.6052631578947368,
+      "width": 0.39214840379637617,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_count": 20,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.36363636363636365,
+      "lo": 0.21311475409836064,
+      "hi": 0.6052631578947368,
+      "width": 0.39214840379637617,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_new_count": 20,
+     "c": {
+      "est": 0.6363636363636364,
+      "lo": 0.3902439024390244,
+      "hi": 0.7868852459016393,
+      "width": 0.3966413434626149,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_count": 35,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.6363636363636364,
+      "lo": 0.3902439024390244,
+      "hi": 0.7868852459016393,
+      "width": 0.3966413434626149,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_left_scope_count": 35,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "cited_touched_count": 0
+    },
+    "norule": {
+     "missed_item_times": 7,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "a_count": 0,
+     "b": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "b_count": 7,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "b_new_count": 7,
+     "c": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_count": 0,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_left_scope_count": 0,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "cited_touched_count": 0
+    },
+    "all": {
+     "missed_item_times": 116,
+     "a": {
+      "est": 0.06896551724137931,
+      "lo": 0.0,
+      "hi": 0.1610738255033557,
+      "width": 0.1610738255033557,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "a_count": 8,
+     "b": {
+      "est": 0.5775862068965517,
+      "lo": 0.42962962962962964,
+      "hi": 0.7281553398058253,
+      "width": 0.2985257101761956,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "b_count": 67,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.5775862068965517,
+      "lo": 0.42962962962962964,
+      "hi": 0.7281553398058253,
+      "width": 0.2985257101761956,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "b_new_count": 67,
+     "c": {
+      "est": 0.35344827586206895,
+      "lo": 0.19047619047619047,
+      "hi": 0.5116279069767442,
+      "width": 0.32115171650055374,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "c_count": 41,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.35344827586206895,
+      "lo": 0.19047619047619047,
+      "hi": 0.5116279069767442,
+      "width": 0.32115171650055374,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "c_left_scope_count": 41,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.04310344827586207,
+      "lo": 0.0,
+      "hi": 0.11504424778761062,
+      "width": 0.11504424778761062,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "a_and_b_count": 5,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 116
+     },
+     "cited_touched_count": 0
+    }
+   },
+   "orphan": {
+    "definition": {
+     "missed_item_times": 74,
+     "a": {
+      "est": 0.16216216216216217,
+      "lo": 0.0,
+      "hi": 0.2857142857142857,
+      "width": 0.2857142857142857,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "a_count": 12,
+     "b": {
+      "est": 0.7162162162162162,
+      "lo": 0.5833333333333334,
+      "hi": 0.8793103448275862,
+      "width": 0.2959770114942528,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "b_count": 53,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.7162162162162162,
+      "lo": 0.5833333333333334,
+      "hi": 0.8793103448275862,
+      "width": 0.2959770114942528,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "b_new_count": 53,
+     "c": {
+      "est": 0.12162162162162163,
+      "lo": 0.03076923076923077,
+      "hi": 0.21428571428571427,
+      "width": 0.1835164835164835,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "c_count": 9,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.12162162162162163,
+      "lo": 0.03076923076923077,
+      "hi": 0.21428571428571427,
+      "width": 0.1835164835164835,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "c_left_scope_count": 9,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.10810810810810811,
+      "lo": 0.0,
+      "hi": 0.21176470588235294,
+      "width": 0.21176470588235294,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "a_and_b_count": 8,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 74
+     },
+     "cited_touched_count": 0
+    },
+    "other": {
+     "missed_item_times": 62,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.43548387096774194,
+      "lo": 0.2441860465116279,
+      "hi": 0.6666666666666666,
+      "width": 0.42248062015503873,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "b_count": 27,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.43548387096774194,
+      "lo": 0.2441860465116279,
+      "hi": 0.6666666666666666,
+      "width": 0.42248062015503873,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "b_new_count": 27,
+     "c": {
+      "est": 0.5645161290322581,
+      "lo": 0.3333333333333333,
+      "hi": 0.7536231884057971,
+      "width": 0.4202898550724638,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_count": 35,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.5645161290322581,
+      "lo": 0.3333333333333333,
+      "hi": 0.7536231884057971,
+      "width": 0.4202898550724638,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_left_scope_count": 35,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 62
+     },
+     "cited_touched_count": 0
+    },
+    "rule": {
+     "missed_item_times": 55,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.36363636363636365,
+      "lo": 0.21311475409836064,
+      "hi": 0.6052631578947368,
+      "width": 0.39214840379637617,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_count": 20,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.36363636363636365,
+      "lo": 0.21311475409836064,
+      "hi": 0.6052631578947368,
+      "width": 0.39214840379637617,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_new_count": 20,
+     "c": {
+      "est": 0.6363636363636364,
+      "lo": 0.3902439024390244,
+      "hi": 0.7868852459016393,
+      "width": 0.3966413434626149,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_count": 35,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.6363636363636364,
+      "lo": 0.3902439024390244,
+      "hi": 0.7868852459016393,
+      "width": 0.3966413434626149,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_left_scope_count": 35,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "cited_touched_count": 0
+    },
+    "norule": {
+     "missed_item_times": 7,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "a_count": 0,
+     "b": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "b_count": 7,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "b_new_count": 7,
+     "c": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_count": 0,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_left_scope_count": 0,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 7
+     },
+     "cited_touched_count": 0
+    },
+    "all": {
+     "missed_item_times": 136,
+     "a": {
+      "est": 0.08823529411764706,
+      "lo": 0.0,
+      "hi": 0.17699115044247787,
+      "width": 0.17699115044247787,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "a_count": 12,
+     "b": {
+      "est": 0.5882352941176471,
+      "lo": 0.4563758389261745,
+      "hi": 0.7327586206896551,
+      "width": 0.27638278176348063,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "b_count": 80,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.5882352941176471,
+      "lo": 0.4563758389261745,
+      "hi": 0.7327586206896551,
+      "width": 0.27638278176348063,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "b_new_count": 80,
+     "c": {
+      "est": 0.3235294117647059,
+      "lo": 0.17647058823529413,
+      "hi": 0.45323741007194246,
+      "width": 0.27676682183664836,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "c_count": 44,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.3235294117647059,
+      "lo": 0.17647058823529413,
+      "hi": 0.45323741007194246,
+      "width": 0.27676682183664836,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "c_left_scope_count": 44,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.058823529411764705,
+      "lo": 0.0,
+      "hi": 0.12878787878787878,
+      "width": 0.12878787878787878,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "a_and_b_count": 8,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 136
+     },
+     "cited_touched_count": 0
+    }
+   },
+   "src": {
+    "definition": {
+     "missed_item_times": 78,
+     "a": {
+      "est": 0.10256410256410256,
+      "lo": 0.0,
+      "hi": 0.21978021978021978,
+      "width": 0.21978021978021978,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "a_count": 8,
+     "b": {
+      "est": 0.8076923076923077,
+      "lo": 0.66,
+      "hi": 0.9666666666666667,
+      "width": 0.30666666666666664,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "b_count": 63,
+     "b_existing": {
+      "est": 0.05128205128205128,
+      "lo": 0.0,
+      "hi": 0.136986301369863,
+      "width": 0.136986301369863,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "b_existing_count": 4,
+     "b_new": {
+      "est": 0.7564102564102564,
+      "lo": 0.6206896551724138,
+      "hi": 0.9104477611940298,
+      "width": 0.289758106021616,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "b_new_count": 59,
+     "c": {
+      "est": 0.08974358974358974,
+      "lo": 0.0136986301369863,
+      "hi": 0.17647058823529413,
+      "width": 0.16277195809830783,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "c_count": 7,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.08974358974358974,
+      "lo": 0.0136986301369863,
+      "hi": 0.17647058823529413,
+      "width": 0.16277195809830783,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "c_left_scope_count": 7,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0641025641025641,
+      "lo": 0.0,
+      "hi": 0.16,
+      "width": 0.16,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "a_and_b_count": 5,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 78
+     },
+     "cited_touched_count": 0
+    },
+    "other": {
+     "missed_item_times": 96,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.6666666666666666,
+      "lo": 0.5063291139240507,
+      "hi": 0.8390804597701149,
+      "width": 0.33275134584606425,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "b_count": 64,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.6666666666666666,
+      "lo": 0.5063291139240507,
+      "hi": 0.8390804597701149,
+      "width": 0.33275134584606425,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "b_new_count": 64,
+     "c": {
+      "est": 0.3333333333333333,
+      "lo": 0.16,
+      "hi": 0.49333333333333335,
+      "width": 0.33333333333333337,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "c_count": 32,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.3333333333333333,
+      "lo": 0.16,
+      "hi": 0.49333333333333335,
+      "width": 0.33333333333333337,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "c_left_scope_count": 32,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 96
+     },
+     "cited_touched_count": 0
+    },
+    "rule": {
+     "missed_item_times": 55,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.41818181818181815,
+      "lo": 0.23809523809523808,
+      "hi": 0.6744186046511628,
+      "width": 0.4363233665559247,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_count": 23,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.41818181818181815,
+      "lo": 0.23809523809523808,
+      "hi": 0.6744186046511628,
+      "width": 0.4363233665559247,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "b_new_count": 23,
+     "c": {
+      "est": 0.5818181818181818,
+      "lo": 0.325,
+      "hi": 0.7619047619047619,
+      "width": 0.43690476190476185,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_count": 32,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.5818181818181818,
+      "lo": 0.325,
+      "hi": 0.7619047619047619,
+      "width": 0.43690476190476185,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_left_scope_count": 32,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 55
+     },
+     "cited_touched_count": 0
+    },
+    "norule": {
+     "missed_item_times": 41,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "a_count": 0,
+     "b": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "b_count": 41,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "b_new_count": 41,
+     "c": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "c_count": 0,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "c_left_scope_count": 0,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 41
+     },
+     "cited_touched_count": 0
+    },
+    "all": {
+     "missed_item_times": 174,
+     "a": {
+      "est": 0.04597701149425287,
+      "lo": 0.0,
+      "hi": 0.10752688172043011,
+      "width": 0.10752688172043011,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "a_count": 8,
+     "b": {
+      "est": 0.7298850574712644,
+      "lo": 0.6348314606741573,
+      "hi": 0.8291139240506329,
+      "width": 0.1942824633764756,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "b_count": 127,
+     "b_existing": {
+      "est": 0.022988505747126436,
+      "lo": 0.0,
+      "hi": 0.06382978723404255,
+      "width": 0.06382978723404255,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "b_existing_count": 4,
+     "b_new": {
+      "est": 0.7068965517241379,
+      "lo": 0.6073298429319371,
+      "hi": 0.8136645962732919,
+      "width": 0.20633475334135476,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "b_new_count": 123,
+     "c": {
+      "est": 0.22413793103448276,
+      "lo": 0.11510791366906475,
+      "hi": 0.32386363636363635,
+      "width": 0.2087557226945716,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "c_count": 39,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.22413793103448276,
+      "lo": 0.11510791366906475,
+      "hi": 0.32386363636363635,
+      "width": 0.2087557226945716,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "c_left_scope_count": 39,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.028735632183908046,
+      "lo": 0.0,
+      "hi": 0.07792207792207792,
+      "width": 0.07792207792207792,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "a_and_b_count": 5,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 174
+     },
+     "cited_touched_count": 0
+    }
+   }
+  },
+  "rep": {
+   "checks": {
+    "world_branches": 59,
+    "events_hash_matches": 59,
+    "missed": 365,
+    "missed_same_at_D0": 365
+   },
+   "worlds": 20,
+   "def": {
+    "definition": {
+     "missed_item_times": 47,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.7872340425531915,
+      "lo": 0.66,
+      "hi": 0.9074074074074074,
+      "width": 0.2474074074074074,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "b_count": 37,
+     "b_existing": {
+      "est": 0.0425531914893617,
+      "lo": 0.0,
+      "hi": 0.11764705882352941,
+      "width": 0.11764705882352941,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "b_existing_count": 2,
+     "b_new": {
+      "est": 0.7446808510638298,
+      "lo": 0.6153846153846154,
+      "hi": 0.8627450980392157,
+      "width": 0.2473604826546003,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "b_new_count": 35,
+     "c": {
+      "est": 0.2127659574468085,
+      "lo": 0.09090909090909091,
+      "hi": 0.34,
+      "width": 0.2490909090909091,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "c_count": 10,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.2127659574468085,
+      "lo": 0.09090909090909091,
+      "hi": 0.34,
+      "width": 0.2490909090909091,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "c_left_scope_count": 10,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 47
+     },
+     "cited_touched_count": 0
+    },
+    "other": {
+     "missed_item_times": 40,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_count": 29,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_new_count": 29,
+     "c": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_count": 11,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_left_scope_count": 11,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "cited_touched_count": 0
+    },
+    "rule": {
+     "missed_item_times": 40,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_count": 29,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_new_count": 29,
+     "c": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_count": 11,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_left_scope_count": 11,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "cited_touched_count": 0
+    },
+    "norule": {
+     "missed_item_times": 0,
+     "a": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "a_count": 0,
+     "b": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "b_count": 0,
+     "b_existing": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "b_new_count": 0,
+     "c": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_count": 0,
+     "c_definition": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_left_scope_count": 0,
+     "c_other": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "cited_touched_count": 0
+    },
+    "all": {
+     "missed_item_times": 87,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.7586206896551724,
+      "lo": 0.6309523809523809,
+      "hi": 0.8831168831168831,
+      "width": 0.25216450216450215,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "b_count": 66,
+     "b_existing": {
+      "est": 0.022988505747126436,
+      "lo": 0.0,
+      "hi": 0.06666666666666667,
+      "width": 0.06666666666666667,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "b_existing_count": 2,
+     "b_new": {
+      "est": 0.735632183908046,
+      "lo": 0.6049382716049383,
+      "hi": 0.8586956521739131,
+      "width": 0.2537573805689748,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "b_new_count": 64,
+     "c": {
+      "est": 0.2413793103448276,
+      "lo": 0.11627906976744186,
+      "hi": 0.36893203883495146,
+      "width": 0.2526529690675096,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "c_count": 21,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.2413793103448276,
+      "lo": 0.11627906976744186,
+      "hi": 0.36893203883495146,
+      "width": 0.2526529690675096,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "c_left_scope_count": 21,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 87
+     },
+     "cited_touched_count": 0
+    }
+   },
+   "orphan": {
+    "definition": {
+     "missed_item_times": 79,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.7974683544303798,
+      "lo": 0.6707317073170732,
+      "hi": 0.9102564102564102,
+      "width": 0.23952470293933703,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "b_count": 63,
+     "b_existing": {
+      "est": 0.02531645569620253,
+      "lo": 0.0,
+      "hi": 0.0625,
+      "width": 0.0625,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "b_existing_count": 2,
+     "b_new": {
+      "est": 0.7721518987341772,
+      "lo": 0.6463414634146342,
+      "hi": 0.8823529411764706,
+      "width": 0.2360114777618364,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "b_new_count": 61,
+     "c": {
+      "est": 0.20253164556962025,
+      "lo": 0.08860759493670886,
+      "hi": 0.3291139240506329,
+      "width": 0.24050632911392403,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "c_count": 16,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.20253164556962025,
+      "lo": 0.08860759493670886,
+      "hi": 0.3291139240506329,
+      "width": 0.24050632911392403,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "c_left_scope_count": 16,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 79
+     },
+     "cited_touched_count": 0
+    },
+    "other": {
+     "missed_item_times": 40,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_count": 29,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_new_count": 29,
+     "c": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_count": 11,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_left_scope_count": 11,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "cited_touched_count": 0
+    },
+    "rule": {
+     "missed_item_times": 40,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_count": 29,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.725,
+      "lo": 0.5428571428571428,
+      "hi": 0.9285714285714286,
+      "width": 0.3857142857142858,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "b_new_count": 29,
+     "c": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_count": 11,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.275,
+      "lo": 0.07142857142857142,
+      "hi": 0.45454545454545453,
+      "width": 0.3831168831168831,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_left_scope_count": 11,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 40
+     },
+     "cited_touched_count": 0
+    },
+    "norule": {
+     "missed_item_times": 0,
+     "a": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "a_count": 0,
+     "b": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "b_count": 0,
+     "b_existing": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "b_new_count": 0,
+     "c": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_count": 0,
+     "c_definition": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_left_scope_count": 0,
+     "c_other": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": NaN,
+      "lo": NaN,
+      "hi": NaN,
+      "width": NaN,
+      "n_worlds": 20,
+      "n_items": 0
+     },
+     "cited_touched_count": 0
+    },
+    "all": {
+     "missed_item_times": 119,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.773109243697479,
+      "lo": 0.6363636363636364,
+      "hi": 0.8956521739130435,
+      "width": 0.25928853754940717,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "b_count": 92,
+     "b_existing": {
+      "est": 0.01680672268907563,
+      "lo": 0.0,
+      "hi": 0.044642857142857144,
+      "width": 0.044642857142857144,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "b_existing_count": 2,
+     "b_new": {
+      "est": 0.7563025210084033,
+      "lo": 0.6229508196721312,
+      "hi": 0.8738738738738738,
+      "width": 0.25092305420174266,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "b_new_count": 90,
+     "c": {
+      "est": 0.226890756302521,
+      "lo": 0.10434782608695652,
+      "hi": 0.3629032258064516,
+      "width": 0.2585553997194951,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "c_count": 27,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.226890756302521,
+      "lo": 0.10434782608695652,
+      "hi": 0.3629032258064516,
+      "width": 0.2585553997194951,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "c_left_scope_count": 27,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 119
+     },
+     "cited_touched_count": 0
+    }
+   },
+   "src": {
+    "definition": {
+     "missed_item_times": 83,
+     "a": {
+      "est": 0.024096385542168676,
+      "lo": 0.0,
+      "hi": 0.07228915662650602,
+      "width": 0.07228915662650602,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "a_count": 2,
+     "b": {
+      "est": 0.8313253012048193,
+      "lo": 0.7093023255813954,
+      "hi": 0.9358974358974359,
+      "width": 0.22659511031604052,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "b_count": 69,
+     "b_existing": {
+      "est": 0.060240963855421686,
+      "lo": 0.012048192771084338,
+      "hi": 0.125,
+      "width": 0.11295180722891567,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "b_existing_count": 5,
+     "b_new": {
+      "est": 0.7710843373493976,
+      "lo": 0.6506024096385542,
+      "hi": 0.8780487804878049,
+      "width": 0.22744637084925068,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "b_new_count": 64,
+     "c": {
+      "est": 0.14457831325301204,
+      "lo": 0.047058823529411764,
+      "hi": 0.2727272727272727,
+      "width": 0.22566844919786094,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "c_count": 12,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.14457831325301204,
+      "lo": 0.047058823529411764,
+      "hi": 0.2727272727272727,
+      "width": 0.22566844919786094,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "c_left_scope_count": 12,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.024096385542168676,
+      "lo": 0.0,
+      "hi": 0.07228915662650602,
+      "width": 0.07228915662650602,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "a_and_b_count": 2,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 83
+     },
+     "cited_touched_count": 0
+    },
+    "other": {
+     "missed_item_times": 76,
+     "a": {
+      "est": 0.013157894736842105,
+      "lo": 0.0,
+      "hi": 0.0449438202247191,
+      "width": 0.0449438202247191,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "a_count": 1,
+     "b": {
+      "est": 0.8421052631578947,
+      "lo": 0.7314814814814815,
+      "hi": 0.95,
+      "width": 0.21851851851851845,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "b_count": 64,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.8421052631578947,
+      "lo": 0.7314814814814815,
+      "hi": 0.95,
+      "width": 0.21851851851851845,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "b_new_count": 64,
+     "c": {
+      "est": 0.14473684210526316,
+      "lo": 0.03333333333333333,
+      "hi": 0.2564102564102564,
+      "width": 0.22307692307692306,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "c_count": 11,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.14473684210526316,
+      "lo": 0.03333333333333333,
+      "hi": 0.2564102564102564,
+      "width": 0.22307692307692306,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "c_left_scope_count": 11,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.013157894736842105,
+      "lo": 0.0,
+      "hi": 0.0449438202247191,
+      "width": 0.0449438202247191,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "a_and_b_count": 1,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 76
+     },
+     "cited_touched_count": 0
+    },
+    "rule": {
+     "missed_item_times": 53,
+     "a": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "a_count": 0,
+     "b": {
+      "est": 0.7924528301886793,
+      "lo": 0.640625,
+      "hi": 0.95,
+      "width": 0.30937499999999996,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "b_count": 42,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.7924528301886793,
+      "lo": 0.640625,
+      "hi": 0.95,
+      "width": 0.30937499999999996,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "b_new_count": 42,
+     "c": {
+      "est": 0.20754716981132076,
+      "lo": 0.04878048780487805,
+      "hi": 0.359375,
+      "width": 0.31059451219512196,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "c_count": 11,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.20754716981132076,
+      "lo": 0.04878048780487805,
+      "hi": 0.359375,
+      "width": 0.31059451219512196,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "c_left_scope_count": 11,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "a_and_b_count": 0,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 53
+     },
+     "cited_touched_count": 0
+    },
+    "norule": {
+     "missed_item_times": 23,
+     "a": {
+      "est": 0.043478260869565216,
+      "lo": 0.0,
+      "hi": 0.2,
+      "width": 0.2,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "a_count": 1,
+     "b": {
+      "est": 0.9565217391304348,
+      "lo": 0.8,
+      "hi": 1.0,
+      "width": 0.19999999999999996,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "b_count": 22,
+     "b_existing": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "b_existing_count": 0,
+     "b_new": {
+      "est": 0.9565217391304348,
+      "lo": 0.8,
+      "hi": 1.0,
+      "width": 0.19999999999999996,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "b_new_count": 22,
+     "c": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "c_count": 0,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "c_left_scope_count": 0,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.043478260869565216,
+      "lo": 0.0,
+      "hi": 0.2,
+      "width": 0.2,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "a_and_b_count": 1,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 23
+     },
+     "cited_touched_count": 0
+    },
+    "all": {
+     "missed_item_times": 159,
+     "a": {
+      "est": 0.018867924528301886,
+      "lo": 0.0,
+      "hi": 0.0457516339869281,
+      "width": 0.0457516339869281,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "a_count": 3,
+     "b": {
+      "est": 0.8364779874213837,
+      "lo": 0.7302631578947368,
+      "hi": 0.9241379310344827,
+      "width": 0.19387477313974588,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "b_count": 133,
+     "b_existing": {
+      "est": 0.031446540880503145,
+      "lo": 0.005952380952380952,
+      "hi": 0.06962025316455696,
+      "width": 0.06366787221217601,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "b_existing_count": 5,
+     "b_new": {
+      "est": 0.8050314465408805,
+      "lo": 0.6961325966850829,
+      "hi": 0.8978102189781022,
+      "width": 0.20167762229301933,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "b_new_count": 128,
+     "c": {
+      "est": 0.14465408805031446,
+      "lo": 0.05084745762711865,
+      "hi": 0.2534246575342466,
+      "width": 0.20257719990712794,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "c_count": 23,
+     "c_definition": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "c_definition_count": 0,
+     "c_left_scope": {
+      "est": 0.14465408805031446,
+      "lo": 0.05084745762711865,
+      "hi": 0.2534246575342466,
+      "width": 0.20257719990712794,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "c_left_scope_count": 23,
+     "c_other": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "c_other_count": 0,
+     "a_and_b": {
+      "est": 0.018867924528301886,
+      "lo": 0.0,
+      "hi": 0.0457516339869281,
+      "width": 0.0457516339869281,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "a_and_b_count": 3,
+     "version_changed": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "version_changed_count": 0,
+     "cited_touched": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 159
+     },
+     "cited_touched_count": 0
+    }
+   }
+  }
+ }
+}

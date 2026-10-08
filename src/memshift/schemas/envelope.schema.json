@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proposed Data Brain response envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "status",
+    "data",
+    "source_refs",
+    "contract_id",
+    "snapshot_id"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "answer",
+        "abstain",
+        "blocked",
+        "not_ready",
+        "error"
+      ]
+    },
+    "data": {},
+    "contract_id": {
+      "type": "string"
+    },
+    "snapshot_id": {
+      "type": "string"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object_id",
+          "revision"
+        ],
+        "properties": {
+          "object_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "locator": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "effect_receipt_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "diagnostics": {
+      "type": "object"
+    }
+  },
+  "$comment": "Schema validates shape only. Validity, permissions and committed effects require independent task/source oracles; self-declared provenance is not trusted execution capture."
+}

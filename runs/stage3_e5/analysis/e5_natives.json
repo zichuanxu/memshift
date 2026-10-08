@@ -1,0 +1,1801 @@
+{
+ "labels": {
+  "mem0": {
+   "B": {
+    "label": 0,
+    "rate": 0.549407114624506,
+    "n": 253
+   },
+   "D": {
+    "label": 0,
+    "rate": 1.0,
+    "n": 289
+   }
+  }
+ },
+ "failures": {
+  "mem0": {
+   "ingested": 11123,
+   "failed": 0,
+   "rate": 0.0
+  }
+ },
+ "silent_failures": {
+  "mem0": {
+   "runs": 15,
+   "parse_errors": 398,
+   "rate": 0.03578171356648386
+  }
+ },
+ "systems": {
+  "mem0": {
+   "worlds": [
+    "w1000",
+    "w1001",
+    "w1002",
+    "w1003",
+    "w1004",
+    "w1005",
+    "w1006",
+    "w1007",
+    "w1008",
+    "w1009",
+    "w1010",
+    "w1011",
+    "w1012",
+    "w1013",
+    "w1014"
+   ],
+   "predicted_by": "holdmem_D0B0",
+   "branches": {
+    "src": {
+     "native": {
+      "Update": {
+       "est": 0.7064220183486238,
+       "lo": 0.6419753086419753,
+       "hi": 0.7616033755274262,
+       "width": 0.11962806688545091,
+       "n_worlds": 15,
+       "n_items": 436
+      },
+      "Stability": {
+       "est": 0.6747572815533981,
+       "lo": 0.612531969309463,
+       "hi": 0.7344444444444445,
+       "width": 0.12191247513498149,
+       "n_worlds": 15,
+       "n_items": 824
+      }
+     },
+     "white_box": {
+      "Update": {
+       "est": 0.5756880733944955,
+       "lo": 0.5154639175257731,
+       "hi": 0.6336206896551724,
+       "width": 0.11815677212939923,
+       "n_worlds": 15,
+       "n_items": 436
+      },
+      "Stability": {
+       "est": 0.6662621359223301,
+       "lo": 0.6058201058201058,
+       "hi": 0.725925925925926,
+       "width": 0.12010582010582016,
+       "n_worlds": 15,
+       "n_items": 824
+      }
+     },
+     "consistent": {
+      "Update": false,
+      "Stability": true
+     },
+     "deviation": {
+      "Update": 0.13073394495412838,
+      "Stability": 0.008495145631068013
+     },
+     "white_box_other": {
+      "Update": {
+       "est": 0.8004587155963303,
+       "lo": 0.7505938242280285,
+       "hi": 0.8461538461538461,
+       "width": 0.0955600219258177,
+       "n_worlds": 15,
+       "n_items": 436
+      },
+      "Stability": {
+       "est": 0.9902912621359223,
+       "lo": 0.9743918053777209,
+       "hi": 1.0,
+       "width": 0.025608194622279146,
+       "n_worlds": 15,
+       "n_items": 824
+      }
+     },
+     "discrimination": {
+      "Update": {
+       "inside_predicted": false,
+       "inside_other": false,
+       "discriminates": false
+      },
+      "Stability": {
+       "inside_predicted": true,
+       "inside_other": false,
+       "discriminates": true
+      }
+     }
+    },
+    "def": {
+     "native": {
+      "Update": {
+       "est": 0.5063829787234042,
+       "lo": 0.405,
+       "hi": 0.5857740585774058,
+       "width": 0.1807740585774058,
+       "n_worlds": 15,
+       "n_items": 235
+      },
+      "Stability": {
+       "est": 0.6965853658536585,
+       "lo": 0.65466297322253,
+       "hi": 0.7361530715005036,
+       "width": 0.0814900982779736,
+       "n_worlds": 15,
+       "n_items": 1025
+      }
+     },
+     "white_box": {
+      "Update": {
+       "est": 0.4723404255319149,
+       "lo": 0.3991228070175439,
+       "hi": 0.5280373831775701,
+       "width": 0.12891457616002622,
+       "n_worlds": 15,
+       "n_items": 235
+      },
+      "Stability": {
+       "est": 0.6907317073170731,
+       "lo": 0.6355599214145383,
+       "hi": 0.745676500508647,
+       "width": 0.11011657909410866,
+       "n_worlds": 15,
+       "n_items": 1025
+      }
+     },
+     "consistent": {
+      "Update": true,
+      "Stability": true
+     },
+     "deviation": {
+      "Update": 0.0340425531914893,
+      "Stability": 0.005853658536585371
+     },
+     "white_box_other": {
+      "Update": {
+       "est": 0.6723404255319149,
+       "lo": 0.5909090909090909,
+       "hi": 0.7368421052631579,
+       "width": 0.14593301435406691,
+       "n_worlds": 15,
+       "n_items": 235
+      },
+      "Stability": {
+       "est": 0.9863414634146341,
+       "lo": 0.9679037111334002,
+       "hi": 1.0,
+       "width": 0.032096288866599765,
+       "n_worlds": 15,
+       "n_items": 1025
+      }
+     },
+     "discrimination": {
+      "Update": {
+       "inside_predicted": true,
+       "inside_other": false,
+       "discriminates": true
+      },
+      "Stability": {
+       "inside_predicted": true,
+       "inside_other": false,
+       "discriminates": true
+      }
+     }
+    },
+    "orphan": {
+     "native": {
+      "Update": {
+       "est": 0.4473684210526316,
+       "lo": 0.2903225806451613,
+       "hi": 0.5777777777777777,
+       "width": 0.2874551971326164,
+       "n_worlds": 14,
+       "n_items": 38
+      },
+      "Stability": {
+       "est": 0.7003610108303249,
+       "lo": 0.6630824372759857,
+       "hi": 0.7389705882352942,
+       "width": 0.07588815095930845,
+       "n_worlds": 15,
+       "n_items": 277
+      }
+     },
+     "white_box": {
+      "Update": {
+       "est": 0.44017094017094016,
+       "lo": 0.3607305936073059,
+       "hi": 0.5102040816326531,
+       "width": 0.14947348802534716,
+       "n_worlds": 15,
+       "n_items": 234
+      },
+      "Stability": {
+       "est": 0.7407407407407407,
+       "lo": 0.6791907514450867,
+       "hi": 0.8002008032128514,
+       "width": 0.12101005176776469,
+       "n_worlds": 15,
+       "n_items": 1026
+      }
+     },
+     "consistent": {
+      "Update": true,
+      "Stability": true
+     },
+     "deviation": {
+      "Update": 0.00719748088169142,
+      "Stability": -0.04037972991041583
+     },
+     "white_box_other": {
+      "Update": {
+       "est": 0.7478632478632479,
+       "lo": 0.6860986547085202,
+       "hi": 0.7978339350180506,
+       "width": 0.1117352803095304,
+       "n_worlds": 15,
+       "n_items": 234
+      },
+      "Stability": {
+       "est": 0.9873294346978557,
+       "lo": 0.9682539682539683,
+       "hi": 1.0,
+       "width": 0.031746031746031744,
+       "n_worlds": 15,
+       "n_items": 1026
+      }
+     },
+     "discrimination": {
+      "Update": {
+       "inside_predicted": true,
+       "inside_other": false,
+       "discriminates": true
+      },
+      "Stability": {
+       "inside_predicted": true,
+       "inside_other": false,
+       "discriminates": true
+      }
+     }
+    }
+   },
+   "other_label_cell": "holdmem_D0B1_source"
+  }
+ },
+ "noise_floor": {
+  "worlds": [
+   "w1000",
+   "w1001",
+   "w1002"
+  ],
+  "systems": {
+   "mem0": {
+    "natural": {
+     "answers": 144,
+     "answers_differ": 22,
+     "share_differ": 0.1527777777777778,
+     "cv_first": 0.7013888888888888,
+     "cv_second": 0.6458333333333334
+    },
+    "src": {
+     "answers": 576,
+     "answers_differ": 136,
+     "share_differ": 0.2361111111111111,
+     "cv_first": 0.7256944444444444,
+     "cv_second": 0.6545138888888888,
+     "first": {
+      "Update": {
+       "est": 0.5441176470588235,
+       "lo": 0.4230769230769231,
+       "hi": 0.6666666666666666,
+       "width": 0.24358974358974356,
+       "n_worlds": 3,
+       "n_items": 68
+      },
+      "Stability": {
+       "est": 0.7777777777777778,
+       "lo": 0.6578947368421053,
+       "hi": 0.8620689655172413,
+       "width": 0.20417422867513602,
+       "n_worlds": 3,
+       "n_items": 144
+      }
+     },
+     "second": {
+      "Update": {
+       "est": 0.6764705882352942,
+       "lo": 0.5,
+       "hi": 0.8333333333333334,
+       "width": 0.33333333333333337,
+       "n_worlds": 3,
+       "n_items": 68
+      },
+      "Stability": {
+       "est": 0.7222222222222222,
+       "lo": 0.5789473684210527,
+       "hi": 0.8275862068965517,
+       "width": 0.24863883847549906,
+       "n_worlds": 3,
+       "n_items": 144
+      }
+     },
+     "diff": {
+      "Update": 0.13235294117647067,
+      "Stability": -0.05555555555555558
+     }
+    },
+    "def": {
+     "answers": 576,
+     "answers_differ": 128,
+     "share_differ": 0.2222222222222222,
+     "cv_first": 0.6545138888888888,
+     "cv_second": 0.5711805555555556,
+     "first": {
+      "Update": {
+       "est": 0.4375,
+       "lo": 0.2222222222222222,
+       "hi": 0.5714285714285714,
+       "width": 0.3492063492063492,
+       "n_worlds": 3,
+       "n_items": 48
+      },
+      "Stability": {
+       "est": 0.7560975609756098,
+       "lo": 0.6428571428571429,
+       "hi": 0.8181818181818182,
+       "width": 0.17532467532467533,
+       "n_worlds": 3,
+       "n_items": 164
+      }
+     },
+     "second": {
+      "Update": {
+       "est": 0.5833333333333334,
+       "lo": 0.5555555555555556,
+       "hi": 0.6428571428571429,
+       "width": 0.08730158730158732,
+       "n_worlds": 3,
+       "n_items": 48
+      },
+      "Stability": {
+       "est": 0.676829268292683,
+       "lo": 0.5952380952380952,
+       "hi": 0.7727272727272727,
+       "width": 0.17748917748917747,
+       "n_worlds": 3,
+       "n_items": 164
+      }
+     },
+     "diff": {
+      "Update": 0.14583333333333337,
+      "Stability": -0.07926829268292679
+     }
+    },
+    "orphan": {
+     "answers": 144,
+     "answers_differ": 31,
+     "share_differ": 0.2152777777777778,
+     "cv_first": 0.4930555555555556,
+     "cv_second": 0.5208333333333334,
+     "first": {
+      "Update": {
+       "est": 0.4,
+       "lo": 0.0,
+       "hi": 0.6666666666666666,
+       "width": 0.6666666666666666,
+       "n_worlds": 3,
+       "n_items": 10
+      },
+      "Stability": {
+       "est": 0.7674418604651163,
+       "lo": 0.6363636363636364,
+       "hi": 0.8333333333333334,
+       "width": 0.19696969696969702,
+       "n_worlds": 3,
+       "n_items": 43
+      }
+     },
+     "second": {
+      "Update": {
+       "est": 0.6,
+       "lo": 0.3333333333333333,
+       "hi": 0.75,
+       "width": 0.4166666666666667,
+       "n_worlds": 3,
+       "n_items": 10
+      },
+      "Stability": {
+       "est": 0.7441860465116279,
+       "lo": 0.5714285714285714,
+       "hi": 0.8888888888888888,
+       "width": 0.31746031746031744,
+       "n_worlds": 3,
+       "n_items": 43
+      }
+     },
+     "diff": {
+      "Update": 0.19999999999999996,
+      "Stability": -0.023255813953488413
+     }
+    }
+   }
+  }
+ },
+ "membership": {
+  "worlds": [
+   "w1000",
+   "w1001",
+   "w1002",
+   "w1003",
+   "w1004",
+   "w1005",
+   "w1006",
+   "w1007",
+   "w1008",
+   "w1009",
+   "w1010",
+   "w1011",
+   "w1012",
+   "w1013",
+   "w1014"
+  ],
+  "full_reread_tokens_per_query": 375043.73333333334,
+  "mem0": {
+   "static": {
+    "est": 0.6597222222222222,
+    "lo": 0.6291666666666667,
+    "hi": 0.6888888888888889,
+    "width": 0.05972222222222223,
+    "n_worlds": 15,
+    "n_items": 720
+   },
+   "reader_tokens_per_query": 4261.247222222222,
+   "serve_ratio_to_full_reread": 0.01136200086413626,
+   "T4_pass": true,
+   "minus_oracle": {
+    "est": -0.16944444444444445,
+    "lo": -0.20555555555555555,
+    "hi": -0.13194444444444445,
+    "width": 0.0736111111111111,
+    "n_worlds": 15,
+    "n_items": 720
+   },
+   "T3_pass": false
+  },
+  "oracle": {
+   "static": {
+    "est": 0.8291666666666667,
+    "lo": 0.8138888888888889,
+    "hi": 0.8430555555555556,
+    "width": 0.029166666666666674,
+    "n_worlds": 15,
+    "n_items": 720
+   },
+   "reader_tokens_per_query": 324.31944444444446,
+   "serve_ratio_to_full_reread": 0.0008647510026682518,
+   "T4_pass": true
+  },
+  "rag": {
+   "static": {
+    "est": 0.6222222222222222,
+    "lo": 0.6013888888888889,
+    "hi": 0.6444444444444445,
+    "width": 0.043055555555555625,
+    "n_worlds": 15,
+    "n_items": 720
+   },
+   "reader_tokens_per_query": 3950.023611111111,
+   "serve_ratio_to_full_reread": 0.010532168011457982,
+   "T4_pass": true,
+   "minus_oracle": {
+    "est": -0.20694444444444443,
+    "lo": -0.2361111111111111,
+    "hi": -0.175,
+    "width": 0.061111111111111116,
+    "n_worlds": 15,
+    "n_items": 720
+   },
+   "T3_pass": false
+  },
+  "zero": {
+   "static": {
+    "est": 0.6611111111111111,
+    "lo": 0.6236111111111111,
+    "hi": 0.6944444444444444,
+    "width": 0.0708333333333333,
+    "n_worlds": 15,
+    "n_items": 720
+   },
+   "reader_tokens_per_query": 3582.3597222222224,
+   "serve_ratio_to_full_reread": 0.009551845301833837,
+   "T4_pass": true,
+   "minus_oracle": {
+    "est": -0.16805555555555557,
+    "lo": -0.20833333333333334,
+    "hi": -0.13333333333333333,
+    "width": 0.07500000000000001,
+    "n_worlds": 15,
+    "n_items": 720
+   },
+   "T3_pass": false
+  }
+ },
+ "exploratory": {
+  "label_rates": {
+   "holdmem_D0B0": {
+    "B": {
+     "est": 0.8972332015810277,
+     "lo": 0.8267716535433071,
+     "hi": 0.952755905511811,
+     "width": 0.12598425196850394,
+     "n_worlds": 15,
+     "n_items": 253
+    },
+    "D": {
+     "est": 0.950381679389313,
+     "lo": 0.9003831417624522,
+     "hi": 0.9881422924901185,
+     "width": 0.08775915072766638,
+     "n_worlds": 15,
+     "n_items": 262
+    }
+   },
+   "holdmem_D1B0": {
+    "B": {
+     "est": 0.8893280632411067,
+     "lo": 0.82421875,
+     "hi": 0.9367588932806324,
+     "width": 0.11254014328063244,
+     "n_worlds": 15,
+     "n_items": 253
+    },
+    "D": {
+     "est": 0.9583333333333334,
+     "lo": 0.9081272084805654,
+     "hi": 0.9922779922779923,
+     "width": 0.08415078379742691,
+     "n_worlds": 15,
+     "n_items": 264
+    }
+   },
+   "holdmem_D0B1_source": {
+    "B": {
+     "est": 0.16996047430830039,
+     "lo": 0.1141732283464567,
+     "hi": 0.23076923076923078,
+     "width": 0.11659600242277408,
+     "n_worlds": 15,
+     "n_items": 253
+    },
+    "D": {
+     "est": 0.9764309764309764,
+     "lo": 0.9477611940298507,
+     "hi": 1.0,
+     "width": 0.052238805970149294,
+     "n_worlds": 15,
+     "n_items": 297
+    }
+   },
+   "holdmem_D1B1_source": {
+    "B": {
+     "est": 0.13438735177865613,
+     "lo": 0.09125475285171103,
+     "hi": 0.18292682926829268,
+     "width": 0.09167207641658165,
+     "n_worlds": 15,
+     "n_items": 253
+    },
+    "D": {
+     "est": 0.9932885906040269,
+     "lo": 0.9786476868327402,
+     "hi": 1.0,
+     "width": 0.02135231316725983,
+     "n_worlds": 15,
+     "n_items": 298
+    }
+   },
+   "holdmem_json_arm": {
+    "B": {
+     "est": 0.13438735177865613,
+     "lo": 0.09125475285171103,
+     "hi": 0.18292682926829268,
+     "width": 0.09167207641658165,
+     "n_worlds": 15,
+     "n_items": 253
+    },
+    "D": {
+     "est": 0.9932203389830508,
+     "lo": 0.9784172661870504,
+     "hi": 1.0,
+     "width": 0.021582733812949617,
+     "n_worlds": 15,
+     "n_items": 295
+    }
+   },
+   "mem0": {
+    "B": {
+     "est": 0.549407114624506,
+     "lo": 0.4899598393574297,
+     "hi": 0.6094890510948905,
+     "width": 0.11952921173746078,
+     "n_worlds": 15,
+     "n_items": 253
+    },
+    "D": {
+     "est": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "width": 0.0,
+     "n_worlds": 15,
+     "n_items": 289
+    }
+   }
+  },
+  "white_box_cells": {
+   "holdmem_D0B0": {
+    "src": {
+     "Update": {
+      "est": 0.5756880733944955,
+      "lo": 0.5154639175257731,
+      "hi": 0.6336206896551724,
+      "width": 0.11815677212939923,
+      "n_worlds": 15,
+      "n_items": 436
+     },
+     "Stability": {
+      "est": 0.6662621359223301,
+      "lo": 0.6058201058201058,
+      "hi": 0.725925925925926,
+      "width": 0.12010582010582016,
+      "n_worlds": 15,
+      "n_items": 824
+     }
+    },
+    "def": {
+     "Update": {
+      "est": 0.4723404255319149,
+      "lo": 0.3991228070175439,
+      "hi": 0.5280373831775701,
+      "width": 0.12891457616002622,
+      "n_worlds": 15,
+      "n_items": 235
+     },
+     "Stability": {
+      "est": 0.6907317073170731,
+      "lo": 0.6355599214145383,
+      "hi": 0.745676500508647,
+      "width": 0.11011657909410866,
+      "n_worlds": 15,
+      "n_items": 1025
+     }
+    },
+    "orphan": {
+     "Update": {
+      "est": 0.44017094017094016,
+      "lo": 0.3607305936073059,
+      "hi": 0.5102040816326531,
+      "width": 0.14947348802534716,
+      "n_worlds": 15,
+      "n_items": 234
+     },
+     "Stability": {
+      "est": 0.7407407407407407,
+      "lo": 0.6791907514450867,
+      "hi": 0.8002008032128514,
+      "width": 0.12101005176776469,
+      "n_worlds": 15,
+      "n_items": 1026
+     }
+    }
+   },
+   "holdmem_D0B1_source": {
+    "src": {
+     "Update": {
+      "est": 0.8004587155963303,
+      "lo": 0.7505938242280285,
+      "hi": 0.8461538461538461,
+      "width": 0.0955600219258177,
+      "n_worlds": 15,
+      "n_items": 436
+     },
+     "Stability": {
+      "est": 0.9902912621359223,
+      "lo": 0.9743918053777209,
+      "hi": 1.0,
+      "width": 0.025608194622279146,
+      "n_worlds": 15,
+      "n_items": 824
+     }
+    },
+    "def": {
+     "Update": {
+      "est": 0.6723404255319149,
+      "lo": 0.5909090909090909,
+      "hi": 0.7368421052631579,
+      "width": 0.14593301435406691,
+      "n_worlds": 15,
+      "n_items": 235
+     },
+     "Stability": {
+      "est": 0.9863414634146341,
+      "lo": 0.9679037111334002,
+      "hi": 1.0,
+      "width": 0.032096288866599765,
+      "n_worlds": 15,
+      "n_items": 1025
+     }
+    },
+    "orphan": {
+     "Update": {
+      "est": 0.7478632478632479,
+      "lo": 0.6860986547085202,
+      "hi": 0.7978339350180506,
+      "width": 0.1117352803095304,
+      "n_worlds": 15,
+      "n_items": 234
+     },
+     "Stability": {
+      "est": 0.9873294346978557,
+      "lo": 0.9682539682539683,
+      "hi": 1.0,
+      "width": 0.031746031746031744,
+      "n_worlds": 15,
+      "n_items": 1026
+     }
+    }
+   },
+   "holdmem_D1B0": {
+    "src": {
+     "Update": {
+      "est": 0.7935779816513762,
+      "lo": 0.7424593967517401,
+      "hi": 0.8467532467532467,
+      "width": 0.1042938500015066,
+      "n_worlds": 15,
+      "n_items": 436
+     },
+     "Stability": {
+      "est": 0.6905339805825242,
+      "lo": 0.6375757575757576,
+      "hi": 0.7434435575826682,
+      "width": 0.10586780000691065,
+      "n_worlds": 15,
+      "n_items": 824
+     }
+    },
+    "def": {
+     "Update": {
+      "est": 0.8170212765957446,
+      "lo": 0.7682926829268293,
+      "hi": 0.8695652173913043,
+      "width": 0.10127253446447504,
+      "n_worlds": 15,
+      "n_items": 235
+     },
+     "Stability": {
+      "est": 0.7278048780487805,
+      "lo": 0.663197729422895,
+      "hi": 0.7915543575920935,
+      "width": 0.12835662816919846,
+      "n_worlds": 15,
+      "n_items": 1025
+     }
+    },
+    "orphan": {
+     "Update": {
+      "est": 0.8376068376068376,
+      "lo": 0.7796610169491526,
+      "hi": 0.8938775510204081,
+      "width": 0.11421653407125554,
+      "n_worlds": 15,
+      "n_items": 234
+     },
+     "Stability": {
+      "est": 0.7719298245614035,
+      "lo": 0.7062200956937799,
+      "hi": 0.835603112840467,
+      "width": 0.1293830171466871,
+      "n_worlds": 15,
+      "n_items": 1026
+     }
+    }
+   },
+   "holdmem_D1B1_source": {
+    "src": {
+     "Update": {
+      "est": 0.981651376146789,
+      "lo": 0.9655913978494624,
+      "hi": 0.9952718676122931,
+      "width": 0.029680469762830786,
+      "n_worlds": 15,
+      "n_items": 436
+     },
+     "Stability": {
+      "est": 0.9902912621359223,
+      "lo": 0.9743918053777209,
+      "hi": 1.0,
+      "width": 0.025608194622279146,
+      "n_worlds": 15,
+      "n_items": 824
+     }
+    },
+    "def": {
+     "Update": {
+      "est": 0.9744680851063829,
+      "lo": 0.9482758620689655,
+      "hi": 0.995575221238938,
+      "width": 0.04729935916997252,
+      "n_worlds": 15,
+      "n_items": 235
+     },
+     "Stability": {
+      "est": 0.9902439024390244,
+      "lo": 0.978021978021978,
+      "hi": 1.0,
+      "width": 0.02197802197802201,
+      "n_worlds": 15,
+      "n_items": 1025
+     }
+    },
+    "orphan": {
+     "Update": {
+      "est": 0.9786324786324786,
+      "lo": 0.9545454545454546,
+      "hi": 0.9956896551724138,
+      "width": 0.041144200626959226,
+      "n_worlds": 15,
+      "n_items": 234
+     },
+     "Stability": {
+      "est": 0.9922027290448343,
+      "lo": 0.9798994974874372,
+      "hi": 1.0,
+      "width": 0.02010050251256279,
+      "n_worlds": 15,
+      "n_items": 1026
+     }
+    }
+   }
+  }
+ },
+ "explore_native_null": {
+  "definitions": {
+   "inside_predicted": "native estimate inside the 95% interval of the predicted cell",
+   "discriminating": "inside the predicted cell's interval, outside the other label's",
+   "label_circular": "comparisons on the branches B is inferred from (circular_branches)",
+   "chance_coverage": "share of the four label cells' 95% intervals that contain the native estimate, i.e. the coverage when the label is permuted",
+   "inflated": "interval half-widths widened in quadrature by 1.96 x the standard error from the repeat-ingestion variance"
+  },
+  "circular_branches": [
+   "orphan"
+  ],
+  "systems": {
+   "mem0": {
+    "predicted_by": "holdmem_D0B0",
+    "other_label_cell": "holdmem_D0B1_source",
+    "b_identified": {
+     "label": 0,
+     "rate": 0.549407114624506,
+     "lo": 0.4899598393574297,
+     "hi": 0.6094890510948905,
+     "n": 253,
+     "n_worlds": 15,
+     "threshold": 0.5,
+     "straddles": true,
+     "identified": false
+    },
+    "white_box_references": [
+     "holdmem_D0B0",
+     "holdmem_D1B0",
+     "holdmem_D0B1_source",
+     "holdmem_D1B1_source"
+    ],
+    "baseline_references": [
+     "zero",
+     "rag",
+     "oracle"
+    ],
+    "comparisons": {
+     "src:Update": {
+      "branch": "src",
+      "metric": "Update",
+      "label_circular": false,
+      "native": {
+       "est": 0.7064220183486238,
+       "lo": 0.6419753086419753,
+       "hi": 0.7616033755274262,
+       "n_items": 436
+      },
+      "references": {
+       "holdmem_D0B0": {
+        "kind": "white_box",
+        "est": 0.5756880733944955,
+        "lo": 0.5154639175257731,
+        "hi": 0.6336206896551724,
+        "n_items": 436,
+        "contains": false
+       },
+       "holdmem_D1B0": {
+        "kind": "white_box",
+        "est": 0.7935779816513762,
+        "lo": 0.7424593967517401,
+        "hi": 0.8467532467532467,
+        "n_items": 436,
+        "contains": false
+       },
+       "holdmem_D0B1_source": {
+        "kind": "white_box",
+        "est": 0.8004587155963303,
+        "lo": 0.7505938242280285,
+        "hi": 0.8461538461538461,
+        "n_items": 436,
+        "contains": false
+       },
+       "holdmem_D1B1_source": {
+        "kind": "white_box",
+        "est": 0.981651376146789,
+        "lo": 0.9655913978494624,
+        "hi": 0.9952718676122931,
+        "n_items": 436,
+        "contains": false
+       },
+       "zero": {
+        "kind": "baseline",
+        "est": 0.7110091743119266,
+        "lo": 0.6586538461538461,
+        "hi": 0.7553956834532374,
+        "n_items": 436,
+        "contains": true
+       },
+       "rag": {
+        "kind": "baseline",
+        "est": 0.7339449541284404,
+        "lo": 0.685785536159601,
+        "hi": 0.7795918367346939,
+        "n_items": 436,
+        "contains": true
+       },
+       "oracle": {
+        "kind": "baseline",
+        "est": 0.9380733944954128,
+        "lo": 0.908695652173913,
+        "hi": 0.9674185463659147,
+        "n_items": 436,
+        "contains": false
+       }
+      },
+      "contained_by": [
+       "zero",
+       "rag"
+      ],
+      "n_contained": 2,
+      "n_references": 7,
+      "inside_predicted": false,
+      "discriminates": false
+     },
+     "src:Stability": {
+      "branch": "src",
+      "metric": "Stability",
+      "label_circular": false,
+      "native": {
+       "est": 0.6747572815533981,
+       "lo": 0.612531969309463,
+       "hi": 0.7344444444444445,
+       "n_items": 824
+      },
+      "references": {
+       "holdmem_D0B0": {
+        "kind": "white_box",
+        "est": 0.6662621359223301,
+        "lo": 0.6058201058201058,
+        "hi": 0.725925925925926,
+        "n_items": 824,
+        "contains": true
+       },
+       "holdmem_D1B0": {
+        "kind": "white_box",
+        "est": 0.6905339805825242,
+        "lo": 0.6375757575757576,
+        "hi": 0.7434435575826682,
+        "n_items": 824,
+        "contains": true
+       },
+       "holdmem_D0B1_source": {
+        "kind": "white_box",
+        "est": 0.9902912621359223,
+        "lo": 0.9743918053777209,
+        "hi": 1.0,
+        "n_items": 824,
+        "contains": false
+       },
+       "holdmem_D1B1_source": {
+        "kind": "white_box",
+        "est": 0.9902912621359223,
+        "lo": 0.9743918053777209,
+        "hi": 1.0,
+        "n_items": 824,
+        "contains": false
+       },
+       "zero": {
+        "kind": "baseline",
+        "est": 0.7075268817204301,
+        "lo": 0.6536585365853659,
+        "hi": 0.7620041753653445,
+        "n_items": 465,
+        "contains": true
+       },
+       "rag": {
+        "kind": "baseline",
+        "est": 0.6645161290322581,
+        "lo": 0.5892857142857143,
+        "hi": 0.7292069632495164,
+        "n_items": 465,
+        "contains": true
+       },
+       "oracle": {
+        "kind": "baseline",
+        "est": 0.8924731182795699,
+        "lo": 0.8692946058091287,
+        "hi": 0.9154589371980676,
+        "n_items": 465,
+        "contains": false
+       }
+      },
+      "contained_by": [
+       "holdmem_D0B0",
+       "holdmem_D1B0",
+       "zero",
+       "rag"
+      ],
+      "n_contained": 4,
+      "n_references": 7,
+      "inside_predicted": true,
+      "discriminates": true
+     },
+     "def:Update": {
+      "branch": "def",
+      "metric": "Update",
+      "label_circular": false,
+      "native": {
+       "est": 0.5063829787234042,
+       "lo": 0.405,
+       "hi": 0.5857740585774058,
+       "n_items": 235
+      },
+      "references": {
+       "holdmem_D0B0": {
+        "kind": "white_box",
+        "est": 0.4723404255319149,
+        "lo": 0.3991228070175439,
+        "hi": 0.5280373831775701,
+        "n_items": 235,
+        "contains": true
+       },
+       "holdmem_D1B0": {
+        "kind": "white_box",
+        "est": 0.8170212765957446,
+        "lo": 0.7682926829268293,
+        "hi": 0.8695652173913043,
+        "n_items": 235,
+        "contains": false
+       },
+       "holdmem_D0B1_source": {
+        "kind": "white_box",
+        "est": 0.6723404255319149,
+        "lo": 0.5909090909090909,
+        "hi": 0.7368421052631579,
+        "n_items": 235,
+        "contains": false
+       },
+       "holdmem_D1B1_source": {
+        "kind": "white_box",
+        "est": 0.9744680851063829,
+        "lo": 0.9482758620689655,
+        "hi": 0.995575221238938,
+        "n_items": 235,
+        "contains": false
+       }
+      },
+      "contained_by": [
+       "holdmem_D0B0"
+      ],
+      "n_contained": 1,
+      "n_references": 4,
+      "inside_predicted": true,
+      "discriminates": true
+     },
+     "def:Stability": {
+      "branch": "def",
+      "metric": "Stability",
+      "label_circular": false,
+      "native": {
+       "est": 0.6965853658536585,
+       "lo": 0.65466297322253,
+       "hi": 0.7361530715005036,
+       "n_items": 1025
+      },
+      "references": {
+       "holdmem_D0B0": {
+        "kind": "white_box",
+        "est": 0.6907317073170731,
+        "lo": 0.6355599214145383,
+        "hi": 0.745676500508647,
+        "n_items": 1025,
+        "contains": true
+       },
+       "holdmem_D1B0": {
+        "kind": "white_box",
+        "est": 0.7278048780487805,
+        "lo": 0.663197729422895,
+        "hi": 0.7915543575920935,
+        "n_items": 1025,
+        "contains": true
+       },
+       "holdmem_D0B1_source": {
+        "kind": "white_box",
+        "est": 0.9863414634146341,
+        "lo": 0.9679037111334002,
+        "hi": 1.0,
+        "n_items": 1025,
+        "contains": false
+       },
+       "holdmem_D1B1_source": {
+        "kind": "white_box",
+        "est": 0.9902439024390244,
+        "lo": 0.978021978021978,
+        "hi": 1.0,
+        "n_items": 1025,
+        "contains": false
+       }
+      },
+      "contained_by": [
+       "holdmem_D0B0",
+       "holdmem_D1B0"
+      ],
+      "n_contained": 2,
+      "n_references": 4,
+      "inside_predicted": true,
+      "discriminates": true
+     },
+     "orphan:Update": {
+      "branch": "orphan",
+      "metric": "Update",
+      "label_circular": true,
+      "native": {
+       "est": 0.4473684210526316,
+       "lo": 0.2903225806451613,
+       "hi": 0.5777777777777777,
+       "n_items": 38
+      },
+      "references": {
+       "holdmem_D0B0": {
+        "kind": "white_box",
+        "est": 0.44017094017094016,
+        "lo": 0.3607305936073059,
+        "hi": 0.5102040816326531,
+        "n_items": 234,
+        "contains": true
+       },
+       "holdmem_D1B0": {
+        "kind": "white_box",
+        "est": 0.8376068376068376,
+        "lo": 0.7796610169491526,
+        "hi": 0.8938775510204081,
+        "n_items": 234,
+        "contains": false
+       },
+       "holdmem_D0B1_source": {
+        "kind": "white_box",
+        "est": 0.7478632478632479,
+        "lo": 0.6860986547085202,
+        "hi": 0.7978339350180506,
+        "n_items": 234,
+        "contains": false
+       },
+       "holdmem_D1B1_source": {
+        "kind": "white_box",
+        "est": 0.9786324786324786,
+        "lo": 0.9545454545454546,
+        "hi": 0.9956896551724138,
+        "n_items": 234,
+        "contains": false
+       }
+      },
+      "contained_by": [
+       "holdmem_D0B0"
+      ],
+      "n_contained": 1,
+      "n_references": 4,
+      "inside_predicted": true,
+      "discriminates": true
+     },
+     "orphan:Stability": {
+      "branch": "orphan",
+      "metric": "Stability",
+      "label_circular": true,
+      "native": {
+       "est": 0.7003610108303249,
+       "lo": 0.6630824372759857,
+       "hi": 0.7389705882352942,
+       "n_items": 277
+      },
+      "references": {
+       "holdmem_D0B0": {
+        "kind": "white_box",
+        "est": 0.7407407407407407,
+        "lo": 0.6791907514450867,
+        "hi": 0.8002008032128514,
+        "n_items": 1026,
+        "contains": true
+       },
+       "holdmem_D1B0": {
+        "kind": "white_box",
+        "est": 0.7719298245614035,
+        "lo": 0.7062200956937799,
+        "hi": 0.835603112840467,
+        "n_items": 1026,
+        "contains": false
+       },
+       "holdmem_D0B1_source": {
+        "kind": "white_box",
+        "est": 0.9873294346978557,
+        "lo": 0.9682539682539683,
+        "hi": 1.0,
+        "n_items": 1026,
+        "contains": false
+       },
+       "holdmem_D1B1_source": {
+        "kind": "white_box",
+        "est": 0.9922027290448343,
+        "lo": 0.9798994974874372,
+        "hi": 1.0,
+        "n_items": 1026,
+        "contains": false
+       }
+      },
+      "contained_by": [
+       "holdmem_D0B0"
+      ],
+      "n_contained": 1,
+      "n_references": 4,
+      "inside_predicted": true,
+      "discriminates": true
+     }
+    },
+    "counts": {
+     "all": {
+      "comparisons": 6,
+      "inside_predicted": 5,
+      "inside_other": 0,
+      "discriminating": 5
+     },
+     "label_circular": {
+      "comparisons": 2,
+      "inside_predicted": 2,
+      "inside_other": 0,
+      "discriminating": 2
+     },
+     "out_of_sample": {
+      "comparisons": 4,
+      "inside_predicted": 3,
+      "inside_other": 0,
+      "discriminating": 3
+     }
+    },
+    "baseline_counts": {
+     "zero": {
+      "baseline": {
+       "all": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       },
+       "label_circular": {
+        "comparisons": 0,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       },
+       "out_of_sample": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       }
+      },
+      "native_same_comparisons": {
+       "all": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       },
+       "label_circular": {
+        "comparisons": 0,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       },
+       "out_of_sample": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       }
+      }
+     },
+     "rag": {
+      "baseline": {
+       "all": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       },
+       "label_circular": {
+        "comparisons": 0,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       },
+       "out_of_sample": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       }
+      },
+      "native_same_comparisons": {
+       "all": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       },
+       "label_circular": {
+        "comparisons": 0,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       },
+       "out_of_sample": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       }
+      }
+     },
+     "oracle": {
+      "baseline": {
+       "all": {
+        "comparisons": 2,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       },
+       "label_circular": {
+        "comparisons": 0,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       },
+       "out_of_sample": {
+        "comparisons": 2,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       }
+      },
+      "native_same_comparisons": {
+       "all": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       },
+       "label_circular": {
+        "comparisons": 0,
+        "inside_predicted": 0,
+        "inside_other": 0,
+        "discriminating": 0
+       },
+       "out_of_sample": {
+        "comparisons": 2,
+        "inside_predicted": 1,
+        "inside_other": 0,
+        "discriminating": 1
+       }
+      }
+     }
+    },
+    "chance_coverage": {
+     "label_cells": {
+      "holdmem_D0B0": 0.8333333333333334,
+      "holdmem_D0B1_source": 0.0,
+      "holdmem_D1B0": 0.3333333333333333,
+      "holdmem_D1B1_source": 0.0
+     },
+     "labels": 0.2916666666666667,
+     "labels_pooled": 0.2916666666666667,
+     "references": 0.375,
+     "observed": 0.8333333333333334
+    },
+    "paired_difference": {
+     "src:Update": {
+      "holdmem_D0B0": {
+       "est": 0.13073394495412843,
+       "lo": 0.07407407407407407,
+       "hi": 0.18872017353579176,
+       "width": 0.1146460994617177,
+       "n_worlds": 15,
+       "n_items": 436,
+       "excludes_zero": true,
+       "ingestion_sd": 0.1012198229258719,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.026918033907218784,
+       "lo_inflated": 0.05331439086753263,
+       "hi_inflated": 0.2091294109706514,
+       "excludes_zero_inflated": true
+      },
+      "zero": {
+       "est": -0.0045871559633027525,
+       "lo": -0.05804749340369393,
+       "hi": 0.04068522483940043,
+       "width": 0.09873271824309436,
+       "n_worlds": 15,
+       "n_items": 436,
+       "excludes_zero": false,
+       "ingestion_sd": 0.1012198229258719,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.026918033907218784,
+       "lo_inflated": -0.0796967696360104,
+       "hi_inflated": 0.06493287604451402,
+       "excludes_zero_inflated": false
+      },
+      "rag": {
+       "est": -0.027522935779816515,
+       "lo": -0.08527131782945736,
+       "hi": 0.024017467248908297,
+       "width": 0.10928878507836566,
+       "n_worlds": 15,
+       "n_items": 436,
+       "excludes_zero": false,
+       "ingestion_sd": 0.1012198229258719,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.026918033907218784,
+       "lo_inflated": -0.1057426392833084,
+       "hi_inflated": 0.04623246762350226,
+       "excludes_zero_inflated": false
+      }
+     },
+     "src:Stability": {
+      "holdmem_D0B0": {
+       "est": 0.00849514563106796,
+       "lo": -0.07818411097099622,
+       "hi": 0.08114856429463171,
+       "width": 0.15933267526562794,
+       "n_worlds": 15,
+       "n_items": 824,
+       "excludes_zero": false,
+       "ingestion_sd": 0.04345111740546719,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.011610131162944945,
+       "lo_inflated": -0.08112127883669933,
+       "hi_inflated": 0.08462877323939638,
+       "excludes_zero_inflated": false
+      },
+      "zero": {
+       "est": -0.053763440860215055,
+       "lo": -0.1165644171779141,
+       "hi": 0.014285714285714285,
+       "width": 0.1308501314636284,
+       "n_worlds": 15,
+       "n_items": 465,
+       "excludes_zero": false,
+       "ingestion_sd": 0.04345111740546719,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.011533715267715067,
+       "lo_inflated": -0.12050906838669606,
+       "hi_inflated": 0.0179422331378885,
+       "excludes_zero_inflated": false
+      },
+      "rag": {
+       "est": -0.010752688172043012,
+       "lo": -0.09375,
+       "hi": 0.07390300230946882,
+       "width": 0.16765300230946883,
+       "n_worlds": 15,
+       "n_items": 465,
+       "excludes_zero": false,
+       "ingestion_sd": 0.04345111740546719,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.011533715267715067,
+       "lo_inflated": -0.09677344112221586,
+       "hi_inflated": 0.07686923886879007,
+       "excludes_zero_inflated": false
+      }
+     },
+     "def:Update": {
+      "holdmem_D0B0": {
+       "est": 0.03404255319148936,
+       "lo": -0.043137254901960784,
+       "hi": 0.10424710424710425,
+       "width": 0.14738435914906503,
+       "n_worlds": 15,
+       "n_items": 235,
+       "excludes_zero": false,
+       "ingestion_sd": 0.13917204695833477,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.03744132649484499,
+       "lo_inflated": -0.07245572456164626,
+       "hi_inflated": 0.13559962766669598,
+       "excludes_zero_inflated": false
+      }
+     },
+     "def:Stability": {
+      "holdmem_D0B0": {
+       "est": 0.005853658536585366,
+       "lo": -0.059959349593495935,
+       "hi": 0.07021276595744681,
+       "width": 0.13017211555094274,
+       "n_worlds": 15,
+       "n_items": 1025,
+       "excludes_zero": false,
+       "ingestion_sd": 0.06421559086900235,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.01696548750360632,
+       "lo_inflated": -0.06788256436652557,
+       "hi_inflated": 0.078295174512558,
+       "excludes_zero_inflated": false
+      }
+     },
+     "orphan:Update": {
+      "holdmem_D0B0": {
+       "est": 0.13157894736842105,
+       "lo": 0.0,
+       "hi": 0.25,
+       "width": 0.25,
+       "n_worlds": 14,
+       "n_items": 38,
+       "excludes_zero": false,
+       "ingestion_sd": 0.17010345435994292,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.047794944556367035,
+       "lo_inflated": -0.029939725918734283,
+       "hi_inflated": 0.2825716893669433,
+       "excludes_zero_inflated": false
+      }
+     },
+     "orphan:Stability": {
+      "holdmem_D0B0": {
+       "est": -0.16967509025270758,
+       "lo": -0.23904382470119523,
+       "hi": -0.08928571428571429,
+       "width": 0.14975811041548093,
+       "n_worlds": 15,
+       "n_items": 277,
+       "excludes_zero": true,
+       "ingestion_sd": 0.09769787605158274,
+       "ingestion_worlds": 3,
+       "ingestion_se": 0.025780892044692253,
+       "lo_inflated": -0.25549620563925163,
+       "hi_inflated": -0.07472408027615016,
+       "excludes_zero_inflated": true
+      }
+     }
+    }
+   }
+  },
+  "total": {
+   "counts": {
+    "all": {
+     "comparisons": 6,
+     "inside_predicted": 5,
+     "inside_other": 0,
+     "discriminating": 5
+    },
+    "label_circular": {
+     "comparisons": 2,
+     "inside_predicted": 2,
+     "inside_other": 0,
+     "discriminating": 2
+    },
+    "out_of_sample": {
+     "comparisons": 4,
+     "inside_predicted": 3,
+     "inside_other": 0,
+     "discriminating": 3
+    }
+   },
+   "baseline_counts": {
+    "zero": {
+     "baseline": {
+      "all": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      },
+      "label_circular": {
+       "comparisons": 0,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      },
+      "out_of_sample": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      }
+     },
+     "native_same_comparisons": {
+      "all": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      },
+      "label_circular": {
+       "comparisons": 0,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      },
+      "out_of_sample": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      }
+     }
+    },
+    "rag": {
+     "baseline": {
+      "all": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      },
+      "label_circular": {
+       "comparisons": 0,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      },
+      "out_of_sample": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      }
+     },
+     "native_same_comparisons": {
+      "all": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      },
+      "label_circular": {
+       "comparisons": 0,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      },
+      "out_of_sample": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      }
+     }
+    },
+    "oracle": {
+     "baseline": {
+      "all": {
+       "comparisons": 2,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      },
+      "label_circular": {
+       "comparisons": 0,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      },
+      "out_of_sample": {
+       "comparisons": 2,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      }
+     },
+     "native_same_comparisons": {
+      "all": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      },
+      "label_circular": {
+       "comparisons": 0,
+       "inside_predicted": 0,
+       "inside_other": 0,
+       "discriminating": 0
+      },
+      "out_of_sample": {
+       "comparisons": 2,
+       "inside_predicted": 1,
+       "inside_other": 0,
+       "discriminating": 1
+      }
+     }
+    }
+   },
+   "b_identified": 0,
+   "systems": 1,
+   "mean_labels_coverage": 0.2916666666666667,
+   "mean_references_coverage": 0.375,
+   "mean_observed_coverage": 0.8333333333333334
+  }
+ },
+ "stage4": {
+  "n1_label_agreement": {},
+  "n1_holds": null,
+  "n2_per_system": {
+   "mem0": {
+    "inside": 5,
+    "comparisons": 6,
+    "n2_holds": true
+   }
+  },
+  "n3_share_inside": 0.8333333333333334,
+  "n3_holds": true,
+  "n4_orphan_stability_by_B": {
+   "0": [
+    0.7003610108303249
+   ]
+  },
+  "n4_holds": null,
+  "discriminability": {
+   "rule": "a comparison discriminates when the native estimate is inside the predicted cell's 95% interval and outside that of the other B label's cell (same D)",
+   "per_system": {
+    "mem0": {
+     "comparisons": 6,
+     "inside_predicted": 5,
+     "inside_other": 0,
+     "discriminating": 5
+    }
+   },
+   "total": {
+    "comparisons": 6,
+    "inside_predicted": 5,
+    "inside_other": 0,
+    "discriminating": 5
+   }
+  }
+ }
+}

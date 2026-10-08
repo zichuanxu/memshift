@@ -1,0 +1,94 @@
+{
+  "code": {
+    "commit": "9f9aad68d4b890d9e78d3a7a599fad503e243f5c",
+    "dirty": false
+  },
+  "created_utc": "2026-09-28T12:53:04Z",
+  "experiment": "smoke-0.4",
+  "files_sha256": {
+    "analysis/smoke_summary.json": "a331601ba5f5112fa62f8c859606dcacec2a02bb1f9b2bb3b954656ec76dd87e",
+    "answers.jsonl": "7a55d71eb44b7612585528827f83d7588a1df10f2b621790374cdb8380fd9e14",
+    "calls.jsonl": "572dc7280399a364bc613e339bba42de8c6e847a4192f849bff3bf5301e6fa06",
+    "env.json": "9dfcb5ba9b7c05d1375ad9e6df3e4a0befc37eb4c5561bd6c6b0f02786a79b04",
+    "items.jsonl": "db4f7292fc01a756587a6237c2bdc3a523f0b402ef8ea80c35ceae8350357e14",
+    "probes.jsonl": "91bed20b60b205abf2327a85486a6825ef6e2d97af9a2d591fc750bb18d57f74"
+  },
+  "models": {
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "build_at": "2026-02-01 00:00:00",
+    "cell": "holdmem_D1B1_source",
+    "checkpoints": [
+      "2026-02-08 00:00:00",
+      "2026-02-15 00:00:00",
+      "2026-02-22 00:00:00",
+      "2026-03-01 00:00:00",
+      "2026-03-08 00:00:00",
+      "2026-03-15 00:00:00",
+      "2026-03-22 00:00:00",
+      "2026-03-29 00:00:00"
+    ],
+    "n_probes": 50,
+    "seed": 0,
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "smoke_20260928T124755Z",
+  "run_image": "sha256:919c467c3c0a8d47018dc1d115f9b5ae0f65688de8938b0a624b653c1c7f58ea",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "7bfd5bd1767a5769e045a7b8c4bd291bc41d346ba09a5a4509db3716f8e6616c",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 543,
+      "seed": 0,
+      "shift_targets": null,
+      "world_id": "w0000"
+    }
+  ]
+}

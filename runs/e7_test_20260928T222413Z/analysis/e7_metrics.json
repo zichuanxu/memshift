@@ -1,0 +1,226 @@
+{
+ "conflict": {
+  "holdmem_D0B0": {
+   "AbstainAccuracy": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 20
+   },
+   "ControlContractValid": {
+    "est": 0.95,
+    "lo": 0.85,
+    "hi": 1.0,
+    "width": 0.15000000000000002,
+    "n_worlds": 5,
+    "n_items": 20
+   }
+  },
+  "holdmem_D0B1_source": {
+   "AbstainAccuracy": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 20
+   },
+   "ControlContractValid": {
+    "est": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 20
+   }
+  },
+  "holdmem_D1B0": {
+   "AbstainAccuracy": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 20
+   },
+   "ControlContractValid": {
+    "est": 0.9,
+    "lo": 0.8,
+    "hi": 1.0,
+    "width": 0.19999999999999996,
+    "n_worlds": 5,
+    "n_items": 20
+   }
+  },
+  "holdmem_D1B1_source": {
+   "AbstainAccuracy": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 20
+   },
+   "ControlContractValid": {
+    "est": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 20
+   }
+  },
+  "zero": {
+   "AbstainAccuracy": {
+    "est": 0.05,
+    "lo": 0.0,
+    "hi": 0.15,
+    "width": 0.15,
+    "n_worlds": 5,
+    "n_items": 20
+   },
+   "ControlContractValid": {
+    "est": 0.75,
+    "lo": 0.55,
+    "hi": 0.95,
+    "width": 0.3999999999999999,
+    "n_worlds": 5,
+    "n_items": 20
+   }
+  }
+ },
+ "cons": {
+  "holdmem_D0B0": {
+   "ScopeLeak": {
+    "est": 0.948051948051948,
+    "lo": 0.9057971014492754,
+    "hi": 0.9845360824742269,
+    "width": 0.07873898102495147,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "BlockAccuracy": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "OverBlock": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 86
+   }
+  },
+  "holdmem_D0B1_source": {
+   "ScopeLeak": {
+    "est": 0.6233766233766234,
+    "lo": 0.42021276595744683,
+    "hi": 0.756578947368421,
+    "width": 0.3363661814109742,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "BlockAccuracy": {
+    "est": 0.35064935064935066,
+    "lo": 0.2159090909090909,
+    "hi": 0.5474452554744526,
+    "width": 0.3315361645653616,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "OverBlock": {
+    "est": 0.36046511627906974,
+    "lo": 0.0,
+    "hi": 0.7913043478260869,
+    "width": 0.7913043478260869,
+    "n_worlds": 5,
+    "n_items": 86
+   }
+  },
+  "holdmem_D1B0": {
+   "ScopeLeak": {
+    "est": 0.9415584415584416,
+    "lo": 0.8859649122807017,
+    "hi": 0.9771428571428571,
+    "width": 0.09117794486215536,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "BlockAccuracy": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "OverBlock": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 86
+   }
+  },
+  "holdmem_D1B1_source": {
+   "ScopeLeak": {
+    "est": 0.6298701298701299,
+    "lo": 0.42021276595744683,
+    "hi": 0.7631578947368421,
+    "width": 0.3429451287793953,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "BlockAccuracy": {
+    "est": 0.33766233766233766,
+    "lo": 0.19736842105263158,
+    "hi": 0.5314685314685315,
+    "width": 0.3341001104158999,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "OverBlock": {
+    "est": 0.36046511627906974,
+    "lo": 0.0,
+    "hi": 0.7913043478260869,
+    "width": 0.7913043478260869,
+    "n_worlds": 5,
+    "n_items": 86
+   }
+  },
+  "zero": {
+   "ScopeLeak": {
+    "est": 0.032467532467532464,
+    "lo": 0.0,
+    "hi": 0.12605042016806722,
+    "width": 0.12605042016806722,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "BlockAccuracy": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 154
+   },
+   "OverBlock": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 86
+   }
+  }
+ }
+}

@@ -1,0 +1,152 @@
+{
+  "code": {
+    "commit": "4692e66c8c62befe937ba93fd7c759769fa0aac4",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T07:46:00Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "20d9a3e03087df2b63bf33fa7cab219a4febcd75a5588a63d1dc0e9efd4e028f",
+    "answers.jsonl": "f357f68272d9050eb8f15d9ee42c03c744764bf6a35b6ca67e6be85a0054ef68",
+    "calls.jsonl": "f6838c326ddd8578d2c7985558e602e521dac9e894de40b1ffdee2aaf09b6c70",
+    "env.json": "8c82065d7f206784c148d0ccf8b5b6186ffc202062d9a2754b1539be0832d4b4",
+    "probes.jsonl": "fa950c0a46c6bd55e9020d91aa256d76e9f3848f6b99363aebd84c21cdc3ad00",
+    "stores/w1011_lightrag/prefix/graph_chunk_entity_relation.graphml": "3130a6e7a149c20939b56dd6037b1ecaf584fe33d0ded10142117eba79e32851",
+    "stores/w1011_lightrag/prefix/kv_store_doc_status.json": "a23f62592e5a04c51980b096aabd04a8a1a80a44112ee755b1a1faf744cbfbda",
+    "stores/w1011_lightrag/prefix/kv_store_entity_chunks.json": "a7e7ebce8334fd37e1298bb1a34ce5e2526fa64949d02b49f4dc010aad099d7f",
+    "stores/w1011_lightrag/prefix/kv_store_full_docs.json": "4635a808e4b31bbb96bb340bb00ddd50dfad0fccf57e65b7cb099814af5bb4fd",
+    "stores/w1011_lightrag/prefix/kv_store_full_entities.json": "a0188b415e4335ced7e92c7d97de7db2ba274a0e779071cafc0ef96f1fe4b59a",
+    "stores/w1011_lightrag/prefix/kv_store_full_relations.json": "4a914081c6a7998e4b96a0226b2761d75d70ce140ab8f9a6ea0bd7b4743e969a",
+    "stores/w1011_lightrag/prefix/kv_store_llm_response_cache.json": "d02539111582056626198cf584df246d42c0cc96c629f66004a82221784bfe04",
+    "stores/w1011_lightrag/prefix/kv_store_relation_chunks.json": "a90810dff30c0512248180542c9c0764a59dc49eb5de46fe535a223ed4ee437e",
+    "stores/w1011_lightrag/prefix/kv_store_text_chunks.json": "65c4ce6cd74f589b8207625cb2e4a77015d48f2f96458ae0cc1364b96c8a293c",
+    "stores/w1011_lightrag/prefix/ledger.jsonl": "357e5f96864c71327fa6af82eb4b2aedad836d72876297efd264e806e44204a7",
+    "stores/w1011_lightrag/prefix/memshift_native.json": "80a48b1dc368499f78e8f5df0188af79aeff766ee820c6d2c9d0cc30330d2785",
+    "stores/w1011_lightrag/prefix/revisions.json": "5381a8667102b258f037d49e63c59ecc20bede4172a40add389dda7642b59de0",
+    "stores/w1011_lightrag/prefix/state.json": "b73b8ae0dc297a1ccbc2149281c2bc1a7945eb7f11abac5fcab60bbec140c52d",
+    "stores/w1011_lightrag/prefix/vdb_chunks.json": "9ceeb4cd43aa15135129e703e185f54351cb4c7a187963f6c9ee9e30492b20d9",
+    "stores/w1011_lightrag/prefix/vdb_entities.json": "7b8e14b416d11bb9a7379a3b56d00210ba4bd03706349d4c72c559100ef83c64",
+    "stores/w1011_lightrag/prefix/vdb_relationships.json": "7f92f4d950be12de209dd27213965101a1545e2f140712b356e41940b2ce8a25",
+    "stores/w1011_lightrag/snapshot/graph_chunk_entity_relation.graphml": "3130a6e7a149c20939b56dd6037b1ecaf584fe33d0ded10142117eba79e32851",
+    "stores/w1011_lightrag/snapshot/kv_store_doc_status.json": "a23f62592e5a04c51980b096aabd04a8a1a80a44112ee755b1a1faf744cbfbda",
+    "stores/w1011_lightrag/snapshot/kv_store_entity_chunks.json": "a7e7ebce8334fd37e1298bb1a34ce5e2526fa64949d02b49f4dc010aad099d7f",
+    "stores/w1011_lightrag/snapshot/kv_store_full_docs.json": "4635a808e4b31bbb96bb340bb00ddd50dfad0fccf57e65b7cb099814af5bb4fd",
+    "stores/w1011_lightrag/snapshot/kv_store_full_entities.json": "a0188b415e4335ced7e92c7d97de7db2ba274a0e779071cafc0ef96f1fe4b59a",
+    "stores/w1011_lightrag/snapshot/kv_store_full_relations.json": "4a914081c6a7998e4b96a0226b2761d75d70ce140ab8f9a6ea0bd7b4743e969a",
+    "stores/w1011_lightrag/snapshot/kv_store_llm_response_cache.json": "8f612b9f51fb89a6b9c9849f43bea93752b0cbc7ece446f28be53bd1fb559dd8",
+    "stores/w1011_lightrag/snapshot/kv_store_relation_chunks.json": "a90810dff30c0512248180542c9c0764a59dc49eb5de46fe535a223ed4ee437e",
+    "stores/w1011_lightrag/snapshot/kv_store_text_chunks.json": "65c4ce6cd74f589b8207625cb2e4a77015d48f2f96458ae0cc1364b96c8a293c",
+    "stores/w1011_lightrag/snapshot/ledger.jsonl": "357e5f96864c71327fa6af82eb4b2aedad836d72876297efd264e806e44204a7",
+    "stores/w1011_lightrag/snapshot/memshift_native.json": "80a48b1dc368499f78e8f5df0188af79aeff766ee820c6d2c9d0cc30330d2785",
+    "stores/w1011_lightrag/snapshot/revisions.json": "5381a8667102b258f037d49e63c59ecc20bede4172a40add389dda7642b59de0",
+    "stores/w1011_lightrag/snapshot/state.json": "b997151b75259320ae716076cdc87d52a431a759060d36dfe6b990c0718ff651",
+    "stores/w1011_lightrag/snapshot/vdb_chunks.json": "fab3c7d9b94ab2693d7056953026a83ace5a6fed4fc364f3d5bc17d98ccef662",
+    "stores/w1011_lightrag/snapshot/vdb_entities.json": "051fc301c2c8184ac4456997cb7d07897c641c4d652a7bd6a0f6a37ab7f3c499",
+    "stores/w1011_lightrag/snapshot/vdb_relationships.json": "80b6cb0f45a7bbc611b5b4036a31e61be98e3ee0a4de5faa996525a543b7a108",
+    "world_results.jsonl": "0744d69ce079d92a02f4bdd829b7c7ed3125162da70dbd5a35093c767c37a437"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "branches": [
+      "src",
+      "def",
+      "orphan"
+    ],
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "native_batch": 2,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "phase": "prefix",
+    "prefix_run": null,
+    "resume_from": "e5_lightrag_s1011_20260929T220248Z",
+    "seeds": [
+      1011
+    ],
+    "systems": [
+      "lightrag"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_lightrag_s1011_pre_20260930T032753Z",
+  "run_image": "sha256:a450a4ca2f48c1856c828652dba8e6c6da4e2d16d5f67c38be77290713ca05db",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "6246764bc2e73cbed688905a23cc477d2396036b864bd3f291e023df30b1b404",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 512,
+      "seed": 1011,
+      "shift_targets": null,
+      "world_id": "w1011"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+ "path1": {
+  "estimate": {
+   "est": 0.09246575342465753,
+   "lo": 0.06742485783915515,
+   "hi": 0.11860068259385666,
+   "width": 0.051175824754701504,
+   "n_worlds": 20,
+   "n_items": 2336
+  },
+  "triggered": false
+ },
+ "path2": {
+  "checks": {
+   "def:D_effect_missed_source": {
+    "estimate": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 558
+    },
+    "triggered": false
+   },
+   "def:D_effect_missed_cited": {
+    "estimate": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 558
+    },
+    "triggered": false
+   },
+   "orphan:D_effect_missed_source": {
+    "estimate": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1767
+    },
+    "triggered": false
+   },
+   "orphan:D_effect_missed_cited": {
+    "estimate": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1767
+    },
+    "triggered": false
+   },
+   "src:D_effect_missed_source": {
+    "estimate": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1168
+    },
+    "triggered": false
+   },
+   "src:D_effect_missed_cited": {
+    "estimate": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1168
+    },
+    "triggered": false
+   }
+  },
+  "triggered": false
+ },
+ "path3": {
+  "pooled_slope": {
+   "est": 1.0103390806029047,
+   "n_items": 2446,
+   "n_worlds": 20,
+   "lo95": 0.8784333116086589,
+   "lo90": 0.8999703906606487,
+   "hi90": 1.178304749885656,
+   "hi95": 1.2222041693567993
+  },
+  "pooled_auroc": {
+   "est": 0.8318898635971806,
+   "n_items": 2446,
+   "n_worlds": 20,
+   "lo95": 0.7555046257359125,
+   "lo90": 0.7681496915471667,
+   "hi90": 0.9023087865193128,
+   "hi95": 0.9181482740204884
+  },
+  "tiers": [
+   "downgrade",
+   "same",
+   "upgrade"
+  ],
+  "tier_caveats": [
+   "upgrade"
+  ],
+  "triggered": false
+ },
+ "claim_level": "two-factor theory + quantitative prediction",
+ "membership": {
+  "T1": {
+   "downgrade": {
+    "equivalent": true,
+    "delta_90": {
+     "est": -0.0036144578313253013,
+     "lo": -0.008464328899637243,
+     "hi": 0.0,
+     "width": 0.008464328899637243,
+     "n_worlds": 20,
+     "n_items": 830
+    }
+   },
+   "same": {
+    "equivalent": true,
+    "delta_90": {
+     "est": -0.013613861386138614,
+     "lo": -0.018633540372670808,
+     "hi": -0.008641975308641974,
+     "width": 0.009991565064028833,
+     "n_worlds": 20,
+     "n_items": 808
+    }
+   },
+   "upgrade": {
+    "equivalent": true,
+    "delta_90": {
+     "est": -0.0037128712871287127,
+     "lo": -0.00865265760197775,
+     "hi": 0.0,
+     "width": 0.00865265760197775,
+     "n_worlds": 20,
+     "n_items": 808
+    }
+   }
+  },
+  "T3_T4": {
+   "1m:holdmem_D1B1_source": {
+    "T3_pass": true,
+    "T4_pass": true
+   },
+   "1m:oracle": {
+    "T3_pass": null,
+    "T4_pass": null
+   },
+   "1m:rag": {
+    "T3_pass": false,
+    "T4_pass": true
+   },
+   "1m:zero": {
+    "T3_pass": false,
+    "T4_pass": true
+   },
+   "3m:holdmem_D1B1_source": {
+    "T3_pass": true,
+    "T4_pass": true
+   },
+   "3m:oracle": {
+    "T3_pass": null,
+    "T4_pass": null
+   },
+   "3m:rag": {
+    "T3_pass": false,
+    "T4_pass": true
+   },
+   "3m:zero": {
+    "T3_pass": false,
+    "T4_pass": true
+   },
+   "12m:holdmem_D1B1_source": {
+    "T3_pass": true,
+    "T4_pass": true
+   },
+   "12m:oracle": {
+    "T3_pass": null,
+    "T4_pass": null
+   },
+   "12m:rag": {
+    "T3_pass": false,
+    "T4_pass": true
+   },
+   "12m:zero": {
+    "T3_pass": false,
+    "T4_pass": true
+   }
+  }
+ },
+ "n_worlds_e1": 20
+}

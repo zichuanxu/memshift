@@ -1,0 +1,140 @@
+{
+  "code": {
+    "commit": "b450a073ef9e18be271e65005d996a93899002b5",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T06:14:24Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "16a1e0f446fd6e54b8c7ff7aa1f473a4e39aa255fa39c126bcee05b9f17ed152",
+    "answers.jsonl": "77c70eb084205ab641350dddbeecb714ead0604671115e49e822bfa8f4adc851",
+    "calls.jsonl": "8992d2f168b81454ab534570a9a815860e51ecfb067303ad6d10663166e27eb6",
+    "env.json": "621e943d47d182188a8085c8b54492201833febb069e03f22230613cb5dad7f1",
+    "probes.jsonl": "605fd32aba4fac9d9e4e1b3b47ffc2f847f274fbe539b7aaa5ca352bd31afa49",
+    "stores/w1006_amem/prefix/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/data_level0.bin": "ea9ac6972cb4666769a17755f17c5727f676f11a742e9553bf3a21119ab54394",
+    "stores/w1006_amem/prefix/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/header.bin": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150",
+    "stores/w1006_amem/prefix/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/length.bin": "c50e00f5edd7f6052ef2646f2e5f1761570c621a5d71157550ab06af41272eb1",
+    "stores/w1006_amem/prefix/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/link_lists.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1006_amem/prefix/chroma/chroma.sqlite3": "6cad6773dd84f0c7e717da70c2970792dfbf018486a1cbb162bbd32d78a720e8",
+    "stores/w1006_amem/prefix/failures.jsonl": "96738f806f1fff188bfde2a27143e90681c2db33bdd41a4d0cbf90f723af3ecc",
+    "stores/w1006_amem/prefix/ledger.jsonl": "9ad766dff4996d1f9365b522fa5ce28826e97cbcc2a63198d42dcd5088132d35",
+    "stores/w1006_amem/prefix/memshift_native.json": "71540373fd8f0625f0181b8fcb865f5f319dafb524611542d7c87be251cd6c11",
+    "stores/w1006_amem/prefix/notes.json": "b4206e865f42dfc4f6d7f11413416a717f47c37c008e65396fc2fe551eacf5f1",
+    "stores/w1006_amem/prefix/state.json": "482b15c77a24e0ce8cfbf6662781d84bacb2e4cac054e8b3b98eb4fe1372534e",
+    "stores/w1006_amem/snapshot/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/data_level0.bin": "ea9ac6972cb4666769a17755f17c5727f676f11a742e9553bf3a21119ab54394",
+    "stores/w1006_amem/snapshot/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/header.bin": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150",
+    "stores/w1006_amem/snapshot/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/length.bin": "69f8b5e1dbfaf3255d01c58dddcbc5393193fc21e2644029da356364df22281d",
+    "stores/w1006_amem/snapshot/chroma/7e635c15-c0d7-4ff9-8fb3-36a02f777d6e/link_lists.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1006_amem/snapshot/chroma/chroma.sqlite3": "9d18f87b99327c7d0a2147bd1b68bcc11043b5609a698dbb81a4383df66f0710",
+    "stores/w1006_amem/snapshot/failures.jsonl": "96738f806f1fff188bfde2a27143e90681c2db33bdd41a4d0cbf90f723af3ecc",
+    "stores/w1006_amem/snapshot/ledger.jsonl": "9ad766dff4996d1f9365b522fa5ce28826e97cbcc2a63198d42dcd5088132d35",
+    "stores/w1006_amem/snapshot/memshift_native.json": "71540373fd8f0625f0181b8fcb865f5f319dafb524611542d7c87be251cd6c11",
+    "stores/w1006_amem/snapshot/notes.json": "b4206e865f42dfc4f6d7f11413416a717f47c37c008e65396fc2fe551eacf5f1",
+    "stores/w1006_amem/snapshot/state.json": "78a75e3126bce4b01eb7731e9065b8cedfdb54b01322940bd11540120840981a",
+    "world_results.jsonl": "f8c0116da772b6f20b109abb9bc0b25ec618b0ee6e6800271f138a1481b67492"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "branches": [
+      "src",
+      "def",
+      "orphan"
+    ],
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "native_batch": 1,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "phase": "prefix",
+    "prefix_run": null,
+    "resume_from": "e5_amem_s1006_pre_20260930T032806Z",
+    "seeds": [
+      1006
+    ],
+    "systems": [
+      "amem"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_amem_s1006_pre_20260930T040805Z",
+  "run_image": "sha256:118fd86eac3ec820195af2864cf98cb8ed610ed59318dc298fa6b2a76e782638",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "fc5cfeda8d58fb49b12e56da9541208e354cc3543a34e8ba0646259d530623e8",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 523,
+      "seed": 1006,
+      "shift_targets": null,
+      "world_id": "w1006"
+    }
+  ]
+}

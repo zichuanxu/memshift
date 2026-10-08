@@ -1,0 +1,283 @@
+import copy
+import json
+import re
+import sys
+from pathlib import Path
+from typing import Any
+
+import pytest
+
+from memshift.analysis import neighbour_table as nt
+
+ROOT = Path(__file__).resolve().parents[1]
+PROPS = ROOT / "paper" / "audit" / "neighbours" / "properties.json"
+GENERATED = ROOT / "paper" / "generated"
+GOYAL = "arxiv2609_05339"
+
+
+@pytest.fixture(scope="module")
+def raw() -> list[dict[str, Any]]:
+    objs: list[dict[str, Any]] = json.loads(PROPS.read_text())
+    return objs
+
+
+def _write(tmp_path: Path, objs: list[dict[str, Any]]) -> Path:
+    path = tmp_path / "properties.json"
+    path.write_text(json.dumps(objs))
+    return path
+
+
+def _data_rows(tex: str) -> list[str]:
+    return [
+        ln
+        for ln in tex.splitlines()
+        if re.search(r"\\cite[pt]\{", ln) or ln.startswith(r"\textbf{\memshift")
+    ]
+
+
+def test_sixteen_rows_and_the_memshift_row_last() -> None:
+    rows = nt.load(PROPS)
+    assert len(rows) == 16
+    assert [r["key"] for r in rows].count("memshift") == 1
+    assert rows[-1]["key"] == "memshift" and rows[-1]["is_reference"]
+    tex = nt.tab_neighbours(rows)
+    body = _data_rows(tex)
+    assert len(body) == 16 and body[-1].startswith(r"\textbf{\memshift{}} &")
+    assert sum(r"\citep{" in ln or r"\citet{" in ln for ln in body) == 15
+    # a row named after its authors prints them once, through the citation
+    assert [ln.split(" & ")[0] for ln in body if r"\citet{" in ln] == [
+        r"\citet{arxiv2609_05339}",
+        r"\citet{arxiv2607_16019}",
+    ]
+
+
+@pytest.mark.parametrize("render", [nt.tab_neighbours, nt.tab_neighbours_full])
+def test_every_row_has_one_cell_per_column(render: Any) -> None:
+    tex = render(nt.load(PROPS))
+    spec = re.search(r"\\begin\{tabular\}\{@\{\}l ([c ]+)@\{\}\}", tex)
+    assert spec is not None
+    n_columns = spec.group(1).count("c")
+    for ln in _data_rows(tex):
+        assert ln.count(" & ") == n_columns  # name + n_columns cells
+        assert ln.endswith(r" \\")
+
+
+def test_neighbour_keys_are_in_the_bibliography_and_cited_in_related_work() -> None:
+    bib = (ROOT / "paper" / "refs" / "references.bib").read_text()
+    entries = set(re.findall(r"^@\w+\{([^,\s]+),", bib, re.M))
+    related = (ROOT / "paper" / "sections" / "related.tex").read_text()
+    cited = {k.strip() for m in re.findall(r"\\cite\w*\{([^}]*)\}", related) for k in m.split(",")}
+    for r in nt.load(PROPS)[:-1]:
+        assert r["key"] in entries, r["key"]
+        assert r["key"] in cited, f"{r['key']} is not cited in related.tex"
+
+
+def test_observed_cells_render_without_a_dagger_and_no_process_note() -> None:
+    rows = nt.load(PROPS)
+    for render in (nt.tab_neighbours, nt.tab_neighbours_full):
+        tex = render(rows)
+        ms = _data_rows(tex)[-1]
+        # native systems: six observed, none planned
+        assert " & 6 & " in ms and r"6\,(+" not in ms
+        assert r"T\,(+L)" in ms and nt.DAGGER not in ms  # world text: block L has run
+        assert "pre-registered" not in tex and "not yet run" not in tex  # no process note
+        assert all(nt.DAGGER not in ln for ln in _data_rows(tex)[:-1])
+        assert " 40 & " in ms and r"40\,(+" not in ms  # histories: block R has run, no mark
+
+
+def test_flipping_the_json_removes_the_marks(raw: list[dict[str, Any]], tmp_path: Path) -> None:
+    objs = copy.deepcopy(raw)
+    ms = next(o for o in objs if o.get("is_reference"))["fields"]
+    ms["native_systems"] = {"value": "6", "derived_from": "memory_systems", "note": "run"}
+    assert "planned_extra" not in ms["n_histories"]  # block R has run
+    assert "planned_extra" not in ms["text_origin"]  # block L has run
+    rows = nt.load(_write(tmp_path, objs))
+    for tex in (nt.tab_neighbours(rows), nt.tab_neighbours_full(rows)):
+        assert nt.DAGGER not in tex and "planned" not in tex
+        assert " 6 & " in _data_rows(tex)[-1]
+
+
+def test_a_planned_categorical_cell_and_an_inferred_cell(
+    raw: list[dict[str, Any]], tmp_path: Path
+) -> None:
+    objs = copy.deepcopy(raw)
+    ms = next(o for o in objs if o.get("is_reference"))["fields"]
+    ms["chg_writer_model_change"]["planned"] = True
+    rows = nt.load(_write(tmp_path, objs))
+    writer = nt.cell(rows[-1], nt.COLUMNS["writer"])
+    assert writer == r"\checkmark$^\dagger$"
+    goyal = next(r for r in rows if r["key"] == GOYAL)
+    assert nt.cell(goyal, nt.COLUMNS["gold_first"]) == r"\checkmark$^\ddagger$"
+    assert "inferred by the audit" in nt.tab_neighbours(rows)
+
+
+def test_only_the_memshift_row_can_be_planned(raw: list[dict[str, Any]], tmp_path: Path) -> None:
+    objs = copy.deepcopy(raw)
+    objs[0]["fields"]["chg_definition_change"]["planned"] = True
+    with pytest.raises(ValueError, match="only the MemShift row"):
+        nt.load(_write(tmp_path, objs))
+
+
+def test_invalid_input_is_rejected(raw: list[dict[str, Any]], tmp_path: Path) -> None:
+    bad = copy.deepcopy(raw)
+    bad[0]["fields"]["prereg"]["value"] = "maybe"
+    with pytest.raises(ValueError, match="bad value"):
+        nt.load(_write(tmp_path, bad))
+    missing = copy.deepcopy(raw)
+    del missing[1]["fields"]["native_systems"]
+    with pytest.raises(ValueError, match="missing field"):
+        nt.load(_write(tmp_path, missing))
+    no_ref = [o for o in raw if not o.get("is_reference")]
+    with pytest.raises(ValueError, match="exactly one MemShift row"):
+        nt.load(_write(tmp_path, no_ref))
+
+
+def test_output_is_deterministic_and_the_generated_files_are_current(tmp_path: Path) -> None:
+    first, second = nt.load(PROPS), nt.load(PROPS)
+    assert nt.tab_neighbours(first) == nt.tab_neighbours(second)
+    assert nt.tab_neighbours_full(first) == nt.tab_neighbours_full(second)
+    assert nt.macros(first) == nt.macros(second)
+    committed = {
+        "tab_neighbours.tex": nt.tab_neighbours(first),
+        "tab_neighbours_full.tex": nt.tab_neighbours_full(first),
+        "neighbour_counts.tex": nt.macros(first),
+    }
+    for name, text in committed.items():
+        assert (GENERATED / name).read_text() == nt.HEAD + text, f"regenerate {name}"
+
+
+def test_cli_writes_the_table_the_appendix_table_and_the_counts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    out = tmp_path / "gen" / "tab_neighbours.tex"
+    monkeypatch.setattr(sys, "argv", ["neighbour_table", str(PROPS), str(out)])
+    nt.main()
+    assert out.read_text().startswith(nt.HEAD + r"\begin{table}")
+    assert (tmp_path / "gen" / "tab_neighbours_full.tex").exists()
+    assert r"\newcommand{\NbrTotal}{15}" in (tmp_path / "gen" / "neighbour_counts.tex").read_text()
+
+
+def test_counts_partition_the_neighbours_and_back_the_related_work_text() -> None:
+    rows = nt.load(PROPS)
+    c = nt.counts(rows)
+    assert c["NbrTotal"] == "15"
+    for col in nt.COLUMNS.values():
+        if col.kind == "text":
+            continue
+        total = sum(int(c[f"Nbr{col.stem}{nt.VALUE_KEY[v]}"]) for v in nt._vocabulary(col))
+        assert total == 15, col.field
+    # related.tex says that no neighbour redefines a concept or migrates a memory between
+    # implementations and that only Goyal and Ray switch the writer and hold the history fixed;
+    # revise the paragraph if the audit changes these
+    assert c["NbrRedefYes"] == "0" and c["NbrImplYes"] == "0"
+    yes = {
+        col: [r["key"] for r in rows[:-1] if r["fields"][col]["value"] == "yes"]
+        for col in ("chg_writer_model_change", "counterfactual")
+    }
+    assert yes == {"chg_writer_model_change": [GOYAL], "counterfactual": [GOYAL]}
+    impl = [
+        r["key"] for r in rows[:-1] if r["fields"]["chg_implementation_migration"]["value"] != "no"
+    ]
+    assert impl == [GOYAL]
+
+
+def _graded_probes(run: str) -> tuple[int, int, int]:
+    """Graded probes, knowledge items and worlds of one E1 run: the pre-fork probes plus the asked
+    post-fork ones, recomputed from the committed E1 metrics."""
+    metrics = json.loads((ROOT / "runs" / run / "analysis" / "e1_metrics.json").read_text())
+    pre = metrics["pre_intervention"]
+    branches = metrics["cells"]
+    for system, entry in pre.items():
+        if isinstance(entry, dict) and "n_items" in entry and system != "json_minus_sk":
+            assert entry["n_items"] == pre["zero"]["n_items"], system
+    post = sum(b["zero"]["ContractValid_post"]["n_items"] for b in branches.values())
+    # 48 items per world, asked before the fork on each of the three branches
+    items = pre["zero"]["n_items"] // len(branches)
+    assert items == 48 * metrics["n_worlds"]
+    return pre["zero"]["n_items"] + post, items, int(metrics["n_worlds"])
+
+
+def test_memshift_questions_are_the_graded_probes_of_the_e1_test_runs() -> None:
+    """The unit is the graded probe every system answers. Stage 2 (20 worlds) gives 9,782 and the
+    replication worlds of block R (20 further worlds) give 9,780."""
+    stage2, stage2_items, stage2_worlds = _graded_probes("stage2_e1")
+    rep, rep_items, rep_worlds = _graded_probes("stage4_rep_e1")
+    assert (stage2, rep) == (9782, 9780)
+    field = nt.load(PROPS)[-1]["fields"]["n_questions"]
+    assert stage2 + rep == 19562 == nt._number(field["value"])
+    assert field["items"] == stage2_items + rep_items
+    assert stage2_worlds + rep_worlds == int(nt.load(PROPS)[-1]["fields"]["n_histories"]["value"])
+    assert "graded probes" in field["unit"] and f"{field['items']:,}" in field["unit"]
+    assert field["unit"] in nt.tab_neighbours(nt.load(PROPS))
+    assert "planned_extra" not in field
+
+
+def test_the_weaknesses_named_in_the_text_hold_in_the_counts() -> None:
+    c = nt.counts(nt.load(PROPS))
+    # related.tex: MemShift has fewer test worlds than the median neighbour history count and one
+    # six native systems (block N); several neighbours have three or more; probes are no weakness
+    assert int(c["MsHistObs"]) < float(c["NbrHistMedian"].replace(",", ""))
+    assert int(c["MsNativeObs"]) == 6 and int(c["NbrNativeThreePlus"]) == 9  # block N
+    assert int(c["MsQ"].replace(",", "")) > int(c["NbrQMedian"].replace(",", ""))
+    assert (c["NbrHistCount"], c["NbrHistMedian"], c["NbrHistMore"]) == ("12", "49", "7")
+
+
+def test_every_count_macro_used_in_the_paper_is_defined() -> None:
+    defined = set(nt.counts(nt.load(PROPS)))
+    sections = ROOT / "paper" / "sections"
+    for path in [sections / "related.tex", *sorted(sections.glob("app*.tex"))]:
+        text = path.read_text()
+        used = set(re.findall(r"\\((?:Nbr|Ms)[A-Za-z]+)\b", text))
+        assert used <= defined, used - defined
+    assert r"\input{generated/neighbour_counts}" in (ROOT / "paper" / "main.tex").read_text()
+
+
+def test_derived_fields_agree_with_the_audit_free_text(raw: list[dict[str, Any]]) -> None:
+    for o in raw:
+        f = o["fields"]
+        timing = f["gold_timing"]["value"].lower()
+        expected = {"before": {"yes", "partial"}, "after": {"no"}}
+        lead = (
+            "before"
+            if timing.startswith("before")
+            else "after"
+            if timing.startswith("after")
+            else ""
+        )
+        if lead:
+            assert f["gold_first"]["value"] in expected[lead], o["key"]
+        else:  # mixed, mostly before, ...
+            assert f["gold_first"]["value"] == "partial", o["key"]
+        for name, field in f.items():
+            if "derived_from" in field:
+                assert field["derived_from"] in f and field["note"], (o["key"], name)
+    assert next(o for o in raw if o["src"] == "goyal")["fields"]["gold_first"]["inferred"]
+
+
+def test_latex_special_characters_are_escaped() -> None:
+    tex = nt.tab_neighbours(nt.load(PROPS))
+    assert r"\citet{arxiv2609_05339} &" in tex and "Goyal" not in tex  # no name twice
+    assert r"LoCoMo~\citep{maharana2024locomo}" in tex  # a benchmark keeps its name
+    assert nt._tex("a_b & 50%") == r"a\_b \& 50\%"
+    assert nt._author_named("Goyal & Ray") and nt._author_named("Jiang et al.")
+    assert not nt._author_named("Ground Truth First")
+
+
+def test_the_appendix_table_is_self_contained() -> None:
+    rows = nt.load(PROPS)
+    full = nt.tab_neighbours_full(rows)
+    caption = full.split(r"\label{tab:neighbours-full}")[0]
+    assert r"\cref{tab:neighbours}" not in full  # the Section 2 table is no longer shown
+    compact = nt.tab_neighbours(rows).split(r"\label{tab:neighbours}")[0]
+    legend = compact.split("). ", 1)[1].split(r" $^\ddagger$")[0]  # the legend after the head
+    assert legend in caption  # every mark and column of the Section 2 table is explained
+    for term in (
+        "Derived items: the graded items aggregate several records",
+        "as in \\memshift{}: every item is derived by a writer, but of a world's 48 items only",
+        "Implicit conflict: conflicting information without an explicit replacement",
+        "Consent revoked: the user withdraws consent or asks to forget",
+        "inferred by the audit",
+    ):
+        assert term in caption, term
+    header = next(ln for ln in full.splitlines() if ln.startswith("benchmark &"))
+    assert r"\rotatebox{90}{deletion}" in header and "retraction" not in full

@@ -1,0 +1,1444 @@
+{
+ "primary": {
+  "contrast": "interaction_B (calendar, all probes): [official - ideal]_B=1 - [official - ideal]_B=0, ContractValid",
+  "L5": {
+   "est": -0.025,
+   "lo": -0.1125,
+   "hi": 0.08823529411764706,
+   "width": 0.20073529411764707,
+   "n_worlds": 5,
+   "n_items": 80,
+   "excludes_zero": false
+  }
+ },
+ "cells": {
+  "ideal_L0:holdmem_D1B0": {
+   "stream": "ideal_L0",
+   "mode": "ideal",
+   "lag": 0.0,
+   "system": "holdmem_D1B0",
+   "B": 0,
+   "all": {
+    "pooled": {
+     "est": 0.6141975308641975,
+     "lo": 0.5465116279069767,
+     "hi": 0.685064935064935,
+     "width": 0.13855330715795833,
+     "n_worlds": 5,
+     "n_items": 324
+    },
+    "email": {
+     "est": 0.5833333333333334,
+     "lo": 0.4090909090909091,
+     "hi": 0.8181818181818182,
+     "width": 0.4090909090909091,
+     "n_worlds": 5,
+     "n_items": 48
+    },
+    "calendar": {
+     "est": 0.65,
+     "lo": 0.575,
+     "hi": 0.7352941176470589,
+     "width": 0.16029411764705892,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "tasks": {
+     "est": 0.5333333333333333,
+     "lo": 0.3,
+     "hi": 0.7142857142857143,
+     "width": 0.4142857142857143,
+     "n_worlds": 5,
+     "n_items": 60
+    },
+    "contacts": {
+     "est": 0.7125,
+     "lo": 0.5875,
+     "hi": 0.825,
+     "width": 0.23749999999999993,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "notes": {
+     "est": 0.625,
+     "lo": 0.5,
+     "hi": 1.0,
+     "width": 0.5,
+     "n_worlds": 3,
+     "n_items": 16
+    },
+    "messages": {
+     "est": 0.5,
+     "lo": 0.2,
+     "hi": 0.8,
+     "width": 0.6000000000000001,
+     "n_worlds": 5,
+     "n_items": 40
+    }
+   },
+   "touched": {
+    "pooled": {
+     "est": 0.5185185185185185,
+     "lo": 0.43037974683544306,
+     "hi": 0.6,
+     "width": 0.16962025316455692,
+     "n_worlds": 5,
+     "n_items": 162
+    },
+    "email": {
+     "est": 0.4166666666666667,
+     "lo": 0.14285714285714285,
+     "hi": 0.7272727272727273,
+     "width": 0.5844155844155845,
+     "n_worlds": 5,
+     "n_items": 24
+    },
+    "calendar": {
+     "est": 0.6,
+     "lo": 0.4117647058823529,
+     "hi": 0.7777777777777778,
+     "width": 0.36601307189542487,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "tasks": {
+     "est": 0.4,
+     "lo": 0.21428571428571427,
+     "hi": 0.5625,
+     "width": 0.3482142857142857,
+     "n_worlds": 5,
+     "n_items": 30
+    },
+    "contacts": {
+     "est": 0.65,
+     "lo": 0.4,
+     "hi": 0.9,
+     "width": 0.5,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "notes": {
+     "est": 0.75,
+     "lo": 0.5,
+     "hi": 1.0,
+     "width": 0.5,
+     "n_worlds": 3,
+     "n_items": 8
+    },
+    "messages": {
+     "est": 0.3,
+     "lo": 0.0,
+     "hi": 0.7,
+     "width": 0.7,
+     "n_worlds": 5,
+     "n_items": 20
+    }
+   }
+  },
+  "ideal_L0:holdmem_D1B1_source": {
+   "stream": "ideal_L0",
+   "mode": "ideal",
+   "lag": 0.0,
+   "system": "holdmem_D1B1_source",
+   "B": 1,
+   "all": {
+    "pooled": {
+     "est": 0.9475308641975309,
+     "lo": 0.9237804878048781,
+     "hi": 0.9633333333333334,
+     "width": 0.03955284552845528,
+     "n_worlds": 5,
+     "n_items": 324
+    },
+    "email": {
+     "est": 0.9791666666666666,
+     "lo": 0.9423076923076923,
+     "hi": 1.0,
+     "width": 0.05769230769230771,
+     "n_worlds": 5,
+     "n_items": 48
+    },
+    "calendar": {
+     "est": 0.9375,
+     "lo": 0.9090909090909091,
+     "hi": 0.9833333333333333,
+     "width": 0.07424242424242422,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "tasks": {
+     "est": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "width": 0.0,
+     "n_worlds": 5,
+     "n_items": 60
+    },
+    "contacts": {
+     "est": 0.9375,
+     "lo": 0.9,
+     "hi": 0.975,
+     "width": 0.07499999999999996,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "notes": {
+     "est": 0.75,
+     "lo": 0.5,
+     "hi": 1.0,
+     "width": 0.5,
+     "n_worlds": 3,
+     "n_items": 16
+    },
+    "messages": {
+     "est": 0.95,
+     "lo": 0.85,
+     "hi": 1.0,
+     "width": 0.15000000000000002,
+     "n_worlds": 5,
+     "n_items": 40
+    }
+   },
+   "touched": {
+    "pooled": {
+     "est": 0.9506172839506173,
+     "lo": 0.925,
+     "hi": 0.9791666666666666,
+     "width": 0.054166666666666585,
+     "n_worlds": 5,
+     "n_items": 162
+    },
+    "email": {
+     "est": 0.9583333333333334,
+     "lo": 0.8846153846153846,
+     "hi": 1.0,
+     "width": 0.11538461538461542,
+     "n_worlds": 5,
+     "n_items": 24
+    },
+    "calendar": {
+     "est": 0.925,
+     "lo": 0.8333333333333334,
+     "hi": 1.0,
+     "width": 0.16666666666666663,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "tasks": {
+     "est": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "width": 0.0,
+     "n_worlds": 5,
+     "n_items": 30
+    },
+    "contacts": {
+     "est": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "width": 0.0,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "notes": {
+     "est": 0.75,
+     "lo": 0.5,
+     "hi": 1.0,
+     "width": 0.5,
+     "n_worlds": 3,
+     "n_items": 8
+    },
+    "messages": {
+     "est": 0.9,
+     "lo": 0.7,
+     "hi": 1.0,
+     "width": 0.30000000000000004,
+     "n_worlds": 5,
+     "n_items": 20
+    }
+   }
+  },
+  "ideal_L0:zero": {
+   "stream": "ideal_L0",
+   "mode": "ideal",
+   "lag": 0.0,
+   "system": "zero",
+   "B": null,
+   "all": {
+    "pooled": {
+     "est": 0.7129629629629629,
+     "lo": 0.6831395348837209,
+     "hi": 0.7467532467532467,
+     "width": 0.0636137118695258,
+     "n_worlds": 5,
+     "n_items": 324
+    },
+    "email": {
+     "est": 0.5833333333333334,
+     "lo": 0.4,
+     "hi": 0.75,
+     "width": 0.35,
+     "n_worlds": 5,
+     "n_items": 48
+    },
+    "calendar": {
+     "est": 0.875,
+     "lo": 0.8152173913043478,
+     "hi": 0.9666666666666667,
+     "width": 0.1514492753623189,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "tasks": {
+     "est": 0.6333333333333333,
+     "lo": 0.5625,
+     "hi": 0.8181818181818182,
+     "width": 0.25568181818181823,
+     "n_worlds": 5,
+     "n_items": 60
+    },
+    "contacts": {
+     "est": 0.8375,
+     "lo": 0.7625,
+     "hi": 0.9,
+     "width": 0.13750000000000007,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "notes": {
+     "est": 0.5,
+     "lo": 0.5,
+     "hi": 0.5,
+     "width": 0.0,
+     "n_worlds": 3,
+     "n_items": 16
+    },
+    "messages": {
+     "est": 0.5,
+     "lo": 0.3,
+     "hi": 0.675,
+     "width": 0.37500000000000006,
+     "n_worlds": 5,
+     "n_items": 40
+    }
+   },
+   "touched": {
+    "pooled": {
+     "est": 0.691358024691358,
+     "lo": 0.6582278481012658,
+     "hi": 0.7375,
+     "width": 0.07927215189873427,
+     "n_worlds": 5,
+     "n_items": 162
+    },
+    "email": {
+     "est": 0.3333333333333333,
+     "lo": 0.0,
+     "hi": 0.5714285714285714,
+     "width": 0.5714285714285714,
+     "n_worlds": 5,
+     "n_items": 24
+    },
+    "calendar": {
+     "est": 0.875,
+     "lo": 0.7884615384615384,
+     "hi": 1.0,
+     "width": 0.21153846153846156,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "tasks": {
+     "est": 0.5333333333333333,
+     "lo": 0.3888888888888889,
+     "hi": 0.75,
+     "width": 0.3611111111111111,
+     "n_worlds": 5,
+     "n_items": 30
+    },
+    "contacts": {
+     "est": 0.95,
+     "lo": 0.9,
+     "hi": 1.0,
+     "width": 0.09999999999999998,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "notes": {
+     "est": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "width": 0.0,
+     "n_worlds": 3,
+     "n_items": 8
+    },
+    "messages": {
+     "est": 0.35,
+     "lo": 0.15,
+     "hi": 0.5,
+     "width": 0.35,
+     "n_worlds": 5,
+     "n_items": 20
+    }
+   }
+  },
+  "official_L5:holdmem_D1B0": {
+   "stream": "official_L5",
+   "mode": "official",
+   "lag": 5.0,
+   "system": "holdmem_D1B0",
+   "B": 0,
+   "all": {
+    "pooled": {
+     "est": 0.5462962962962963,
+     "lo": 0.5,
+     "hi": 0.5948275862068966,
+     "width": 0.09482758620689657,
+     "n_worlds": 5,
+     "n_items": 324
+    },
+    "email": {
+     "est": 0.4791666666666667,
+     "lo": 0.3,
+     "hi": 0.6346153846153846,
+     "width": 0.3346153846153846,
+     "n_worlds": 5,
+     "n_items": 48
+    },
+    "calendar": {
+     "est": 0.4625,
+     "lo": 0.4264705882352941,
+     "hi": 0.4895833333333333,
+     "width": 0.06311274509803921,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "tasks": {
+     "est": 0.6333333333333333,
+     "lo": 0.38461538461538464,
+     "hi": 0.8055555555555556,
+     "width": 0.42094017094017094,
+     "n_worlds": 5,
+     "n_items": 60
+    },
+    "contacts": {
+     "est": 0.6,
+     "lo": 0.525,
+     "hi": 0.675,
+     "width": 0.15000000000000002,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "notes": {
+     "est": 0.5,
+     "lo": 0.0,
+     "hi": 1.0,
+     "width": 1.0,
+     "n_worlds": 3,
+     "n_items": 16
+    },
+    "messages": {
+     "est": 0.575,
+     "lo": 0.425,
+     "hi": 0.8,
+     "width": 0.37500000000000006,
+     "n_worlds": 5,
+     "n_items": 40
+    }
+   },
+   "touched": {
+    "pooled": {
+     "est": 0.3888888888888889,
+     "lo": 0.35119047619047616,
+     "hi": 0.425531914893617,
+     "width": 0.07434143870314086,
+     "n_worlds": 5,
+     "n_items": 162
+    },
+    "email": {
+     "est": 0.3333333333333333,
+     "lo": 0.09090909090909091,
+     "hi": 0.5384615384615384,
+     "width": 0.4475524475524475,
+     "n_worlds": 5,
+     "n_items": 24
+    },
+    "calendar": {
+     "est": 0.275,
+     "lo": 0.14285714285714285,
+     "hi": 0.3888888888888889,
+     "width": 0.24603174603174605,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "tasks": {
+     "est": 0.4,
+     "lo": 0.09090909090909091,
+     "hi": 0.6111111111111112,
+     "width": 0.5202020202020202,
+     "n_worlds": 5,
+     "n_items": 30
+    },
+    "contacts": {
+     "est": 0.475,
+     "lo": 0.425,
+     "hi": 0.5,
+     "width": 0.07500000000000001,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "notes": {
+     "est": 0.5,
+     "lo": 0.0,
+     "hi": 1.0,
+     "width": 1.0,
+     "n_worlds": 3,
+     "n_items": 8
+    },
+    "messages": {
+     "est": 0.45,
+     "lo": 0.1,
+     "hi": 0.8,
+     "width": 0.7000000000000001,
+     "n_worlds": 5,
+     "n_items": 20
+    }
+   }
+  },
+  "official_L5:holdmem_D1B1_source": {
+   "stream": "official_L5",
+   "mode": "official",
+   "lag": 5.0,
+   "system": "holdmem_D1B1_source",
+   "B": 1,
+   "all": {
+    "pooled": {
+     "est": 0.845679012345679,
+     "lo": 0.8079268292682927,
+     "hi": 0.8766666666666667,
+     "width": 0.06873983739837397,
+     "n_worlds": 5,
+     "n_items": 324
+    },
+    "email": {
+     "est": 0.875,
+     "lo": 0.8035714285714286,
+     "hi": 0.975,
+     "width": 0.17142857142857137,
+     "n_worlds": 5,
+     "n_items": 48
+    },
+    "calendar": {
+     "est": 0.725,
+     "lo": 0.6538461538461539,
+     "hi": 0.8333333333333334,
+     "width": 0.17948717948717952,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "tasks": {
+     "est": 0.9166666666666666,
+     "lo": 0.8541666666666666,
+     "hi": 0.9736842105263158,
+     "width": 0.11951754385964919,
+     "n_worlds": 5,
+     "n_items": 60
+    },
+    "contacts": {
+     "est": 0.8875,
+     "lo": 0.85,
+     "hi": 0.925,
+     "width": 0.07500000000000007,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "notes": {
+     "est": 0.625,
+     "lo": 0.375,
+     "hi": 1.0,
+     "width": 0.625,
+     "n_worlds": 3,
+     "n_items": 16
+    },
+    "messages": {
+     "est": 0.95,
+     "lo": 0.9,
+     "hi": 1.0,
+     "width": 0.09999999999999998,
+     "n_worlds": 5,
+     "n_items": 40
+    }
+   },
+   "touched": {
+    "pooled": {
+     "est": 0.7592592592592593,
+     "lo": 0.7183908045977011,
+     "hi": 0.8125,
+     "width": 0.0941091954022989,
+     "n_worlds": 5,
+     "n_items": 162
+    },
+    "email": {
+     "est": 0.75,
+     "lo": 0.6071428571428571,
+     "hi": 0.95,
+     "width": 0.34285714285714286,
+     "n_worlds": 5,
+     "n_items": 24
+    },
+    "calendar": {
+     "est": 0.55,
+     "lo": 0.4583333333333333,
+     "hi": 0.7058823529411765,
+     "width": 0.2475490196078432,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "tasks": {
+     "est": 0.8333333333333334,
+     "lo": 0.7083333333333334,
+     "hi": 0.9473684210526315,
+     "width": 0.23903508771929816,
+     "n_worlds": 5,
+     "n_items": 30
+    },
+    "contacts": {
+     "est": 0.9,
+     "lo": 0.875,
+     "hi": 0.95,
+     "width": 0.07499999999999996,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "notes": {
+     "est": 0.5,
+     "lo": 0.25,
+     "hi": 1.0,
+     "width": 0.75,
+     "n_worlds": 3,
+     "n_items": 8
+    },
+    "messages": {
+     "est": 0.9,
+     "lo": 0.8,
+     "hi": 1.0,
+     "width": 0.19999999999999996,
+     "n_worlds": 5,
+     "n_items": 20
+    }
+   }
+  },
+  "official_L5:zero": {
+   "stream": "official_L5",
+   "mode": "official",
+   "lag": 5.0,
+   "system": "zero",
+   "B": null,
+   "all": {
+    "pooled": {
+     "est": 0.6018518518518519,
+     "lo": 0.5670731707317073,
+     "hi": 0.6385135135135135,
+     "width": 0.07144034278180622,
+     "n_worlds": 5,
+     "n_items": 324
+    },
+    "email": {
+     "est": 0.5,
+     "lo": 0.36363636363636365,
+     "hi": 0.6071428571428571,
+     "width": 0.24350649350649345,
+     "n_worlds": 5,
+     "n_items": 48
+    },
+    "calendar": {
+     "est": 0.7125,
+     "lo": 0.6304347826086957,
+     "hi": 0.8333333333333334,
+     "width": 0.2028985507246377,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "tasks": {
+     "est": 0.5333333333333333,
+     "lo": 0.4230769230769231,
+     "hi": 0.675,
+     "width": 0.25192307692307697,
+     "n_worlds": 5,
+     "n_items": 60
+    },
+    "contacts": {
+     "est": 0.7125,
+     "lo": 0.6625,
+     "hi": 0.775,
+     "width": 0.11250000000000004,
+     "n_worlds": 5,
+     "n_items": 80
+    },
+    "notes": {
+     "est": 0.375,
+     "lo": 0.25,
+     "hi": 0.5,
+     "width": 0.25,
+     "n_worlds": 3,
+     "n_items": 16
+    },
+    "messages": {
+     "est": 0.475,
+     "lo": 0.3,
+     "hi": 0.6,
+     "width": 0.3,
+     "n_worlds": 5,
+     "n_items": 40
+    }
+   },
+   "touched": {
+    "pooled": {
+     "est": 0.49382716049382713,
+     "lo": 0.4594594594594595,
+     "hi": 0.5246913580246914,
+     "width": 0.06523189856523187,
+     "n_worlds": 5,
+     "n_items": 162
+    },
+    "email": {
+     "est": 0.16666666666666666,
+     "lo": 0.0,
+     "hi": 0.2857142857142857,
+     "width": 0.2857142857142857,
+     "n_worlds": 5,
+     "n_items": 24
+    },
+    "calendar": {
+     "est": 0.6,
+     "lo": 0.48,
+     "hi": 0.8,
+     "width": 0.32000000000000006,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "tasks": {
+     "est": 0.36666666666666664,
+     "lo": 0.23076923076923078,
+     "hi": 0.5357142857142857,
+     "width": 0.3049450549450549,
+     "n_worlds": 5,
+     "n_items": 30
+    },
+    "contacts": {
+     "est": 0.775,
+     "lo": 0.7,
+     "hi": 0.85,
+     "width": 0.15000000000000002,
+     "n_worlds": 5,
+     "n_items": 40
+    },
+    "notes": {
+     "est": 0.75,
+     "lo": 0.5,
+     "hi": 1.0,
+     "width": 0.5,
+     "n_worlds": 3,
+     "n_items": 8
+    },
+    "messages": {
+     "est": 0.2,
+     "lo": 0.1,
+     "hi": 0.25,
+     "width": 0.15,
+     "n_worlds": 5,
+     "n_items": 20
+    }
+   }
+  }
+ },
+ "contrasts": {
+  "L5": {
+   "all": {
+    "pooled": {
+     "drop_holdmem_D1B0": {
+      "est": -0.06790123456790123,
+      "lo": -0.1111111111111111,
+      "hi": -0.03614457831325301,
+      "width": 0.07496653279785809,
+      "n_worlds": 5,
+      "n_items": 324,
+      "excludes_zero": true
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.10185185185185185,
+      "lo": -0.11875,
+      "hi": -0.08445945945945946,
+      "width": 0.03429054054054054,
+      "n_worlds": 5,
+      "n_items": 324,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.1111111111111111,
+      "lo": -0.12837837837837837,
+      "hi": -0.09659090909090909,
+      "width": 0.03178746928746928,
+      "n_worlds": 5,
+      "n_items": 324,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": -0.033950617283950615,
+      "lo": -0.08132530120481928,
+      "hi": 0.024305555555555556,
+      "width": 0.10563085676037483,
+      "n_worlds": 5,
+      "n_items": 324,
+      "excludes_zero": false
+     }
+    },
+    "email": {
+     "drop_holdmem_D1B0": {
+      "est": -0.10416666666666667,
+      "lo": -0.4,
+      "hi": 0.10714285714285714,
+      "width": 0.5071428571428571,
+      "n_worlds": 5,
+      "n_items": 48,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.10416666666666667,
+      "lo": -0.19230769230769232,
+      "hi": -0.022727272727272728,
+      "width": 0.16958041958041958,
+      "n_worlds": 5,
+      "n_items": 48,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.08333333333333333,
+      "lo": -0.14285714285714285,
+      "hi": 0.0,
+      "width": 0.14285714285714285,
+      "n_worlds": 5,
+      "n_items": 48,
+      "excludes_zero": false
+     },
+     "interaction_B": {
+      "est": 0.0,
+      "lo": -0.25,
+      "hi": 0.35,
+      "width": 0.6,
+      "n_worlds": 5,
+      "n_items": 48,
+      "excludes_zero": false
+     }
+    },
+    "calendar": {
+     "drop_holdmem_D1B0": {
+      "est": -0.1875,
+      "lo": -0.29411764705882354,
+      "hi": -0.125,
+      "width": 0.16911764705882354,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": true
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.2125,
+      "lo": -0.27380952380952384,
+      "hi": -0.1323529411764706,
+      "width": 0.14145658263305325,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.1625,
+      "lo": -0.2,
+      "hi": -0.11842105263157894,
+      "width": 0.08157894736842107,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": -0.025,
+      "lo": -0.1125,
+      "hi": 0.08823529411764706,
+      "width": 0.20073529411764707,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": false
+     }
+    },
+    "tasks": {
+     "drop_holdmem_D1B0": {
+      "est": 0.1,
+      "lo": -0.06666666666666667,
+      "hi": 0.23076923076923078,
+      "width": 0.29743589743589743,
+      "n_worlds": 5,
+      "n_items": 60,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.08333333333333333,
+      "lo": -0.14583333333333334,
+      "hi": -0.02631578947368421,
+      "width": 0.11951754385964913,
+      "n_worlds": 5,
+      "n_items": 60,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.1,
+      "lo": -0.1875,
+      "hi": -0.03571428571428571,
+      "width": 0.1517857142857143,
+      "n_worlds": 5,
+      "n_items": 60,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": -0.18333333333333332,
+      "lo": -0.3076923076923077,
+      "hi": -0.07142857142857142,
+      "width": 0.23626373626373628,
+      "n_worlds": 5,
+      "n_items": 60,
+      "excludes_zero": true
+     }
+    },
+    "contacts": {
+     "drop_holdmem_D1B0": {
+      "est": -0.1125,
+      "lo": -0.2875,
+      "hi": 0.05,
+      "width": 0.33749999999999997,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.05,
+      "lo": -0.0625,
+      "hi": -0.025,
+      "width": 0.0375,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.125,
+      "lo": -0.1625,
+      "hi": -0.0875,
+      "width": 0.07500000000000001,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": 0.0625,
+      "lo": -0.1,
+      "hi": 0.2375,
+      "width": 0.3375,
+      "n_worlds": 5,
+      "n_items": 80,
+      "excludes_zero": false
+     }
+    },
+    "notes": {
+     "drop_holdmem_D1B0": {
+      "est": -0.125,
+      "lo": -0.5,
+      "hi": 0.0,
+      "width": 0.5,
+      "n_worlds": 3,
+      "n_items": 16,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.125,
+      "lo": -0.25,
+      "hi": 0.0,
+      "width": 0.25,
+      "n_worlds": 3,
+      "n_items": 16,
+      "excludes_zero": false
+     },
+     "drop_zero": {
+      "est": -0.125,
+      "lo": -0.25,
+      "hi": 0.0,
+      "width": 0.25,
+      "n_worlds": 3,
+      "n_items": 16,
+      "excludes_zero": false
+     },
+     "interaction_B": {
+      "est": 0.0,
+      "lo": -0.125,
+      "hi": 0.25,
+      "width": 0.375,
+      "n_worlds": 3,
+      "n_items": 16,
+      "excludes_zero": false
+     }
+    },
+    "messages": {
+     "drop_holdmem_D1B0": {
+      "est": 0.075,
+      "lo": -0.075,
+      "hi": 0.3,
+      "width": 0.375,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": 0.0,
+      "lo": -0.1,
+      "hi": 0.125,
+      "width": 0.225,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": false
+     },
+     "drop_zero": {
+      "est": -0.025,
+      "lo": -0.075,
+      "hi": 0.0,
+      "width": 0.075,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": false
+     },
+     "interaction_B": {
+      "est": -0.075,
+      "lo": -0.375,
+      "hi": 0.15,
+      "width": 0.525,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": false
+     }
+    }
+   },
+   "touched": {
+    "pooled": {
+     "drop_holdmem_D1B0": {
+      "est": -0.12962962962962962,
+      "lo": -0.19736842105263158,
+      "hi": -0.05921052631578947,
+      "width": 0.13815789473684212,
+      "n_worlds": 5,
+      "n_items": 162,
+      "excludes_zero": true
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.19135802469135801,
+      "lo": -0.2247191011235955,
+      "hi": -0.16,
+      "width": 0.0647191011235955,
+      "n_worlds": 5,
+      "n_items": 162,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.19753086419753085,
+      "lo": -0.22839506172839505,
+      "hi": -0.16666666666666666,
+      "width": 0.06172839506172839,
+      "n_worlds": 5,
+      "n_items": 162,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": -0.06172839506172839,
+      "lo": -0.13924050632911392,
+      "hi": 0.03125,
+      "width": 0.17049050632911392,
+      "n_worlds": 5,
+      "n_items": 162,
+      "excludes_zero": false
+     }
+    },
+    "email": {
+     "drop_holdmem_D1B0": {
+      "est": -0.08333333333333333,
+      "lo": -0.6,
+      "hi": 0.2857142857142857,
+      "width": 0.8857142857142857,
+      "n_worlds": 5,
+      "n_items": 24,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.20833333333333334,
+      "lo": -0.38461538461538464,
+      "hi": -0.045454545454545456,
+      "width": 0.33916083916083917,
+      "n_worlds": 5,
+      "n_items": 24,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.16666666666666666,
+      "lo": -0.2857142857142857,
+      "hi": 0.0,
+      "width": 0.2857142857142857,
+      "n_worlds": 5,
+      "n_items": 24,
+      "excludes_zero": false
+     },
+     "interaction_B": {
+      "est": -0.125,
+      "lo": -0.6071428571428571,
+      "hi": 0.5,
+      "width": 1.1071428571428572,
+      "n_worlds": 5,
+      "n_items": 24,
+      "excludes_zero": false
+     }
+    },
+    "calendar": {
+     "drop_holdmem_D1B0": {
+      "est": -0.325,
+      "lo": -0.425,
+      "hi": -0.17647058823529413,
+      "width": 0.24852941176470586,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": true
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.375,
+      "lo": -0.5192307692307693,
+      "hi": -0.20588235294117646,
+      "width": 0.3133484162895928,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.275,
+      "lo": -0.325,
+      "hi": -0.2,
+      "width": 0.125,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": -0.05,
+      "lo": -0.19444444444444445,
+      "hi": 0.10526315789473684,
+      "width": 0.29970760233918126,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": false
+     }
+    },
+    "tasks": {
+     "drop_holdmem_D1B0": {
+      "est": 0.0,
+      "lo": -0.21428571428571427,
+      "hi": 0.15,
+      "width": 0.36428571428571427,
+      "n_worlds": 5,
+      "n_items": 30,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.16666666666666666,
+      "lo": -0.2916666666666667,
+      "hi": -0.05263157894736842,
+      "width": 0.23903508771929827,
+      "n_worlds": 5,
+      "n_items": 30,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.16666666666666666,
+      "lo": -0.2916666666666667,
+      "hi": -0.05263157894736842,
+      "width": 0.23903508771929827,
+      "n_worlds": 5,
+      "n_items": 30,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": -0.16666666666666666,
+      "lo": -0.23076923076923078,
+      "hi": -0.07142857142857142,
+      "width": 0.15934065934065936,
+      "n_worlds": 5,
+      "n_items": 30,
+      "excludes_zero": true
+     }
+    },
+    "contacts": {
+     "drop_holdmem_D1B0": {
+      "est": -0.175,
+      "lo": -0.475,
+      "hi": 0.1,
+      "width": 0.575,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.1,
+      "lo": -0.125,
+      "hi": -0.05,
+      "width": 0.075,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": true
+     },
+     "drop_zero": {
+      "est": -0.175,
+      "lo": -0.275,
+      "hi": -0.125,
+      "width": 0.15000000000000002,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": 0.075,
+      "lo": -0.2,
+      "hi": 0.35,
+      "width": 0.55,
+      "n_worlds": 5,
+      "n_items": 40,
+      "excludes_zero": false
+     }
+    },
+    "notes": {
+     "drop_holdmem_D1B0": {
+      "est": -0.25,
+      "lo": -1.0,
+      "hi": 0.0,
+      "width": 1.0,
+      "n_worlds": 3,
+      "n_items": 8,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": -0.25,
+      "lo": -0.5,
+      "hi": 0.0,
+      "width": 0.5,
+      "n_worlds": 3,
+      "n_items": 8,
+      "excludes_zero": false
+     },
+     "drop_zero": {
+      "est": -0.25,
+      "lo": -0.5,
+      "hi": 0.0,
+      "width": 0.5,
+      "n_worlds": 3,
+      "n_items": 8,
+      "excludes_zero": false
+     },
+     "interaction_B": {
+      "est": 0.0,
+      "lo": -0.25,
+      "hi": 0.5,
+      "width": 0.75,
+      "n_worlds": 3,
+      "n_items": 8,
+      "excludes_zero": false
+     }
+    },
+    "messages": {
+     "drop_holdmem_D1B0": {
+      "est": 0.15,
+      "lo": 0.0,
+      "hi": 0.45,
+      "width": 0.45,
+      "n_worlds": 5,
+      "n_items": 20,
+      "excludes_zero": false
+     },
+     "drop_holdmem_D1B1_source": {
+      "est": 0.0,
+      "lo": -0.2,
+      "hi": 0.25,
+      "width": 0.45,
+      "n_worlds": 5,
+      "n_items": 20,
+      "excludes_zero": false
+     },
+     "drop_zero": {
+      "est": -0.15,
+      "lo": -0.25,
+      "hi": -0.05,
+      "width": 0.2,
+      "n_worlds": 5,
+      "n_items": 20,
+      "excludes_zero": true
+     },
+     "interaction_B": {
+      "est": -0.15,
+      "lo": -0.65,
+      "hi": 0.25,
+      "width": 0.9,
+      "n_worlds": 5,
+      "n_items": 20,
+      "excludes_zero": false
+     }
+    }
+   }
+  }
+ },
+ "divergence": {
+  "ideal_L0": {
+   "mode": "ideal",
+   "lag": 0.0,
+   "pooled": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 768
+   },
+   "email": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "calendar": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "tasks": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "contacts": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "notes": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "messages": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 5,
+    "n_items": 128
+   }
+  },
+  "official_L5": {
+   "mode": "official",
+   "lag": 5.0,
+   "pooled": {
+    "est": 0.0026721079250573254,
+    "lo": 0.0016140139921133841,
+    "hi": 0.00423928831051303,
+    "width": 0.002625274318399646,
+    "n_worlds": 5,
+    "n_items": 768
+   },
+   "email": {
+    "est": 0.0006430013903499992,
+    "lo": 0.0004360704955161007,
+    "hi": 0.0008654503327992241,
+    "width": 0.0004293798372831234,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "calendar": {
+    "est": 0.0008445021476536419,
+    "lo": 0.0005016874073384128,
+    "hi": 0.0011568124150687729,
+    "width": 0.0006551250077303601,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "tasks": {
+    "est": 0.004828498349511281,
+    "lo": 0.002936713823810598,
+    "hi": 0.006055526529664461,
+    "width": 0.003118812705853863,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "contacts": {
+    "est": 0.007521446078431373,
+    "lo": 0.0028859431096382214,
+    "hi": 0.01594342655094825,
+    "width": 0.013057483441310028,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "notes": {
+    "est": 0.0018320221445221447,
+    "lo": 0.0,
+    "hi": 0.003905227192898426,
+    "width": 0.003905227192898426,
+    "n_worlds": 5,
+    "n_items": 128
+   },
+   "messages": {
+    "est": 0.0003631774398755124,
+    "lo": 0.00016804231608797147,
+    "hi": 0.0006367433370109163,
+    "width": 0.0004687010209229448,
+    "n_worlds": 5,
+    "n_items": 128
+   }
+  }
+ },
+ "n_worlds": 5,
+ "n_probes": 324,
+ "n_probes_by_source": {
+  "email": {
+   "all": 48,
+   "touched": 24
+  },
+  "calendar": {
+   "all": 80,
+   "touched": 40
+  },
+  "tasks": {
+   "all": 60,
+   "touched": 30
+  },
+  "contacts": {
+   "all": 80,
+   "touched": 40
+  },
+  "notes": {
+   "all": 16,
+   "touched": 8
+  },
+  "messages": {
+   "all": 40,
+   "touched": 20
+  }
+ }
+}

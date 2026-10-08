@@ -1,0 +1,49 @@
+{
+  "analysis_code": {
+    "commit": "b08894c6f8a0301049944b7573ffd205d47c4016",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T19:05:58Z",
+  "experiment": "merged-ex_account",
+  "files_sha256": {
+    "analysis/ex_account.json": "07675624952de323a980fb23d7be26f1189c94bd9477dec79b137b8d2f6e1e45"
+  },
+  "run_id": "stage5_ex_account",
+  "sources": [
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "run_id": "stage2_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "aabb9fdaf7409e7a8d6cb59dbda41b5af2b4c189e21b36af01e7c46982272e69",
+      "run_id": "stage4_rep_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "9747c1191ca18b4f6a89246c8d03a278b8f8f43d6770dc0f068d6215da8895aa",
+      "run_id": "stage4_m2_google_gemma-4-12b-it",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "df5b9472c4a7e35a804c905c4507fe0d4d81397e355316f3d08f766c01adcbb2",
+      "run_id": "stage4_m2_meta-llama_llama-3_1-8b-instruct",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "8d5dfb12bd99f33ddc005b49903323eceba28740f114d927745a3f58fd29238e",
+      "run_id": "stage4_m2_openai_gpt-oss-20b",
+      "worlds": []
+    }
+  ]
+}

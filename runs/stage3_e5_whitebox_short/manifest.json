@@ -1,0 +1,92 @@
+{
+  "analysis_code": {
+    "commit": "e6391024d16bd147d2ed4d63115aec02d3748f3b",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T05:38:23Z",
+  "experiment": "merged-e5_infer",
+  "files_sha256": {
+    "analysis/e5_whitebox_validation.json": "046f4003a66c6ddd388466b95cefb16e69d129b876074d4b4574d1f19f5f6f4d"
+  },
+  "run_id": "stage3_e5_whitebox_short",
+  "sources": [
+    {
+      "code": {
+        "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8599339aef330c7fab9b4b4f221dd7becb2f135708a1d64b6af7b9c19cda53bb",
+      "run_id": "e5_whitebox_short_s1000-1004_20260929T024709Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5c1febe033e7a4adece2744a10327846f261599477005178d9d37581cb71a7ee",
+      "run_id": "e5_whitebox_short_s1005-1009_20260929T024709Z",
+      "worlds": [
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007",
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c250001bbaceeae40b249a10ed51731bc2968dfd5642c16d585af9f295d28d13",
+      "run_id": "e5_whitebox_short_s1010-1014_20260929T024709Z",
+      "worlds": [
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011",
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014"
+      ]
+    }
+  ]
+}

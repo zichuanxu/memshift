@@ -1,0 +1,146 @@
+{
+  "code": {
+    "commit": "ef70d0fc64c6d1f770df84d3fbd215e951b48a1e",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T07:17:53Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "5381632e67a2d37e1def9d51f951ca3e36242146738ea579c25dca5fa394964e",
+    "answers.jsonl": "c0bbfd0af3c70042b2549b1d87497bc65195f21e73dc0072134468e71d594653",
+    "calls.jsonl": "f7ea711264ff75e7c7322a8bd7126e72386540a38c16a0a8db63f7b9780f755f",
+    "env.json": "0a8b80283d2a870a961763a66bc1abef85fab9f55f080ac224da4a8e58c8eede",
+    "probes.jsonl": "e2e9e71ea9d9118ef566302d14f58ebcd7acf08c2fbce7e376e19e427aca16d0",
+    "stores/w1005_mem0/def/history.db": "1c3073c6323bd38158aed0141b406eab76712e06f31fc7190893ea82d01baaba",
+    "stores/w1005_mem0/def/ledger.jsonl": "d0c1a0ffbaab009139830b8a33af51a60d3ff0ef64220da636e6ea14987d0b94",
+    "stores/w1005_mem0/def/memshift_native.json": "7440d5c04dde327a18bdf3e5024b438407588dffe59373a2a0a6f05df5805e39",
+    "stores/w1005_mem0/def/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1005_mem0/def/qdrant/collection/memshift/storage.sqlite": "dd7652d3f6125e9710fee1faa6a578ed8c63ed8b98db11b0c76927866583c128",
+    "stores/w1005_mem0/def/qdrant/meta.json": "721f202dd420bd78efc04eef3607eb0ec13764e877f7e2e4eb53dfaa3985928a",
+    "stores/w1005_mem0/def/state.json": "89db88e9c0064a235c6a324dc585c02675f067285694ed1785782b039ffc442f",
+    "stores/w1005_mem0/orphan/history.db": "4ad21d0b321ebcee1727476347c461da0a3fbbea639b4bb668c2e33beb4b22ae",
+    "stores/w1005_mem0/orphan/ledger.jsonl": "682fcf941a9446e5043991f7e733927795e07e7f5498610823c199e26e4c8d88",
+    "stores/w1005_mem0/orphan/memshift_native.json": "7440d5c04dde327a18bdf3e5024b438407588dffe59373a2a0a6f05df5805e39",
+    "stores/w1005_mem0/orphan/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1005_mem0/orphan/qdrant/collection/memshift/storage.sqlite": "ef7a5d087d4465a0118d5a37b786fed4a315ea7127d2ea18867e51d800be0305",
+    "stores/w1005_mem0/orphan/qdrant/meta.json": "721f202dd420bd78efc04eef3607eb0ec13764e877f7e2e4eb53dfaa3985928a",
+    "stores/w1005_mem0/orphan/state.json": "4a00c1446f3138adba0baf75df3228e6bacfca88b16fbb8b4a3f17aff56416c3",
+    "stores/w1005_mem0/prefix/history.db": "272fdcef12c9a5795d8fddea085da714bd8d982d80ad26f7b5ea74fb451df6f3",
+    "stores/w1005_mem0/prefix/ledger.jsonl": "4af0983c7c07e4ea9fccc7ede62ab3f530b7156e8156229495eff3f9ddd30254",
+    "stores/w1005_mem0/prefix/memshift_native.json": "7440d5c04dde327a18bdf3e5024b438407588dffe59373a2a0a6f05df5805e39",
+    "stores/w1005_mem0/prefix/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1005_mem0/prefix/qdrant/collection/memshift/storage.sqlite": "9f26dd61c10013a37757f2c9c1aafd004d5cf9205286a1b8c27c1a089f418469",
+    "stores/w1005_mem0/prefix/qdrant/meta.json": "721f202dd420bd78efc04eef3607eb0ec13764e877f7e2e4eb53dfaa3985928a",
+    "stores/w1005_mem0/prefix/state.json": "dd05eeb968cdb0f7b03466867096c61637437e4b2c3cac1f7f59d50830c25b51",
+    "stores/w1005_mem0/snapshot/history.db": "272fdcef12c9a5795d8fddea085da714bd8d982d80ad26f7b5ea74fb451df6f3",
+    "stores/w1005_mem0/snapshot/ledger.jsonl": "4af0983c7c07e4ea9fccc7ede62ab3f530b7156e8156229495eff3f9ddd30254",
+    "stores/w1005_mem0/snapshot/memshift_native.json": "7440d5c04dde327a18bdf3e5024b438407588dffe59373a2a0a6f05df5805e39",
+    "stores/w1005_mem0/snapshot/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1005_mem0/snapshot/qdrant/collection/memshift/storage.sqlite": "9f26dd61c10013a37757f2c9c1aafd004d5cf9205286a1b8c27c1a089f418469",
+    "stores/w1005_mem0/snapshot/qdrant/meta.json": "721f202dd420bd78efc04eef3607eb0ec13764e877f7e2e4eb53dfaa3985928a",
+    "stores/w1005_mem0/snapshot/state.json": "ac0e8eb782f81f7beaae1ef792db23826512d9c8d8dd00873a5f8f269b7f849a",
+    "stores/w1005_mem0/src/history.db": "48fa6215f61c9b01655edf85dad2a5eba34e189ab2478c4801cd0467b01370bc",
+    "stores/w1005_mem0/src/ledger.jsonl": "2146537ab24a321205049a9d87d4e6ddec25b27fd9f87b88ea0b41844b38df30",
+    "stores/w1005_mem0/src/memshift_native.json": "7440d5c04dde327a18bdf3e5024b438407588dffe59373a2a0a6f05df5805e39",
+    "stores/w1005_mem0/src/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1005_mem0/src/qdrant/collection/memshift/storage.sqlite": "d10df112dda35eb306944821ae06fe3c8217514fb0dbc46364f757e72d9b0035",
+    "stores/w1005_mem0/src/qdrant/meta.json": "721f202dd420bd78efc04eef3607eb0ec13764e877f7e2e4eb53dfaa3985928a",
+    "stores/w1005_mem0/src/state.json": "db74bd5f02c19cfdf170d6c67ef2b27d9b2f2c027747afec1cd268ccbea2c30d",
+    "world_results.jsonl": "5a21336f3fd2ec2625737edbddeb32261f9cbe2279b38aabba9186a2b4302928"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "seeds": [
+      1005
+    ],
+    "systems": [
+      "mem0"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_mem0_s1005_20260929T024709Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "6730fc2e551469bcdb26774ee847aa3e9895992fa14dfb556e2ab278eb8847db",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 517,
+      "seed": 1005,
+      "shift_targets": null,
+      "world_id": "w1005"
+    }
+  ]
+}

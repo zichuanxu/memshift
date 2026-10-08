@@ -1,0 +1,1304 @@
+{
+ "cells": {
+  "ideal_L0:holdmem_D1B0": {
+   "mode": "ideal",
+   "lag": 0.0,
+   "system": "holdmem_D1B0",
+   "B": 0,
+   "all": {
+    "est": 0.15,
+    "lo": 0.1,
+    "hi": 0.2,
+    "width": 0.1,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.15,
+    "lo": 0.1,
+    "hi": 0.2,
+    "width": 0.1,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "unsynced": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "synced": {
+    "est": 0.15,
+    "lo": 0.1,
+    "hi": 0.2,
+    "width": 0.1,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "gold_changed": {
+    "est": 0.375,
+    "lo": 0.3333333333333333,
+    "hi": 0.4,
+    "width": 0.06666666666666671,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "ideal_L0:holdmem_D1B1_source": {
+   "mode": "ideal",
+   "lag": 0.0,
+   "system": "holdmem_D1B1_source",
+   "B": 1,
+   "all": {
+    "est": 0.9,
+    "lo": 0.9,
+    "hi": 0.9,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.9,
+    "lo": 0.9,
+    "hi": 0.9,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "unsynced": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "synced": {
+    "est": 0.9,
+    "lo": 0.9,
+    "hi": 0.9,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "gold_changed": {
+    "est": 0.75,
+    "lo": 0.6666666666666666,
+    "hi": 0.8,
+    "width": 0.13333333333333341,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "ideal_L0:zero": {
+   "mode": "ideal",
+   "lag": 0.0,
+   "system": "zero",
+   "B": null,
+   "all": {
+    "est": 0.3,
+    "lo": 0.2,
+    "hi": 0.4,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.3,
+    "lo": 0.2,
+    "hi": 0.4,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "unsynced": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "synced": {
+    "est": 0.3,
+    "lo": 0.2,
+    "hi": 0.4,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "gold_changed": {
+    "est": 0.75,
+    "lo": 0.6666666666666666,
+    "hi": 0.8,
+    "width": 0.13333333333333341,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L1:holdmem_D1B0": {
+   "mode": "official",
+   "lag": 1.0,
+   "system": "holdmem_D1B0",
+   "B": 0,
+   "all": {
+    "est": 0.2833333333333333,
+    "lo": 0.0,
+    "hi": 0.5666666666666667,
+    "width": 0.5666666666666667,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.2833333333333333,
+    "lo": 0.0,
+    "hi": 0.5666666666666667,
+    "width": 0.5666666666666667,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "unsynced": {
+    "est": 0.2727272727272727,
+    "lo": 0.0,
+    "hi": 0.5454545454545454,
+    "width": 0.5454545454545454,
+    "n_worlds": 2,
+    "n_items": 22
+   },
+   "synced": {
+    "est": 0.2894736842105263,
+    "lo": 0.0,
+    "hi": 0.5789473684210527,
+    "width": 0.5789473684210527,
+    "n_worlds": 2,
+    "n_items": 38
+   },
+   "gold_changed": {
+    "est": 0.08333333333333333,
+    "lo": 0.0,
+    "hi": 0.2222222222222222,
+    "width": 0.2222222222222222,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.4166666666666667,
+    "lo": 0.0,
+    "hi": 0.7142857142857143,
+    "width": 0.7142857142857143,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L1:holdmem_D1B1_source": {
+   "mode": "official",
+   "lag": 1.0,
+   "system": "holdmem_D1B1_source",
+   "B": 1,
+   "all": {
+    "est": 0.75,
+    "lo": 0.7,
+    "hi": 0.8,
+    "width": 0.10000000000000009,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.75,
+    "lo": 0.7,
+    "hi": 0.8,
+    "width": 0.10000000000000009,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "unsynced": {
+    "est": 0.45454545454545453,
+    "lo": 0.36363636363636365,
+    "hi": 0.5454545454545454,
+    "width": 0.18181818181818177,
+    "n_worlds": 2,
+    "n_items": 22
+   },
+   "synced": {
+    "est": 0.9210526315789473,
+    "lo": 0.8947368421052632,
+    "hi": 0.9473684210526315,
+    "width": 0.05263157894736836,
+    "n_worlds": 2,
+    "n_items": 38
+   },
+   "gold_changed": {
+    "est": 0.4583333333333333,
+    "lo": 0.4444444444444444,
+    "hi": 0.4666666666666667,
+    "width": 0.022222222222222254,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.9444444444444444,
+    "lo": 0.9333333333333333,
+    "hi": 0.9523809523809523,
+    "width": 0.01904761904761898,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L1:zero": {
+   "mode": "official",
+   "lag": 1.0,
+   "system": "zero",
+   "B": null,
+   "all": {
+    "est": 0.18333333333333332,
+    "lo": 0.13333333333333333,
+    "hi": 0.23333333333333334,
+    "width": 0.1,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.18333333333333332,
+    "lo": 0.13333333333333333,
+    "hi": 0.23333333333333334,
+    "width": 0.1,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "unsynced": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 22
+   },
+   "synced": {
+    "est": 0.2894736842105263,
+    "lo": 0.21052631578947367,
+    "hi": 0.3684210526315789,
+    "width": 0.15789473684210525,
+    "n_worlds": 2,
+    "n_items": 38
+   },
+   "gold_changed": {
+    "est": 0.4583333333333333,
+    "lo": 0.4444444444444444,
+    "hi": 0.4666666666666667,
+    "width": 0.022222222222222254,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L5:holdmem_D1B0": {
+   "mode": "official",
+   "lag": 5.0,
+   "system": "holdmem_D1B0",
+   "B": 0,
+   "all": {
+    "est": 0.2833333333333333,
+    "lo": 0.0,
+    "hi": 0.5666666666666667,
+    "width": 0.5666666666666667,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.25,
+    "lo": 0.0,
+    "hi": 0.5,
+    "width": 0.5,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "outside_window": {
+    "est": 0.3,
+    "lo": 0.0,
+    "hi": 0.6,
+    "width": 0.6,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "unsynced": {
+    "est": 0.20689655172413793,
+    "lo": 0.0,
+    "hi": 0.5454545454545454,
+    "width": 0.5454545454545454,
+    "n_worlds": 2,
+    "n_items": 29
+   },
+   "synced": {
+    "est": 0.3548387096774194,
+    "lo": 0.0,
+    "hi": 0.5789473684210527,
+    "width": 0.5789473684210527,
+    "n_worlds": 2,
+    "n_items": 31
+   },
+   "gold_changed": {
+    "est": 0.08333333333333333,
+    "lo": 0.0,
+    "hi": 0.2222222222222222,
+    "width": 0.2222222222222222,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.4166666666666667,
+    "lo": 0.0,
+    "hi": 0.7142857142857143,
+    "width": 0.7142857142857143,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L5:holdmem_D1B1_source": {
+   "mode": "official",
+   "lag": 5.0,
+   "system": "holdmem_D1B1_source",
+   "B": 1,
+   "all": {
+    "est": 0.7,
+    "lo": 0.6,
+    "hi": 0.8,
+    "width": 0.20000000000000007,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.5,
+    "lo": 0.4,
+    "hi": 0.6,
+    "width": 0.19999999999999996,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "outside_window": {
+    "est": 0.8,
+    "lo": 0.7,
+    "hi": 0.9,
+    "width": 0.20000000000000007,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "unsynced": {
+    "est": 0.4827586206896552,
+    "lo": 0.4444444444444444,
+    "hi": 0.5454545454545454,
+    "width": 0.101010101010101,
+    "n_worlds": 2,
+    "n_items": 29
+   },
+   "synced": {
+    "est": 0.9032258064516129,
+    "lo": 0.8333333333333334,
+    "hi": 0.9473684210526315,
+    "width": 0.11403508771929816,
+    "n_worlds": 2,
+    "n_items": 31
+   },
+   "gold_changed": {
+    "est": 0.375,
+    "lo": 0.3333333333333333,
+    "hi": 0.4444444444444444,
+    "width": 0.1111111111111111,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.9166666666666666,
+    "lo": 0.8666666666666667,
+    "hi": 0.9523809523809523,
+    "width": 0.08571428571428563,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L5:zero": {
+   "mode": "official",
+   "lag": 5.0,
+   "system": "zero",
+   "B": null,
+   "all": {
+    "est": 0.15,
+    "lo": 0.13333333333333333,
+    "hi": 0.16666666666666666,
+    "width": 0.033333333333333326,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "outside_window": {
+    "est": 0.225,
+    "lo": 0.2,
+    "hi": 0.25,
+    "width": 0.04999999999999999,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "unsynced": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 29
+   },
+   "synced": {
+    "est": 0.2903225806451613,
+    "lo": 0.21052631578947367,
+    "hi": 0.4166666666666667,
+    "width": 0.206140350877193,
+    "n_worlds": 2,
+    "n_items": 31
+   },
+   "gold_changed": {
+    "est": 0.375,
+    "lo": 0.3333333333333333,
+    "hi": 0.4444444444444444,
+    "width": 0.1111111111111111,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L30:holdmem_D1B0": {
+   "mode": "official",
+   "lag": 30.0,
+   "system": "holdmem_D1B0",
+   "B": 0,
+   "all": {
+    "est": 0.25,
+    "lo": 0.0,
+    "hi": 0.5,
+    "width": 0.5,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.25,
+    "lo": 0.0,
+    "hi": 0.5,
+    "width": 0.5,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "outside_window": {
+    "est": 0.25,
+    "lo": 0.0,
+    "hi": 0.5,
+    "width": 0.5,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "unsynced": {
+    "est": 0.25,
+    "lo": 0.0,
+    "hi": 0.5,
+    "width": 0.5,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "synced": {
+    "est": 0.25,
+    "lo": 0.0,
+    "hi": 0.5,
+    "width": 0.5,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "gold_changed": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.4166666666666667,
+    "lo": 0.0,
+    "hi": 0.7142857142857143,
+    "width": 0.7142857142857143,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L30:holdmem_D1B1_source": {
+   "mode": "official",
+   "lag": 30.0,
+   "system": "holdmem_D1B1_source",
+   "B": 1,
+   "all": {
+    "est": 0.6333333333333333,
+    "lo": 0.5666666666666667,
+    "hi": 0.7,
+    "width": 0.1333333333333333,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.5,
+    "lo": 0.4,
+    "hi": 0.6,
+    "width": 0.19999999999999996,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "outside_window": {
+    "est": 0.9,
+    "lo": 0.9,
+    "hi": 0.9,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "unsynced": {
+    "est": 0.5,
+    "lo": 0.4,
+    "hi": 0.6,
+    "width": 0.19999999999999996,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "synced": {
+    "est": 0.9,
+    "lo": 0.9,
+    "hi": 0.9,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "gold_changed": {
+    "est": 0.25,
+    "lo": 0.2222222222222222,
+    "hi": 0.26666666666666666,
+    "width": 0.04444444444444445,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.8888888888888888,
+    "lo": 0.8666666666666667,
+    "hi": 0.9047619047619048,
+    "width": 0.03809523809523807,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  },
+  "official_L30:zero": {
+   "mode": "official",
+   "lag": 30.0,
+   "system": "zero",
+   "B": null,
+   "all": {
+    "est": 0.1,
+    "lo": 0.06666666666666667,
+    "hi": 0.13333333333333333,
+    "width": 0.06666666666666667,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "outside_window": {
+    "est": 0.3,
+    "lo": 0.2,
+    "hi": 0.4,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "unsynced": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "synced": {
+    "est": 0.3,
+    "lo": 0.2,
+    "hi": 0.4,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "gold_changed": {
+    "est": 0.25,
+    "lo": 0.2222222222222222,
+    "hi": 0.26666666666666666,
+    "width": 0.04444444444444445,
+    "n_worlds": 2,
+    "n_items": 24
+   },
+   "gold_unchanged": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 36
+   }
+  }
+ },
+ "divergence": {
+  "ideal_L0": {
+   "mode": "ideal",
+   "lag": 0.0,
+   "all": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 60
+   }
+  },
+  "official_L1": {
+   "mode": "official",
+   "lag": 1.0,
+   "all": {
+    "est": 0.002517023361713795,
+    "lo": 0.0022709988057756105,
+    "hi": 0.0027630479176519794,
+    "width": 0.0004920491118763689,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "outside_window": {
+    "est": 0.002517023361713795,
+    "lo": 0.0022709988057756105,
+    "hi": 0.0027630479176519794,
+    "width": 0.0004920491118763689,
+    "n_worlds": 2,
+    "n_items": 60
+   }
+  },
+  "official_L5": {
+   "mode": "official",
+   "lag": 5.0,
+   "all": {
+    "est": 0.003385046106003195,
+    "lo": 0.0022709988057756105,
+    "hi": 0.004499093406230779,
+    "width": 0.0022280946004551686,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.006868381769259656,
+    "lo": 0.006199499484811494,
+    "hi": 0.007537264053707818,
+    "width": 0.0013377645688963241,
+    "n_worlds": 2,
+    "n_items": 20
+   },
+   "outside_window": {
+    "est": 0.0016433782743749642,
+    "lo": 0.00030674846625766873,
+    "hi": 0.0029800080824922597,
+    "width": 0.002673259616234591,
+    "n_worlds": 2,
+    "n_items": 40
+   }
+  },
+  "official_L30": {
+   "mode": "official",
+   "lag": 30.0,
+   "all": {
+    "est": 0.0046857587863440445,
+    "lo": 0.00434667487021621,
+    "hi": 0.005024842702471878,
+    "width": 0.0006781678322556684,
+    "n_worlds": 2,
+    "n_items": 60
+   },
+   "in_window": {
+    "est": 0.006868381769259656,
+    "lo": 0.006199499484811494,
+    "hi": 0.007537264053707818,
+    "width": 0.0013377645688963241,
+    "n_worlds": 2,
+    "n_items": 40
+   },
+   "outside_window": {
+    "est": 0.0003205128205128205,
+    "lo": 0.0,
+    "hi": 0.000641025641025641,
+    "width": 0.000641025641025641,
+    "n_worlds": 2,
+    "n_items": 20
+   }
+  }
+ },
+ "contrasts": {
+  "L1": {
+   "drop_holdmem_D1B0_all": {
+    "est": 0.13333333333333333,
+    "lo": -0.2,
+    "hi": 0.4666666666666667,
+    "width": 0.6666666666666667,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_all": {
+    "est": -0.15,
+    "lo": -0.2,
+    "hi": -0.1,
+    "width": 0.1,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "drop_zero_all": {
+    "est": -0.11666666666666667,
+    "lo": -0.16666666666666666,
+    "hi": -0.06666666666666667,
+    "width": 0.09999999999999999,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "interaction_B_all": {
+    "est": -0.2833333333333333,
+    "lo": -0.5666666666666667,
+    "hi": 0.0,
+    "width": 0.5666666666666667,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B0_in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0,
+    "excludes_zero": false
+   },
+   "drop_zero_in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0,
+    "excludes_zero": false
+   },
+   "interaction_B_in_window": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B0_outside_window": {
+    "est": 0.13333333333333333,
+    "lo": -0.2,
+    "hi": 0.4666666666666667,
+    "width": 0.6666666666666667,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_outside_window": {
+    "est": -0.15,
+    "lo": -0.2,
+    "hi": -0.1,
+    "width": 0.1,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "drop_zero_outside_window": {
+    "est": -0.11666666666666667,
+    "lo": -0.16666666666666666,
+    "hi": -0.06666666666666667,
+    "width": 0.09999999999999999,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "interaction_B_outside_window": {
+    "est": -0.2833333333333333,
+    "lo": -0.5666666666666667,
+    "hi": 0.0,
+    "width": 0.5666666666666667,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B0_unsynced": {
+    "est": 0.13636363636363635,
+    "lo": -0.18181818181818182,
+    "hi": 0.45454545454545453,
+    "width": 0.6363636363636364,
+    "n_worlds": 2,
+    "n_items": 22,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_unsynced": {
+    "est": -0.4090909090909091,
+    "lo": -0.5454545454545454,
+    "hi": -0.2727272727272727,
+    "width": 0.2727272727272727,
+    "n_worlds": 2,
+    "n_items": 22,
+    "excludes_zero": true
+   },
+   "drop_zero_unsynced": {
+    "est": -0.3181818181818182,
+    "lo": -0.45454545454545453,
+    "hi": -0.18181818181818182,
+    "width": 0.2727272727272727,
+    "n_worlds": 2,
+    "n_items": 22,
+    "excludes_zero": true
+   },
+   "interaction_B_unsynced": {
+    "est": -0.5454545454545454,
+    "lo": -0.7272727272727273,
+    "hi": -0.36363636363636365,
+    "width": 0.36363636363636365,
+    "n_worlds": 2,
+    "n_items": 22,
+    "excludes_zero": true
+   }
+  },
+  "L5": {
+   "drop_holdmem_D1B0_all": {
+    "est": 0.13333333333333333,
+    "lo": -0.2,
+    "hi": 0.4666666666666667,
+    "width": 0.6666666666666667,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_all": {
+    "est": -0.2,
+    "lo": -0.3,
+    "hi": -0.1,
+    "width": 0.19999999999999998,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "drop_zero_all": {
+    "est": -0.15,
+    "lo": -0.23333333333333334,
+    "hi": -0.06666666666666667,
+    "width": 0.16666666666666669,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "interaction_B_all": {
+    "est": -0.3333333333333333,
+    "lo": -0.5666666666666667,
+    "hi": -0.1,
+    "width": 0.4666666666666667,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "drop_holdmem_D1B0_in_window": {
+    "est": 0.1,
+    "lo": -0.2,
+    "hi": 0.4,
+    "width": 0.6000000000000001,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_in_window": {
+    "est": -0.4,
+    "lo": -0.5,
+    "hi": -0.3,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": true
+   },
+   "drop_zero_in_window": {
+    "est": -0.3,
+    "lo": -0.4,
+    "hi": -0.2,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": true
+   },
+   "interaction_B_in_window": {
+    "est": -0.5,
+    "lo": -0.7,
+    "hi": -0.3,
+    "width": 0.39999999999999997,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": true
+   },
+   "drop_holdmem_D1B0_outside_window": {
+    "est": 0.15,
+    "lo": -0.2,
+    "hi": 0.5,
+    "width": 0.7,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_outside_window": {
+    "est": -0.1,
+    "lo": -0.2,
+    "hi": 0.0,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": false
+   },
+   "drop_zero_outside_window": {
+    "est": -0.075,
+    "lo": -0.15,
+    "hi": 0.0,
+    "width": 0.15,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": false
+   },
+   "interaction_B_outside_window": {
+    "est": -0.25,
+    "lo": -0.5,
+    "hi": 0.0,
+    "width": 0.5,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B0_unsynced": {
+    "est": 0.034482758620689655,
+    "lo": -0.2222222222222222,
+    "hi": 0.45454545454545453,
+    "width": 0.6767676767676767,
+    "n_worlds": 2,
+    "n_items": 29,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_unsynced": {
+    "est": -0.41379310344827586,
+    "lo": -0.5,
+    "hi": -0.2727272727272727,
+    "width": 0.2272727272727273,
+    "n_worlds": 2,
+    "n_items": 29,
+    "excludes_zero": true
+   },
+   "drop_zero_unsynced": {
+    "est": -0.3103448275862069,
+    "lo": -0.3888888888888889,
+    "hi": -0.18181818181818182,
+    "width": 0.20707070707070707,
+    "n_worlds": 2,
+    "n_items": 29,
+    "excludes_zero": true
+   },
+   "interaction_B_unsynced": {
+    "est": -0.4482758620689655,
+    "lo": -0.7272727272727273,
+    "hi": -0.2777777777777778,
+    "width": 0.4494949494949495,
+    "n_worlds": 2,
+    "n_items": 29,
+    "excludes_zero": true
+   }
+  },
+  "L30": {
+   "drop_holdmem_D1B0_all": {
+    "est": 0.1,
+    "lo": -0.2,
+    "hi": 0.4,
+    "width": 0.6000000000000001,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_all": {
+    "est": -0.26666666666666666,
+    "lo": -0.3333333333333333,
+    "hi": -0.2,
+    "width": 0.1333333333333333,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "drop_zero_all": {
+    "est": -0.2,
+    "lo": -0.26666666666666666,
+    "hi": -0.13333333333333333,
+    "width": 0.13333333333333333,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "interaction_B_all": {
+    "est": -0.36666666666666664,
+    "lo": -0.6,
+    "hi": -0.13333333333333333,
+    "width": 0.4666666666666667,
+    "n_worlds": 2,
+    "n_items": 60,
+    "excludes_zero": true
+   },
+   "drop_holdmem_D1B0_in_window": {
+    "est": 0.1,
+    "lo": -0.2,
+    "hi": 0.4,
+    "width": 0.6000000000000001,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_in_window": {
+    "est": -0.4,
+    "lo": -0.5,
+    "hi": -0.3,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": true
+   },
+   "drop_zero_in_window": {
+    "est": -0.3,
+    "lo": -0.4,
+    "hi": -0.2,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": true
+   },
+   "interaction_B_in_window": {
+    "est": -0.5,
+    "lo": -0.7,
+    "hi": -0.3,
+    "width": 0.39999999999999997,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": true
+   },
+   "drop_holdmem_D1B0_outside_window": {
+    "est": 0.1,
+    "lo": -0.2,
+    "hi": 0.4,
+    "width": 0.6000000000000001,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_outside_window": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": false
+   },
+   "drop_zero_outside_window": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": false
+   },
+   "interaction_B_outside_window": {
+    "est": -0.1,
+    "lo": -0.4,
+    "hi": 0.2,
+    "width": 0.6000000000000001,
+    "n_worlds": 2,
+    "n_items": 20,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B0_unsynced": {
+    "est": 0.1,
+    "lo": -0.2,
+    "hi": 0.4,
+    "width": 0.6000000000000001,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": false
+   },
+   "drop_holdmem_D1B1_source_unsynced": {
+    "est": -0.4,
+    "lo": -0.5,
+    "hi": -0.3,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": true
+   },
+   "drop_zero_unsynced": {
+    "est": -0.3,
+    "lo": -0.4,
+    "hi": -0.2,
+    "width": 0.2,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": true
+   },
+   "interaction_B_unsynced": {
+    "est": -0.5,
+    "lo": -0.7,
+    "hi": -0.3,
+    "width": 0.39999999999999997,
+    "n_worlds": 2,
+    "n_items": 40,
+    "excludes_zero": true
+   }
+  }
+ },
+ "n_worlds": 2,
+ "n_probes": 60
+}

@@ -1,0 +1,205 @@
+"""Paper numbers and tables of the analyses requested by the second review round
+(`analysis.ex_round2`, prereg/decisions.md 2026-10-08): computed from committed run outputs and the
+seeded generator, reproducing the staged values they build on, and the committed generated files."""
+
+import json
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from memshift.analysis import ex_round2 as r2
+from memshift.analysis import paper_numbers as pn
+from memshift.analysis.ex_e1_paper import UNDEFINED
+from memshift.analysis.paper_data import MISSING
+from tests.test_paper_stage4 import check_tex
+
+ROOT = Path(__file__).resolve().parents[1]
+SOURCES = json.loads((ROOT / "paper/results_sources.json").read_text())
+INP = r2.load(ROOT, SOURCES)
+EMPTY = r2.load(ROOT, {})
+NUMBERS = (ROOT / "paper/generated/numbers.tex").read_text()
+
+
+def committed(name: str) -> str:
+    """The value of a macro in the committed numbers.tex."""
+    m = re.search(rf"\\newcommand{{\\{name}}}{{(.*)}}\n", NUMBERS)
+    assert m, name
+    return m.group(1)
+
+
+# ------------------------------------------------------------------------------------ macros
+def test_no_stage_staged_renders_only_missing_markers():
+    macros = r2.numbers(EMPTY)
+    assert len(macros) > 250
+    for name, value in macros.items():
+        pn._macro(name, value)  # letters-only
+        assert name.startswith(("Ex", "ETwoExWriter")), name
+        assert value == MISSING, (name, value)
+
+
+def test_every_macro_has_a_number_when_everything_is_staged():
+    macros = r2.numbers(INP)
+    assert not [k for k, v in macros.items() if v == MISSING]
+    # a redefinition changes no item outside the definition class: a contrast over no item
+    assert macros["ExAttrDefShiftOtherItems"] == "0"
+    assert macros["ExAttrDefShiftOtherBxD"] == UNDEFINED
+
+
+def test_attribution_reproduces_the_published_counts_and_splits_them():
+    m = r2.numbers(INP)
+    # the changed item-times of the class mix, by branch
+    for b in ("Src", "Def", "Orphan"):
+        assert int(m[f"ExAttr{b}Changed"].replace(",", "")) == int(
+            committed(f"ExMixMain{b}AllItems")
+        )
+        assert m[f"ExAttr{b}ItemTimes"] == "3,840"
+        parts = sum(int(m[f"ExAttr{b}{c}AllItems"].replace(",", "")) for c in ("Shift", "Drift"))
+        assert parts == int(m[f"ExAttr{b}Changed"].replace(",", ""))
+    # S_src changes 30.4% of the item-times; the revision itself 20.5%; it targets 10 of 48 items
+    assert m["ExAttrSrcChangedShareOfAll"] == "30.4\\%"
+    assert m["ExAttrSrcShiftShareOfAll"] == "20.5\\%"
+    assert m["ExAttrSrcTargetSlots"] == "10" and m["ExAttrWorldSlots"] == "48"
+    # after S_def: by definition version 235 redefined and 152 kept item-times (as the review),
+    # by value 222 changed by the redefinition and 165 by drift only
+    assert m["ExAttrDefKappaRedefinedItems"] == "235" and m["ExAttrDefKappaKeptItems"] == "152"
+    assert m["ExAttrDefKappaRedefinedBxD"].startswith("$+$38.3\\,pp [")
+    assert m["ExAttrDefKappaKeptBxD"].startswith("$+$39.5\\,pp [")
+    assert m["ExAttrDefShiftDefinitionItems"] == "222"
+    assert m["ExAttrDefDriftDefinitionItems"] == "165"
+    assert m["ExAttrDefDriftOtherItems"] == committed("ExMixMainDefOtherItems")
+
+
+def test_attribution_on_drift_of_other_items_is_the_published_class_contrast():
+    # after S_def every other item changed by drift: the part is the whole class
+    m = r2.numbers(INP)
+    assert m["ExAttrDefDriftOtherBxD"] == committed("ExClsMainDefOtherBxD")
+    assert m["ExAttrDefDriftOtherBDzero"] == committed("ExClsMainDefOtherBDzero")
+
+
+def test_thinking_writer_reproduces_the_registered_shares():
+    m = r2.numbers(INP)
+    assert m["ExThinkAllAtLimit"] == committed("CtlThinkAtLimitAll")
+    assert m["ExThinkAllUnreadable"] == committed("CtlThinkUnreadableAll")
+    assert m["ExThinkAllWrites"] == "708"
+    assert m["ExThinkImportantContactAtLimit"].startswith("98.3\\%")
+    assert m["ExThinkCloseFriendAtLimit"].startswith("60.8\\%")
+    assert m["ExThinkOverdueTaskAtLimit"].startswith("0.0\\%")
+    # every asked re-derivation of important contacts after S_src returned no value
+    assert m["ExThinkImportantContactSrcNoValue"] == m["ExThinkImportantContactSrcRederived"]
+    assert m["ExThinkImportantContactSrcCorrect"] == "0"
+    # the thinking gain on repair is the registered D_gain_rep (think minus plain, same items)
+    assert m["ExThinkAllSrcRederived"] == m["ExThinkAllSrcPlainRederived"]
+    gain = int(m["ExThinkAllSrcCorrect"]) - int(m["ExThinkAllSrcPlainCorrect"])
+    n = int(m["ExThinkAllSrcRederived"])
+    assert committed("CtlDGainRepSrcDefinitionEst") == f"$+${100 * gain / n:.1f}\\,pp"
+
+
+def test_writer_predictor_intervals_and_the_path3_rule_under_type_resampling():
+    m = r2.numbers(INP)
+    assert m["ETwoExWriterAgreePooledAurocTypeNinety"] == "0.832 [0.389, 0.934]"
+    assert m["ETwoExWriterNoDefAgreePooledAurocNinety"] == "0.275 [0.175, 0.347]"
+    assert m["ETwoExWriterNonDefPooledAurocNinety"].startswith("0.869 [")
+    assert m["ETwoExWriterPathThreeTypeVerdict"] == "triggered"  # slope 90% lower bound -0.53
+    assert committed("ETwoExWriterAgreePooledSlopeType") == "1.01 [$-$0.53, 1.79]"
+
+
+def test_leave_one_definition_out_range():
+    m = r2.numbers(INP)
+    assert (m["ExPerDefLooMainSrcBxDMin"], m["ExPerDefLooMainSrcBxDMax"]) == (
+        "$+$16.5\\,pp",
+        "$+$33.8\\,pp",
+    )
+    assert m["ExPerDefLooMainDefBxDMin"] == "$+$34.6\\,pp"
+    assert committed("ExPerDefWithoutMainSrcImportantContactBxDEst") == "$+$16.5\\,pp"
+
+
+# ------------------------------------------------------------------------------------ tables
+LABELS = {
+    "tab_main.tex": "tab:main",
+    "tab_redef_only.tex": "tab:redef_only",
+    "tab_think_trunc.tex": "tab:think_trunc",
+    "tab_classsplit_dm.tex": "tab:classsplit_dm",
+    "tab_perdef.tex": "tab:perdef",
+}
+
+
+def test_tables_are_wellformed_with_data_and_without():
+    for inp in (INP, EMPTY):
+        assert set(r2.tables(inp)) == set(LABELS)
+        for name, tex in r2.tables(inp).items():
+            check_tex(tex)
+            assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
+    for name, tex in r2.tables(EMPTY).items():
+        assert MISSING in tex, name
+    for name, tex in r2.tables(INP).items():
+        assert MISSING not in tex, name
+
+
+def test_main_table_carries_the_values_of_the_decomposition_and_class_split():
+    tex = r2.tab_main(INP)
+    assert "$\\Ssrc$ & definition & 29 & 16.2 & 99.1 & 10.2 & 65.8 & " in tex
+    assert "$+$27.3\\,{\\scriptsize [$+$21.6,\\,$+$32.6]} & 23 \\\\" in tex
+    assert " & other & 83 & 68.1 & 67.5 & 10.0 & 10.9 & " in tex
+    decomp = (ROOT / "paper/generated/tab_decomp.tex").read_text()
+    for row in ("& 16.2 & 99.1 & 10.2 & 65.8 &", "& 6.7 & 99.7 & 7.5 & 61.8 &"):
+        assert row in decomp and row in tex
+    split = (ROOT / "paper/generated/tab_classsplit.tex").read_text()
+    for cell in re.findall(r"\$[+-]\$\d+\.\d\\,\{\\scriptsize \[[^]]*\]\}", tex):
+        assert cell in split, cell
+
+
+def test_dm_table_holds_the_registered_c3_values():
+    tex = r2.tab_classsplit_dm(INP)
+    for name in ("SynthCThreeSrc", "SynthCThreeDef", "SynthExCThreeOrphan"):
+        est = committed(name + "Est").replace("\\,pp", "")
+        assert f"{est}\\,{{\\scriptsize [" in tex, name
+    assert tex.count("\\textcolor{gray}{authored}") == 12  # four contrasts, three classes
+
+
+def test_perdef_table_matches_the_per_definition_macros():
+    tex = r2.tab_perdef(INP)
+    for d in ("ImportantContact", "CloseFriend", "WorkingHours", "ActiveProject", "VipSender"):
+        for b in ("Src", "Def", "Orphan"):
+            est = committed(f"ExPerDefMain{b}{d}BxDEst").replace("\\,pp", "")
+            assert f"{est}\\,{{\\scriptsize [" in tex, (d, b)
+    assert "$+$16.5 to $+$33.8" in tex
+
+
+@pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
+def test_tables_compile_at_the_paper_width(tmp_path):
+    names = []
+    for name, tex in r2.tables(INP).items():
+        (tmp_path / name).write_text(tex)
+        names.append(name)
+    (tmp_path / "t.tex").write_text(
+        "\n".join(
+            [
+                r"\documentclass[10pt]{article}\usepackage[T1]{fontenc}",
+                r"\usepackage[textwidth=5.5in,textheight=9in]{geometry}",
+                r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
+                r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
+                r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
+                r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",
+            ]
+        )
+    )
+    done = subprocess.run(
+        ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "t.tex"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+    )
+    assert done.returncode == 0, done.stdout[-1500:]
+    assert "Overfull \\hbox" not in done.stdout  # every table fits 5.5in
+
+
+# ------------------------------------------------------------------------- generated files
+def test_committed_generated_files_are_current():
+    head = "% generated by memshift.analysis.paper_tables; do not edit\n"
+    for name, tex in r2.tables(INP).items():
+        assert (ROOT / "paper/generated" / name).read_text() == head + tex, name
+    for name, value in r2.numbers(INP).items():
+        assert pn._macro(name, value) in NUMBERS, name

@@ -1,0 +1,13 @@
+{
+ "implicit": {
+  "items": 15,
+  "ceiling": 0.06666666666666667,
+  "by_kappa": {
+   "active_project": 0.0,
+   "close_friend": 0.5,
+   "overdue_task": 0.0,
+   "vip_sender": 0.0,
+   "working_hours": 0.0
+  }
+ }
+}

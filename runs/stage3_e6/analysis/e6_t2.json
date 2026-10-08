@@ -1,0 +1,82 @@
+{
+ "native": "native_holdmem_D1B1_source",
+ "margin": 0.03,
+ "imports": {
+  "imported_no_ext": {
+   "diff_90": {
+    "pre": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1920
+    },
+    "post": {
+     "est": -0.15403645833333332,
+     "lo": -0.1734375,
+     "hi": -0.13606770833333334,
+     "width": 0.03736979166666665,
+     "n_worlds": 20,
+     "n_items": 7680
+    },
+    "missed": {
+     "est": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1726
+    }
+   },
+   "measured": [
+    "missed",
+    "post",
+    "pre"
+   ],
+   "t2_equivalent": false,
+   "export_fidelity": {
+    "pre": 1.0,
+    "post": 0.8335678109172763
+   }
+  },
+  "imported_with_ext": {
+   "diff_90": {
+    "pre": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1920
+    },
+    "post": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 7680
+    },
+    "missed": {
+     "est": 0.0,
+     "lo": 0.0,
+     "hi": 0.0,
+     "width": 0.0,
+     "n_worlds": 20,
+     "n_items": 1726
+    }
+   },
+   "measured": [
+    "missed",
+    "post",
+    "pre"
+   ],
+   "t2_equivalent": true,
+   "export_fidelity": {
+    "pre": 1.0,
+    "post": 1.0
+   }
+  }
+ }
+}

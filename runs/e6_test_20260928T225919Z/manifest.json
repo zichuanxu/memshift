@@ -1,0 +1,2659 @@
+{
+  "code": {
+    "commit": "022a8828d7873ed7c6b0b86420b47055bf977302",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T02:12:56Z",
+  "experiment": "E6",
+  "files_sha256": {
+    "analysis/carriers.json": "78209135c4e8da7896ea02086b6fd7f1a8568cf31a247c01c3b183a3dbcd7b77",
+    "answers.jsonl": "c55d18c5558f113c066ab5af5156bc6635ec956afcef07ede38f6a0fda91a2db",
+    "bundles/w1000_def/no_ext.mem/CHECKSUMS": "96297f1e0d91895593a55938260f6a8be8345d4e8182abd1a486d395b57a0d84",
+    "bundles/w1000_def/no_ext.mem/items/episode.jsonl": "15136609ffabcf6393775d84cae01c83be4d57847d009309c11c357094104508",
+    "bundles/w1000_def/no_ext.mem/items/fact.jsonl": "c0f7a61aa4b3556670ce23a71e4d90e5b8f93095ae3e0b35f5367a3a4c629997",
+    "bundles/w1000_def/with_ext.mem/CHECKSUMS": "586342c1a263219b6e36339f5330aa071980692d99164663162446112bd475a1",
+    "bundles/w1000_def/with_ext.mem/items/episode.jsonl": "15136609ffabcf6393775d84cae01c83be4d57847d009309c11c357094104508",
+    "bundles/w1000_def/with_ext.mem/items/fact.jsonl": "c0f7a61aa4b3556670ce23a71e4d90e5b8f93095ae3e0b35f5367a3a4c629997",
+    "bundles/w1000_def/with_ext.mem/items/memshift.item.jsonl": "8d32a943789095c223ad7a072dd663c7db621f8d886b0b5a3723157323788de4",
+    "bundles/w1000_src/all_carriers.mem/CHECKSUMS": "5bc4f5f05cb865759dc7efb001b19f1bcaf0b457c8ea733a63adb9296d469c91",
+    "bundles/w1000_src/all_carriers.mem/items/episode.jsonl": "4897c5e7eec4802730e8016fe3a890a65a78c6eae7ef3024f4c391294840b0a5",
+    "bundles/w1000_src/all_carriers.mem/items/fact.jsonl": "8bd657d348dc32dcd9dd93e90b1e39b2d79398641134345a72bfddfb0713e8d2",
+    "bundles/w1000_src/all_carriers.mem/items/memshift.item.jsonl": "b883adf792858c260fe15e63aad76ec4ff25f3c5ef43a0455e78eded064bc93c",
+    "bundles/w1000_src/no_ext.mem/CHECKSUMS": "099cc5ac491e925a7afc3a91ccfb3068dc54ed5768ee42dcb0a0fcab490bceff",
+    "bundles/w1000_src/no_ext.mem/items/episode.jsonl": "e86b362d24d6d2b85bfa594bc2a2e1330fe62e7ca274f39b27fa35e66adc6ab6",
+    "bundles/w1000_src/no_ext.mem/items/fact.jsonl": "eeb4962f4820bd6ffa789dbea9cd9101335f0f005146f1d6554c0319e1637766",
+    "bundles/w1000_src/with_ext.mem/CHECKSUMS": "01b70a2e6166c9ec90266b8e0b78ac479285dad62e08995d2c8894d63936a19e",
+    "bundles/w1000_src/with_ext.mem/items/episode.jsonl": "e86b362d24d6d2b85bfa594bc2a2e1330fe62e7ca274f39b27fa35e66adc6ab6",
+    "bundles/w1000_src/with_ext.mem/items/fact.jsonl": "eeb4962f4820bd6ffa789dbea9cd9101335f0f005146f1d6554c0319e1637766",
+    "bundles/w1000_src/with_ext.mem/items/memshift.item.jsonl": "b883adf792858c260fe15e63aad76ec4ff25f3c5ef43a0455e78eded064bc93c",
+    "bundles/w1001_def/no_ext.mem/CHECKSUMS": "b62ba74543a05dfa0c5c66843a766385a05d0a9e6f42c9f8853c1155c5c4a523",
+    "bundles/w1001_def/no_ext.mem/items/episode.jsonl": "a80770a0423a869abfa95f382acccfecfdb7d99a1308d53859f0047a0b1de4e9",
+    "bundles/w1001_def/no_ext.mem/items/fact.jsonl": "4a4a449641adf3ce361adfd9fd7033a06ae0a8dafde1281d6d7f13f7964db1fd",
+    "bundles/w1001_def/with_ext.mem/CHECKSUMS": "71db8d130ae0a692d3cfaf39cafdee438151fd465c7c2edeb426a83697b822ea",
+    "bundles/w1001_def/with_ext.mem/items/episode.jsonl": "a80770a0423a869abfa95f382acccfecfdb7d99a1308d53859f0047a0b1de4e9",
+    "bundles/w1001_def/with_ext.mem/items/fact.jsonl": "4a4a449641adf3ce361adfd9fd7033a06ae0a8dafde1281d6d7f13f7964db1fd",
+    "bundles/w1001_def/with_ext.mem/items/memshift.item.jsonl": "2101fce30011992aa83f5a0840232bab18749465f10fd226187f6f424d93399e",
+    "bundles/w1001_src/all_carriers.mem/CHECKSUMS": "3a48bb4a955e4aced6365aaac5ea218966c688bc53b0a73c92e12c998b93d041",
+    "bundles/w1001_src/all_carriers.mem/items/episode.jsonl": "c9f30227af5d26f99d899004314eaedfd136fc147c27276885148ed1451abfa9",
+    "bundles/w1001_src/all_carriers.mem/items/fact.jsonl": "a7ca19163434fe7695cdbdad3f026721152ce5e9ee44aeb8cfa26aaeaa29a2f8",
+    "bundles/w1001_src/all_carriers.mem/items/memshift.item.jsonl": "696bd07c3eab6355143ee6ac1a50ad4c6c4c8e3e718609e652ab56f0762f578a",
+    "bundles/w1001_src/no_ext.mem/CHECKSUMS": "f8abc165eff7ee513daa5a57f4b4acc6c637c888f29cdbcdbb5dfb1ccd1f1a0a",
+    "bundles/w1001_src/no_ext.mem/items/episode.jsonl": "a4c4d702295d55c0875ed7b6cb1f9f54e635bc76cb470c42fc6eb6dd8c819db5",
+    "bundles/w1001_src/no_ext.mem/items/fact.jsonl": "d33f874c149635f00286893f353dafa5654f5395d1337202d65d54b76cef0d1b",
+    "bundles/w1001_src/with_ext.mem/CHECKSUMS": "16edf71d08d87af73610fcda116f2de60f761ce210f71a17bc7a76362c73a7fc",
+    "bundles/w1001_src/with_ext.mem/items/episode.jsonl": "a4c4d702295d55c0875ed7b6cb1f9f54e635bc76cb470c42fc6eb6dd8c819db5",
+    "bundles/w1001_src/with_ext.mem/items/fact.jsonl": "d33f874c149635f00286893f353dafa5654f5395d1337202d65d54b76cef0d1b",
+    "bundles/w1001_src/with_ext.mem/items/memshift.item.jsonl": "696bd07c3eab6355143ee6ac1a50ad4c6c4c8e3e718609e652ab56f0762f578a",
+    "bundles/w1002_def/no_ext.mem/CHECKSUMS": "c874dc20638455b15dfedb07be4c9c9e181a226dac80a9ba5f6cfda146b58ffc",
+    "bundles/w1002_def/no_ext.mem/items/episode.jsonl": "d32b52073f2e01f0d75cdf360870f90149ec87a200028f1fce441dd16333f964",
+    "bundles/w1002_def/no_ext.mem/items/fact.jsonl": "b509400a9b9619875bedd401bf24b5d5af8420568b48bed8372b1dbfc4ad68de",
+    "bundles/w1002_def/with_ext.mem/CHECKSUMS": "815abdd90ee78831627e0f7df8434cf509f44018fb280f325466e98f4b4b40c5",
+    "bundles/w1002_def/with_ext.mem/items/episode.jsonl": "d32b52073f2e01f0d75cdf360870f90149ec87a200028f1fce441dd16333f964",
+    "bundles/w1002_def/with_ext.mem/items/fact.jsonl": "b509400a9b9619875bedd401bf24b5d5af8420568b48bed8372b1dbfc4ad68de",
+    "bundles/w1002_def/with_ext.mem/items/memshift.item.jsonl": "22065af536f20fe17b481a7df73824519303a57cd0341b382f1c6230a825045f",
+    "bundles/w1002_src/all_carriers.mem/CHECKSUMS": "f090648534a09d5aff84d520f2bd3cf8e2902063c449d88a2d56ee8e91869fbf",
+    "bundles/w1002_src/all_carriers.mem/items/episode.jsonl": "8af2b1f65a55acb500ab515c5651c1d0e5b4dd8e29bb70c4ed2b5e000578b449",
+    "bundles/w1002_src/all_carriers.mem/items/fact.jsonl": "9253727d7dad2be398d131376f52c1db5cc23e68d88abbb36ea3a5f356ebcaa4",
+    "bundles/w1002_src/all_carriers.mem/items/memshift.item.jsonl": "5dd58f72436f7ce7d6bf2b51bd7d96d5e26035d9121eac20d707c24553a321c7",
+    "bundles/w1002_src/no_ext.mem/CHECKSUMS": "f150d73e00937d2011dceedaade813026326c50b4e7fa0b06086474b0d43f106",
+    "bundles/w1002_src/no_ext.mem/items/episode.jsonl": "d32b52073f2e01f0d75cdf360870f90149ec87a200028f1fce441dd16333f964",
+    "bundles/w1002_src/no_ext.mem/items/fact.jsonl": "8e25bd4e570502fcf9fc5ba5761a6acff34a535adef200a38dd6b29063a700f6",
+    "bundles/w1002_src/with_ext.mem/CHECKSUMS": "718c5d00bb07afb6bdc1e302b7fc1567487720e660c3eadcc6e048a2a94b6f08",
+    "bundles/w1002_src/with_ext.mem/items/episode.jsonl": "d32b52073f2e01f0d75cdf360870f90149ec87a200028f1fce441dd16333f964",
+    "bundles/w1002_src/with_ext.mem/items/fact.jsonl": "8e25bd4e570502fcf9fc5ba5761a6acff34a535adef200a38dd6b29063a700f6",
+    "bundles/w1002_src/with_ext.mem/items/memshift.item.jsonl": "5dd58f72436f7ce7d6bf2b51bd7d96d5e26035d9121eac20d707c24553a321c7",
+    "bundles/w1003_def/no_ext.mem/CHECKSUMS": "3145624cf9a7dc7e2774e9f30d4c2ee4c207a25219f82528b25d85e195dfb259",
+    "bundles/w1003_def/no_ext.mem/items/episode.jsonl": "630f9efbc3c9abf7d462945ad669fa7b234e0893bc3516d8bde113137dba73da",
+    "bundles/w1003_def/no_ext.mem/items/fact.jsonl": "235533c8e49eb268818ddb46652d8502684150fc8e6191f882eee0bbe655ca83",
+    "bundles/w1003_def/with_ext.mem/CHECKSUMS": "b75a515b7be5ec543694b7a03ec3fc0865b459558688a86f4f62d6db8d17e67b",
+    "bundles/w1003_def/with_ext.mem/items/episode.jsonl": "630f9efbc3c9abf7d462945ad669fa7b234e0893bc3516d8bde113137dba73da",
+    "bundles/w1003_def/with_ext.mem/items/fact.jsonl": "235533c8e49eb268818ddb46652d8502684150fc8e6191f882eee0bbe655ca83",
+    "bundles/w1003_def/with_ext.mem/items/memshift.item.jsonl": "563acaa73e2efe73dc9e845503db8c5ef7b72eca7c570a065008cf3df8f8263e",
+    "bundles/w1003_src/all_carriers.mem/CHECKSUMS": "00d08c62922198ea25e20b7e6ef333cfe08faed656a219c4e7db25343f22a17c",
+    "bundles/w1003_src/all_carriers.mem/items/episode.jsonl": "d4122927b361c2f15ba8c9bf391060d5a2dccf555741d96e4c431e117ac6fc25",
+    "bundles/w1003_src/all_carriers.mem/items/fact.jsonl": "d08b29f6ca518dc99b62d98b716af7f5b8d71f5648f78ca412c32e23cb11aa37",
+    "bundles/w1003_src/all_carriers.mem/items/memshift.item.jsonl": "563acaa73e2efe73dc9e845503db8c5ef7b72eca7c570a065008cf3df8f8263e",
+    "bundles/w1003_src/no_ext.mem/CHECKSUMS": "3145624cf9a7dc7e2774e9f30d4c2ee4c207a25219f82528b25d85e195dfb259",
+    "bundles/w1003_src/no_ext.mem/items/episode.jsonl": "630f9efbc3c9abf7d462945ad669fa7b234e0893bc3516d8bde113137dba73da",
+    "bundles/w1003_src/no_ext.mem/items/fact.jsonl": "235533c8e49eb268818ddb46652d8502684150fc8e6191f882eee0bbe655ca83",
+    "bundles/w1003_src/with_ext.mem/CHECKSUMS": "b75a515b7be5ec543694b7a03ec3fc0865b459558688a86f4f62d6db8d17e67b",
+    "bundles/w1003_src/with_ext.mem/items/episode.jsonl": "630f9efbc3c9abf7d462945ad669fa7b234e0893bc3516d8bde113137dba73da",
+    "bundles/w1003_src/with_ext.mem/items/fact.jsonl": "235533c8e49eb268818ddb46652d8502684150fc8e6191f882eee0bbe655ca83",
+    "bundles/w1003_src/with_ext.mem/items/memshift.item.jsonl": "563acaa73e2efe73dc9e845503db8c5ef7b72eca7c570a065008cf3df8f8263e",
+    "bundles/w1004_def/no_ext.mem/CHECKSUMS": "221c9e45f0a271605b54f8564f02e06071645dec73533fc4fe1b67468c62a273",
+    "bundles/w1004_def/no_ext.mem/items/episode.jsonl": "971e8ccba34b94ae5f6ebfe21d7fa54a8a20b8a5ae998da52ea2cfddb2df85cd",
+    "bundles/w1004_def/no_ext.mem/items/fact.jsonl": "0039eeb85a120d4691defbba204f4974e0fbaec1c06210a5f6f1d4920285c39c",
+    "bundles/w1004_def/with_ext.mem/CHECKSUMS": "b42bae33ca6e94f9407eaa61f8bf53e8cb55dfc85204f61b25959bd681578187",
+    "bundles/w1004_def/with_ext.mem/items/episode.jsonl": "971e8ccba34b94ae5f6ebfe21d7fa54a8a20b8a5ae998da52ea2cfddb2df85cd",
+    "bundles/w1004_def/with_ext.mem/items/fact.jsonl": "0039eeb85a120d4691defbba204f4974e0fbaec1c06210a5f6f1d4920285c39c",
+    "bundles/w1004_def/with_ext.mem/items/memshift.item.jsonl": "7aa9e7c2e1df77d07a28f76b9b0f393008574e59d5c953951add020680d23d66",
+    "bundles/w1004_src/all_carriers.mem/CHECKSUMS": "624a2f362ba63c4c64e9736a24e7e94a11ba108ebca892f5fa2965a300dfe803",
+    "bundles/w1004_src/all_carriers.mem/items/episode.jsonl": "4c05e3db0afb28f5072a968828b03ede4e7363e62b52532f5ed45dcffa78ecf9",
+    "bundles/w1004_src/all_carriers.mem/items/fact.jsonl": "be547d980248e031bba02327567afa33b5c9c576a7b0c14c816d81d029602043",
+    "bundles/w1004_src/all_carriers.mem/items/memshift.item.jsonl": "7aa9e7c2e1df77d07a28f76b9b0f393008574e59d5c953951add020680d23d66",
+    "bundles/w1004_src/no_ext.mem/CHECKSUMS": "221c9e45f0a271605b54f8564f02e06071645dec73533fc4fe1b67468c62a273",
+    "bundles/w1004_src/no_ext.mem/items/episode.jsonl": "971e8ccba34b94ae5f6ebfe21d7fa54a8a20b8a5ae998da52ea2cfddb2df85cd",
+    "bundles/w1004_src/no_ext.mem/items/fact.jsonl": "0039eeb85a120d4691defbba204f4974e0fbaec1c06210a5f6f1d4920285c39c",
+    "bundles/w1004_src/with_ext.mem/CHECKSUMS": "b42bae33ca6e94f9407eaa61f8bf53e8cb55dfc85204f61b25959bd681578187",
+    "bundles/w1004_src/with_ext.mem/items/episode.jsonl": "971e8ccba34b94ae5f6ebfe21d7fa54a8a20b8a5ae998da52ea2cfddb2df85cd",
+    "bundles/w1004_src/with_ext.mem/items/fact.jsonl": "0039eeb85a120d4691defbba204f4974e0fbaec1c06210a5f6f1d4920285c39c",
+    "bundles/w1004_src/with_ext.mem/items/memshift.item.jsonl": "7aa9e7c2e1df77d07a28f76b9b0f393008574e59d5c953951add020680d23d66",
+    "bundles/w1005_def/no_ext.mem/CHECKSUMS": "a71f81616bed29fad72c94b518ee8de7c844ad4dccada8683e73ac69c8d6fd64",
+    "bundles/w1005_def/no_ext.mem/items/episode.jsonl": "8898206927944bd77da407bb4b57e60d9b9d3310f3d8fa21416bf576680514c2",
+    "bundles/w1005_def/no_ext.mem/items/fact.jsonl": "1e13cf946ccf9f34ad914614740d9b5fde7c7342b211b42f7e298c833c562355",
+    "bundles/w1005_def/with_ext.mem/CHECKSUMS": "7e465f5ecc035c9159db8f23feb0ae1ac2216c5c642765d39c2b821e612c2da7",
+    "bundles/w1005_def/with_ext.mem/items/episode.jsonl": "8898206927944bd77da407bb4b57e60d9b9d3310f3d8fa21416bf576680514c2",
+    "bundles/w1005_def/with_ext.mem/items/fact.jsonl": "1e13cf946ccf9f34ad914614740d9b5fde7c7342b211b42f7e298c833c562355",
+    "bundles/w1005_def/with_ext.mem/items/memshift.item.jsonl": "47633176245c03c1b39c17ecab5e6af09e138f4493057eb40b3ea2868e7cc48f",
+    "bundles/w1005_src/all_carriers.mem/CHECKSUMS": "7674dc597256e222e3ca653a2dc3a5cafaf50bdc90da6845e22325d7e385423a",
+    "bundles/w1005_src/all_carriers.mem/items/episode.jsonl": "26bc7c112e1d6327718a2da12eba1b662cb02be1524ec9ad7b9886f43ab5bb0f",
+    "bundles/w1005_src/all_carriers.mem/items/fact.jsonl": "89b6eb94c11bbf5ef276064ddb1df3f088e895d7631f79e1055b8dd561d84a41",
+    "bundles/w1005_src/all_carriers.mem/items/memshift.item.jsonl": "47633176245c03c1b39c17ecab5e6af09e138f4493057eb40b3ea2868e7cc48f",
+    "bundles/w1005_src/no_ext.mem/CHECKSUMS": "a71f81616bed29fad72c94b518ee8de7c844ad4dccada8683e73ac69c8d6fd64",
+    "bundles/w1005_src/no_ext.mem/items/episode.jsonl": "8898206927944bd77da407bb4b57e60d9b9d3310f3d8fa21416bf576680514c2",
+    "bundles/w1005_src/no_ext.mem/items/fact.jsonl": "1e13cf946ccf9f34ad914614740d9b5fde7c7342b211b42f7e298c833c562355",
+    "bundles/w1005_src/with_ext.mem/CHECKSUMS": "7e465f5ecc035c9159db8f23feb0ae1ac2216c5c642765d39c2b821e612c2da7",
+    "bundles/w1005_src/with_ext.mem/items/episode.jsonl": "8898206927944bd77da407bb4b57e60d9b9d3310f3d8fa21416bf576680514c2",
+    "bundles/w1005_src/with_ext.mem/items/fact.jsonl": "1e13cf946ccf9f34ad914614740d9b5fde7c7342b211b42f7e298c833c562355",
+    "bundles/w1005_src/with_ext.mem/items/memshift.item.jsonl": "47633176245c03c1b39c17ecab5e6af09e138f4493057eb40b3ea2868e7cc48f",
+    "bundles/w1006_def/no_ext.mem/CHECKSUMS": "b1552dfc48ee8819a4333b997f32bf445831ed42afda50e04638209e1a69f850",
+    "bundles/w1006_def/no_ext.mem/items/episode.jsonl": "76563fca2512b49e94b32ca2730a675967dba36664f44b2da49e51800aa3a2f3",
+    "bundles/w1006_def/no_ext.mem/items/fact.jsonl": "9240a7ce9cb1c8519834d10b477d6d5261a7189356d2fdc06363c1f6dabf3c7e",
+    "bundles/w1006_def/with_ext.mem/CHECKSUMS": "58c1bebd5c838eb5a112609711a3bdced21ba2d6741fac0d81bcffedb9483a1f",
+    "bundles/w1006_def/with_ext.mem/items/episode.jsonl": "76563fca2512b49e94b32ca2730a675967dba36664f44b2da49e51800aa3a2f3",
+    "bundles/w1006_def/with_ext.mem/items/fact.jsonl": "9240a7ce9cb1c8519834d10b477d6d5261a7189356d2fdc06363c1f6dabf3c7e",
+    "bundles/w1006_def/with_ext.mem/items/memshift.item.jsonl": "836ae2a0e4d199c19956137ea385e13fe45665fa88b7b9fe76cdd4fe026ee92e",
+    "bundles/w1006_src/all_carriers.mem/CHECKSUMS": "686842dc4010b931159a33c96dcdc2610c9bf9c94678a99f55ecdec0a900dacb",
+    "bundles/w1006_src/all_carriers.mem/items/episode.jsonl": "0a6bc32707e6f42c6d343e4f3ac423275373653d8010fcf853f45856088418e5",
+    "bundles/w1006_src/all_carriers.mem/items/fact.jsonl": "f89b01403a6869023ac325a1111e744c504511fefa2a994e827528d6a52aeba5",
+    "bundles/w1006_src/all_carriers.mem/items/memshift.item.jsonl": "836ae2a0e4d199c19956137ea385e13fe45665fa88b7b9fe76cdd4fe026ee92e",
+    "bundles/w1006_src/no_ext.mem/CHECKSUMS": "b1552dfc48ee8819a4333b997f32bf445831ed42afda50e04638209e1a69f850",
+    "bundles/w1006_src/no_ext.mem/items/episode.jsonl": "76563fca2512b49e94b32ca2730a675967dba36664f44b2da49e51800aa3a2f3",
+    "bundles/w1006_src/no_ext.mem/items/fact.jsonl": "9240a7ce9cb1c8519834d10b477d6d5261a7189356d2fdc06363c1f6dabf3c7e",
+    "bundles/w1006_src/with_ext.mem/CHECKSUMS": "58c1bebd5c838eb5a112609711a3bdced21ba2d6741fac0d81bcffedb9483a1f",
+    "bundles/w1006_src/with_ext.mem/items/episode.jsonl": "76563fca2512b49e94b32ca2730a675967dba36664f44b2da49e51800aa3a2f3",
+    "bundles/w1006_src/with_ext.mem/items/fact.jsonl": "9240a7ce9cb1c8519834d10b477d6d5261a7189356d2fdc06363c1f6dabf3c7e",
+    "bundles/w1006_src/with_ext.mem/items/memshift.item.jsonl": "836ae2a0e4d199c19956137ea385e13fe45665fa88b7b9fe76cdd4fe026ee92e",
+    "bundles/w1007_def/no_ext.mem/CHECKSUMS": "87eb961b31823346c4d5e0de6f735e7bd67095e58e4e91453dbbe0c945c80e21",
+    "bundles/w1007_def/no_ext.mem/items/episode.jsonl": "bcd82fc40bbbe5c28c0ee547dfae29ea7e0dec076006ad92c73338386740a1df",
+    "bundles/w1007_def/no_ext.mem/items/fact.jsonl": "4c81c63e227e537b4a864a41ac7fcbfe3bdf5c2cdb8d8d27dd9aafa4048a24f9",
+    "bundles/w1007_def/with_ext.mem/CHECKSUMS": "3f59ec89ddd87e774f2d740775bc7c60160576c203f8ffacabab1c735803b336",
+    "bundles/w1007_def/with_ext.mem/items/episode.jsonl": "bcd82fc40bbbe5c28c0ee547dfae29ea7e0dec076006ad92c73338386740a1df",
+    "bundles/w1007_def/with_ext.mem/items/fact.jsonl": "4c81c63e227e537b4a864a41ac7fcbfe3bdf5c2cdb8d8d27dd9aafa4048a24f9",
+    "bundles/w1007_def/with_ext.mem/items/memshift.item.jsonl": "3643a2e288e7e53dffcaa181b7d50f40b0bb20ec014ece2e13628957fd684200",
+    "bundles/w1007_src/all_carriers.mem/CHECKSUMS": "b402cb2526200f77faa25a0f52cd9efe0de63f922028577495871a29874bdd64",
+    "bundles/w1007_src/all_carriers.mem/items/episode.jsonl": "be0d2fd5c387977d406dfa21398b4bb02ada058983c3727b13e2c3072f312cfa",
+    "bundles/w1007_src/all_carriers.mem/items/fact.jsonl": "3e011193a7819d16d01c798fb706c6ae27ae8bcf05fe812bc59267d39e52fe2a",
+    "bundles/w1007_src/all_carriers.mem/items/memshift.item.jsonl": "3643a2e288e7e53dffcaa181b7d50f40b0bb20ec014ece2e13628957fd684200",
+    "bundles/w1007_src/no_ext.mem/CHECKSUMS": "87eb961b31823346c4d5e0de6f735e7bd67095e58e4e91453dbbe0c945c80e21",
+    "bundles/w1007_src/no_ext.mem/items/episode.jsonl": "bcd82fc40bbbe5c28c0ee547dfae29ea7e0dec076006ad92c73338386740a1df",
+    "bundles/w1007_src/no_ext.mem/items/fact.jsonl": "4c81c63e227e537b4a864a41ac7fcbfe3bdf5c2cdb8d8d27dd9aafa4048a24f9",
+    "bundles/w1007_src/with_ext.mem/CHECKSUMS": "3f59ec89ddd87e774f2d740775bc7c60160576c203f8ffacabab1c735803b336",
+    "bundles/w1007_src/with_ext.mem/items/episode.jsonl": "bcd82fc40bbbe5c28c0ee547dfae29ea7e0dec076006ad92c73338386740a1df",
+    "bundles/w1007_src/with_ext.mem/items/fact.jsonl": "4c81c63e227e537b4a864a41ac7fcbfe3bdf5c2cdb8d8d27dd9aafa4048a24f9",
+    "bundles/w1007_src/with_ext.mem/items/memshift.item.jsonl": "3643a2e288e7e53dffcaa181b7d50f40b0bb20ec014ece2e13628957fd684200",
+    "bundles/w1008_def/no_ext.mem/CHECKSUMS": "1c2ed5ddeeff13d1fb9225d322725bef7de08c83e178192683fd15a8ada69b01",
+    "bundles/w1008_def/no_ext.mem/items/episode.jsonl": "2830ae84890ef3fcd6219baa4eaeecc1e12746aca4c25f6e310cc37a29ca888e",
+    "bundles/w1008_def/no_ext.mem/items/fact.jsonl": "a6b2c4d3fcb3fd4a5bdfe04de0f24dbb94c3126cdfa9d14968439e1de964e448",
+    "bundles/w1008_def/with_ext.mem/CHECKSUMS": "00a170bac71c598b2134ed9f78707f882674a7f69242addb716f18ced7e8ebc1",
+    "bundles/w1008_def/with_ext.mem/items/episode.jsonl": "2830ae84890ef3fcd6219baa4eaeecc1e12746aca4c25f6e310cc37a29ca888e",
+    "bundles/w1008_def/with_ext.mem/items/fact.jsonl": "a6b2c4d3fcb3fd4a5bdfe04de0f24dbb94c3126cdfa9d14968439e1de964e448",
+    "bundles/w1008_def/with_ext.mem/items/memshift.item.jsonl": "e0fa8abedd73169d07697eeb2165aa3fa096749e6d3d744b4f7d81462e429b83",
+    "bundles/w1008_src/all_carriers.mem/CHECKSUMS": "95888510ee955a67ed432aba2bad787f8ae8ea5a694997275218e0732c1d791b",
+    "bundles/w1008_src/all_carriers.mem/items/episode.jsonl": "e340ed81a612874d7ebe32b86c390b25152dff5c8cd064b732526654b0e57b90",
+    "bundles/w1008_src/all_carriers.mem/items/fact.jsonl": "85429bdedb4cb441236aaa39cdc6bb58632570d3ce1da2f1c45a5fd822421a03",
+    "bundles/w1008_src/all_carriers.mem/items/memshift.item.jsonl": "e0fa8abedd73169d07697eeb2165aa3fa096749e6d3d744b4f7d81462e429b83",
+    "bundles/w1008_src/no_ext.mem/CHECKSUMS": "1c2ed5ddeeff13d1fb9225d322725bef7de08c83e178192683fd15a8ada69b01",
+    "bundles/w1008_src/no_ext.mem/items/episode.jsonl": "2830ae84890ef3fcd6219baa4eaeecc1e12746aca4c25f6e310cc37a29ca888e",
+    "bundles/w1008_src/no_ext.mem/items/fact.jsonl": "a6b2c4d3fcb3fd4a5bdfe04de0f24dbb94c3126cdfa9d14968439e1de964e448",
+    "bundles/w1008_src/with_ext.mem/CHECKSUMS": "00a170bac71c598b2134ed9f78707f882674a7f69242addb716f18ced7e8ebc1",
+    "bundles/w1008_src/with_ext.mem/items/episode.jsonl": "2830ae84890ef3fcd6219baa4eaeecc1e12746aca4c25f6e310cc37a29ca888e",
+    "bundles/w1008_src/with_ext.mem/items/fact.jsonl": "a6b2c4d3fcb3fd4a5bdfe04de0f24dbb94c3126cdfa9d14968439e1de964e448",
+    "bundles/w1008_src/with_ext.mem/items/memshift.item.jsonl": "e0fa8abedd73169d07697eeb2165aa3fa096749e6d3d744b4f7d81462e429b83",
+    "bundles/w1009_def/no_ext.mem/CHECKSUMS": "fbc0d2807c2972f361d567b036be7597c016b28298ae97ab47c0c45350166ff8",
+    "bundles/w1009_def/no_ext.mem/items/episode.jsonl": "83f92d449313655664080903acf7df3eb937e5e83bb845eaa7a7d51caf2ea472",
+    "bundles/w1009_def/no_ext.mem/items/fact.jsonl": "9b72c4a70a642f2cb6ea52242e51788173fd6b06c8e7c2805fc69ec5787451da",
+    "bundles/w1009_def/with_ext.mem/CHECKSUMS": "334c94877c527fe529d4296e68fc921c4b08b94b007c20cfd780a5c522fa8167",
+    "bundles/w1009_def/with_ext.mem/items/episode.jsonl": "83f92d449313655664080903acf7df3eb937e5e83bb845eaa7a7d51caf2ea472",
+    "bundles/w1009_def/with_ext.mem/items/fact.jsonl": "9b72c4a70a642f2cb6ea52242e51788173fd6b06c8e7c2805fc69ec5787451da",
+    "bundles/w1009_def/with_ext.mem/items/memshift.item.jsonl": "8956686a2812b43c21a46bcaec75765b508bebb4a0b3e142686baeecf1f7fb34",
+    "bundles/w1009_src/all_carriers.mem/CHECKSUMS": "fea49e26bb6d76ab37c7e401ec8bd16a7788554594b9b140f3fc1aed8daa4df4",
+    "bundles/w1009_src/all_carriers.mem/items/episode.jsonl": "187f863cd48230aee4de725043a13bdcb3150fa4aa75a09cc4d7b71c3a77d197",
+    "bundles/w1009_src/all_carriers.mem/items/fact.jsonl": "de8f297f0ad8568c4824dea5f0dbf81474f3743a946471eccbbd7ed0e0a422a8",
+    "bundles/w1009_src/all_carriers.mem/items/memshift.item.jsonl": "8956686a2812b43c21a46bcaec75765b508bebb4a0b3e142686baeecf1f7fb34",
+    "bundles/w1009_src/no_ext.mem/CHECKSUMS": "fbc0d2807c2972f361d567b036be7597c016b28298ae97ab47c0c45350166ff8",
+    "bundles/w1009_src/no_ext.mem/items/episode.jsonl": "83f92d449313655664080903acf7df3eb937e5e83bb845eaa7a7d51caf2ea472",
+    "bundles/w1009_src/no_ext.mem/items/fact.jsonl": "9b72c4a70a642f2cb6ea52242e51788173fd6b06c8e7c2805fc69ec5787451da",
+    "bundles/w1009_src/with_ext.mem/CHECKSUMS": "334c94877c527fe529d4296e68fc921c4b08b94b007c20cfd780a5c522fa8167",
+    "bundles/w1009_src/with_ext.mem/items/episode.jsonl": "83f92d449313655664080903acf7df3eb937e5e83bb845eaa7a7d51caf2ea472",
+    "bundles/w1009_src/with_ext.mem/items/fact.jsonl": "9b72c4a70a642f2cb6ea52242e51788173fd6b06c8e7c2805fc69ec5787451da",
+    "bundles/w1009_src/with_ext.mem/items/memshift.item.jsonl": "8956686a2812b43c21a46bcaec75765b508bebb4a0b3e142686baeecf1f7fb34",
+    "bundles/w1010_def/no_ext.mem/CHECKSUMS": "4272ccb58d6efd803bead39c0b11be9b8090f6040b80db783fef9d81c143bb37",
+    "bundles/w1010_def/no_ext.mem/items/episode.jsonl": "891cb6d8216141ffb3b2a95d6974a4fca25053c34df9bd85cb8d1344e163939c",
+    "bundles/w1010_def/no_ext.mem/items/fact.jsonl": "5815d3702966f65cd8abe49ae9b6301b51f7f7fd185ce2949d9bac2845602462",
+    "bundles/w1010_def/with_ext.mem/CHECKSUMS": "d67ef11af303ad01d90f8a7346cd6ece3e82364a670ace5d1ac6f9278618b845",
+    "bundles/w1010_def/with_ext.mem/items/episode.jsonl": "891cb6d8216141ffb3b2a95d6974a4fca25053c34df9bd85cb8d1344e163939c",
+    "bundles/w1010_def/with_ext.mem/items/fact.jsonl": "5815d3702966f65cd8abe49ae9b6301b51f7f7fd185ce2949d9bac2845602462",
+    "bundles/w1010_def/with_ext.mem/items/memshift.item.jsonl": "3fdf84229297ee711aa06800fdf2ee0ce947e76f6814b823b1eadb43d628d998",
+    "bundles/w1010_src/all_carriers.mem/CHECKSUMS": "0156ce6bb1624fa01da7d01260f33b866de21a35c82568c4bcad6b6f6bf56e93",
+    "bundles/w1010_src/all_carriers.mem/items/episode.jsonl": "cb7f2568d08b89013bb8c7cfe40a6c7351c14141e4fe0a3f93f32d5a5779563f",
+    "bundles/w1010_src/all_carriers.mem/items/fact.jsonl": "71dec65efd9663dc44411c03ac256fea4319cd1bed207fe522258f66ae0bc9af",
+    "bundles/w1010_src/all_carriers.mem/items/memshift.item.jsonl": "dcda24b499c415b3cf21b2aa0298ee87572f92d42257573dd0ddbe1ab84e474a",
+    "bundles/w1010_src/no_ext.mem/CHECKSUMS": "ace13d7e5f54a45c5c2dc67e487a85e10bd0ca3b9e0a4e0ca5d4dd3733d455a9",
+    "bundles/w1010_src/no_ext.mem/items/episode.jsonl": "891cb6d8216141ffb3b2a95d6974a4fca25053c34df9bd85cb8d1344e163939c",
+    "bundles/w1010_src/no_ext.mem/items/fact.jsonl": "77907ad7660f3441c9f7fe91d7970fb98c77914e41b6048160d023c98677bdd5",
+    "bundles/w1010_src/with_ext.mem/CHECKSUMS": "2b3dbc357161655812793eb4bef8b010d8eb23ed7020cd315ab69cbda7bd19c4",
+    "bundles/w1010_src/with_ext.mem/items/episode.jsonl": "891cb6d8216141ffb3b2a95d6974a4fca25053c34df9bd85cb8d1344e163939c",
+    "bundles/w1010_src/with_ext.mem/items/fact.jsonl": "77907ad7660f3441c9f7fe91d7970fb98c77914e41b6048160d023c98677bdd5",
+    "bundles/w1010_src/with_ext.mem/items/memshift.item.jsonl": "dcda24b499c415b3cf21b2aa0298ee87572f92d42257573dd0ddbe1ab84e474a",
+    "bundles/w1011_def/no_ext.mem/CHECKSUMS": "54b4f77540feebd8400cc948c4427530f09063749f00e6e9f988b4f992c46a67",
+    "bundles/w1011_def/no_ext.mem/items/episode.jsonl": "2d0decca6c73c71c04587dc01f0c7db384e918af02ce7c31854eba3563f8fbf1",
+    "bundles/w1011_def/no_ext.mem/items/fact.jsonl": "509e45ef527b7cf8f8fd7fbb0477459b5dfb779cfcae4a44275b0f15794d2e9d",
+    "bundles/w1011_def/with_ext.mem/CHECKSUMS": "55298cefac7f7e294862986aa23eb96552a77be57c2c1628d2d3862285988c49",
+    "bundles/w1011_def/with_ext.mem/items/episode.jsonl": "2d0decca6c73c71c04587dc01f0c7db384e918af02ce7c31854eba3563f8fbf1",
+    "bundles/w1011_def/with_ext.mem/items/fact.jsonl": "509e45ef527b7cf8f8fd7fbb0477459b5dfb779cfcae4a44275b0f15794d2e9d",
+    "bundles/w1011_def/with_ext.mem/items/memshift.item.jsonl": "9c884d4d49a6aef39cb347669111612421441552c424eb7a5d0b8f528095565e",
+    "bundles/w1011_src/all_carriers.mem/CHECKSUMS": "890b37df20d1aba51adbd675b6aba50dabc006c22e877c86648f2df74c182a2f",
+    "bundles/w1011_src/all_carriers.mem/items/episode.jsonl": "9ac2c2cd4b3a8127e2f5521a6702b6effe281ba866e276787e7f611010937ecf",
+    "bundles/w1011_src/all_carriers.mem/items/fact.jsonl": "b96cbefaebe738ef09f154c56defac0fdcc780cf93094f747d190bb991659a40",
+    "bundles/w1011_src/all_carriers.mem/items/memshift.item.jsonl": "9c884d4d49a6aef39cb347669111612421441552c424eb7a5d0b8f528095565e",
+    "bundles/w1011_src/no_ext.mem/CHECKSUMS": "54b4f77540feebd8400cc948c4427530f09063749f00e6e9f988b4f992c46a67",
+    "bundles/w1011_src/no_ext.mem/items/episode.jsonl": "2d0decca6c73c71c04587dc01f0c7db384e918af02ce7c31854eba3563f8fbf1",
+    "bundles/w1011_src/no_ext.mem/items/fact.jsonl": "509e45ef527b7cf8f8fd7fbb0477459b5dfb779cfcae4a44275b0f15794d2e9d",
+    "bundles/w1011_src/with_ext.mem/CHECKSUMS": "55298cefac7f7e294862986aa23eb96552a77be57c2c1628d2d3862285988c49",
+    "bundles/w1011_src/with_ext.mem/items/episode.jsonl": "2d0decca6c73c71c04587dc01f0c7db384e918af02ce7c31854eba3563f8fbf1",
+    "bundles/w1011_src/with_ext.mem/items/fact.jsonl": "509e45ef527b7cf8f8fd7fbb0477459b5dfb779cfcae4a44275b0f15794d2e9d",
+    "bundles/w1011_src/with_ext.mem/items/memshift.item.jsonl": "9c884d4d49a6aef39cb347669111612421441552c424eb7a5d0b8f528095565e",
+    "bundles/w1012_def/no_ext.mem/CHECKSUMS": "1c858b00cb947b9bad978faf1fbd4b88550ed5c71a2a0dd0ea8e5b26e4f8fcc7",
+    "bundles/w1012_def/no_ext.mem/items/episode.jsonl": "0aca64a6fffa898035b65712dc5c29e6152b212d9f3dd7019a8ecb5382e3e086",
+    "bundles/w1012_def/no_ext.mem/items/fact.jsonl": "17c31629579daee71d5941da1220f46a4043cefd6d4d5f82639235275a3f15c3",
+    "bundles/w1012_def/with_ext.mem/CHECKSUMS": "bb5c92cc654e7de7af42fdcd5650dfebc0b3aa2a8ecbfac94fdc3059ca5abbd6",
+    "bundles/w1012_def/with_ext.mem/items/episode.jsonl": "0aca64a6fffa898035b65712dc5c29e6152b212d9f3dd7019a8ecb5382e3e086",
+    "bundles/w1012_def/with_ext.mem/items/fact.jsonl": "17c31629579daee71d5941da1220f46a4043cefd6d4d5f82639235275a3f15c3",
+    "bundles/w1012_def/with_ext.mem/items/memshift.item.jsonl": "3d1a641015da53383b26cc847a785dfb4cd5dff3b5407fb59774086920f87a7c",
+    "bundles/w1012_src/all_carriers.mem/CHECKSUMS": "0fb84b16cf00658efdcc6c24877eaf18be8812942ff6520dd9c0cb70c51f0f58",
+    "bundles/w1012_src/all_carriers.mem/items/episode.jsonl": "67c3d9e0022ab4f0cfe56afc368bf6f8e061d268493e575c251f54a6ddd0c932",
+    "bundles/w1012_src/all_carriers.mem/items/fact.jsonl": "071b7c06dee7c85f79b1077e7371caa4cd30890618e06598b2c73c2d2d889011",
+    "bundles/w1012_src/all_carriers.mem/items/memshift.item.jsonl": "3d1a641015da53383b26cc847a785dfb4cd5dff3b5407fb59774086920f87a7c",
+    "bundles/w1012_src/no_ext.mem/CHECKSUMS": "1c858b00cb947b9bad978faf1fbd4b88550ed5c71a2a0dd0ea8e5b26e4f8fcc7",
+    "bundles/w1012_src/no_ext.mem/items/episode.jsonl": "0aca64a6fffa898035b65712dc5c29e6152b212d9f3dd7019a8ecb5382e3e086",
+    "bundles/w1012_src/no_ext.mem/items/fact.jsonl": "17c31629579daee71d5941da1220f46a4043cefd6d4d5f82639235275a3f15c3",
+    "bundles/w1012_src/with_ext.mem/CHECKSUMS": "bb5c92cc654e7de7af42fdcd5650dfebc0b3aa2a8ecbfac94fdc3059ca5abbd6",
+    "bundles/w1012_src/with_ext.mem/items/episode.jsonl": "0aca64a6fffa898035b65712dc5c29e6152b212d9f3dd7019a8ecb5382e3e086",
+    "bundles/w1012_src/with_ext.mem/items/fact.jsonl": "17c31629579daee71d5941da1220f46a4043cefd6d4d5f82639235275a3f15c3",
+    "bundles/w1012_src/with_ext.mem/items/memshift.item.jsonl": "3d1a641015da53383b26cc847a785dfb4cd5dff3b5407fb59774086920f87a7c",
+    "bundles/w1013_def/no_ext.mem/CHECKSUMS": "88bf5b886d81a1e3e03bdaaa79d2c2d91b6cb2e1235cd73b170e261faca5490a",
+    "bundles/w1013_def/no_ext.mem/items/episode.jsonl": "969ac717a71e201653a3df7071527989a655e8a65924802e852828e4cbdab041",
+    "bundles/w1013_def/no_ext.mem/items/fact.jsonl": "953f21a752bbf1b4a8b5e48518645bf5e2fce880869efbc3c8ed48a7b19a01a7",
+    "bundles/w1013_def/with_ext.mem/CHECKSUMS": "f8271ab02fed048733e021569d4c69cb5f52b92c4ecc4298150037c69210eeac",
+    "bundles/w1013_def/with_ext.mem/items/episode.jsonl": "969ac717a71e201653a3df7071527989a655e8a65924802e852828e4cbdab041",
+    "bundles/w1013_def/with_ext.mem/items/fact.jsonl": "953f21a752bbf1b4a8b5e48518645bf5e2fce880869efbc3c8ed48a7b19a01a7",
+    "bundles/w1013_def/with_ext.mem/items/memshift.item.jsonl": "971dd7bdddfadc276549efd3fb5bb9b954befe43cd33f10396d33d0ad37bf8b2",
+    "bundles/w1013_src/all_carriers.mem/CHECKSUMS": "cd018d5cc8618a8ff15ab6715954e7144efb62884ea6489f3173ea288368e55f",
+    "bundles/w1013_src/all_carriers.mem/items/episode.jsonl": "ae152724d51ac328e8091e156ba3d7105b6625731a3e093409068718ec2963d0",
+    "bundles/w1013_src/all_carriers.mem/items/fact.jsonl": "6d968d69ff9eed82dbfdae6f9aafb151f04143179596d22a3a8e30d598fe79d3",
+    "bundles/w1013_src/all_carriers.mem/items/memshift.item.jsonl": "971dd7bdddfadc276549efd3fb5bb9b954befe43cd33f10396d33d0ad37bf8b2",
+    "bundles/w1013_src/no_ext.mem/CHECKSUMS": "88bf5b886d81a1e3e03bdaaa79d2c2d91b6cb2e1235cd73b170e261faca5490a",
+    "bundles/w1013_src/no_ext.mem/items/episode.jsonl": "969ac717a71e201653a3df7071527989a655e8a65924802e852828e4cbdab041",
+    "bundles/w1013_src/no_ext.mem/items/fact.jsonl": "953f21a752bbf1b4a8b5e48518645bf5e2fce880869efbc3c8ed48a7b19a01a7",
+    "bundles/w1013_src/with_ext.mem/CHECKSUMS": "f8271ab02fed048733e021569d4c69cb5f52b92c4ecc4298150037c69210eeac",
+    "bundles/w1013_src/with_ext.mem/items/episode.jsonl": "969ac717a71e201653a3df7071527989a655e8a65924802e852828e4cbdab041",
+    "bundles/w1013_src/with_ext.mem/items/fact.jsonl": "953f21a752bbf1b4a8b5e48518645bf5e2fce880869efbc3c8ed48a7b19a01a7",
+    "bundles/w1013_src/with_ext.mem/items/memshift.item.jsonl": "971dd7bdddfadc276549efd3fb5bb9b954befe43cd33f10396d33d0ad37bf8b2",
+    "bundles/w1014_def/no_ext.mem/CHECKSUMS": "44784b71d612e54907ffaf0b96e29fdc371581fdd996458a6e4ba43dcf145819",
+    "bundles/w1014_def/no_ext.mem/items/episode.jsonl": "0a03e630cc4fbcf8600563a0dc274962df24d4bb38bb7364f2b2c2aea35af535",
+    "bundles/w1014_def/no_ext.mem/items/fact.jsonl": "c42bb012af9c20bb1e78c48ae063532848fcedf8a380378ef66f758fcbc106be",
+    "bundles/w1014_def/with_ext.mem/CHECKSUMS": "2f81883731faa8d3b03e56f1c8cce73c9e3b1aa01608d10cb4b6f6e356ed5e3b",
+    "bundles/w1014_def/with_ext.mem/items/episode.jsonl": "0a03e630cc4fbcf8600563a0dc274962df24d4bb38bb7364f2b2c2aea35af535",
+    "bundles/w1014_def/with_ext.mem/items/fact.jsonl": "c42bb012af9c20bb1e78c48ae063532848fcedf8a380378ef66f758fcbc106be",
+    "bundles/w1014_def/with_ext.mem/items/memshift.item.jsonl": "645e02cdf046d7fc31662313f17b59b955cbc9117d31d848b459ef88f9ae62bc",
+    "bundles/w1014_src/all_carriers.mem/CHECKSUMS": "df1d4aa675423b2acc3f4135689d1ac34cc8e72db97331e9812dd581090cdb9b",
+    "bundles/w1014_src/all_carriers.mem/items/episode.jsonl": "cf17893f9b6be8fce6df5669fbebf2df026afdb59dd1cb717b0999d7626297e2",
+    "bundles/w1014_src/all_carriers.mem/items/fact.jsonl": "833379daa800d36cca192844fcf876f65ed89bfc585367b18513b0fec4562712",
+    "bundles/w1014_src/all_carriers.mem/items/memshift.item.jsonl": "645e02cdf046d7fc31662313f17b59b955cbc9117d31d848b459ef88f9ae62bc",
+    "bundles/w1014_src/no_ext.mem/CHECKSUMS": "44784b71d612e54907ffaf0b96e29fdc371581fdd996458a6e4ba43dcf145819",
+    "bundles/w1014_src/no_ext.mem/items/episode.jsonl": "0a03e630cc4fbcf8600563a0dc274962df24d4bb38bb7364f2b2c2aea35af535",
+    "bundles/w1014_src/no_ext.mem/items/fact.jsonl": "c42bb012af9c20bb1e78c48ae063532848fcedf8a380378ef66f758fcbc106be",
+    "bundles/w1014_src/with_ext.mem/CHECKSUMS": "2f81883731faa8d3b03e56f1c8cce73c9e3b1aa01608d10cb4b6f6e356ed5e3b",
+    "bundles/w1014_src/with_ext.mem/items/episode.jsonl": "0a03e630cc4fbcf8600563a0dc274962df24d4bb38bb7364f2b2c2aea35af535",
+    "bundles/w1014_src/with_ext.mem/items/fact.jsonl": "c42bb012af9c20bb1e78c48ae063532848fcedf8a380378ef66f758fcbc106be",
+    "bundles/w1014_src/with_ext.mem/items/memshift.item.jsonl": "645e02cdf046d7fc31662313f17b59b955cbc9117d31d848b459ef88f9ae62bc",
+    "bundles/w1015_def/no_ext.mem/CHECKSUMS": "89ae684cbdb9d08fcf0f5b1b182d67fe8d4b752dd13aa2d8098115c619acdc27",
+    "bundles/w1015_def/no_ext.mem/items/episode.jsonl": "6422131cb88af693e8ec0b5c2efe8e35fbc18567adcf859a6ea1af600df6a9ed",
+    "bundles/w1015_def/no_ext.mem/items/fact.jsonl": "ae6df9df6ce489fdf3db91b135c1d2757c62f7c9540272567b096d53df64b8b5",
+    "bundles/w1015_def/with_ext.mem/CHECKSUMS": "f300add1d8a7c20c8a86da923b36554ad421bcf57b210e8b37f90c5b5f7624b1",
+    "bundles/w1015_def/with_ext.mem/items/episode.jsonl": "6422131cb88af693e8ec0b5c2efe8e35fbc18567adcf859a6ea1af600df6a9ed",
+    "bundles/w1015_def/with_ext.mem/items/fact.jsonl": "ae6df9df6ce489fdf3db91b135c1d2757c62f7c9540272567b096d53df64b8b5",
+    "bundles/w1015_def/with_ext.mem/items/memshift.item.jsonl": "a8782344cc89885b767072d83e159054da2d2ba9ae928b614d8cfd31e4c9b974",
+    "bundles/w1015_src/all_carriers.mem/CHECKSUMS": "0ef9b2e2f649446e09a311e19e6b7d3ddbebc579afbfde3dd6c5c357a492bfe9",
+    "bundles/w1015_src/all_carriers.mem/items/episode.jsonl": "ec02a889800aca526c888fb6158180282f4548485de8adc5cf04d6998062e155",
+    "bundles/w1015_src/all_carriers.mem/items/fact.jsonl": "ad017cca043f8a0791702468d35e665b26524c7ef5bc3d7d84f0b89aefc728e7",
+    "bundles/w1015_src/all_carriers.mem/items/memshift.item.jsonl": "a8782344cc89885b767072d83e159054da2d2ba9ae928b614d8cfd31e4c9b974",
+    "bundles/w1015_src/no_ext.mem/CHECKSUMS": "89ae684cbdb9d08fcf0f5b1b182d67fe8d4b752dd13aa2d8098115c619acdc27",
+    "bundles/w1015_src/no_ext.mem/items/episode.jsonl": "6422131cb88af693e8ec0b5c2efe8e35fbc18567adcf859a6ea1af600df6a9ed",
+    "bundles/w1015_src/no_ext.mem/items/fact.jsonl": "ae6df9df6ce489fdf3db91b135c1d2757c62f7c9540272567b096d53df64b8b5",
+    "bundles/w1015_src/with_ext.mem/CHECKSUMS": "f300add1d8a7c20c8a86da923b36554ad421bcf57b210e8b37f90c5b5f7624b1",
+    "bundles/w1015_src/with_ext.mem/items/episode.jsonl": "6422131cb88af693e8ec0b5c2efe8e35fbc18567adcf859a6ea1af600df6a9ed",
+    "bundles/w1015_src/with_ext.mem/items/fact.jsonl": "ae6df9df6ce489fdf3db91b135c1d2757c62f7c9540272567b096d53df64b8b5",
+    "bundles/w1015_src/with_ext.mem/items/memshift.item.jsonl": "a8782344cc89885b767072d83e159054da2d2ba9ae928b614d8cfd31e4c9b974",
+    "bundles/w1016_def/no_ext.mem/CHECKSUMS": "f927f83c831eebc2c23e7de68c2a54a2a3f33eb4267451135f21f2f5c274c85a",
+    "bundles/w1016_def/no_ext.mem/items/episode.jsonl": "c7695289705eb995ce0527aba182cc1aea5bb3c0ac7d507152712571fa66ca36",
+    "bundles/w1016_def/no_ext.mem/items/fact.jsonl": "5e366432b9aca6a390172414c26eeb31108c0503fa3d24b45f2d4c463a6b9856",
+    "bundles/w1016_def/with_ext.mem/CHECKSUMS": "92a14aa46cf20df9e7d229f59965678118e50e1d4edbff7dee7d5d0af7b48c3b",
+    "bundles/w1016_def/with_ext.mem/items/episode.jsonl": "c7695289705eb995ce0527aba182cc1aea5bb3c0ac7d507152712571fa66ca36",
+    "bundles/w1016_def/with_ext.mem/items/fact.jsonl": "5e366432b9aca6a390172414c26eeb31108c0503fa3d24b45f2d4c463a6b9856",
+    "bundles/w1016_def/with_ext.mem/items/memshift.item.jsonl": "cde59185ca8c672528d266f87a7eb0ddfe23a3a475defe27591ca2a0c9de79bd",
+    "bundles/w1016_src/all_carriers.mem/CHECKSUMS": "f85e4568155b1341417cf1dd80d276f92e70810c4441b0ede5cc4cd578673580",
+    "bundles/w1016_src/all_carriers.mem/items/episode.jsonl": "650fc37fa9243c78e918c9472010891e20c26fbb507746a93882f8fdfe867027",
+    "bundles/w1016_src/all_carriers.mem/items/fact.jsonl": "f22663c70677431a7b3a9354fa1a8fad18d4338622fc5fd7899f8f8b0c06c00b",
+    "bundles/w1016_src/all_carriers.mem/items/memshift.item.jsonl": "cde59185ca8c672528d266f87a7eb0ddfe23a3a475defe27591ca2a0c9de79bd",
+    "bundles/w1016_src/no_ext.mem/CHECKSUMS": "f927f83c831eebc2c23e7de68c2a54a2a3f33eb4267451135f21f2f5c274c85a",
+    "bundles/w1016_src/no_ext.mem/items/episode.jsonl": "c7695289705eb995ce0527aba182cc1aea5bb3c0ac7d507152712571fa66ca36",
+    "bundles/w1016_src/no_ext.mem/items/fact.jsonl": "5e366432b9aca6a390172414c26eeb31108c0503fa3d24b45f2d4c463a6b9856",
+    "bundles/w1016_src/with_ext.mem/CHECKSUMS": "92a14aa46cf20df9e7d229f59965678118e50e1d4edbff7dee7d5d0af7b48c3b",
+    "bundles/w1016_src/with_ext.mem/items/episode.jsonl": "c7695289705eb995ce0527aba182cc1aea5bb3c0ac7d507152712571fa66ca36",
+    "bundles/w1016_src/with_ext.mem/items/fact.jsonl": "5e366432b9aca6a390172414c26eeb31108c0503fa3d24b45f2d4c463a6b9856",
+    "bundles/w1016_src/with_ext.mem/items/memshift.item.jsonl": "cde59185ca8c672528d266f87a7eb0ddfe23a3a475defe27591ca2a0c9de79bd",
+    "bundles/w1017_def/no_ext.mem/CHECKSUMS": "535dbcd15bd68709188eb720a7247fc655812febb97e5736b49dfbbd6273c9d8",
+    "bundles/w1017_def/no_ext.mem/items/episode.jsonl": "1fc5a090c21c461e763921ab74145c307431efd900e8059e52a3ab718e579cc5",
+    "bundles/w1017_def/no_ext.mem/items/fact.jsonl": "24cb23a1030102ee0d94b7356106bf9aa55929b168a0cdc0e564fa01796b0dc6",
+    "bundles/w1017_def/with_ext.mem/CHECKSUMS": "90c1ad38a801962bfe498ba3a72569fcaed8501db3b90abefa4d896bc0ae04e8",
+    "bundles/w1017_def/with_ext.mem/items/episode.jsonl": "1fc5a090c21c461e763921ab74145c307431efd900e8059e52a3ab718e579cc5",
+    "bundles/w1017_def/with_ext.mem/items/fact.jsonl": "24cb23a1030102ee0d94b7356106bf9aa55929b168a0cdc0e564fa01796b0dc6",
+    "bundles/w1017_def/with_ext.mem/items/memshift.item.jsonl": "91738eae2222886f03dc1a2f11fa067a8e2ec0056119909918df4c3e8bdaccc5",
+    "bundles/w1017_src/all_carriers.mem/CHECKSUMS": "403ffb48a6186968daa7abb0d56ce88f5a0f2a7dc2da202e1bb8fdf0e1f77992",
+    "bundles/w1017_src/all_carriers.mem/items/episode.jsonl": "0f0f1f34520a5ee9bf392009a82566480e392b78db0d1dee2a756085cd09b754",
+    "bundles/w1017_src/all_carriers.mem/items/fact.jsonl": "7f49c2720ee13d536a71864b78e1eca0b8b6e5c17d78ddda8d99ce2b361fcda4",
+    "bundles/w1017_src/all_carriers.mem/items/memshift.item.jsonl": "925f9f8fa8029b708a99270f265848e14b381750142506f7e8b3f7aee40adf3d",
+    "bundles/w1017_src/no_ext.mem/CHECKSUMS": "9601d91545cf83f33376420647ad792d514968abac4ef1c36bf2c760115e0a49",
+    "bundles/w1017_src/no_ext.mem/items/episode.jsonl": "1fc5a090c21c461e763921ab74145c307431efd900e8059e52a3ab718e579cc5",
+    "bundles/w1017_src/no_ext.mem/items/fact.jsonl": "3da36cff5120750161c814cd6a63e98355d659e428fdabf02ac037afa79a230b",
+    "bundles/w1017_src/with_ext.mem/CHECKSUMS": "a0ee5e13c03cac27d0c90ad7455160af5d487d2097eb47c983fde9d202bbe0d9",
+    "bundles/w1017_src/with_ext.mem/items/episode.jsonl": "1fc5a090c21c461e763921ab74145c307431efd900e8059e52a3ab718e579cc5",
+    "bundles/w1017_src/with_ext.mem/items/fact.jsonl": "3da36cff5120750161c814cd6a63e98355d659e428fdabf02ac037afa79a230b",
+    "bundles/w1017_src/with_ext.mem/items/memshift.item.jsonl": "925f9f8fa8029b708a99270f265848e14b381750142506f7e8b3f7aee40adf3d",
+    "bundles/w1018_def/no_ext.mem/CHECKSUMS": "f5de0a6f2b5c877827410ef756c677e59566b4581a296bf09d76b73b416fe04c",
+    "bundles/w1018_def/no_ext.mem/items/episode.jsonl": "16a2b47ca2b2825228ed12f7c6fb31e4bbe488142fc1f29944414305c86972ba",
+    "bundles/w1018_def/no_ext.mem/items/fact.jsonl": "58303b36b18ccb869744e50e30f7b677229aafa53ae0ad61821e405b23878e59",
+    "bundles/w1018_def/with_ext.mem/CHECKSUMS": "c253addb1ad4bef6b918f6706472c231235f2b8be1a354565b5ffe9eb52a30fd",
+    "bundles/w1018_def/with_ext.mem/items/episode.jsonl": "16a2b47ca2b2825228ed12f7c6fb31e4bbe488142fc1f29944414305c86972ba",
+    "bundles/w1018_def/with_ext.mem/items/fact.jsonl": "58303b36b18ccb869744e50e30f7b677229aafa53ae0ad61821e405b23878e59",
+    "bundles/w1018_def/with_ext.mem/items/memshift.item.jsonl": "f48109c41be1fff51bb57b72e55bd77acdebd49e5033755d31fdf4090dab4f3c",
+    "bundles/w1018_src/all_carriers.mem/CHECKSUMS": "125f6b7c5fde3a18427ea8b3ce13993f765761800aa5e72630ebe1ea36d0a9b9",
+    "bundles/w1018_src/all_carriers.mem/items/episode.jsonl": "a530e982f4dadfecc8570d1e0dec38201e5f9db98b8f3d079ee56677f39b31bb",
+    "bundles/w1018_src/all_carriers.mem/items/fact.jsonl": "b4502394252b5968d8d756ad3458b6e02a380ef21f0c71efbcc13e1231056a1d",
+    "bundles/w1018_src/all_carriers.mem/items/memshift.item.jsonl": "8601bcf3880eda32dbfec357945a03ac29f7a296518b658f49fa83c258fa3316",
+    "bundles/w1018_src/no_ext.mem/CHECKSUMS": "f5de0a6f2b5c877827410ef756c677e59566b4581a296bf09d76b73b416fe04c",
+    "bundles/w1018_src/no_ext.mem/items/episode.jsonl": "16a2b47ca2b2825228ed12f7c6fb31e4bbe488142fc1f29944414305c86972ba",
+    "bundles/w1018_src/no_ext.mem/items/fact.jsonl": "58303b36b18ccb869744e50e30f7b677229aafa53ae0ad61821e405b23878e59",
+    "bundles/w1018_src/with_ext.mem/CHECKSUMS": "c5c0bc33a7917ffe0d2be98ee862c46581342315aa651af16f73ddcd7a1b039b",
+    "bundles/w1018_src/with_ext.mem/items/episode.jsonl": "16a2b47ca2b2825228ed12f7c6fb31e4bbe488142fc1f29944414305c86972ba",
+    "bundles/w1018_src/with_ext.mem/items/fact.jsonl": "58303b36b18ccb869744e50e30f7b677229aafa53ae0ad61821e405b23878e59",
+    "bundles/w1018_src/with_ext.mem/items/memshift.item.jsonl": "8601bcf3880eda32dbfec357945a03ac29f7a296518b658f49fa83c258fa3316",
+    "bundles/w1019_def/no_ext.mem/CHECKSUMS": "6b1fe25e6123a94a8051b8b50c75ffa5e04b33ed32a74b7da218f5afec028ef4",
+    "bundles/w1019_def/no_ext.mem/items/episode.jsonl": "0b853a352b50ceea49607dc300d9df2b4eb197e54384fb891fd1a0f9ca014bc2",
+    "bundles/w1019_def/no_ext.mem/items/fact.jsonl": "0713051955fec85d45708199bd996a233acf9d0c2530df73c4d160ed55928a65",
+    "bundles/w1019_def/with_ext.mem/CHECKSUMS": "22ca3e8e0577b6415d31b8a7bfd1cd4486e2c94dff386849d10c224516e7801a",
+    "bundles/w1019_def/with_ext.mem/items/episode.jsonl": "0b853a352b50ceea49607dc300d9df2b4eb197e54384fb891fd1a0f9ca014bc2",
+    "bundles/w1019_def/with_ext.mem/items/fact.jsonl": "0713051955fec85d45708199bd996a233acf9d0c2530df73c4d160ed55928a65",
+    "bundles/w1019_def/with_ext.mem/items/memshift.item.jsonl": "8121985839638282497b30fed20c18f8f7e9060a4705be9aacc667099c7cdd7c",
+    "bundles/w1019_src/all_carriers.mem/CHECKSUMS": "568caac3ed52b5ce3e1b84264cc348d1a8ef31412efcd9cea3717506d8fc12e9",
+    "bundles/w1019_src/all_carriers.mem/items/episode.jsonl": "2d8fd288704473cef02ac2824c5b51730f2faadbd3f1c6ee0ce1b094b6795f9b",
+    "bundles/w1019_src/all_carriers.mem/items/fact.jsonl": "c488829e91aedf0d8080c467899e1037490048475adbf2481cb5ca68c603015f",
+    "bundles/w1019_src/all_carriers.mem/items/memshift.item.jsonl": "8121985839638282497b30fed20c18f8f7e9060a4705be9aacc667099c7cdd7c",
+    "bundles/w1019_src/no_ext.mem/CHECKSUMS": "6b1fe25e6123a94a8051b8b50c75ffa5e04b33ed32a74b7da218f5afec028ef4",
+    "bundles/w1019_src/no_ext.mem/items/episode.jsonl": "0b853a352b50ceea49607dc300d9df2b4eb197e54384fb891fd1a0f9ca014bc2",
+    "bundles/w1019_src/no_ext.mem/items/fact.jsonl": "0713051955fec85d45708199bd996a233acf9d0c2530df73c4d160ed55928a65",
+    "bundles/w1019_src/with_ext.mem/CHECKSUMS": "22ca3e8e0577b6415d31b8a7bfd1cd4486e2c94dff386849d10c224516e7801a",
+    "bundles/w1019_src/with_ext.mem/items/episode.jsonl": "0b853a352b50ceea49607dc300d9df2b4eb197e54384fb891fd1a0f9ca014bc2",
+    "bundles/w1019_src/with_ext.mem/items/fact.jsonl": "0713051955fec85d45708199bd996a233acf9d0c2530df73c4d160ed55928a65",
+    "bundles/w1019_src/with_ext.mem/items/memshift.item.jsonl": "8121985839638282497b30fed20c18f8f7e9060a4705be9aacc667099c7cdd7c",
+    "calls.jsonl": "9eb0f08f5068cf01ed65df2f296e6b38243b0eefeb1c685589893ff0275ebbb9",
+    "env.json": "e33908b811379e50567a9271c35c30a9c4681998d3039b1b65fe93d9d9d09ee7",
+    "items.jsonl": "eaeb52051315e2706542beffe95d10d2f32210933ec3e66e39d3065646ff17fb",
+    "probes.jsonl": "41d05360e5ea2785961934eed3dca3df1112e2a9f041ec24079e8b36127ad401"
+  },
+  "models": {
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "cell": "holdmem_D1B1_source",
+    "format": "portable-memory 0.3.0 (format 1.1)",
+    "mem0_arms": false,
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ]
+  },
+  "run_id": "e6_test_20260928T225919Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "df724790d6af5b227c6a679dabcdd2690b259b2300f60565e64156ec44844504",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1643,
+      "seed": 1000,
+      "shift_targets": [
+        "c.p17.employer",
+        "c.p18.city",
+        "c.p19.employer",
+        "c.p25.city",
+        "c.p29.employer",
+        "k.important_contact",
+        "k.vip_sender",
+        "s.series_team_sync",
+        "t.t034",
+        "u.commute"
+      ],
+      "world_id": "w1000"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "433c7312796b05870d0449cfaf285920ed3a93face4d42bcd7261bd44c8a8c1b",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "active_project",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1624,
+      "seed": 1000,
+      "shift_targets": [
+        "active_project",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1000"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "606b5928249a4cda139933c95ddbbcd9c0da41c285c67f4cc12582f4b07aaf75",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1543,
+      "seed": 1001,
+      "shift_targets": [
+        "c.p05.employer",
+        "c.p11.employer",
+        "c.p13.city",
+        "c.p29.city",
+        "c.p29.employer",
+        "k.close_friend",
+        "k.working_hours",
+        "t.t013",
+        "t.t026",
+        "u.timezone"
+      ],
+      "world_id": "w1001"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "02b5e79d88f7e5fd89c389253f66cfe40d5aa02b4c49245c22f68b68f0493569",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1524,
+      "seed": 1001,
+      "shift_targets": [
+        "overdue_task",
+        "vip_sender",
+        "working_hours"
+      ],
+      "world_id": "w1001"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "45532dd38bdd3312240f5d701ae6211ae4966bcc1709ece93611ae32f5ef6fdd",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1661,
+      "seed": 1002,
+      "shift_targets": [
+        "c.p07.employer",
+        "c.p19.employer",
+        "c.p22.city",
+        "c.p22.employer",
+        "k.active_project",
+        "k.important_contact",
+        "t.t003",
+        "t.t015",
+        "t.t031",
+        "u.employer"
+      ],
+      "world_id": "w1002"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "757d3ac5bda40bc70624b46edb99f5d976227317d3ff5f9928190cc56c9be096",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1642,
+      "seed": 1002,
+      "shift_targets": [
+        "close_friend",
+        "vip_sender",
+        "working_hours"
+      ],
+      "world_id": "w1002"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "1e6902f1865142c116529db620324ed2fd173a4da62027249df62c8dadf487c1",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1615,
+      "seed": 1003,
+      "shift_targets": [
+        "c.p05.city",
+        "c.p08.employer",
+        "c.p19.employer",
+        "c.p20.city",
+        "c.p21.city",
+        "c.p22.employer",
+        "c.p28.employer",
+        "k.vip_sender",
+        "t.t003",
+        "u.employer"
+      ],
+      "world_id": "w1003"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "4a2b70b442a2daa6988b3dfe29d782aecde879a448017be86507daf11b7e8c0b",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "active_project",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1593,
+      "seed": 1003,
+      "shift_targets": [
+        "active_project",
+        "vip_sender",
+        "working_hours"
+      ],
+      "world_id": "w1003"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "31f0c5eb10aced2864d63cdd30b78e3ad0291df375bea4fdac1a25df6e6876c3",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1561,
+      "seed": 1004,
+      "shift_targets": [
+        "a.dentist",
+        "c.p05.city",
+        "c.p08.city",
+        "c.p16.city",
+        "c.p16.employer",
+        "c.p19.city",
+        "c.p30.employer",
+        "s.series_language_exchange",
+        "t.t034",
+        "u.commute"
+      ],
+      "world_id": "w1004"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "1621523a7fa4fb5ccfd1b0acd7577acc7361a1733534b8040588829741b63447",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1544,
+      "seed": 1004,
+      "shift_targets": [
+        "close_friend",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1004"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "21712cd5ceeb1a405caeebdf9988d1765dc763c0123c72b7903db88cb22ee1c8",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1620,
+      "seed": 1005,
+      "shift_targets": [
+        "a.dentist",
+        "a.doctor",
+        "c.p05.employer",
+        "c.p06.employer",
+        "c.p16.employer",
+        "c.p25.employer",
+        "k.active_project",
+        "s.series_book_club",
+        "t.t020",
+        "u.commute"
+      ],
+      "world_id": "w1005"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "d62eb583c8e94bb7bb4faee33e018a83de0168fb04ad05d840ade20bfd3f488b",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1605,
+      "seed": 1005,
+      "shift_targets": [
+        "close_friend",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1005"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "85909dbadc4d1b5ab7a199e7dd063511fc555e25778df8b8d822d86435e9a143",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1647,
+      "seed": 1006,
+      "shift_targets": [
+        "a.dentist",
+        "a.doctor",
+        "c.p08.employer",
+        "c.p22.city",
+        "c.p23.city",
+        "k.active_project",
+        "k.overdue_task",
+        "s.series_piano_lesson",
+        "s.series_team_sync",
+        "u.home_city"
+      ],
+      "world_id": "w1006"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "ce2b7c4b13c8ee01eb152363468728a6fd008b398b9796ddf8e41735901cb56a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ]
+      ],
+      "n_events": 1628,
+      "seed": 1006,
+      "shift_targets": [
+        "close_friend",
+        "overdue_task",
+        "vip_sender"
+      ],
+      "world_id": "w1006"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "c1650c11101e2f887278812759918af20e3e8cdc0d897a6d163a7d4800032b50",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1564,
+      "seed": 1007,
+      "shift_targets": [
+        "c.p06.city",
+        "c.p08.employer",
+        "c.p14.city",
+        "c.p23.employer",
+        "c.p28.city",
+        "s.series_language_exchange",
+        "t.t015",
+        "t.t024",
+        "u.commute",
+        "u.diet"
+      ],
+      "world_id": "w1007"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "f0ba360c92d235b8f6e437fbc9c46afe57f4af5f3871616b155e07518bc65d16",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "important_contact",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1549,
+      "seed": 1007,
+      "shift_targets": [
+        "close_friend",
+        "important_contact",
+        "working_hours"
+      ],
+      "world_id": "w1007"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "80dabf393bafdf21d97fef7cba01f3def0e938c4f49344fa0a231dad5a5a0858",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1649,
+      "seed": 1008,
+      "shift_targets": [
+        "c.p07.city",
+        "c.p08.city",
+        "c.p18.city",
+        "c.p25.city",
+        "c.p29.city",
+        "c.p30.employer",
+        "s.series_design_review",
+        "s.series_team_sync",
+        "t.t007",
+        "u.timezone"
+      ],
+      "world_id": "w1008"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "1ad85dae4a718e602c3bb1574ce94c3f6fa19b58a1a139f4fb7b8f3637b2640d",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "important_contact",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1634,
+      "seed": 1008,
+      "shift_targets": [
+        "important_contact",
+        "vip_sender",
+        "working_hours"
+      ],
+      "world_id": "w1008"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "114da07c80bfb2ffb99e685d6beb97fd2e5e5110841c5b8f62afe375da948453",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1617,
+      "seed": 1009,
+      "shift_targets": [
+        "c.p06.city",
+        "c.p18.employer",
+        "c.p21.employer",
+        "c.p23.employer",
+        "k.overdue_task",
+        "t.t030",
+        "t.t034",
+        "u.employer",
+        "u.home_city",
+        "u.timezone"
+      ],
+      "world_id": "w1009"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "993af40c4495f9618b5ce94eb2462f7496f5a3fd634b568054338a9733b8864f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "active_project",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ]
+      ],
+      "n_events": 1597,
+      "seed": 1009,
+      "shift_targets": [
+        "active_project",
+        "close_friend",
+        "overdue_task"
+      ],
+      "world_id": "w1009"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "e5d256639140f93b40e803f0e987aba1e47a23e0971cedd2e1a0aeea84098274",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1587,
+      "seed": 1010,
+      "shift_targets": [
+        "c.p24.city",
+        "c.p24.employer",
+        "c.p27.employer",
+        "k.important_contact",
+        "k.working_hours",
+        "s.series_climbing_session",
+        "s.series_team_sync",
+        "t.t014",
+        "u.home_city",
+        "u.manager"
+      ],
+      "world_id": "w1010"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "e0d631b5465758a4edccebb8d88051e82cfb0dbfa00bb27095218ac44e2b71c3",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "active_project",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ]
+      ],
+      "n_events": 1568,
+      "seed": 1010,
+      "shift_targets": [
+        "active_project",
+        "close_friend",
+        "overdue_task"
+      ],
+      "world_id": "w1010"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "a7d83ec91264bbb0f1da313b6718cd61c447125b795075feb51df16596ea66c0",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1639,
+      "seed": 1011,
+      "shift_targets": [
+        "a.dentist",
+        "c.p08.city",
+        "c.p11.city",
+        "k.overdue_task",
+        "k.vip_sender",
+        "k.working_hours",
+        "s.series_team_sync",
+        "t.t036",
+        "u.employer",
+        "u.manager"
+      ],
+      "world_id": "w1011"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "465cf97c9ea40ef8666a7885fff4ae66caf7f4f11af15afb1d858d9786440891",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1618,
+      "seed": 1011,
+      "shift_targets": [
+        "close_friend",
+        "vip_sender",
+        "working_hours"
+      ],
+      "world_id": "w1011"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "5f249fb3b96b0b527d35b1201e34a342bc58726a613058ffe705628845ba3778",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1616,
+      "seed": 1012,
+      "shift_targets": [
+        "c.p07.city",
+        "c.p07.employer",
+        "c.p11.city",
+        "c.p11.employer",
+        "c.p16.city",
+        "c.p18.city",
+        "c.p22.employer",
+        "s.series_team_sync",
+        "u.commute",
+        "u.employer"
+      ],
+      "world_id": "w1012"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "5fe9646e8bc5b17b5a9be622a0907a607457a72d7150724bd7aaba43ac8c369a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1596,
+      "seed": 1012,
+      "shift_targets": [
+        "close_friend",
+        "vip_sender",
+        "working_hours"
+      ],
+      "world_id": "w1012"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "74024298aefc3cb00cd95630073fd1b3fb60b4cff0047b75bf605cb71f69c035",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1525,
+      "seed": 1013,
+      "shift_targets": [
+        "a.doctor",
+        "c.p05.city",
+        "c.p13.employer",
+        "c.p21.employer",
+        "c.p28.employer",
+        "s.series_language_exchange",
+        "s.series_piano_lesson",
+        "s.series_team_sync",
+        "t.t037",
+        "u.home_city"
+      ],
+      "world_id": "w1013"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "ecf8595a05dd4ca2887d5bec92b7c23b6e116ba84c74d120297b8573275270ba",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "important_contact",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ]
+      ],
+      "n_events": 1505,
+      "seed": 1013,
+      "shift_targets": [
+        "close_friend",
+        "important_contact",
+        "vip_sender"
+      ],
+      "world_id": "w1013"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "bc2cd8179a9749feccb0a35c47a7a5d1ef8a7ad6b6d82dd2a4e3169035d6fc2d",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1624,
+      "seed": 1014,
+      "shift_targets": [
+        "c.p07.city",
+        "c.p11.city",
+        "c.p15.employer",
+        "c.p18.employer",
+        "c.p22.city",
+        "c.p22.employer",
+        "c.p29.city",
+        "c.p29.employer",
+        "u.manager",
+        "u.timezone"
+      ],
+      "world_id": "w1014"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "851623f8cc04e0fa8f230176fdd671d3123f6b5dc361c0921d9d239a7690a3c2",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "active_project",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1611,
+      "seed": 1014,
+      "shift_targets": [
+        "active_project",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1014"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "d142ecd2276f8b76df00b252487efef1c4693a0d53ad375f8ee2caca5673c51d",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1618,
+      "seed": 1015,
+      "shift_targets": [
+        "c.p07.employer",
+        "c.p26.city",
+        "c.p27.employer",
+        "k.active_project",
+        "k.close_friend",
+        "k.overdue_task",
+        "k.vip_sender",
+        "s.series_book_club",
+        "t.t038",
+        "u.timezone"
+      ],
+      "world_id": "w1015"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "3180106899500f07f86ff8201bc94edacab85fda8835447b239e9dd0135bc056",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "active_project",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1596,
+      "seed": 1015,
+      "shift_targets": [
+        "active_project",
+        "vip_sender",
+        "working_hours"
+      ],
+      "world_id": "w1015"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "3686b852555b5ca3120c5b85d6eebd79b024102559cf50272372e32fffdb8427",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1603,
+      "seed": 1016,
+      "shift_targets": [
+        "c.p07.employer",
+        "c.p08.employer",
+        "c.p16.city",
+        "c.p26.employer",
+        "c.p27.employer",
+        "c.p28.city",
+        "k.close_friend",
+        "k.vip_sender",
+        "s.series_language_exchange",
+        "u.manager"
+      ],
+      "world_id": "w1016"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "cf27af267788f9657fddb4e0e54c1687fbacd81eee8deb66678582ded3d6528d",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "important_contact",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ]
+      ],
+      "n_events": 1582,
+      "seed": 1016,
+      "shift_targets": [
+        "close_friend",
+        "important_contact",
+        "overdue_task"
+      ],
+      "world_id": "w1016"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "7e2c54f9d2cad59f439ba0ebbd71da84766b9d61f7e50aa6de9a99119adaedc3",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1623,
+      "seed": 1017,
+      "shift_targets": [
+        "c.p08.employer",
+        "c.p13.employer",
+        "c.p19.employer",
+        "c.p26.city",
+        "k.important_contact",
+        "k.overdue_task",
+        "k.working_hours",
+        "t.t006",
+        "u.commute",
+        "u.manager"
+      ],
+      "world_id": "w1017"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "7ce5a68f89c7b4cc43903aff9ebd852e58275e5bfe116b2749e8b75d3c39da33",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "active_project",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "vip_sender",
+          "v2"
+        ]
+      ],
+      "n_events": 1608,
+      "seed": 1017,
+      "shift_targets": [
+        "active_project",
+        "overdue_task",
+        "vip_sender"
+      ],
+      "world_id": "w1017"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "5f6b985f09e40d3fc0279c921a4a29b6bd6b80ec76bf694d0bd2c095b66e463f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1667,
+      "seed": 1018,
+      "shift_targets": [
+        "c.p19.city",
+        "c.p22.city",
+        "c.p24.employer",
+        "k.close_friend",
+        "k.important_contact",
+        "s.series_team_sync",
+        "t.t001",
+        "t.t023",
+        "u.commute",
+        "u.employer"
+      ],
+      "world_id": "w1018"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "c9938244f009ecb2326a4051427b7cbe462a363f01deb8ff6a0a8c4373cb0719",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "important_contact",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1640,
+      "seed": 1018,
+      "shift_targets": [
+        "important_contact",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1018"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "434b0c111875cb015f1691599fed91ed41375cde9798903bbaa109ab6cad8bf5",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1608,
+      "seed": 1019,
+      "shift_targets": [
+        "c.p07.city",
+        "c.p14.employer",
+        "c.p15.employer",
+        "c.p20.city",
+        "k.overdue_task",
+        "k.vip_sender",
+        "s.series_language_exchange",
+        "s.series_team_sync",
+        "t.t028",
+        "u.manager"
+      ],
+      "world_id": "w1019"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "3458b057f581903908e9393346928f821f00e993f2be743cd58c8980306af3c7",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1592,
+      "seed": 1019,
+      "shift_targets": [
+        "close_friend",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1019"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "code": {
+    "commit": "4d05cedfb74ae30963cc99c16b8c3fe2389f6d51",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T11:43:54Z",
+  "experiment": "E2-warm",
+  "files_sha256": {
+    "calls.jsonl": "11ba16021746df5b2fe8e2320c010e646d4b7eab88b81785d5a11304248affe0",
+    "warm.json": "e1711e972b2524bcaba66b9e6cf46a01bbf1e91a28a47bb185b75fcbe44bd62f"
+  },
+  "models": {
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659"
+    }
+  },
+  "params": {
+    "cal_seeds": [
+      900,
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909
+    ],
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ]
+  },
+  "run_id": "m1_meta-llama_llama-3_1-8b-instruct_warm_20260930T090451Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": []
+}

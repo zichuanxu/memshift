@@ -1,0 +1,114 @@
+{
+  "code": {
+    "commit": "2466d11ed991d7c1b3318d15d7f54f3c957bcf52",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T02:29:16Z",
+  "experiment": "E5-measure",
+  "files_sha256": {
+    "analysis/e5_native.json": "63aef0fd64989984e29c0b40a40a81e7d3f09b4ae0fe169c155e70fa148bc786",
+    "env.json": "7669fa38b84bdeecfbca0309f08a081717fe426bfe0e7d223cda955650949e21",
+    "stores/w1000_mem0/prefix/history.db": "eb962eeda91013ba235f0775a150e3e9935d68e4cf926d8c36e62734e8125d1d",
+    "stores/w1000_mem0/prefix/ledger.jsonl": "b5e73ace3a19ec502cdf16fb93dc3bf09914be69341997660cfd5f6767cfbd78",
+    "stores/w1000_mem0/prefix/memshift_native.json": "ce0dcb80cf71f91177814608a4133a3abc8e5fc7c39f221dbfeffdc98b204455",
+    "stores/w1000_mem0/prefix/qdrant/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "stores/w1000_mem0/prefix/qdrant/collection/memshift/storage.sqlite": "9c56a5b651d21f197968a9f446ded8b605a7da9e068241e6604f33581f4ca1b5",
+    "stores/w1000_mem0/prefix/qdrant/meta.json": "721f202dd420bd78efc04eef3607eb0ec13764e877f7e2e4eb53dfaa3985928a",
+    "stores/w1000_mem0/prefix/state.json": "5cce450c04eca385e355c77f805f28549e94e780c8ad8f3c0e17b0c5dffb1504",
+    "world_results.jsonl": "b574684c445f5f445efb5ad85d903f54a9151aa3f66164cb0c91041ff55bc00d"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "graphiti_batch": 1,
+    "measure_events": 100,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "seeds": [
+      1000
+    ],
+    "systems": [
+      "mem0"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_measure2_mem0_20260929T000020Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "da2a934e970d58d74c8566ddc060d57bca753fa59d8509e90acbf0249108d298",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 490,
+      "seed": 1000,
+      "shift_targets": null,
+      "world_id": "w1000"
+    }
+  ]
+}

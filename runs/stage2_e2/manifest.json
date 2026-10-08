@@ -1,0 +1,96 @@
+{
+  "analysis_code": {
+    "commit": "e20f1e0ab5e53741e8f88485f221675869db871e",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T14:17:24Z",
+  "experiment": "merged-e2",
+  "files_sha256": {
+    "analysis/e2_metrics.json": "17a7caa888d50fca30c8f3179ab84acdad43b49222971ada87d7d00983f5b097"
+  },
+  "run_id": "stage2_e2",
+  "sources": [
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "ef38c3fea9b1f0f44e0d3bbe19c564a9235edd76e436cda9c5b0579ba9b36227",
+      "run_id": "e2_test_same_20260928T202249Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "b04b36cbdd4276b17405fe9139e70c5d7593e97f",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "c81b22e145d7bd6eeb0ab8affd7ae524fd9855ff2d654932289a76aeb33b0f62",
+      "run_id": "e2_test_27b_20260928T200630Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019",
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    }
+  ]
+}

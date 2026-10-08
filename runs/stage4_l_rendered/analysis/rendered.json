@@ -1,0 +1,5427 @@
+{
+ "prereg": "v2 section 5 (block L); checks (i)-(v) of section 2 (M2)",
+ "worlds": [
+  "w1000",
+  "w1001",
+  "w1002",
+  "w1003",
+  "w1004",
+  "w1005",
+  "w1006",
+  "w1007",
+  "w1008",
+  "w1009"
+ ],
+ "worlds_missing_in_template": [],
+ "rendered": {
+  "checks": {
+   "i_path2_not_triggered": true,
+   "ii_B_update_src": true,
+   "iii_D_repair_src": true,
+   "iii_D_repair_def": true,
+   "iv_BxD_def": true,
+   "v_zero_below_hm11_def": true
+  },
+  "pattern_holds": true,
+  "estimates": {
+   "B_update_src": {
+    "est": 0.09106239460370995,
+    "lo": 0.05324459234608985,
+    "hi": 0.13162393162393163,
+    "width": 0.07837933927784177,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "D_repair_src": {
+    "est": 0.06361323155216285,
+    "lo": 0.052377115229653506,
+    "hi": 0.07516891891891891,
+    "width": 0.022791803689265408,
+    "n_worlds": 10,
+    "n_items": 1179
+   },
+   "D_repair_def": {
+    "est": 0.2918149466192171,
+    "lo": 0.2673611111111111,
+    "hi": 0.32056451612903225,
+    "width": 0.053203405017921146,
+    "n_worlds": 10,
+    "n_items": 562
+   },
+   "BxD_def": {
+    "est": 0.2676056338028169,
+    "lo": 0.22413793103448276,
+    "hi": 0.31343283582089554,
+    "width": 0.08929490478641278,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "BxD_src": {
+    "est": 0.07082630691399663,
+    "lo": 0.03819444444444445,
+    "hi": 0.10362694300518134,
+    "width": 0.0654324985607369,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "zero_minus_hm11_def": {
+    "est": -0.40492957746478875,
+    "lo": -0.45588235294117646,
+    "hi": -0.35813148788927335,
+    "width": 0.09775086505190311,
+    "n_worlds": 10,
+    "n_items": 568
+   }
+  },
+  "n_worlds": 10
+ },
+ "template_same_seeds": {
+  "checks": {
+   "i_path2_not_triggered": true,
+   "ii_B_update_src": true,
+   "iii_D_repair_src": true,
+   "iii_D_repair_def": true,
+   "iv_BxD_def": true,
+   "v_zero_below_hm11_def": true
+  },
+  "pattern_holds": true,
+  "estimates": {
+   "B_update_src": {
+    "est": 0.07841483979763912,
+    "lo": 0.04361873990306947,
+    "hi": 0.11663807890222985,
+    "width": 0.07301933899916038,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "D_repair_src": {
+    "est": 0.13740458015267176,
+    "lo": 0.12479740680713128,
+    "hi": 0.1516802906448683,
+    "width": 0.026882883837737015,
+    "n_worlds": 10,
+    "n_items": 1179
+   },
+   "D_repair_def": {
+    "est": 0.33629893238434166,
+    "lo": 0.3125,
+    "hi": 0.36278195488721804,
+    "width": 0.05028195488721804,
+    "n_worlds": 10,
+    "n_items": 562
+   },
+   "BxD_def": {
+    "est": 0.2711267605633803,
+    "lo": 0.2290909090909091,
+    "hi": 0.32081911262798635,
+    "width": 0.09172820353707725,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "BxD_src": {
+    "est": 0.06239460370994941,
+    "lo": 0.025039123630672927,
+    "hi": 0.10288808664259928,
+    "width": 0.07784896301192636,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "zero_minus_hm11_def": {
+    "est": -0.4507042253521127,
+    "lo": -0.486328125,
+    "hi": -0.4219269102990033,
+    "width": 0.06440121470099669,
+    "n_worlds": 10,
+    "n_items": 568
+   }
+  },
+  "n_worlds": 10
+ },
+ "check_comparison": {
+  "checks": {
+   "i_path2_not_triggered": {
+    "rendered": true,
+    "template": true,
+    "agree": true
+   },
+   "ii_B_update_src": {
+    "rendered": true,
+    "template": true,
+    "agree": true
+   },
+   "iii_D_repair_src": {
+    "rendered": true,
+    "template": true,
+    "agree": true
+   },
+   "iii_D_repair_def": {
+    "rendered": true,
+    "template": true,
+    "agree": true
+   },
+   "iv_BxD_def": {
+    "rendered": true,
+    "template": true,
+    "agree": true
+   },
+   "v_zero_below_hm11_def": {
+    "rendered": true,
+    "template": true,
+    "agree": true
+   }
+  },
+  "pattern_holds": {
+   "rendered": true,
+   "template": true
+  }
+ },
+ "paired": [
+  {
+   "name": "B_update_src",
+   "check": "ii",
+   "branch": "src",
+   "contrast": "B_effect_update_pooled_source",
+   "rendered": {
+    "est": 0.09106239460370995,
+    "lo": 0.05324459234608985,
+    "hi": 0.13162393162393163,
+    "width": 0.07837933927784177,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "template": {
+    "est": 0.07841483979763912,
+    "lo": 0.04361873990306947,
+    "hi": 0.11663807890222985,
+    "width": 0.07301933899916038,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "mean_rendered": 0.09106239460370995,
+   "mean_template": 0.07841483979763912,
+   "diff": {
+    "est": 0.012647554806070826,
+    "lo": -0.010238907849829351,
+    "hi": 0.032948929159802305,
+    "width": 0.043187837009631656,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.2,
+     "template": 0.17,
+     "diff": 0.03,
+     "n_items": 100
+    },
+    "w1001": {
+     "rendered": 0.13114754098360656,
+     "template": 0.07377049180327869,
+     "diff": 0.05737704918032787,
+     "n_items": 122
+    },
+    "w1002": {
+     "rendered": 0.06164383561643835,
+     "template": 0.03424657534246575,
+     "diff": 0.0273972602739726,
+     "n_items": 146
+    },
+    "w1003": {
+     "rendered": 0.06349206349206349,
+     "template": 0.12698412698412698,
+     "diff": -0.06349206349206349,
+     "n_items": 126
+    },
+    "w1004": {
+     "rendered": 0.08,
+     "template": 0.07,
+     "diff": 0.01,
+     "n_items": 100
+    },
+    "w1005": {
+     "rendered": 0.19444444444444445,
+     "template": 0.19444444444444445,
+     "diff": 0.0,
+     "n_items": 108
+    },
+    "w1006": {
+     "rendered": -0.025,
+     "template": -0.016666666666666666,
+     "diff": -0.008333333333333333,
+     "n_items": 120
+    },
+    "w1007": {
+     "rendered": 0.03968253968253968,
+     "template": 0.05555555555555555,
+     "diff": -0.015873015873015872,
+     "n_items": 126
+    },
+    "w1008": {
+     "rendered": 0.11016949152542373,
+     "template": 0.07627118644067797,
+     "diff": 0.03389830508474576,
+     "n_items": 118
+    },
+    "w1009": {
+     "rendered": 0.09166666666666666,
+     "template": 0.03333333333333333,
+     "diff": 0.058333333333333334,
+     "n_items": 120
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.012930753517396688,
+    "lo": -0.009395883777239707,
+    "hi": 0.032851388438031606,
+    "width": 0.04224727221527132,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "D_repair_src",
+   "check": "iii",
+   "branch": "src",
+   "contrast": "D_effect_repair_source",
+   "rendered": {
+    "est": 0.06361323155216285,
+    "lo": 0.052377115229653506,
+    "hi": 0.07516891891891891,
+    "width": 0.022791803689265408,
+    "n_worlds": 10,
+    "n_items": 1179
+   },
+   "template": {
+    "est": 0.13740458015267176,
+    "lo": 0.12479740680713128,
+    "hi": 0.1516802906448683,
+    "width": 0.026882883837737015,
+    "n_worlds": 10,
+    "n_items": 1179
+   },
+   "mean_rendered": 0.06361323155216285,
+   "mean_template": 0.13740458015267176,
+   "diff": {
+    "est": -0.0737913486005089,
+    "lo": -0.08453237410071943,
+    "hi": -0.06416666666666666,
+    "width": 0.020365707434052763,
+    "n_worlds": 10,
+    "n_items": 1179
+   },
+   "items": {
+    "rendered": 1179,
+    "template": 1179,
+    "common": 1179
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.05,
+     "template": 0.15,
+     "diff": -0.1,
+     "n_items": 100
+    },
+    "w1001": {
+     "rendered": 0.07377049180327869,
+     "template": 0.12295081967213115,
+     "diff": -0.04918032786885246,
+     "n_items": 122
+    },
+    "w1002": {
+     "rendered": 0.0410958904109589,
+     "template": 0.1095890410958904,
+     "diff": -0.0684931506849315,
+     "n_items": 146
+    },
+    "w1003": {
+     "rendered": 0.03968253968253968,
+     "template": 0.1349206349206349,
+     "diff": -0.09523809523809523,
+     "n_items": 126
+    },
+    "w1004": {
+     "rendered": 0.09278350515463918,
+     "template": 0.18556701030927836,
+     "diff": -0.09278350515463918,
+     "n_items": 97
+    },
+    "w1005": {
+     "rendered": 0.09259259259259259,
+     "template": 0.1574074074074074,
+     "diff": -0.06481481481481481,
+     "n_items": 108
+    },
+    "w1006": {
+     "rendered": 0.05,
+     "template": 0.11666666666666667,
+     "diff": -0.06666666666666667,
+     "n_items": 120
+    },
+    "w1007": {
+     "rendered": 0.06557377049180328,
+     "template": 0.14754098360655737,
+     "diff": -0.08196721311475409,
+     "n_items": 122
+    },
+    "w1008": {
+     "rendered": 0.07627118644067797,
+     "template": 0.15254237288135594,
+     "diff": -0.07627118644067797,
+     "n_items": 118
+    },
+    "w1009": {
+     "rendered": 0.06666666666666667,
+     "template": 0.11666666666666667,
+     "diff": -0.05,
+     "n_items": 120
+    }
+   },
+   "diff_world_mean": {
+    "est": -0.07454149599834319,
+    "lo": -0.08529290989785379,
+    "hi": -0.06436474123470512,
+    "width": 0.020928168663148672,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "D_repair_def",
+   "check": "iii",
+   "branch": "def",
+   "contrast": "D_effect_repair_source",
+   "rendered": {
+    "est": 0.2918149466192171,
+    "lo": 0.2673611111111111,
+    "hi": 0.32056451612903225,
+    "width": 0.053203405017921146,
+    "n_worlds": 10,
+    "n_items": 562
+   },
+   "template": {
+    "est": 0.33629893238434166,
+    "lo": 0.3125,
+    "hi": 0.36278195488721804,
+    "width": 0.05028195488721804,
+    "n_worlds": 10,
+    "n_items": 562
+   },
+   "mean_rendered": 0.2918149466192171,
+   "mean_template": 0.33629893238434166,
+   "diff": {
+    "est": -0.04448398576512456,
+    "lo": -0.060218978102189784,
+    "hi": -0.028985507246376812,
+    "width": 0.031233470855812972,
+    "n_worlds": 10,
+    "n_items": 562
+   },
+   "items": {
+    "rendered": 562,
+    "template": 562,
+    "common": 562
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.3448275862068966,
+     "template": 0.3448275862068966,
+     "diff": 0.0,
+     "n_items": 58
+    },
+    "w1001": {
+     "rendered": 0.22580645161290322,
+     "template": 0.2903225806451613,
+     "diff": -0.06451612903225806,
+     "n_items": 62
+    },
+    "w1002": {
+     "rendered": 0.2638888888888889,
+     "template": 0.2916666666666667,
+     "diff": -0.027777777777777776,
+     "n_items": 72
+    },
+    "w1003": {
+     "rendered": 0.3064516129032258,
+     "template": 0.3870967741935484,
+     "diff": -0.08064516129032258,
+     "n_items": 62
+    },
+    "w1004": {
+     "rendered": 0.35714285714285715,
+     "template": 0.38095238095238093,
+     "diff": -0.023809523809523808,
+     "n_items": 42
+    },
+    "w1005": {
+     "rendered": 0.27586206896551724,
+     "template": 0.3275862068965517,
+     "diff": -0.05172413793103448,
+     "n_items": 58
+    },
+    "w1006": {
+     "rendered": 0.25925925925925924,
+     "template": 0.2962962962962963,
+     "diff": -0.037037037037037035,
+     "n_items": 54
+    },
+    "w1007": {
+     "rendered": 0.36538461538461536,
+     "template": 0.40384615384615385,
+     "diff": -0.038461538461538464,
+     "n_items": 52
+    },
+    "w1008": {
+     "rendered": 0.2826086956521739,
+     "template": 0.3695652173913043,
+     "diff": -0.08695652173913043,
+     "n_items": 46
+    },
+    "w1009": {
+     "rendered": 0.26785714285714285,
+     "template": 0.30357142857142855,
+     "diff": -0.03571428571428571,
+     "n_items": 56
+    }
+   },
+   "diff_world_mean": {
+    "est": -0.044664211279290836,
+    "lo": -0.06075319994892466,
+    "hi": -0.02901947988154885,
+    "width": 0.03173372006737581,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "BxD_def",
+   "check": "iv",
+   "branch": "def",
+   "contrast": "BxD_interaction_update_source",
+   "rendered": {
+    "est": 0.2676056338028169,
+    "lo": 0.22413793103448276,
+    "hi": 0.31343283582089554,
+    "width": 0.08929490478641278,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "template": {
+    "est": 0.2711267605633803,
+    "lo": 0.2290909090909091,
+    "hi": 0.32081911262798635,
+    "width": 0.09172820353707725,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "mean_rendered": 0.2676056338028169,
+   "mean_template": 0.2711267605633803,
+   "diff": {
+    "est": -0.0035211267605633804,
+    "lo": -0.015444015444015444,
+    "hi": 0.0072992700729927005,
+    "width": 0.022743285517008147,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.3448275862068966,
+     "template": 0.3793103448275862,
+     "diff": -0.034482758620689655,
+     "n_items": 29
+    },
+    "w1001": {
+     "rendered": 0.25806451612903225,
+     "template": 0.22580645161290322,
+     "diff": 0.03225806451612903,
+     "n_items": 31
+    },
+    "w1002": {
+     "rendered": 0.2222222222222222,
+     "template": 0.2222222222222222,
+     "diff": 0.0,
+     "n_items": 36
+    },
+    "w1003": {
+     "rendered": 0.3870967741935484,
+     "template": 0.3870967741935484,
+     "diff": 0.0,
+     "n_items": 31
+    },
+    "w1004": {
+     "rendered": 0.36363636363636365,
+     "template": 0.36363636363636365,
+     "diff": 0.0,
+     "n_items": 22
+    },
+    "w1005": {
+     "rendered": 0.20689655172413793,
+     "template": 0.20689655172413793,
+     "diff": 0.0,
+     "n_items": 29
+    },
+    "w1006": {
+     "rendered": 0.14814814814814814,
+     "template": 0.18518518518518517,
+     "diff": -0.037037037037037035,
+     "n_items": 27
+    },
+    "w1007": {
+     "rendered": 0.2857142857142857,
+     "template": 0.2857142857142857,
+     "diff": 0.0,
+     "n_items": 28
+    },
+    "w1008": {
+     "rendered": 0.21739130434782608,
+     "template": 0.21739130434782608,
+     "diff": 0.0,
+     "n_items": 23
+    },
+    "w1009": {
+     "rendered": 0.25,
+     "template": 0.25,
+     "diff": 0.0,
+     "n_items": 28
+    }
+   },
+   "diff_world_mean": {
+    "est": -0.003926173114159766,
+    "lo": -0.015037284225270875,
+    "hi": 0.0064516129032258064,
+    "width": 0.021488897128496682,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "BxD_src",
+   "check": null,
+   "branch": "src",
+   "contrast": "BxD_interaction_update_source",
+   "rendered": {
+    "est": 0.07082630691399663,
+    "lo": 0.03819444444444445,
+    "hi": 0.10362694300518134,
+    "width": 0.0654324985607369,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "template": {
+    "est": 0.06239460370994941,
+    "lo": 0.025039123630672927,
+    "hi": 0.10288808664259928,
+    "width": 0.07784896301192636,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "mean_rendered": 0.07082630691399663,
+   "mean_template": 0.06239460370994941,
+   "diff": {
+    "est": 0.008431703204047217,
+    "lo": -0.026622296173044926,
+    "hi": 0.03727714748784441,
+    "width": 0.06389944366088933,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "items": {
+    "rendered": 593,
+    "template": 593,
+    "common": 593
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.0,
+     "template": 0.06,
+     "diff": -0.06,
+     "n_items": 50
+    },
+    "w1001": {
+     "rendered": 0.0,
+     "template": 0.01639344262295082,
+     "diff": -0.01639344262295082,
+     "n_items": 61
+    },
+    "w1002": {
+     "rendered": 0.0410958904109589,
+     "template": -0.0136986301369863,
+     "diff": 0.0547945205479452,
+     "n_items": 73
+    },
+    "w1003": {
+     "rendered": 0.031746031746031744,
+     "template": 0.12698412698412698,
+     "diff": -0.09523809523809523,
+     "n_items": 63
+    },
+    "w1004": {
+     "rendered": 0.16,
+     "template": 0.18,
+     "diff": -0.02,
+     "n_items": 50
+    },
+    "w1005": {
+     "rendered": 0.12962962962962962,
+     "template": 0.12962962962962962,
+     "diff": 0.0,
+     "n_items": 54
+    },
+    "w1006": {
+     "rendered": 0.05,
+     "template": 0.0,
+     "diff": 0.05,
+     "n_items": 60
+    },
+    "w1007": {
+     "rendered": 0.07936507936507936,
+     "template": 0.015873015873015872,
+     "diff": 0.06349206349206349,
+     "n_items": 63
+    },
+    "w1008": {
+     "rendered": 0.15254237288135594,
+     "template": 0.11864406779661017,
+     "diff": 0.03389830508474576,
+     "n_items": 59
+    },
+    "w1009": {
+     "rendered": 0.08333333333333333,
+     "template": 0.03333333333333333,
+     "diff": 0.05,
+     "n_items": 60
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.006055335126370841,
+    "lo": -0.027820942325249075,
+    "hi": 0.035355729506414434,
+    "width": 0.0631766718316635,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "def:D_effect_missed_cited",
+   "check": "i",
+   "branch": "def",
+   "contrast": "D_effect_missed_cited",
+   "rendered": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "template": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "mean_rendered": 0.0,
+   "mean_template": 0.0,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 29
+    },
+    "w1001": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 31
+    },
+    "w1002": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 36
+    },
+    "w1003": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 31
+    },
+    "w1004": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 22
+    },
+    "w1005": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 29
+    },
+    "w1006": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 27
+    },
+    "w1007": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 28
+    },
+    "w1008": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 23
+    },
+    "w1009": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 28
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "def:D_effect_missed_source",
+   "check": "i",
+   "branch": "def",
+   "contrast": "D_effect_missed_source",
+   "rendered": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "template": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "mean_rendered": 0.0,
+   "mean_template": 0.0,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 29
+    },
+    "w1001": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 31
+    },
+    "w1002": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 36
+    },
+    "w1003": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 31
+    },
+    "w1004": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 22
+    },
+    "w1005": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 29
+    },
+    "w1006": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 27
+    },
+    "w1007": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 28
+    },
+    "w1008": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 23
+    },
+    "w1009": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 28
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "orphan:D_effect_missed_cited",
+   "check": "i",
+   "branch": "orphan",
+   "contrast": "D_effect_missed_cited",
+   "rendered": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 872
+   },
+   "template": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 872
+   },
+   "mean_rendered": 0.0,
+   "mean_template": 0.0,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 872
+   },
+   "items": {
+    "rendered": 872,
+    "template": 872,
+    "common": 872
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 83
+    },
+    "w1001": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 90
+    },
+    "w1002": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 106
+    },
+    "w1003": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 79
+    },
+    "w1004": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 81
+    },
+    "w1005": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 68
+    },
+    "w1006": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 103
+    },
+    "w1007": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 90
+    },
+    "w1008": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 94
+    },
+    "w1009": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 78
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "orphan:D_effect_missed_source",
+   "check": "i",
+   "branch": "orphan",
+   "contrast": "D_effect_missed_source",
+   "rendered": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 872
+   },
+   "template": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 872
+   },
+   "mean_rendered": 0.0,
+   "mean_template": 0.0,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 872
+   },
+   "items": {
+    "rendered": 872,
+    "template": 872,
+    "common": 872
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 83
+    },
+    "w1001": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 90
+    },
+    "w1002": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 106
+    },
+    "w1003": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 79
+    },
+    "w1004": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 81
+    },
+    "w1005": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 68
+    },
+    "w1006": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 103
+    },
+    "w1007": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 90
+    },
+    "w1008": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 94
+    },
+    "w1009": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 78
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "src:D_effect_missed_cited",
+   "check": "i",
+   "branch": "src",
+   "contrast": "D_effect_missed_cited",
+   "rendered": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "template": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "mean_rendered": 0.0,
+   "mean_template": 0.0,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "items": {
+    "rendered": 593,
+    "template": 593,
+    "common": 593
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 50
+    },
+    "w1001": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 61
+    },
+    "w1002": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 73
+    },
+    "w1003": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 63
+    },
+    "w1004": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 50
+    },
+    "w1005": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 54
+    },
+    "w1006": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 60
+    },
+    "w1007": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 63
+    },
+    "w1008": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 59
+    },
+    "w1009": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 60
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "src:D_effect_missed_source",
+   "check": "i",
+   "branch": "src",
+   "contrast": "D_effect_missed_source",
+   "rendered": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "template": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "mean_rendered": 0.0,
+   "mean_template": 0.0,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "items": {
+    "rendered": 593,
+    "template": 593,
+    "common": 593
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 50
+    },
+    "w1001": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 61
+    },
+    "w1002": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 73
+    },
+    "w1003": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 63
+    },
+    "w1004": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 50
+    },
+    "w1005": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 54
+    },
+    "w1006": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 60
+    },
+    "w1007": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 63
+    },
+    "w1008": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 59
+    },
+    "w1009": {
+     "rendered": 0.0,
+     "template": 0.0,
+     "diff": 0.0,
+     "n_items": 60
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  },
+  {
+   "name": "zero_minus_hm11_def",
+   "check": "v",
+   "branch": "def",
+   "contrast": "ContractValid of zero minus HoldMem(1,1), k > 0",
+   "rendered": {
+    "est": -0.40492957746478875,
+    "lo": -0.45588235294117646,
+    "hi": -0.35813148788927335,
+    "width": 0.09775086505190311,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "template": {
+    "est": -0.4507042253521127,
+    "lo": -0.486328125,
+    "hi": -0.4219269102990033,
+    "width": 0.06440121470099669,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "mean_rendered": -0.40492957746478875,
+   "mean_template": -0.4507042253521127,
+   "diff": {
+    "est": 0.045774647887323945,
+    "lo": 0.0017730496453900709,
+    "hi": 0.08904109589041095,
+    "width": 0.08726804624502088,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   },
+   "per_world": {
+    "w1000": {
+     "rendered": -0.4827586206896552,
+     "template": -0.41379310344827586,
+     "diff": -0.06896551724137931,
+     "n_items": 58
+    },
+    "w1001": {
+     "rendered": -0.3387096774193548,
+     "template": -0.4032258064516129,
+     "diff": 0.06451612903225806,
+     "n_items": 62
+    },
+    "w1002": {
+     "rendered": -0.3611111111111111,
+     "template": -0.3888888888888889,
+     "diff": 0.027777777777777776,
+     "n_items": 72
+    },
+    "w1003": {
+     "rendered": -0.3387096774193548,
+     "template": -0.45161290322580644,
+     "diff": 0.11290322580645161,
+     "n_items": 62
+    },
+    "w1004": {
+     "rendered": -0.5227272727272727,
+     "template": -0.4772727272727273,
+     "diff": -0.045454545454545456,
+     "n_items": 44
+    },
+    "w1005": {
+     "rendered": -0.27586206896551724,
+     "template": -0.4482758620689655,
+     "diff": 0.1724137931034483,
+     "n_items": 58
+    },
+    "w1006": {
+     "rendered": -0.42592592592592593,
+     "template": -0.46296296296296297,
+     "diff": 0.037037037037037035,
+     "n_items": 54
+    },
+    "w1007": {
+     "rendered": -0.5,
+     "template": -0.5178571428571429,
+     "diff": 0.017857142857142856,
+     "n_items": 56
+    },
+    "w1008": {
+     "rendered": -0.4782608695652174,
+     "template": -0.5869565217391305,
+     "diff": 0.10869565217391304,
+     "n_items": 46
+    },
+    "w1009": {
+     "rendered": -0.39285714285714285,
+     "template": -0.4107142857142857,
+     "diff": 0.017857142857142856,
+     "n_items": 56
+    }
+   },
+   "diff_world_mean": {
+    "est": 0.044463783794924674,
+    "lo": 0.0003355098738858461,
+    "hi": 0.08904186539602703,
+    "width": 0.08870635552214118,
+    "n_worlds": 10,
+    "n_items": 10
+   }
+  }
+ ],
+ "cells": [
+  {
+   "branch": "def",
+   "system": "holdmem_D0B0",
+   "period": "k1",
+   "mean_rendered": 0.48214285714285715,
+   "mean_template": 0.4642857142857143,
+   "diff": {
+    "est": 0.017857142857142856,
+    "lo": 0.0,
+    "hi": 0.04032258064516129,
+    "width": 0.04032258064516129,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B0",
+   "period": "k2",
+   "mean_rendered": 0.4596774193548387,
+   "mean_template": 0.46774193548387094,
+   "diff": {
+    "est": -0.008064516129032258,
+    "lo": -0.06716417910447761,
+    "hi": 0.044642857142857144,
+    "width": 0.11180703624733476,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B0",
+   "period": "k4",
+   "mean_rendered": 0.5263157894736842,
+   "mean_template": 0.5592105263157895,
+   "diff": {
+    "est": -0.03289473684210526,
+    "lo": -0.11971830985915492,
+    "hi": 0.025974025974025976,
+    "width": 0.1456923358331809,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B0",
+   "period": "k8",
+   "mean_rendered": 0.5555555555555556,
+   "mean_template": 0.5777777777777777,
+   "diff": {
+    "est": -0.022222222222222223,
+    "lo": -0.0755813953488372,
+    "hi": 0.022988505747126436,
+    "width": 0.09856990109596364,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B0",
+   "period": "post",
+   "mean_rendered": 0.5123239436619719,
+   "mean_template": 0.5264084507042254,
+   "diff": {
+    "est": -0.014084507042253521,
+    "lo": -0.05311355311355311,
+    "hi": 0.020202020202020204,
+    "width": 0.07331557331557331,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B0",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_cited",
+   "period": "k1",
+   "mean_rendered": 0.5089285714285714,
+   "mean_template": 0.5089285714285714,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.026785714285714284,
+    "hi": 0.023076923076923078,
+    "width": 0.049862637362637366,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_cited",
+   "period": "k2",
+   "mean_rendered": 0.49193548387096775,
+   "mean_template": 0.49193548387096775,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.021739130434782608,
+    "hi": 0.02459016393442623,
+    "width": 0.04632929436920884,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_cited",
+   "period": "k4",
+   "mean_rendered": 0.6052631578947368,
+   "mean_template": 0.6052631578947368,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.02631578947368421,
+    "hi": 0.02666666666666667,
+    "width": 0.05298245614035088,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_cited",
+   "period": "k8",
+   "mean_rendered": 0.6333333333333333,
+   "mean_template": 0.6277777777777778,
+   "diff": {
+    "est": 0.005555555555555556,
+    "lo": -0.016853932584269662,
+    "hi": 0.031914893617021274,
+    "width": 0.04876882620129094,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_cited",
+   "period": "post",
+   "mean_rendered": 0.5704225352112676,
+   "mean_template": 0.5686619718309859,
+   "diff": {
+    "est": 0.0017605633802816902,
+    "lo": -0.017543859649122806,
+    "hi": 0.018333333333333333,
+    "width": 0.03587719298245614,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_cited",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_source",
+   "period": "k1",
+   "mean_rendered": 0.5267857142857143,
+   "mean_template": 0.5357142857142857,
+   "diff": {
+    "est": -0.008928571428571428,
+    "lo": -0.02830188679245283,
+    "hi": 0.0,
+    "width": 0.02830188679245283,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_source",
+   "period": "k2",
+   "mean_rendered": 0.5080645161290323,
+   "mean_template": 0.5161290322580645,
+   "diff": {
+    "est": -0.008064516129032258,
+    "lo": -0.023809523809523808,
+    "hi": 0.0,
+    "width": 0.023809523809523808,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_source",
+   "period": "k4",
+   "mean_rendered": 0.631578947368421,
+   "mean_template": 0.631578947368421,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.019736842105263157,
+    "hi": 0.019736842105263157,
+    "width": 0.039473684210526314,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_source",
+   "period": "k8",
+   "mean_rendered": 0.65,
+   "mean_template": 0.6555555555555556,
+   "diff": {
+    "est": -0.005555555555555556,
+    "lo": -0.017045454545454544,
+    "hi": 0.0,
+    "width": 0.017045454545454544,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_source",
+   "period": "post",
+   "mean_rendered": 0.5897887323943662,
+   "mean_template": 0.5950704225352113,
+   "diff": {
+    "est": -0.00528169014084507,
+    "lo": -0.017921146953405017,
+    "hi": 0.0036363636363636364,
+    "width": 0.021557510589768653,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D0B1_source",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B0",
+   "period": "k1",
+   "mean_rendered": 0.6428571428571429,
+   "mean_template": 0.625,
+   "diff": {
+    "est": 0.017857142857142856,
+    "lo": -0.0196078431372549,
+    "hi": 0.05555555555555555,
+    "width": 0.07516339869281045,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B0",
+   "period": "k2",
+   "mean_rendered": 0.6935483870967742,
+   "mean_template": 0.6854838709677419,
+   "diff": {
+    "est": 0.008064516129032258,
+    "lo": -0.017241379310344827,
+    "hi": 0.03333333333333333,
+    "width": 0.05057471264367816,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B0",
+   "period": "k4",
+   "mean_rendered": 0.7368421052631579,
+   "mean_template": 0.7302631578947368,
+   "diff": {
+    "est": 0.006578947368421052,
+    "lo": -0.0410958904109589,
+    "hi": 0.04430379746835443,
+    "width": 0.08539968787931333,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B0",
+   "period": "k8",
+   "mean_rendered": 0.7444444444444445,
+   "mean_template": 0.7888888888888889,
+   "diff": {
+    "est": -0.044444444444444446,
+    "lo": -0.10919540229885058,
+    "hi": 0.017857142857142856,
+    "width": 0.12705254515599343,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B0",
+   "period": "post",
+   "mean_rendered": 0.7112676056338029,
+   "mean_template": 0.7183098591549296,
+   "diff": {
+    "est": -0.007042253521126761,
+    "lo": -0.03790613718411552,
+    "hi": 0.02218430034129693,
+    "width": 0.060090437525412446,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B0",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_cited",
+   "period": "k1",
+   "mean_rendered": 0.8571428571428571,
+   "mean_template": 0.875,
+   "diff": {
+    "est": -0.017857142857142856,
+    "lo": -0.04310344827586207,
+    "hi": 0.0,
+    "width": 0.04310344827586207,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_cited",
+   "period": "k2",
+   "mean_rendered": 0.6854838709677419,
+   "mean_template": 0.7258064516129032,
+   "diff": {
+    "est": -0.04032258064516129,
+    "lo": -0.0684931506849315,
+    "hi": -0.008928571428571428,
+    "width": 0.05956457925636008,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_cited",
+   "period": "k4",
+   "mean_rendered": 0.756578947368421,
+   "mean_template": 0.8026315789473685,
+   "diff": {
+    "est": -0.046052631578947366,
+    "lo": -0.0821917808219178,
+    "hi": -0.013513513513513514,
+    "width": 0.06867826730840429,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_cited",
+   "period": "k8",
+   "mean_rendered": 0.7222222222222222,
+   "mean_template": 0.7944444444444444,
+   "diff": {
+    "est": -0.07222222222222222,
+    "lo": -0.10714285714285714,
+    "hi": -0.04040404040404041,
+    "width": 0.06673881673881674,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_cited",
+   "period": "post",
+   "mean_rendered": 0.75,
+   "mean_template": 0.7975352112676056,
+   "diff": {
+    "est": -0.04753521126760563,
+    "lo": -0.0684931506849315,
+    "hi": -0.027491408934707903,
+    "width": 0.0410017417502236,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_cited",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_source",
+   "period": "k1",
+   "mean_rendered": 0.8928571428571429,
+   "mean_template": 0.9375,
+   "diff": {
+    "est": -0.044642857142857144,
+    "lo": -0.08333333333333333,
+    "hi": -0.01020408163265306,
+    "width": 0.07312925170068027,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_source",
+   "period": "k2",
+   "mean_rendered": 0.8790322580645161,
+   "mean_template": 0.9112903225806451,
+   "diff": {
+    "est": -0.03225806451612903,
+    "lo": -0.05303030303030303,
+    "hi": -0.008771929824561403,
+    "width": 0.04425837320574163,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_source",
+   "period": "k4",
+   "mean_rendered": 0.9078947368421053,
+   "mean_template": 0.9539473684210527,
+   "diff": {
+    "est": -0.046052631578947366,
+    "lo": -0.08,
+    "hi": -0.018292682926829267,
+    "width": 0.06170731707317073,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_source",
+   "period": "k8",
+   "mean_rendered": 0.8555555555555555,
+   "mean_template": 0.9222222222222223,
+   "diff": {
+    "est": -0.06666666666666667,
+    "lo": -0.09883720930232558,
+    "hi": -0.03684210526315789,
+    "width": 0.061995104039167685,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_source",
+   "period": "post",
+   "mean_rendered": 0.8820422535211268,
+   "mean_template": 0.9313380281690141,
+   "diff": {
+    "est": -0.04929577464788732,
+    "lo": -0.07093425605536333,
+    "hi": -0.028368794326241134,
+    "width": 0.04256546172912219,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_D1B1_source",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_json_arm",
+   "period": "k1",
+   "mean_rendered": 0.6964285714285714,
+   "mean_template": 0.75,
+   "diff": {
+    "est": -0.05357142857142857,
+    "lo": -0.09433962264150944,
+    "hi": -0.017543859649122806,
+    "width": 0.07679576299238663,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_json_arm",
+   "period": "k2",
+   "mean_rendered": 0.6693548387096774,
+   "mean_template": 0.7016129032258065,
+   "diff": {
+    "est": -0.03225806451612903,
+    "lo": -0.05737704918032787,
+    "hi": -0.007936507936507936,
+    "width": 0.049440541243819934,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_json_arm",
+   "period": "k4",
+   "mean_rendered": 0.756578947368421,
+   "mean_template": 0.8092105263157895,
+   "diff": {
+    "est": -0.05263157894736842,
+    "lo": -0.09722222222222222,
+    "hi": -0.017857142857142856,
+    "width": 0.07936507936507936,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_json_arm",
+   "period": "k8",
+   "mean_rendered": 0.7111111111111111,
+   "mean_template": 0.7944444444444444,
+   "diff": {
+    "est": -0.08333333333333333,
+    "lo": -0.11797752808988764,
+    "hi": -0.05789473684210526,
+    "width": 0.060082791247782374,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_json_arm",
+   "period": "post",
+   "mean_rendered": 0.7112676056338029,
+   "mean_template": 0.7693661971830986,
+   "diff": {
+    "est": -0.058098591549295774,
+    "lo": -0.08013937282229965,
+    "hi": -0.03924914675767918,
+    "width": 0.040890226064620463,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "holdmem_json_arm",
+   "period": "pre",
+   "mean_rendered": 0.8208333333333333,
+   "mean_template": 0.8145833333333333,
+   "diff": {
+    "est": 0.00625,
+    "lo": 0.0,
+    "hi": 0.0125,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "oracle",
+   "period": "k1",
+   "mean_rendered": 0.6160714285714286,
+   "mean_template": 0.6071428571428571,
+   "diff": {
+    "est": 0.008928571428571428,
+    "lo": 0.0,
+    "hi": 0.02830188679245283,
+    "width": 0.02830188679245283,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "oracle",
+   "period": "k2",
+   "mean_rendered": 0.6129032258064516,
+   "mean_template": 0.6129032258064516,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "oracle",
+   "period": "k4",
+   "mean_rendered": 0.6644736842105263,
+   "mean_template": 0.6644736842105263,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "oracle",
+   "period": "k8",
+   "mean_rendered": 0.7055555555555556,
+   "mean_template": 0.7,
+   "diff": {
+    "est": 0.005555555555555556,
+    "lo": 0.0,
+    "hi": 0.01744186046511628,
+    "width": 0.01744186046511628,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "oracle",
+   "period": "post",
+   "mean_rendered": 0.6566901408450704,
+   "mean_template": 0.653169014084507,
+   "diff": {
+    "est": 0.0035211267605633804,
+    "lo": 0.0,
+    "hi": 0.010869565217391304,
+    "width": 0.010869565217391304,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "oracle",
+   "period": "pre",
+   "mean_rendered": 0.7916666666666666,
+   "mean_template": 0.775,
+   "diff": {
+    "est": 0.016666666666666666,
+    "lo": 0.010416666666666666,
+    "hi": 0.020833333333333332,
+    "width": 0.010416666666666666,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "rag",
+   "period": "k1",
+   "mean_rendered": 0.38392857142857145,
+   "mean_template": 0.36607142857142855,
+   "diff": {
+    "est": 0.017857142857142856,
+    "lo": -0.017857142857142856,
+    "hi": 0.05172413793103448,
+    "width": 0.06958128078817734,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "rag",
+   "period": "k2",
+   "mean_rendered": 0.3548387096774194,
+   "mean_template": 0.3467741935483871,
+   "diff": {
+    "est": 0.008064516129032258,
+    "lo": -0.025,
+    "hi": 0.045454545454545456,
+    "width": 0.07045454545454546,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "rag",
+   "period": "k4",
+   "mean_rendered": 0.45394736842105265,
+   "mean_template": 0.46710526315789475,
+   "diff": {
+    "est": -0.013157894736842105,
+    "lo": -0.04216867469879518,
+    "hi": 0.0273972602739726,
+    "width": 0.06956593497276778,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "rag",
+   "period": "k8",
+   "mean_rendered": 0.4888888888888889,
+   "mean_template": 0.5055555555555555,
+   "diff": {
+    "est": -0.016666666666666666,
+    "lo": -0.07065217391304347,
+    "hi": 0.03763440860215054,
+    "width": 0.10828658251519402,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "rag",
+   "period": "post",
+   "mean_rendered": 0.4295774647887324,
+   "mean_template": 0.43309859154929575,
+   "diff": {
+    "est": -0.0035211267605633804,
+    "lo": -0.026022304832713755,
+    "hi": 0.02,
+    "width": 0.04602230483271376,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "rag",
+   "period": "pre",
+   "mean_rendered": 0.5583333333333333,
+   "mean_template": 0.5770833333333333,
+   "diff": {
+    "est": -0.01875,
+    "lo": -0.035416666666666666,
+    "hi": -0.004166666666666667,
+    "width": 0.03125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "def",
+   "system": "zero",
+   "period": "k1",
+   "mean_rendered": 0.4107142857142857,
+   "mean_template": 0.41964285714285715,
+   "diff": {
+    "est": -0.008928571428571428,
+    "lo": -0.043478260869565216,
+    "hi": 0.017857142857142856,
+    "width": 0.06133540372670807,
+    "n_worlds": 10,
+    "n_items": 112
+   },
+   "items": {
+    "rendered": 112,
+    "template": 112,
+    "common": 112
+   }
+  },
+  {
+   "branch": "def",
+   "system": "zero",
+   "period": "k2",
+   "mean_rendered": 0.41935483870967744,
+   "mean_template": 0.4274193548387097,
+   "diff": {
+    "est": -0.008064516129032258,
+    "lo": -0.041666666666666664,
+    "hi": 0.02857142857142857,
+    "width": 0.07023809523809524,
+    "n_worlds": 10,
+    "n_items": 124
+   },
+   "items": {
+    "rendered": 124,
+    "template": 124,
+    "common": 124
+   }
+  },
+  {
+   "branch": "def",
+   "system": "zero",
+   "period": "k4",
+   "mean_rendered": 0.48026315789473684,
+   "mean_template": 0.5131578947368421,
+   "diff": {
+    "est": -0.03289473684210526,
+    "lo": -0.0625,
+    "hi": -0.006578947368421052,
+    "width": 0.05592105263157895,
+    "n_worlds": 10,
+    "n_items": 152
+   },
+   "items": {
+    "rendered": 152,
+    "template": 152,
+    "common": 152
+   }
+  },
+  {
+   "branch": "def",
+   "system": "zero",
+   "period": "k8",
+   "mean_rendered": 0.5555555555555556,
+   "mean_template": 0.5277777777777778,
+   "diff": {
+    "est": 0.027777777777777776,
+    "lo": -0.023529411764705882,
+    "hi": 0.07386363636363637,
+    "width": 0.09739304812834225,
+    "n_worlds": 10,
+    "n_items": 180
+   },
+   "items": {
+    "rendered": 180,
+    "template": 180,
+    "common": 180
+   }
+  },
+  {
+   "branch": "def",
+   "system": "zero",
+   "period": "post",
+   "mean_rendered": 0.477112676056338,
+   "mean_template": 0.48063380281690143,
+   "diff": {
+    "est": -0.0035211267605633804,
+    "lo": -0.02877697841726619,
+    "hi": 0.019927536231884056,
+    "width": 0.048704514649150245,
+    "n_worlds": 10,
+    "n_items": 568
+   },
+   "items": {
+    "rendered": 568,
+    "template": 568,
+    "common": 568
+   }
+  },
+  {
+   "branch": "def",
+   "system": "zero",
+   "period": "pre",
+   "mean_rendered": 0.6229166666666667,
+   "mean_template": 0.625,
+   "diff": {
+    "est": -0.0020833333333333333,
+    "lo": -0.020833333333333332,
+    "hi": 0.01875,
+    "width": 0.03958333333333333,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B0",
+   "period": "k1",
+   "mean_rendered": 0.40703517587939697,
+   "mean_template": 0.40703517587939697,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.01639344262295082,
+    "hi": 0.014634146341463415,
+    "width": 0.031027588964414238,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B0",
+   "period": "k2",
+   "mean_rendered": 0.43838862559241704,
+   "mean_template": 0.44549763033175355,
+   "diff": {
+    "est": -0.0071090047393364926,
+    "lo": -0.027227722772277228,
+    "hi": 0.011627906976744186,
+    "width": 0.03885562974902142,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B0",
+   "period": "k4",
+   "mean_rendered": 0.44772727272727275,
+   "mean_template": 0.4409090909090909,
+   "diff": {
+    "est": 0.006818181818181818,
+    "lo": -0.015350877192982455,
+    "hi": 0.03125,
+    "width": 0.046600877192982455,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B0",
+   "period": "k8",
+   "mean_rendered": 0.44144144144144143,
+   "mean_template": 0.42567567567567566,
+   "diff": {
+    "est": 0.015765765765765764,
+    "lo": 0.0,
+    "hi": 0.03409090909090909,
+    "width": 0.03409090909090909,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B0",
+   "period": "post",
+   "mean_rendered": 0.43427230046948356,
+   "mean_template": 0.4301643192488263,
+   "diff": {
+    "est": 0.004107981220657277,
+    "lo": -0.006455399061032864,
+    "hi": 0.016183035714285716,
+    "width": 0.02263843477531858,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B0",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_cited",
+   "period": "k1",
+   "mean_rendered": 0.7160804020100503,
+   "mean_template": 0.7211055276381909,
+   "diff": {
+    "est": -0.005025125628140704,
+    "lo": -0.023195876288659795,
+    "hi": 0.013966480446927373,
+    "width": 0.03716235673558717,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_cited",
+   "period": "k2",
+   "mean_rendered": 0.7180094786729858,
+   "mean_template": 0.6990521327014217,
+   "diff": {
+    "est": 0.018957345971563982,
+    "lo": -0.002403846153846154,
+    "hi": 0.038461538461538464,
+    "width": 0.040865384615384616,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_cited",
+   "period": "k4",
+   "mean_rendered": 0.7045454545454546,
+   "mean_template": 0.7068181818181818,
+   "diff": {
+    "est": -0.0022727272727272726,
+    "lo": -0.02826086956521739,
+    "hi": 0.022058823529411766,
+    "width": 0.05031969309462916,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_cited",
+   "period": "k8",
+   "mean_rendered": 0.7004504504504504,
+   "mean_template": 0.6824324324324325,
+   "diff": {
+    "est": 0.018018018018018018,
+    "lo": 0.0,
+    "hi": 0.03636363636363636,
+    "width": 0.03636363636363636,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_cited",
+   "period": "post",
+   "mean_rendered": 0.7095070422535211,
+   "mean_template": 0.7018779342723005,
+   "diff": {
+    "est": 0.007629107981220657,
+    "lo": -0.00909090909090909,
+    "hi": 0.022962112514351322,
+    "width": 0.03205302160526041,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_cited",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_source",
+   "period": "k1",
+   "mean_rendered": 0.7286432160804021,
+   "mean_template": 0.7185929648241206,
+   "diff": {
+    "est": 0.010050251256281407,
+    "lo": -0.007537688442211055,
+    "hi": 0.026066350710900472,
+    "width": 0.033604039153111526,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_source",
+   "period": "k2",
+   "mean_rendered": 0.7180094786729858,
+   "mean_template": 0.7061611374407583,
+   "diff": {
+    "est": 0.011848341232227487,
+    "lo": -0.0023584905660377358,
+    "hi": 0.024390243902439025,
+    "width": 0.02674873446847676,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_source",
+   "period": "k4",
+   "mean_rendered": 0.7113636363636363,
+   "mean_template": 0.7068181818181818,
+   "diff": {
+    "est": 0.004545454545454545,
+    "lo": -0.01627906976744186,
+    "hi": 0.025974025974025976,
+    "width": 0.042253095741467836,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_source",
+   "period": "k8",
+   "mean_rendered": 0.7094594594594594,
+   "mean_template": 0.7252252252252253,
+   "diff": {
+    "est": -0.015765765765765764,
+    "lo": -0.027659574468085105,
+    "hi": -0.002336448598130841,
+    "width": 0.025323125869954263,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_source",
+   "period": "post",
+   "mean_rendered": 0.7165492957746479,
+   "mean_template": 0.7142018779342723,
+   "diff": {
+    "est": 0.002347417840375587,
+    "lo": -0.009153318077803204,
+    "hi": 0.013922518159806295,
+    "width": 0.023075836237609497,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D0B1_source",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B0",
+   "period": "k1",
+   "mean_rendered": 0.44472361809045224,
+   "mean_template": 0.43467336683417085,
+   "diff": {
+    "est": 0.010050251256281407,
+    "lo": -0.011494252873563218,
+    "hi": 0.02981651376146789,
+    "width": 0.04131076663503111,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B0",
+   "period": "k2",
+   "mean_rendered": 0.46919431279620855,
+   "mean_template": 0.48104265402843605,
+   "diff": {
+    "est": -0.011848341232227487,
+    "lo": -0.03317535545023697,
+    "hi": 0.009302325581395349,
+    "width": 0.04247768103163232,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B0",
+   "period": "k4",
+   "mean_rendered": 0.49772727272727274,
+   "mean_template": 0.49772727272727274,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.020737327188940093,
+    "hi": 0.022222222222222223,
+    "width": 0.04295954941116231,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B0",
+   "period": "k8",
+   "mean_rendered": 0.5045045045045045,
+   "mean_template": 0.5112612612612613,
+   "diff": {
+    "est": -0.006756756756756757,
+    "lo": -0.041666666666666664,
+    "hi": 0.03636363636363636,
+    "width": 0.07803030303030303,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B0",
+   "period": "post",
+   "mean_rendered": 0.4800469483568075,
+   "mean_template": 0.4823943661971831,
+   "diff": {
+    "est": -0.002347417840375587,
+    "lo": -0.016981132075471698,
+    "hi": 0.012761020881670533,
+    "width": 0.02974215295714223,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B0",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_cited",
+   "period": "k1",
+   "mean_rendered": 0.7587939698492462,
+   "mean_template": 0.7562814070351759,
+   "diff": {
+    "est": 0.002512562814070352,
+    "lo": -0.03553299492385787,
+    "hi": 0.04314720812182741,
+    "width": 0.07868020304568528,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_cited",
+   "period": "k2",
+   "mean_rendered": 0.7037914691943128,
+   "mean_template": 0.6943127962085308,
+   "diff": {
+    "est": 0.009478672985781991,
+    "lo": -0.019230769230769232,
+    "hi": 0.037209302325581395,
+    "width": 0.05644007155635063,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_cited",
+   "period": "k4",
+   "mean_rendered": 0.7318181818181818,
+   "mean_template": 0.7159090909090909,
+   "diff": {
+    "est": 0.015909090909090907,
+    "lo": -0.024774774774774775,
+    "hi": 0.06046511627906977,
+    "width": 0.08523989105384454,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_cited",
+   "period": "k8",
+   "mean_rendered": 0.6936936936936937,
+   "mean_template": 0.7072072072072072,
+   "diff": {
+    "est": -0.013513513513513514,
+    "lo": -0.05088495575221239,
+    "hi": 0.024444444444444446,
+    "width": 0.07532940019665683,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_cited",
+   "period": "post",
+   "mean_rendered": 0.721244131455399,
+   "mean_template": 0.7177230046948356,
+   "diff": {
+    "est": 0.0035211267605633804,
+    "lo": -0.026976160602258468,
+    "hi": 0.03413173652694611,
+    "width": 0.06110789712920457,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_cited",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_source",
+   "period": "k1",
+   "mean_rendered": 0.7663316582914573,
+   "mean_template": 0.8115577889447236,
+   "diff": {
+    "est": -0.04522613065326633,
+    "lo": -0.08285714285714285,
+    "hi": -0.00980392156862745,
+    "width": 0.07305322128851541,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_source",
+   "period": "k2",
+   "mean_rendered": 0.7654028436018957,
+   "mean_template": 0.8033175355450237,
+   "diff": {
+    "est": -0.037914691943127965,
+    "lo": -0.05813953488372093,
+    "hi": -0.018867924528301886,
+    "width": 0.03927161035541904,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_source",
+   "period": "k4",
+   "mean_rendered": 0.75,
+   "mean_template": 0.8068181818181818,
+   "diff": {
+    "est": -0.056818181818181816,
+    "lo": -0.0892018779342723,
+    "hi": -0.018867924528301886,
+    "width": 0.07033395340597041,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_source",
+   "period": "k8",
+   "mean_rendered": 0.7274774774774775,
+   "mean_template": 0.8040540540540541,
+   "diff": {
+    "est": -0.07657657657657657,
+    "lo": -0.10300429184549356,
+    "hi": -0.0472972972972973,
+    "width": 0.05570699454819626,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_source",
+   "period": "post",
+   "mean_rendered": 0.7517605633802817,
+   "mean_template": 0.8063380281690141,
+   "diff": {
+    "est": -0.05457746478873239,
+    "lo": -0.07259001161440186,
+    "hi": -0.03546099290780142,
+    "width": 0.03712901870660044,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_D1B1_source",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_json_arm",
+   "period": "k1",
+   "mean_rendered": 0.4849246231155779,
+   "mean_template": 0.535175879396985,
+   "diff": {
+    "est": -0.05025125628140704,
+    "lo": -0.07474226804123711,
+    "hi": -0.022222222222222223,
+    "width": 0.052520045819014885,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_json_arm",
+   "period": "k2",
+   "mean_rendered": 0.504739336492891,
+   "mean_template": 0.5592417061611374,
+   "diff": {
+    "est": -0.054502369668246446,
+    "lo": -0.0748792270531401,
+    "hi": -0.035545023696682464,
+    "width": 0.03933420335645763,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_json_arm",
+   "period": "k4",
+   "mean_rendered": 0.5,
+   "mean_template": 0.5568181818181818,
+   "diff": {
+    "est": -0.056818181818181816,
+    "lo": -0.07432432432432433,
+    "hi": -0.03881278538812785,
+    "width": 0.03551153893619648,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_json_arm",
+   "period": "k8",
+   "mean_rendered": 0.5022522522522522,
+   "mean_template": 0.5563063063063063,
+   "diff": {
+    "est": -0.05405405405405406,
+    "lo": -0.07111111111111111,
+    "hi": -0.032327586206896554,
+    "width": 0.03878352490421456,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_json_arm",
+   "period": "post",
+   "mean_rendered": 0.4982394366197183,
+   "mean_template": 0.5522300469483568,
+   "diff": {
+    "est": -0.0539906103286385,
+    "lo": -0.06586483390607102,
+    "hi": -0.041617122473246136,
+    "width": 0.024247711432824885,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "holdmem_json_arm",
+   "period": "pre",
+   "mean_rendered": 0.8208333333333333,
+   "mean_template": 0.8145833333333333,
+   "diff": {
+    "est": 0.00625,
+    "lo": 0.0,
+    "hi": 0.0125,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "oracle",
+   "period": "k1",
+   "mean_rendered": 0.8994974874371859,
+   "mean_template": 0.8869346733668342,
+   "diff": {
+    "est": 0.01256281407035176,
+    "lo": 0.005128205128205128,
+    "hi": 0.01990049751243781,
+    "width": 0.014772292384232683,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "oracle",
+   "period": "k2",
+   "mean_rendered": 0.8957345971563981,
+   "mean_template": 0.8862559241706162,
+   "diff": {
+    "est": 0.009478672985781991,
+    "lo": 0.0024630541871921183,
+    "hi": 0.016203703703703703,
+    "width": 0.013740649516511584,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "oracle",
+   "period": "k4",
+   "mean_rendered": 0.8954545454545455,
+   "mean_template": 0.8886363636363637,
+   "diff": {
+    "est": 0.006818181818181818,
+    "lo": -0.00228310502283105,
+    "hi": 0.01569506726457399,
+    "width": 0.01797817228740504,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "oracle",
+   "period": "k8",
+   "mean_rendered": 0.8738738738738738,
+   "mean_template": 0.8693693693693694,
+   "diff": {
+    "est": 0.0045045045045045045,
+    "lo": -0.0043859649122807015,
+    "hi": 0.012077294685990338,
+    "width": 0.016463259598271038,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "oracle",
+   "period": "post",
+   "mean_rendered": 0.8908450704225352,
+   "mean_template": 0.8826291079812206,
+   "diff": {
+    "est": 0.008215962441314555,
+    "lo": 0.0011312217194570137,
+    "hi": 0.015410958904109588,
+    "width": 0.014279737184652575,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "oracle",
+   "period": "pre",
+   "mean_rendered": 0.7916666666666666,
+   "mean_template": 0.775,
+   "diff": {
+    "est": 0.016666666666666666,
+    "lo": 0.010416666666666666,
+    "hi": 0.020833333333333332,
+    "width": 0.010416666666666666,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "rag",
+   "period": "k1",
+   "mean_rendered": 0.6658291457286433,
+   "mean_template": 0.6758793969849246,
+   "diff": {
+    "est": -0.010050251256281407,
+    "lo": -0.02564102564102564,
+    "hi": 0.01020408163265306,
+    "width": 0.0358451072736787,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "rag",
+   "period": "k2",
+   "mean_rendered": 0.6682464454976303,
+   "mean_template": 0.6824644549763034,
+   "diff": {
+    "est": -0.014218009478672985,
+    "lo": -0.038834951456310676,
+    "hi": 0.0071090047393364926,
+    "width": 0.045943956195647166,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "rag",
+   "period": "k4",
+   "mean_rendered": 0.6681818181818182,
+   "mean_template": 0.675,
+   "diff": {
+    "est": -0.006818181818181818,
+    "lo": -0.02564102564102564,
+    "hi": 0.013227513227513227,
+    "width": 0.03886853886853887,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "rag",
+   "period": "k8",
+   "mean_rendered": 0.6576576576576577,
+   "mean_template": 0.6576576576576577,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.02511415525114155,
+    "hi": 0.027149321266968326,
+    "width": 0.05226347651810988,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "rag",
+   "period": "post",
+   "mean_rendered": 0.664906103286385,
+   "mean_template": 0.6725352112676056,
+   "diff": {
+    "est": -0.007629107981220657,
+    "lo": -0.023474178403755867,
+    "hi": 0.010332950631458095,
+    "width": 0.03380712903521396,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "rag",
+   "period": "pre",
+   "mean_rendered": 0.5583333333333333,
+   "mean_template": 0.5770833333333333,
+   "diff": {
+    "est": -0.01875,
+    "lo": -0.035416666666666666,
+    "hi": -0.004166666666666667,
+    "width": 0.03125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "zero",
+   "period": "k1",
+   "mean_rendered": 0.7135678391959799,
+   "mean_template": 0.7035175879396985,
+   "diff": {
+    "est": 0.010050251256281407,
+    "lo": -0.0024875621890547263,
+    "hi": 0.0228310502283105,
+    "width": 0.025318612417365226,
+    "n_worlds": 10,
+    "n_items": 398
+   },
+   "items": {
+    "rendered": 398,
+    "template": 398,
+    "common": 398
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "zero",
+   "period": "k2",
+   "mean_rendered": 0.7014218009478673,
+   "mean_template": 0.7037914691943128,
+   "diff": {
+    "est": -0.002369668246445498,
+    "lo": -0.01674641148325359,
+    "hi": 0.014084507042253521,
+    "width": 0.03083091852550711,
+    "n_worlds": 10,
+    "n_items": 422
+   },
+   "items": {
+    "rendered": 422,
+    "template": 422,
+    "common": 422
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "zero",
+   "period": "k4",
+   "mean_rendered": 0.6886363636363636,
+   "mean_template": 0.6886363636363636,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.01939655172413793,
+    "hi": 0.02054794520547945,
+    "width": 0.03994449692961738,
+    "n_worlds": 10,
+    "n_items": 440
+   },
+   "items": {
+    "rendered": 440,
+    "template": 440,
+    "common": 440
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "zero",
+   "period": "k8",
+   "mean_rendered": 0.6824324324324325,
+   "mean_template": 0.6824324324324325,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.016203703703703703,
+    "hi": 0.017777777777777778,
+    "width": 0.03398148148148148,
+    "n_worlds": 10,
+    "n_items": 444
+   },
+   "items": {
+    "rendered": 444,
+    "template": 444,
+    "common": 444
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "zero",
+   "period": "post",
+   "mean_rendered": 0.6960093896713615,
+   "mean_template": 0.6942488262910798,
+   "diff": {
+    "est": 0.0017605633802816902,
+    "lo": -0.00533175355450237,
+    "hi": 0.009592326139088728,
+    "width": 0.014924079693591098,
+    "n_worlds": 10,
+    "n_items": 1704
+   },
+   "items": {
+    "rendered": 1704,
+    "template": 1704,
+    "common": 1704
+   }
+  },
+  {
+   "branch": "orphan",
+   "system": "zero",
+   "period": "pre",
+   "mean_rendered": 0.6229166666666667,
+   "mean_template": 0.625,
+   "diff": {
+    "est": -0.0020833333333333333,
+    "lo": -0.020833333333333332,
+    "hi": 0.01875,
+    "width": 0.03958333333333333,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B0",
+   "period": "k1",
+   "mean_rendered": 0.7424242424242424,
+   "mean_template": 0.7575757575757576,
+   "diff": {
+    "est": -0.015151515151515152,
+    "lo": -0.03333333333333333,
+    "hi": 0.0038461538461538464,
+    "width": 0.03717948717948718,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B0",
+   "period": "k2",
+   "mean_rendered": 0.676056338028169,
+   "mean_template": 0.6901408450704225,
+   "diff": {
+    "est": -0.014084507042253521,
+    "lo": -0.04054054054054054,
+    "hi": 0.010638297872340425,
+    "width": 0.05117883841288097,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B0",
+   "period": "k4",
+   "mean_rendered": 0.6568627450980392,
+   "mean_template": 0.673202614379085,
+   "diff": {
+    "est": -0.016339869281045753,
+    "lo": -0.053691275167785234,
+    "hi": 0.021739130434782608,
+    "width": 0.07543040560256783,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B0",
+   "period": "k8",
+   "mean_rendered": 0.6325301204819277,
+   "mean_template": 0.641566265060241,
+   "diff": {
+    "est": -0.009036144578313253,
+    "lo": -0.059748427672955975,
+    "hi": 0.038011695906432746,
+    "width": 0.09776012357938872,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B0",
+   "period": "post",
+   "mean_rendered": 0.6736930860033726,
+   "mean_template": 0.6871838111298483,
+   "diff": {
+    "est": -0.013490725126475547,
+    "lo": -0.04056437389770723,
+    "hi": 0.01124567474048443,
+    "width": 0.05181004863819166,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B0",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_cited",
+   "period": "k1",
+   "mean_rendered": 0.7727272727272727,
+   "mean_template": 0.7689393939393939,
+   "diff": {
+    "est": 0.003787878787878788,
+    "lo": -0.014705882352941176,
+    "hi": 0.031007751937984496,
+    "width": 0.045713634290925675,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_cited",
+   "period": "k2",
+   "mean_rendered": 0.778169014084507,
+   "mean_template": 0.7640845070422535,
+   "diff": {
+    "est": 0.014084507042253521,
+    "lo": -0.0034965034965034965,
+    "hi": 0.031914893617021274,
+    "width": 0.03541139711352477,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_cited",
+   "period": "k4",
+   "mean_rendered": 0.7908496732026143,
+   "mean_template": 0.7777777777777778,
+   "diff": {
+    "est": 0.013071895424836602,
+    "lo": -0.006024096385542169,
+    "hi": 0.032467532467532464,
+    "width": 0.03849162885307463,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_cited",
+   "period": "k8",
+   "mean_rendered": 0.7951807228915663,
+   "mean_template": 0.7831325301204819,
+   "diff": {
+    "est": 0.012048192771084338,
+    "lo": -0.0029940119760479044,
+    "hi": 0.026785714285714284,
+    "width": 0.029779726261762188,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_cited",
+   "period": "post",
+   "mean_rendered": 0.784991568296796,
+   "mean_template": 0.7740303541315345,
+   "diff": {
+    "est": 0.010961214165261383,
+    "lo": -0.003372681281618887,
+    "hi": 0.028695652173913042,
+    "width": 0.03206833345553193,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_cited",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_source",
+   "period": "k1",
+   "mean_rendered": 0.8181818181818182,
+   "mean_template": 0.8143939393939394,
+   "diff": {
+    "est": 0.003787878787878788,
+    "lo": 0.0,
+    "hi": 0.0125,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_source",
+   "period": "k2",
+   "mean_rendered": 0.8028169014084507,
+   "mean_template": 0.8028169014084507,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.01056338028169014,
+    "hi": 0.010273972602739725,
+    "width": 0.020837352884429866,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_source",
+   "period": "k4",
+   "mean_rendered": 0.7973856209150327,
+   "mean_template": 0.7941176470588235,
+   "diff": {
+    "est": 0.0032679738562091504,
+    "lo": -0.012658227848101266,
+    "hi": 0.022151898734177215,
+    "width": 0.03481012658227848,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_source",
+   "period": "k8",
+   "mean_rendered": 0.7951807228915663,
+   "mean_template": 0.8012048192771084,
+   "diff": {
+    "est": -0.006024096385542169,
+    "lo": -0.01488095238095238,
+    "hi": 0.0,
+    "width": 0.01488095238095238,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_source",
+   "period": "post",
+   "mean_rendered": 0.8026981450252951,
+   "mean_template": 0.8026981450252951,
+   "diff": {
+    "est": 0.0,
+    "lo": -0.006666666666666667,
+    "hi": 0.008348794063079777,
+    "width": 0.015015460729746445,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D0B1_source",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B0",
+   "period": "k1",
+   "mean_rendered": 0.7765151515151515,
+   "mean_template": 0.8522727272727273,
+   "diff": {
+    "est": -0.07575757575757576,
+    "lo": -0.10638297872340426,
+    "hi": -0.04198473282442748,
+    "width": 0.06439824589897677,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B0",
+   "period": "k2",
+   "mean_rendered": 0.7007042253521126,
+   "mean_template": 0.7253521126760564,
+   "diff": {
+    "est": -0.02464788732394366,
+    "lo": -0.059027777777777776,
+    "hi": 0.007407407407407408,
+    "width": 0.06643518518518518,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B0",
+   "period": "k4",
+   "mean_rendered": 0.7320261437908496,
+   "mean_template": 0.7777777777777778,
+   "diff": {
+    "est": -0.0457516339869281,
+    "lo": -0.09868421052631579,
+    "hi": 0.006535947712418301,
+    "width": 0.1052201582387341,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B0",
+   "period": "k8",
+   "mean_rendered": 0.7259036144578314,
+   "mean_template": 0.7831325301204819,
+   "diff": {
+    "est": -0.0572289156626506,
+    "lo": -0.10632183908045977,
+    "hi": -0.005917159763313609,
+    "width": 0.10040467931714615,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B0",
+   "period": "post",
+   "mean_rendered": 0.7327150084317032,
+   "mean_template": 0.7833052276559865,
+   "diff": {
+    "est": -0.050590219224283306,
+    "lo": -0.08644067796610169,
+    "hi": -0.01610305958132045,
+    "width": 0.07033761838478124,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B0",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_cited",
+   "period": "k1",
+   "mean_rendered": 0.821969696969697,
+   "mean_template": 0.8560606060606061,
+   "diff": {
+    "est": -0.03409090909090909,
+    "lo": -0.064,
+    "hi": -0.010869565217391304,
+    "width": 0.0531304347826087,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_cited",
+   "period": "k2",
+   "mean_rendered": 0.8098591549295775,
+   "mean_template": 0.8591549295774648,
+   "diff": {
+    "est": -0.04929577464788732,
+    "lo": -0.0782312925170068,
+    "hi": -0.024822695035460994,
+    "width": 0.05340859748154581,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_cited",
+   "period": "k4",
+   "mean_rendered": 0.8104575163398693,
+   "mean_template": 0.8660130718954249,
+   "diff": {
+    "est": -0.05555555555555555,
+    "lo": -0.08391608391608392,
+    "hi": -0.028125,
+    "width": 0.05579108391608392,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_cited",
+   "period": "k8",
+   "mean_rendered": 0.8102409638554217,
+   "mean_template": 0.8644578313253012,
+   "diff": {
+    "est": -0.05421686746987952,
+    "lo": -0.07627118644067797,
+    "hi": -0.03225806451612903,
+    "width": 0.04401312192454894,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_cited",
+   "period": "post",
+   "mean_rendered": 0.8128161888701517,
+   "mean_template": 0.8617200674536256,
+   "diff": {
+    "est": -0.048903878583473864,
+    "lo": -0.06332703213610585,
+    "hi": -0.03372681281618887,
+    "width": 0.029600219319916986,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_cited",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_source",
+   "period": "k1",
+   "mean_rendered": 0.875,
+   "mean_template": 0.9431818181818182,
+   "diff": {
+    "est": -0.06818181818181818,
+    "lo": -0.08888888888888889,
+    "hi": -0.047244094488188976,
+    "width": 0.04164479440069992,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_source",
+   "period": "k2",
+   "mean_rendered": 0.8767605633802817,
+   "mean_template": 0.9436619718309859,
+   "diff": {
+    "est": -0.06690140845070422,
+    "lo": -0.08680555555555555,
+    "hi": -0.04642857142857143,
+    "width": 0.04037698412698412,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_source",
+   "period": "k4",
+   "mean_rendered": 0.8627450980392157,
+   "mean_template": 0.9477124183006536,
+   "diff": {
+    "est": -0.08496732026143791,
+    "lo": -0.10927152317880795,
+    "hi": -0.0641025641025641,
+    "width": 0.04516895907624385,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_source",
+   "period": "k8",
+   "mean_rendered": 0.8614457831325302,
+   "mean_template": 0.9337349397590361,
+   "diff": {
+    "est": -0.07228915662650602,
+    "lo": -0.09523809523809523,
+    "hi": -0.049019607843137254,
+    "width": 0.04621848739495798,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_source",
+   "period": "post",
+   "mean_rendered": 0.8684654300168634,
+   "mean_template": 0.9418212478920742,
+   "diff": {
+    "est": -0.0733558178752108,
+    "lo": -0.08290155440414508,
+    "hi": -0.06547619047619048,
+    "width": 0.0174253639279546,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_D1B1_source",
+   "period": "pre",
+   "mean_rendered": 0.8416666666666667,
+   "mean_template": 0.8333333333333334,
+   "diff": {
+    "est": 0.008333333333333333,
+    "lo": 0.0020833333333333333,
+    "hi": 0.014583333333333334,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_json_arm",
+   "period": "k1",
+   "mean_rendered": 0.8068181818181818,
+   "mean_template": 0.875,
+   "diff": {
+    "est": -0.06818181818181818,
+    "lo": -0.09230769230769231,
+    "hi": -0.04198473282442748,
+    "width": 0.05032295948326483,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_json_arm",
+   "period": "k2",
+   "mean_rendered": 0.7816901408450704,
+   "mean_template": 0.8767605633802817,
+   "diff": {
+    "est": -0.09507042253521127,
+    "lo": -0.11151079136690648,
+    "hi": -0.07586206896551724,
+    "width": 0.035648722401389235,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_json_arm",
+   "period": "k4",
+   "mean_rendered": 0.8071895424836601,
+   "mean_template": 0.8823529411764706,
+   "diff": {
+    "est": -0.07516339869281045,
+    "lo": -0.10135135135135136,
+    "hi": -0.049079754601226995,
+    "width": 0.05227159675012436,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_json_arm",
+   "period": "k8",
+   "mean_rendered": 0.8042168674698795,
+   "mean_template": 0.8885542168674698,
+   "diff": {
+    "est": -0.08433734939759036,
+    "lo": -0.10909090909090909,
+    "hi": -0.059006211180124224,
+    "width": 0.05008469791078486,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_json_arm",
+   "period": "post",
+   "mean_rendered": 0.8001686340640809,
+   "mean_template": 0.8811129848229342,
+   "diff": {
+    "est": -0.08094435075885328,
+    "lo": -0.09137931034482759,
+    "hi": -0.07096774193548387,
+    "width": 0.020411568409343717,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "holdmem_json_arm",
+   "period": "pre",
+   "mean_rendered": 0.8208333333333333,
+   "mean_template": 0.8145833333333333,
+   "diff": {
+    "est": 0.00625,
+    "lo": 0.0,
+    "hi": 0.0125,
+    "width": 0.0125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "oracle",
+   "period": "k1",
+   "mean_rendered": 0.8181818181818182,
+   "mean_template": 0.8181818181818182,
+   "diff": {
+    "est": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "width": 0.0,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "oracle",
+   "period": "k2",
+   "mean_rendered": 0.8204225352112676,
+   "mean_template": 0.8133802816901409,
+   "diff": {
+    "est": 0.007042253521126761,
+    "lo": 0.0,
+    "hi": 0.01773049645390071,
+    "width": 0.01773049645390071,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "oracle",
+   "period": "k4",
+   "mean_rendered": 0.8006535947712419,
+   "mean_template": 0.7941176470588235,
+   "diff": {
+    "est": 0.006535947712418301,
+    "lo": 0.0,
+    "hi": 0.017123287671232876,
+    "width": 0.017123287671232876,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "oracle",
+   "period": "k8",
+   "mean_rendered": 0.8132530120481928,
+   "mean_template": 0.8042168674698795,
+   "diff": {
+    "est": 0.009036144578313253,
+    "lo": 0.0,
+    "hi": 0.018518518518518517,
+    "width": 0.018518518518518517,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "oracle",
+   "period": "post",
+   "mean_rendered": 0.8128161888701517,
+   "mean_template": 0.8069139966273187,
+   "diff": {
+    "est": 0.005902192242833052,
+    "lo": 0.0016129032258064516,
+    "hi": 0.011343804537521814,
+    "width": 0.009730901311715362,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "oracle",
+   "period": "pre",
+   "mean_rendered": 0.7916666666666666,
+   "mean_template": 0.775,
+   "diff": {
+    "est": 0.016666666666666666,
+    "lo": 0.010416666666666666,
+    "hi": 0.020833333333333332,
+    "width": 0.010416666666666666,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "rag",
+   "period": "k1",
+   "mean_rendered": 0.6742424242424242,
+   "mean_template": 0.6856060606060606,
+   "diff": {
+    "est": -0.011363636363636364,
+    "lo": -0.027131782945736434,
+    "hi": 0.007751937984496124,
+    "width": 0.03488372093023256,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "rag",
+   "period": "k2",
+   "mean_rendered": 0.6373239436619719,
+   "mean_template": 0.6514084507042254,
+   "diff": {
+    "est": -0.014084507042253521,
+    "lo": -0.024305555555555556,
+    "hi": -0.0035971223021582736,
+    "width": 0.02070843325339728,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "rag",
+   "period": "k4",
+   "mean_rendered": 0.630718954248366,
+   "mean_template": 0.6470588235294118,
+   "diff": {
+    "est": -0.016339869281045753,
+    "lo": -0.04929577464788732,
+    "hi": 0.012903225806451613,
+    "width": 0.06219900045433893,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "rag",
+   "period": "k8",
+   "mean_rendered": 0.6656626506024096,
+   "mean_template": 0.6686746987951807,
+   "diff": {
+    "est": -0.0030120481927710845,
+    "lo": -0.021604938271604937,
+    "hi": 0.018292682926829267,
+    "width": 0.03989762119843421,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "rag",
+   "period": "post",
+   "mean_rendered": 0.6517706576728499,
+   "mean_template": 0.6627318718381113,
+   "diff": {
+    "est": -0.010961214165261383,
+    "lo": -0.023465703971119134,
+    "hi": 0.001763668430335097,
+    "width": 0.02522937240145423,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "rag",
+   "period": "pre",
+   "mean_rendered": 0.5583333333333333,
+   "mean_template": 0.5770833333333333,
+   "diff": {
+    "est": -0.01875,
+    "lo": -0.035416666666666666,
+    "hi": -0.004166666666666667,
+    "width": 0.03125,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  },
+  {
+   "branch": "src",
+   "system": "zero",
+   "period": "k1",
+   "mean_rendered": 0.6931818181818182,
+   "mean_template": 0.7083333333333334,
+   "diff": {
+    "est": -0.015151515151515152,
+    "lo": -0.044715447154471545,
+    "hi": 0.010416666666666666,
+    "width": 0.05513211382113821,
+    "n_worlds": 10,
+    "n_items": 264
+   },
+   "items": {
+    "rendered": 264,
+    "template": 264,
+    "common": 264
+   }
+  },
+  {
+   "branch": "src",
+   "system": "zero",
+   "period": "k2",
+   "mean_rendered": 0.6830985915492958,
+   "mean_template": 0.6901408450704225,
+   "diff": {
+    "est": -0.007042253521126761,
+    "lo": -0.022222222222222223,
+    "hi": 0.010135135135135136,
+    "width": 0.032357357357357355,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "items": {
+    "rendered": 284,
+    "template": 284,
+    "common": 284
+   }
+  },
+  {
+   "branch": "src",
+   "system": "zero",
+   "period": "k4",
+   "mean_rendered": 0.6535947712418301,
+   "mean_template": 0.6797385620915033,
+   "diff": {
+    "est": -0.026143790849673203,
+    "lo": -0.057432432432432436,
+    "hi": 0.0,
+    "width": 0.057432432432432436,
+    "n_worlds": 10,
+    "n_items": 306
+   },
+   "items": {
+    "rendered": 306,
+    "template": 306,
+    "common": 306
+   }
+  },
+  {
+   "branch": "src",
+   "system": "zero",
+   "period": "k8",
+   "mean_rendered": 0.6596385542168675,
+   "mean_template": 0.6716867469879518,
+   "diff": {
+    "est": -0.012048192771084338,
+    "lo": -0.026627218934911243,
+    "hi": 0.006493506493506494,
+    "width": 0.033120725428417735,
+    "n_worlds": 10,
+    "n_items": 332
+   },
+   "items": {
+    "rendered": 332,
+    "template": 332,
+    "common": 332
+   }
+  },
+  {
+   "branch": "src",
+   "system": "zero",
+   "period": "post",
+   "mean_rendered": 0.6711635750421585,
+   "mean_template": 0.6863406408094435,
+   "diff": {
+    "est": -0.01517706576728499,
+    "lo": -0.02666666666666667,
+    "hi": -0.0039001560062402497,
+    "width": 0.02276651066042642,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "items": {
+    "rendered": 1186,
+    "template": 1186,
+    "common": 1186
+   }
+  },
+  {
+   "branch": "src",
+   "system": "zero",
+   "period": "pre",
+   "mean_rendered": 0.6229166666666667,
+   "mean_template": 0.625,
+   "diff": {
+    "est": -0.0020833333333333333,
+    "lo": -0.020833333333333332,
+    "hi": 0.01875,
+    "width": 0.03958333333333333,
+    "n_worlds": 10,
+    "n_items": 480
+   },
+   "items": {
+    "rendered": 480,
+    "template": 480,
+    "common": 480
+   }
+  }
+ ],
+ "probe_identity": {
+  "probes_rendered": 5760,
+  "probes_template": 5760,
+  "probes_common": 5760,
+  "only_rendered": 0,
+  "only_template": 0,
+  "changed_or_vtype_mismatch": 0,
+  "identical": true
+ },
+ "rendering": {
+  "source": "world_summaries.jsonl",
+  "models": [
+   "google/gemma-4-12B-it"
+  ],
+  "world_branches": 30,
+  "note": "counts are summed over world x branch renderings: every branch renders its own copy of the natural events",
+  "per_source": {
+   "email": {
+    "events": 17301,
+    "skipped_background": 10080,
+    "rendered": 7221,
+    "retried": 0,
+    "kept_template": 0,
+    "anchored_events": 80,
+    "anchors": 122,
+    "outside_length_band": 149,
+    "attempted": 7221,
+    "kept_template_share": 0.0,
+    "retried_share": 0.0,
+    "first_failures": {}
+   },
+   "messages": {
+    "events": 20209,
+    "skipped_background": 0,
+    "rendered": 20209,
+    "retried": 0,
+    "kept_template": 0,
+    "anchored_events": 130,
+    "anchors": 130,
+    "outside_length_band": 2179,
+    "attempted": 20209,
+    "kept_template_share": 0.0,
+    "retried_share": 0.0,
+    "first_failures": {}
+   },
+   "notes": {
+    "events": 532,
+    "skipped_background": 0,
+    "rendered": 532,
+    "retried": 0,
+    "kept_template": 0,
+    "anchored_events": 172,
+    "anchors": 172,
+    "outside_length_band": 9,
+    "attempted": 532,
+    "kept_template_share": 0.0,
+    "retried_share": 0.0,
+    "first_failures": {}
+   }
+  },
+  "total": {
+   "events": 38042,
+   "skipped_background": 10080,
+   "rendered": 27962,
+   "retried": 0,
+   "kept_template": 0,
+   "anchored_events": 382,
+   "anchors": 424,
+   "outside_length_band": 2337,
+   "attempted": 27962,
+   "kept_template_share": 0.0,
+   "retried_share": 0.0,
+   "first_failures": {}
+  },
+  "fidelity": {
+   "checked": 67871,
+   "min_rate": 1.0,
+   "min_rate_template": 1.0,
+   "all_one": true,
+   "below_one": []
+  },
+  "requests": 8413,
+  "usage": {
+   "cached": 8413,
+   "calls": 8413,
+   "completion_tokens": 459069,
+   "prompt_tokens": 1777658
+  },
+  "by_world_branch": [
+   {
+    "world_id": "w1000",
+    "branch": "def",
+    "attempted": 964,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1000",
+    "branch": "orphan",
+    "attempted": 964,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1000",
+    "branch": "src",
+    "attempted": 973,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1001",
+    "branch": "def",
+    "attempted": 856,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1001",
+    "branch": "orphan",
+    "attempted": 856,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1001",
+    "branch": "src",
+    "attempted": 866,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1002",
+    "branch": "def",
+    "attempted": 977,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1002",
+    "branch": "orphan",
+    "attempted": 977,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1002",
+    "branch": "src",
+    "attempted": 981,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1003",
+    "branch": "def",
+    "attempted": 934,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1003",
+    "branch": "orphan",
+    "attempted": 934,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1003",
+    "branch": "src",
+    "attempted": 944,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1004",
+    "branch": "def",
+    "attempted": 884,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1004",
+    "branch": "orphan",
+    "attempted": 884,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1004",
+    "branch": "src",
+    "attempted": 892,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1005",
+    "branch": "def",
+    "attempted": 955,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1005",
+    "branch": "orphan",
+    "attempted": 955,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1005",
+    "branch": "src",
+    "attempted": 962,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1006",
+    "branch": "def",
+    "attempted": 945,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1006",
+    "branch": "orphan",
+    "attempted": 945,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1006",
+    "branch": "src",
+    "attempted": 954,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1007",
+    "branch": "def",
+    "attempted": 908,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1007",
+    "branch": "orphan",
+    "attempted": 908,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1007",
+    "branch": "src",
+    "attempted": 915,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1008",
+    "branch": "def",
+    "attempted": 962,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1008",
+    "branch": "orphan",
+    "attempted": 962,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1008",
+    "branch": "src",
+    "attempted": 967,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1009",
+    "branch": "def",
+    "attempted": 910,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1009",
+    "branch": "orphan",
+    "attempted": 910,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   },
+   {
+    "world_id": "w1009",
+    "branch": "src",
+    "attempted": 918,
+    "retried": 0,
+    "kept_template": 0,
+    "kept_template_share": 0.0,
+    "fidelity_rate": 1.0
+   }
+  ]
+ }
+}

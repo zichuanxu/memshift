@@ -1,0 +1,337 @@
+{
+ "horizons": {
+  "1": {
+   "holdmem_D1B1_source": {
+    "contract_valid": {
+     "est": 0.8458333333333333,
+     "lo": 0.8291666666666667,
+     "hi": 0.8604166666666667,
+     "width": 0.03125,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 174309.8,
+     "maintain_tokens": 3882734.35625,
+     "maintain_writes_counted": 1068.6,
+     "serve_tokens": 2566757.375,
+     "verify_cpu_s": 1.1068585098917578,
+     "storage_bytes": 91396.0
+    },
+    "serve_tokens_per_query": 4139.93125,
+    "full_reread_tokens_per_query": 201730.4,
+    "serve_ratio_to_full_reread": 0.02052209904902781,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.010416666666666666,
+     "lo": -0.0375,
+     "hi": 0.014583333333333334,
+     "width": 0.05208333333333333,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": true
+   },
+   "oracle": {
+    "contract_valid": {
+     "est": 0.85625,
+     "lo": 0.8395833333333333,
+     "hi": 0.8729166666666667,
+     "width": 0.033333333333333326,
+     "n_worlds": 10,
+     "n_items": 480
+    }
+   },
+   "rag": {
+    "contract_valid": {
+     "est": 0.69375,
+     "lo": 0.6604166666666667,
+     "hi": 0.7229166666666667,
+     "width": 0.0625,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 210998.0,
+     "maintain_tokens": 201856.3,
+     "serve_tokens": 2257323.125,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 6928384.0
+    },
+    "serve_tokens_per_query": 3640.84375,
+    "full_reread_tokens_per_query": 201730.4,
+    "serve_ratio_to_full_reread": 0.018048066875394092,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.1625,
+     "lo": -0.20833333333333334,
+     "hi": -0.11875,
+     "width": 0.08958333333333335,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": false
+   },
+   "zero": {
+    "contract_valid": {
+     "est": 0.7916666666666666,
+     "lo": 0.7291666666666666,
+     "hi": 0.84375,
+     "width": 0.11458333333333337,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 0.0,
+     "maintain_tokens": 0.0,
+     "serve_tokens": 2183030.333333333,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 0.0
+    },
+    "serve_tokens_per_query": 3521.016666666666,
+    "full_reread_tokens_per_query": 201730.4,
+    "serve_ratio_to_full_reread": 0.017454070713519957,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.06458333333333334,
+     "lo": -0.13541666666666666,
+     "hi": -0.0020833333333333333,
+     "width": 0.13333333333333333,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": false
+   },
+   "zero_minus_holdmem": {
+    "est": -0.05416666666666667,
+    "lo": -0.10833333333333334,
+    "hi": -0.00625,
+    "width": 0.10208333333333333,
+    "n_worlds": 10,
+    "n_items": 480
+   }
+  },
+  "3": {
+   "holdmem_D1B1_source": {
+    "contract_valid": {
+     "est": 0.8458333333333333,
+     "lo": 0.8270833333333333,
+     "hi": 0.8625,
+     "width": 0.03541666666666676,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 212013.5,
+     "maintain_tokens": 14398726.579166666,
+     "maintain_writes_counted": 3259.9,
+     "serve_tokens": 7503356.25,
+     "verify_cpu_s": 5.458976520219725,
+     "storage_bytes": 95388.0
+    },
+    "serve_tokens_per_query": 4168.53125,
+    "full_reread_tokens_per_query": 560494.4,
+    "serve_ratio_to_full_reread": 0.007437239783305596,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.0020833333333333333,
+     "lo": -0.03125,
+     "hi": 0.03125,
+     "width": 0.0625,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": true
+   },
+   "oracle": {
+    "contract_valid": {
+     "est": 0.8479166666666667,
+     "lo": 0.8270833333333333,
+     "hi": 0.8666666666666667,
+     "width": 0.039583333333333415,
+     "n_worlds": 10,
+     "n_items": 480
+    }
+   },
+   "rag": {
+    "contract_valid": {
+     "est": 0.5729166666666666,
+     "lo": 0.5416666666666666,
+     "hi": 0.6041666666666666,
+     "width": 0.0625,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 586271.6,
+     "maintain_tokens": 561254.0,
+     "serve_tokens": 7066402.5,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 19181977.6
+    },
+    "serve_tokens_per_query": 3925.7791666666667,
+    "full_reread_tokens_per_query": 560494.4,
+    "serve_ratio_to_full_reread": 0.0070041362887241455,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.275,
+     "lo": -0.31875,
+     "hi": -0.2375,
+     "width": 0.08124999999999999,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": false
+   },
+   "zero": {
+    "contract_valid": {
+     "est": 0.6375,
+     "lo": 0.60625,
+     "hi": 0.66875,
+     "width": 0.0625,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 0.0,
+     "maintain_tokens": 0.0,
+     "serve_tokens": 6532012.5,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 0.0
+    },
+    "serve_tokens_per_query": 3628.8958333333335,
+    "full_reread_tokens_per_query": 560494.4,
+    "serve_ratio_to_full_reread": 0.006474455112010635,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.21041666666666667,
+     "lo": -0.25416666666666665,
+     "hi": -0.16666666666666666,
+     "width": 0.0875,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": false
+   },
+   "zero_minus_holdmem": {
+    "est": -0.20833333333333334,
+    "lo": -0.23333333333333334,
+    "hi": -0.18333333333333332,
+    "width": 0.05000000000000002,
+    "n_worlds": 10,
+    "n_items": 480
+   }
+  },
+  "12": {
+   "holdmem_D1B1_source": {
+    "contract_valid": {
+     "est": 0.91875,
+     "lo": 0.9104166666666667,
+     "hi": 0.9270833333333334,
+     "width": 0.01666666666666672,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 277988.8,
+     "maintain_tokens": 78128140.64791666,
+     "maintain_writes_counted": 13488.9,
+     "serve_tokens": 30342297.916666668,
+     "verify_cpu_s": 29.51025485710603,
+     "storage_bytes": 136558.1
+    },
+    "serve_tokens_per_query": 4156.479166666667,
+    "full_reread_tokens_per_query": 2238479.4,
+    "serve_ratio_to_full_reread": 0.0018568315467485058,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": 0.1375,
+     "lo": 0.10208333333333333,
+     "hi": 0.175,
+     "width": 0.07291666666666666,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": true
+   },
+   "oracle": {
+    "contract_valid": {
+     "est": 0.78125,
+     "lo": 0.7479166666666667,
+     "hi": 0.8145833333333333,
+     "width": 0.06666666666666665,
+     "n_worlds": 10,
+     "n_items": 480
+    }
+   },
+   "rag": {
+    "contract_valid": {
+     "est": 0.59375,
+     "lo": 0.5770833333333333,
+     "hi": 0.6104166666666667,
+     "width": 0.03333333333333344,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 2341598.4,
+     "maintain_tokens": 2242322.4,
+     "serve_tokens": 30468892.083333332,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 76387532.8
+    },
+    "serve_tokens_per_query": 4173.820833333333,
+    "full_reread_tokens_per_query": 2238479.4,
+    "serve_ratio_to_full_reread": 0.0018645786212432125,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.1875,
+     "lo": -0.22916666666666666,
+     "hi": -0.14375,
+     "width": 0.08541666666666667,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": false
+   },
+   "zero": {
+    "contract_valid": {
+     "est": 0.625,
+     "lo": 0.59375,
+     "hi": 0.6583333333333333,
+     "width": 0.06458333333333333,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "cost_mean": {
+     "ingest_tokens": 0.0,
+     "maintain_tokens": 0.0,
+     "serve_tokens": 30039697.708333332,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 0.0
+    },
+    "serve_tokens_per_query": 4115.027083333333,
+    "full_reread_tokens_per_query": 2238479.4,
+    "serve_ratio_to_full_reread": 0.0018383135816810883,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.15625,
+     "lo": -0.20416666666666666,
+     "hi": -0.11041666666666666,
+     "width": 0.09375,
+     "n_worlds": 10,
+     "n_items": 480
+    },
+    "T3_pass": false
+   },
+   "zero_minus_holdmem": {
+    "est": -0.29375,
+    "lo": -0.33125,
+    "hi": -0.25625,
+    "width": 0.07500000000000001,
+    "n_worlds": 10,
+    "n_items": 480
+   }
+  }
+ }
+}

@@ -1,0 +1,273 @@
+{
+ "retention": {
+  "same:holdmem_D0B0": {
+   "est": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "width": 0.0,
+   "n_worlds": 20,
+   "n_items": 808
+  },
+  "same:holdmem_D0B1_source": {
+   "est": 0.9839108910891089,
+   "lo": 0.976629766297663,
+   "hi": 0.9912935323383084,
+   "width": 0.014663766040645454,
+   "n_worlds": 20,
+   "n_items": 808
+  },
+  "same:holdmem_D1B0": {
+   "est": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "width": 0.0,
+   "n_worlds": 20,
+   "n_items": 808
+  },
+  "same:holdmem_D1B1_source": {
+   "est": 0.9863861386138614,
+   "lo": 0.9801242236024845,
+   "hi": 0.9925558312655087,
+   "width": 0.012431607663024202,
+   "n_worlds": 20,
+   "n_items": 808
+  }
+ },
+ "calibration": {
+  "same": {
+   "slope": {
+    "est": 1.372880359269615,
+    "n_items": 808,
+    "n_worlds": 20,
+    "lo95": 0.867570353322701,
+    "lo90": 0.9387564545485672,
+    "hi90": 2.19036822485264,
+    "hi95": 2.4490163452494356
+   },
+   "auroc": {
+    "est": 0.7552007740686986,
+    "n_items": 808,
+    "n_worlds": 20,
+    "lo95": 0.6023869346733668,
+    "lo90": 0.6053459119496856,
+    "hi90": 0.8997790404040404,
+    "hi95": 0.9243952768542932
+   },
+   "per_type": {
+    "appointment": {
+     "predicted": 0.95,
+     "observed": 1.0,
+     "n": 13
+    },
+    "contact.city": {
+     "predicted": 1.0,
+     "observed": 0.9958333333333333,
+     "n": 240
+    },
+    "contact.employer": {
+     "predicted": 0.9888888888888889,
+     "observed": 1.0,
+     "n": 237
+    },
+    "kappa.active_project": {
+     "predicted": 0.6333333333333333,
+     "observed": 0.47058823529411764,
+     "n": 17
+    },
+    "kappa.working_hours": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "series": {
+     "predicted": 0.975,
+     "observed": 1.0,
+     "n": 74
+    },
+    "task_due": {
+     "predicted": 0.9055555555555556,
+     "observed": 1.0,
+     "n": 120
+    },
+    "u.commute": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.diet": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    },
+    "u.employer": {
+     "predicted": 1.0,
+     "observed": 0.7142857142857143,
+     "n": 7
+    },
+    "u.manager": {
+     "predicted": 1.0,
+     "observed": 0.95,
+     "n": 20
+    },
+    "u.timezone": {
+     "predicted": 1.0,
+     "observed": 1.0,
+     "n": 20
+    }
+   }
+  }
+ },
+ "d1_vs_checker": {
+  "same": {
+   "checker_pass_rate_calibration": 0.7930555555555555,
+   "new_writer_correct_calibration": 0.8305555555555556,
+   "d1_b1_survival": 0.9863861386138614,
+   "agreement_by_type": {
+    "appointment": {
+     "n": 60,
+     "agree": 0.95,
+     "old_correct": 0.18333333333333332,
+     "new_correct": 0.16666666666666666
+    },
+    "contact.city": {
+     "n": 360,
+     "agree": 1.0,
+     "old_correct": 0.9972222222222222,
+     "new_correct": 0.9972222222222222
+    },
+    "contact.employer": {
+     "n": 360,
+     "agree": 0.9888888888888889,
+     "old_correct": 0.9944444444444445,
+     "new_correct": 0.9944444444444445
+    },
+    "kappa.active_project": {
+     "n": 30,
+     "agree": 0.6333333333333333,
+     "old_correct": 0.8333333333333334,
+     "new_correct": 0.5333333333333333
+    },
+    "kappa.close_friend": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.0,
+     "new_correct": 0.0
+    },
+    "kappa.important_contact": {
+     "n": 30,
+     "agree": 0.9666666666666667,
+     "old_correct": 0.03333333333333333,
+     "new_correct": 0.0
+    },
+    "kappa.overdue_task": {
+     "n": 30,
+     "agree": 0.4666666666666667,
+     "old_correct": 0.23333333333333334,
+     "new_correct": 0.7666666666666667
+    },
+    "kappa.vip_sender": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.0,
+     "new_correct": 0.0
+    },
+    "kappa.working_hours": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "series": {
+     "n": 120,
+     "agree": 0.975,
+     "old_correct": 0.9833333333333333,
+     "new_correct": 0.975
+    },
+    "task_due": {
+     "n": 180,
+     "agree": 0.9055555555555556,
+     "old_correct": 0.9722222222222222,
+     "new_correct": 0.8777777777777778
+    },
+    "u.commute": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.diet": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.employer": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.16666666666666666,
+     "new_correct": 0.16666666666666666
+    },
+    "u.home_city": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 0.0,
+     "new_correct": 0.0
+    },
+    "u.manager": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    },
+    "u.timezone": {
+     "n": 30,
+     "agree": 1.0,
+     "old_correct": 1.0,
+     "new_correct": 1.0
+    }
+   }
+  }
+ },
+ "t1": {
+  "same": {
+   "delta_90": {
+    "est": -0.013613861386138614,
+    "lo": -0.018633540372670808,
+    "hi": -0.008641975308641974,
+    "width": 0.009991565064028833,
+    "n_worlds": 20,
+    "n_items": 808
+   },
+   "margin": 0.03,
+   "equivalent": true
+  }
+ },
+ "path3_quantitative_prediction_holds": {
+  "same": true
+ },
+ "path3": {
+  "tiers": [
+   "same"
+  ],
+  "pooled_slope": {
+   "est": 1.372880359269615,
+   "n_items": 808,
+   "n_worlds": 20,
+   "lo95": 0.867570353322701,
+   "lo90": 0.9387564545485672,
+   "hi90": 2.19036822485264,
+   "hi95": 2.4490163452494356
+  },
+  "pooled_auroc": {
+   "est": 0.7552007740686986,
+   "n_items": 808,
+   "n_worlds": 20,
+   "lo95": 0.6023869346733668,
+   "lo90": 0.6053459119496856,
+   "hi90": 0.8997790404040404,
+   "hi95": 0.9243952768542932
+  },
+  "triggered": false,
+  "tier_caveats": []
+ }
+}

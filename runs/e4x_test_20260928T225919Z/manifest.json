@@ -1,0 +1,412 @@
+{
+  "code": {
+    "commit": "022a8828d7873ed7c6b0b86420b47055bf977302",
+    "dirty": false
+  },
+  "created_utc": "2026-09-29T02:26:21Z",
+  "experiment": "E4X",
+  "files_sha256": {
+    "answers.jsonl": "c70ee17a362e2c5b4a7c8affcf4519461cea0fe90bb9aba1c53f8b60ff8242bf",
+    "calls.jsonl": "7066ff5844fe3595b4514b5a18c3426054fecddf2378ddf2c630e16f87cb80a5",
+    "divergence.jsonl": "d44ae9f27919921ff82e320baea24376c9636b756a4f7e0d7dc989cedd7c1758",
+    "env.json": "e33908b811379e50567a9271c35c30a9c4681998d3039b1b65fe93d9d9d09ee7",
+    "polls.jsonl": "fba4af3ef50cff53550713d2349bbcb98672905dc016fdfd11b2a96d50dfd897",
+    "probes.jsonl": "723b99db91150968b5a4efe53883e2573b2918244659c3ce8b9d5dfab5ce26f0",
+    "world_summaries.jsonl": "84b14c69c01435e62e112cd0948e52e2188c6ce7e422d78d31d45dded4464af5"
+  },
+  "llm_calls_expected": 19320,
+  "models": {
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "branch": "src",
+    "cells": [
+      "holdmem_D1B0",
+      "holdmem_D1B1_source"
+    ],
+    "event_strata": [
+      "shift-tagged",
+      "update/delete",
+      "insert"
+    ],
+    "lag_minutes": 5,
+    "maintain": "at probe times where the delivered log changed since last maintenance",
+    "max_events_per_source": 2,
+    "modes": [
+      "ideal",
+      "official"
+    ],
+    "probe_deltas_minutes": [
+      10,
+      60
+    ],
+    "probes": "every touched slot + equal-size seeded sample of untouched slots per event (same at both deltas); (slot, time) deduplicated, touched first",
+    "profiles": {
+      "calendar": {
+        "api": "Google Calendar API events.list(syncToken)",
+        "gone_prob": 0.001,
+        "incremental": "changes",
+        "invalid_cursor": "HTTP 410 GONE -> clear and full sync",
+        "page_size": 50,
+        "poll_minutes": 15,
+        "source": "calendar",
+        "token_ttl_days": 7.0,
+        "tombstone": "status: \"cancelled\""
+      },
+      "contacts": {
+        "api": "People API people.connections.list(requestSyncToken, syncToken)",
+        "gone_prob": 0.0,
+        "incremental": "changes",
+        "invalid_cursor": "EXPIRED_SYNC_TOKEN -> full sync",
+        "page_size": 50,
+        "poll_minutes": 15,
+        "source": "contacts",
+        "token_ttl_days": 7.0,
+        "tombstone": "metadata.deleted = true"
+      },
+      "email": {
+        "api": "Gmail users.history.list(startHistoryId)",
+        "gone_prob": 0.0,
+        "incremental": "changes",
+        "invalid_cursor": "HTTP 404 -> full sync",
+        "page_size": 50,
+        "poll_minutes": 15,
+        "source": "email",
+        "token_ttl_days": 7.0,
+        "tombstone": "messagesDeleted"
+      },
+      "messages": {
+        "api": "Slack conversations.history(oldest = latest ts seen)",
+        "gone_prob": 0.0,
+        "incremental": "created",
+        "invalid_cursor": "none (oldest is a timestamp)",
+        "page_size": 50,
+        "poll_minutes": 15,
+        "source": "messages",
+        "token_ttl_days": null,
+        "tombstone": null
+      },
+      "notes": {
+        "api": "Google Drive changes.list(pageToken from changes.getStartPageToken)",
+        "gone_prob": 0.0,
+        "incremental": "changes",
+        "invalid_cursor": "none (page tokens do not expire)",
+        "page_size": 50,
+        "poll_minutes": 15,
+        "source": "notes",
+        "token_ttl_days": null,
+        "tombstone": "removed = true"
+      },
+      "tasks": {
+        "api": "Google Tasks tasks.list(updatedMin, showDeleted=true, showHidden=true)",
+        "gone_prob": 0.0,
+        "incremental": "changes",
+        "invalid_cursor": "none (updatedMin does not expire)",
+        "page_size": 50,
+        "poll_minutes": 15,
+        "source": "tasks",
+        "token_ttl_days": null,
+        "tombstone": "deleted = true"
+      }
+    },
+    "reader_budget_tokens": 4096,
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004
+    ],
+    "sources": [
+      "email",
+      "calendar",
+      "tasks",
+      "contacts",
+      "notes",
+      "messages"
+    ],
+    "sync_seed": "world.seed * 7919 + 4; calendar seeded as in E4, other sources' phase and invalidation seed strings include the source name",
+    "systems": [
+      "holdmem_D1B0",
+      "holdmem_D1B1_source",
+      "zero"
+    ],
+    "t0": "fork - 1 minute",
+    "touched": "event.object_id in true gold deps at event.ts or event.ts - 1 s",
+    "window_weeks": 8,
+    "world_params": {}
+  },
+  "run_id": "e4x_test_20260928T225919Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "df724790d6af5b227c6a679dabcdd2690b259b2300f60565e64156ec44844504",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1643,
+      "seed": 1000,
+      "shift_targets": [
+        "c.p17.employer",
+        "c.p18.city",
+        "c.p19.employer",
+        "c.p25.city",
+        "c.p29.employer",
+        "k.important_contact",
+        "k.vip_sender",
+        "s.series_team_sync",
+        "t.t034",
+        "u.commute"
+      ],
+      "world_id": "w1000"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "606b5928249a4cda139933c95ddbbcd9c0da41c285c67f4cc12582f4b07aaf75",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1543,
+      "seed": 1001,
+      "shift_targets": [
+        "c.p05.employer",
+        "c.p11.employer",
+        "c.p13.city",
+        "c.p29.city",
+        "c.p29.employer",
+        "k.close_friend",
+        "k.working_hours",
+        "t.t013",
+        "t.t026",
+        "u.timezone"
+      ],
+      "world_id": "w1001"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "45532dd38bdd3312240f5d701ae6211ae4966bcc1709ece93611ae32f5ef6fdd",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1661,
+      "seed": 1002,
+      "shift_targets": [
+        "c.p07.employer",
+        "c.p19.employer",
+        "c.p22.city",
+        "c.p22.employer",
+        "k.active_project",
+        "k.important_contact",
+        "t.t003",
+        "t.t015",
+        "t.t031",
+        "u.employer"
+      ],
+      "world_id": "w1002"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "1e6902f1865142c116529db620324ed2fd173a4da62027249df62c8dadf487c1",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1615,
+      "seed": 1003,
+      "shift_targets": [
+        "c.p05.city",
+        "c.p08.employer",
+        "c.p19.employer",
+        "c.p20.city",
+        "c.p21.city",
+        "c.p22.employer",
+        "c.p28.employer",
+        "k.vip_sender",
+        "t.t003",
+        "u.employer"
+      ],
+      "world_id": "w1003"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "31f0c5eb10aced2864d63cdd30b78e3ad0291df375bea4fdac1a25df6e6876c3",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1561,
+      "seed": 1004,
+      "shift_targets": [
+        "a.dentist",
+        "c.p05.city",
+        "c.p08.city",
+        "c.p16.city",
+        "c.p16.employer",
+        "c.p19.city",
+        "c.p30.employer",
+        "s.series_language_exchange",
+        "t.t034",
+        "u.commute"
+      ],
+      "world_id": "w1004"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+ "stage4_m2_openai_gpt-oss-20b": {
+  "checks": {
+   "i_path2_not_triggered": true,
+   "ii_B_update_src": true,
+   "iii_D_repair_src": true,
+   "iii_D_repair_def": true,
+   "iv_BxD_def": true,
+   "v_zero_below_hm11_def": true
+  },
+  "pattern_holds": true,
+  "estimates": {
+   "B_update_src": {
+    "est": 0.1205733558178752,
+    "lo": 0.07830342577487764,
+    "hi": 0.16547406082289803,
+    "width": 0.08717063504802039,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "D_repair_src": {
+    "est": 0.11959287531806616,
+    "lo": 0.10487200660611065,
+    "hi": 0.1354515050167224,
+    "width": 0.03057949841061175,
+    "n_worlds": 10,
+    "n_items": 1179
+   },
+   "D_repair_def": {
+    "est": 0.26512455516014233,
+    "lo": 0.23720136518771331,
+    "hi": 0.29454545454545455,
+    "width": 0.05734408935774124,
+    "n_worlds": 10,
+    "n_items": 562
+   },
+   "BxD_def": {
+    "est": 0.2852112676056338,
+    "lo": 0.23076923076923078,
+    "hi": 0.3277027027027027,
+    "width": 0.0969334719334719,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "BxD_src": {
+    "est": 0.12310286677908938,
+    "lo": 0.09628378378378379,
+    "hi": 0.1546572934973638,
+    "width": 0.058373509713580005,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "zero_minus_hm11_def": {
+    "est": -0.301056338028169,
+    "lo": -0.3316151202749141,
+    "hi": -0.272108843537415,
+    "width": 0.059506276737499086,
+    "n_worlds": 10,
+    "n_items": 568
+   }
+  },
+  "n_worlds": 10
+ },
+ "families_holding": 1
+}

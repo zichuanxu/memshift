@@ -1,0 +1,251 @@
+{
+  "analysis_code": {
+    "commit": "7ddb146802414cdd99dc91e94ee1be3cf566a90a",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T21:31:14Z",
+  "experiment": "merged-e2",
+  "files_sha256": {
+    "analysis/e2_metrics.json": "88603cfa0c4d20ee71550ec191c17db94c82e867b6f88b96b7f50c9a344b1ee7"
+  },
+  "run_id": "stage4_m1_e2",
+  "sources": [
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "ef38c3fea9b1f0f44e0d3bbe19c564a9235edd76e436cda9c5b0579ba9b36227",
+      "run_id": "e2_test_same_20260928T202249Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "b04b36cbdd4276b17405fe9139e70c5d7593e97f",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "c81b22e145d7bd6eeb0ab8affd7ae524fd9855ff2d654932289a76aeb33b0f62",
+      "run_id": "e2_test_27b_20260928T200630Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019",
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "75086a1bba39f6d57fdd76745e61d9c58729e0c5",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "3a42d574f0981533be3610b798a10605cbb59c41c6d9dd5924b79de638e652da",
+      "run_id": "m1_read_google_gemma-4-12b-it_20260930T175459Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "75086a1bba39f6d57fdd76745e61d9c58729e0c5",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "e62d7885a027a2bc91c1f454189fa0b37b0cec627edcd0a413d2efb1fc7e455a",
+      "run_id": "m1_read_meta-llama_llama-3_1-8b-instruct_20260930T175603Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "75086a1bba39f6d57fdd76745e61d9c58729e0c5",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "d5ebab654b1353df59c256e9a91591497bf3eff6046d9e4b7fe55a5c3a6a55bb",
+      "run_id": "m1_read_mistralai_ministral-3-14b-instruct-2512-bf16_20260930T174601Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "75086a1bba39f6d57fdd76745e61d9c58729e0c5",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "f6b4d906f7040dd7f901bbedd58e56e436fc95350d4b71c0e7aed008c63055d3",
+      "run_id": "m1_read_openai_gpt-oss-20b_20260930T180608Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "75086a1bba39f6d57fdd76745e61d9c58729e0c5",
+        "dirty": false
+      },
+      "experiment": "E2",
+      "manifest_sha256": "72c57a3df2ac267860eee0850e983c4568c4ef1a64a3af27b94a5d7ea888c278",
+      "run_id": "m1_read_qwen_qwen3-8b_20260930T191737Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009",
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    }
+  ]
+}

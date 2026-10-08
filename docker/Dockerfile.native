@@ -1,0 +1,9 @@
+# Per-system image for block N (prereg/v2.md §3): the CPU run image plus one native memory
+# system's pinned closure from docker/native/<system>.txt. Build with scripts/build_native.sh,
+# which passes the base image, the system and the pip flags that system's file asks for.
+ARG BASE
+FROM ${BASE}
+ARG SYSTEM
+ARG PIP_FLAGS=""
+COPY native/${SYSTEM}.txt /tmp/native.txt
+RUN pip install --no-cache-dir ${PIP_FLAGS} -r /tmp/native.txt && rm /tmp/native.txt

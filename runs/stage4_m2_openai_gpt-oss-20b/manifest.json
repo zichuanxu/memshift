@@ -1,0 +1,101 @@
+{
+  "analysis_code": {
+    "commit": "534495fb6a88cf33a5b2bbdf83291d83c9868847",
+    "dirty": true
+  },
+  "created_utc": "2026-09-30T15:45:30Z",
+  "experiment": "merged-m2",
+  "files_sha256": {
+    "analysis/e1_item_table.jsonl": "ee5715ab558ccc9273e0704f7703baccd37251a600b31bcf3f706565b67190b9",
+    "analysis/e1_metrics.json": "454b9fafb694e3cfa35b8c41b9df65344c1bc91c6056051cceb43cf92b8e2fa2",
+    "analysis/families.json": "326be27b49ab60ebf703f590a2ceadd42bac29512f09753ed8e64fe35ecb991b"
+  },
+  "run_id": "stage4_m2_openai_gpt-oss-20b",
+  "sources": [
+    {
+      "code": {
+        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "6271be6c816bf172788ce6d4e2fd6f733f880d85af3efa8e9f720b05d617850f",
+      "run_id": "m2_openai_gpt-oss-20b_s1000-1001_20260930T132340Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "539bcce2a3fbe9b3cb781a42fb8ffa2b0d2cd2b6c84aad1cae47c2242c9db599",
+      "run_id": "m2_openai_gpt-oss-20b_s1002-1003_20260930T132342Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f711d832ca2a7e05d0d273c6acd64e8160b00797601b3dbfef5375113c4a8ff5",
+      "run_id": "m2_openai_gpt-oss-20b_s1004-1005_20260930T132344Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "9fd3665921687eb0a0517d01d622409949cb9f383a3a4cb41ce7b92728b343df",
+      "run_id": "m2_openai_gpt-oss-20b_s1006-1007_20260930T132346Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f284b155aa414742ab299aaff268cbf65e9c157311c3d4688682622f1bdb02c7",
+      "run_id": "m2_openai_gpt-oss-20b_s1008-1009_20260930T132348Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "analysis_code": {
+    "commit": "666c8bdbc3fd9d7785a895c3b73a1668da21ba68",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T17:48:28Z",
+  "experiment": "merged-e5_cost",
+  "files_sha256": {
+    "analysis/e5_cost.json": "ee52b6f18a93d090fe90fc2a0cc54daa1d83f42c80391067dec2dc24a1bd6a56"
+  },
+  "run_id": "stage4_n_cost",
+  "sources": [
+    {
+      "code": {
+        "commit": "bbd6152604326be95ed23e1bef345ddd25249c6f",
+        "dirty": false
+      },
+      "experiment": "E5-measure",
+      "manifest_sha256": "58c59830330db4802ab1f38c942c9ef245e3c47dfc04586e37c7c5c48a4a0f22",
+      "run_id": "e5_measure_amem_20260929T152806Z",
+      "worlds": [
+        "w1000"
+      ]
+    },
+    {
+      "code": {
+        "commit": "6ea744452d9c17892ac38da936b624b19d001f9d",
+        "dirty": false
+      },
+      "experiment": "E5-measure",
+      "manifest_sha256": "ef0439e4ac7532cec8cc7dbb708871939f26ce13f6358b25672b4c1f567e10be",
+      "run_id": "e5_measure_cognee_20260929T163119Z",
+      "worlds": [
+        "w1000"
+      ]
+    },
+    {
+      "code": {
+        "commit": "bbd6152604326be95ed23e1bef345ddd25249c6f",
+        "dirty": false
+      },
+      "experiment": "E5-measure",
+      "manifest_sha256": "4f2a74ae417e63b527c050c1c30cbf3e903b520a3a91368961ffb6c0d7cb40b9",
+      "run_id": "e5_measure_hipporag_20260929T152808Z",
+      "worlds": [
+        "w1000"
+      ]
+    },
+    {
+      "code": {
+        "commit": "bbd6152604326be95ed23e1bef345ddd25249c6f",
+        "dirty": false
+      },
+      "experiment": "E5-measure",
+      "manifest_sha256": "4736915c9d98de4afff17c8b93ebb117415e6f1cc29271daca5c6c08a3279f1a",
+      "run_id": "e5_measure_lightrag_20260929T152810Z",
+      "worlds": [
+        "w1000"
+      ]
+    },
+    {
+      "code": {
+        "commit": "bbd6152604326be95ed23e1bef345ddd25249c6f",
+        "dirty": false
+      },
+      "experiment": "E5-measure",
+      "manifest_sha256": "8b53e65ed09990839b4071ae4247f678762c5266d0e82e88ba83e2f81fe99aa0",
+      "run_id": "e5_measure_memos_20260929T152812Z",
+      "worlds": [
+        "w1000"
+      ]
+    }
+  ]
+}

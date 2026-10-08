@@ -1,0 +1,70 @@
+{
+  "analysis_code": {
+    "commit": "b08894c6f8a0301049944b7573ffd205d47c4016",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T19:06:05Z",
+  "experiment": "merged-ex_e1_more",
+  "files_sha256": {
+    "analysis/ex_e1_more.json": "89ee26e5974d908dfb8b72a7309eff227b3c693bbccc778adf8cfa638fcae997"
+  },
+  "run_id": "stage5_ex_more",
+  "sources": [
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "c4896ee09108a2c449bd41349cfdbeabbc420086b144fa331091a9c793a854b6",
+      "run_id": "stage1_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "aecd627574294160a19ea540f46cca7e67013f325b05057cdec002b20439eaf4",
+      "run_id": "stage1_orphan",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "run_id": "stage2_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "aabb9fdaf7409e7a8d6cb59dbda41b5af2b4c189e21b36af01e7c46982272e69",
+      "run_id": "stage4_rep_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "b63e0ff5d9eaa3b29cb3f8be24d2bf831ba6c2456e0c820fd47e24809d7f8376",
+      "run_id": "stage5_short_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "9747c1191ca18b4f6a89246c8d03a278b8f8f43d6770dc0f068d6215da8895aa",
+      "run_id": "stage4_m2_google_gemma-4-12b-it",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "df5b9472c4a7e35a804c905c4507fe0d4d81397e355316f3d08f766c01adcbb2",
+      "run_id": "stage4_m2_meta-llama_llama-3_1-8b-instruct",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "8d5dfb12bd99f33ddc005b49903323eceba28740f114d927745a3f58fd29238e",
+      "run_id": "stage4_m2_openai_gpt-oss-20b",
+      "worlds": []
+    }
+  ]
+}

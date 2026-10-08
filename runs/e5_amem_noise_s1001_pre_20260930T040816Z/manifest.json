@@ -1,0 +1,140 @@
+{
+  "code": {
+    "commit": "b450a073ef9e18be271e65005d996a93899002b5",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T06:12:04Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "f34d55a8bdb3417c54a2c505eb81e8c5285e2371b48b8bd1e234b52084b34eb2",
+    "answers.jsonl": "1021de05e2d0a055a8c94668383862a9a18bfcbdabecba057815a55e5cc32cf5",
+    "calls.jsonl": "3fa8d2bc3e9a25084d8d4507f59d77331fb9b2a2284cfc41cc1510e0f2d839a4",
+    "env.json": "621e943d47d182188a8085c8b54492201833febb069e03f22230613cb5dad7f1",
+    "probes.jsonl": "d48eb25384d0d2c4c1b09bbb4ef58f4feb780d816e6495065966ea4f9225413b",
+    "stores/w1001_amem/prefix/chroma/chroma.sqlite3": "b43a62fee491c0ebeb98fc6ac7bc6314c897db6896e6d3f0b381a4dab70b5261",
+    "stores/w1001_amem/prefix/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/data_level0.bin": "ea9ac6972cb4666769a17755f17c5727f676f11a742e9553bf3a21119ab54394",
+    "stores/w1001_amem/prefix/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/header.bin": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150",
+    "stores/w1001_amem/prefix/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/length.bin": "7b7155e3022196dba898d042f695b06592838cda2fcd98cb6a7e52812470e98f",
+    "stores/w1001_amem/prefix/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/link_lists.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1001_amem/prefix/failures.jsonl": "5de6a624bad9c5d2f08622b47885540b2dda0a231be9ea3ad967d119363c5c19",
+    "stores/w1001_amem/prefix/ledger.jsonl": "615b4498bceec4ddd87d7cdd8d89c03775284a010a2e421d35b14668a0befcf1",
+    "stores/w1001_amem/prefix/memshift_native.json": "f65b0189cac13ca26e44e7f68f9e4da941255cedf243a7952e9a883ca60838dc",
+    "stores/w1001_amem/prefix/notes.json": "e73f57b2e27523261ef1a90c605227c6b2589127980c134e305b1be992f773fd",
+    "stores/w1001_amem/prefix/state.json": "74b62b67d5a2d10835dc18168d33656f9acbf02b983fe2e28e5b8e3505ce9928",
+    "stores/w1001_amem/snapshot/chroma/chroma.sqlite3": "4eb5ffee33583a93b2b6f3156b85c92c8850086e594ae72ca35ba804e3054e83",
+    "stores/w1001_amem/snapshot/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/data_level0.bin": "ea9ac6972cb4666769a17755f17c5727f676f11a742e9553bf3a21119ab54394",
+    "stores/w1001_amem/snapshot/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/header.bin": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150",
+    "stores/w1001_amem/snapshot/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/length.bin": "6c5b65c0d9040970ced872d17574e57a819ecadeecbd314dc86b329434ec6890",
+    "stores/w1001_amem/snapshot/chroma/e6724c05-49dc-4556-8922-ed281de8b4d5/link_lists.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1001_amem/snapshot/failures.jsonl": "5de6a624bad9c5d2f08622b47885540b2dda0a231be9ea3ad967d119363c5c19",
+    "stores/w1001_amem/snapshot/ledger.jsonl": "615b4498bceec4ddd87d7cdd8d89c03775284a010a2e421d35b14668a0befcf1",
+    "stores/w1001_amem/snapshot/memshift_native.json": "f65b0189cac13ca26e44e7f68f9e4da941255cedf243a7952e9a883ca60838dc",
+    "stores/w1001_amem/snapshot/notes.json": "e73f57b2e27523261ef1a90c605227c6b2589127980c134e305b1be992f773fd",
+    "stores/w1001_amem/snapshot/state.json": "72db8f10e5e6246dccc45c52d6a7d38f4842e1e802d2e7200ffdee2e5fa19a7b",
+    "world_results.jsonl": "996a6a54cbf8d8d252cdbef84c97d708658f4c965b08c1eb9f86a445f1faea9a"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "branches": [
+      "src",
+      "def",
+      "orphan"
+    ],
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "native_batch": 1,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "phase": "prefix",
+    "prefix_run": null,
+    "resume_from": "e5_amem_noise_s1001_pre_20260930T032817Z",
+    "seeds": [
+      1001
+    ],
+    "systems": [
+      "amem"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_amem_noise_s1001_pre_20260930T040816Z",
+  "run_image": "sha256:118fd86eac3ec820195af2864cf98cb8ed610ed59318dc298fa6b2a76e782638",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "699ef4adfd9e5222a88ea69de55f43acceab56d64fdabc233a729a7013949c7f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 481,
+      "seed": 1001,
+      "shift_targets": null,
+      "world_id": "w1001"
+    }
+  ]
+}

@@ -1,0 +1,1705 @@
+{
+ "horizons": {
+  "1": {
+   "holdmem_D1B1_source": {
+    "contract_valid": {
+     "est": 0.8479166666666667,
+     "lo": 0.8364583333333333,
+     "hi": 0.859375,
+     "width": 0.022916666666666696,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 176038.3,
+     "maintain_tokens": 3943527.9083333337,
+     "maintain_writes_counted": 1074.85,
+     "serve_tokens": 2542467.583333333,
+     "verify_cpu_s": 0.9371122376181216,
+     "storage_bytes": 91902.1
+    },
+    "serve_tokens_per_query": 4100.754166666667,
+    "full_reread_tokens_per_query": 202213.4,
+    "serve_ratio_to_full_reread": 0.02027933938436655,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": 0.016666666666666666,
+     "lo": -0.0010416666666666667,
+     "hi": 0.034375,
+     "width": 0.03541666666666667,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": true,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.8297297297297297,
+      "lo": 0.8148648648648649,
+      "hi": 0.8445945945945946,
+      "width": 0.02972972972972976,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.8,
+      "lo": 0.8,
+      "hi": 0.8,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.8261904761904761,
+      "lo": 0.8130952380952381,
+      "hi": 0.8392857142857143,
+      "width": 0.02619047619047621,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.06904761904761905,
+      "lo": -0.08928571428571429,
+      "hi": -0.04880952380952381,
+      "width": 0.04047619047619048,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.8297297297297297,
+       "lo": 0.8148648648648649,
+       "hi": 0.8445945945945946,
+       "width": 0.02972972972972976,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.051351351351351354,
+       "lo": -0.07432432432432433,
+       "hi": -0.02837837837837838,
+       "width": 0.04594594594594595,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.03958333333333333
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 1.0,
+       "lo": 1.0,
+       "hi": 1.0,
+       "width": 0.0,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": 0.6166666666666667,
+       "lo": 0.575,
+       "hi": 0.6583333333333333,
+       "width": 0.08333333333333337,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": true,
+      "T3_pass_at_eps_pp": {
+       "1": true,
+       "2": true,
+       "3": true,
+       "5": true
+      },
+      "share_of_items": 0.125,
+      "contribution": 0.07708333333333334
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.8,
+       "lo": 0.8,
+       "hi": 0.8,
+       "width": 0.0,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.2,
+       "lo": -0.2,
+       "hi": -0.2,
+       "width": 0.0,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.020833333333333332
+     }
+    },
+    "explore_t4_slack": 24.655635497941944
+   },
+   "oracle": {
+    "contract_valid": {
+     "est": 0.83125,
+     "lo": 0.815625,
+     "hi": 0.8458333333333333,
+     "width": 0.03020833333333328,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "explore_by_class": {
+     "rule": {
+      "est": 0.8810810810810811,
+      "lo": 0.8608108108108108,
+      "hi": 0.9,
+      "width": 0.03918918918918923,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.38333333333333336,
+      "lo": 0.3416666666666667,
+      "hi": 0.425,
+      "width": 0.08333333333333331,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.8952380952380953,
+      "lo": 0.8773809523809524,
+      "hi": 0.9119047619047619,
+      "width": 0.03452380952380951,
+      "n_worlds": 20,
+      "n_items": 840
+     }
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.8810810810810811,
+       "lo": 0.8608108108108108,
+       "hi": 0.9,
+       "width": 0.03918918918918923,
+       "n_worlds": 20,
+       "n_items": 740
+      }
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.38333333333333336,
+       "lo": 0.3416666666666667,
+       "hi": 0.425,
+       "width": 0.08333333333333331,
+       "n_worlds": 20,
+       "n_items": 120
+      }
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 1.0,
+       "lo": 1.0,
+       "hi": 1.0,
+       "width": 0.0,
+       "n_worlds": 20,
+       "n_items": 100
+      }
+     }
+    },
+    "explore_t4_slack": null
+   },
+   "rag": {
+    "contract_valid": {
+     "est": 0.68125,
+     "lo": 0.659375,
+     "hi": 0.703125,
+     "width": 0.043749999999999956,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 211511.9,
+     "maintain_tokens": 202355.6,
+     "serve_tokens": 2256172.25,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 6962790.4
+    },
+    "serve_tokens_per_query": 3638.9875,
+    "full_reread_tokens_per_query": 202213.4,
+    "serve_ratio_to_full_reread": 0.01799577822241256,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.15,
+     "lo": -0.17916666666666667,
+     "hi": -0.12083333333333333,
+     "width": 0.058333333333333334,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": false,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.7581081081081081,
+      "lo": 0.7297297297297297,
+      "hi": 0.7851351351351351,
+      "width": 0.055405405405405395,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.35,
+      "lo": 0.31666666666666665,
+      "hi": 0.38333333333333336,
+      "width": 0.06666666666666671,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.51,
+      "lo": 0.45,
+      "hi": 0.58,
+      "width": 0.12999999999999995,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.7285714285714285,
+      "lo": 0.7035714285714286,
+      "hi": 0.7547619047619047,
+      "width": 0.05119047619047612,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.16666666666666666,
+      "lo": -0.1988095238095238,
+      "hi": -0.13452380952380952,
+      "width": 0.06428571428571428,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.7581081081081081,
+       "lo": 0.7297297297297297,
+       "hi": 0.7851351351351351,
+       "width": 0.055405405405405395,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.12297297297297298,
+       "lo": -0.15675675675675677,
+       "hi": -0.0891891891891892,
+       "width": 0.06756756756756757,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.09479166666666666
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.35,
+       "lo": 0.31666666666666665,
+       "hi": 0.38333333333333336,
+       "width": 0.06666666666666671,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": -0.03333333333333333,
+       "lo": -0.075,
+       "hi": 0.0,
+       "width": 0.075,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": true
+      },
+      "share_of_items": 0.125,
+      "contribution": -0.004166666666666667
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.51,
+       "lo": 0.45,
+       "hi": 0.58,
+       "width": 0.12999999999999995,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.49,
+       "lo": -0.55,
+       "hi": -0.42,
+       "width": 0.13000000000000006,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.051041666666666666
+     }
+    },
+    "explore_t4_slack": 27.784294395075552
+   },
+   "zero": {
+    "contract_valid": {
+     "est": 0.75,
+     "lo": 0.7166666666666667,
+     "hi": 0.7833333333333333,
+     "width": 0.06666666666666665,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 0.0,
+     "maintain_tokens": 0.0,
+     "serve_tokens": 2192358.1041666665,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 0.0
+    },
+    "serve_tokens_per_query": 3536.061458333333,
+    "full_reread_tokens_per_query": 202213.4,
+    "serve_ratio_to_full_reread": 0.017486781085394604,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.08125,
+     "lo": -0.11145833333333334,
+     "hi": -0.051041666666666666,
+     "width": 0.060416666666666674,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": false,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.8324324324324325,
+      "lo": 0.7932432432432432,
+      "hi": 0.8716216216216216,
+      "width": 0.07837837837837835,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.3333333333333333,
+      "lo": 0.30833333333333335,
+      "hi": 0.35833333333333334,
+      "width": 0.04999999999999999,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.64,
+      "lo": 0.58,
+      "hi": 0.7,
+      "width": 0.12,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.8095238095238095,
+      "lo": 0.7726190476190476,
+      "hi": 0.8476190476190476,
+      "width": 0.07499999999999996,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.08571428571428572,
+      "lo": -0.12023809523809524,
+      "hi": -0.05119047619047619,
+      "width": 0.06904761904761905,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.8324324324324325,
+       "lo": 0.7932432432432432,
+       "hi": 0.8716216216216216,
+       "width": 0.07837837837837835,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.04864864864864865,
+       "lo": -0.08648648648648649,
+       "hi": -0.012162162162162163,
+       "width": 0.07432432432432433,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": true
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.0375
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.3333333333333333,
+       "lo": 0.30833333333333335,
+       "hi": 0.35833333333333334,
+       "width": 0.04999999999999999,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": -0.05,
+       "lo": -0.08333333333333333,
+       "hi": -0.016666666666666666,
+       "width": 0.06666666666666667,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": true
+      },
+      "share_of_items": 0.125,
+      "contribution": -0.00625
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.64,
+       "lo": 0.58,
+       "hi": 0.7,
+       "width": 0.12,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.36,
+       "lo": -0.42,
+       "hi": -0.3,
+       "width": 0.12,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.0375
+     }
+    },
+    "explore_t4_slack": 28.593026787394994
+   },
+   "zero_minus_holdmem": {
+    "est": -0.09791666666666667,
+    "lo": -0.13229166666666667,
+    "hi": -0.06666666666666667,
+    "width": 0.065625,
+    "n_worlds": 20,
+    "n_items": 960
+   }
+  },
+  "3": {
+   "holdmem_D1B1_source": {
+    "contract_valid": {
+     "est": 0.8395833333333333,
+     "lo": 0.8291666666666667,
+     "hi": 0.8510416666666667,
+     "width": 0.021874999999999978,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 212385.9,
+     "maintain_tokens": 14558086.954166666,
+     "maintain_writes_counted": 3289.8,
+     "serve_tokens": 7441290.0,
+     "verify_cpu_s": 4.3708390722345865,
+     "storage_bytes": 95186.25
+    },
+    "serve_tokens_per_query": 4134.05,
+    "full_reread_tokens_per_query": 560491.1,
+    "serve_ratio_to_full_reread": 0.007375763861370859,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": 0.011458333333333333,
+     "lo": -0.00625,
+     "hi": 0.029166666666666667,
+     "width": 0.035416666666666666,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": true,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.8445945945945946,
+      "lo": 0.8324324324324325,
+      "hi": 0.8581081081081081,
+      "width": 0.025675675675675635,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.61,
+      "lo": 0.6,
+      "hi": 0.63,
+      "width": 0.030000000000000027,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.8166666666666667,
+      "lo": 0.8047619047619048,
+      "hi": 0.8297619047619048,
+      "width": 0.025000000000000022,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.06904761904761905,
+      "lo": -0.0880952380952381,
+      "hi": -0.05119047619047619,
+      "width": 0.03690476190476191,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.8445945945945946,
+       "lo": 0.8324324324324325,
+       "hi": 0.8581081081081081,
+       "width": 0.025675675675675635,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.052702702702702706,
+       "lo": -0.07432432432432433,
+       "hi": -0.031081081081081083,
+       "width": 0.043243243243243246,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.040625
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 1.0,
+       "lo": 1.0,
+       "hi": 1.0,
+       "width": 0.0,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": 0.575,
+       "lo": 0.5333333333333333,
+       "hi": 0.625,
+       "width": 0.09166666666666667,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": true,
+      "T3_pass_at_eps_pp": {
+       "1": true,
+       "2": true,
+       "3": true,
+       "5": true
+      },
+      "share_of_items": 0.125,
+      "contribution": 0.071875
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.61,
+       "lo": 0.6,
+       "hi": 0.63,
+       "width": 0.030000000000000027,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.19,
+       "lo": -0.25,
+       "hi": -0.13,
+       "width": 0.12,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.019791666666666666
+     }
+    },
+    "explore_t4_slack": 67.78958890192426
+   },
+   "oracle": {
+    "contract_valid": {
+     "est": 0.828125,
+     "lo": 0.8114583333333333,
+     "hi": 0.84375,
+     "width": 0.03229166666666672,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "explore_by_class": {
+     "rule": {
+      "est": 0.8972972972972973,
+      "lo": 0.8797297297297297,
+      "hi": 0.9135135135135135,
+      "width": 0.03378378378378377,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.425,
+      "lo": 0.375,
+      "hi": 0.4666666666666667,
+      "width": 0.09166666666666667,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.8,
+      "lo": 0.74,
+      "hi": 0.86,
+      "width": 0.12,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.8857142857142857,
+      "lo": 0.8690476190476191,
+      "hi": 0.9011904761904762,
+      "width": 0.03214285714285714,
+      "n_worlds": 20,
+      "n_items": 840
+     }
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.8972972972972973,
+       "lo": 0.8797297297297297,
+       "hi": 0.9135135135135135,
+       "width": 0.03378378378378377,
+       "n_worlds": 20,
+       "n_items": 740
+      }
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.425,
+       "lo": 0.375,
+       "hi": 0.4666666666666667,
+       "width": 0.09166666666666667,
+       "n_worlds": 20,
+       "n_items": 120
+      }
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.8,
+       "lo": 0.74,
+       "hi": 0.86,
+       "width": 0.12,
+       "n_worlds": 20,
+       "n_items": 100
+      }
+     }
+    },
+    "explore_t4_slack": null
+   },
+   "rag": {
+    "contract_valid": {
+     "est": 0.59375,
+     "lo": 0.5677083333333334,
+     "hi": 0.6177083333333333,
+     "width": 0.04999999999999993,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 586268.0,
+     "maintain_tokens": 561249.9,
+     "serve_tokens": 7069503.75,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 19188736.0
+    },
+    "serve_tokens_per_query": 3927.5020833333333,
+    "full_reread_tokens_per_query": 560491.1,
+    "serve_ratio_to_full_reread": 0.0070072514681024075,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.234375,
+     "lo": -0.2635416666666667,
+     "hi": -0.20625,
+     "width": 0.057291666666666685,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": false,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.6783783783783783,
+      "lo": 0.6459459459459459,
+      "hi": 0.7094594594594594,
+      "width": 0.06351351351351353,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.2833333333333333,
+      "lo": 0.24166666666666667,
+      "hi": 0.325,
+      "width": 0.08333333333333334,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.34,
+      "lo": 0.26,
+      "hi": 0.43,
+      "width": 0.16999999999999998,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.638095238095238,
+      "lo": 0.6059523809523809,
+      "hi": 0.6666666666666666,
+      "width": 0.06071428571428572,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.24761904761904763,
+      "lo": -0.28095238095238095,
+      "hi": -0.2154761904761905,
+      "width": 0.06547619047619047,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.6783783783783783,
+       "lo": 0.6459459459459459,
+       "hi": 0.7094594594594594,
+       "width": 0.06351351351351353,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.21891891891891893,
+       "lo": -0.25405405405405407,
+       "hi": -0.1837837837837838,
+       "width": 0.07027027027027027,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.16875
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.2833333333333333,
+       "lo": 0.24166666666666667,
+       "hi": 0.325,
+       "width": 0.08333333333333334,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": -0.14166666666666666,
+       "lo": -0.2,
+       "hi": -0.075,
+       "width": 0.125,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.125,
+      "contribution": -0.017708333333333333
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.34,
+       "lo": 0.26,
+       "hi": 0.43,
+       "width": 0.16999999999999998,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.46,
+       "lo": -0.54,
+       "hi": -0.37,
+       "width": 0.17000000000000004,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.04791666666666667
+     }
+    },
+    "explore_t4_slack": 71.3546534295282
+   },
+   "zero": {
+    "contract_valid": {
+     "est": 0.6291666666666667,
+     "lo": 0.60625,
+     "hi": 0.6510416666666666,
+     "width": 0.044791666666666674,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 0.0,
+     "maintain_tokens": 0.0,
+     "serve_tokens": 6479503.125,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 0.0
+    },
+    "serve_tokens_per_query": 3599.7239583333335,
+    "full_reread_tokens_per_query": 560491.1,
+    "serve_ratio_to_full_reread": 0.006422446241043495,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.19895833333333332,
+     "lo": -0.225,
+     "hi": -0.171875,
+     "width": 0.053125000000000006,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": false,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.7378378378378379,
+      "lo": 0.7040540540540541,
+      "hi": 0.7716216216216216,
+      "width": 0.06756756756756754,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.2916666666666667,
+      "lo": 0.25,
+      "hi": 0.3416666666666667,
+      "width": 0.09166666666666667,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.23,
+      "lo": 0.17,
+      "hi": 0.3,
+      "width": 0.12999999999999998,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.6773809523809524,
+      "lo": 0.6511904761904762,
+      "hi": 0.7035714285714286,
+      "width": 0.05238095238095242,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.20833333333333334,
+      "lo": -0.23809523809523808,
+      "hi": -0.17857142857142858,
+      "width": 0.05952380952380951,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.7378378378378379,
+       "lo": 0.7040540540540541,
+       "hi": 0.7716216216216216,
+       "width": 0.06756756756756754,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.15945945945945947,
+       "lo": -0.1945945945945946,
+       "hi": -0.12297297297297298,
+       "width": 0.07162162162162163,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.12291666666666666
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.2916666666666667,
+       "lo": 0.25,
+       "hi": 0.3416666666666667,
+       "width": 0.09166666666666667,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": -0.13333333333333333,
+       "lo": -0.20833333333333334,
+       "hi": -0.058333333333333334,
+       "width": 0.15000000000000002,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.125,
+      "contribution": -0.016666666666666666
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.23,
+       "lo": 0.17,
+       "hi": 0.3,
+       "width": 0.12999999999999998,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.57,
+       "lo": -0.65,
+       "hi": -0.49,
+       "width": 0.16000000000000003,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.05937499999999999
+     }
+    },
+    "explore_t4_slack": 77.8519556621095
+   },
+   "zero_minus_holdmem": {
+    "est": -0.21041666666666667,
+    "lo": -0.23854166666666668,
+    "hi": -0.184375,
+    "width": 0.05416666666666667,
+    "n_worlds": 20,
+    "n_items": 960
+   }
+  },
+  "12": {
+   "holdmem_D1B1_source": {
+    "contract_valid": {
+     "est": 0.9166666666666666,
+     "lo": 0.9072916666666667,
+     "hi": 0.925,
+     "width": 0.017708333333333326,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 279701.6,
+     "maintain_tokens": 79082652.58125,
+     "maintain_writes_counted": 13570.95,
+     "serve_tokens": 30456291.979166668,
+     "verify_cpu_s": 20.165847946390567,
+     "storage_bytes": 137740.9
+    },
+    "serve_tokens_per_query": 4172.094791666666,
+    "full_reread_tokens_per_query": 2241225.3,
+    "serve_ratio_to_full_reread": 0.0018615240474336367,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": 0.13333333333333333,
+     "lo": 0.1125,
+     "hi": 0.15625,
+     "width": 0.04375,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": true,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.9351351351351351,
+      "lo": 0.9283783783783783,
+      "hi": 0.9418918918918919,
+      "width": 0.013513513513513598,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.68,
+      "lo": 0.63,
+      "hi": 0.73,
+      "width": 0.09999999999999998,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.9047619047619048,
+      "lo": 0.8940476190476191,
+      "hi": 0.9142857142857143,
+      "width": 0.020238095238095166,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": 0.06190476190476191,
+      "lo": 0.0380952380952381,
+      "hi": 0.0880952380952381,
+      "width": 0.05,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": true
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.9351351351351351,
+       "lo": 0.9283783783783783,
+       "hi": 0.9418918918918919,
+       "width": 0.013513513513513598,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": 0.10945945945945947,
+       "lo": 0.08378378378378379,
+       "hi": 0.13648648648648648,
+       "width": 0.05270270270270269,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": true,
+      "T3_pass_at_eps_pp": {
+       "1": true,
+       "2": true,
+       "3": true,
+       "5": true
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": 0.084375
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 1.0,
+       "lo": 1.0,
+       "hi": 1.0,
+       "width": 0.0,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": 0.6333333333333333,
+       "lo": 0.5833333333333334,
+       "hi": 0.6833333333333333,
+       "width": 0.09999999999999998,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": true,
+      "T3_pass_at_eps_pp": {
+       "1": true,
+       "2": true,
+       "3": true,
+       "5": true
+      },
+      "share_of_items": 0.125,
+      "contribution": 0.07916666666666666
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.68,
+       "lo": 0.63,
+       "hi": 0.73,
+       "width": 0.09999999999999998,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.29,
+       "lo": -0.34,
+       "hi": -0.24,
+       "width": 0.10000000000000003,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.03020833333333333
+     }
+    },
+    "explore_t4_slack": 268.59712110048633
+   },
+   "oracle": {
+    "contract_valid": {
+     "est": 0.7833333333333333,
+     "lo": 0.765625,
+     "hi": 0.8,
+     "width": 0.034375000000000044,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "explore_by_class": {
+     "rule": {
+      "est": 0.8256756756756757,
+      "lo": 0.8013513513513514,
+      "hi": 0.8486486486486486,
+      "width": 0.04729729729729726,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.36666666666666664,
+      "lo": 0.31666666666666665,
+      "hi": 0.4166666666666667,
+      "width": 0.10000000000000003,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.97,
+      "lo": 0.93,
+      "hi": 1.0,
+      "width": 0.06999999999999995,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.8428571428571429,
+      "lo": 0.8226190476190476,
+      "hi": 0.8630952380952381,
+      "width": 0.040476190476190554,
+      "n_worlds": 20,
+      "n_items": 840
+     }
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.8256756756756757,
+       "lo": 0.8013513513513514,
+       "hi": 0.8486486486486486,
+       "width": 0.04729729729729726,
+       "n_worlds": 20,
+       "n_items": 740
+      }
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.36666666666666664,
+       "lo": 0.31666666666666665,
+       "hi": 0.4166666666666667,
+       "width": 0.10000000000000003,
+       "n_worlds": 20,
+       "n_items": 120
+      }
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.97,
+       "lo": 0.93,
+       "hi": 1.0,
+       "width": 0.06999999999999995,
+       "n_worlds": 20,
+       "n_items": 100
+      }
+     }
+    },
+    "explore_t4_slack": null
+   },
+   "rag": {
+    "contract_valid": {
+     "est": 0.603125,
+     "lo": 0.5770833333333333,
+     "hi": 0.628125,
+     "width": 0.05104166666666676,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 2344341.0,
+     "maintain_tokens": 2245169.5,
+     "serve_tokens": 30664418.020833332,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 76572876.8
+    },
+    "serve_tokens_per_query": 4200.605208333333,
+    "full_reread_tokens_per_query": 2241225.3,
+    "serve_ratio_to_full_reread": 0.0018742449535677354,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.18020833333333333,
+     "lo": -0.20729166666666668,
+     "hi": -0.15208333333333332,
+     "width": 0.05520833333333336,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": false,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.6932432432432433,
+      "lo": 0.6567567567567567,
+      "hi": 0.727027027027027,
+      "width": 0.07027027027027033,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.19166666666666668,
+      "lo": 0.16666666666666666,
+      "hi": 0.21666666666666667,
+      "width": 0.05000000000000002,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.43,
+      "lo": 0.37,
+      "hi": 0.49,
+      "width": 0.12,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.6619047619047619,
+      "lo": 0.6309523809523809,
+      "hi": 0.6916666666666667,
+      "width": 0.06071428571428572,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.18095238095238095,
+      "lo": -0.21428571428571427,
+      "hi": -0.14523809523809525,
+      "width": 0.06904761904761902,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.6932432432432433,
+       "lo": 0.6567567567567567,
+       "hi": 0.727027027027027,
+       "width": 0.07027027027027033,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.13243243243243244,
+       "lo": -0.17432432432432432,
+       "hi": -0.0891891891891892,
+       "width": 0.08513513513513513,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.10208333333333333
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.19166666666666668,
+       "lo": 0.16666666666666666,
+       "hi": 0.21666666666666667,
+       "width": 0.05000000000000002,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": -0.175,
+       "lo": -0.24166666666666667,
+       "hi": -0.11666666666666667,
+       "width": 0.125,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.125,
+      "contribution": -0.021875
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.43,
+       "lo": 0.37,
+       "hi": 0.49,
+       "width": 0.12,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.54,
+       "lo": -0.6,
+       "hi": -0.48,
+       "width": 0.12,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.05625
+     }
+    },
+    "explore_t4_slack": 266.774094308335
+   },
+   "zero": {
+    "contract_valid": {
+     "est": 0.640625,
+     "lo": 0.6125,
+     "hi": 0.6697916666666667,
+     "width": 0.05729166666666663,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "cost_mean": {
+     "ingest_tokens": 0.0,
+     "maintain_tokens": 0.0,
+     "serve_tokens": 30099124.270833332,
+     "verify_cpu_s": 0.0,
+     "storage_bytes": 0.0
+    },
+    "serve_tokens_per_query": 4123.167708333333,
+    "full_reread_tokens_per_query": 2241225.3,
+    "serve_ratio_to_full_reread": 0.0018396935409989053,
+    "T4_pass": true,
+    "minus_oracle": {
+     "est": -0.14270833333333333,
+     "lo": -0.171875,
+     "hi": -0.115625,
+     "width": 0.056249999999999994,
+     "n_worlds": 20,
+     "n_items": 960
+    },
+    "T3_pass": false,
+    "explore_by_class": {
+     "rule": {
+      "est": 0.7567567567567568,
+      "lo": 0.7216216216216216,
+      "hi": 0.7918918918918919,
+      "width": 0.07027027027027033,
+      "n_worlds": 20,
+      "n_items": 740
+     },
+     "definition": {
+      "est": 0.18333333333333332,
+      "lo": 0.16666666666666666,
+      "hi": 0.20833333333333334,
+      "width": 0.041666666666666685,
+      "n_worlds": 20,
+      "n_items": 120
+     },
+     "norule": {
+      "est": 0.33,
+      "lo": 0.25,
+      "hi": 0.41,
+      "width": 0.15999999999999998,
+      "n_worlds": 20,
+      "n_items": 100
+     }
+    },
+    "explore_no_definition": {
+     "contract_valid": {
+      "est": 0.705952380952381,
+      "lo": 0.6726190476190477,
+      "hi": 0.7392857142857143,
+      "width": 0.06666666666666665,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "minus_oracle": {
+      "est": -0.13690476190476192,
+      "lo": -0.17023809523809524,
+      "hi": -0.10357142857142858,
+      "width": 0.06666666666666667,
+      "n_worlds": 20,
+      "n_items": 840
+     },
+     "T3_pass": false
+    },
+    "explore_t3_by_class": {
+     "rule": {
+      "contract_valid": {
+       "est": 0.7567567567567568,
+       "lo": 0.7216216216216216,
+       "hi": 0.7918918918918919,
+       "width": 0.07027027027027033,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "minus_oracle": {
+       "est": -0.06891891891891892,
+       "lo": -0.10675675675675676,
+       "hi": -0.032432432432432434,
+       "width": 0.07432432432432433,
+       "n_worlds": 20,
+       "n_items": 740
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.7708333333333334,
+      "contribution": -0.053125
+     },
+     "definition": {
+      "contract_valid": {
+       "est": 0.18333333333333332,
+       "lo": 0.16666666666666666,
+       "hi": 0.20833333333333334,
+       "width": 0.041666666666666685,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "minus_oracle": {
+       "est": -0.18333333333333332,
+       "lo": -0.24166666666666667,
+       "hi": -0.13333333333333333,
+       "width": 0.10833333333333334,
+       "n_worlds": 20,
+       "n_items": 120
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.125,
+      "contribution": -0.022916666666666665
+     },
+     "norule": {
+      "contract_valid": {
+       "est": 0.33,
+       "lo": 0.25,
+       "hi": 0.41,
+       "width": 0.15999999999999998,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "minus_oracle": {
+       "est": -0.64,
+       "lo": -0.73,
+       "hi": -0.56,
+       "width": 0.16999999999999993,
+       "n_worlds": 20,
+       "n_items": 100
+      },
+      "T3_pass": false,
+      "T3_pass_at_eps_pp": {
+       "1": false,
+       "2": false,
+       "3": false,
+       "5": false
+      },
+      "share_of_items": 0.10416666666666667,
+      "contribution": -0.06666666666666667
+     }
+    },
+    "explore_t4_slack": 271.7843971602537
+   },
+   "zero_minus_holdmem": {
+    "est": -0.2760416666666667,
+    "lo": -0.30833333333333335,
+    "hi": -0.24270833333333333,
+    "width": 0.06562500000000002,
+    "n_worlds": 20,
+    "n_items": 960
+   }
+  }
+ }
+}

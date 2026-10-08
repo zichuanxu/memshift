@@ -1,0 +1,24 @@
+# Model roles (plan §9). Candidate list from reference/research_1/configs/models.json.
+main_writer: Qwen/Qwen3.5-9B
+main_reader: Qwen/Qwen3.5-9B
+embedding: Qwen/Qwen3-Embedding-0.6B
+embedding_swap: BAAI/bge-m3                              # E7 theta_e only (prereg/decisions.md)
+writer_tiers:              # E2 / T1, all same lineage
+  same_tier: XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B     # needs download; verify vLLM serving in stage 0
+  upgrade: Qwen/Qwen3.8-27B                            # TP=2, batch re-derivation inside a coordinated window only
+  downgrade: reverse of upgrade
+  fallback_downgrade: Qwen/Qwen3-4B-Instruct-2507      # only if the 27B window cannot be obtained
+cross_family:              # external validity, writer and reader
+  - openai/gpt-oss-20b                                 # harmony image
+  - mistralai/Ministral-3-14B-Instruct-2512-BF16
+# Stage 4 (prereg/v2.md; decisions.md 2026-09-29): writer switches across families (M1), E1 with
+# another family as writer and reader (M2), reader swaps (M3), LLM rendering of worlds (L).
+stage4_families:           # single GPU each, vLLM 0.30.0 main image, pinned revisions
+  - meta-llama/Llama-3.1-8B-Instruct                   # M1, M2, M3
+  - google/gemma-4-12B-it                              # M1, M2, M3; Apache-2.0, ungated
+  - openai/gpt-oss-20b                                 # M1, M2, M3; native MXFP4
+  - mistralai/Ministral-3-14B-Instruct-2512-BF16       # M1
+  - Qwen/Qwen3-8B                                      # M1 (previous generation of the main lineage)
+world_renderer: google/gemma-4-12B-it                  # L: free-text bodies; not the writer/reader family
+excluded_v1:
+  - apple/LensVLM-9B                                   # vision context compression; sources are text

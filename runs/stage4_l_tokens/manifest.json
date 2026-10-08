@@ -1,0 +1,20 @@
+{
+  "analysis_code": {
+    "commit": "51c2cc463be31b50696875a0d39c41c0a91ae35c",
+    "dirty": false
+  },
+  "branches": [
+    "src",
+    "def",
+    "orphan"
+  ],
+  "command": "python -m memshift.analysis.l_tokens --seeds 1000-1009 --branches src,def,orphan --months 12",
+  "created_utc": "2026-09-30T21:54:18Z",
+  "experiment": "merged-l_tokens",
+  "files_sha256": {
+    "analysis/token_share.json": "c85b72cf1ec8f15c9851630aee7b27bf2241018335a5ac87cb484d74a72599ff"
+  },
+  "run_id": "stage4_l_tokens",
+  "seeds": "1000-1009",
+  "sources": []
+}

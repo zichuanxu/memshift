@@ -1,0 +1,65 @@
+{
+ "stage4_m2_google_gemma-4-12b-it": {
+  "checks": {
+   "i_path2_not_triggered": true,
+   "ii_B_update_src": true,
+   "iii_D_repair_src": true,
+   "iii_D_repair_def": true,
+   "iv_BxD_def": true,
+   "v_zero_below_hm11_def": true
+  },
+  "pattern_holds": true,
+  "estimates": {
+   "B_update_src": {
+    "est": 0.09527824620573355,
+    "lo": 0.05546075085324232,
+    "hi": 0.1359724612736661,
+    "width": 0.0805117104204238,
+    "n_worlds": 10,
+    "n_items": 1186
+   },
+   "D_repair_src": {
+    "est": 0.13146734520780323,
+    "lo": 0.11584875301689461,
+    "hi": 0.14634146341463414,
+    "width": 0.030492710397739528,
+    "n_worlds": 10,
+    "n_items": 1179
+   },
+   "D_repair_def": {
+    "est": 0.3185053380782918,
+    "lo": 0.28442028985507245,
+    "hi": 0.3498168498168498,
+    "width": 0.06539655996177735,
+    "n_worlds": 10,
+    "n_items": 562
+   },
+   "BxD_def": {
+    "est": 0.1443661971830986,
+    "lo": 0.08333333333333333,
+    "hi": 0.20134228187919462,
+    "width": 0.11800894854586129,
+    "n_worlds": 10,
+    "n_items": 284
+   },
+   "BxD_src": {
+    "est": 0.008431703204047217,
+    "lo": -0.020654044750430294,
+    "hi": 0.03815580286168521,
+    "width": 0.05880984761211551,
+    "n_worlds": 10,
+    "n_items": 593
+   },
+   "zero_minus_hm11_def": {
+    "est": -0.3626760563380282,
+    "lo": -0.4010416666666667,
+    "hi": -0.32342657342657344,
+    "width": 0.07761509324009325,
+    "n_worlds": 10,
+    "n_items": 568
+   }
+  },
+  "n_worlds": 10
+ },
+ "families_holding": 1
+}

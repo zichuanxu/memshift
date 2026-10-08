@@ -1,0 +1,81 @@
+# LightRAG for the E5 / block-N native runs (prereg v2 §3): pip lines needed on top of
+# docker/requirements.lock. Everything the lock already pins is left out, so install both:
+#   pip install -r docker/requirements.lock -r docker/native/lightrag.txt
+# Resolved with: uv pip compile <(echo lightrag-hku==1.5.7) -c docker/requirements.lock \
+#   --python-version 3.12 --python-platform linux --no-header
+# The tokenizer's encoding file (tiktoken o200k_base) is not a pip package: it is fetched on first
+# use into cache/tiktoken (TIKTOKEN_CACHE_DIR), so seed that directory on a host without internet.
+aiohappyeyeballs==2.7.1
+    # via aiohttp
+aiohttp==3.14.3
+    # via lightrag-hku
+aiosignal==1.4.0
+    # via aiohttp
+ascii-colors==0.12.3
+    # via pipmaster
+cffi==2.1.1
+    # via cryptography
+configparser==7.2.0
+    # via lightrag-hku
+cryptography==50.0.1
+    # via google-auth
+frozenlist==1.8.0
+    # via
+    #   aiohttp
+    #   aiosignal
+google-api-core==2.39.0
+    # via lightrag-hku
+google-auth==2.59.0
+    # via
+    #   google-api-core
+    #   google-genai
+google-genai==2.25.0
+    # via lightrag-hku
+googleapis-common-protos==1.75.4
+    # via google-api-core
+json-repair==0.63.5
+    # via lightrag-hku
+lightrag-hku==1.5.7
+    # direct requirement
+multidict==6.9.1
+    # via
+    #   aiohttp
+    #   yarl
+nano-vectordb==0.0.4.3
+    # via lightrag-hku
+networkx==3.7
+    # via lightrag-hku
+opentelemetry-api==1.45.0
+    # via google-api-core
+pandas==3.0.6
+    # via lightrag-hku
+pipmaster==1.1.13
+    # via lightrag-hku
+propcache==0.5.4
+    # via
+    #   aiohttp
+    #   yarl
+proto-plus==1.28.4
+    # via google-api-core
+pyasn1==0.6.4
+    # via pyasn1-modules
+pyasn1-modules==0.4.2
+    # via google-auth
+pycparser==3.0
+    # via cffi
+pypinyin==0.55.0
+    # via lightrag-hku
+regex==2026.9.29
+    # via tiktoken
+setuptools==84.0.0
+    # via lightrag-hku
+tiktoken==0.14.0
+    # via lightrag-hku
+wcwidth==0.9.1
+    # via ascii-colors
+websockets==16.1.1
+    # via google-genai
+xlsxwriter==3.2.9
+    # via lightrag-hku
+yarl==1.25.1
+    # via aiohttp

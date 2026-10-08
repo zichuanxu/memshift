@@ -1,0 +1,172 @@
+{
+  "code": {
+    "commit": "65f62c8e4ad91bc7240210700a151b8cd8bc7539",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T04:46:34Z",
+  "experiment": "E5",
+  "files_sha256": {
+    "analysis/e5_native.json": "434f2ab8d552f8edc35ae56ab4fa29b7182a6ac37710928cc227ed0302f750cc",
+    "answers.jsonl": "28755a7ad11d744906d130470c6bca0f9a6203cb4bddb9ff044c51ec3c8bf436",
+    "calls.jsonl": "698fdf32a870d9424803af3153ebbc99537f43642ed86cf362c6e6ad64424e03",
+    "env.json": "fc43c4c9e7d29a3120621ccc4441ee86ac6d8c73ab75c541a34f213309e13595",
+    "probes.jsonl": "b8ec8698c26583396ffd06b8bfd6b7846a010a619cfe478522bb06c23da25b9c",
+    "stores/w1012_hipporag/def/failures.jsonl": "6ff07b18c8f2c0ff063f679816f9df4f3973dd358a8def089e1e09366f1f9bf1",
+    "stores/w1012_hipporag/def/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/chunk_embeddings/vdb_chunk.parquet": "422fd5d4a7bd15350cce6ab4ab3aa4ec827c45b62d32a20f4eec6594ea217f1f",
+    "stores/w1012_hipporag/def/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/entity_embeddings/vdb_entity.parquet": "813be8531dd47ef730edd01b9b0ab648ca130255f2eb599e85058ed2a14d07c2",
+    "stores/w1012_hipporag/def/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/fact_embeddings/vdb_fact.parquet": "9830c88482a44296646d4fabf014de4082fd5a2e882b3bf86fee0785828fcd2b",
+    "stores/w1012_hipporag/def/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/graph.pickle": "4d4da47c5433b404b7d7d534f7ee24d054360f3599774bd9b2f342cfe85bb201",
+    "stores/w1012_hipporag/def/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite": "c5dc27b280a57f520d7756b045c58e7c61026d75a65e20939630a777293f72c0",
+    "stores/w1012_hipporag/def/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1012_hipporag/def/hipporag/openie_results_ner_Qwen_Qwen3.5-9B.json": "30df35500f492ec261e01c84774889fb1c2e321d11d791f2919d7ab42278a76f",
+    "stores/w1012_hipporag/def/ledger.jsonl": "0147b102597bbf74167e6d38d36a74f7347ec56d85c8a0a4fd70b462a2a70a2b",
+    "stores/w1012_hipporag/def/memshift_native.json": "761647400be22cabd8426cbddc8633e3c469ad5b85400341786536da51f6eee3",
+    "stores/w1012_hipporag/def/objects.jsonl": "3749557e019d59aebb31a64ada2667d9fc7809cd9d96df80347602b90ce77e7c",
+    "stores/w1012_hipporag/def/state.json": "bb23dc257b22ec604bb221e9e0bdcbe712485bcb95de93783accc65e8f09615f",
+    "stores/w1012_hipporag/orphan/failures.jsonl": "d308b7dade302c683b2175c52074cac0088a7adeb36182649f3d401b02bec779",
+    "stores/w1012_hipporag/orphan/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/chunk_embeddings/vdb_chunk.parquet": "24f241dae7b7d0cc665359c68afc4a3488a642d00f95c674ad7707259ec31b64",
+    "stores/w1012_hipporag/orphan/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/entity_embeddings/vdb_entity.parquet": "2ee5822c73a2c7706b7f34e6af5354c431e56511389ed3f2c2324e1406ddce87",
+    "stores/w1012_hipporag/orphan/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/fact_embeddings/vdb_fact.parquet": "3ad9a121f114c7ec46b5dbd96f105fb2f8112c8adae581722a562922bc7f0eeb",
+    "stores/w1012_hipporag/orphan/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/graph.pickle": "be45feefafd293bdc13913428ab328bf004705ca73a0c3e32593bc9f1fb162d6",
+    "stores/w1012_hipporag/orphan/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite": "613af91ff46ef8b8a010c32313d81f2f929308c8faba445290094caed4c7bbd5",
+    "stores/w1012_hipporag/orphan/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1012_hipporag/orphan/hipporag/openie_results_ner_Qwen_Qwen3.5-9B.json": "d89fa830b6ea0bb7748086f222535b318d126156b51ac3374aa5008c70849ad6",
+    "stores/w1012_hipporag/orphan/ledger.jsonl": "e20ec2e69db6808fa5589bf4a1ae97465cf3f6eefee62abfc06530c9534973de",
+    "stores/w1012_hipporag/orphan/memshift_native.json": "761647400be22cabd8426cbddc8633e3c469ad5b85400341786536da51f6eee3",
+    "stores/w1012_hipporag/orphan/objects.jsonl": "e2ffb5db888b0b3448b6fb5c78e46b40def8ad06cbffa1c0fc45f89aac68fd06",
+    "stores/w1012_hipporag/orphan/state.json": "85c33f56216fd04d5f88dd8a360cdaa9738ac2354de8a5304153d84ae4287ffa",
+    "stores/w1012_hipporag/prefix/failures.jsonl": "d6f7fbeb2a70116ccbf6f8629a2c275d3d600e6b192fb29f7a5d89a738f70d2b",
+    "stores/w1012_hipporag/prefix/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/chunk_embeddings/vdb_chunk.parquet": "3e4c12b779ee5028888f5e6436e57776c912012754fbd2f79ba0127692070cd7",
+    "stores/w1012_hipporag/prefix/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/entity_embeddings/vdb_entity.parquet": "a6af23feaa26cae9976953884ab9e1a4c187ffce0dfe1f4557865c049966b3a7",
+    "stores/w1012_hipporag/prefix/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/fact_embeddings/vdb_fact.parquet": "c46d699660e53206e71c1134db844bc5c556d0db1338693c933ae244b5b34d75",
+    "stores/w1012_hipporag/prefix/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/graph.pickle": "495c353da3254f3f98cbf665ddb68c325568b6afb52193527bf4cf7c641e8108",
+    "stores/w1012_hipporag/prefix/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite": "66aa1e1babae8e83a899988316934331eae7f46262c418f07bfa7282fbfb14c9",
+    "stores/w1012_hipporag/prefix/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1012_hipporag/prefix/hipporag/openie_results_ner_Qwen_Qwen3.5-9B.json": "8ba858be872521876aaaeca2159affec5f0acc6d521a10914c7a70d82eb922d2",
+    "stores/w1012_hipporag/prefix/ledger.jsonl": "aaf47c3d79b34301b8b5d71dbe2faea52fbb8db766cda7fce7923df3c8d61117",
+    "stores/w1012_hipporag/prefix/memshift_native.json": "761647400be22cabd8426cbddc8633e3c469ad5b85400341786536da51f6eee3",
+    "stores/w1012_hipporag/prefix/objects.jsonl": "7014e094d9bd835328b3584e768668678aeecf175398acc9904cf85bcceb39bb",
+    "stores/w1012_hipporag/prefix/state.json": "ab5819fe69256a78fa890bf02425c2eacab41802489a8d6f4b2ca5c8987938ad",
+    "stores/w1012_hipporag/snapshot/failures.jsonl": "d6f7fbeb2a70116ccbf6f8629a2c275d3d600e6b192fb29f7a5d89a738f70d2b",
+    "stores/w1012_hipporag/snapshot/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/chunk_embeddings/vdb_chunk.parquet": "3e4c12b779ee5028888f5e6436e57776c912012754fbd2f79ba0127692070cd7",
+    "stores/w1012_hipporag/snapshot/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/entity_embeddings/vdb_entity.parquet": "a6af23feaa26cae9976953884ab9e1a4c187ffce0dfe1f4557865c049966b3a7",
+    "stores/w1012_hipporag/snapshot/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/fact_embeddings/vdb_fact.parquet": "c46d699660e53206e71c1134db844bc5c556d0db1338693c933ae244b5b34d75",
+    "stores/w1012_hipporag/snapshot/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/graph.pickle": "495c353da3254f3f98cbf665ddb68c325568b6afb52193527bf4cf7c641e8108",
+    "stores/w1012_hipporag/snapshot/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite": "08e5bb26072c500fa7f40e35ee771bfaa491392dd5b3e113413f63508b856960",
+    "stores/w1012_hipporag/snapshot/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1012_hipporag/snapshot/hipporag/openie_results_ner_Qwen_Qwen3.5-9B.json": "8ba858be872521876aaaeca2159affec5f0acc6d521a10914c7a70d82eb922d2",
+    "stores/w1012_hipporag/snapshot/ledger.jsonl": "aaf47c3d79b34301b8b5d71dbe2faea52fbb8db766cda7fce7923df3c8d61117",
+    "stores/w1012_hipporag/snapshot/memshift_native.json": "761647400be22cabd8426cbddc8633e3c469ad5b85400341786536da51f6eee3",
+    "stores/w1012_hipporag/snapshot/objects.jsonl": "7014e094d9bd835328b3584e768668678aeecf175398acc9904cf85bcceb39bb",
+    "stores/w1012_hipporag/snapshot/state.json": "977d68a691442bdc9c25e06bb3b88ee464df7c28e7f45c9e479c4ce8e3dc84d2",
+    "stores/w1012_hipporag/src/failures.jsonl": "8edccd768ab7283246455ab28d40f31345237724c369d2452a04234a082113a5",
+    "stores/w1012_hipporag/src/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/chunk_embeddings/vdb_chunk.parquet": "206a8e303b6ff8497ab2b818fa8da6ecc0572b7364e901af7ea56b632e0cc612",
+    "stores/w1012_hipporag/src/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/entity_embeddings/vdb_entity.parquet": "4fe21e98ea2fa03eb19ff33d9ca069eb26d456b5416ef78e230647408d952d25",
+    "stores/w1012_hipporag/src/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/fact_embeddings/vdb_fact.parquet": "0b911a0bc30763725fd74376acf3c52c89e07cf10e4cbd025c70a052a20fcfe9",
+    "stores/w1012_hipporag/src/hipporag/Qwen_Qwen3.5-9B_Qwen_Qwen3-Embedding-0.6B/graph.pickle": "f4b72b0cbf073de91dccfa1a0188f504a1218da795f063633010b16abc759f18",
+    "stores/w1012_hipporag/src/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite": "894966813834839b67b11a296b6ebd6a26baecb55ed585d2cbecc1638678edcc",
+    "stores/w1012_hipporag/src/hipporag/llm_cache/Qwen_Qwen3.5-9B_cache.sqlite.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stores/w1012_hipporag/src/hipporag/openie_results_ner_Qwen_Qwen3.5-9B.json": "da4b73eda7210a26fcd59f6bd7a4915533a8bc2b26c5a803f267efbac85e3f4c",
+    "stores/w1012_hipporag/src/ledger.jsonl": "392bfd485066e8658721c7f0a7ff47c7bc02b9b2a8386f53bc7f531ce897de7b",
+    "stores/w1012_hipporag/src/memshift_native.json": "761647400be22cabd8426cbddc8633e3c469ad5b85400341786536da51f6eee3",
+    "stores/w1012_hipporag/src/objects.jsonl": "92436f5158dae633a1c5ff6b22a632728b6e23ba00610521955775c6f3df9aef",
+    "stores/w1012_hipporag/src/state.json": "464fc0ec8c0fecd7bbf6dd33f9c0131bcfe11cc3e0ceb796784e83d262cd59cb",
+    "world_results.jsonl": "5face7cd5f64df9bf7b85a7bd8fbdf11e5f2706d6daddf0a67fd9cfc653c5834"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "native_llm": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "graphiti_batch": 1,
+    "measure_events": null,
+    "native_batch": 2,
+    "offsets": {
+      "def": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "orphan": [
+        1
+      ],
+      "src": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "on_error": "skip",
+    "seeds": [
+      1012
+    ],
+    "systems": [
+      "hipporag"
+    ],
+    "world_params": {
+      "fork_month": 2,
+      "months": 3,
+      "target_tokens": 500000
+    }
+  },
+  "run_id": "e5_hipporag_s1012_20260929T220231Z",
+  "run_image": "sha256:f81c58d13ea6288b8a91ab7b5e40601adec18142aa3d78d5e1cc1b8fdb44da5a",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "ba69426fe3eeefda86f21aa86419bc4c5abf5b826a725f0386a42d8e23e4c839",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 491,
+      "seed": 1012,
+      "shift_targets": null,
+      "world_id": "w1012"
+    }
+  ]
+}

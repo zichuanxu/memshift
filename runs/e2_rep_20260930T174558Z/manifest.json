@@ -1,0 +1,2565 @@
+{
+  "code": {
+    "commit": "75086a1bba39f6d57fdd76745e61d9c58729e0c5",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T18:08:13Z",
+  "experiment": "E2",
+  "files_sha256": {
+    "answers.jsonl": "33bc634cec59da79aa4ee3e6b90051dbb210bc7add09e8d2ce0c134d0da41154",
+    "calibration_downgrade.jsonl": "277a389314bc80875706223cdf01cc4bebef122120009433b905fc4ed67a54aa",
+    "calibration_same.jsonl": "be5915ba58f4e349ab20e611f25caf5f1d9418fa6f5fe7b12a44f142d6c9bb30",
+    "calibration_upgrade.jsonl": "77f7670bf66085840a97b1b286290fc009507bb21ab5b0e140b0d19c646953d9",
+    "calls.jsonl": "251ac9d8ce3bdc5258b5d7ef458f182a6f85f08db4f672e87aeef01aa5ba4e57",
+    "env.json": "5c46a80ae31b7d02432be6b402bc0933413f8cecefe4b83b2117258c346a3885",
+    "survival.jsonl": "cd2ac4caafdc6b5e662fad29dff6f6e6bfd285f0ba29b16b72f90140963213a2",
+    "tiers.json": "4038ccc22bc44a3bd55ee2e8bdb2395eb6039c49e8bc1ee33f963eced874bad6"
+  },
+  "models": {
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "writer_0": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "writer_1": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.8-27B",
+      "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0"
+    },
+    "writer_2": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B",
+      "revision": "2367e865d009c13ac81713a2878291d33ab28177"
+    }
+  },
+  "params": {
+    "calibration_months": [
+      3,
+      6,
+      9
+    ],
+    "calibration_seeds": [
+      900,
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909
+    ],
+    "cells": [
+      "holdmem_D0B0",
+      "holdmem_D0B1_source",
+      "holdmem_D1B0",
+      "holdmem_D1B1_source"
+    ],
+    "seeds": [
+      1020,
+      1021,
+      1022,
+      1023,
+      1024,
+      1025,
+      1026,
+      1027,
+      1028,
+      1029,
+      1030,
+      1031,
+      1032,
+      1033,
+      1034,
+      1035,
+      1036,
+      1037,
+      1038,
+      1039
+    ],
+    "tiers": {
+      "downgrade": [
+        "Qwen/Qwen3.8-27B",
+        "Qwen/Qwen3.5-9B"
+      ],
+      "same": [
+        "Qwen/Qwen3.5-9B",
+        "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B"
+      ],
+      "upgrade": [
+        "Qwen/Qwen3.5-9B",
+        "Qwen/Qwen3.8-27B"
+      ]
+    }
+  },
+  "run_id": "e2_rep_20260930T174558Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "e9c806fea925f7cf88be0b936131140cc35030650456dc92ef2e7368560d10a9",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1636,
+      "seed": 1020,
+      "shift_targets": null,
+      "world_id": "w1020"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "e9d27d1b76a846af2c7c71a05605fc6b4e835a7df4f99ba983ace1715f17e62f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1649,
+      "seed": 1021,
+      "shift_targets": null,
+      "world_id": "w1021"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "f8fbcbdf0f608859541425a1d0a2c0ff1986bb29400de7c7801698026d6f34c5",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1595,
+      "seed": 1022,
+      "shift_targets": null,
+      "world_id": "w1022"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "3bd891dee2a8627cf3e6c946bb67be2f9eb38292314f4b682c64a8146a000180",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1594,
+      "seed": 1023,
+      "shift_targets": null,
+      "world_id": "w1023"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "696f0f571723f8b6a6baf7942f3edf27c5b015f5a10b4827d575d9a17b80a998",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1654,
+      "seed": 1024,
+      "shift_targets": null,
+      "world_id": "w1024"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "72f941467d0c7201b3029fc3567552bce036e676907d9a02532847be8055bc69",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1528,
+      "seed": 1025,
+      "shift_targets": null,
+      "world_id": "w1025"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "a04e2c2af41e6a8f34b87ea85bd6ecc766ecac7da04c98acea3717d301381131",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1654,
+      "seed": 1026,
+      "shift_targets": null,
+      "world_id": "w1026"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "83d7978051652fdc3822ba125596e806aecfc97371f4421313a3b5b455d14a1c",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1633,
+      "seed": 1027,
+      "shift_targets": null,
+      "world_id": "w1027"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "368d970f008739a6abc4ef5f052ff2ff23739826f27b02ed6411b94aa92ada82",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1614,
+      "seed": 1028,
+      "shift_targets": null,
+      "world_id": "w1028"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "4f17374a995e369f807023da2a48e162d34063295d07a24e9b6653cd656a7a1a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1569,
+      "seed": 1029,
+      "shift_targets": null,
+      "world_id": "w1029"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "a1f567d1e339c515eed528044e07b4e781b990246ddabbbf5303b62f86ae0bb2",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1630,
+      "seed": 1030,
+      "shift_targets": null,
+      "world_id": "w1030"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "6407ed1847d44d0b1ee369e28caecb1d05d176e49be0f8fb6c8869b82870d694",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1597,
+      "seed": 1031,
+      "shift_targets": null,
+      "world_id": "w1031"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "246bfdd734dd8ef8e47792be375aa9b8a63b031c288640186063701fa01e72df",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1560,
+      "seed": 1032,
+      "shift_targets": null,
+      "world_id": "w1032"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c4fd87d1f5942244df1180b49783a94570095edca8b069f17c6ee66039965920",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1599,
+      "seed": 1033,
+      "shift_targets": null,
+      "world_id": "w1033"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "7d843828bad8fabdf89bc1f9708870c59156d985db63c4b488816436de25746a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1618,
+      "seed": 1034,
+      "shift_targets": null,
+      "world_id": "w1034"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c38b47aba984efca4f2e40e6d45981859ecc2e62469a0c3b856dd3f13310702b",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1567,
+      "seed": 1035,
+      "shift_targets": null,
+      "world_id": "w1035"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "69883a3f3479a8a4091230abcb8bea236f9119bb5d70056b8bf3060d70f41b74",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1586,
+      "seed": 1036,
+      "shift_targets": null,
+      "world_id": "w1036"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "3308d65445f6fc52477b863239a0409ad575d7152c153a2e1ce7cf1d7412ffe1",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1568,
+      "seed": 1037,
+      "shift_targets": null,
+      "world_id": "w1037"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "42e92d87e5d5350e0e38d7bfa5c9334a63a484e05390b2f2cfd386427f14a38f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1606,
+      "seed": 1038,
+      "shift_targets": null,
+      "world_id": "w1038"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "32fc8f23f841c029d1560b58fc689e03e71ea9db045ad9bb53dac3ed4aa676e6",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1636,
+      "seed": 1039,
+      "shift_targets": null,
+      "world_id": "w1039"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "e9c806fea925f7cf88be0b936131140cc35030650456dc92ef2e7368560d10a9",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1636,
+      "seed": 1020,
+      "shift_targets": null,
+      "world_id": "w1020"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "e9d27d1b76a846af2c7c71a05605fc6b4e835a7df4f99ba983ace1715f17e62f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1649,
+      "seed": 1021,
+      "shift_targets": null,
+      "world_id": "w1021"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "f8fbcbdf0f608859541425a1d0a2c0ff1986bb29400de7c7801698026d6f34c5",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1595,
+      "seed": 1022,
+      "shift_targets": null,
+      "world_id": "w1022"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "3bd891dee2a8627cf3e6c946bb67be2f9eb38292314f4b682c64a8146a000180",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1594,
+      "seed": 1023,
+      "shift_targets": null,
+      "world_id": "w1023"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "696f0f571723f8b6a6baf7942f3edf27c5b015f5a10b4827d575d9a17b80a998",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1654,
+      "seed": 1024,
+      "shift_targets": null,
+      "world_id": "w1024"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "72f941467d0c7201b3029fc3567552bce036e676907d9a02532847be8055bc69",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1528,
+      "seed": 1025,
+      "shift_targets": null,
+      "world_id": "w1025"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "a04e2c2af41e6a8f34b87ea85bd6ecc766ecac7da04c98acea3717d301381131",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1654,
+      "seed": 1026,
+      "shift_targets": null,
+      "world_id": "w1026"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "83d7978051652fdc3822ba125596e806aecfc97371f4421313a3b5b455d14a1c",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1633,
+      "seed": 1027,
+      "shift_targets": null,
+      "world_id": "w1027"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "368d970f008739a6abc4ef5f052ff2ff23739826f27b02ed6411b94aa92ada82",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1614,
+      "seed": 1028,
+      "shift_targets": null,
+      "world_id": "w1028"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "4f17374a995e369f807023da2a48e162d34063295d07a24e9b6653cd656a7a1a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1569,
+      "seed": 1029,
+      "shift_targets": null,
+      "world_id": "w1029"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "a1f567d1e339c515eed528044e07b4e781b990246ddabbbf5303b62f86ae0bb2",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1630,
+      "seed": 1030,
+      "shift_targets": null,
+      "world_id": "w1030"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "6407ed1847d44d0b1ee369e28caecb1d05d176e49be0f8fb6c8869b82870d694",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1597,
+      "seed": 1031,
+      "shift_targets": null,
+      "world_id": "w1031"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "246bfdd734dd8ef8e47792be375aa9b8a63b031c288640186063701fa01e72df",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1560,
+      "seed": 1032,
+      "shift_targets": null,
+      "world_id": "w1032"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c4fd87d1f5942244df1180b49783a94570095edca8b069f17c6ee66039965920",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1599,
+      "seed": 1033,
+      "shift_targets": null,
+      "world_id": "w1033"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "7d843828bad8fabdf89bc1f9708870c59156d985db63c4b488816436de25746a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1618,
+      "seed": 1034,
+      "shift_targets": null,
+      "world_id": "w1034"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c38b47aba984efca4f2e40e6d45981859ecc2e62469a0c3b856dd3f13310702b",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1567,
+      "seed": 1035,
+      "shift_targets": null,
+      "world_id": "w1035"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "69883a3f3479a8a4091230abcb8bea236f9119bb5d70056b8bf3060d70f41b74",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1586,
+      "seed": 1036,
+      "shift_targets": null,
+      "world_id": "w1036"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "3308d65445f6fc52477b863239a0409ad575d7152c153a2e1ce7cf1d7412ffe1",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1568,
+      "seed": 1037,
+      "shift_targets": null,
+      "world_id": "w1037"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "42e92d87e5d5350e0e38d7bfa5c9334a63a484e05390b2f2cfd386427f14a38f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1606,
+      "seed": 1038,
+      "shift_targets": null,
+      "world_id": "w1038"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "32fc8f23f841c029d1560b58fc689e03e71ea9db045ad9bb53dac3ed4aa676e6",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1636,
+      "seed": 1039,
+      "shift_targets": null,
+      "world_id": "w1039"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "e9c806fea925f7cf88be0b936131140cc35030650456dc92ef2e7368560d10a9",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1636,
+      "seed": 1020,
+      "shift_targets": null,
+      "world_id": "w1020"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "e9d27d1b76a846af2c7c71a05605fc6b4e835a7df4f99ba983ace1715f17e62f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1649,
+      "seed": 1021,
+      "shift_targets": null,
+      "world_id": "w1021"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "f8fbcbdf0f608859541425a1d0a2c0ff1986bb29400de7c7801698026d6f34c5",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1595,
+      "seed": 1022,
+      "shift_targets": null,
+      "world_id": "w1022"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "3bd891dee2a8627cf3e6c946bb67be2f9eb38292314f4b682c64a8146a000180",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1594,
+      "seed": 1023,
+      "shift_targets": null,
+      "world_id": "w1023"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "696f0f571723f8b6a6baf7942f3edf27c5b015f5a10b4827d575d9a17b80a998",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1654,
+      "seed": 1024,
+      "shift_targets": null,
+      "world_id": "w1024"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "72f941467d0c7201b3029fc3567552bce036e676907d9a02532847be8055bc69",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1528,
+      "seed": 1025,
+      "shift_targets": null,
+      "world_id": "w1025"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "a04e2c2af41e6a8f34b87ea85bd6ecc766ecac7da04c98acea3717d301381131",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1654,
+      "seed": 1026,
+      "shift_targets": null,
+      "world_id": "w1026"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "83d7978051652fdc3822ba125596e806aecfc97371f4421313a3b5b455d14a1c",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1633,
+      "seed": 1027,
+      "shift_targets": null,
+      "world_id": "w1027"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "368d970f008739a6abc4ef5f052ff2ff23739826f27b02ed6411b94aa92ada82",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1614,
+      "seed": 1028,
+      "shift_targets": null,
+      "world_id": "w1028"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "4f17374a995e369f807023da2a48e162d34063295d07a24e9b6653cd656a7a1a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1569,
+      "seed": 1029,
+      "shift_targets": null,
+      "world_id": "w1029"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "a1f567d1e339c515eed528044e07b4e781b990246ddabbbf5303b62f86ae0bb2",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1630,
+      "seed": 1030,
+      "shift_targets": null,
+      "world_id": "w1030"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "6407ed1847d44d0b1ee369e28caecb1d05d176e49be0f8fb6c8869b82870d694",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1597,
+      "seed": 1031,
+      "shift_targets": null,
+      "world_id": "w1031"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "246bfdd734dd8ef8e47792be375aa9b8a63b031c288640186063701fa01e72df",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1560,
+      "seed": 1032,
+      "shift_targets": null,
+      "world_id": "w1032"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c4fd87d1f5942244df1180b49783a94570095edca8b069f17c6ee66039965920",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1599,
+      "seed": 1033,
+      "shift_targets": null,
+      "world_id": "w1033"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "7d843828bad8fabdf89bc1f9708870c59156d985db63c4b488816436de25746a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1618,
+      "seed": 1034,
+      "shift_targets": null,
+      "world_id": "w1034"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "c38b47aba984efca4f2e40e6d45981859ecc2e62469a0c3b856dd3f13310702b",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1567,
+      "seed": 1035,
+      "shift_targets": null,
+      "world_id": "w1035"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "69883a3f3479a8a4091230abcb8bea236f9119bb5d70056b8bf3060d70f41b74",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1586,
+      "seed": 1036,
+      "shift_targets": null,
+      "world_id": "w1036"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "3308d65445f6fc52477b863239a0409ad575d7152c153a2e1ce7cf1d7412ffe1",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1568,
+      "seed": 1037,
+      "shift_targets": null,
+      "world_id": "w1037"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "42e92d87e5d5350e0e38d7bfa5c9334a63a484e05390b2f2cfd386427f14a38f",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1606,
+      "seed": 1038,
+      "shift_targets": null,
+      "world_id": "w1038"
+    },
+    {
+      "branch": "natural",
+      "consent_log": [],
+      "events_sha256": "32fc8f23f841c029d1560b58fc689e03e71ea9db045ad9bb53dac3ed4aa676e6",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1636,
+      "seed": 1039,
+      "shift_targets": null,
+      "world_id": "w1039"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "analysis_code": {
+    "commit": "e20f1e0ab5e53741e8f88485f221675869db871e",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T14:17:28Z",
+  "experiment": "merged-e3",
+  "files_sha256": {
+    "analysis/e3_metrics.json": "64284d2d6493c0c5326f851044ff6860a27320f00f3e2515713b10aee2bc07f1"
+  },
+  "run_id": "stage2_e3",
+  "sources": [
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E3",
+      "manifest_sha256": "fb6180168eb2b6e03cfe4b6abeb940f39abbb74acba73438df8169ff5bd4e967",
+      "run_id": "e3_test_s1000-1009_20260928T202247Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004",
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "c974c77af1ee875250186093eb13f2ab34cb9a62",
+        "dirty": false
+      },
+      "experiment": "E3",
+      "manifest_sha256": "9009799adf4fd62b712f6af576a3d9c65b21d903c312a28ce46f0d0183a9a562",
+      "run_id": "e3_test_s1010-1019_20260928T202248Z",
+      "worlds": [
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014",
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    }
+  ]
+}

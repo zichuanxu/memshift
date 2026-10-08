@@ -1,0 +1,112 @@
+{
+  "analysis_code": {
+    "commit": "25d5fccbbbec6ac0a611380e0d9249b427f3b940",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T13:57:51Z",
+  "experiment": "merged-ex_e1",
+  "files_sha256": {
+    "analysis/ex_e1.json": "8dda173c0cc5158eb2f8ab0ea2e2ba0de04b52a149b262e994ad9da6fe1fd5c0"
+  },
+  "run_id": "stage5_ex_e1",
+  "sources": [
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "c4896ee09108a2c449bd41349cfdbeabbc420086b144fa331091a9c793a854b6",
+      "run_id": "stage1_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "aecd627574294160a19ea540f46cca7e67013f325b05057cdec002b20439eaf4",
+      "run_id": "stage1_orphan",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "run_id": "stage2_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "aabb9fdaf7409e7a8d6cb59dbda41b5af2b4c189e21b36af01e7c46982272e69",
+      "run_id": "stage4_rep_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "b63e0ff5d9eaa3b29cb3f8be24d2bf831ba6c2456e0c820fd47e24809d7f8376",
+      "run_id": "stage5_short_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e3",
+      "manifest_sha256": "ee388f3eb4ce5aa4bc6a1bb39d014f1ce4b0cb2fc90c7b2edb32e596e6907e28",
+      "run_id": "stage2_e3",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e3",
+      "manifest_sha256": "69d6d2c66d4354bfac3549f219575c20ebea1cbe0af76e744e8dca7d404750fe",
+      "run_id": "stage4_rep_e3",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "run_id": "stage2_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "aabb9fdaf7409e7a8d6cb59dbda41b5af2b4c189e21b36af01e7c46982272e69",
+      "run_id": "stage4_rep_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "c4896ee09108a2c449bd41349cfdbeabbc420086b144fa331091a9c793a854b6",
+      "run_id": "stage1_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "aecd627574294160a19ea540f46cca7e67013f325b05057cdec002b20439eaf4",
+      "run_id": "stage1_orphan",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "010a5f35df4ac396319de8faec2ac5e275934133356c378d6a5b4fe62dea3597",
+      "run_id": "stage4_c_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "9747c1191ca18b4f6a89246c8d03a278b8f8f43d6770dc0f068d6215da8895aa",
+      "run_id": "stage4_m2_google_gemma-4-12b-it",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "b63e0ff5d9eaa3b29cb3f8be24d2bf831ba6c2456e0c820fd47e24809d7f8376",
+      "run_id": "stage5_short_e1",
+      "worlds": []
+    }
+  ]
+}

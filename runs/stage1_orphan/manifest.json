@@ -1,0 +1,47 @@
+{
+  "analysis_code": {
+    "commit": "25d5fccbbbec6ac0a611380e0d9249b427f3b940",
+    "dirty": false
+  },
+  "created_utc": "2026-09-30T13:55:42Z",
+  "experiment": "merged-e1",
+  "files_sha256": {
+    "analysis/e1_item_table.jsonl": "9f41148582c1ed15ac2ea9ef169486627a49c8209708c7a2d4d992bc6c735f6d",
+    "analysis/e1_metrics.json": "8e0511b1c84c265ed1c0512a0c83844d3f6f3602f33b04259d5812b5df4faaa2"
+  },
+  "run_id": "stage1_orphan",
+  "sources": [
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "230b65a99fe0f1273a52c5dc460d24285cc855911b165700f5a2c1dc126ad5a3",
+      "run_id": "e1_dev_orphan_v3_s0-4_20260928T171949Z",
+      "worlds": [
+        "w0000",
+        "w0001",
+        "w0002",
+        "w0003",
+        "w0004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5897ab6e7f929952daaf818b94dbfbad5e2e9322",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f831b00bc4b1f3746e38227f3e2f9e844d6b074763dbc3242e3142c60076da52",
+      "run_id": "e1_dev_orphan_v3_s5-9_20260928T171951Z",
+      "worlds": [
+        "w0005",
+        "w0006",
+        "w0007",
+        "w0008",
+        "w0009"
+      ]
+    }
+  ]
+}
