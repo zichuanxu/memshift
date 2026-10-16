@@ -1,7 +1,7 @@
 # Registration history
 
-The paper cites four registrations by the commit that adds them (Appendix D, Table "The four
-registrations"): v0 `f469617`, v1 `2051086`, v2 `525f7ab`, v3 `a4b5474`. Those commits live in the
+The paper cites its registrations by the commit that adds them (Appendix D): v0 `f469617`, v1
+`2051086`, v2 `525f7ab`, v3 `a4b5474`, and v4 `72261c0` (the round-3 blocks). Those commits live in the
 authors' working repository, whose files also hold internal infrastructure details. This directory
 publishes the part of that history needed to check the order of the registrations, without the rest
 of the working tree:

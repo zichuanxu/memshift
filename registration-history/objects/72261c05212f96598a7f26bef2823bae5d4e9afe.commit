@@ -1,0 +1,8 @@
+tree 072d91dde46428fb9542b79ecc508e5b654c0712
+parent 6742a41ab09d9892875698fdc1d5815e2e74a3ca
+author zichuanxu <zichuanxu28@gmail.com> 1792130698 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792130698 +0900
+
+Registration v4: round-3 blocks U, H, G, X, Q and N, before any model call
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,11 +1,12 @@
 """Check the registration history without the working repository.
 
 1. Every object file hashes to its name (git's SHA-1 over "<type> <size>\\0<content>").
-2. The commits form one parent chain ending at the published head; the first commit is given by hash.
-3. Each registration file is reachable from its commit's tree, and its blob equals the file of the same
-   name in this release's prereg/ directory where that file is unchanged since.
-4. Every run manifest in this release (runs/*/manifest.json, field code.commit) names a commit of the
-   chain, and each registration that the paper says preceded a run is an ancestor of that commit.
+2. The commits form one parent chain ending at the published head; the first commit is given by
+   hash only.
+3. Each registration file is reachable from its commit's tree, and its blob equals the file of the
+   same name in this release's prereg/ directory where that file is unchanged since.
+4. Every run manifest in this release (runs/*/manifest.json, field code.commit) names a commit of
+   the chain, and each registration that preceded a run is an ancestor of that commit.
 
 Usage, from the repository root: python registration-history/verify.py
 """
@@ -46,7 +47,8 @@ for sha, ps in parents.items():
             sys.exit(f"FAIL: commit {sha} has a parent outside the chain: {p}")
 if index["head"] not in parents:
     sys.exit("FAIL: head commit missing")
-print(f"2. {len(parents)} commits link by parent hash to the first commit {index['root_commit_hash_only'][:7]}")
+first = index["root_commit_hash_only"][:7]
+print(f"2. {len(parents)} commits link by parent hash to the first commit {first}")
 
 
 def ancestors(sha: str) -> set[str]:
@@ -95,7 +97,7 @@ for m in runs:
     anc = ancestors(c)
     for k, reg in index["registrations"].items():
         counts[k] += reg["commit"] in anc
-print(f"4. {len(runs)} run manifests; runs whose code commit descends from each registration: {counts}")
+print(f"4. {len(runs)} run manifests; runs descending from each registration: {counts}")
 if outside:
     print(f"   {len(outside)} manifests name a commit outside the chain, e.g. {outside[:3]}")
 print("OK")
