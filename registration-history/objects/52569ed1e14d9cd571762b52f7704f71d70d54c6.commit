@@ -1,0 +1,8 @@
+tree ee0940bf28b2e46feb1c494310293b2c4e805ebb
+parent abf9846f13a24047f541742c4242d4814f98a985
+author zichuanxu <zichuanxu28@gmail.com> 1790699241 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790699241 +0900
+
+Block N (prereg v2 §3, substitute for Letta): Cognee native adapter (cognee 1.6.1) on its embedded stores (SQLite, Ladybug graph, LanceDB); one data item per source object, a revision is delete then add, deletes cascade by provenance as the library does; default HYBRID_COMPLETION context; served model registered as JSON-schema capable so Cognee's own structured-output path decodes under the schema; resume cognifies added-but-uncognified rows; own image (four lock pins differ)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

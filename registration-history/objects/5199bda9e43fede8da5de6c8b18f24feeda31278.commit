@@ -1,0 +1,8 @@
+tree 5fd4f688d0eb1b779f62a9e13b7b61f29e7beea9
+parent 42efe4a1a9dddc4d57887a02175a3fc009d49927
+author zichuanxu <zichuanxu28@gmail.com> 1790621082 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790621082 +0900
+
+E5 black-box (D,B) inference and white-box validation (protocol §1-2)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

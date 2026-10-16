@@ -1,0 +1,8 @@
+tree 29822e548759e3c7f5b7328c9a7eb15f05a0380c
+parent d1c8fe37c2afd0a9b180629b310f965904a7f0d9
+author zichuanxu <zichuanxu28@gmail.com> 1790741732 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741732 +0900
+
+Stage 2 E2 re-run: explore_t1_cells (T1 for all four source-epoch cells per tier: HoldMem(0,1) within the margin for same and upgrade, outside for downgrade); the current code also adds the m1b_d_protects_switch field the committed file predates; no existing field changes
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

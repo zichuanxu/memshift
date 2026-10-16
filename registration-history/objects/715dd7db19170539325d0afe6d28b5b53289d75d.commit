@@ -1,0 +1,17 @@
+tree 53e690feabb5a30bc88808d8ca008856b959af3a
+parent 13f30d4388a93e1cd2bcde5bb888b777d38424f8
+author zichuanxu <zichuanxu28@gmail.com> 1791459548 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1791459548 +0900
+
+Paper round 2: NeurIPS layout, 9-page main text, reviewer-driven analyses and claim fixes
+
+Two simulated reviews plus a re-review (paper/review/round2_*). NeurIPS 2025
+preprint style; main text ends on page 9. Oracle nature of D=1 stated up front,
+model-written derivation as the realistic arm, tag system for registered vs
+exploratory, levels table in the main text, Figure 1 redrawn, all figures at
+5.5in. New post hoc analyses from committed outputs (ex_round2: redefinition-only
+subset, thinking-arm truncation per definition, path 3 under type resampling,
+per-definition B x D, D_m class split); numbers.tex additions only. C3 shown as
+registered for S_def only. Nine verified references added. NeurIPS checklist.
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>

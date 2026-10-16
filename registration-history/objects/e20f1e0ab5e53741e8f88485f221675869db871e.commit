@@ -1,0 +1,8 @@
+tree e19696e6e2d3fd3c0a9f358147831fe38b421ab8
+parent f8e96e1acd9be10440e1f28ea09045bbebefa0f0
+author zichuanxu <zichuanxu28@gmail.com> 1790777797 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790777797 +0900
+
+Paper generators for the exploratory analyses: Ex macros (writer predictors and baselines, leave-one-type-out, failure counts, survival, recovery, net change, T1 at several margins and by class, T3 by class, native null baselines per system and in total once all six are staged; M1 switches and block N fill in when staged, MISSING until then) and three appendix tables (writer predictors, tests sensitivity, native null); numbers and tables regenerated from the stages as they are now, before the analyses are restaged
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

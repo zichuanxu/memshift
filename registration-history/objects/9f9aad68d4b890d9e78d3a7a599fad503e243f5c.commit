@@ -1,0 +1,16 @@
+tree 53dddb2782886b7ae07493d73e2d6b69398c0e1b
+parent 3fe4d42145f80d791c9f88df6d5b74ec3c68e95f
+author zichuanxu <zichuanxu28@gmail.com> 1790599143 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790599143 +0900
+
+Add E1 driver and analysis; tighten writer value format and quote matching
+
+Smoke findings: the writer often put sentences into the typed value, and
+multi-line quotes from contact cards skipped lines. The writer prompt now
+states the value format per type; the checker matches quotes segment by
+segment in order. E1 runs six HoldMem cells per world and branch with a
+pre-intervention hash assertion, JSON arm, zero system, RAG and oracle;
+the analysis computes item-paired detection and repair metrics with
+world-bootstrap contrasts. World-clustered bootstrap and TOST helpers.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree 80d9a15b9e41f92b93c3204df517522cb9c8c83f
+parent f0beb0eab060a8aa8c8e5ef897b8b43e5245cee9
+author zichuanxu <zichuanxu28@gmail.com> 1790779457 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790779457 +0900
+
+Decision row for the second batch of exploratory analyses of existing E2, E3 and E5 data (writer-switch baselines and type-level intervals, T1 net change and margins, T3 by item class, native null baselines); no registered verdict changes
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

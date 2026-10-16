@@ -1,0 +1,8 @@
+tree 918ea3df3891c0068afb88b0cfbcd185919d48d7
+parent 731f9e2fff9a77273b5093e8384242f8b1d073cd
+author zichuanxu <zichuanxu28@gmail.com> 1790741904 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741904 +0900
+
+Appendix: Datasheet and License (app:datasheet) in the style of Datasheets for Datasets, with motivation, composition, collection, labelling, uses, distribution (MIT for code, CC BY 4.0 for generated data) and maintenance
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

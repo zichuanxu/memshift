@@ -1,0 +1,13 @@
+tree bb65d54316f787c6780f2c5f4602c984f8429f36
+parent 56876e3634ca9493d9511e67d98e935be81cb887
+author zichuanxu <zichuanxu28@gmail.com> 1790612669 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790612669 +0900
+
+Add sixteen-system audit (T1-T4 with evidence pointers)
+
+21 rows: the plan's 16 systems, the other HoldMem cells and the Claude
+API memory tool; 105 evidence items with access dates. Vendor assistants
+fail T2 (no export or prose-only export); most cells are undeterminable
+from outside; our own systems await E2/E3/E6.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree ef689427b79a24a64fb74b3983d5d5bd13a0fe12
+parent a9fe1c2a9da92ff0dca101a4e690b664528c64b9
+author zichuanxu <zichuanxu28@gmail.com> 1790679878 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790679878 +0900
+
+run.sh: pass MEMSHIFT_CACHE_TAGS into the run container
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

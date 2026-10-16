@@ -1,0 +1,8 @@
+tree 0b56fae02260ba15075d07074d6f31a94910b622
+parent 43713f3b0aabb32f930e8d318d1b72f0159da1f5
+author zichuanxu <zichuanxu28@gmail.com> 1790651177 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790651177 +0900
+
+Paper: abstract, results roadmap, conclusion and granularity appendix from the test-set results; E5 design text reflects the budget reduction
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree 796ad2972a9913b696598848cfb21522bbdb2a1e
+parent f64d8aab8b91b018b96b7fa9591fbdf780ad3e92
+author zichuanxu <zichuanxu28@gmail.com> 1790672264 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790672264 +0900
+
+theta_r done (5 worlds, Ministral-3-14B reader): all four pre-registered contrasts keep sign and size; E7 restaged; GPU0 released
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

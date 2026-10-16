@@ -1,0 +1,8 @@
+tree f493ed36d74a3b1ec9a72ecda68104407ae5cb51
+parent 1a3a6ec372bdb54261d72dcd660892e1c00722f7
+author zichuanxu <zichuanxu28@gmail.com> 1790774738 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790774738 +0900
+
+Exploratory multi-stage E1 analyses (WS1a): out-of-sample test of Eq. (1) from development to test and R, source-epoch replication accounting with class-stratified R and Holm on the non-detection family (10,000 draws), short-world prediction from the twelve-month terms, E3 cost-model split, pooled HoldMem noise floor
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

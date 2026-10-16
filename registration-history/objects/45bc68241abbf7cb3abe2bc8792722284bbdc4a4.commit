@@ -1,0 +1,8 @@
+tree 091b7c3e2b0bf67da5f9154d0cc9951a2a603d3d
+parent 310c0c88ddfa03419869e78c9e0cfd480161c646
+author zichuanxu <zichuanxu28@gmail.com> 1790687868 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790687868 +0900
+
+Block M2 analysis (prereg v2 §2): per-family verdicts on path 2, the B effect, the D effect on repair, the B x D interaction and zero system vs HoldMem(1,1) after S_def; ruff skips tool worktrees
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

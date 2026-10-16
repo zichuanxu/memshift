@@ -1,0 +1,8 @@
+tree 50fd1c61492f36faa02f9b3c906aebbe8a6c2b73
+parent b2183ee0ca85753540d0695f63f7c2f45a3a1461
+author zichuanxu <zichuanxu28@gmail.com> 1790741733 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741733 +0900
+
+Stage 3 E5 re-run: white_box_other and discrimination per branch (Mem0: 5 of 6 comparisons discriminate, none lies inside the other label's interval); the current code also adds the stage4 summary the committed file predates; no existing field changes
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

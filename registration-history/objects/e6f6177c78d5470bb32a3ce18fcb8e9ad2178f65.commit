@@ -1,0 +1,8 @@
+tree 3b9a6e2acde9010505f4691bef62846b8a9b6e29
+parent 4692e66c8c62befe937ba93fd7c759769fa0aac4
+author zichuanxu <zichuanxu28@gmail.com> 1790738911 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790738911 +0900
+
+STATUS compute rows (02:56 replica stopped and 8001 forwarded, 02:58 block M resumed on GPU0, 03:26 block N split runs) and the 36 interrupted A-Mem / LightRAG runs recorded as void
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

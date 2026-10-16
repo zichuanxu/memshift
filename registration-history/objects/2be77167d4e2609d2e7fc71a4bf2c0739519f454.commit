@@ -1,0 +1,8 @@
+tree f7cafed888c9d636ed934e615ca0c04c3fc2ce1d
+parent 72ecd5fad24c66eb812eae4071758f09675c02e2
+author zichuanxu <zichuanxu28@gmail.com> 1790638612 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790638612 +0900
+
+Exploratory D=1 no-fallback cell (checker only); item classes follow the fallback's actual coverage (43/48, u.timezone has a rule); class-split paper macros
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

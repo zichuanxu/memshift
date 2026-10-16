@@ -1,0 +1,15 @@
+tree 821dcac0a0ae886438cc1faf8e67955d728ac4fb
+parent 243b64f8fe1b24d287c83df5c20318b63b40acd9
+author zichuanxu <zichuanxu28@gmail.com> 1790597835 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790597835 +0900
+
+Add seeded world generator, gold, kappa, shifts, probes and typed scoring
+
+Script-first generator over six sources (email, calendar, tasks, contacts,
+notes, messages) with object ids, monotone revisions and tombstones; gold
+recomputed from source state; six versioned kappa definitions with
+deterministic evaluators; S_src/S_def/S_cons shifts from separate random
+streams; fidelity checker (100% on tested seeds); typed answer matching
+without an LLM judge. Includes the stage 0.3 reuse evaluation.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

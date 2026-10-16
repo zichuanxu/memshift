@@ -1,0 +1,8 @@
+tree 0e2ab227c7cce5e0035f15c14c905dbb887fabfd
+parent c69847ba60a1814ee48a7676a0de28fe62183e65
+author zichuanxu <zichuanxu28@gmail.com> 1790753735 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790753735 +0900
+
+Paper: related work and theory tightened (neighbour contrasts kept, validity and model-change neighbours and the portability sentence moved to the extended related work, theory text shortened, falsification paths stated once)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

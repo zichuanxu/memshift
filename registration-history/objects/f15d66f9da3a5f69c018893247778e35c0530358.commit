@@ -1,0 +1,8 @@
+tree f40082989192eb94c02903d62c799b27d2249c3b
+parent f185cee8b27431054a3be44951468ca41803056e
+author zichuanxu <zichuanxu28@gmail.com> 1790742155 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790742155 +0900
+
+Appendix: membership table placed in the audit appendix; generator-reuse paragraph states what the two existing generators lack; native appendix reports Graphiti as cost measured only and drops the untested-cause sentence; sync appendix keeps the development-world calendar interaction as a fact and what replicated; limitations in present tense; E4 world counts from macros; robustness deviations split into two tables
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

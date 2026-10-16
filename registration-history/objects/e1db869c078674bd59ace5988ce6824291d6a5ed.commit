@@ -1,0 +1,8 @@
+tree e3f51e0a37604e3f92f791fe279d5bb1db78deea
+parent b98dc205d408f843a7f6038a383e31ff050ae1fd
+author zichuanxu <zichuanxu28@gmail.com> 1790776512 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790776512 +0900
+
+Noise floor counted per world as well as per world-branch (the three branches of a world repeat one second ingestion: 40 worlds, 1,920 items in the test and replication runs); note on the interval of a mean absolute error
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

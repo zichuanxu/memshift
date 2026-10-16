@@ -1,0 +1,8 @@
+tree a67ae53016eedefb7fc029b180031953a5d311f3
+parent 339a78d2f442d488490689fdb3af70feaa0f1282
+author zichuanxu <zichuanxu28@gmail.com> 1790650396 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790650396 +0900
+
+E7 stage with test-set read-set analysis and theta_e (bge-m3 for RAG); macros for theta_e / theta_r and the pre-registered E4 lag
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

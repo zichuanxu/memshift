@@ -1,0 +1,8 @@
+tree 2e36def213bb173e8588f05e5ac2cc379dc1f96d
+parent f68b48ec878d79bd20d9627c31f9652f0a353dfb
+author zichuanxu <zichuanxu28@gmail.com> 1790648207 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790648207 +0900
+
+E6 results paragraph; audit T2 cells from E6 (HoldMem (1,1) pass with shared-data-model caveat; zero system by construction)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

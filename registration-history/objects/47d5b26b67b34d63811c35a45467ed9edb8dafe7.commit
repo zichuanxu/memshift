@@ -1,0 +1,12 @@
+tree 4a44c2a560a67d91ce534eeb4df3720b07967a7d
+parent 1e4ad96f9a373af0802763754422cd8e9a94d2fe
+author zichuanxu <zichuanxu28@gmail.com> 1790774743 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790774743 +0900
+
+E1 control cells: oracle and scope keys, refresh without invalidation, template presentation, thinking writer and the query-time view zero_Dm, with offline tests and a pin of the existing cells
+
+The cells write from the same writer requests as existing cells wherever their design allows
+(tests assert this with a recording fake writer); the pre-intervention hash assertion covers them;
+a pin test fixes the requests, served contexts and item rows of the existing cells.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

@@ -1,0 +1,16 @@
+tree fd1e5d69e5a85efd6a1412e0f3931218c44c44ce
+parent 1daecba9a11a9bfabf5aa6ba604f6266e57f4d98
+author zichuanxu <zichuanxu28@gmail.com> 1790602650 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790602650 +0900
+
+Add cited-cluster binding granularity; merge runs in E1 analysis
+
+Read-set cluster keys include high-churn clusters (newsletter threads), so
+false invalidation barely drops below source-epoch keys (0.93 vs 1.00 on
+the first dev world-branch). The cited granularity binds the clusters of
+the writer's own citations -- the item's support set -- taken from the
+shared writer output in both D arms so that D cannot leak into detection
+(tested). E1 cells and baselines are configurable; the analysis merges
+several runs and writes to an explicit output directory.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

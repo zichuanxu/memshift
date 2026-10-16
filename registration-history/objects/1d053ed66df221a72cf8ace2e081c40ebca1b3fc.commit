@@ -1,0 +1,8 @@
+tree 536de84bb8b3b412832887f4629b4606c8e921d9
+parent b2835fa4f93181c05c265ac6c82bab649aa00835
+author zichuanxu <zichuanxu28@gmail.com> 1790743659 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790743659 +0900
+
+Block N serving: GPU1 batch limit 64 during block N (paused restart at 04:25, restored to 128 before the batch queue), A-Mem prefix runs frozen with docker pause until the LightRAG prefixes finish (KV 0.96 and preemptions again at 64); failed gemma M1 warm (client time-outs on the GPU0 queue) recorded as void and re-queued; STATUS compute rows
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,22 @@
+tree 65b48e6e02c90a8ce2aa4138a69a817a48cd9ba1
+parent e42d54aa02146b56720a347a05a7db0095415228
+author zichuanxu <zichuanxu28@gmail.com> 1790821916 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790821916 +0900
+
+Paper presentation round 1: new title, Figure 1 redrawn, appendix rewritten without the log, tables centred
+
+- Title: "MemShift: Noticing a Change Is Not Repairing It in LLM-Derived Personal Memory".
+- Figure 1 redrawn in TikZ with icons (fontawesome5): what changes, what an item stores (B, D), what
+  each part governs, and the two headline results.
+- memtab ends its paragraph, so side tables are centred (old Tables 34 and 44); appendix floats stay
+  inside their section and may sit here, at the top, at the bottom or on a float page.
+- Appendix rewritten in five parts (app_a..app_e) without process narrative: 56 to 27 pages;
+  dropped generated tables that repeated others (per-contrast control intervals, decomposition,
+  writer predictors, test sensitivity, robustness duplicates, native per-system table, membership
+  subset); appendix_stage4.tex replaced by app_d.tex.
+- Main text polished for density and one name per mechanism (the authored derivation's former name
+  "extractor" kept until round 2); bibliography set small.
+- Generators: native-null table may take a float page and has a shorter caption; neighbour caption
+  points to the released audit record; class-split figure axis no longer clips the orphan branch.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

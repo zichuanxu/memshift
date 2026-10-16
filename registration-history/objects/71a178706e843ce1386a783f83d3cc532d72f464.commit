@@ -1,0 +1,8 @@
+tree 5bc52531432ca43f6be24fccb1e46ead0aa8ff81
+parent 47f6512357b8646fe9710b7b7e85f1c697912cbe
+author zichuanxu <zichuanxu28@gmail.com> 1790693855 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790693855 +0900
+
+decisions: implementation choices of the block-L paired comparison and the §6 exploratory rank correlation, logged before any stage-4 data are analysed
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

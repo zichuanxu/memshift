@@ -1,0 +1,8 @@
+tree 0446d224e0abb87094ff6e781fec17b12fcdd219
+parent 26384fbacdc0404b2b386a5eebefafcf429c98a0
+author zichuanxu <zichuanxu28@gmail.com> 1790790384 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790790384 +0900
+
+Paper after review: main text organised by claim (detection is cheap and repair decides by item class; a model's citations are not its dependencies; what repair needs; stored state versus query time; writer switch; replication and families; native systems with null baselines; rendered worlds), Eq. (1) as an accounting identity with the corrected interaction, diagnostic tests instead of certification, exact registration wording, design-rule table with evidence status, supporting tables and figures in a new appendix; generator captions without internal stage names and unsigned mean absolute errors; deterministic ambiguity error in the control staging; decisions and STATUS rows for the batch runner, the GPU0 replica and the separate controls commit
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

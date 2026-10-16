@@ -1,0 +1,8 @@
+tree b8b1f8fc39877c0856e937510d75942b3394797e
+parent 6dd1db10bde07ad28cb56682c338e21e44ef0ba3
+author zichuanxu <zichuanxu28@gmail.com> 1790691402 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790691402 +0900
+
+Neighbour audit for the comparison table (prereg v2 §6): properties.json with verbatim-checked evidence for 15 neighbours and the MemShift row, rubric, human-readable tables; verify.py runs against the neighbour texts when present (not in the repo) and always against the repository files quoted for MemShift
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

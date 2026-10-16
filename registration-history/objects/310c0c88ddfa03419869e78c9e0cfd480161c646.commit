@@ -1,0 +1,8 @@
+tree f65d5a24688658312d7273ab8257fb0dce26059c
+parent 525f7abaec3b662ca1c564bc10e64b5c3ce6315c
+author zichuanxu <zichuanxu28@gmail.com> 1790687486 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790687486 +0900
+
+Stage 4 plumbing: per-family request extras (reasoning off for Gemma 4 and the Qwen lineage, low effort for gpt-oss, none for Llama and Mistral; Qwen/MiMo/Mistral bodies unchanged so cache keys hold), cross-family writer switches in E2 (--tiers cross:<model>), and the block-R replication analysis implementing prereg v2 §1
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

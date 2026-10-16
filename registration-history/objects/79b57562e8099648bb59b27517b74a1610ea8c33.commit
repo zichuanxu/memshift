@@ -1,0 +1,9 @@
+tree 8fcc1574057570f2684232a096f9cb47816ee960
+parent 06eb9c19880957550d9430e0009e0045f5bf4e7b
+parent 1517ab4101b7210c3f175c7ae095fc440bad0a6c
+author zichuanxu <zichuanxu28@gmail.com> 1790712441 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790712441 +0900
+
+Merge stage-4 paper generators: numbers, five tables and the native-system figure from staged data, MISSING markers for stages not run
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

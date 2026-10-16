@@ -1,0 +1,10 @@
+tree 96ca6a4c0be66fee3bacf19b49e47b20dd0f9a48
+parent 6fffdf7f57eadba409ee1700be60efbf6ddd541d
+author zichuanxu <zichuanxu28@gmail.com> 1790619586 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790619586 +0900
+
+Stage-1 re-analysis with prereg-v1 contrasts; record superseded runs
+
+Existing stage-1 numbers unchanged except the E2 slope bound (2000 draws).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

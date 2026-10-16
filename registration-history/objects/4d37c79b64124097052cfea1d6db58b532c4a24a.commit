@@ -1,0 +1,8 @@
+tree 944c870bd494dd54af1e2b186c74b0599f78519e
+parent 022a8828d7873ed7c6b0b86420b47055bf977302
+author zichuanxu <zichuanxu28@gmail.com> 1790634516 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790634516 +0900
+
+Stage-2 E3 (test, 20 worlds): HoldMem(1,1) passes T3 at 1/3/12 months; zero and RAG do not
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

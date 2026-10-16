@@ -1,0 +1,19 @@
+tree d1243cb29f95f25275a90e5bb8fc87a01cc5a23a
+parent b489aadde8f7f6c05a4e4e324ae95e5e5d768c4a
+author zichuanxu <zichuanxu28@gmail.com> 1790621678 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790621955 +0900
+
+E4x driver: official sync semantics for all six sources, discriminative probes
+
+Per world (S_src): ideal and official L = 5 min streams, every source through its own sync
+profile; HoldMem D=1 B in {0,1} (source epoch) and the zero system on the delivered world
+(all slots), built at t_f - 1 min. Up to 2 true change events per source in the 8 weeks after
+the fork (seeded, stratified: shift-tagged, then updates/deletes, then inserts). A slot is
+touched when the event's object is in the true gold's dependency set at e.ts or e.ts - 1 s;
+probes at e.ts + {10, 60} min cover every touched slot plus an equal seeded sample of untouched
+slots. Answers carry stream, mode, lag, delta, system, B, source, touched and synced tags;
+divergence and polls are written per source. The module docstring gives the LLM-call upper
+bound (<= 4 S (1 + T) + 6 P; <= 11,712 per world for S = 48), and each world records it next
+to the client's call count. CLI: python -m memshift.experiments.e4x --seeds 1000-1004.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree d0741f57c067c2e1074ba2517362764e342d05f2
+parent e6f6177c78d5470bb32a3ce18fcb8e9ad2178f65
+author zichuanxu <zichuanxu28@gmail.com> 1790740214 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790740214 +0900
+
+Neighbour tables: captions without process wording (quotes in the related-work appendix), MemShift's implementation-change cell partial (the importer is a second implementation of the same data model); regenerated tables, neighbour counts unchanged
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

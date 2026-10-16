@@ -1,0 +1,8 @@
+tree fdb9b781a9520b9fc9011366788686cfd9ca1143
+parent 3daf16bf2778e35a616d6fd8c14df08f1f04431f
+author zichuanxu <zichuanxu28@gmail.com> 1790707100 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790707100 +0900
+
+Block L render warm: python -m memshift.gen.llm_render renders every (seed, branch) world while the renderer is served and records the render reports and a manifest, so the E1 --render run reads each rendering from the request cache
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

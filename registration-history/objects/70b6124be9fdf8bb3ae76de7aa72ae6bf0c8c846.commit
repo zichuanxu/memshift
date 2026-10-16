@@ -1,0 +1,8 @@
+tree 8dc56ea191d29efd8ad637ae8bd214d92c7b868b
+parent f1662123d3434f8f65dad1503697d2e66e733108
+author zichuanxu <zichuanxu28@gmail.com> 1790741588 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741588 +0900
+
+E5: native discriminability (exploratory): each comparison also placed against the white-box cell of the other B label (same D), a comparison discriminates when the predicted interval contains the native value and the other label's does not; counts in stage4.discriminability; tests
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

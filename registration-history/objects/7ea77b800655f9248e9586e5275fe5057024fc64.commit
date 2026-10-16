@@ -1,0 +1,11 @@
+tree f9e66b7a473506b5f0bd163d4341c2cbd755fefd
+parent 27b7a0efda41b8a3149b0df191489eed0efcc0e3
+author zichuanxu <zichuanxu28@gmail.com> 1790613483 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790613483 +0900
+
+Stage-1 E1 (final design) and E3 results on the 10 development worlds
+
+Merged analyses in runs/stage1_e1 and runs/stage1_e3 with source-run
+manifests; per-run manifests, env and hash checks of the split runs.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

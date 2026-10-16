@@ -1,0 +1,8 @@
+tree 1082540111281ab575478c79ca82db22218425a3
+parent f522b3e1d75556618264e67929d0790401f20284
+author zichuanxu <zichuanxu28@gmail.com> 1790620796 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790620796 +0900
+
+Paper: v1 design (orphan branch, cited granularity, test-set split, six-source sync appendix)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

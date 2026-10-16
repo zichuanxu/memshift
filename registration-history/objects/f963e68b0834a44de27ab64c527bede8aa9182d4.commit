@@ -1,0 +1,8 @@
+tree d132ece62c42723e4d5ac397598eaee15c81f0dc
+parent 71353ddc20123bb12c19ac4cc98505c0613ba0cb
+author zichuanxu <zichuanxu28@gmail.com> 1790640201 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790640201 +0900
+
+Audit table: T1 (E2) and T3/T4 (E3) measured cells for HoldMem, plain RAG and the zero system
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

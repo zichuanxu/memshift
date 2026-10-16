@@ -1,0 +1,8 @@
+tree e8bf8188833fb863618f5ed3aadec03acbe5d556
+parent 1c04c2f1dcd1c6fbc84c588f5f5a7968c4b050f6
+author zichuanxu <zichuanxu28@gmail.com> 1790753771 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790753771 +0900
+
+Paper: results 5.1 to 5.3 and 5.5 tightened (item-class estimates, program statistics, the exploratory T3 count without definition items and the replication path estimates moved to the appendix; duplicated explanations removed)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

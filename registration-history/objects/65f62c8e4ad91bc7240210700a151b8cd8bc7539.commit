@@ -1,0 +1,8 @@
+tree c14d8b56b2219cc569ebabb738bf560767ce69ec
+parent b3020cb0307634fb176e6d838f3f7b295d520c96
+author zichuanxu <zichuanxu28@gmail.com> 1790719318 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790719318 +0900
+
+Block N serving: A-Mem and Cognee on GPU1, HippoRAG 2 / LightRAG / MemOS on a GPU0 replica with batch 2 and LightRAG's concurrent LLM calls capped at 2 (KV-bound server); family lane paused; decision and void runs recorded
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

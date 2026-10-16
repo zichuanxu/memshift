@@ -1,0 +1,8 @@
+tree 2eccb17d96716a8b41c4aa5bf8b7a8a81bd74a74
+parent 1e4ad96f9a373af0802763754422cd8e9a94d2fe
+author zichuanxu <zichuanxu28@gmail.com> 1790775692 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790775692 +0900
+
+Paper: related work rewritten around the closest neighbours (StateMemBench, MemTrace, PLANFENCE, RECON, Goyal and Ray), memory-based editors, and what a language-model rebuild adds to dependency tracking inherited from data systems and program-aided reasoning; 23 references verified and added, eight later neighbours discussed and not audited
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

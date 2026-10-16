@@ -1,0 +1,8 @@
+tree f31bd047db059042a51be35ef8d089051f9ffb5c
+parent 1b1819c1e6dfb76c48af3189398f6b68c96e3bbb
+author zichuanxu <zichuanxu28@gmail.com> 1790660887 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790660887 +0900
+
+E5: T3 (static minus oracle) and T4 (reader tokens over one full re-read) for native systems on the short worlds, E3's criteria
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

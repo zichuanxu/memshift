@@ -1,0 +1,8 @@
+tree 4c6493ce7afadc8921694075dcb86b004ebdccab
+parent c974c77af1ee875250186093eb13f2ab34cb9a62
+author zichuanxu <zichuanxu28@gmail.com> 1790627021 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790627021 +0900
+
+Stage-1 completion: E2 upgrade/downgrade tiers on dev (T1 within margin on both)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

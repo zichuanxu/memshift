@@ -1,0 +1,12 @@
+tree 025da6a4bdb9bf0d35851d3faecb89906446c281
+parent 525f7abaec3b662ca1c564bc10e64b5c3ce6315c
+author zichuanxu <zichuanxu28@gmail.com> 1790694697 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790694697 +0900
+
+A-Mem as a native system for block N: persistent notes and Chroma index, metered LLM path, encoder pinned to one Hub revision
+
+AMemSystem wraps the official A-Mem system repository (WujiangXu/A-mem-sys, pinned commit f303dfc71e07): every source event goes through the library's own add path (analysis call, evolution call over the five nearest notes, index add), with the event key as note id, the source as category and the event time as timestamp; tombstones are ordinary notes. The library keeps everything in memory and resets a process-wide index in its constructor, so the adapter attaches a persistent Chroma client under the store directory and reloads notes.json, which makes snapshot and restore by directory copy exact. The LLM client is replaced by MeteredOpenAI on our endpoint (thinking off, temperature 0, shared output cap); LLM failures the library swallows are recorded and reported through the ledger. Retrieval is the library's ranking plus linked notes, rendered from the live note; the local encoder is the library's default all-MiniLM-L6-v2, recorded in describe().
+
+The encoder is pinned to revision 1110a243fdf4 and requested by full repo id (ChromaDB caches loaded models by name only); the library constructor and its consolidation, the only places the package builds an encoder, are stubbed and overridden so no unpinned copy loads. HF_HOME points at cache/hf in the repository before sentence_transformers or huggingface_hub is imported, HF_HUB_OFFLINE=1 is set once the pinned snapshot is in that cache, and `python -m memshift.adapters.native_amem --seed-cache` downloads exactly the ten files the encoder loads. Registered as "amem" in experiments/e5.py; pinned requirement set in docker/native/amem.txt; offline tests for the pure helpers, the driver-side bookkeeping, the pin and the environment handling, and library-gated tests over a scripted LLM client and a hash embedder.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

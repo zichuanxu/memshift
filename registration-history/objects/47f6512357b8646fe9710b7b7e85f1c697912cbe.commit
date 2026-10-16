@@ -1,0 +1,9 @@
+tree d12bfff779ad15dff6509c0aa14835b6ebaecb3b
+parent 27f4ee724f0c24e203f0fb3cde1461e4371f1cdb
+parent 8264386b41fae92e8e2bc0aa46c397f04ee1b539
+author zichuanxu <zichuanxu28@gmail.com> 1790693644 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790693644 +0900
+
+Merge block-L paired analysis and §6 exploratory rank correlation
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

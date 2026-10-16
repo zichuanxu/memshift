@@ -1,0 +1,8 @@
+tree 151edb4a9b0dca43eb91db0d48fe067685d8299f
+parent 82344c098e02a7efe09d30584ca3917f5f97f50d
+author zichuanxu <zichuanxu28@gmail.com> 1790742075 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790742075 +0900
+
+E2: the pooled logistic calibration fit (intercept, slope, predicted survival on a grid with a pointwise 90% band from the same world resamples as the slope interval) is stored as explore_pooled_curve for the calibration figure; test typing fix in the E3 tests
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

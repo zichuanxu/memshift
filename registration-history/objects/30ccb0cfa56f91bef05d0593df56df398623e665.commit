@@ -1,0 +1,10 @@
+tree 9bf16c658de1b34a3aa7b15eaa1f4568092b5e3b
+parent 65f62c8e4ad91bc7240210700a151b8cd8bc7539
+author zichuanxu <zichuanxu28@gmail.com> 1790723392 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790723392 +0900
+
+Exploratory multiplicity check on the directional E1 contrasts: Holm-Bonferroni and Benjamini-Hochberg over the v1 §4 predicted-non-zero contrasts, one family per stage, one-sided p-values from the main analysis' world bootstrap
+
+analysis.multiplicity recomputes each contrast's per-world item differences through the same code path as e1.contrasts (rendered.contrast_vectors), takes the bootstrap draws behind the stored interval (scoring.stats.world_bootstrap_draws, the body of world_bootstrap unchanged), refuses to go on unless the recomputed estimate and interval equal e1_metrics.json, and reads a one-sided p-value off the draws. Exploratory: not part of prereg v1 or v2, no verdict changes.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

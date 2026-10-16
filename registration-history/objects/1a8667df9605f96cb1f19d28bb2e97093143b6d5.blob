@@ -1,0 +1,323 @@
+# Registration of the control cells added after review (2026-09-30)
+
+Status: registered before any of these cells ran on a model (code in commits `47d5b26`, `db0029d`,
+`0180213`; the dated rows in `prereg/decisions.md` of 2026-09-30 are the authoritative record). The
+executed scope was reduced before the first run to worlds 1000-1009 and the cells listed in the last
+of those rows; predictions that refer to cells that were not run are withdrawn there.
+
+What is registered is of two kinds, kept apart throughout:
+
+- **Facts computed offline from the worlds** (section 1). The keys of the oracle cell, the scope cell
+  (on definition items) and the source-epoch cell are functions of the world, so their detection is
+  known before any model runs. They are audited with `python -m memshift.analysis.e1_keys` and are not
+  predictions. A run whose rates for these keys differ from the audit has a bug and is void.
+- **Predictions** (section 3), each with a threshold that can be missed and an analysis.
+
+## 0. What was built
+
+| Cell or arm | Token in `--cells` | Name in the outputs | New model requests |
+|---|---|---|---|
+| Oracle key | `D0B1_gold`, `D1B1_gold` | `holdmem_D{0,1}B1_gold` | writer: 6 in total over 20 worlds and 3 branches |
+| Refresh without invalidation | `D0B0_refresh`, `D1B0_refresh` | `holdmem_D{0,1}B0_refresh` | none |
+| Template presentation of D=0 | `D0tB0`, `D0tB1_source` | `holdmem_D0tB0`, `holdmem_D0tB1_source` | none |
+| Retraction-aware programs | `D1sB1_source_ra`, `D1sB0_ra` | `holdmem_D1sB1_source_ra`, `holdmem_D1sB0_ra` | program: 51 per world |
+| Scope-aware key | `D0B1_scope`, `D1B1_scope` | `holdmem_D{0,1}B1_scope` | writer: 7 in total over 20 worlds and 3 branches |
+| Query-time view | `zero_Dm` | `zero_Dm` | none (program requests are the D1s ones) |
+| Thinking writer | `D0thinkB0`, `D0thinkB1_source` | `holdmem_D0thinkB0`, `holdmem_D0thinkB1_source` | thinking writer: 60 to 68 (B=1) and 30 to 32 (B=0) per world |
+
+Design notes that the predictions depend on:
+
+1. **Oracle key (`gold`).** The key of a slot at time t is the sorted (object id, revision) list of
+   `gold_at(slot, t).deps` plus the definition version. An item is invalidated when its key differs
+   from the key at its last derivation, and is re-derived with the request the source-epoch cell would
+   send at that checkpoint. It is an oracle (it reads the gold) and is not implementable.
+2. **Scope key (`scope`).** For a definition item the key is (definition version, the (object id,
+   revision) list of the objects the definition's scope ranges over at t). The range is the executable
+   form of `SCOPE_PREDICATES` (`gen/kappa.py: SCOPE_RANGES`, written from the definition text, reads no
+   evaluator output); windows that slide with t are part of the range, so the key moves when an object
+   enters or leaves a window. Reading "epochs of the sources the predicates range over" literally gives
+   the source-epoch key again (the sources are the declared ones) except for `working_hours` v1, so the
+   range fingerprint is used. All other items are keyed by their cited clusters, exactly as in
+   `B1_cited`. No key reads the writer's value or the D=1 extractor.
+3. **Refresh without invalidation (`B0_refresh`).** A B=0 cell that, at each checkpoint, re-derives
+   every item whose source-epoch key moved (which is what the B=1 source-epoch cell re-derives, with
+   the same full in-scope records and the same request), appends the new item and never invalidates.
+   The old derivation stays valid and is served beside the new one.
+4. **Template presentation (`D0t`).** D=0 without checker or sidecar. A repaired or new item written
+   after the shift is rendered by `render_fallback_sk` from the writer's own typed value and its own
+   citations, with the "under the definition in effect" clause and the D=1 provenance phrase
+   ("programmatic extraction from ..."), verbatim. Items of the pre-shift snapshot keep the writer's
+   statement, so the pre-shift contexts are those of every other cell. Note that D=1 applies the
+   template only to items whose check failed; D0t applies it to every item written after the shift.
+5. **Retraction-aware programs (`_ra`).** A second program request per item. The function is
+   `derive(records, as_of, prior_reads)` and returns `{"value": V, "reads": [ids]}`. The sandbox wraps
+   every record: reading a content field of a record whose id is not in `reads` is an error
+   ("undeclared read"). Identification fields (`object_id`, `source`, `revision`, `updated`, `cluster`
+   and per source the locator fields `name`, `kind`/`title`/`appt_type`, `title`/`project`, `from_addr`,
+   `conversation_with`/`contact`, `title`) can be read on any record so that a program can find its
+   record without declaring every record it looked at. `prior_reads` is the item's lineage: every id
+   any earlier run declared for that item (the layer keeps it, also across a failed run). The prompt
+   asks the program to return `None` (for set items too) when an id of `prior_reads` no longer belongs
+   to a live record and not to substitute another record. The sandbox does not enforce that rule; the
+   layer measures it (`lineage_ok`, per run) and reports it.
+6. **Query-time view (`zero_Dm`).** The zero system (BM25 over the live objects the agent may read)
+   plus, for the probed item, the value of its D1s program (the same cached request) run on the live
+   records at the probe's as-of time, rendered with the D=1 template and the provenance phrase "computed
+   by the writer's own program". The view leads the evidence and shares the 4,096-token evidence
+   budget (the BM25 evidence is packed into what the view leaves). No derived state is stored.
+   Items whose program fails, or whose sources the agent may not read, are served as the zero system
+   serves them.
+7. **Thinking writer (`D0think`).** D=0. Items of the pre-shift snapshot are written by the normal
+   writer (same bytes as every cell). Definition items written after the shift come from a second
+   client with `enable_thinking: True`, `max_tokens` 8,192, no JSON schema (a schema that has to open
+   with `{` leaves no room to think on a server without a reasoning parser), and the prompt extended by
+   one line naming the JSON keys. The body, hence the response-cache key, differs from every other
+   request. A reply cut off by the token limit is an unreadable write and is counted.
+
+## 1. Facts computed offline (worlds 1000 to 1019, 12 months; no model)
+
+`python -m memshift.analysis.e1_keys --seeds 1000-1019 --branches src,def,orphan`. "Changed" means the
+gold at the checkpoint differs from the gold at t0 (as in `analysis/e1.py`). Item-checkpoints pool the
+four checkpoints (1, 2, 4, 8 weeks). Rates are over item-checkpoints.
+
+| Branch | Key | Missed (all classes) | False invalidation: all / definition / rule / free text | Re-derivations per world (all / definition) |
+|---|---|---|---|---|
+| S_src | source epoch | 0.0% | 99.7 / 98.6 / 99.7 / 100.0 % | 190.0 / 23.5 |
+| S_src | oracle (gold) | 0.0% | 16.8 / 50.3 / 16.4 / 1.5 % | 38.2 / 18.9 |
+| S_src | scope, definition items only | 0.0% | - / 53.1 / - / - % | - / 19.1 |
+| S_def | source epoch | 0.0% | 99.3 / 95.7 / 99.3 / 100.0 % | 189.6 / 23.5 |
+| S_def | oracle (gold) | 0.0% | 4.3 / 61.3 / 2.9 / 1.1 % | 27.7 / 20.8 |
+| S_def | scope, definition items only | 0.0% | - / 64.5 / - / - % | - / 21.5 |
+| orphan | source epoch | 0.0% | 100.0 / 100.0 / 100.0 / 100.0 % | 190.4 / 23.6 |
+| orphan | oracle (gold) | 0.0% | 7.0 / 49.4 / 3.7 / 1.1 % | 40.3 / 18.7 |
+| orphan | scope, definition items only | 0.0% | - / 52.3 / - / - % | - / 19.0 |
+
+Changed / unchanged item-checkpoints: S_src 1,168 / 2,672; S_def 558 / 3,282; orphan 1,767 / 2,073.
+Source-epoch false invalidation reproduces the published 99.7 / 99.3 / 100.0%.
+
+Three consequences that change what the brief suggested:
+
+- The oracle key does **not** have false invalidation below 5% in every branch: 16.8% after S_src and
+  7.0% on the orphan branch (it is 4.3% after S_def). Gold dependencies include the revision of each
+  object, so a revised record with the same value invalidates the item, and on definition items a
+  window that slides changes the dependency set while the value often stays. The suggested "< 5%"
+  is therefore replaced by the audit above. On definition items false invalidation is about 50 to 61%.
+- Definition items are re-derived at 78 to 87% of their checkpoints even under the oracle key (18.7 to
+  20.8 of at most 24 per world, against 23.5 for the source-epoch key). Selective and complete binding
+  saves almost nothing on the items the D effect lives in; its saving is on the other classes (rule
+  items: 344 vs 2,930 re-derivations in 20 worlds after S_src).
+- The scope key is almost the oracle on definition items (false invalidation 52 to 65% against 49 to
+  61%); with both at zero missed, any Update difference between them and the source-epoch cell on
+  definition items is model noise, not detection.
+
+Uncached writer requests of the keys (a re-derivation at a checkpoint where the source-epoch cell did
+not re-derive, because the clock moved a window): across 20 worlds and 3 branches, 6 for the oracle
+key and 7 for the scope key in total (worlds 1015, 1018, 1019 only, several shared between branches);
+0 in seeds 1000 and 1001 in the full replay. Every other writer request of these cells is one the
+source-epoch cells sent.
+
+## 2. Common analysis (all predictions below)
+
+- Probes: the discriminative probes of the published E1 runs (all items whose gold changed since t0
+  plus an equal-size seeded sample of unchanged items, selected from gold only), so every system is
+  asked the same questions in every world, branch and checkpoint; `--discriminative` is required.
+- Worlds 1000 to 1019 (think arm: 1000 to 1009); branches S_src, S_def, orphan; checkpoints 1, 2, 4, 8
+  weeks after the fork, pooled. Anchor cells (`D0B0`, `D0B1_source`, `D1B1_source`, `D1sB1_source`,
+  `zero`) come from the published runs on the same worlds (same code, same writer and reader cache).
+- Unit: per-item paired difference (same fact id at the same checkpoint), clustered by world, 95% world
+  bootstrap interval with 2,000 draws and seed 996 (`scoring.stats`). Metrics: Update and Stability
+  (ContractValid on changed and on unchanged asked probes), Missed and False invalidation, repair
+  correctness (ContractValid given the item was repaired at that checkpoint; mechanical variant: the
+  repaired value equals the gold). Classes as in `analysis.e1.ITEM_CLASSES`: definition (`k.`), rule
+  (structured fields), free text.
+- A prediction "holds" exactly as its threshold says; all contrasts are reported, including those that
+  fail. No multiplicity correction (as v1, v2). Anything not listed is exploratory and labelled so.
+- Implementation checks (not predictions): the pre-shift hash assertion must pass for every cell of
+  a run (it covers the new cells); the run's Missed and False invalidation for the gold cells and for the
+  scope cells on definition items must equal section 1; the scope cells' non-definition items must
+  equal the `B1_cited` cell's rates.
+
+## 3. Predictions
+
+### 3.1 Oracle key (`B1_gold`)
+
+Question: does selective and complete binding keep the benefit of refreshing everything?
+
+- **P-G1** (non-inferiority on Update, all items). For D in {0,1} and each of S_src, S_def, orphan,
+  `Update(B1_gold) - Update(B1_source) >= -0.02` (point estimate). Holds if true in all six contrasts;
+  reported with the pooled interval (holds strongly if its lower bound is above -0.04).
+- **P-G2** (definition items). `|Update(B1_gold) - Update(B1_source)| <= 0.03` on definition items in
+  each of the six (D, branch) contrasts. Rationale: the audit shows both keys re-derive the same items
+  at almost the same checkpoints, so the oracle should neither help nor hurt there. Fails if the oracle
+  is better or worse than the refresh on these items by more than 3 pp.
+- **P-G3** (regressions). `Stability(B1_gold) - Stability(B1_source) >= 0` in at least five of the six
+  (D, branch) contrasts: fewer re-derivations leave fewer items to regress (the net effect of binding
+  that the review found missing).
+- Consequence. P-G1 true: the benefit of refreshing everything is recoverable with dependency
+  tracking, and what the paper called "binding" is paying for re-derivation it does not need. P-G1
+  false: complete dependency tracking loses something the refresh has (it hides re-derivations that fix
+  a stale value whose dependencies did not change, for instance a value written from an earlier
+  record). Either is reported as measured.
+
+### 3.2 Refresh without invalidation (`B0_refresh`)
+
+Question: is the B effect "a fresh derivation is added" or "the stale one is removed"?
+
+- **P-R1** (ordering, all items). For each D and branch,
+  `Update(B0) - 0.01 <= Update(B0_refresh) <= Update(B1_source) + 0.01` (point estimates). Holds if true
+  in at least five of the six.
+- **P-R2** (closer to B=1, definition items, D=1). In S_src and S_def,
+  `(Update(B0_refresh) - Update(B0)) / (Update(B1_source) - Update(B0)) >= 0.5` (ratio of pooled
+  means; not evaluated if the denominator is below 0.05). Holds if true in both.
+- Orphan, definition and other classes: reported, no threshold (old and new derivations coexist, so the
+  direction is not obvious).
+- Consequence. P-R2 true: most of the B effect on definition items is adding the fresh derivation; the
+  binding's removal of the stale one matters little there. False: removal matters.
+
+### 3.3 Template presentation (`D0t`)
+
+Question: is the D effect a matter of value, or of the template it is shown in after the shift?
+
+- **P-T1** (primary). `|Update(D0tB{0,1}) - Update(D0B{0,1})| <= 0.03` on definition items, for B in
+  {0,1} and each of the three branches (six contrasts), as point estimates. Power note: a definition
+  item contributes about 50 changed item-checkpoints per world over the three branches, so a 95%
+  interval narrower than plus or minus 0.03 is unlikely; the prediction is on the point estimates and
+  the intervals are reported.
+- **P-T2** (share of the D effect that is presentation). At B=1 in S_src and S_def on definition items,
+  `(Update(D0t) - Update(D0)) / (Update(D1) - Update(D0)) <= 0.15`.
+- **P-T3** (all items). `|Update(D0t) - Update(D0)| <= 0.03` for B in {0,1} and each branch.
+- Consequence. All three true: the D effect on Update is value, not presentation, and "D = check +
+  executable re-derivation + template" can say which part matters. P-T1 false with
+  `Update(D0t) - Update(D0) >= 0.10` on definition items: most of the D effect there is presentation, and
+  the paper's execution claim must be restated.
+
+### 3.4 Retraction-aware programs (`D1sB1_source_ra`, `D1sB0_ra`)
+
+Question: does design rule 3 (a derivation that declares its inputs and is withdrawn with them) repair
+the retraction failure of the writer's own programs (-7.8 pp on the orphan branch)?
+
+- **P-M1** (primary, orphan branch, B=1, source epoch). (a) `RepairCorrectness(D1sB1_source_ra) -
+  RepairCorrectness(D0B1_source) >= 0` (point estimate; for D_m the published value is -7.8 pp); (b)
+  `RepairCorrectness(D1sB1_source_ra) - RepairCorrectness(D1sB1_source)` has a 95% interval above 0.
+  Holds if both.
+- **P-M2** (no cost where nothing is retracted). On S_src and S_def, `Update(D1sB1_source_ra) -
+  Update(D1sB1_source) >= -0.03` on all items (point estimate).
+- **P-M3** (executability, a validity condition). The share of `_ra` programs that run (ok) at t0, over
+  all items, is at least 0.8 times that of the D1s programs. If it is lower, the `_ra` result is a
+  result about prompt compliance (as the first smoke of block C was) and is reported as inconclusive
+  for rule 3; P-M1 and P-M2 are then not judged.
+- Measured and reported (no threshold): the share of runs that returned a value although a prior read
+  was gone (`lineage_ok` false), the share that failed by an undeclared read, by class and branch; and
+  the over-retraction of definition items over tasks on the orphan branch (a program that reads every
+  task must declare every task, so a deleted task withdraws it; `active_project` and `overdue_task`
+  are expected to lose there, as rule 3 over-retracts multi-witness items).
+- B=0 counterpart: reported, no threshold. A B=0 layer never re-derives an item whose sources have no
+  new record, so a deleted object is repaired only when a delta arrives.
+
+### 3.5 Scope-aware key (`B1_scope`)
+
+Question: does a key that ranges over what the definition ranges over (selective and scope-complete)
+recover the refresh-everything benefit on definition items?
+
+- **P-K1**. On definition items, `Update(B1_scope) - Update(B1_source) >= -0.02` for D in {0,1} and
+  each branch (six contrasts, point estimates).
+- **Audit-checked, not predicted:** missed on definition items is 0.0% (section 1, bound by the
+  prediction "at most 2%"), and false invalidation on definition items is 52.3 to 64.5% against 95.7
+  to 100.0% (at most 0.7 times the source-epoch rate in every branch).
+- **P-K2** (what the scope key cannot do). On the non-definition items the scope cell is the cited
+  cell; `|Update(B1_scope) - Update(B1_cited)| <= 0.01` on those items, and the scope cell's overall
+  missed rate is above 0.05 (the cited key misses 15 to 21%). This is stated so that the scope result
+  is not read as a result for all items.
+- Consequence. P-K1 true together with P-G2: selective and complete binding on definition items is as
+  good as the refresh, at 80 to 91% of its re-derivations on those items; the saving is small because
+  definitions over time windows change at almost every checkpoint.
+
+### 3.6 Query-time view (`zero_Dm`)
+
+Question: when the derived item is computed at read time from live records, is there nothing to bind
+and nothing lost?
+
+- **P-Z1** (definition items, primary). `Update(zero_Dm) - Update(zero) >= 0.30` in S_src and S_def
+  (each a point estimate, pooled lower bound above 0.20).
+- **P-Z2** (other items). On rule items (structured fields), `Update(zero_Dm) - Update(zero) >= 0` in S_src
+  and S_def; on free-text items, `Update(zero_Dm) - Update(zero) <= 0.03` (the program has no rule to
+  execute and can only be wrong); on the orphan branch, `Update(zero_Dm) - Update(zero) <= 0` on rule
+  items (the program of a deleted record can still return another record's value, the mechanism of the
+  -7.8 pp); on unchanged items, `Stability(zero_Dm) - Stability(zero) >= -0.03` in S_src and S_def.
+- **P-Z3** (against the stored derivation). `|Update(zero_Dm) - Update(D1sB1_source)| <= 0.10` on
+  definition items in S_src and S_def.
+- Before the shift (k = 0) the same contrasts are reported for the same items; the prediction for
+  definition items is at least +0.30 there too (the gap is not a shift artifact).
+- Consequence. P-Z1 and P-Z3 true: for the items where D helps, a stored derived item plus its binding
+  is an unnecessary cost (a view does as well); the derived store earns its place on the items the view
+  cannot compute. P-Z1 true and P-Z3 false in favour of D1s: storing adds something (for example the
+  check against the writer's value).
+
+### 3.7 Thinking writer (`D0think`)
+
+Question: is the D=0 failure on definition items a failure to compute that thinking removes?
+
+- Worlds 1000 to 1009 only.
+- **P-D1.** `RepairCorrectness(D1B1_source) - RepairCorrectness(D0thinkB1_source) >= 0.30` on definition
+  items in S_src and S_def (each a point estimate); the same for the mechanical variant.
+- **P-D2** (validity). At most 20% of the thinking writes are unreadable (cut off by the token limit);
+  otherwise the arm is reported as inconclusive and P-D1 is not judged.
+- Reported, no threshold: `RepairCorrectness(D0think) - RepairCorrectness(D0)` on definition items (the
+  size of the thinking gain) and the same for Update; completion tokens per write (`items.jsonl`,
+  `note.think`).
+- Consequence. P-D1 true: the gap is not removed by reasoning on this 9B model (the statement is about
+  this model, one prompt, one budget). False: part of the D effect is aggregation failure that thinking
+  repairs.
+
+## 4. Runs, CLIs, calls
+
+Environment. The writer and the reader are the main model; both ask the same endpoints as the published
+runs, through `MEMSHIFT_ENDPOINTS` (a JSON object from model id to OpenAI-compatible base URL; several
+replicas separated by `|`):
+
+    MEMSHIFT_ENDPOINTS='{"Qwen/Qwen3.5-9B": "<replica-1 base url>|<replica-2 base url>"}'
+
+No other endpoint is needed (no embedding service when `--no-baselines` is given). Through the project
+runner, `RUN_MODULE=memshift.experiments.e1 scripts/run.sh <the arguments below>`; split seeds into
+chunks of four worlds per container as before (`--seeds 1000-1003` and so on) and use distinct `--name`s.
+
+| Run | Arguments | New model calls per world (12-month worlds 1000, 1001) |
+|---|---|---|
+| Keys, refresh, D0t | `--seeds 1000-1019 --branches src,def,orphan --discriminative --no-baselines --cells D0B1_source,D0B1_gold,D1B1_gold,D0B1_scope,D1B1_scope,D0B0_refresh,D1B0_refresh,D0tB0,D0tB1_source --name e1_ctrl` | writer 0 (136 to 150 distinct requests per gold cell, all cached), reader up to about 2,700 (8 cells x 324 to 362) |
+| Retraction-aware | `--seeds 1000-1019 --branches src,def,orphan --discriminative --no-baselines --cells D1sB1_source,D1sB1_source_ra,D1sB0_ra --name e1_ra` | program 51 (48 items + 3 definitions that change version after S_def; fewer after the first world, because world-independent items are shared), writer 0, reader up to about 700 |
+| Query-time view | `--seeds 1000-1019 --branches src,def,orphan --discriminative --no-baselines --cells zero_Dm --name e1_zerodm` | program 0 (the D1s programs), writer 0, reader up to 470 to 510 (all asked probes, k = 0 included), about 470 to 510 sandbox runs |
+| Thinking writer | `--seeds 1000-1009 --branches src,def,orphan --discriminative --no-baselines --cells D0B0,D0B1_source,D0thinkB0,D0thinkB1_source --name e1_think` | thinking writer 90 to 98 (60 to 68 for B=1, 30 to 32 for B=0, 8,192 tokens at most each), writer 0, reader up to about 700 |
+
+- The anchor cell in each run (`D0B1_source`, `D1sB1_source`, `D0B0`) is there so that the pre-shift hash
+  assertion spans the new cells and an existing one; its writer and reader requests are cached.
+- Reader figures are upper bounds: the asked probes after the fork (k = 1, 2, 4, 8 summed over the three
+  branches); the pre-shift contexts are those of the anchors, so k = 0 reader calls are cached. The
+  thinking arm sends its thinking requests only after the shift.
+- Totals for 20 worlds (10 for the thinking arm), upper bounds: reader about 55,000 (keys, refresh,
+  D0t) + 14,000 (retraction-aware) + 9,800 (view) + 7,000 (thinking) = about 86,000 calls of up to 4k
+  prompt tokens; writer 0; program about 700 to 1,000; thinking writer about 1,000. At the rate the
+  review assumed (3 to 5 GPU-hours for four cells x three branches x 20 worlds, reader calls only) this
+  is on the order of 9 to 16 GPU-hours plus the thinking decode; that figure is an extrapolation, not a
+  measurement.
+- Reproduce the counts: `python -m memshift.experiments.e1_estimate --seeds 1000-1001 --branches
+  src,def,orphan --cells <tokens>` replays the cells with a recording stand-in and prints, per world,
+  distinct and new (not sent by any of the six published cells and the two D1s cells) writer, program
+  and thinking requests, and the reader upper bound.
+
+## 5. Limits that belong in the paper if these are reported
+
+- `D0t` renders every item written after the shift in the D=1 template; D=1 uses the template only for
+  items whose check failed.
+- The oracle and scope keys see the benchmark's dependency and scope definitions; they bound what
+  dependency tracking could give and are not implementable or are implementable only with the
+  definition's machine-readable scope.
+- The retraction-aware prompt is one prompt for one 9B model. Its locator fields are a design choice
+  (without them every scan would declare every record); a different set changes what over-retraction
+  costs. The rule "return no value when a prior read is gone" is the program's, measured and not
+  enforced.
+- `zero_Dm` uses the writer's own D1s programs, including the ones that fail after a retraction; a
+  view built from authored rules is the ceiling and is not a cell here.
+- The thinking arm is one model, one budget (8,192 tokens), no schema, and only definition items after
+  the shift.
+- Not built (not in the list of seven): a D=0 arm with the full in-scope records (the access control
+  of review items M-03 and F3).

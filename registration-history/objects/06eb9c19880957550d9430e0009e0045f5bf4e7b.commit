@@ -1,0 +1,8 @@
+tree 143c032d2e49cd408f98aded4319dbbd1a0f792f
+parent 08c20c13ac7959633be40e3a6ac5089e0245e1d4
+author zichuanxu <zichuanxu28@gmail.com> 1790712431 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790712431 +0900
+
+STATUS compute rows: 27B window for R's E2 writes, MiMo same-tier warm, GPU1 restart, block N launch
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

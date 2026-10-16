@@ -1,0 +1,8 @@
+tree ef85971b1bd6d56b7a27229a7094b024deebd304
+parent 5cd7a6fc37fd78cc6c85a67c2226a7af504ea5dd
+author zichuanxu <zichuanxu28@gmail.com> 1790679728 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790679728 +0900
+
+theta_r on the main vLLM image: import-compatibility shim for Mistral-format Ministral-3 on v0.30.0, optional shim mount in serve_model.sh, per-model response-cache namespaces so a rerun on another engine gets fresh responses; decision recorded before the rerun
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

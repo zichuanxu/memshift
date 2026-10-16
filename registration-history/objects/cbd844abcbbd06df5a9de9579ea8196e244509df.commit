@@ -1,0 +1,8 @@
+tree 0740918a6bc9714f0c9bae592653254c96a307cf
+parent 525f7abaec3b662ca1c564bc10e64b5c3ce6315c
+author zichuanxu <zichuanxu28@gmail.com> 1790689089 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790689089 +0900
+
+Block C (prereg v2 §4): D1s cells whose executable derivation is a program the writer model writes (restricted-AST sandbox in a separate process, 2 s timeout); definition items checked against the writer's own program, never the gold evaluator; block-C contrasts C1-C4 and program statistics in the E1 analysis
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

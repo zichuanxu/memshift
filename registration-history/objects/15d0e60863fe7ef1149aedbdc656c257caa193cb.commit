@@ -1,0 +1,8 @@
+tree c1c3bffa907d5c8a2df233709d30cd32d87f5ad7
+parent fbb989929ae8be197db8176f95b4c6e8a13d926e
+author zichuanxu <zichuanxu28@gmail.com> 1790669664 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790669664 +0900
+
+Gate B: sufficient statistic consistent on Mem0 (5 of 6 inside, the sixth within its ingestion noise; weak evidence), T2 kept, cards B and C not split off
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

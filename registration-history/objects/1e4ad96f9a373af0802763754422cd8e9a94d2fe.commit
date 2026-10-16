@@ -1,0 +1,8 @@
+tree e148e92fe26d8201cc74c6b0e3ca16f0d8a31d6e
+parent 4d05cedfb74ae30963cc99c16b8c3fe2389f6d51
+author zichuanxu <zichuanxu28@gmail.com> 1790760376 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790760376 +0900
+
+Block M2, gemma-4-12B as writer and reader of E1 on ten test worlds: staged (all five M2 jobs exit 0); checks (i)-(v) all hold, so the two-factor pattern holds for this family; macros and the families table regenerated
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

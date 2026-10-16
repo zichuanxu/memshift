@@ -1,0 +1,8 @@
+tree 368f6a759727e0f45c98f5713d0ec338412ca92b
+parent 55c8bd9d387e5b0d1d6d8fd00503c37b05e1e1f2
+author zichuanxu <zichuanxu28@gmail.com> 1790738716 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790738716 +0900
+
+E5 split runs: --phase prefix / branch (--prefix-run, --branches) and --resume-from an interrupted run's prefix store; a failed unit stays failed on a resumed ingest; resumed runs count ingested and failed units from the store and report no prefix cost; offline tests check that split runs reproduce one run and that a resume adds nothing twice; decision row
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

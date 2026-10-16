@@ -1,0 +1,8 @@
+tree dabc3740419483b4fb80ce22f88f1372c2b53126
+parent e88d7ed40fb033d3e816418eeb0b6a7ab81ab253
+author zichuanxu <zichuanxu28@gmail.com> 1790804804 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790804804 +0900
+
+STATUS: blocks M1 and L observed; compute rows for the control-runner changes and the end of the batch and D0full runs
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

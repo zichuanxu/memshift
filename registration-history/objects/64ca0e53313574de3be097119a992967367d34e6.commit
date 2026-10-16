@@ -1,0 +1,8 @@
+tree 1d813df7a1d0f1328801adbbb455404518c9bf0e
+parent 64818f1fd7173ca79a88f1287d08630047171294
+author zichuanxu <zichuanxu28@gmail.com> 1790674310 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790674310 +0900
+
+Paper on the official ICML 2026 template: figures redrawn in one style (Type-1 Times via LaTeX), TikZ concept figure, tables generated from runs with booktabs, sections rewritten to the 8-page limit with an appendix, bibliography expanded to 160 verified references (ADI survey audited entries, arXiv-verified memory literature, classic dependency-tracking and statistics references)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

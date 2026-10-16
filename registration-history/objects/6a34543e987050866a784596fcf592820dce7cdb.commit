@@ -1,0 +1,8 @@
+tree f44a874a6f3fcf0ad3bfbc117cce875c132e45cd
+parent 2cf1838f4f0fba0362e78c81428f1fdfab5f8ed5
+author zichuanxu <zichuanxu28@gmail.com> 1790636262 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790636262 +0900
+
+E7 on test worlds 1000-1004: no cell abstains on conflicts; B=1 still leaks revoked scope
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

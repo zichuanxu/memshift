@@ -1,0 +1,8 @@
+tree bacaf4e842ade47334a939e63886dc7155d3c5ae
+parent 8e5f276ce7dde36c089efaaa235c6bbfa38beea7
+author zichuanxu <zichuanxu28@gmail.com> 1790622067 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790622190 +0900
+
+E4x: sample only slot-touching events; calendar up to 10 per world, stratified as in E4
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

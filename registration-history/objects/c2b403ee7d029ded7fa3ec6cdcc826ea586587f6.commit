@@ -1,0 +1,11 @@
+tree 60eaf271308dedf85f66c56ea1524c786b546ac9
+parent 6a34543e987050866a784596fcf592820dce7cdb
+author zichuanxu <zichuanxu28@gmail.com> 1790636620 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790636620 +0900
+
+Disclose D=1 fallback = gold computation on 42/48 items; exploratory item-class splits (E1 repair, E3 CV)
+
+Dev: D repair effect is +70/+86 pp on definition items, ~+2 pp on rule items, <=0 on free text.
+Test E3 at 12 months: HoldMem 0.73 vs oracle 0.96 on free-text items; zero loses on every class.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

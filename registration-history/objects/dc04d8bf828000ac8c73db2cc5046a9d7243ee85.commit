@@ -1,0 +1,8 @@
+tree 9e00b12ad9b8f8afc66e0d3e447aeebdd2fa2581
+parent d8df61ec8bc1c7c35c83c1694811f8273260befd
+author zichuanxu <zichuanxu28@gmail.com> 1790657354 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790657354 +0900
+
+E5 inference: native runs probe t0 once on the natural world; fall back to it (found by a smoke test on partial white-box data, before any native result)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

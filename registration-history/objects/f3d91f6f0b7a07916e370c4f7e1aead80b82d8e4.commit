@@ -1,0 +1,17 @@
+tree 7761587f72a4cda34990ae890cc3a0437298f8bb
+parent f469617d0a64eba2bcef84c947f7edc1408f3868
+author zichuanxu <zichuanxu28@gmail.com> 1790600417 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790600417 +0900
+
+Cache BM25 indexes per source snapshot; add E3 driver
+
+The first E1 launch was CPU-bound: every writer call rebuilt a BM25 index
+over all in-scope objects. Indexes are now built once per (log, time,
+declared sources, delta) and shared by all cells and slots, with a token
+cache per object revision; SourceLog carries a unique id for cache keys.
+Adds the E3 driver (static ContractValid at 1/3/12 months for zero, RAG,
+HoldMem (1,1) and oracle; five-part cost model with counted daily-batch
+invalidations x measured unit cost) and an option to build HoldMem with
+the full D=1 write path.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

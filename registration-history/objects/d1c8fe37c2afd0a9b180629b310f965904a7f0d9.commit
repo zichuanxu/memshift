@@ -1,0 +1,8 @@
+tree 0e05087132621720ec9ea99e9046a80ae7e99af2
+parent 70b6124be9fdf8bb3ae76de7aa72ae6bf0c8c846
+author zichuanxu <zichuanxu28@gmail.com> 1790741612 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741612 +0900
+
+Block C by item class: SynthExCOne / SynthExCTwo macros per class (definition, rule, freetext) and branch, with the paired item counts (SynthExCItems); regenerated numbers
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

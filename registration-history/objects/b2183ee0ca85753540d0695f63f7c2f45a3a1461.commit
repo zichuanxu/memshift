@@ -1,0 +1,8 @@
+tree 71495dc4bf69134d102dea5a7b1412689fdc73b0
+parent c03e561e1a0abc4fc08e518b4adfacbe83fc12c9
+author zichuanxu <zichuanxu28@gmail.com> 1790741733 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741733 +0900
+
+Stage 2 and block R E3 re-runs: explore_no_definition (ContractValid and T3 without definition items; HoldMem(1,1) passes T3 at 1 of 3 horizons instead of 3); no existing field changes
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,10 @@
+tree 32e359512dee9df94c444def3d83335db7817081
+parent de916cfc4408542a6e0d96e159e64a5b9e15f816
+author zichuanxu <zichuanxu28@gmail.com> 1790619630 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790619630 +0900
+
+Freeze prereg v1: N=20 (seeds 1000-1019), margins, thresholds, contrasts
+
+Signed by this commit hash (prereg v1 §10).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,28 @@
+tree 2c8f1c34f686c5662a1d74f261c12fdd2bc8225e
+parent 08c20c13ac7959633be40e3a6ac5089e0245e1d4
+author zichuanxu <zichuanxu28@gmail.com> 1790711282 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790711282 +0900
+
+Paper generators for stage 4: macros, five tables and the predicted-vs-observed figure come from staged run data
+
+Every stage-4 quantity of prereg v2 §8 is generated (paper_numbers, paper_tables, figures) from the
+staged analyses named in paper/results_sources.json, through the shared views in
+analysis/paper_data.py; a stage that has not run renders as the MISSING marker and a verdict over a
+whole set (families, systems, switches) only once the set is complete.
+
+- Macros (Rep, RepPool, Synth, MOne, MTwo, MThree, Nat, Rend, Rank): block R from
+  analysis.replication and analysis.gate applied to the committed stage-2 and replication JSON (no
+  stage step needed), block C from e1_metrics (C1-C4 with verdicts, program statistics), M1 from
+  the merged E2, M2 from families.json, M3 from e7 theta_r_by_reader, N from e5_natives with its
+  stage4 summary and e5_cost, L from rendered.json, section 6 from rank_corr.json.
+- Tables tab_replication, tab_construct, tab_native, tab_families, tab_rendered; figure
+  fig_native_systems (vector PDF, Okabe-Ito, Mem0 falls back to stage 3, other systems show as
+  not run).
+- New stage kind `m2` (E1 plus analysis/families.json); e7.analyse groups theta_r runs by the reader
+  model in each run's manifest (theta_r_by_reader) so that several readers do not mix.
+- paper/generated/* regenerated (existing macros and tables unchanged); the paper builds.
+- tests/test_paper_stage4.py: MISSING rendering, determinism, complete synthetic inputs (every macro
+  reads an existing key; macros and tables compile), real analyses as fixtures, and a check that
+  the committed generated files are current.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

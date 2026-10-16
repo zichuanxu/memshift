@@ -1,0 +1,8 @@
+tree 8d954004cb514bf301f990bb9a67af7b8c9124b9
+parent 205108679e9f16fe1c6dbb8b9f54da27c79c5ff0
+author zichuanxu <zichuanxu28@gmail.com> 1790620311 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790620311 +0900
+
+E6 T2 analysis (prereg v1 §5); log 27B window start and v1 freeze
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

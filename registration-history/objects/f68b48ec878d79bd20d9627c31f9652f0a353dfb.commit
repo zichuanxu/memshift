@@ -1,0 +1,8 @@
+tree 34dd440aa5b1ab14deeb9dc48b2b4240fb66bee0
+parent b2c15a6486054134c309aecd475299622e787844
+author zichuanxu <zichuanxu28@gmail.com> 1790648060 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790648060 +0900
+
+E6 on 20 test worlds: import with the derivation extension is equivalent (T2), without it detection degrades to B=0 (post-shift -15.4 pp, every change missed)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

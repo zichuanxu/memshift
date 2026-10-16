@@ -1,0 +1,8 @@
+tree 2f139fa62f848ca3a0b6532bcccae582c0cc1c79
+parent 1e2e4f1935b16748a66090357a7170b21c6505b3
+author zichuanxu <zichuanxu28@gmail.com> 1790742266 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790742266 +0900
+
+Figures: calibration figure draws the pooled logistic fit with its 90% band and a rug of the items per type; dissociation figure marks the B=0 and source-epoch detection lines as 100 / 0 by design (lighter, named in the panel); tests check the by-design values in the data and that both figures draw with and without the curve
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

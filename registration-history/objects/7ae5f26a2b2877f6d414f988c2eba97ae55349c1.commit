@@ -1,0 +1,8 @@
+tree 4c0137c4ef9c88c8e7324a749e93f003256cf702
+parent 31447243eff259f43957b5062ca4cda0f7386a8b
+author zichuanxu <zichuanxu28@gmail.com> 1790796781 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790796781 +0900
+
+Test: the replication claim level is worded as a registered claim in the flipped-effect case too
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

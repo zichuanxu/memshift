@@ -1,0 +1,8 @@
+tree f1a20047f50dc6a0312307f5c9ba0ea9cec899eb
+parent cdbbadd84ef8eaa53e41ccacffcbada4348eda79
+author zichuanxu <zichuanxu28@gmail.com> 1790693504 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790693504 +0900
+
+Neighbour table: MemShift questions are the 9,782 graded probes every system answers (2,880 pre-fork + 6,902 asked post-fork, over 960 items; recounted from the stage-2 E1 test runs and tied to the committed E1 metrics by a test), unit stated in the caption; the item-count weakness is dropped and replaced by the number of histories (20 test worlds against the neighbour median), histories column added to the Section 2 table; stage-4 sentence no longer predicts a probe count
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree 492569fc94f5ffa8951260b247faf3cc374ac662
+parent e0914ad3a40db6807eb6c7623d1b2fdc3f1227b5
+author zichuanxu <zichuanxu28@gmail.com> 1790799521 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790800939 +0900
+
+Paper: second revision of the main text, first stage (results reorganised around a complete key, per-writer account, out-of-sample baselines, why cited keys miss, binding moves a, zero system after the shift, JSON arm; abstract, introduction, theory, registration wording and design-rule table rewritten; new exploratory analyses in the appendix)
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

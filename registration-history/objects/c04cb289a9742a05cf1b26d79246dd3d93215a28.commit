@@ -1,0 +1,16 @@
+tree 6e422d10ce3634aa54512f14aa4211fd9832782f
+parent 9f9aad68d4b890d9e78d3a7a599fad503e243f5c
+author zichuanxu <zichuanxu28@gmail.com> 1790600123 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790600123 +0900
+
+Parallelise E1, add single-flight LLM calls, E2 driver, noise floor
+
+Smoke showed the GPU idling between write waves; E1 now builds and
+maintains cells concurrently and runs several worlds at once, and the
+LLM client coalesces identical in-flight requests so concurrent cells
+still share one writer output. Adds the E2 writer-switch driver with a
+disjoint calibration set and cache warming for the TP=2 window, and a
+second-ingestion noise floor in E1. Keeps run manifests, env and
+analysis in git; the stage 0.4 smoke record is included.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,9 @@
+tree b9f4393a24359c68eda4a6e3329e393d6d23d6e3
+parent 2de8fc9e9c60f73def97ed57ddc709e3751069ab
+parent 9ce84193b8032eb7158e3642d4525ba9ba81298b
+author zichuanxu <zichuanxu28@gmail.com> 1790697436 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790697436 +0900
+
+Merge stage-4 protocol appendix
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

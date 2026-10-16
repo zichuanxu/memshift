@@ -1,0 +1,8 @@
+tree bb4360eb12ad82875fbe27cbea82e87cac7afedb
+parent e6391024d16bd147d2ed4d63115aec02d3748f3b
+author zichuanxu <zichuanxu28@gmail.com> 1790660458 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790660458 +0900
+
+E5 white-box references on the 15 short test worlds (45 hash checks pass); probe validation replicates on short worlds (kappa_B 1.0, kappa_D 0.5)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

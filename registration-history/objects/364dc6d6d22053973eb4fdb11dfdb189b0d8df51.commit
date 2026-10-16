@@ -1,0 +1,8 @@
+tree b00248602cdbcf9a705d2f39097d3026c857eb79
+parent 167efba6c4ad6ce4dc1ee4edceb22328861de140
+author zichuanxu <zichuanxu28@gmail.com> 1790776825 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790776825 +0900
+
+Generated paper files for the exploratory E1-family analyses (WS1a): Ex macros in numbers.tex, tab_classsplit.tex (main text), tab_decomp.tex (appendix), fig_classsplit.pdf
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

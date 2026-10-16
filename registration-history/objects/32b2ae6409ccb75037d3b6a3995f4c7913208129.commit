@@ -1,0 +1,8 @@
+tree 4486c7f3a26de8b8532a36a0d3a48454f05360df
+parent 6ee4a6e9a5eae1562df8f8e505e0537fe100ade4
+author zichuanxu <zichuanxu28@gmail.com> 1790811344 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790811344 +0900
+
+Run records of blocks N, R, M, L and the controls: manifests, environments and hash checks (the 18 Cognee manifests of 12-13 MB stay on the compute host)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

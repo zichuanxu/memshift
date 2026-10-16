@@ -1,0 +1,8 @@
+tree 95484fe0f625849921d892cf3e5992e089102907
+parent 1e4ad96f9a373af0802763754422cd8e9a94d2fe
+author zichuanxu <zichuanxu28@gmail.com> 1790774294 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790774294 +0900
+
+Exploratory class-stratified E1 analyses (WS1a): class split of every registered contrast, Eq. (1) decomposition with the corrected interaction, invalidation precision, per-definition spread, post-shift JSON arm, Stability and net B, noise floor; explore_* keys added to e1.analyse, nothing registered changes
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

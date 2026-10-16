@@ -1,0 +1,8 @@
+tree 88780679dea6932ad8e636eb18b688142856fe64
+parent 391e1c0b7a7f5d4242d85f057e1fea82086ae654
+author zichuanxu <zichuanxu28@gmail.com> 1790640602 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790640602 +0900
+
+Paper macros: E1 contrasts in pp (orphan branch, B x D, cited granularity, no-fallback split), gate A group; fix stale granularity keys
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

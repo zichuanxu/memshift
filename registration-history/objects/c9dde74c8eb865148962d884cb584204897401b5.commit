@@ -1,0 +1,8 @@
+tree 654b1894e62aec37888e143bd946f2a9dfdf2ed7
+parent 2ceb0a8148327fb8cee4610d327a9e54bc85fef6
+author zichuanxu <zichuanxu28@gmail.com> 1790796714 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790796714 +0900
+
+Decision: D0full implementation before any run (record set = every live record of the declared sources, as the D=1 checker reads; cap 25,000 approximate tokens so prompts fit the 32k context; per-source truncation that keeps every source whole except the one that overflows)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

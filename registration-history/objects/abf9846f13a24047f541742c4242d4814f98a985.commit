@@ -1,0 +1,8 @@
+tree 0267d2a7effdd08c989f8ddf400c6b9779c2220a
+parent 45bc68241abbf7cb3abe2bc8792722284bbdc4a4
+author zichuanxu <zichuanxu28@gmail.com> 1790688080 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790688080 +0900
+
+Block N analysis (prereg v2 §3): document-level B=1 systems compared with the cited-cluster cell, documented label predictions, and the cross-system predictions N-1..N-4; stage-4 serving launcher with pinned revisions and engine flags per model; STATUS compute rows
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

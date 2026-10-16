@@ -1,0 +1,8 @@
+tree 39e0ace36c8753fd39589ca0cb5a8175ecfa8e13
+parent 886ba8a2eb1747590a5c9c71f8e78337d782672f
+author zichuanxu <zichuanxu28@gmail.com> 1790610241 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790610241 +0900
+
+Stage helper merges E2/E3/E4 inputs across split runs
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree 88535bf9bf90ce264416363cdf2162e80d3172a5
+parent 01cea226fa421a70428e6f28c2fa294737ea0bd9
+author zichuanxu <zichuanxu28@gmail.com> 1790670594 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790670594 +0900
+
+theta_r: world 1000 with Ministral-3-14B as reader (checked before scaling); failed 4-world run recorded as superseded (thread limit)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree ed04d2f0cea5a7fe8aaa45ef4587177a41debfe2
+parent fc7d46106097a6c5c113cd357cb6cc147f0a5097
+author zichuanxu <zichuanxu28@gmail.com> 1790740489 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790740489 +0900
+
+Stage block C re-run with the exploratory C1 / C2 class split (same source runs; only the explore_C*_source_<class> contrasts are new, the item table is byte-identical)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

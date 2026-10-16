@@ -1,0 +1,8 @@
+tree db2ce4e80431bfc15324f944c6182863d8a477b9
+parent 83520ce439312aab6a69fa90881849b743864412
+author zichuanxu <zichuanxu28@gmail.com> 1790723877 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790723877 +0900
+
+Decision row 2026-09-30: exploratory multiplicity check (Holm-Bonferroni and BH over the v1 §4 predicted-non-zero E1 contrasts of stage 2 and block R; not part of v1 or v2, no verdict changes)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

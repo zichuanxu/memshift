@@ -1,0 +1,8 @@
+tree 41ef2145f830380c3c80a6d6c670a786a88e2ea0
+parent b5aec2382965c819ae6a8fc7af76f307453b67fc
+author zichuanxu <zichuanxu28@gmail.com> 1790744250 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790744250 +0900
+
+Paper generators: macros for the exploratory analyses (T1 for the other cells, E3 without definition items with the T3 counts, E3 on the replication worlds, Mem0 and stage-4 discriminability, replication direction counts), replication table with a separate as-predicted column, construct table with D_m and a dash for the share where C1 is not positive, plain-words captions in the gate and replication tables (no claim level, main study for stage 2); regenerated numbers and tables
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,14 @@
+tree e1937e827adcb12eb85e5da12ce3f3e364469237
+parent 0489e3a36fafa1ed4045e43ada66f9a493654652
+author zichuanxu <zichuanxu28@gmail.com> 1790598303 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790598303 +0900
+
+Scale generator day ranges for short worlds; record stage 0 decisions
+
+rday() keeps 12-month worlds byte-identical and makes 3-month smoke worlds
+valid. decisions.md gains a plan-clause column and the stage 0 decisions
+(own generator, template renderer, coordination-window rule, MiMo download
+and serving, vLLM image, shared pre-intervention snapshot, maintenance
+schedule, paired probes for gold-invariant shifts).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

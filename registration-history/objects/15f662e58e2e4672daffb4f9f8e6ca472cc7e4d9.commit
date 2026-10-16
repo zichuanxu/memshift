@@ -1,0 +1,8 @@
+tree e3d78a7f1d13164868e4d8c49a572c56f8268dc6
+parent ffb5b102e8243bb28b2e61dc4483bb973b929669
+author zichuanxu <zichuanxu28@gmail.com> 1790637981 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790637981 +0900
+
+E5 measure: cap the measured prefix, t_i per attempted event, per-world results as they finish; --months for E1 white-box references on short worlds
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

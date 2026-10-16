@@ -1,0 +1,8 @@
+tree f35fb7e9af3a67dc9d0ace28547fb8a889a86ae8
+parent 7431ab6ecf9bf56349d70d993e7c0218be6a765f
+author zichuanxu <zichuanxu28@gmail.com> 1790692360 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790692360 +0900
+
+Neighbour table generator (prereg v2 §6): tab_neighbours.tex (Section 2), tab_neighbours_full.tex (appendix) and count macros read from properties.json; MemShift cells that are PLANNED in stage 4 (native systems, LLM-rendered text, further test worlds) carry a dagger and flip by editing the JSON only; derived table fields added to the audit record; tests for rows, planned rendering, determinism and the numbers the text quotes
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

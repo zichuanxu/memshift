@@ -1,0 +1,8 @@
+tree 84f21598c6c42797fc8daf6b301c8037f0d02f18
+parent 1e824be7edbceed31873778d04f0a0991138600e
+author zichuanxu <zichuanxu28@gmail.com> 1790777770 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790777770 +0900
+
+E5 exploratory null baselines inside e5.analyse (explore_native_null, all native systems of the analysis so block N needs no change): which white-box cells, zero system, plain RAG and oracle intervals contain each native estimate, inside and discriminating counts for the label-circular (orphan) and out-of-sample comparisons, the counts a label-free baseline gets under the same rule, chance coverage over permuted labels, item-paired native minus predicted cell differences with the interval widened by the repeat-ingestion variance, and B marked unidentified when the persistence interval straddles 0.5; tested on a synthetic three-system fixture with cited-cluster cells, baselines and a second ingestion
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

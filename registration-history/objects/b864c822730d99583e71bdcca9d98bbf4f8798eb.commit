@@ -1,0 +1,8 @@
+tree 4bf8aa539b235f9ca2ec095f6c64f1b81c9853c6
+parent 83341eee0fd9b8be609306002d19d673041d29fe
+author zichuanxu <zichuanxu28@gmail.com> 1790800626 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790800939 +0900
+
+Paper: appendix registration record (two implementation choices fixed on the development worlds after v0, B x D with its development estimate known, R after the class split, registered readings of the pending results with the sentences they change), extended limitations for the confounds and the writer-dependent class boundary, status table split in two
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

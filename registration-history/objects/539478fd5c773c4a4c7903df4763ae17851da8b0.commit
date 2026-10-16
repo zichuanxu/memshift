@@ -1,0 +1,13 @@
+tree 5cc1dd2b86e1b206c98b9e17448b427df46e502a
+parent 84765dbf77fc86882987042ec17b6335d704d7ff
+author zichuanxu <zichuanxu28@gmail.com> 1790800133 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790800133 +0900
+
+controls_data: compare each new run with the published runs on the branches its manifest declares
+
+A run of two branches (the D0full runs: src and def) has no orphan probes or answers, and the
+anchor check listed the published anchor's orphan answers as missing on one side. The probe-set
+and anchor checks now read a run's branches from params.branches (else from its answers), and a
+declared branch without answers still fails both checks, so a run is neither padded nor excused.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

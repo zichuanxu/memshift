@@ -1,0 +1,8 @@
+tree 3e69f3ded628819b1d8ff072dc323b7e6fc084cc
+parent b04b36cbdd4276b17405fe9139e70c5d7593e97f
+author zichuanxu <zichuanxu28@gmail.com> 1790626172 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790626172 +0900
+
+E1 default cells follow prereg v1 (cited granularity); log end of 27B window
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

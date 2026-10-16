@@ -1,0 +1,14 @@
+tree 4d71c4aa70d5b53aa34cbfc3c0bc80cfed6ae11f
+parent 13b1cfe78a7a114b70bdf984b4df72f64e552eaf
+author zichuanxu <zichuanxu28@gmail.com> 1790693501 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790693501 +0900
+
+Stage 4 analyses: block L rendered-vs-template paired M2 checks (prereg v2 §5) and the exploratory rank correlation across systems (§6)
+
+analysis/rendered.py: families.family_checks on the rendered E1 run and on the same-seed template data; every contrast behind checks (ii)-(v) and each path-2 contrast as an item-paired rendered-minus-template difference with a world bootstrap interval (per-world values and the equal-weight world mean alongside); a probe-level ContractValid table per branch, cell and k; probe-identity check; rendering descriptives per source kind (kept as template, retried, fidelity) from world_summaries.jsonl or the manifest.
+
+analysis/rank_corr.py: Update on S_src, Update on S_def and orphan Stability of every short-world system (natives, baselines, white-box cells) by e5.carry_samples, Spearman rho of the S_src ranking against the other two with a world-level bootstrap; marked exploratory.
+
+Shared helpers, behaviour unchanged: stats.item_diffs (paired_diff's per-item step), e5.carry_samples (_carry's samples), families.zero_hm_vectors, and an injectable paired_diff in e1.contrasts. Recomputing every stage-2 contrast from the item table reproduces runs/stage2_e1/analysis/e1_metrics.json exactly.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

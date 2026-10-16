@@ -1,0 +1,8 @@
+tree d23398d21c3517ae0f1ac3682522cbc63eea0b89
+parent 14190a962da5f7144023beb4e102d7af1fbfc891
+author zichuanxu <zichuanxu28@gmail.com> 1790793978 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790793978 +0900
+
+writer: full_records docstring names the declared scope (Slot.sources) as the record set
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

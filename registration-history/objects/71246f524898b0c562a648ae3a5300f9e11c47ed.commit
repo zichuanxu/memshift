@@ -1,0 +1,8 @@
+tree c1fffcb5e078a679f4edafc5f9ab671ec2c0f1a6
+parent 4867d64523bf9858f0deca9dad6a948de480b9e1
+author zichuanxu <zichuanxu28@gmail.com> 1790602907 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790602907 +0900
+
+Paper: limitations section; implicit-definition ceiling macro from gold
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,8 @@
+tree 5dfd8bca0c489281fe3bb9f76b2f876f9563d3b2
+parent bb9d91ff39ef13c02b30392b55afb07f2a604318
+author zichuanxu <zichuanxu28@gmail.com> 1790785138 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790785138 +0900
+
+Paper: appendix brought in line with the reframe (registration record with the v1 and v3 wording and dates, status table with the exploratory analyses and the pending controls, Holm over the non-detection contrasts, retraction control pending, label test for the native systems, diagnostic tests, gold-dependency context); the neighbour table moves to the extended related work
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

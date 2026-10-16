@@ -1,0 +1,14 @@
+tree 1d2ec423a1315d5766d6f9966296643cf67c65a7
+parent a370d46f0a16c31baeb54e8523e6dd8ad1f30f45
+author zichuanxu <zichuanxu28@gmail.com> 1790600883 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790600883 +0900
+
+Add E2 and E3 analyses
+
+E2: retention per tier and cell; D=0 calibration slope on the logit of the
+per-type agreement rate and AUROC with world-bootstrap intervals; D=1
+survival vs checker pass rate; the path-3 verdict. E3: static
+ContractValid by horizon, five-part costs, serving cost relative to a full
+re-read, T3/T4 checks and the preregistered H_U decision rule.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

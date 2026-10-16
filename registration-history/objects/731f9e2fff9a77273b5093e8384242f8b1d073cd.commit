@@ -1,0 +1,8 @@
+tree 2397500d180668ba27b79f9c3370e01bb27b3d90
+parent 837e966de73d83e572ca8212b9efd574be37fc4b
+author zichuanxu <zichuanxu28@gmail.com> 1790741867 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741867 +0900
+
+Appendix stage4: retitled Protocols of the Robustness Study; main study / robustness study wording, D_m for D1s, plain words for claim level; choices after the freeze now point to the deviations table; Letta history, Ministral shim and cache-key details and post-freeze wording removed
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

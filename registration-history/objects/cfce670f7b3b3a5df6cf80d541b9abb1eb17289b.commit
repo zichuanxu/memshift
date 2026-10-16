@@ -1,0 +1,12 @@
+tree 1f27f0d38769919ff0f56e2abd2253d25ba3da61
+parent 183e14d3d0e6978875f3e8d6e65d89e899f730bd
+author zichuanxu <zichuanxu28@gmail.com> 1790604658 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790604658 +0900
+
+Add E6 leave-test driver: .mem export with/without derivation record, second-implementation import
+
+Offline test (fake writer): with the derivation record the imported store
+keeps B=1 detection (missed invalidation 0); without it the import is
+append-only (missed invalidation 1).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

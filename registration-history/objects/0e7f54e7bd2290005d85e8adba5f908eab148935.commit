@@ -1,0 +1,8 @@
+tree 23c0eacf02537147d3cb0118a8b6d1929ea83551
+parent 677a82379f19fde5ff7f2d2e93442e03b248ab1f
+author zichuanxu <zichuanxu28@gmail.com> 1790744244 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790744244 +0900
+
+Neighbour tables: no legend note for the planned marks (the dagger cells stay until the runs flip them in the audit JSON); regenerated tables, neighbour counts unchanged
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

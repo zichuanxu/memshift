@@ -1,0 +1,8 @@
+tree 761b0fd10be42d2187cae0f93faa926c9c8bce29
+parent 1896291d1c9d193821f26a0e2b31e18d33d02527
+author zichuanxu <zichuanxu28@gmail.com> 1790668290 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790668290 +0900
+
+Decision: theta_r reader served by the vLLM 0.20.0 image (0.30.0 cannot load Ministral-3)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,26 @@
+tree d9e6424558b385ddb4453ea953159dbad44fdc1a
+parent b7c0bc040d07a2a07c0f5d328bbe27e94c23cadf
+author zichuanxu <zichuanxu28@gmail.com> 1790793875 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790793875 +0900
+
+E1 control cell D0fullB1_source: definition items re-derived from every live record of their declared sources
+
+The D=0, B=1 source-epoch cell of the registered control D0full. After the shift a definition item
+is re-derived from all live records of its declared sources (`writer.full_records`, no BM25
+selection, no 6,000-token writer budget), ordered by time and cut to the most recent records above
+`FULL_BUDGET`; the cut is counted in the item's note (records given, dropped, capped, tokens, dropped
+by source). The pre-shift snapshot, the key, the reader and every other item's request are
+D0B1_source's, so they are cache hits and the pre-shift hash assertion covers the cell.
+
+The cap is 25,000 approximate tokens, not the registered 28,000: `approx_tokens` counts 1.11-1.15
+server tokens per token on message and calendar records (up to 1.19 on tasks), so 28,000 would
+overflow the 32,768-token context with the request text and its 700 output tokens. The record set is
+the declared sources' records, not the definition's scope range (which applies the definition's
+predicate to the structured fields); see the `full_records` docstring.
+
+Offline tests with the recording fake writer: every in-scope record is in the request, truncation
+keeps the most recent ones, other and pre-shift requests equal D0B1_source's, detection and keys
+equal, no evaluator / gold / scope range read, pin of the cell's requests and items. The existing
+pin test passes unchanged.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

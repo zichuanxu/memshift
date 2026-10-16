@@ -1,0 +1,8 @@
+tree 5de4e70196d6e7d5b914f3f19cd9ccec5b7ec668
+parent ee6a378a3f19dac1cbbe959f6b889989dcce7547
+author zichuanxu <zichuanxu28@gmail.com> 1790656176 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790656176 +0900
+
+E5 analysis: ingestion failure rate, noise floor from the second ingestions, role-tagged e5 stage
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,9 @@
+tree 04c68fe6780c3f70858d36bfd4cf1b335233e4a1
+parent bcdc51e262e8149171df5fe1aebc55ac005d8249
+parent 7ae5f26a2b2877f6d414f988c2eba97ae55349c1
+author zichuanxu <zichuanxu28@gmail.com> 1790798628 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790798649 +0900
+
+Merge the second round of exploratory analyses (per-writer account: B x D against the repair gap over four writers with leave-one-writer-out; class-blind cell-mean baseline and horizon transfer for the out-of-sample check; why cited keys miss, mostly records entering the scope later; binding moves a as well as m; zero system after the shift; post-shift JSON arm table; 'field' label and wording fixes in generated tables), and set the thinking-writer client timeout to 1,800 s (transport only; request bodies and cache keys unchanged) after the first thinking run timed out under load; decision rows
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

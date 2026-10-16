@@ -1,0 +1,8 @@
+tree 4f30526444b10d1596722c3a04e4cf23f0483fa7
+parent e6db5c7ba6513c17ef26c82a0969af133f70f1c4
+author zichuanxu <zichuanxu28@gmail.com> 1790742133 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790742133 +0900
+
+Stage 2 E2 re-run: explore_pooled_curve (the pooled calibration fit and its 90% band); no other field changes
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

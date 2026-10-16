@@ -1,0 +1,8 @@
+tree 1cb56818681c70974aa0a13c349d4aec77903abf
+parent be5320f817d82ae5944cea1031c93b9f3c5d8927
+author zichuanxu <zichuanxu28@gmail.com> 1790649430 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790649430 +0900
+
+Exploratory no-fallback split: checking alone gives no repair benefit, the fallback carries the whole D effect; figure 1 from the test set; Mem0 t_i measured
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

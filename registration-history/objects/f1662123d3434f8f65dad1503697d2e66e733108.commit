@@ -1,0 +1,8 @@
+tree 609a15715261a5dc1a3f7151cb125775e5c727bb
+parent dbdc91b6babd1c6fa292c0d5ded38f36480f8e1d
+author zichuanxu <zichuanxu28@gmail.com> 1790741587 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790741587 +0900
+
+E3: ContractValid and T3 recomputed without definition items (exploratory explore_no_definition per system and horizon; system and oracle on the same items); first tests for the E3 analysis
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

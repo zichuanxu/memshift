@@ -1,0 +1,8 @@
+tree b4a96b8f69f812b81d6f43c361de8a3f9895202a
+parent e0914ad3a40db6807eb6c7623d1b2fdc3f1227b5
+author zichuanxu <zichuanxu28@gmail.com> 1790801458 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790801458 +0900
+
+P-F1 readings made explicit before the D0full results (four gaps, mixed when they disagree); neighbour test line length
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

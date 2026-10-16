@@ -1,0 +1,8 @@
+tree 4d2536205438b5306a0e874eb2f37d1b9a380538
+parent 23c5495d3de379069615e031ce2b73a1e2833494
+author zichuanxu <zichuanxu28@gmail.com> 1790642017 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790642017 +0900
+
+Paper macros for E4 (stage-1 calendar interaction) and the six-source E4 extension
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

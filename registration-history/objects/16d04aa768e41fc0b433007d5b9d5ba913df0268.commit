@@ -1,0 +1,8 @@
+tree 8b623f036cb917f50da461a9f37f67ab4a5456ed
+parent 4f5752af3a99c5c5a7e586966e2877140a59127b
+author zichuanxu <zichuanxu28@gmail.com> 1790692360 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790692360 +0900
+
+Related work: what MemShift adds relative to its 15 nearest neighbours, each claim backed by the neighbour table with counts from the audit, and where it is weaker (native systems, text realism, item count, implicit conflict; stage 4 addresses the first three only as plans); full table in the appendix
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

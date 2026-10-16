@@ -1,0 +1,14 @@
+tree 2fffa8cf63c7f8d0c5cbb33eafd79ea97b8cc4a0
+parent c04cb289a9742a05cf1b26d79246dd3d93215a28
+author zichuanxu <zichuanxu28@gmail.com> 1790600123 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790600123 +0900
+
+Preregistration v0: parameters, measured t_i/t_q, metrics, rules for gate A0
+
+Fills prereg/v0.md from plan §2.3, §2.4, §4.4, §4.6 and §6 with the stage
+0.4 measurements (t_i = 5,066 writer tokens per event; t_q = 4,177 reader
+tokens per probe), operational metric definitions, numeric falsification
+rules, the fixed contrast list and the gate A0 decision rules. This
+commit's hash is the v0 signature.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

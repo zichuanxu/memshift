@@ -1,0 +1,8 @@
+tree e08711e0ba6ae340860b53f7ba5cafba93db5ffc
+parent b7c0bc040d07a2a07c0f5d328bbe27e94c23cadf
+author zichuanxu <zichuanxu28@gmail.com> 1790795904 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790795904 +0900
+
+Block N and the rank correlation observed and written in: labels agree with the documentation (N-1, 5 of 5) and B=1 systems keep more after a deletion (N-4), but N-3 fails (12 of 36 comparisons inside) and, by the reading registered before the results, a label-free baseline fits the out-of-sample comparisons as often (RAG 12 of 24 against 7 of 24); ingestion cost staged from the measure runs; a knowledge-update ranking of 15 systems matches the redefinition ranking (rho 0.96) but not the deletion one (0.55); MemShift's native-system cell flipped to 6; STATUS section, void runs and L rebalancing decision
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

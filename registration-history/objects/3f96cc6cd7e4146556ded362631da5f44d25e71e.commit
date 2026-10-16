@@ -1,0 +1,8 @@
+tree 4bfa09da938f7e02a4eb5535bc86fc3fe7126e2b
+parent e20f1e0ab5e53741e8f88485f221675869db871e
+author zichuanxu <zichuanxu28@gmail.com> 1790778093 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790778093 +0900
+
+Exploratory generators: no slack macro for the oracle context (it has no serving cost), T1 table columns labelled by group with the margins in the caption
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

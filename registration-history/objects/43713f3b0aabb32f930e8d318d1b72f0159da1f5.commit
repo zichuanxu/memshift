@@ -1,0 +1,8 @@
+tree 5aa249652936b7fcf35f38c99985c9d00ce91932
+parent deec7fd999641097d6a38c758a1d3c39be31da29
+author zichuanxu <zichuanxu28@gmail.com> 1790651073 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790651073 +0900
+
+Native ingestion cost t_i from store counters (Mem0 1.0 call / 10.3k prompt tokens per event; Graphiti 6.1 calls / 13.3k), incl. the Graphiti run that stopped on an invalid-JSON error
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

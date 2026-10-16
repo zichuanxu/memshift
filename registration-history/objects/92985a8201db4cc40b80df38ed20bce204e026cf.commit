@@ -1,0 +1,8 @@
+tree 2bf19f223f569044af3660ae3fe558594bfb2ecb
+parent 9f1cc2712100216f175030c2549947e3313e4ce7
+author zichuanxu <zichuanxu28@gmail.com> 1790684111 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790684111 +0900
+
+Engine check for theta_r: match the same reader requests across two serving-engine versions and report context identity, answer agreement and per-cell ContractValid differences (stage kind "engine")
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

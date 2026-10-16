@@ -1,0 +1,13 @@
+tree bbacc15588e1bb5b5a3c82555e989d61ade57fd6
+parent 49fa89a42cd5c3adbe82e14f95179f03f60030ea
+author zichuanxu <zichuanxu28@gmail.com> 1790615964 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790615964 +0900
+
+Append-only (B=0) makes no writer call on an empty delta
+
+Stage-1 dev: 196 of 1,484 B=0 appends came from empty deltas, where the
+writer asserted a value with no records (and the D=1 fallback recomputed
+structured facts). That is an implementation artefact, not append-only
+semantics. Writes with records are unchanged and remain cached.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

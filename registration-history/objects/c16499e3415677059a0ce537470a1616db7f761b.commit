@@ -1,0 +1,8 @@
+tree 9e7a2896f3ebe1e4b757d56b022dd65bb35e70f0
+parent 525f7abaec3b662ca1c564bc10e64b5c3ce6315c
+author zichuanxu <zichuanxu28@gmail.com> 1790689295 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790689295 +0900
+
+Block L (prereg v2 §5): LLM-rendered free-text bodies (email, chat, notes) with verbatim fact anchors, guards against added numbers, dates, names, companies and cities, one retry then template; background digests kept templated (decisions.md); E1 --render MODEL; fidelity must stay 1.0
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

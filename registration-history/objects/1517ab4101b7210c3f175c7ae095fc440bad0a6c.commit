@@ -1,0 +1,13 @@
+tree 7bafff36768b192092c1a255bf22e56b0afb1a38
+parent b89b72325c446746215364ec699e7396cefad925
+author zichuanxu <zichuanxu28@gmail.com> 1790712359 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790712359 +0900
+
+Stage-4 macros: a name defined twice in a block is an error; the replicated counts no longer spell like the tier estimates
+
+The count of replicated T1 tiers was named RepTOneSame, the same name as the T1 estimate of the tier
+called same, and silently overwrote it. Each stage-4 block now builds its macros in a table that
+refuses a second definition (the counts are RepTOneReplicated, RepTThreeReplicated,
+RepTFourReplicated), with a test; paper/generated regenerated.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

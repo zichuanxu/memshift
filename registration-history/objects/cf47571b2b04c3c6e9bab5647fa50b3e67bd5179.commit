@@ -1,0 +1,20 @@
+tree 4a79b79fb16f702f04a9f41232693363207c905a
+parent f16e381acbb0a32e41795e6e077d1350afcc0dcd
+author zichuanxu <zichuanxu28@gmail.com> 1790603718 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1790603718 +0900
+
+Add Mem0 and Graphiti adapters and .mem export/import; add matplotlib
+
+native.py: Mem0 (Qdrant path mode, SQLite history, raw records archived
+under a separate scope so the configuration stays identifiable) and
+Graphiti (embedded Kuzu) through their own ingestion paths with our
+OpenAI-compatible endpoints; idempotent ingest per object revision,
+snapshot/restore, packed serving under the shared reader budget, raw
+export for black-box (D,B) inference. mem_export.py: HoldMem to Portable
+Memory bundles with and without a derivation record, a second HoldMem
+importer, Mem0 import, and a round-trip probe of which carriers survive.
+Observed with portable-memory 0.3.0: the derivation record survives as a
+custom kind or in episode ext (48/48) but fact ext is dropped on import
+(0/48). The run image now includes the native extra and matplotlib.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
