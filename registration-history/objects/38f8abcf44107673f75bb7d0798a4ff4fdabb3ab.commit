@@ -1,0 +1,8 @@
+tree 2f57f187b0dbe1673f2d17999c49ee762982e7ca
+parent ae07281ecfa73336c6c096ec2e8b3a6886501876
+author zichuanxu <zichuanxu28@gmail.com> 1792133938 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792133938 +0900
+
+G-a: e1 --kappa-set and the drawn held-out definitions logged before any model call
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

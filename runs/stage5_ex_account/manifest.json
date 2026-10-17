@@ -1,12 +1,16 @@
 {
   "analysis_code": {
-    "commit": "b08894c6f8a0301049944b7573ffd205d47c4016",
+    "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
     "dirty": false
   },
-  "created_utc": "2026-09-30T19:05:58Z",
+  "created_utc": "2026-10-17T05:16:47Z",
   "experiment": "merged-ex_account",
   "files_sha256": {
-    "analysis/ex_account.json": "07675624952de323a980fb23d7be26f1189c94bd9477dec79b137b8d2f6e1e45"
+    "analysis/ex_account.json": "04174173d3078626ca8b2a3d939a084bde85bc3efad3e529fbc24517836678f2"
+  },
+  "note": "exploratory (second review round): the account of Update across the main study, R and the three M2 families, no model call; restaged with the restaged stage4_m2 Llama-3.1-8B and gpt-oss-20b stages, whose runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache (prereg/decisions.md 2026-10-17)",
+  "producers": {
+    "analysis/ex_account.json": "python -m memshift.analysis.ex_account runs/stage5_ex_account main:runs/stage2_e1 rep:runs/stage4_rep_e1 gemma:runs/stage4_m2_google_gemma-4-12b-it llama:runs/stage4_m2_meta-llama_llama-3_1-8b-instruct gptoss:runs/stage4_m2_openai_gpt-oss-20b"
   },
   "run_id": "stage5_ex_account",
   "sources": [
@@ -34,14 +38,14 @@
     {
       "code": null,
       "experiment": "merged-m2",
-      "manifest_sha256": "df5b9472c4a7e35a804c905c4507fe0d4d81397e355316f3d08f766c01adcbb2",
+      "manifest_sha256": "5a72810aeff2ec71a828f9ef5fd6fa0fe8dcd865916e1d1692cec20ab8aaa1cf",
       "run_id": "stage4_m2_meta-llama_llama-3_1-8b-instruct",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-m2",
-      "manifest_sha256": "8d5dfb12bd99f33ddc005b49903323eceba28740f114d927745a3f58fd29238e",
+      "manifest_sha256": "7149449c130f61cfde32f10785759e74e7998d01d80d1308ce9e15988af810f7",
       "run_id": "stage4_m2_openai_gpt-oss-20b",
       "worlds": []
     }

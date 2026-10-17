@@ -403,18 +403,18 @@ def tab_native_null(res: dict[str, Any] | None) -> str:
     lines = [
         r"\begin{table}[tp]",  # taller than \topfraction: may need a page of its own
         r"\caption{Native systems against label-free baselines (exploratory). (a) Label: the "
-        r"inferred $(D,B)$; $P$: orphan persistence, the share of deleted items still answered, "
+        r"inferred $(D,B)$. $P$: deletion persistence, the share of deleted items still answered, "
         r"with its 95\% interval (id.\ \pass{}: it excludes the $B$ threshold 0.5). Counts as "
-        r"inside, discriminating\,/\,total: \emph{inside} the 95\% interval of the cell with the "
-        r"inferred label; \emph{discriminating}: inside, and outside that of the cell with the "
-        r"other $B$; over all six comparisons, the label-circular ones (orphan branch, from which "
-        r"$B$ is inferred) and the out-of-sample ones ($\Ssrc$, $\Sdef$); the zero system and "
-        r"plain RAG against the same intervals. Chance: share of the label cells containing the "
-        r"native estimate (label permuted); observed: share inside. Last row: sums (chance: "
-        r"means). (b) References whose 95\% interval contains the native estimate ((d,b): "
-        r"white-box cell, c: cited-cluster binding, gold-dep.: gold-dependency context) and "
-        r"item-paired differences in pp; \emph{inflated}: interval widened by the "
-        r"repeat-ingestion variance; $^\circ$: label-circular comparison.}",
+        r"inside, discriminating\,/\,total. Inside: inside the 95\% interval of the cell "
+        r"with the inferred label. Discriminating: inside, and outside that of the cell "
+        r"with the other $B$. Counts are over all six comparisons, the label-circular ones "
+        r"($\Sdel$, from which $B$ is inferred) and the out-of-sample ones ($\Ssrc$, $\Sdef$). "
+        r"The zero system and plain RAG are counted against the same intervals. Chance: share of "
+        r"the label cells containing the native estimate (label permuted). Observed: share inside. "
+        r"Last row: sums (chance: means). (b) References whose 95\% interval contains the native "
+        r"estimate ((d,b): white-box cell, c: cited-cluster key, gold-dep.: gold-dependency "
+        r"context) and item-paired differences in pp. Inflated: interval widened by the "
+        r"repeat-ingestion variance. $^\circ$: label-circular comparison.}",
         r"\label{tab:native-null}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{2pt}",

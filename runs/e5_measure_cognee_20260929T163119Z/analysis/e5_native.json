@@ -1,0 +1,19 @@
+[
+ {
+  "seed": 1000,
+  "system": "cognee",
+  "prefix_events": 60,
+  "t_i": {
+   "events": 1.0,
+   "skipped": 0.0,
+   "ingested": 1.0,
+   "wall_s": 27.42645,
+   "llm_calls": 2.183333333333333,
+   "prompt_tokens": 2115.9166666666665,
+   "completion_tokens": 1069.3666666666666,
+   "embed_calls": 6.2,
+   "embed_tokens": 1160.9
+  },
+  "identifiable": true
+ }
+]

@@ -1,0 +1,8 @@
+tree 181fa7c5a15bf7c85cd9a9eae4f75940c53d717a
+parent f64a5aa679201c2303fa0a140e9b1ecb51a7ddf7
+author zichuanxu <zichuanxu28@gmail.com> 1792181008 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792181008 +0900
+
+Decision log: block X is void under the anchor rule (3 of 480 t0 answers differ from E5's, from non-reproducible Mem0 retrieval); X1 not judged, its quantities reported as exploratory; logged before the X1 outcome was looked at
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

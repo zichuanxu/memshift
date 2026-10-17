@@ -1,0 +1,8 @@
+tree 25d64c5ade8fb429000e5ac708f5b84d963dd087
+parent 98855578f47753a5cea9f1c001a7aa7fecfd069d
+author zichuanxu <zichuanxu28@gmail.com> 1792187153 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792187153 +0900
+
+Response cache: the first reply stored wins (INSERT OR IGNORE) and every concurrent poster of a request uses the stored reply; before, the last writer won and each poster kept its own reply, so concurrent processes (stage-4 M2 with the E2 warm-up) and the per-world clients of one E1 run (world-independent D1s program requests) used replies the cache no longer held
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

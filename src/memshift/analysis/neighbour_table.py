@@ -1,5 +1,5 @@
 """The neighbour comparison table (prereg v2 section 6) and the counts the paper quotes from it,
-generated from paper/audit/neighbours/properties.json so that no cell is typed by hand.
+generated from audit/neighbours/properties.json so that no cell is typed by hand.
 
 Rows are the fifteen nearest benchmarks of the audit plus the MemShift row (the object with
 "is_reference"). A cell is read from ``fields[<field>]``: a categorical value (yes / partial / no /
@@ -16,7 +16,7 @@ Everything not yet run is therefore flipped by editing the JSON alone: set the o
 module; the marks disappear with the flags. The
 caption carries no legend for the dagger (a plan is not something the printed table explains).
 
-Usage: python -m memshift.analysis.neighbour_table paper/audit/neighbours/properties.json \\
+Usage: python -m memshift.analysis.neighbour_table audit/neighbours/properties.json \\
            paper/generated/tab_neighbours.tex
 Writes the Section 2 table to the given path, the appendix table next to it as <stem>_full.tex and
 the counts as LaTeX macros (\\Nbr... over the neighbours, \\Ms... for the MemShift row) as
@@ -72,12 +72,12 @@ COLUMNS = {
     "gold_first": Column("gold_first", "gold before text", stem="GoldFirst"),
     "gold_dep": Column("gold_dependency", "gold dependency sets", stem="GoldDep"),
     "derived": Column("derived_knowledge", "derived items", stem="Derived"),
-    "update": Column("chg_new_updated_facts", "source update", stem="Update"),
+    "update": Column("chg_new_updated_facts", "source revision", stem="Update"),
     "invalid": Column("chg_retraction_deletion", "deletion", stem="Invalid"),
     "implicit": Column("chg_implicit_conflict", "implicit conflict", stem="Implicit"),
-    "redef": Column("chg_definition_change", "user redefines", stem="Redef"),
+    "redef": Column("chg_definition_change", "redefinition", stem="Redef"),
     "writer": Column("chg_writer_model_change", "writer switch", stem="Writer"),
-    "impl": Column("chg_implementation_migration", "implementation switch", stem="Impl"),
+    "impl": Column("chg_implementation_migration", "export", stem="Impl"),
     "consent": Column("chg_consent_revocation", "consent revoked", stem="Consent"),
     "branch": Column("counterfactual", "counterfactual", stem="Branch"),
     "native": Column("native_systems", "native systems", "text"),
@@ -187,18 +187,18 @@ LEGEND_PARTS = (
     r"with and without the change (\memshift{}: byte-identical branches). Frozen plan: ",
     r"hypotheses and thresholds fixed before the runs (pre-registration or a signed ",
     r"analysis plan). Native systems: off-the-shelf memory systems evaluated, as the ",
-    r"paper groups them; long-context and plain RAG baselines, each paper's own ",
+    r"paper groups them. Long-context and plain RAG baselines, each paper's own ",
     r"systems and oracles are not counted. Histories (worlds, users or trajectories) ",
-    r"and questions as printed (MemoryArena: tasks; EvoArena: the PersonaMem-Evo ",
-    r"subset); \memshift{}: test worlds and UNIT.",
+    r"and questions are as printed (MemoryArena: tasks, EvoArena: the PersonaMem-Evo ",
+    r"subset). For \memshift{} they are test worlds and UNIT.",
 )
 # the columns only the appendix table has, and why the MemShift row is partial on derived items
 FULL_PARTS = (
     r" Derived items: the graded items aggregate several records (counts, sets, sums, ",
-    r"multi-hop or temporal aggregation) rather than restate one stored fact; $\sim$ when ",
+    r"multi-hop or temporal aggregation) rather than restate one stored fact. $\sim$ when ",
     r"both kinds are graded, as in \memshift{}: every item is derived by a writer, but of a ",
     r"world's 48 items only the six definition items and four recurring series aggregate ",
-    r"records; the rest are attribute or latest-value items. Implicit conflict: ",
+    r"records. The rest are attribute or latest-value items. Implicit conflict: ",
     r"conflicting information without an explicit replacement, which the system must ",
     r"detect. Consent revoked: the user withdraws consent or asks to forget, and the memory ",
     r"must stop using or delete the data.",
@@ -212,7 +212,7 @@ def _caption(rows: list[dict[str, Any]], inferred: bool, full: bool) -> str:
     parts: list[str]
     if full:  # self-contained: the appendix table is the one the paper shows
         head = (
-            r"\memshift{} against its nearest neighbours, all properties of the audit; every "
+            r"\memshift{} against its nearest neighbours, all properties of the audit. Every "
             r"cell is read from the neighbour's own paper (quotes in the released audit record). "
         )
         parts = [head, *LEGEND_PARTS, *FULL_PARTS]
@@ -338,7 +338,7 @@ def macros(rows: list[dict[str, Any]]) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
-    ap.add_argument("properties", type=Path, help="paper/audit/neighbours/properties.json")
+    ap.add_argument("properties", type=Path, help="audit/neighbours/properties.json")
     ap.add_argument("out", type=Path, help="paper/generated/tab_neighbours.tex")
     a = ap.parse_args()
     rows = load(a.properties)

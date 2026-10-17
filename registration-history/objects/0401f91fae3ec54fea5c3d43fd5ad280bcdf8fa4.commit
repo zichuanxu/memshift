@@ -1,0 +1,20 @@
+tree e4d14f8b11c3935a29618e898821287176c6c302
+parent 6742a41ab09d9892875698fdc1d5815e2e74a3ca
+author zichuanxu <zichuanxu28@gmail.com> 1792133778 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792133778 +0900
+
+Anthropic Messages API client for claude-* writers (round 3, block H)
+
+llm.py: claude-* model ids go to Anthropic's Messages API with the same
+LLMClient interface and LLMResult; system messages become `system`, a schema
+becomes `output_config.format`, extra_body (thinking, output_config.effort)
+passes through, no temperature unless set. Bounded retries on 429/529/5xx and
+connection errors (retry-after honoured, spend-cap 429 not retried), per-client
+concurrency limit (MEMSHIFT_CLAUDE_CONCURRENCY, default 8), key never logged.
+Top-level memshift_* body keys enter the cache key and are stripped before
+sending on both paths; existing cache keys are unchanged (pinned in a test).
+common.py: claude-* models need no endpoint entry and get anthropic_*.sqlite
+caches. runinfo.py: manifest records api, anthropic_version, first_call_utc.
+run.sh: CLAUDE_API_KEY passed by name only. scripts/claude_smoke.py.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

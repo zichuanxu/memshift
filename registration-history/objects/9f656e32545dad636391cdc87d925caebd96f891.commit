@@ -1,0 +1,16 @@
+tree 9e2e3ab13aa104b32bba8feb5395866904866464
+parent 6742a41ab09d9892875698fdc1d5815e2e74a3ca
+author zichuanxu <zichuanxu28@gmail.com> 1792130106 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792130106 +0900
+
+HoldMem: slot-keyed upsert cells (prereg v4 block U)
+
+CellConfig(upsert=True), B=0 only and not with refresh; cells
+holdmem_D0B0_upsert, holdmem_D1B0_upsert, holdmem_D1sB0_upsert and the
+--cells tokens D0B0_upsert, D1B0_upsert, D1sB0_upsert. In the append-only
+branch of maintain, a new delta item for a slot first retires every older
+valid or unverifiable item of that slot (status invalid, history event
+supersede). Requests are those of the plain B=0 cell. Tests also run
+D1sB0_refresh (synth + refresh) against D1sB1_source's requests.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

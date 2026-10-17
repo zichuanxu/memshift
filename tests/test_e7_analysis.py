@@ -111,18 +111,18 @@ def test_audit_table_marks_and_excludes_extra_rows():
     assert "?$^\\ddagger$" in tex and "Extra" not in tex
 
 
-def test_audit_caption_explains_every_mark_and_how_its_labels_differ_from_block_n():
+def test_audit_caption_explains_every_mark_and_how_its_labels_differ_from_native_labels():
     from memshift.analysis.audit_table import table
 
     caption = table([]).split(r"\label{tab:audit}")[0]
     for term in (
         "Diagnostic tests",
-        "retention test (T1), leaving test (T2), utility floor (T3), cost ceiling (T4)",
+        "retention test, leaving test, utility floor (floor) and cost ceiling (cost)",
         r"(so ?$^\dagger$ and ?$^\ddagger$ are undeterminable for that reason)",
         "-- = not applicable (the system stores no derived item)",
         r"counts an incomplete key as $B{=}0$",
         "infers its label from measurement",
-        "(Cognee: (part., 0) here, (0,1) in block N)",
+        "(Cognee: (part., 0) here, (0,1) there)",
     ):
         assert term in caption, term
     assert "Membership" not in caption

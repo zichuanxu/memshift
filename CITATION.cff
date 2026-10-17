@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "If you use MemShift, please cite the paper below."
+type: software
+title: "MemShift"
+abstract: >-
+  MemShift measures whether what a memory derived about a person stays correct after the records,
+  the person's definitions, the writer model or the memory product change. It applies controlled
+  shifts to synthetic worlds with gold dependencies and scores every answer without an LLM judge.
+version: "0.1.0"
+license: MIT
+repository-code: "https://github.com/zichuanxu/memshift"
+keywords:
+  - LLM memory
+  - derived knowledge
+  - invalidation
+  - benchmark
+  - preregistration
+authors:
+  - family-names: Xu
+    given-names: Zichuan
+    affiliation: Osaka University
+  - family-names: Dong
+    given-names: Yuyang
+    affiliation: Initial S
+  - family-names: Onizuka
+    given-names: Makoto
+    affiliation: Osaka University
+  - family-names: Xiao
+    given-names: Chuan
+    affiliation: "Osaka University; Nagoya University"
+preferred-citation:
+  type: generic
+  status: preprint
+  title: "MemShift: Noticing a Change Is Not Repairing It in LLM-Derived Personal Memory"
+  year: 2026
+  authors:
+    - family-names: Xu
+      given-names: Zichuan
+      affiliation: Osaka University
+    - family-names: Dong
+      given-names: Yuyang
+      affiliation: Initial S
+    - family-names: Onizuka
+      given-names: Makoto
+      affiliation: Osaka University
+    - family-names: Xiao
+      given-names: Chuan
+      affiliation: "Osaka University; Nagoya University"

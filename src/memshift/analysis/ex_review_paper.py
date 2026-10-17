@@ -1,6 +1,6 @@
 """Paper numbers, tables and the figure of the second-round exploratory analyses (prereg/
 decisions.md 2026-10-01; answers to a devil's-advocate re-review). Every macro name starts with `Ex`
-(exploratory) and every source is a staged analysis named in paper/results_sources.json:
+(exploratory) and every source is a staged analysis named in results/sources.json:
 
   ex_account   analysis/ex_account.json (`analysis.ex_account`): the account across writers, classes
                and branches; the test across the cells
@@ -39,7 +39,7 @@ from memshift.analysis.paper_tables import _num, _row, interval
 
 WRITER_TAGS = (
     ("main", "Main", "Qwen3.5-9B"),
-    ("rep", "Rep", "Qwen3.5-9B, R"),
+    ("rep", "Rep", "Qwen3.5-9B, repl."),
     ("gemma", "Gem", "gemma-4-12B"),
     ("llama", "Llama", "Llama-3.1-8B"),
     ("gptoss", "Gpt", "gpt-oss-20b"),
@@ -450,18 +450,18 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
     fit = _get(acct, "explore_account_fit", "two_class") or {}
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The account by writer and item class (exploratory; source-epoch binding). "
-        r"$r_D$: accuracy (\%) of the re-derived items at $D$; $B{\times}D$: the interaction on "
+        r"\caption{The account by writer and item class (exploratory, source-epoch key). "
+        r"$r_D$: accuracy (\%) of the re-derived items at $D$. $B{\times}D$: the interaction on "
         r"Update (pp, world-bootstrap 95\% interval), which with a key that misses nothing is "
         r"$(r_1{-}r_0)-(a_1{-}a_0)$, where $a_D$ is the Update of the $B{=}0$ cell. "
-        r"\emph{field}: single-field items, \emph{other}: single-field and free-text items; "
+        r"Field: single-field items. Other: single-field and free-text items. "
         r"$\rho$: Spearman rank correlation. Writers: "
-        r"main study and R (Qwen3.5-9B; 20 worlds each), and ten worlds each for "
+        r"main study and replication (Qwen3.5-9B, 20 worlds each), and ten worlds each for "
         r"gemma-4-12B, Llama-3.1-8B and gpt-oss-20b. Below: the test across the "
-        r"(writer, class, branch) cells of the four fitted writers (R is held out): "
-        r"leave-one-writer-out mean absolute error of the predicted $B{\times}D$ in pp, "
-        r"from the repair gap $r_1{-}r_0$ of the same cell (least-squares line) and from "
-        r"the class label alone (definition against other).}",
+        r"(writer, class, branch) cells of the four fitted writers, with the replication held out. "
+        r"It gives the leave-one-writer-out mean absolute error of the predicted $B{\times}D$ in "
+        r"pp. The prediction comes from the repair gap $r_1{-}r_0$ of the same cell (least-squares "
+        r"line) or from the class label alone (definition against other).}",
         r"\label{tab:writers}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{2pt}",
@@ -500,7 +500,7 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
         r"\par\medskip",
         r"\begin{tabular}{@{}l rrr r@{}}",
         r"\toprule",
-        r"leave-one-writer-out error & all cells & definition & other & R's cells \\",
+        r"leave-one-writer-out error & all cells & definition & other & repl. cells \\",
         r"\midrule",
     ]
     for pred, label in (
@@ -536,13 +536,14 @@ def tab_baselines(inp: Mapping[str, Any]) -> str:
         r"\begin{table}[t]",
         r"\caption{Out-of-sample error of each predictor of a cell's Update (exploratory): mean "
         r"absolute error in pp over the cells of the three branches, and the number of cells "
-        r"within 5\,pp. \emph{cell terms}: each cell's Update per item class, weighted by the "
-        r"class mix of the target; \emph{structural}: Eq.~(1) with $r$ by $D$, $m$ by the key "
-        r"and $a$ from the write path; \emph{one stale accuracy}: Eq.~(1) with a single "
-        r"stale-value accuracy; \emph{pooled mean}: the fit worlds' Update of the cell over all "
+        r"within 5\,pp. Cell terms: each cell's Update per item class, weighted by the "
+        r"class mix of the target. Structural: Eq.~(\ref{eq:decomp}) with $r$ by $D$, "
+        r"$m$ by the key and $a$ from the write path. One stale accuracy: "
+        r"Eq.~(\ref{eq:decomp}) with a single stale-value accuracy. Pooled mean: the fit "
+        r"worlds' Update of the cell over all "
         r"items, with no class terms and no reweighting (the same number for every class). The "
-        r"last block fits the twelve-month "
-        r"main study and predicts the three-month worlds (four source-epoch cells per branch).}",
+        r"last rows fit the twelve-month "
+        r"main study and predict the three-month worlds (four source-epoch cells per branch).}",
         r"\label{tab:baselines}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{3pt}",
@@ -553,8 +554,8 @@ def tab_baselines(inp: Mapping[str, Any]) -> str:
     ]
     pairs = (
         ("dev_to_main", r"development $\to$ main"),
-        ("dev_to_rep", r"development $\to$ R"),
-        ("main_to_rep", r"main $\to$ R"),
+        ("dev_to_rep", r"development $\to$ repl."),
+        ("main_to_rep", r"main $\to$ repl."),
     )
     for pair, label in pairs:
         for k, (cls, cname) in enumerate(
@@ -593,19 +594,19 @@ def tab_misses(inp: Mapping[str, Any]) -> str:
     lines = [
         r"\begin{table}[t]",
         r"\caption{The changed item-times the cited-cluster key missed (exploratory). "
-        r"(a) Why, main study and, in grey, the replication: \emph{missed}: the number of "
-        r"missed item-times; the other columns are shares of them in percent. \emph{a}: a record "
+        r"(a) Why, main study and, in grey, the replication. Missed: the number of "
+        r"missed item-times. The other columns are shares of them in percent. $a$: a record "
         r"of the item's gold "
-        r"dependency set at derivation changed and the writer had not cited it; \emph{b}: "
-        r"otherwise a record entered the dependency set (\emph{new}: created after the "
-        r"derivation; \emph{old}: existed and entered the scope); \emph{c left}: otherwise no "
-        r"record changed and records left a time window or a narrowed scope; $a{\wedge}b$: "
+        r"dependency set at derivation changed and the writer had not cited it. $b$: "
+        r"otherwise a record entered the dependency set (new: created after the "
+        r"derivation, old: existed and entered the scope). $c$ left: otherwise no "
+        r"record changed and records left a time window or a narrowed scope. $a{\wedge}b$: "
         r"item-times of class $a$ into whose dependency set a record also entered. The classes "
         r"$a$, $b$, $c$ are exclusive. A change of the definition version always moves the key, "
-        r"so none of the missed item-times has one; a record created after the derivation, or "
+        r"so none of the missed item-times has one. A record created after the derivation, or "
         r"leaving a scope by the clock, cannot be cited at derivation. (b) What binding does to "
-        r"the accuracy (percent) of the changed items a key did not invalidate, main study: "
-        r"\emph{missed}: the number of missed item-times at $D{=}1$; the $B{=}1$ cited cell on "
+        r"the accuracy (percent) of the changed items a key did not invalidate, main study. "
+        r"Missed: the number of missed item-times at $D{=}1$. The $B{=}1$ cited cell on "
         r"the missed items against the $B{=}0$ cell on the same items (same) and on all changed "
         r"items (all).}",
         r"\label{tab:misses}",
@@ -635,7 +636,7 @@ def tab_misses(inp: Mapping[str, Any]) -> str:
                 ]
                 if stage == "rep":
                     cells = [rf"\textcolor{{gray}}{{{c}}}" for c in cells]
-                    label, cname_ = "", r"\quad\textcolor{gray}{R}"
+                    label, cname_ = "", r"\quad\textcolor{gray}{repl.}"
                 else:
                     label, cname_ = (bt if k == 0 else ""), cname
                 lines.append(_row(label, cname_, *cells, ""))  # (a) leaves (b)'s last column empty
@@ -671,11 +672,11 @@ def tab_zero_after(inp: Mapping[str, Any]) -> str:
     res = _get(inp.get("more"), "explore_zero_system") or {}
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The zero system after the shift (exploratory): Update (changed items) and "
-        r"Stability (unchanged items), percent, of the zero system (zero), \textsc{HoldMem}(1,1) "
-        r"and \textsc{HoldMem}(0,0) (columns (1,1) and (0,0)), and the paired difference zero "
-        r"system minus \textsc{HoldMem}(1,1) (pp, 95\% interval); main study, then the "
-        r"replication.}",
+        r"\caption{The zero system after the shift (exploratory). Update (changed items) and "
+        r"Stability (unchanged items), in percent, of the zero system (zero), "
+        r"\textsc{HoldMem}(1,1) and \textsc{HoldMem}(0,0) (columns (1,1) and (0,0)). "
+        r"Zero $-$ (1,1): the paired difference, zero system minus \textsc{HoldMem}(1,1) (pp, "
+        r"95\% interval). Main study, then the replication.}",
         r"\label{tab:zero-after}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{3pt}",
@@ -717,10 +718,11 @@ def tab_json_arm(inp: Mapping[str, Any]) -> str:
     the post-shift probes: main study and R, per branch and class."""
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The post-shift JSON arm against the $s_k$ arm (exploratory; the same "
-        r"$D{=}1$, source-epoch store served as JSON records or as statements): Update on "
-        r"changed items and Stability on unchanged ones, percent, and the paired difference "
-        r"JSON minus $s_k$ (pp, 95\% interval); main study, then the replication.}",
+        r"\caption{The post-shift JSON arm against the $s_k$ arm (exploratory). The same "
+        r"$D{=}1$ store with the source-epoch key is served as JSON records or as statements "
+        r"($s_k$). Update on changed items and Stability on unchanged ones, in percent, and the "
+        r"paired difference JSON minus $s_k$ (pp, 95\% interval). Main study, then the "
+        r"replication.}",
         r"\label{tab:json-arm}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{3pt}",
@@ -812,7 +814,7 @@ def fig_account(inp: Mapping[str, Any], out: Path) -> Path:
         )
     ]  # fmt: skip
     handles.append(plt.Line2D([], [], marker="o", ls="none", mfc="white", mec="0.35", mew=1.2,
-                              ms=4.8, label="R (not fitted)"))  # fmt: skip
+                              ms=4.8, label="replication (not fitted)"))  # fmt: skip
     handles += [
         plt.Line2D([], [], marker="o", ls="none", mfc=colours[c], mec=colours[c],
                    ms=4.8, label=f"{c} items")

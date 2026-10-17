@@ -1,0 +1,8 @@
+tree 55a7ab489d879d562faf7e2768d3260927364968
+parent 02567d6ccab8e90833ff85583d484b8627bcf44e
+author zichuanxu <zichuanxu28@gmail.com> 1792144532 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792144532 +0900
+
+Blocks Y and V (prereg v4b): --reader claude-sonnet-5-5 with its registered settings, --program-user-words for the definition items' D1s programs; defaults change no request
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

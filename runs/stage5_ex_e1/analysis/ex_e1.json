@@ -21452,7 +21452,7 @@
     "values_differ_share": 0.013541666666666667,
     "answers_differ": 3,
     "answers_differ_share": 0.0010416666666666667,
-    "cv_first_mean": 0.8416666666666668,
+    "cv_first_mean": 0.8416666666666667,
     "cv_second_mean": 0.840625,
     "world_level": {
      "worlds": 20,

@@ -1,0 +1,19 @@
+[
+ {
+  "seed": 1013,
+  "system": "memos",
+  "prefix_events": 332,
+  "t_i": {
+   "events": 1.0,
+   "skipped": 0.0,
+   "ingested": 1.0,
+   "wall_s": 10.446063253012047,
+   "llm_calls": 1.0,
+   "prompt_tokens": 2498.012048192771,
+   "completion_tokens": 276.2198795180723,
+   "embed_calls": 1.963855421686747,
+   "embed_tokens": 194.07831325301206
+  },
+  "identifiable": true
+ }
+]

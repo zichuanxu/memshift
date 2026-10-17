@@ -1,0 +1,19 @@
+[
+ {
+  "seed": 1000,
+  "system": "lightrag",
+  "prefix_events": 60,
+  "t_i": {
+   "events": 1.0,
+   "skipped": 0.0,
+   "ingested": 0.9166666666666666,
+   "wall_s": 149.67501666666666,
+   "llm_calls": 2.6666666666666665,
+   "prompt_tokens": 6819.85,
+   "completion_tokens": 1252.8333333333333,
+   "embed_calls": 3.5,
+   "embed_tokens": 1121.4333333333334
+  },
+  "identifiable": true
+ }
+]

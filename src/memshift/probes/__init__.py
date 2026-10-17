@@ -4,6 +4,10 @@
 Probe schema (plan §4.3): `{probe_id, fact_id, as_of, question_text, gold_value, gold_status,
 deps, kappa_version, agent_id}`. Gold status is `abstain` when the fact has no current value and
 `blocked` when the asking agent lacks consent for a source the fact depends on.
+
+A definition item's question ends with "Definition in effect: <statement>" of the version in effect
+at the probe time. `unnamed_defs=True` (prereg v4 block Q) leaves that sentence out; the question
+keeps "under the user's current definition", and the probe ids, gold and dependencies are unchanged.
 """
 
 from __future__ import annotations
@@ -51,9 +55,9 @@ class Probe:
         }
 
 
-def question_text(world: World, slot: Slot, t: datetime) -> str:
+def question_text(world: World, slot: Slot, t: datetime, unnamed_defs: bool = False) -> str:
     q = f"As of {t:%Y-%m-%d %H:%M}: {slot.question}"
-    if slot.kappa_id:
+    if slot.kappa_id and not unnamed_defs:
         ver = world.kappa_version(slot.kappa_id, t)
         q += f" Definition in effect: {world.kappa_defs[slot.kappa_id][ver].statement}"
     return q
@@ -66,6 +70,7 @@ def make_probe(
     t: datetime,
     agent_id: str = "assistant",
     tags: dict[str, Any] | None = None,
+    unnamed_defs: bool = False,
 ) -> Probe:
     g = gold_at(world, log, slot, t)
     status = g.status
@@ -83,7 +88,7 @@ def make_probe(
         fact_id=slot.slot_id,
         vtype=slot.vtype,
         as_of=t,
-        question_text=question_text(world, slot, t),
+        question_text=question_text(world, slot, t, unnamed_defs),
         gold_value=g.value,
         gold_status=status,
         deps=g.deps,
@@ -100,7 +105,10 @@ def make_probes(
     slots: list[Slot] | None = None,
     agent_id: str = "assistant",
     tags: dict[str, Any] | None = None,
+    unnamed_defs: bool = False,
 ) -> list[Probe]:
     return [
-        make_probe(world, log, s, t, agent_id, tags) for t in times for s in (slots or world.slots)
+        make_probe(world, log, s, t, agent_id, tags, unnamed_defs)
+        for t in times
+        for s in (slots or world.slots)
     ]

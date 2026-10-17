@@ -1,0 +1,15 @@
+tree 5add1408b1edd761598dacf1ecf49b3b250a0e25
+parent 9f656e32545dad636391cdc87d925caebd96f891
+author zichuanxu <zichuanxu28@gmail.com> 1792130320 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792130320 +0900
+
+E1: --probe-unnamed-defs (prereg v4 block Q)
+
+make_probes(unnamed_defs=True) leaves out the appended " Definition in
+effect: <statement>" of definition-item probes and keeps the question;
+probe ids, gold and dependencies are unchanged. The E1 driver threads the
+flag to the pre- and post-shift probes of every cell (the hash assertion
+still holds) and records probe_unnamed_defs in the manifest params.
+Default unchanged.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

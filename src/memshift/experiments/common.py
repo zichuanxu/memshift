@@ -1,7 +1,8 @@
 """Shared plumbing for experiment drivers: endpoints, clients, run directories, answering probes.
 
 Endpoints come from MEMSHIFT_ENDPOINTS (JSON: model id -> OpenAI base URL) or the
-MEMSHIFT_WRITER_* / MEMSHIFT_READER_* / MEMSHIFT_EMBED_* variables of `.env.example`.
+MEMSHIFT_WRITER_* / MEMSHIFT_READER_* / MEMSHIFT_EMBED_* variables of `.env.example`. `claude-*`
+models need no entry: they go to Anthropic's API, and their responses get their own cache file.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ from typing import Any
 
 from memshift.gen.model import fmt_ts
 from memshift.holdmem.system import ServeResult
-from memshift.llm import LLMClient
+from memshift.llm import ANTHROPIC_URL, LLMClient, is_claude
 from memshift.probes import Probe
 from memshift.reader import context_hash, parse_answer, read_request
 from memshift.runinfo import REPO, cache_tags
@@ -48,15 +49,20 @@ def slug(model: str) -> str:
 def cache_path(model: str) -> Path:
     tag = cache_tags().get(model)
     name = f"{slug(model)}@{slug(tag)}" if tag else slug(model)
+    if is_claude(model):
+        name = f"anthropic_{name}"
     return REPO / "cache" / "llm" / f"{name}.sqlite"
 
 
 def client(model: str, run_dir: Path | None, workers: int = 48, **kw: Any) -> LLMClient:
     eps = endpoints()
-    if model not in eps:
+    if model not in eps and not is_claude(model):
         raise SystemExit(f"no endpoint configured for {model}; set MEMSHIFT_ENDPOINTS")
+    if "timeout" not in kw and os.environ.get("MEMSHIFT_HTTP_TIMEOUT"):
+        # a long server queue makes a request wait; the timeout is not part of any request or key
+        kw["timeout"] = float(os.environ["MEMSHIFT_HTTP_TIMEOUT"])
     return LLMClient(
-        eps[model],
+        eps.get(model, ANTHROPIC_URL),
         model,
         cache_path=cache_path(model),
         max_workers=workers,
@@ -72,13 +78,20 @@ def new_run_dir(name: str, root: Path | None = None) -> Path:
     return d
 
 
-def world_params(months: int) -> dict[str, Any] | None:
+def world_params(months: int, kappa_set: str | None = None) -> dict[str, Any] | None:
     """Generator parameters for a shortened world (E5 natives and their white-box references):
     `months` long, forked one month before the end, token target scaled with length. None for the
-    default twelve-month world."""
+    default twelve-month world with the fixed definitions. `kappa_set` ("heldout:<seed>", prereg
+    v4_round3 §G-a) swaps the six definitions for a draw of `gen.kappa.heldout_draw`."""
+    extra = {"kappa_set": kappa_set} if kappa_set else {}
     if months == 12:
-        return None
-    return {"months": months, "fork_month": months - 1, "target_tokens": 2_000_000 * months // 12}
+        return extra or None
+    return {
+        "months": months,
+        "fork_month": months - 1,
+        "target_tokens": 2_000_000 * months // 12,
+        **extra,
+    }
 
 
 def write_jsonl(path: Path, rows: Iterable[dict[str, Any]], mode: str = "w") -> None:

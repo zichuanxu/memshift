@@ -1,6 +1,6 @@
 """Paper numbers and tables of the control cells (prereg/v3_controls.md; analysis in
 `analysis.controls`). Every macro name starts with `Ctl`; the source is the staged analysis named
-`ctl` in paper/results_sources.json (`analysis/ctl_metrics.json`). A stage that is not staged
+`ctl` in results/sources.json (`analysis/ctl_metrics.json`). A stage that is not staged
 renders every macro and table cell as the MISSING marker; a prediction that was not judged says
 so in its verdict macro.
 
@@ -330,40 +330,34 @@ NOT_JUDGED = "n.j."
 GROUPS = ("definition", "other", "all")
 DM = r"$D_{\mathrm{m}}$"
 CAPTION = (
-    r"Control cells (\texttt{{prereg/v3\_controls.md}}): predictions registered before running "
-    r"and after the main results were known, "
-    r"worlds 1000--1009 ({n} worlds), after $\Ssrc$, $\Sdef$ and on the orphan branch ($\Sdel$). "
-    r"Predictions on cells that were not run were withdrawn before the first run ($D{{=}}0$ for "
-    r"the add-only refresh and the scope key, $B{{=}}0$ for the template, deletion-aware and "
-    r"thinking arms). The full-access control (P-F1) was run on $\Ssrc$ and $\Sdef$ only."
+    r"Control cells: predictions registered after the main results were known and before each "
+    r"control ran, {n} test worlds, after $\Ssrc$, $\Sdef$ and $\Sdel$. "
+    r"The full-access writer ran after $\Ssrc$ and $\Sdef$ only."
 )
-# P-Z1 at k = 0 has no ID of its own: the registration states it under P-Z1 (v3 section 3.6), and
-# the analysis judges it as the separate prediction `Z1k` (`controls.PREDICTIONS`)
+# The query-time view at k = 0 has no ID of its own: the registration states it under P-Z1 (v3
+# section 3.6), and the analysis judges it as the separate prediction `Z1k` (`controls.PREDICTIONS`)
 Z1K_NOTE = (
-    r" P-Z1, $k{=}0$: the statement registered with P-Z1 for the same items before the shift "
-    r"(at least $+$30\,pp; Section 3.6 of the registration), which has no ID of its own; it is "
-    rf"counted as a separate prediction among the {len(controls.PREDICTIONS)}."
+    r" The row ``view, before the shift'' is a further registered prediction (at least $+$30\,pp), "
+    rf"one of the {len(controls.PREDICTIONS)}."
 )
 FULL_CAPTION = (
     r"Control cells (predictions registered before running, worlds 1000--1009, "
     r"{n} worlds; see Table~\ref{{tab:controls}})."
 )
 COMPACT_NOTE = (
-    r" Arms: \emph{{oracle}}, \emph{{scope}}: the oracle key (built from the gold dependencies) "
+    r" Arms: oracle, scope: the oracle key (built from the gold dependencies) "
     r"and the scope key (what each definition ranges over), against the source-epoch "
-    r"(\emph{{source}}) or cited-cluster (\emph{{cited}}) key; \emph{{add-only}}: the add-only "
-    r"refresh, which adds the fresh derivation without invalidating; \emph{{template}}: the "
-    r"$D{{=}}0$ value in the $D{{=}}1$ template; \emph{{deletion-aware}}: model-written programs "
-    r"that declare the records they read and are withdrawn when one is deleted; {dm}: $D{{=}}1$ "
-    r"with a model-written derivation; \emph{{view}}: the query-time view (the zero system plus "
-    r"the model-written program run on the live records); \emph{{thinking}}, "
-    r"\emph{{full-access}}: a $D{{=}}0$ writer that thinks before answering, or is given every "
-    r"in-scope record. Prediction IDs: P-G oracle key, P-K scope key, P-R add-only, P-T template, "
-    r"P-M deletion-aware (del.-aware), P-Z view, P-D thinking, P-F full-access. "
-    r"Repair: share of the re-derived items the reader answers correctly; "
-    r"mechanistic repair: share whose re-derived value equals gold; $t_0$, $k{{=}}0$: before "
-    r"the shift. Entries are point estimates in pp (ratios for the rows marked ratio, shares in "
-    r"percent); \textbf{{bold}} entries are the ones the prediction judges; verdict: "
+    r"(source) or cited-cluster (cited) key. Add-only: the add-only "
+    r"refresh, which adds the fresh derivation without invalidating. Template: the "
+    r"$D{{=}}0$ value in the $D{{=}}1$ template. Deletion-aware (del.-aware): "
+    r"model-written programs that declare the records they read and are withdrawn when one is "
+    r"deleted. {dm}: $D{{=}}1$ with a model-written derivation. View: the query-time "
+    r"view (the zero system plus the model-written program run on the live records). "
+    r"Thinking, full access: a $D{{=}}0$ writer that thinks before answering, "
+    r"or is given every in-scope record. Repair: share of the re-derived items the reader "
+    r"answers correctly. Mechanistic repair: share whose re-derived value equals gold. $t_0$: "
+    r"before the shift. Entries are point estimates in pp (ratios for the rows marked ratio, "
+    r"shares in percent). \textbf{{Bold}} entries are the ones the prediction judges. Verdict: "
     r"\pass{{}}~holds, \fail{{}}~fails, n.j.~not judged, with the contrasts met of those tested, "
     r"in the order of the predictions."
 )
@@ -398,59 +392,59 @@ class CompactRow:
 ALLB = ("src", "def", "orphan")
 SD = ("src", "def")
 ROWS = (
-    CompactRow("P-G1, P-G2", r"Update, oracle $-$ source, $D{=}0$",
+    CompactRow("oracle", r"Update, oracle $-$ source, $D{=}0$",
                {"definition": "G_upd_D0_{br}_definition", "all": "G_upd_D0_{br}_all"},
                {"definition": ALLB, "all": ALLB}, ("G1", "G2")),
     CompactRow("", r"\quad$D{=}1$",
                {"definition": "G_upd_D1_{br}_definition", "all": "G_upd_D1_{br}_all"},
                {"definition": ALLB, "all": ALLB}),
-    CompactRow("P-G3", r"Stability, oracle $-$ source, $D{=}0$",
+    CompactRow("oracle", r"Stability, oracle $-$ source, $D{=}0$",
                {"definition": "G_stab_D0_{br}_definition", "all": "G_stab_D0_{br}_all"},
                {"all": ALLB}, ("G3",)),
     CompactRow("", r"\quad$D{=}1$",
                {"definition": "G_stab_D1_{br}_definition", "all": "G_stab_D1_{br}_all"},
                {"all": ALLB}),
-    CompactRow("P-R1", r"Update, add-only $-$ $B{=}0$ ($D{=}1$)",
+    CompactRow("add-only", r"Update, add-only $-$ $B{=}0$ ($D{=}1$)",
                {"definition": "R_ref_{br}_definition", "all": "R_ref_{br}_all"},
                {"all": ALLB}, ("R1",)),
     CompactRow("", r"\quad$B{=}1$ $-$ add-only",
                {"definition": "R_gap_{br}_definition", "all": "R_gap_{br}_all"},
                {"all": ALLB}),
-    CompactRow("P-R2", r"(add-only $-$ $B{=}0$)/($B{=}1$ $-$ $B{=}0$), ratio",
+    CompactRow("add-only", r"(add-only $-$ $B{=}0$)/($B{=}1$ $-$ $B{=}0$), ratio",
                {"definition": "R_ratio_{br}_definition"}, {"definition": SD}, ("R2",), "ratio"),
-    CompactRow("P-T1, P-T3", r"Update, template $-$ $D{=}0$ ($B{=}1$)",
+    CompactRow("template", r"Update, template $-$ $D{=}0$ ($B{=}1$)",
                {"definition": "T_upd_{br}_definition", "all": "T_upd_{br}_all"},
                {"definition": ALLB, "all": ALLB}, ("T1", "T3")),
-    CompactRow("P-T2", r"(template $-$ $D{=}0$)/($D{=}1$ $-$ $D{=}0$), ratio",
+    CompactRow("template", r"(template $-$ $D{=}0$)/($D{=}1$ $-$ $D{=}0$), ratio",
                {"definition": "T_ratio_{br}_definition"}, {"definition": SD}, ("T2",), "ratio"),
-    CompactRow("P-M1", r"Repair, deletion-aware $-$ $D{=}0$",
+    CompactRow("deletion-aware", r"Repair, deletion-aware $-$ $D{=}0$",
                {"definition": "M_rep_D0_{br}_definition", "all": "M_rep_D0_{br}_all"},
                {"all": ("orphan",)}, ("M1",)),
     CompactRow("", rf"\quad$-$ {DM}",
                {"definition": "M_rep_D1s_{br}_definition", "all": "M_rep_D1s_{br}_all"},
                {"all": ("orphan",)}),
-    CompactRow("P-M2", rf"Update, deletion-aware $-$ {DM}",
+    CompactRow("deletion-aware", rf"Update, deletion-aware $-$ {DM}",
                {"definition": "M_upd_{br}_definition", "all": "M_upd_{br}_all"},
                {"all": SD}, ("M2",)),
-    CompactRow("P-M3", rf"Programs ok at $t_0$, del.-aware/{DM}, ratio",
+    CompactRow("deletion-aware", rf"Programs ok at $t_0$, del.-aware/{DM}, ratio",
                {"all": "program_t0"}, {"all": ALLB}, ("M3",), "ratio", "program_ratio"),
-    CompactRow("P-K1", r"Update, scope $-$ source ($D{=}1$)",
+    CompactRow("scope", r"Update, scope $-$ source ($D{=}1$)",
                {"definition": "K_upd_{br}_definition", "all": "K_upd_{br}_all"},
                {"definition": ALLB}, ("K1",)),
-    CompactRow("P-K2", r"Update, scope $-$ cited ($D{=}1$)",
+    CompactRow("scope", r"Update, scope $-$ cited ($D{=}1$)",
                {"definition": "K_cited_{br}_definition", "other": "K_cited_{br}_other",
                 "all": "K_cited_{br}_all"},
                {"other": ALLB}, ("K2",)),
     CompactRow("", r"\quad missed invalidation, scope cell (\%)",
                {"all": "scope_missed"}, {"all": ALLB}, (), "pct", "scope_missed"),
-    CompactRow("P-Z1", r"Update, view $-$ zero system",
+    CompactRow("view", r"Update, view $-$ zero system",
                {"definition": "Z_upd_{br}_definition", "other": "Z_upd_{br}_other",
                 "all": "Z_upd_{br}_all"},
                {"definition": SD}, ("Z1",)),
-    CompactRow("P-Z1, $k{=}0$", r"Accuracy at $t_0$, view $-$ zero",
+    CompactRow("view, before the shift", r"Accuracy at $t_0$, view $-$ zero",
                {"definition": "Z0_upd_{br}_definition", "all": "Z0_upd_{br}_all"},
                {"definition": SD}, ("Z1k",)),
-    CompactRow("P-Z2", r"Update, view $-$ zero, single-field items",
+    CompactRow("view", r"Update, view $-$ zero, single-field items",
                {"other": "Z_upd_{br}_rule"}, {"other": ALLB}, ("Z2",)),
     CompactRow("", r"\quad free-text items",
                {"other": "Z_upd_{br}_free"}, {"other": ALLB}),
@@ -458,18 +452,18 @@ ROWS = (
                {"definition": "Z_stab_{br}_definition", "other": "Z_stab_{br}_other",
                 "all": "Z_stab_{br}_all"},
                {"all": SD}),
-    CompactRow("P-Z3", rf"Update, view $-$ {DM}",
+    CompactRow("view", rf"Update, view $-$ {DM}",
                {"definition": "Z_vs_D1s_{br}_definition", "all": "Z_vs_D1s_{br}_all"},
                {"definition": SD}, ("Z3",)),
-    CompactRow("P-D1", r"Repair, $D{=}1$ $-$ thinking $D{=}0$",
+    CompactRow("thinking", r"Repair, $D{=}1$ $-$ thinking $D{=}0$",
                {"definition": "D_rep_{br}_definition", "all": "D_rep_{br}_all"},
                {"definition": SD}, ("D1",)),
     CompactRow("", r"\quad mechanistic repair",
                {"definition": "D_repmech_{br}_definition", "all": "D_repmech_{br}_all"},
                {"definition": SD}),
-    CompactRow("P-D2", r"Thinking writes unreadable (\%)",
+    CompactRow("thinking", r"Thinking writes unreadable (\%)",
                {"definition": "think_unreadable"}, {"definition": ALLB}, ("D2",), "pct", "think"),
-    CompactRow("P-F1", r"Repair, $D{=}1$ $-$ full-access $D{=}0$",
+    CompactRow("full access", r"Repair, $D{=}1$ $-$ full-access $D{=}0$",
                {"definition": "F_rep_{br}_definition", "all": "F_rep_{br}_all"},
                {"definition": SD}, ("F1",), run=SD),
     CompactRow("", r"\quad mechanistic repair",
@@ -520,7 +514,7 @@ def tab_controls(view: Mapping[str, Any] | None) -> str:
         r"& & \multicolumn{3}{c}{definition items} & \multicolumn{3}{c}{non-definition} "
         r"& \multicolumn{3}{c}{all items} & \\",
         r"\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}",
-        r"Pred. & contrast & $\Ssrc$ & $\Sdef$ & $\Sdel$ & $\Ssrc$ & $\Sdef$ & $\Sdel$ "
+        r"arm & contrast & $\Ssrc$ & $\Sdef$ & $\Sdel$ & $\Ssrc$ & $\Sdef$ & $\Sdel$ "
         r"& $\Ssrc$ & $\Sdef$ & $\Sdel$ & verdict \\",
         r"\midrule",
     ]

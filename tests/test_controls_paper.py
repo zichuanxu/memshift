@@ -21,7 +21,7 @@ from tests.test_controls import Builder, ev
 from tests.test_paper_stage4 import check_tex
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = json.loads((ROOT / "paper/results_sources.json").read_text())
+SOURCES = json.loads((ROOT / "results/sources.json").read_text())
 
 
 @pytest.fixture(scope="module")
@@ -213,36 +213,40 @@ def test_tables_are_wellformed_staged_partly_staged_and_unstaged(staged, partial
 
 def test_compact_table_rows_are_the_registered_predictions_with_their_verdicts(staged):
     tex = cp.tab_controls(staged)
-    for pred in (
-        "P-G1, P-G2",
-        "P-G3",
-        "P-R1",
-        "P-R2",
-        "P-T1, P-T3",
-        "P-T2",
-        "P-M1",
-        "P-M2",
-        "P-M3",
-        "P-K1",
-        "P-K2",
-        "P-Z1",
-        "P-Z2",
-        "P-Z3",
-        "P-D1",
-        "P-D2",
+    for arm, contrast in (  # the arm's name, not a prediction ID, heads each prediction's row
+        ("oracle", "Update, oracle"),
+        ("oracle", "Stability, oracle"),
+        ("add-only", "Update, add-only"),
+        ("add-only", "(add-only"),
+        ("template", "Update, template"),
+        ("template", "(template"),
+        ("deletion-aware", "Repair, deletion-aware"),
+        ("deletion-aware", "Update, deletion-aware"),
+        ("deletion-aware", "Programs ok"),
+        ("scope", "Update, scope $-$ source"),
+        ("scope", "Update, scope $-$ cited"),
+        ("view", "Update, view $-$ zero system"),
+        ("view, before the shift", "Accuracy at $t_0$"),
+        ("view", "Update, view $-$ zero, single-field"),
+        ("view", "Update, view $-$ $D_"),
+        ("thinking", "Repair, $D{=}1$ $-$ thinking"),
+        ("thinking", "Thinking writes"),
     ):
-        assert f"\n{pred} &" in tex, pred
-    assert "registered before running" in tex  # the caption says it
+        assert f"\n{arm} & {contrast}" in tex, (arm, contrast)
+    assert "P-" not in tex and "prereg" not in tex  # no prediction IDs or registration files
+    assert "registered after the main results were known" in tex  # the caption says it
     assert tex.count("\\pass\\,6/6") >= 2  # G1 and G2 carry a verdict each, T1 and T3 as well
     rows = [r for r in cp.ROWS if r.verdict]
     assert {p for r in rows for p in r.verdict} == set(
         ctl.PREDICTIONS
     )  # every prediction has a row
     # the cells a prediction judges are in bold, the others are not
-    g = next(line for line in tex.splitlines() if line.startswith("P-G1, P-G2"))
+    g = next(line for line in tex.splitlines() if line.startswith("oracle & Update, oracle"))
     assert g.count("\\textbf{") == 6  # definition and all items, three branches each
-    z1 = next(line for line in tex.splitlines() if line.startswith("P-Z1 &"))
-    assert z1.count("\\textbf{") == 2  # the two branches P-Z1 judges
+    z1 = next(
+        line for line in tex.splitlines() if line.startswith("view & Update, view $-$ zero s")
+    )
+    assert z1.count("\\textbf{") == 2  # the two branches the view prediction judges
     assert "$+$80.0" in z1
 
 
@@ -272,26 +276,28 @@ def contrast_rows(tex: str, label: str) -> list[list[str]]:
 
 
 def test_compact_table_has_the_full_access_rows_for_src_and_def_only(staged):
-    cells = cells_of(cp.tab_controls(staged), "P-F1 &")
-    # predicted, contrast, definition (3 branches), non-definition (3), all items (3), verdict
-    assert len(cells) == 12 and cells[0] == "P-F1" and "full-access" in cells[1]
+    cells = cells_of(cp.tab_controls(staged), "full access &")
+    # arm, contrast, definition (3 branches), non-definition (3), all items (3), verdict
+    assert len(cells) == 12 and cells[0] == "full access" and "full-access" in cells[1]
     assert cells[2:5] == [r"\textbf{$+$66.0}", r"\textbf{$+$66.0}", cp.UNDEFINED]
     assert cells[5:8] == [cp.UNDEFINED] * 3  # the prediction is about the definition items
     assert cells[8:11] == ["$+$32.2", "$+$32.2", cp.UNDEFINED]  # not judged, so not in bold
     assert cells[11] == r"\pass\,4/4"
     lines = cp.tab_controls(staged).splitlines()
-    mech = split_row(lines[lines.index(next(x for x in lines if x.startswith("P-F1 &"))) + 1])
-    assert mech[:2] == ["", r"\quad mechanistic repair"]  # the row after P-F1's
+    mech = split_row(
+        lines[lines.index(next(x for x in lines if x.startswith("full access &"))) + 1]
+    )
+    assert mech[:2] == ["", r"\quad mechanistic repair"]  # the row after the full-access row
     assert mech[2:5] == [r"\textbf{$+$66.0}", r"\textbf{$+$66.0}", cp.UNDEFINED]
-    assert "P-F1" in cp.tab_controls(staged) and "$\\Ssrc$ and $\\Sdef$ only" in cp.CAPTION
+    assert "full access &" in cp.tab_controls(staged) and "$\\Ssrc$ and $\\Sdef$ only" in cp.CAPTION
 
 
 def test_the_full_access_rows_are_missing_when_unstaged_and_not_judged_without_the_cell():
-    cells = cells_of(cp.tab_controls(None), "P-F1 &")
+    cells = cells_of(cp.tab_controls(None), "full access &")
     assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp.UNDEFINED and cells[11] == MISSING
     b = Builder()
     b.drop |= {"D0fullB1"}
-    cells = cells_of(cp.tab_controls(ev(b.table())), "P-F1 &")
+    cells = cells_of(cp.tab_controls(ev(b.table())), "full access &")
     assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp.UNDEFINED  # `---`: no orphan run
     assert cells[11] == cp.NOT_JUDGED
     m = cp.numbers(ev(b.table()))
@@ -348,9 +354,9 @@ def test_compact_table_shows_a_failed_and_a_not_judged_verdict():
     b.drop |= {"zeroDm"}
     res = ev(b.table())
     tex = cp.tab_controls(res)
-    g = next(line for line in tex.splitlines() if line.startswith("P-G1, P-G2"))
+    g = next(line for line in tex.splitlines() if line.startswith("oracle & Update, oracle"))
     assert g.endswith("\\fail\\,5/6 \\\\") or "\\fail" in g
-    z = next(line for line in tex.splitlines() if line.startswith("P-Z1 &"))
+    z = next(line for line in tex.splitlines() if line.startswith("view & Update, view $-$ zero s"))
     assert z.rstrip(" \\").endswith("n.j.")
 
 
@@ -431,25 +437,24 @@ def test_tables_compile_and_fit_the_page(staged, tmp_path):
 def test_compact_caption_defines_every_arm_and_term_and_rows_count_each_verdict(staged):
     tex = cp.tab_controls(staged)
     caption = tex.split("\\label{tab:controls}")[0]
-    assert r"\texttt{prereg/v3\_controls.md}" in caption  # a path, not hyphenated text
+    assert "prereg" not in caption and "P-" not in caption  # no registration file or IDs
     for term in (
-        r"\emph{oracle}",
-        r"\emph{scope}",
-        r"\emph{add-only}",
-        r"\emph{template}",
-        r"\emph{deletion-aware}",
-        r"\emph{view}",
-        r"\emph{thinking}",
-        r"\emph{full-access}",
+        "Arms: oracle, scope:",
+        "(source) or cited-cluster (cited) key",
+        "Add-only:",
+        "Template:",
+        "Deletion-aware (del.-aware):",
+        "View:",
+        "Thinking, full access:",
         "Repair: share of the re-derived items the reader answers correctly",
-        "mechanistic repair: share whose re-derived value equals gold",
-        "$t_0$, $k{=}0$: before the shift",
-        r"($\Sdel$)",
+        "Mechanistic repair: share whose re-derived value equals gold",
+        "$t_0$: before the shift",
+        r"$\Ssrc$, $\Sdef$ and $\Sdel$",
     ):
         assert term in caption, term
     assert "retraction" not in tex and "gold $-$" not in tex and "refresh $-$" not in tex
     # a row that carries two predictions gives the count of each, in their order
-    t = cells_of(tex, "P-T1, P-T3 &")
+    t = cells_of(tex, "template & Update, template")
     v = staged["verdicts"]
     assert t[-1] == ", ".join(cp._mark(v[p]) for p in ("T1", "T3"))
     assert t[-1].count("/") == 2
@@ -470,6 +475,7 @@ def test_results_sources_name_the_control_stage_and_it_is_not_staged_yet():
         assert cp.load(ROOT, SOURCES) is None
 
 
+@pytest.mark.paper
 def test_committed_generated_files_are_current():
     head = "% generated by memshift.analysis.paper_tables; do not edit\n"
     for name, tex in cp.tables(cp.load(ROOT, SOURCES)).items():

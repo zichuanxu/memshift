@@ -1,0 +1,23 @@
+tree e8555cb7bbdf73ec0d3ab8b592e8231dc836eff7
+parent 0e046527aff5fd692e2748df20e465e1e6265391
+author zichuanxu <zichuanxu28@gmail.com> 1792144054 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792144054 +0900
+
+Round 3 registered verdicts: one function per block (U, H, G, Q, N, X) with pairing checks
+
+analysis/round3_registered.py judges the predictions of prereg/v4_round3.md as amended on
+2026-10-16: every registered quantity with its world-clustered interval, a verdict per
+prediction (holds, fails, not_judged with the reason) and the reading it triggers. U: R_refresh
+and R_upsert per branch, D arm and class, U1-U5. H: amended validity from calls.jsonl, the run
+summaries or the response cache; H1 reading, H2, the H-c trigger, H3 (v3 P-D1). G: G1/G2 with a
+two-way bootstrap over worlds x 18 held-out definitions, G3 over worlds x program sets, the
+writer share of the variance and the S_del interaction per writer. Q1/Q2. N1 wraps
+ex_round3_natural.paired_vs_natural. X1 with the amended threshold over analysis.x_mem0.
+
+Pairing: complete runs only, newest per (group, cell, world, branch), superseded copies must
+agree, hash checks, probe keys and gold against the committed reference, anchor answers; any
+mismatch refuses every verdict of the block. A prediction whose registered worlds are not all
+present is not judged (its interim value is kept apart). CLI:
+python -m memshift.analysis.round3_registered BLOCK --runs ... --compare ... --out FILE.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

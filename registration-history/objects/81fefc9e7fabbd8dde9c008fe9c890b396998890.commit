@@ -1,0 +1,8 @@
+tree adc85fbd96b10f13069b5e8ba3a50df6c834579a
+parent ebdecde8ef5a13bce362373dbb42f1e8bc7b46d1
+author zichuanxu <zichuanxu28@gmail.com> 1792227654 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792227654 +0900
+
+Nature-polishing pass: sentences under 30 words, \emph only at definitions, one name per notion (export, definition items, world-bootstrap, probes, plain RAG), captions open with the takeaway; tests follow the caption wording
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

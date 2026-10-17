@@ -23,7 +23,7 @@ from tests.test_ex_tests import _cv
 from tests.test_paper_stage4 import check_tex
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = json.loads((ROOT / "paper/results_sources.json").read_text())
+SOURCES = json.loads((ROOT / "results/sources.json").read_text())
 
 
 def _roundtrip(x: Any) -> dict[str, Any]:
@@ -373,8 +373,8 @@ def test_native_table_defines_its_counts_and_gives_the_out_of_sample_baselines(e
     tex = ex_tables.tab_native_null(e5_res)
     caption = tex.split(r"\label{tab:native-null}")[0]
     for term in (
-        r"\emph{inside} the 95\% interval of the cell with the inferred label",
-        r"\emph{discriminating}: inside, and outside that of the cell with the other $B$",
+        r"Inside: inside the 95\% interval of the cell with the inferred label",
+        r"Discriminating: inside, and outside that of the cell with the other $B$",
         "the share of deleted items still answered",
         "gold-dep.: gold-dependency context",
         "Last row: sums",
@@ -439,6 +439,7 @@ def test_tables_compile(tmp_path, e2_res, e3_res, e5_res):
     assert done.returncode == 0, done.stdout[-1500:]
 
 
+@pytest.mark.paper
 def test_committed_exploratory_tables_are_current():
     """paper/generated/tab_{writer_predictors,tests_sensitivity,native_null}.tex are what the
     generators print for the staged data: regenerate them with `python -m

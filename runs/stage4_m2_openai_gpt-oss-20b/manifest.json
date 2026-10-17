@@ -1,25 +1,31 @@
 {
   "analysis_code": {
-    "commit": "534495fb6a88cf33a5b2bbdf83291d83c9868847",
-    "dirty": true
+    "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+    "dirty": false
   },
-  "created_utc": "2026-09-30T15:45:30Z",
+  "created_utc": "2026-10-17T05:16:47Z",
   "experiment": "merged-m2",
   "files_sha256": {
-    "analysis/e1_item_table.jsonl": "ee5715ab558ccc9273e0704f7703baccd37251a600b31bcf3f706565b67190b9",
-    "analysis/e1_metrics.json": "454b9fafb694e3cfa35b8c41b9df65344c1bc91c6056051cceb43cf92b8e2fa2",
-    "analysis/families.json": "326be27b49ab60ebf703f590a2ceadd42bac29512f09753ed8e64fe35ecb991b"
+    "analysis/e1_item_table.jsonl": "20779369263abb20a8149f460a7322141d90bbb277fea9d1dec200501e5239d5",
+    "analysis/e1_metrics.json": "59af77dca974dae4fe4d7b3faf56f124bda8ba9d1628e28e7a9da0fb9e3aae4f",
+    "analysis/families.json": "ffd0075219cb3f40a444f9c2a60114084718045888cc9d0712ed54fc2699b612"
+  },
+  "note": "registered block M2 (prereg/v2.md \u00a72) for gpt-oss-20b as writer and reader on worlds 1000-1009: the E1 analysis and checks (i)-(v) in families.json, computed from the raw runs, no model call; the runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache with the original parameters (their src t0 stores were not in the cache before), replacing the 20260930 runs (prereg/decisions.md 2026-10-17); the runs of worlds 1004-1005 and 1008-1009 are unchanged",
+  "producers": {
+    "analysis/e1_item_table.jsonl": "python -m memshift.analysis.stage m2 runs/stage4_m2_openai_gpt-oss-20b runs/m2_openai_gpt-oss-20b_s1000-1001_20261017T043342Z runs/m2_openai_gpt-oss-20b_s1002-1003_20261017T043512Z runs/m2_openai_gpt-oss-20b_s1004-1005_20260930T132344Z runs/m2_openai_gpt-oss-20b_s1006-1007_20261017T043642Z runs/m2_openai_gpt-oss-20b_s1008-1009_20260930T132348Z",
+    "analysis/e1_metrics.json": "python -m memshift.analysis.stage m2 runs/stage4_m2_openai_gpt-oss-20b runs/m2_openai_gpt-oss-20b_s1000-1001_20261017T043342Z runs/m2_openai_gpt-oss-20b_s1002-1003_20261017T043512Z runs/m2_openai_gpt-oss-20b_s1004-1005_20260930T132344Z runs/m2_openai_gpt-oss-20b_s1006-1007_20261017T043642Z runs/m2_openai_gpt-oss-20b_s1008-1009_20260930T132348Z",
+    "analysis/families.json": "python -m memshift.analysis.stage m2 runs/stage4_m2_openai_gpt-oss-20b runs/m2_openai_gpt-oss-20b_s1000-1001_20261017T043342Z runs/m2_openai_gpt-oss-20b_s1002-1003_20261017T043512Z runs/m2_openai_gpt-oss-20b_s1004-1005_20260930T132344Z runs/m2_openai_gpt-oss-20b_s1006-1007_20261017T043642Z runs/m2_openai_gpt-oss-20b_s1008-1009_20260930T132348Z"
   },
   "run_id": "stage4_m2_openai_gpt-oss-20b",
   "sources": [
     {
       "code": {
-        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
         "dirty": false
       },
       "experiment": "E1",
-      "manifest_sha256": "6271be6c816bf172788ce6d4e2fd6f733f880d85af3efa8e9f720b05d617850f",
-      "run_id": "m2_openai_gpt-oss-20b_s1000-1001_20260930T132340Z",
+      "manifest_sha256": "e0f090fb1f19b87370066f8be05540b0b0f03a970b1c3087eef175ee494da51d",
+      "run_id": "m2_openai_gpt-oss-20b_s1000-1001_20261017T043342Z",
       "worlds": [
         "w1000",
         "w1000",
@@ -31,12 +37,12 @@
     },
     {
       "code": {
-        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
         "dirty": false
       },
       "experiment": "E1",
-      "manifest_sha256": "539bcce2a3fbe9b3cb781a42fb8ffa2b0d2cd2b6c84aad1cae47c2242c9db599",
-      "run_id": "m2_openai_gpt-oss-20b_s1002-1003_20260930T132342Z",
+      "manifest_sha256": "423031dc961acfe45869a9944910374893803cd8cd0c4b3f51cbba8a6b443944",
+      "run_id": "m2_openai_gpt-oss-20b_s1002-1003_20261017T043512Z",
       "worlds": [
         "w1002",
         "w1002",
@@ -65,12 +71,12 @@
     },
     {
       "code": {
-        "commit": "1e4ad96f9a373af0802763754422cd8e9a94d2fe",
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
         "dirty": false
       },
       "experiment": "E1",
-      "manifest_sha256": "9fd3665921687eb0a0517d01d622409949cb9f383a3a4cb41ce7b92728b343df",
-      "run_id": "m2_openai_gpt-oss-20b_s1006-1007_20260930T132346Z",
+      "manifest_sha256": "a4daab095d3ed6e24abf8dd0943bf9639243d796694a92236f7d994f14026bb8",
+      "run_id": "m2_openai_gpt-oss-20b_s1006-1007_20261017T043642Z",
       "worlds": [
         "w1006",
         "w1006",

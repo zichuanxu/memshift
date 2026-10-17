@@ -1,0 +1,13 @@
+tree b27a631c0c976350fc9795c438302fa6f50df6ec
+parent ad950aa798f48f3955984404efa92800e92e3bf2
+author zichuanxu <zichuanxu28@gmail.com> 1792133077 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792133077 +0900
+
+Block X: cached-only D1s programs for mem0_rep, server context as a lower bound, driver end-to-end test
+
+The program view sends only response-cache hits of the D1s cells: the run checks every program
+request it will send before any model call and stops otherwise. The prefix check compares model,
+revision, engine image and engine arguments exactly and requires at least E5's context length.
+An end-to-end test runs one world through the driver and the analysis on a stand-in Memory.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

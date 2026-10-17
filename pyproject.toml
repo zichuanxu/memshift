@@ -1,11 +1,17 @@
 [project]
 name = "memshift"
 version = "0.1.0"
-description = "MemShift: per-item carryover of a personal data layer under source, definition, writer-model and implementation shift."
+description = "MemShift: a benchmark of whether a memory layer's derived items stay correct after what they were derived from changes."
 readme = "README.md"
 requires-python = ">=3.12"
-license = { text = "TBD" }
-authors = [{ name = "MemShift team" }]
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  { name = "Zichuan Xu" },
+  { name = "Yuyang Dong" },
+  { name = "Makoto Onizuka" },
+  { name = "Chuan Xiao" },
+]
 keywords = ["agent memory", "personal data layer", "benchmark", "incremental maintenance"]
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",

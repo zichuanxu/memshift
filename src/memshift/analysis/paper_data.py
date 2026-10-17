@@ -3,7 +3,7 @@ feeds which block, and the views derived from it that the three generators share
 
 A stage that has not been staged is None (or an empty view), and every consumer renders that as
 the MISSING marker; nothing here supplies a value that a run has not produced. Sources are named
-in paper/results_sources.json (group -> stage directory whose analysis/*.json is committed):
+in results/sources.json (group -> stage directory whose analysis/*.json is committed):
 
   rep_e1 / rep_e2 / rep_e3   block R, the frozen stage-2 analyses on the replication worlds
   pool_e1 / pool_e2 / pool_e3   stage 2 and R pooled over the forty test worlds (secondary)
@@ -78,7 +78,7 @@ def model_slug(model: str) -> str:
 
 
 class Family(NamedTuple):
-    key: str  # results_sources group suffix
+    key: str  # results/sources.json group suffix
     tag: str  # macro-name tag
     model: str
     label: str  # as printed in tables

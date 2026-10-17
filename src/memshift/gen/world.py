@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from memshift.gen import pools
-from memshift.gen.kappa import KAPPA_DEFS
+from memshift.gen.kappa import KAPPA_DEFS, kappa_set_defs
 from memshift.gen.model import Event, KappaDef, Person, Slot, TimelinePoint, World
 from memshift.gen.render import render_text
 
@@ -1034,20 +1034,10 @@ class Builder:
                     structured=True,
                 )
             )
+        # always the fixed definitions: the shift scripts read the builder's slots, so a world's
+        # events never depend on its kappa set; `to_world` swaps in a held-out set
         for kid, spec in KAPPA_DEFS.items():
-            s.append(
-                Slot(
-                    f"k.{kid}",
-                    "kappa",
-                    str(spec["vtype"]),
-                    str(spec["question"]),
-                    str(spec["description"]),
-                    str(spec["query"]),
-                    tuple(spec["sources"]),
-                    kappa_id=kid,
-                    structured=True,
-                )
-            )
+            s.append(kappa_slot(kid, spec))
 
     def alive(self, oid: str, t: datetime) -> bool:
         alive = False
@@ -1094,6 +1084,20 @@ class Builder:
         return events
 
 
+def kappa_slot(kid: str, spec: dict[str, Any]) -> Slot:
+    return Slot(
+        f"k.{kid}",
+        "kappa",
+        str(spec["vtype"]),
+        str(spec["question"]),
+        str(spec["description"]),
+        str(spec["query"]),
+        tuple(spec["sources"]),
+        kappa_id=kid,
+        structured=True,
+    )
+
+
 def build(seed: int, params: dict[str, Any] | None = None) -> Builder:
     b = Builder(seed, params or {})
     b.build_natural()
@@ -1101,10 +1105,19 @@ def build(seed: int, params: dict[str, Any] | None = None) -> Builder:
 
 
 def to_world(b: Builder, branch: str = "natural") -> World:
+    """The world of a built (and shifted) script. With the parameter `kappa_set: "heldout:<seed>"`
+    the draw's six definitions take the places of the fixed six in the slot list, and everything
+    else (events, other slots, timelines) is that of the fixed-set world. The S_src script edits
+    the records of the fixed definitions it targets, so the src branch's `shift_targets` name those
+    fixed items, not held-out ones."""
+    defs = kappa_set_defs(b.p.get("kappa_set"))
     kappa_defs = {
-        kid: {v: KappaDef(kid, v, str(spec[v])) for v in ("v1", "v2")}
-        for kid, spec in KAPPA_DEFS.items()
+        kid: {v: KappaDef(kid, v, str(spec[v])) for v in ("v1", "v2")} for kid, spec in defs.items()
     }
+    slots = b.slots
+    if defs is not KAPPA_DEFS:
+        heldout = iter([kappa_slot(kid, spec) for kid, spec in defs.items()])
+        slots = [next(heldout) if s.kind == "kappa" else s for s in b.slots]
     return World(
         world_id=f"w{b.seed:04d}",
         seed=b.seed,
@@ -1113,11 +1126,11 @@ def to_world(b: Builder, branch: str = "natural") -> World:
         fork=b.fork,
         user_name=b.user_name,
         people=b.people,
-        slots=b.slots,
+        slots=slots,
         events=b.materialise(),
         timelines={k: sorted(v, key=lambda p: p.ts) for k, v in b.timelines.items()},
         kappa_defs=kappa_defs,
-        kappa_log=[(b.start, kid, "v1") for kid in KAPPA_DEFS],
+        kappa_log=[(b.start, kid, "v1") for kid in defs],
         agents={k: list(v) for k, v in AGENTS.items()},
         branch=branch,
         params=dict(b.p),

@@ -1,12 +1,16 @@
 {
   "analysis_code": {
-    "commit": "25d5fccbbbec6ac0a611380e0d9249b427f3b940",
+    "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
     "dirty": false
   },
-  "created_utc": "2026-09-30T13:57:51Z",
+  "created_utc": "2026-10-17T05:16:47Z",
   "experiment": "merged-ex_e1",
   "files_sha256": {
-    "analysis/ex_e1.json": "8dda173c0cc5158eb2f8ab0ea2e2ba0de04b52a149b262e994ad9da6fe1fd5c0"
+    "analysis/ex_e1.json": "fcda291c24c3e0e5e4cfcdc0521a9da113bfdc2022d13727666a1cd89f890734"
+  },
+  "note": "exploratory (prereg/decisions.md 2026-09-30): out-of-sample test of Eq. (1), replication accounting, short-world prediction, cost model and noise floor across the E1-family stages, no model call; restaged after stage4_c_e1 took the re-run e1_synth_s1016-1019_20261016T222156Z (prereg/decisions.md 2026-10-17), which only the listed (not pooled) noise-floor entry of stage4_c_e1 reads; stage5_short_e1's item table (not kept in git) was regenerated from its three source runs by its stage command and equals the SHA256 in that stage's manifest",
+  "producers": {
+    "analysis/ex_e1.json": "python -m memshift.analysis.ex_e1_cross runs/stage5_ex_e1 dev:runs/stage1_e1 devorphan:runs/stage1_orphan main:runs/stage2_e1 rep:runs/stage4_rep_e1 short:runs/stage5_short_e1 e3:runs/stage2_e3 e3rep:runs/stage4_rep_e3 noisepool:runs/stage2_e1 noisepool:runs/stage4_rep_e1 noise:runs/stage1_e1 noise:runs/stage1_orphan noise:runs/stage4_c_e1 noise:runs/stage4_m2_google_gemma-4-12b-it noise:runs/stage5_short_e1"
   },
   "run_id": "stage5_ex_e1",
   "sources": [
@@ -48,14 +52,14 @@
     {
       "code": null,
       "experiment": "merged-e3",
-      "manifest_sha256": "ee388f3eb4ce5aa4bc6a1bb39d014f1ce4b0cb2fc90c7b2edb32e596e6907e28",
+      "manifest_sha256": "616c75f12eff03e7fce6f7749cd8e934557c832bcd6ca86da3f42b31f07ddaae",
       "run_id": "stage2_e3",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e3",
-      "manifest_sha256": "69d6d2c66d4354bfac3549f219575c20ebea1cbe0af76e744e8dca7d404750fe",
+      "manifest_sha256": "5f9339c373c3153a758d6a86a323c2a0e9ed4133139b1753338b2785d01dc72a",
       "run_id": "stage4_rep_e3",
       "worlds": []
     },
@@ -90,7 +94,7 @@
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "010a5f35df4ac396319de8faec2ac5e275934133356c378d6a5b4fe62dea3597",
+      "manifest_sha256": "6128f3a59c20ce483b83076094557ea6736f1c2f790dc38b1e1b9efb0bfe1089",
       "run_id": "stage4_c_e1",
       "worlds": []
     },

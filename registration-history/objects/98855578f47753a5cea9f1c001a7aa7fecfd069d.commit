@@ -1,0 +1,27 @@
+tree 859c03270cfb071779a89607ed2df1256d2236e8
+parent 8a05f4ac3879e0922aa79082ac0dd9352f195f4e
+author zichuanxu <zichuanxu28@gmail.com> 1792183310 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792183310 +0900
+
+Paper batch 5 of round 3: block X (Mem0 interventions) staged as void under the anchor rule and written into the paper; X1 not judged, its quantities reported as exploratory
+
+Stage runs/stage7_round3 again from the raw runs (analysis code 8a05f4a, clean): x.json is block X on
+its ten x_mem0 runs (no committed runs to compare with); the other nine files differ only in the code
+field. Commit the manifests and env of the ten X runs. Pairing fails as logged in decisions.md
+2026-10-17: every world's prefix restored from E5, 3 of 480 anchor answers (and 50 contexts) differ
+from E5's, so X1 is not judged; per the void-run rule the result holds no X1 tests and no verdict
+before the amendment. Exploratory (tab_mem0x): Mem0 m = 1 in every class and shift (0 updates or
+deletions after the fork); Update on changed definition items 12.2%, 8.9%, 10.7% after S_src, S_def,
+S_del; the query-time view +72.6, +64.4, +71.4 pp; source-keyed invalidation +0.6, +1.6, +3.6 pp on
+definition items and -3.4, -8.5, +35.9 pp on the other items (1,312 deletions).
+
+Paper: results 4.6 native paragraph gains one sentence (the Mem0 intervention test is void), the
+Worlds limitation states its held-out scope positively to keep the main text ending on page 9;
+appendix round-3 subsection (renamed "Finished So Far") lists X as finished, adds the block X
+paragraphs and tab:mem0x, and places each round-3 table at its first citation (55 pages, no sparse
+page); tab:round3 has the X1 row (void, n.j.); the status table moves X out of "still running"; the
+deviations table adds the anchor failure and m = 1; the sentence after it now names X1's amended
+threshold as the second registered-rule change. Tests pin the void pairing, the absence of an X1
+outcome in x.json, and the values the text states.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

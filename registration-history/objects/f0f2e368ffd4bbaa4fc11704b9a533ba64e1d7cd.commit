@@ -1,0 +1,18 @@
+tree 44c5af547247ccb9f33f6c286632963512415f59
+parent b0ff1901b0be4f02431dcadf7bfbe17396a9d13b
+author zichuanxu <zichuanxu28@gmail.com> 1792137900 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792137900 +0900
+
+Block X fix: infrastructure errors are retried, then stop the run; serving records match on served_model
+
+Mem0 raises LLMError for any client error and E5's on_error=skip turned extraction timeouts into
+skipped units. Mem0's LLM and embedding clients now get a long timeout (SDK retries off) and are
+retried with backoff on timeouts, connection errors, 5xx and 429 (found through the cause chain);
+after RetryPolicy.attempts the run stops with InfrastructureError, also where Mem0 swallowed the
+error. Other errors still follow on_error=skip, as in E5 (whose Mem0 runs skipped none). The
+reader gets the same timeout; --request-timeout and --attempts set the policy.
+
+The prefix check read the serving record's model as 'model', which logs/serving/*.json names
+'served_model', so the llm and embedder checks failed on every world and the prefix was rebuilt.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

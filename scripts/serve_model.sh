@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Launch one vLLM OpenAI server and record its metadata
-# (image id, model revision, engine flags) in logs/serving/<model>.json for run manifests.
+# Launch one vLLM OpenAI-compatible server in a resource-limited GPU container, bound to
+# 127.0.0.1, and record its metadata (image id, model revision, engine flags) in
+# logs/serving/<model>.json for run manifests.
 # Usage: serve_model.sh MODEL REVISION GPU(S) PORT [extra vllm args...]
 # Env:   MEMSHIFT_ROOT (repo on the host), HF_CACHE_DIR (read-only model cache),
 #        MEMSHIFT_PREFIX (container name prefix), VLLM_IMAGE, MEM_UTIL, MAX_LEN, MAX_SEQS,

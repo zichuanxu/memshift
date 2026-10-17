@@ -1,0 +1,756 @@
+{
+ "block": "N",
+ "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
+ "inputs": {
+  "runs": [
+   "runs/e1_n_natural_s1000-1004_20261016T094158Z",
+   "runs/e1_n_natural_s1005-1009_20261016T094158Z",
+   "runs/e1_n_natural_s1010-1014_20261016T094158Z",
+   "runs/e1_n_natural_s1015-1019_20261016T094158Z"
+  ],
+  "compare": [
+   "runs/stage2_e1"
+  ]
+ },
+ "pairing": {
+  "detail": {
+   "incomplete_runs_skipped": [],
+   "superseded": [],
+   "calls": {
+    "e1_n_natural_s1000-1004_20261016T094158Z": {
+     "serve/cached": 5491,
+     "serve/sent": 989,
+     "write/cached": 4694,
+     "write/sent": 8
+    },
+    "e1_n_natural_s1005-1009_20261016T094158Z": {
+     "serve/cached": 3620,
+     "serve/sent": 2860,
+     "write/cached": 4726,
+     "write/sent": 32
+    },
+    "e1_n_natural_s1010-1014_20261016T094158Z": {
+     "serve/cached": 5738,
+     "serve/sent": 742,
+     "write/cached": 4702,
+     "write/sent": 6
+    },
+    "e1_n_natural_s1015-1019_20261016T094158Z": {
+     "serve/cached": 4356,
+     "serve/sent": 2124,
+     "write/cached": 4692,
+     "write/sent": 20
+    }
+   }
+  },
+  "ok": true,
+  "counts": {
+   "superseded_answers_differ": 0,
+   "hash_failed": 0,
+   "hash_missing": 0,
+   "discriminative_runs": 0,
+   "runs_missing_cells": 0,
+   "anchor_answers_differ": 0,
+   "anchor_answers_missing": 0,
+   "runs_without_anchor": 0
+  },
+  "anchor_answers_compared": 3840
+ },
+ "predictions": {
+  "N1": {
+   "verdict": "fails",
+   "reason": "1 of 2 met; not met: paired_difference_src_shift_definition -0.0450",
+   "tests": [
+    {
+     "key": "paired_difference_src_shift_definition",
+     "value": -0.04504504504504504,
+     "ok": false,
+     "threshold": "est > 0 and lo > 0"
+    },
+    {
+     "key": "paired_difference_def_shift_definition",
+     "value": 0.13513513513513514,
+     "ok": true,
+     "threshold": "est > 0 and lo > 0"
+    }
+   ],
+   "reading_if_holds": "the interaction on definition items is caused by the shift, not by the time passed"
+  }
+ },
+ "reported": {
+  "other_items": {
+   "src": {
+    "est": 0.0029585798816568047,
+    "lo": -0.034482758620689655,
+    "hi": 0.03498542274052478,
+    "width": 0.06946818136121444,
+    "n_worlds": 20,
+    "n_items": 676
+   },
+   "def": {
+    "est": NaN,
+    "lo": NaN,
+    "hi": NaN,
+    "width": NaN,
+    "n_worlds": 0,
+    "n_items": 0
+   },
+   "orphan": {
+    "est": -0.01588502269288956,
+    "lo": -0.06716417910447761,
+    "hi": 0.02878787878787879,
+    "width": 0.0959520578923564,
+    "n_worlds": 20,
+    "n_items": 1322
+   }
+  },
+  "all_items": {
+   "src": {
+    "est": -0.0038119440914866584,
+    "lo": -0.048302872062663184,
+    "hi": 0.03435114503816794,
+    "width": 0.08265401710083112,
+    "n_worlds": 20,
+    "n_items": 787
+   },
+   "def": {
+    "est": 0.13513513513513514,
+    "lo": 0.017937219730941704,
+    "hi": 0.25333333333333335,
+    "width": 0.23539611360239165,
+    "n_worlds": 20,
+    "n_items": 222
+   },
+   "orphan": {
+    "est": -0.010948905109489052,
+    "lo": -0.06041222459132907,
+    "hi": 0.03163686382393398,
+    "width": 0.09204908841526305,
+    "n_worlds": 20,
+    "n_items": 1370
+   }
+  },
+  "S_del_definition": {
+   "est": 0.125,
+   "lo": 0.0,
+   "hi": 0.21428571428571427,
+   "width": 0.21428571428571427,
+   "n_worlds": 9,
+   "n_items": 48
+  },
+  "natural_also_changed": {
+   "src": {
+    "definition": {
+     "est": 0.6036036036036037,
+     "lo": 0.4774774774774775,
+     "hi": 0.7254901960784313,
+     "width": 0.24801271860095386,
+     "n_worlds": 18,
+     "n_items": 111
+    },
+    "other": {
+     "est": 0.01775147928994083,
+     "lo": 0.0,
+     "hi": 0.03857142857142857,
+     "width": 0.03857142857142857,
+     "n_worlds": 20,
+     "n_items": 676
+    },
+    "all": {
+     "est": 0.10038119440914867,
+     "lo": 0.06976744186046512,
+     "hi": 0.13454075032341525,
+     "width": 0.06477330846295014,
+     "n_worlds": 20,
+     "n_items": 787
+    }
+   },
+   "def": {
+    "definition": {
+     "est": 0.545045045045045,
+     "lo": 0.45495495495495497,
+     "hi": 0.6327433628318584,
+     "width": 0.17778840787690342,
+     "n_worlds": 20,
+     "n_items": 222
+    },
+    "other": {
+     "est": NaN,
+     "lo": NaN,
+     "hi": NaN,
+     "width": NaN,
+     "n_worlds": 0,
+     "n_items": 0
+    },
+    "all": {
+     "est": 0.545045045045045,
+     "lo": 0.45495495495495497,
+     "hi": 0.6327433628318584,
+     "width": 0.17778840787690342,
+     "n_worlds": 20,
+     "n_items": 222
+    }
+   },
+   "orphan": {
+    "definition": {
+     "est": 0.5833333333333334,
+     "lo": 0.40425531914893614,
+     "hi": 0.8378378378378378,
+     "width": 0.4335825186889017,
+     "n_worlds": 9,
+     "n_items": 48
+    },
+    "other": {
+     "est": 0.025718608169440244,
+     "lo": 0.013119533527696793,
+     "hi": 0.04148148148148148,
+     "width": 0.02836194795378469,
+     "n_worlds": 20,
+     "n_items": 1322
+    },
+    "all": {
+     "est": 0.04525547445255475,
+     "lo": 0.030619865571321882,
+     "hi": 0.06036363636363636,
+     "width": 0.02974377079231448,
+     "n_worlds": 20,
+     "n_items": 1370
+    }
+   }
+  }
+ },
+ "quantities": {
+  "counterfactual": {
+   "src": {
+    "shift": {
+     "definition": {
+      "item_times_in_branch": 111,
+      "item_times_with_natural": 111,
+      "shifted_branch": {
+       "est": 0.24324324324324326,
+       "lo": 0.125,
+       "hi": 0.3565217391304348,
+       "width": 0.23152173913043478,
+       "n_worlds": 18,
+       "n_items": 111
+      },
+      "natural": {
+       "est": 0.2882882882882883,
+       "lo": 0.15748031496062992,
+       "hi": 0.42727272727272725,
+       "width": 0.26979241231209733,
+       "n_worlds": 18,
+       "n_items": 111
+      },
+      "difference": {
+       "est": -0.04504504504504504,
+       "lo": -0.17543859649122806,
+       "hi": 0.0958904109589041,
+       "width": 0.27132900745013216,
+       "n_worlds": 18,
+       "n_items": 111
+      }
+     },
+     "other": {
+      "item_times_in_branch": 676,
+      "item_times_with_natural": 676,
+      "shifted_branch": {
+       "est": -0.010355029585798817,
+       "lo": -0.046948356807511735,
+       "hi": 0.019943019943019943,
+       "width": 0.06689137675053168,
+       "n_worlds": 20,
+       "n_items": 676
+      },
+      "natural": {
+       "est": -0.013313609467455622,
+       "lo": -0.03566121842496285,
+       "hi": 0.009202453987730062,
+       "width": 0.044863672412692915,
+       "n_worlds": 20,
+       "n_items": 676
+      },
+      "difference": {
+       "est": 0.0029585798816568047,
+       "lo": -0.034482758620689655,
+       "hi": 0.03498542274052478,
+       "width": 0.06946818136121444,
+       "n_worlds": 20,
+       "n_items": 676
+      }
+     },
+     "all": {
+      "item_times_in_branch": 787,
+      "item_times_with_natural": 787,
+      "shifted_branch": {
+       "est": 0.025412960609911054,
+       "lo": 0.005115089514066497,
+       "hi": 0.044213263979193757,
+       "width": 0.03909817446512726,
+       "n_worlds": 20,
+       "n_items": 787
+      },
+      "natural": {
+       "est": 0.029224904701397714,
+       "lo": -0.003816793893129771,
+       "hi": 0.06535141800246609,
+       "width": 0.06916821189559587,
+       "n_worlds": 20,
+       "n_items": 787
+      },
+      "difference": {
+       "est": -0.0038119440914866584,
+       "lo": -0.048302872062663184,
+       "hi": 0.03435114503816794,
+       "width": 0.08265401710083112,
+       "n_worlds": 20,
+       "n_items": 787
+      }
+     }
+    },
+    "drift": {
+     "definition": {
+      "item_times_in_branch": 222,
+      "item_times_with_natural": 222,
+      "shifted_branch": {
+       "est": 0.2882882882882883,
+       "lo": 0.20502092050209206,
+       "hi": 0.36486486486486486,
+       "width": 0.1598439443627728,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "natural": {
+       "est": 0.33783783783783783,
+       "lo": 0.27459016393442626,
+       "hi": 0.4,
+       "width": 0.12540983606557377,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "difference": {
+       "est": -0.04954954954954955,
+       "lo": -0.11267605633802817,
+       "hi": 0.0,
+       "width": 0.11267605633802817,
+       "n_worlds": 20,
+       "n_items": 222
+      }
+     },
+     "other": {
+      "item_times_in_branch": 159,
+      "item_times_with_natural": 159,
+      "shifted_branch": {
+       "est": 0.012578616352201259,
+       "lo": -0.05405405405405406,
+       "hi": 0.08270676691729323,
+       "width": 0.13676082097134729,
+       "n_worlds": 20,
+       "n_items": 159
+      },
+      "natural": {
+       "est": 0.006289308176100629,
+       "lo": -0.040268456375838924,
+       "hi": 0.05732484076433121,
+       "width": 0.09759329714017013,
+       "n_worlds": 20,
+       "n_items": 159
+      },
+      "difference": {
+       "est": 0.006289308176100629,
+       "lo": -0.025974025974025976,
+       "hi": 0.050359712230215826,
+       "width": 0.0763337382042418,
+       "n_worlds": 20,
+       "n_items": 159
+      }
+     },
+     "all": {
+      "item_times_in_branch": 381,
+      "item_times_with_natural": 381,
+      "shifted_branch": {
+       "est": 0.1732283464566929,
+       "lo": 0.11244019138755981,
+       "hi": 0.24,
+       "width": 0.12755980861244018,
+       "n_worlds": 20,
+       "n_items": 381
+      },
+      "natural": {
+       "est": 0.1994750656167979,
+       "lo": 0.1525,
+       "hi": 0.24725274725274726,
+       "width": 0.09475274725274727,
+       "n_worlds": 20,
+       "n_items": 381
+      },
+      "difference": {
+       "est": -0.026246719160104987,
+       "lo": -0.06406685236768803,
+       "hi": 0.008379888268156424,
+       "width": 0.07244674063584446,
+       "n_worlds": 20,
+       "n_items": 381
+      }
+     }
+    }
+   },
+   "def": {
+    "shift": {
+     "definition": {
+      "item_times_in_branch": 222,
+      "item_times_with_natural": 222,
+      "shifted_branch": {
+       "est": 0.38738738738738737,
+       "lo": 0.3039647577092511,
+       "hi": 0.4694835680751174,
+       "width": 0.1655188103658663,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "natural": {
+       "est": 0.25225225225225223,
+       "lo": 0.16216216216216217,
+       "hi": 0.3392857142857143,
+       "width": 0.17712355212355213,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "difference": {
+       "est": 0.13513513513513514,
+       "lo": 0.017937219730941704,
+       "hi": 0.25333333333333335,
+       "width": 0.23539611360239165,
+       "n_worlds": 20,
+       "n_items": 222
+      }
+     },
+     "other": {
+      "item_times_in_branch": 0,
+      "item_times_with_natural": 0,
+      "shifted_branch": {
+       "est": NaN,
+       "lo": NaN,
+       "hi": NaN,
+       "width": NaN,
+       "n_worlds": 0,
+       "n_items": 0
+      },
+      "natural": {
+       "est": NaN,
+       "lo": NaN,
+       "hi": NaN,
+       "width": NaN,
+       "n_worlds": 0,
+       "n_items": 0
+      },
+      "difference": {
+       "est": NaN,
+       "lo": NaN,
+       "hi": NaN,
+       "width": NaN,
+       "n_worlds": 0,
+       "n_items": 0
+      }
+     },
+     "all": {
+      "item_times_in_branch": 222,
+      "item_times_with_natural": 222,
+      "shifted_branch": {
+       "est": 0.38738738738738737,
+       "lo": 0.3039647577092511,
+       "hi": 0.4694835680751174,
+       "width": 0.1655188103658663,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "natural": {
+       "est": 0.25225225225225223,
+       "lo": 0.16216216216216217,
+       "hi": 0.3392857142857143,
+       "width": 0.17712355212355213,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "difference": {
+       "est": 0.13513513513513514,
+       "lo": 0.017937219730941704,
+       "hi": 0.25333333333333335,
+       "width": 0.23539611360239165,
+       "n_worlds": 20,
+       "n_items": 222
+      }
+     }
+    },
+    "drift": {
+     "definition": {
+      "item_times_in_branch": 165,
+      "item_times_with_natural": 165,
+      "shifted_branch": {
+       "est": 0.3878787878787879,
+       "lo": 0.2925170068027211,
+       "hi": 0.4838709677419355,
+       "width": 0.19135396093921442,
+       "n_worlds": 20,
+       "n_items": 165
+      },
+      "natural": {
+       "est": 0.38181818181818183,
+       "lo": 0.2893081761006289,
+       "hi": 0.4748603351955307,
+       "width": 0.1855521590949018,
+       "n_worlds": 20,
+       "n_items": 165
+      },
+      "difference": {
+       "est": 0.006060606060606061,
+       "lo": -0.0136986301369863,
+       "hi": 0.02617801047120419,
+       "width": 0.03987664060819049,
+       "n_worlds": 20,
+       "n_items": 165
+      }
+     },
+     "other": {
+      "item_times_in_branch": 171,
+      "item_times_with_natural": 171,
+      "shifted_branch": {
+       "est": -0.005847953216374269,
+       "lo": -0.03954802259887006,
+       "hi": 0.026595744680851064,
+       "width": 0.06614376727972113,
+       "n_worlds": 20,
+       "n_items": 171
+      },
+      "natural": {
+       "est": 0.0,
+       "lo": -0.0457516339869281,
+       "hi": 0.04938271604938271,
+       "width": 0.09513435003631082,
+       "n_worlds": 20,
+       "n_items": 171
+      },
+      "difference": {
+       "est": -0.005847953216374269,
+       "lo": -0.03896103896103896,
+       "hi": 0.021621621621621623,
+       "width": 0.06058266058266058,
+       "n_worlds": 20,
+       "n_items": 171
+      }
+     },
+     "all": {
+      "item_times_in_branch": 336,
+      "item_times_with_natural": 336,
+      "shifted_branch": {
+       "est": 0.1875,
+       "lo": 0.1238390092879257,
+       "hi": 0.2507936507936508,
+       "width": 0.1269546415057251,
+       "n_worlds": 20,
+       "n_items": 336
+      },
+      "natural": {
+       "est": 0.1875,
+       "lo": 0.12540192926045016,
+       "hi": 0.24924012158054712,
+       "width": 0.12383819232009696,
+       "n_worlds": 20,
+       "n_items": 336
+      },
+      "difference": {
+       "est": 0.0,
+       "lo": -0.02364864864864865,
+       "hi": 0.01904761904761905,
+       "width": 0.0426962676962677,
+       "n_worlds": 20,
+       "n_items": 336
+      }
+     }
+    }
+   },
+   "orphan": {
+    "shift": {
+     "definition": {
+      "item_times_in_branch": 48,
+      "item_times_with_natural": 48,
+      "shifted_branch": {
+       "est": 0.3958333333333333,
+       "lo": 0.15,
+       "hi": 0.6,
+       "width": 0.44999999999999996,
+       "n_worlds": 9,
+       "n_items": 48
+      },
+      "natural": {
+       "est": 0.2708333333333333,
+       "lo": 0.03571428571428571,
+       "hi": 0.5227272727272727,
+       "width": 0.487012987012987,
+       "n_worlds": 9,
+       "n_items": 48
+      },
+      "difference": {
+       "est": 0.125,
+       "lo": 0.0,
+       "hi": 0.21428571428571427,
+       "width": 0.21428571428571427,
+       "n_worlds": 9,
+       "n_items": 48
+      }
+     },
+     "other": {
+      "item_times_in_branch": 1322,
+      "item_times_with_natural": 1322,
+      "shifted_branch": {
+       "est": -0.015128593040847202,
+       "lo": -0.05918057663125948,
+       "hi": 0.025236593059936908,
+       "width": 0.08441716969119639,
+       "n_worlds": 20,
+       "n_items": 1322
+      },
+      "natural": {
+       "est": 0.0007564296520423601,
+       "lo": -0.01790830945558739,
+       "hi": 0.019461077844311378,
+       "width": 0.03736938729989877,
+       "n_worlds": 20,
+       "n_items": 1322
+      },
+      "difference": {
+       "est": -0.01588502269288956,
+       "lo": -0.06716417910447761,
+       "hi": 0.02878787878787879,
+       "width": 0.0959520578923564,
+       "n_worlds": 20,
+       "n_items": 1322
+      }
+     },
+     "all": {
+      "item_times_in_branch": 1370,
+      "item_times_with_natural": 1370,
+      "shifted_branch": {
+       "est": -0.00072992700729927,
+       "lo": -0.04491017964071856,
+       "hi": 0.04332386363636364,
+       "width": 0.0882340432770822,
+       "n_worlds": 20,
+       "n_items": 1370
+      },
+      "natural": {
+       "est": 0.010218978102189781,
+       "lo": -0.012509197939661517,
+       "hi": 0.0363382250174703,
+       "width": 0.04884742295713181,
+       "n_worlds": 20,
+       "n_items": 1370
+      },
+      "difference": {
+       "est": -0.010948905109489052,
+       "lo": -0.06041222459132907,
+       "hi": 0.03163686382393398,
+       "width": 0.09204908841526305,
+       "n_worlds": 20,
+       "n_items": 1370
+      }
+     }
+    },
+    "drift": {
+     "definition": {
+      "item_times_in_branch": 260,
+      "item_times_with_natural": 260,
+      "shifted_branch": {
+       "est": 0.34615384615384615,
+       "lo": 0.29432624113475175,
+       "hi": 0.39299610894941633,
+       "width": 0.09866986781466458,
+       "n_worlds": 20,
+       "n_items": 260
+      },
+      "natural": {
+       "est": 0.34615384615384615,
+       "lo": 0.29277566539923955,
+       "hi": 0.3968871595330739,
+       "width": 0.10411149413383436,
+       "n_worlds": 20,
+       "n_items": 260
+      },
+      "difference": {
+       "est": 0.0,
+       "lo": -0.01646090534979424,
+       "hi": 0.019230769230769232,
+       "width": 0.03569167458056347,
+       "n_worlds": 20,
+       "n_items": 260
+      }
+     },
+     "other": {
+      "item_times_in_branch": 137,
+      "item_times_with_natural": 137,
+      "shifted_branch": {
+       "est": -0.0072992700729927005,
+       "lo": -0.04375,
+       "hi": 0.02962962962962963,
+       "width": 0.07337962962962963,
+       "n_worlds": 20,
+       "n_items": 137
+      },
+      "natural": {
+       "est": -0.0072992700729927005,
+       "lo": -0.05263157894736842,
+       "hi": 0.047619047619047616,
+       "width": 0.10025062656641603,
+       "n_worlds": 20,
+       "n_items": 137
+      },
+      "difference": {
+       "est": 0.0,
+       "lo": -0.03508771929824561,
+       "hi": 0.03389830508474576,
+       "width": 0.06898602438299137,
+       "n_worlds": 20,
+       "n_items": 137
+      }
+     },
+     "all": {
+      "item_times_in_branch": 397,
+      "item_times_with_natural": 397,
+      "shifted_branch": {
+       "est": 0.22418136020151133,
+       "lo": 0.17530864197530865,
+       "hi": 0.2722371967654987,
+       "width": 0.09692855479019002,
+       "n_worlds": 20,
+       "n_items": 397
+      },
+      "natural": {
+       "est": 0.22418136020151133,
+       "lo": 0.17603911980440098,
+       "hi": 0.27298050139275765,
+       "width": 0.09694138158835666,
+       "n_worlds": 20,
+       "n_items": 397
+      },
+      "difference": {
+       "est": 0.0,
+       "lo": -0.016216216216216217,
+       "hi": 0.017456359102244388,
+       "width": 0.0336725753184606,
+       "n_worlds": 20,
+       "n_items": 397
+      }
+     }
+    }
+   }
+  }
+ },
+ "notes": {
+  "N1": "`ex_round3_natural.paired_vs_natural`, part \"shift\", definition items, S_src and S_def, lower bound > 0; not judged unless the natural answers cover every item-time."
+ },
+ "code": {
+  "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+  "dirty": false
+ }
+}

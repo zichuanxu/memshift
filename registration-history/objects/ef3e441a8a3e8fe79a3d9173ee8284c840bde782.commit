@@ -1,0 +1,8 @@
+tree 0ade1919464a03d4bf63804ec47be0afb75101ba
+parent 6231be4ac30c679bf1735a2411668601d87df696
+author zichuanxu <zichuanxu28@gmail.com> 1792155845 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792155845 +0900
+
+H-b serves a 43,008-token context (registered max_tokens 32,768 does not fit 157 of 618 prompts in 40,960; logged before any H-b run); typecheck fix in test_e1_round3b
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,12 @@
+tree 9b2592322c931f7a890ff93d5e33dffe60cad5e8
+parent 6a95f8ea3ae006404f6c21c7d2f5650c75f1fa38
+author zichuanxu <zichuanxu28@gmail.com> 1792175438 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792175438 +0900
+
+Round-3 paper batch 4, code: stage block V (definitions in the user's own words) beside Q and G-a
+
+round3_paper: v.json holds block V on its 45 runs (nine program sets) with the 45 G-b runs of the
+same writers and samples, which only V's reported per-writer comparison reads (G3 is not staged).
+RThreeV macros, the V1 and V2 rows of tab_round3 and a per-writer table (tab_userwords).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

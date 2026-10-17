@@ -1,0 +1,421 @@
+{
+  "code": {
+    "commit": "f3429646f25877fb743a1d7dfd1b33e5959264ae",
+    "dirty": false
+  },
+  "created_utc": "2026-10-16T16:26:11Z",
+  "experiment": "E1",
+  "files_sha256": {
+    "answers.jsonl": "c2aafdd41b402564bfe32eba03fa61930ea111562466a9deda2be5ead87ea930",
+    "calls.jsonl": "c8e8e926ca10b528c690c8a10cc49f50ea94f40eecfa595553bb931cb393f808",
+    "env.json": "b02fe33588a09915de7dfc648b56cd0334e3ab3e3e7ca4658a75b989bfa723f6",
+    "hash_check_w1006_def.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1006_orphan.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1006_src.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1007_def.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1007_orphan.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1007_src.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "items.jsonl": "9b844bb1f119ebc7b7ef2d2734aae46385475127b0564035734fda4143abf709",
+    "maintenance.jsonl": "ef52af1873acac9081d250fde23f278555cdb5b9aad618ce5cb96537f0d771d5",
+    "probes.jsonl": "28a291332ae2731bbff1b503340893f7fe33ec88a911c16e0fd1b6199db4d77f",
+    "world_summaries.jsonl": "7d07185a59602d8207edfe707eaf0348a8502951496978d088bbf7a99b04a805"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    },
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+    }
+  },
+  "params": {
+    "baselines": false,
+    "branches": [
+      "src",
+      "def",
+      "orphan"
+    ],
+    "cells": [
+      "holdmem_D0B0",
+      "holdmem_D0B1_source",
+      "holdmem_D1B0",
+      "holdmem_D1B1_source",
+      "holdmem_D1sB0",
+      "holdmem_D1sB1_source"
+    ],
+    "json_arm_of": "holdmem_D1B1_source",
+    "offsets_weeks": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "post_probes": "definition",
+    "probe_unnamed_defs": false,
+    "probes_after_fork": "discriminative",
+    "program_writer": {
+      "extra_body": null,
+      "items": "definition items (other items: the writer)",
+      "model": "Qwen/Qwen3.5-9B",
+      "sample": null,
+      "temperature": 0.0,
+      "user_words": false
+    },
+    "reader_budget_tokens": 4096,
+    "render_model": null,
+    "seeds": [
+      1006,
+      1007
+    ],
+    "t0": "fork - 1 minute",
+    "views": [],
+    "world_params": {
+      "kappa_set": "heldout:4003"
+    }
+  },
+  "run_id": "e1_ga_heldout4003_s1006-1007_20261016T151709Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "85909dbadc4d1b5ab7a199e7dd063511fc555e25778df8b8d822d86435e9a143",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_social_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_upcoming_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_recently_completed_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_hot_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_close_relative",
+          "v1"
+        ]
+      ],
+      "n_events": 1647,
+      "seed": 1006,
+      "shift_targets": [
+        "a.dentist",
+        "a.doctor",
+        "c.p08.employer",
+        "c.p22.city",
+        "c.p23.city",
+        "k.active_project",
+        "k.overdue_task",
+        "s.series_piano_lesson",
+        "s.series_team_sync",
+        "u.home_city"
+      ],
+      "world_id": "w1006"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "ce2b7c4b13c8ee01eb152363468728a6fd008b398b9796ddf8e41735901cb56a",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_social_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_upcoming_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_recently_completed_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_hot_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_close_relative",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "h4003_recently_completed_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "h4003_social_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1628,
+      "seed": 1006,
+      "shift_targets": [
+        "h4003_frequent_recipient",
+        "h4003_recently_completed_task",
+        "h4003_social_hours"
+      ],
+      "world_id": "w1006"
+    },
+    {
+      "branch": "orphan",
+      "consent_log": [],
+      "events_sha256": "74dc7aabf30224ef53f85f74693a1f3daa0809f47a1f2f0c1242a4d7424dcd6c",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_social_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_upcoming_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_recently_completed_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_hot_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_close_relative",
+          "v1"
+        ]
+      ],
+      "n_events": 1638,
+      "seed": 1006,
+      "shift_targets": [
+        "contacts:p08",
+        "contacts:p11",
+        "contacts:p15",
+        "contacts:p17",
+        "contacts:p19",
+        "contacts:p22",
+        "contacts:p24",
+        "calendar:series_design_review",
+        "calendar:series_team_sync",
+        "tasks:t011",
+        "tasks:t031",
+        "tasks:t035",
+        "tasks:t037"
+      ],
+      "world_id": "w1006"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "c1650c11101e2f887278812759918af20e3e8cdc0d897a6d163a7d4800032b50",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_social_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_upcoming_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_recently_completed_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_hot_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_close_relative",
+          "v1"
+        ]
+      ],
+      "n_events": 1564,
+      "seed": 1007,
+      "shift_targets": [
+        "c.p06.city",
+        "c.p08.employer",
+        "c.p14.city",
+        "c.p23.employer",
+        "c.p28.city",
+        "s.series_language_exchange",
+        "t.t015",
+        "t.t024",
+        "u.commute",
+        "u.diet"
+      ],
+      "world_id": "w1007"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "f0ba360c92d235b8f6e437fbc9c46afe57f4af5f3871616b155e07518bc65d16",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_social_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_upcoming_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_recently_completed_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_hot_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_close_relative",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "h4003_hot_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "h4003_upcoming_task",
+          "v2"
+        ]
+      ],
+      "n_events": 1549,
+      "seed": 1007,
+      "shift_targets": [
+        "h4003_frequent_recipient",
+        "h4003_hot_task",
+        "h4003_upcoming_task"
+      ],
+      "world_id": "w1007"
+    },
+    {
+      "branch": "orphan",
+      "consent_log": [],
+      "events_sha256": "260882f3bd8f8779a2778287171125540a33ad4fbd3d97f52bf4baaa97ea369d",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "h4003_frequent_recipient",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_social_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_upcoming_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_recently_completed_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_hot_task",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "h4003_close_relative",
+          "v1"
+        ]
+      ],
+      "n_events": 1559,
+      "seed": 1007,
+      "shift_targets": [
+        "contacts:p06",
+        "contacts:p08",
+        "contacts:p13",
+        "contacts:p22",
+        "contacts:p24",
+        "contacts:p28",
+        "calendar:series_design_review",
+        "calendar:series_team_sync",
+        "tasks:t015",
+        "tasks:t020",
+        "tasks:t024"
+      ],
+      "world_id": "w1007"
+    }
+  ]
+}

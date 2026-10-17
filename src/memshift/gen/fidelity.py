@@ -63,7 +63,7 @@ def check_world(world: World, log: SourceLog | None = None) -> FidelityReport:
             if isinstance(g.value, list):
                 blob = "\n".join(texts)
                 ok = all(str(m) in blob for m in g.value)
-            elif slot.kind == "kappa" and slot.kappa_id == "working_hours":
+            elif slot.kind == "kappa" and slot.vtype == "timerange":
                 ok = bool(texts)
             else:
                 ok = any(

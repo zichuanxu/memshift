@@ -2,7 +2,8 @@
 
 For every (world, branch, slot, checkpoint k) the gold at k is compared with the gold at t0:
   changed   gold value or status differs from t0
-  detected  the cell invalidated the slot's original item in (t0, t_k]
+  detected  the cell invalidated the slot's original item in (t0, t_k] (an upsert cell: invalidated
+            or superseded, `detection_events`)
 MissedInvalidation = P(not detected | changed); FalseInvalidation = P(detected | unchanged);
 RepairCorrectness  = P(probe ContractValid at k | item repaired at k) (behavioural, primary) and
                      P(repaired value matches gold at k) (mechanistic, secondary);
@@ -77,7 +78,18 @@ HM_CELLS = (
     "holdmem_D1sB0_ra",
     "holdmem_D1sB1_source_ra",
     "holdmem_D0fullB1_source",
+    # prereg v4 block U: slot-keyed upsert cells and the D1s refresh cell
+    "holdmem_D0B0_upsert",
+    "holdmem_D1B0_upsert",
+    "holdmem_D1sB0_upsert",
+    "holdmem_D1sB0_refresh",
 )
+
+
+def detection_events(system: str) -> tuple[str, ...]:
+    """History events that count as detection in a cell: `invalidate`; in an upsert cell (prereg
+    v4 block U) also `supersede`, the retirement of a slot's older items by its new delta item."""
+    return ("invalidate", "supersede") if "_upsert" in system else ("invalidate",)
 
 
 def _key(r: Row) -> tuple[str, str, str, int]:
@@ -133,7 +145,7 @@ def item_table(data: dict[str, list[Row]]) -> list[Row]:
             events = hist.get((w, b, system, slot))
             if events is not None:
                 upto = [h for h in events if h["ts"] <= p["as_of"]]
-                row["detected"] = any(h["event"] == "invalidate" for h in upto)
+                row["detected"] = any(h["event"] in detection_events(system) for h in upto)
                 now = [h for h in upto if h["event"] == "repair" and h["ts"] == p["as_of"]]
                 row["repaired_now"] = bool(now)
                 if now:

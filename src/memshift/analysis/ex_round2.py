@@ -1,7 +1,7 @@
 """Paper numbers and tables of the exploratory analyses requested by the second review round of the
 paper (prereg/decisions.md 2026-10-08; post hoc). They change no registered contrast, margin,
 threshold or verdict. Every quantity comes from committed run outputs and the seeded world
-generator, with no model call; the stages are named in paper/results_sources.json:
+generator, with no model call; the stages are named in results/sources.json:
 
   e1    analysis/e1_metrics.json (the Eq. (1) terms, class split and per-definition contrasts of
         `analysis.ex_e1_classes`), analysis/e1_item_table.jsonl, the probes of the runs its
@@ -591,17 +591,17 @@ def tab_redef_only(inp: Mapping[str, Any]) -> str:
     lines = [
         r"\begin{table}[t]",
         r"\caption{Update after a shift counts every item-time whose gold value or status differs "
-        r"from its value before the shift, whether the shift changed it or later events would "
-        rf"have changed it anyway (main study, {attr.get('n_worlds', MISSING)} worlds; "
-        r"exploratory). \emph{By the shift}: the gold differs from the gold the same world has at "
-        r"the same time without the shift (the generator's natural branch); \emph{drift only}: "
+        rf"from its value before the shift (main study, {attr.get('n_worlds', MISSING)} worlds, "
+        r"exploratory). It does so whether the shift changed the value or later events would have "
+        r"changed it anyway. By the shift: the gold differs from the gold the same world has at "
+        r"the same time without the shift (the generator's natural branch). Drift only: "
         r"it does not. (a) Item-times after the shift (48 items, four checkpoints), those that "
         r"changed, and the part the shift itself changed, with shares of all item-times. "
         rf"$\Ssrc$ revises the sources of {target}. (b) $B$ effect at each $D$ and "
-        r"$B{\times}D$ on Update (source-epoch key; pp, 95\% world-bootstrap intervals) on "
-        r"each part; $n$: changed "
-        r"item-times. A redefinition changes only definition items. \emph{New} or \emph{same "
-        r"version}: after $\Sdef$, the definition item's version moved or not, whatever its "
+        r"$B{\times}D$ on Update (source-epoch key, pp, 95\% world-bootstrap intervals) on "
+        r"each part. $n$: changed "
+        r"item-times. A redefinition changes only definition items. New or same "
+        r"version: after $\Sdef$, the definition item's version moved or not, whatever its "
         r"value.}",
         r"\label{tab:redef_only}",
         r"\centering\scriptsize",
@@ -651,19 +651,19 @@ def tab_think_trunc(inp: Mapping[str, Any]) -> str:
     pooled = _get(think, "writes", "all") or {}
     differ = pooled.get("at_limit_xor_unreadable")
     same = (
-        "; they are exactly the writes whose reply could not be read"
+        ", exactly the writes whose reply could not be read"
         if differ == 0
-        else f"; {_count(differ)} writes are at the limit or unreadable but not both"
+        else f", with {_count(differ)} writes at the limit or unreadable but not both"
     )
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The thinking writer ($D{=}0$, $B{=}1$, source-epoch key; "
-        rf"{pooled.get('n_worlds', MISSING)} worlds; exploratory) per definition. Writes: its "
-        r"definition writes after the shift, all branches; at limit: the share of them that used "
+        r"\caption{The thinking writer ($D{=}0$, $B{=}1$, source-epoch key, "
+        rf"{pooled.get('n_worlds', MISSING)} worlds, exploratory) per definition. Writes: its "
+        r"definition writes after the shift, all branches. At limit: the share of them that used "
         rf"the whole budget of {_count(pooled.get('limit_tokens'))} completion tokens "
         rf"(percent{same}). Repair: "
         r"ContractValid of its re-derivations that were asked (percent, 95\% world-bootstrap "
-        r"interval); no value: those re-derivations that returned no value, of all asked; plain: "
+        r"interval). No value: those re-derivations that returned no value, of all asked. Plain: "
         r"the repair of the same writer without thinking on the same item-times (percent).}",
         r"\label{tab:think_trunc}",
         r"\centering\scriptsize",
@@ -714,16 +714,16 @@ def tab_classsplit_dm(inp: Mapping[str, Any]) -> str:
     lines = [
         r"\begin{table}[t]",
         r"\caption{The contrasts on Update by item class with the model-written derivation "
-        rf"$D_{{\mathrm{{m}}}}$ as the $D{{=}}1$ arm (block C, {n} worlds; source-epoch binding; "
+        rf"$D_{{\mathrm{{m}}}}$ as the $D{{=}}1$ arm ({n} worlds, source-epoch key, "
         r"pp, 95\% world-bootstrap intervals). $B$ at $D$: the effect of binding, $B{=}1$ minus "
-        r"$B{=}0$, at the given $D$; $D_{\mathrm{m}}$ at $B$: $D_{\mathrm{m}}$ minus $D{=}0$ at "
-        r"the given $B$; $B{\times}D_{\mathrm{m}}$: $B$ at $D_{\mathrm{m}}$ minus $B$ at $D{=}0$. "
+        r"$B{=}0$, at the given $D$. $D_{\mathrm{m}}$ at $B$: $D_{\mathrm{m}}$ minus $D{=}0$ at "
+        r"the given $B$. $B{\times}D_{\mathrm{m}}$: $B$ at $D_{\mathrm{m}}$ minus $B$ at $D{=}0$. "
         r"In grey under each row: the same contrast with the authored derivation as the $D{=}1$ "
-        r"arm, on the same worlds ($B$ at $D{=}0$ involves neither). \emph{Definition}: the six "
-        r"definition items of each world; \emph{other}: the other 42 items; share: the class's "
+        r"arm, on the same worlds ($B$ at $D{=}0$ involves neither). Definition: the six "
+        r"definition items of each world. Other: the other 42 items. Share: the class's "
         r"share of the changed item-times. On all items, $B{\times}D_{\mathrm{m}}$ after $\Sdef$ "
-        r"is the registered prediction C3; after $\Ssrc$ and $\Sdel$ it is exploratory; the class "
-        r"split is exploratory.}",
+        r"is registered, and after $\Ssrc$ and $\Sdel$ it is exploratory. The class split is "
+        r"exploratory.}",
         r"\label{tab:classsplit_dm}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{6pt}",
@@ -764,8 +764,8 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
     res = _get(main, "explore_per_definition", "D1") or {}
     lines = [
         r"\begin{table}[t]",
-        rf"\caption{{$B{{\times}}D$ on Update per definition (main study, {n} worlds; "
-        r"source-epoch key; pp, 95\% world-bootstrap intervals; exploratory). $n$: the "
+        rf"\caption{{$B{{\times}}D$ on Update per definition (main study, {n} worlds, "
+        r"source-epoch key, pp, 95\% world-bootstrap intervals, exploratory). $n$: the "
         r"definition's changed item-times. All six: the definition class. Leave one out: the "
         r"smallest and the largest $B{\times}D$ of the definition class with one definition "
         r"removed. The intervals resample worlds, not definitions.}",

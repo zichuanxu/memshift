@@ -1,0 +1,3113 @@
+{
+ "block": "H",
+ "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
+ "inputs": {
+  "runs": [
+   "runs/e1_hb_think32k_s1000-1001_20261016T211635Z",
+   "runs/e1_hb_think32k_s1002-1003_20261016T211805Z",
+   "runs/e1_hb_think32k_s1004-1005_20261016T211935Z",
+   "runs/e1_hb_think32k_s1006-1007_20261016T212105Z",
+   "runs/e1_hb_think32k_s1008-1009_20261016T212235Z"
+  ],
+  "compare": [
+   "runs/stage2_e1",
+   "runs/stage4_c_e1"
+  ]
+ },
+ "pairing": {
+  "ok": true,
+  "counts": {
+   "anchor_answers_differ": 0,
+   "anchor_answers_missing": 0,
+   "hash_failed": 0,
+   "hash_missing": 0,
+   "probe_keys_extra": 0,
+   "probe_keys_missing": 0,
+   "superseded_answers_differ": 0
+  },
+  "anchor_answers_compared": 4898,
+  "detail": {
+   "incomplete_runs_skipped": [],
+   "runs": {
+    "e1_hb_think32k_s1000-1001_20261016T211635Z": {
+     "probe_keys_missing": 0,
+     "probe_keys_extra": 0,
+     "anchor_answers_differ": 0,
+     "anchor_answers_missing": 0,
+     "anchor_answers_compared": 974
+    },
+    "e1_hb_think32k_s1002-1003_20261016T211805Z": {
+     "probe_keys_missing": 0,
+     "probe_keys_extra": 0,
+     "anchor_answers_differ": 0,
+     "anchor_answers_missing": 0,
+     "anchor_answers_compared": 1044
+    },
+    "e1_hb_think32k_s1004-1005_20261016T211935Z": {
+     "probe_keys_missing": 0,
+     "probe_keys_extra": 0,
+     "anchor_answers_differ": 0,
+     "anchor_answers_missing": 0,
+     "anchor_answers_compared": 896
+    },
+    "e1_hb_think32k_s1006-1007_20261016T212105Z": {
+     "probe_keys_missing": 0,
+     "probe_keys_extra": 0,
+     "anchor_answers_differ": 0,
+     "anchor_answers_missing": 0,
+     "anchor_answers_compared": 1016
+    },
+    "e1_hb_think32k_s1008-1009_20261016T212235Z": {
+     "probe_keys_missing": 0,
+     "probe_keys_extra": 0,
+     "anchor_answers_differ": 0,
+     "anchor_answers_missing": 0,
+     "anchor_answers_compared": 968
+    }
+   },
+   "superseded": [
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1000",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1000",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1000",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1001",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1001",
+      "orphan"
+     ],
+     "compared": 226,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1001",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1002",
+      "def"
+     ],
+     "compared": 120,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1002",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1002",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1003",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1003",
+      "orphan"
+     ],
+     "compared": 206,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1003",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1004",
+      "def"
+     ],
+     "compared": 92,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1004",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1004",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1005",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1005",
+      "orphan"
+     ],
+     "compared": 184,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1005",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1006",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1006",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1006",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1007",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1007",
+      "orphan"
+     ],
+     "compared": 228,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1007",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1008",
+      "def"
+     ],
+     "compared": 94,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1008",
+      "orphan"
+     ],
+     "compared": 232,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1008",
+      "src"
+     ],
+     "compared": 166,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1009",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1009",
+      "orphan"
+     ],
+     "compared": 204,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1009",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1010",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1010",
+      "orphan"
+     ],
+     "compared": 196,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1010",
+      "src"
+     ],
+     "compared": 164,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1011",
+      "def"
+     ],
+     "compared": 98,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1011",
+      "orphan"
+     ],
+     "compared": 212,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1011",
+      "src"
+     ],
+     "compared": 152,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1012",
+      "def"
+     ],
+     "compared": 114,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1012",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1012",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1013",
+      "def"
+     ],
+     "compared": 84,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1013",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1013",
+      "src"
+     ],
+     "compared": 162,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1014",
+      "def"
+     ],
+     "compared": 132,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1014",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1014",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1015",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1015",
+      "orphan"
+     ],
+     "compared": 222,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1015",
+      "src"
+     ],
+     "compared": 142,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1016",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1016",
+      "orphan"
+     ],
+     "compared": 218,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1016",
+      "src"
+     ],
+     "compared": 150,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1017",
+      "def"
+     ],
+     "compared": 88,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1017",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1017",
+      "src"
+     ],
+     "compared": 146,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1018",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1018",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1018",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1019",
+      "def"
+     ],
+     "compared": 90,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1019",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B0",
+      "w1019",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1000",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1000",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1000",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1001",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1001",
+      "orphan"
+     ],
+     "compared": 226,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1001",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1002",
+      "def"
+     ],
+     "compared": 120,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1002",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1002",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1003",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1003",
+      "orphan"
+     ],
+     "compared": 206,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1003",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1004",
+      "def"
+     ],
+     "compared": 92,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1004",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1004",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1005",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1005",
+      "orphan"
+     ],
+     "compared": 184,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1005",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1006",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1006",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1006",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1007",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1007",
+      "orphan"
+     ],
+     "compared": 228,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1007",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1008",
+      "def"
+     ],
+     "compared": 94,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1008",
+      "orphan"
+     ],
+     "compared": 232,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1008",
+      "src"
+     ],
+     "compared": 166,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1009",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1009",
+      "orphan"
+     ],
+     "compared": 204,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1009",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1010",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1010",
+      "orphan"
+     ],
+     "compared": 196,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1010",
+      "src"
+     ],
+     "compared": 164,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1011",
+      "def"
+     ],
+     "compared": 98,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1011",
+      "orphan"
+     ],
+     "compared": 212,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1011",
+      "src"
+     ],
+     "compared": 152,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1012",
+      "def"
+     ],
+     "compared": 114,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1012",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1012",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1013",
+      "def"
+     ],
+     "compared": 84,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1013",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1013",
+      "src"
+     ],
+     "compared": 162,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1014",
+      "def"
+     ],
+     "compared": 132,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1014",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1014",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1015",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1015",
+      "orphan"
+     ],
+     "compared": 222,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1015",
+      "src"
+     ],
+     "compared": 142,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1016",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1016",
+      "orphan"
+     ],
+     "compared": 218,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1016",
+      "src"
+     ],
+     "compared": 150,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1017",
+      "def"
+     ],
+     "compared": 88,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1017",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1017",
+      "src"
+     ],
+     "compared": 146,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1018",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1018",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1018",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1019",
+      "def"
+     ],
+     "compared": 90,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1019",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D0B1_source",
+      "w1019",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1000",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1000",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1000",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1001",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1001",
+      "orphan"
+     ],
+     "compared": 226,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1001",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1002",
+      "def"
+     ],
+     "compared": 120,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1002",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1002",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1003",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1003",
+      "orphan"
+     ],
+     "compared": 206,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1003",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1004",
+      "def"
+     ],
+     "compared": 92,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1004",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1004",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1005",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1005",
+      "orphan"
+     ],
+     "compared": 184,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1005",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1006",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1006",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1006",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1007",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1007",
+      "orphan"
+     ],
+     "compared": 228,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1007",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1008",
+      "def"
+     ],
+     "compared": 94,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1008",
+      "orphan"
+     ],
+     "compared": 232,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1008",
+      "src"
+     ],
+     "compared": 166,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1009",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1009",
+      "orphan"
+     ],
+     "compared": 204,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1009",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1010",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1010",
+      "orphan"
+     ],
+     "compared": 196,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1010",
+      "src"
+     ],
+     "compared": 164,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1011",
+      "def"
+     ],
+     "compared": 98,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1011",
+      "orphan"
+     ],
+     "compared": 212,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1011",
+      "src"
+     ],
+     "compared": 152,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1012",
+      "def"
+     ],
+     "compared": 114,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1012",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1012",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1013",
+      "def"
+     ],
+     "compared": 84,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1013",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1013",
+      "src"
+     ],
+     "compared": 162,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1014",
+      "def"
+     ],
+     "compared": 132,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1014",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1014",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1015",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1015",
+      "orphan"
+     ],
+     "compared": 222,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1015",
+      "src"
+     ],
+     "compared": 142,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1016",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1016",
+      "orphan"
+     ],
+     "compared": 218,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1016",
+      "src"
+     ],
+     "compared": 150,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1017",
+      "def"
+     ],
+     "compared": 88,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1017",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1017",
+      "src"
+     ],
+     "compared": 146,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1018",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1018",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1018",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1019",
+      "def"
+     ],
+     "compared": 90,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1019",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B0",
+      "w1019",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1000",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1000",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1000b_20260929T144647Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1000",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1001",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1001",
+      "orphan"
+     ],
+     "compared": 226,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1001",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1002",
+      "def"
+     ],
+     "compared": 120,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1002",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1001-1002_20260929T180353Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1002",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1003",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1003",
+      "orphan"
+     ],
+     "compared": 206,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1000-1003_20260928T202242Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1003",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1004",
+      "def"
+     ],
+     "compared": 92,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1004",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1003-1004_20260929T180355Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1004",
+      "src"
+     ],
+     "compared": 148,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1005",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1005",
+      "orphan"
+     ],
+     "compared": 184,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1005",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1006",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1006",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1005-1006_20260929T180357Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1006",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1007",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1007",
+      "orphan"
+     ],
+     "compared": 228,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1004-1007_20260928T202243Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1007",
+      "src"
+     ],
+     "compared": 174,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1008",
+      "def"
+     ],
+     "compared": 94,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1008",
+      "orphan"
+     ],
+     "compared": 232,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1007-1008_20260929T180359Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1008",
+      "src"
+     ],
+     "compared": 166,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1009",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1009",
+      "orphan"
+     ],
+     "compared": 204,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1009",
+      "src"
+     ],
+     "compared": 168,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1010",
+      "def"
+     ],
+     "compared": 102,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1010",
+      "orphan"
+     ],
+     "compared": 196,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1009-1010_20260929T180401Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1010",
+      "src"
+     ],
+     "compared": 164,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1011",
+      "def"
+     ],
+     "compared": 98,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1011",
+      "orphan"
+     ],
+     "compared": 212,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1008-1011_20260928T202244Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1011",
+      "src"
+     ],
+     "compared": 152,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1012",
+      "def"
+     ],
+     "compared": 114,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1012",
+      "orphan"
+     ],
+     "compared": 210,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1011-1012_20260929T180403Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1012",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1013",
+      "def"
+     ],
+     "compared": 84,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1013",
+      "orphan"
+     ],
+     "compared": 240,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1013",
+      "src"
+     ],
+     "compared": 162,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1014",
+      "def"
+     ],
+     "compared": 132,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1014",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1013-1014_20260929T180405Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1014",
+      "src"
+     ],
+     "compared": 194,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1015",
+      "def"
+     ],
+     "compared": 104,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1015",
+      "orphan"
+     ],
+     "compared": 222,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1012-1015_20260928T202245Z",
+     "kept": "e1_synth_s1015_20260929T180407Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1015",
+      "src"
+     ],
+     "compared": 142,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1016",
+      "def"
+     ],
+     "compared": 106,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1016",
+      "orphan"
+     ],
+     "compared": 218,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1016",
+      "src"
+     ],
+     "compared": 150,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1017",
+      "def"
+     ],
+     "compared": 88,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1017",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1017",
+      "src"
+     ],
+     "compared": 146,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1018",
+      "def"
+     ],
+     "compared": 110,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1018",
+      "orphan"
+     ],
+     "compared": 238,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1018",
+      "src"
+     ],
+     "compared": 170,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1019",
+      "def"
+     ],
+     "compared": 90,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1019",
+      "orphan"
+     ],
+     "compared": 214,
+     "differ": 0,
+     "missing": 0
+    },
+    {
+     "run": "e1_test_s1016-1019_20260928T202246Z",
+     "kept": "e1_synth_s1016-1019_20261016T222156Z",
+     "cell": [
+      "holdmem_D1B1_source",
+      "w1019",
+      "src"
+     ],
+     "compared": 156,
+     "differ": 0,
+     "missing": 0
+    }
+   ],
+   "calls": {
+    "e1_hb_think32k_s1000-1001_20261016T211635Z": {
+     "serve/cached": 1889,
+     "serve/sent": 635,
+     "write/cached": 3040,
+     "write/sent": 128
+    },
+    "e1_hb_think32k_s1002-1003_20261016T211805Z": {
+     "serve/cached": 1987,
+     "serve/sent": 677,
+     "write/cached": 3047,
+     "write/sent": 121
+    },
+    "e1_hb_think32k_s1004-1005_20261016T211935Z": {
+     "serve/cached": 1816,
+     "serve/sent": 552,
+     "write/cached": 2992,
+     "write/sent": 128
+    },
+    "e1_hb_think32k_s1006-1007_20261016T212105Z": {
+     "serve/cached": 1939,
+     "serve/sent": 669,
+     "write/cached": 2999,
+     "write/sent": 121
+    },
+    "e1_hb_think32k_s1008-1009_20261016T212235Z": {
+     "serve/cached": 1890,
+     "serve/sent": 622,
+     "write/cached": 3046,
+     "write/sent": 122
+    }
+   }
+  }
+ },
+ "predictions": {
+  "H3": {
+   "verdict": "not_judged",
+   "reason": "validity failed: cut off 12.6% > 10%",
+   "tests": []
+  },
+  "H1": {
+   "verdict": "not_judged",
+   "reason": "no run of this arm given",
+   "tests": [],
+   "reading": null
+  },
+  "H2": {
+   "verdict": "not_judged",
+   "reason": "no run of this arm given",
+   "tests": []
+  }
+ },
+ "reported": {
+  "H_c_trigger": null
+ },
+ "quantities": {
+  "writers": {},
+  "think": {
+   "validity": {
+    "limits": [
+     32768
+    ],
+    "writes": 708,
+    "cut_off": 89,
+    "cut_off_share": 0.12570621468926554,
+    "unreadable": 89,
+    "unreadable_share": 0.12570621468926554,
+    "v3_P_D2_unreadable_at_most_20pct": true,
+    "tests": [
+     {
+      "key": "cut_off_share",
+      "value": 0.12570621468926554,
+      "ok": false,
+      "threshold": "<= 10%"
+     }
+    ],
+    "valid": false
+   },
+   "worlds": [
+    "w1000",
+    "w1001",
+    "w1002",
+    "w1003",
+    "w1004",
+    "w1005",
+    "w1006",
+    "w1007",
+    "w1008",
+    "w1009"
+   ],
+   "D1_minus_think": {
+    "repair": {
+     "src": {
+      "est": 0.5846153846153846,
+      "lo": 0.5504587155963303,
+      "hi": 0.6264367816091954,
+      "width": 0.07597806601286505,
+      "n_worlds": 10,
+      "n_items": 195
+     },
+     "def": {
+      "est": 0.7128712871287128,
+      "lo": 0.6502242152466368,
+      "hi": 0.7777777777777778,
+      "width": 0.12755356253114103,
+      "n_worlds": 10,
+      "n_items": 202
+     },
+     "orphan": {
+      "est": 0.5633802816901409,
+      "lo": 0.5336322869955157,
+      "hi": 0.6040609137055838,
+      "width": 0.07042862671006811,
+      "n_worlds": 10,
+      "n_items": 213
+     }
+    },
+    "repair_mech": {
+     "src": {
+      "est": 0.461864406779661,
+      "lo": 0.4406779661016949,
+      "hi": 0.48717948717948717,
+      "width": 0.04650152107779226,
+      "n_worlds": 10,
+      "n_items": 236
+     },
+     "def": {
+      "est": 0.559322033898305,
+      "lo": 0.5042016806722689,
+      "hi": 0.6086956521739131,
+      "width": 0.10449397150164419,
+      "n_worlds": 10,
+      "n_items": 236
+     },
+     "orphan": {
+      "est": 0.4533898305084746,
+      "lo": 0.42016806722689076,
+      "hi": 0.4872881355932203,
+      "width": 0.06712006836632955,
+      "n_worlds": 10,
+      "n_items": 236
+     }
+    }
+   },
+   "H3": {
+    "verdict": "not_judged",
+    "reason": "validity failed: cut off 12.6% > 10%",
+    "tests": []
+   }
+  },
+  "ignored_runs": []
+ },
+ "notes": {
+  "H1": "B x D with the authored D=1 cells (the registered main-study contrast); the D_m version is reported. Reading writer_property (est <= 10 pp, or the interval includes 0), execution_pays (est >= 20 pp and the interval above 0), else both.",
+  "H2": "r_0 = ContractValid of the changed definition item-times the source-epoch key invalidated in D0B1_source after S_src (the `r` of Eq. (1), whose main-study value is the registered 16.2%); holds when r_0 - 0.162 >= 20 pp (point estimate). The same quantity of Qwen3.5-9B on the same worlds, and the paired difference, are reported.",
+  "H": "validity (amended): at most 10% of the writer's distinct write requests stop at the output limit (`finish_reason` \"length\" in calls.jsonl: max_tokens or the context window), at most 2% unreadable. calls.jsonl records the finish reason, prompt and output tokens (thinking included) but not whether the reply parsed; the unreadable share is per distinct request from the response cache when given, else from the run summaries' `def_stats` (per cell write, so a request several cells send counts once per cell), and `basis` says which.",
+  "H3": "v3 P-D1 as v3 judged it: repair and mechanical repair, S_src and S_def, D1B1_source minus D0thinkB1_source on definition items, each >= 30 pp. Validity as the v4 text states it: at most 10% of the thinking writes cut off (completion tokens at the run's limit); v3 P-D2's 20%-unreadable rule is reported beside it."
+ },
+ "code": {
+  "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+  "dirty": false
+ }
+}

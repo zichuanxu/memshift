@@ -1,0 +1,19 @@
+tree 77e02c39e846b149415f90ead9c12cee30b2854e
+parent e7d79ee11673cea42efefd7c001e5691ae8e7d96
+author zichuanxu <zichuanxu28@gmail.com> 1792133252 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792133252 +0900
+
+E1: program sets, --program-model/--program-temperature/--program-sample (prereg v4 block G-b)
+
+HoldMem(program_writer=...): the D1s program requests of the definition
+items (before and after the shift, plain and retraction-aware) go to that
+client; every other request is the writer's. The E1 driver builds it only
+off the defaults (another model, temperature != 0 or a sample index) and
+only for runs with D1s cells, with extra_body from program_extra_body: the
+model's default body (none for claude-* models, no thinking), the
+temperature (replacing the body's 0.0) and memshift_sample=I (kept in the
+cache key, removed before the HTTP request by the LLM client). The three
+settings go into the manifest params (program_writer) and a non-default
+model into the manifest models.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

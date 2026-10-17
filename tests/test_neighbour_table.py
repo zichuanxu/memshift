@@ -10,7 +10,7 @@ import pytest
 from memshift.analysis import neighbour_table as nt
 
 ROOT = Path(__file__).resolve().parents[1]
-PROPS = ROOT / "paper" / "audit" / "neighbours" / "properties.json"
+PROPS = ROOT / "audit" / "neighbours" / "properties.json"
 GENERATED = ROOT / "paper" / "generated"
 GOYAL = "arxiv2609_05339"
 
@@ -62,6 +62,7 @@ def test_every_row_has_one_cell_per_column(render: Any) -> None:
         assert ln.endswith(r" \\")
 
 
+@pytest.mark.paper
 def test_neighbour_keys_are_in_the_bibliography_and_cited_in_related_work() -> None:
     bib = (ROOT / "paper" / "refs" / "references.bib").read_text()
     entries = set(re.findall(r"^@\w+\{([^,\s]+),", bib, re.M))
@@ -132,6 +133,7 @@ def test_invalid_input_is_rejected(raw: list[dict[str, Any]], tmp_path: Path) ->
         nt.load(_write(tmp_path, no_ref))
 
 
+@pytest.mark.paper
 def test_output_is_deterministic_and_the_generated_files_are_current(tmp_path: Path) -> None:
     first, second = nt.load(PROPS), nt.load(PROPS)
     assert nt.tab_neighbours(first) == nt.tab_neighbours(second)
@@ -222,6 +224,7 @@ def test_the_weaknesses_named_in_the_text_hold_in_the_counts() -> None:
     assert (c["NbrHistCount"], c["NbrHistMedian"], c["NbrHistMore"]) == ("12", "49", "7")
 
 
+@pytest.mark.paper
 def test_every_count_macro_used_in_the_paper_is_defined() -> None:
     defined = set(nt.counts(nt.load(PROPS)))
     sections = ROOT / "paper" / "sections"

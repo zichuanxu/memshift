@@ -1,0 +1,406 @@
+{
+  "code": {
+    "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+    "dirty": false
+  },
+  "created_utc": "2026-10-16T20:50:49Z",
+  "experiment": "E1",
+  "files_sha256": {
+    "answers.jsonl": "31e230cb933b390aac3a94d621dc36b4caf1e75d24cb2dbfbc790425254a59ac",
+    "calls.jsonl": "85428732a64c1473cdc442b75016389502f22ba3e9fcbaff505771994fc4b497",
+    "env.json": "e2436328a1fa3042f8f11af1984a7d6abc563ec18a91bfe186a48460b678f01a",
+    "hash_check_w1004_def.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1004_orphan.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1004_src.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1005_def.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1005_orphan.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "hash_check_w1005_src.json": "3192d54b4534900bc7c6e4f0274493cdf9f748e3773b8d8f64fce95c727c913c",
+    "items.jsonl": "b298d31bf36e4fcaf7b79f337120e2feacd05e755c760ad7060eb06b88b7daeb",
+    "maintenance.jsonl": "bb7fd92d426b869ebd35994bf3606c6689daa3028ad8f24f16c3ed82f633125d",
+    "probes.jsonl": "8b853c773c1325c69848278e1b7f6d7446ce4125bf57b632d2cf3c7e73186d0e",
+    "world_summaries.jsonl": "cc37d6b8b7c57139285af4f16959341d6cdacdf56adf0d9a192ff296fcf55c3a"
+  },
+  "models": {
+    "embedding": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+    },
+    "reader": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "google/gemma-4-12B-it",
+      "revision": "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7"
+    },
+    "writer": {
+      "image_id": "sha256:d076d77d8dade699041dbcb6bb989a058e51b532e6367f13f80b5a4e63ee5c53",
+      "model": "google/gemma-4-12B-it",
+      "revision": "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7"
+    }
+  },
+  "params": {
+    "baselines": false,
+    "branches": [
+      "src",
+      "def",
+      "orphan"
+    ],
+    "cells": [
+      "holdmem_D0B0",
+      "holdmem_D0B0_refresh",
+      "holdmem_D1B0_refresh",
+      "holdmem_D0B0_upsert",
+      "holdmem_D1B0_upsert"
+    ],
+    "json_arm_of": "holdmem_D1B1_source",
+    "offsets_weeks": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "post_probes": "definition",
+    "probe_unnamed_defs": false,
+    "probes_after_fork": "discriminative",
+    "reader_budget_tokens": 4096,
+    "render_model": null,
+    "seeds": [
+      1004,
+      1005
+    ],
+    "t0": "fork - 1 minute",
+    "views": [],
+    "world_params": {}
+  },
+  "run_id": "e1_u5_gemma_s1004-1005_20261016T203015Z",
+  "run_image": "sha256:ba03b9fa5daa3b850748c26ccfc5dcaaed58fa79843a6cf325253eccfc9ab0c6",
+  "worlds": [
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "31f0c5eb10aced2864d63cdd30b78e3ad0291df375bea4fdac1a25df6e6876c3",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1561,
+      "seed": 1004,
+      "shift_targets": [
+        "a.dentist",
+        "c.p05.city",
+        "c.p08.city",
+        "c.p16.city",
+        "c.p16.employer",
+        "c.p19.city",
+        "c.p30.employer",
+        "s.series_language_exchange",
+        "t.t034",
+        "u.commute"
+      ],
+      "world_id": "w1004"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "1621523a7fa4fb5ccfd1b0acd7577acc7361a1733534b8040588829741b63447",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1544,
+      "seed": 1004,
+      "shift_targets": [
+        "close_friend",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1004"
+    },
+    {
+      "branch": "orphan",
+      "consent_log": [],
+      "events_sha256": "9d1cc27fa02e870dfa19ee75684c06a991a12367466849169986d0fa360402b7",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1552,
+      "seed": 1004,
+      "shift_targets": [
+        "contacts:p06",
+        "contacts:p08",
+        "contacts:p11",
+        "contacts:p19",
+        "contacts:p20",
+        "contacts:p22",
+        "calendar:series_design_review",
+        "calendar:series_team_sync",
+        "tasks:t017",
+        "tasks:t024",
+        "tasks:t037"
+      ],
+      "world_id": "w1004"
+    },
+    {
+      "branch": "src",
+      "consent_log": [],
+      "events_sha256": "21712cd5ceeb1a405caeebdf9988d1765dc763c0123c72b7903db88cb22ee1c8",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1620,
+      "seed": 1005,
+      "shift_targets": [
+        "a.dentist",
+        "a.doctor",
+        "c.p05.employer",
+        "c.p06.employer",
+        "c.p16.employer",
+        "c.p25.employer",
+        "k.active_project",
+        "s.series_book_club",
+        "t.t020",
+        "u.commute"
+      ],
+      "world_id": "w1005"
+    },
+    {
+      "branch": "def",
+      "consent_log": [],
+      "events_sha256": "d62eb583c8e94bb7bb4faee33e018a83de0168fb04ad05d840ade20bfd3f488b",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "close_friend",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "overdue_task",
+          "v2"
+        ],
+        [
+          "2026-10-01 00:00:00",
+          "working_hours",
+          "v2"
+        ]
+      ],
+      "n_events": 1605,
+      "seed": 1005,
+      "shift_targets": [
+        "close_friend",
+        "overdue_task",
+        "working_hours"
+      ],
+      "world_id": "w1005"
+    },
+    {
+      "branch": "orphan",
+      "consent_log": [],
+      "events_sha256": "dbe4f8fd266aa5e02d6e6e506990e09e59aae6eed05c429a0fe31e6e1d7966ef",
+      "kappa_log": [
+        [
+          "2026-01-01 00:00:00",
+          "important_contact",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "close_friend",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "active_project",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "working_hours",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "vip_sender",
+          "v1"
+        ],
+        [
+          "2026-01-01 00:00:00",
+          "overdue_task",
+          "v1"
+        ]
+      ],
+      "n_events": 1611,
+      "seed": 1005,
+      "shift_targets": [
+        "contacts:p06",
+        "contacts:p19",
+        "contacts:p26",
+        "calendar:series_design_review",
+        "calendar:series_team_sync",
+        "tasks:t019",
+        "tasks:t020",
+        "tasks:t022",
+        "tasks:t031"
+      ],
+      "world_id": "w1005"
+    }
+  ]
+}

@@ -42,7 +42,7 @@ def _roundtrip(x: Any) -> Any:
 
 
 ORIG = {f"e{n}": _load(f"stage2_e{n}", f"e{n}_metrics.json") for n in (1, 2, 3)}
-SOURCES = json.loads((ROOT / "paper/results_sources.json").read_text())
+SOURCES = json.loads((ROOT / "results/sources.json").read_text())
 MULT_RESULT = _load("stage4_multiplicity", "multiplicity.json")
 REP_PARTIAL = {  # what is staged today: E1 and E3 on the replication worlds, E2 is not
     "e1": _load("stage4_rep_e1", "e1_metrics.json"),
@@ -396,7 +396,7 @@ def test_replication_table_has_a_separate_as_predicted_column():
     # as predicted in both stages, on all three branches
     source_rows = [
         line.split(" & ")
-        for line in tab.split("cited-cluster binding")[0].splitlines()
+        for line in tab.split(r"\emph{cited-cluster key}")[0].splitlines()
         if line.startswith(r"\quad ")
     ]
     assert len(source_rows) == 8 and any("missed invalidation" in c[0] for c in source_rows)
@@ -408,8 +408,9 @@ def test_replication_table_has_a_separate_as_predicted_column():
 def test_replication_table_marks_and_partial_stage():
     full = pt.tab_replication(paper_data.replication_view(ORIG, REP_PARTIAL))
     assert r"\pass" in full and r"$\sim$" in full and r"\fail" in full  # cited-cluster rows
-    assert "path~3 " + MISSING in full  # E2 not staged: path 3 and T1 are missing
-    assert "T3 9 of 9" in full
+    assert "agreement check " + MISSING in full  # E2 not staged: path 3 and T1 are missing
+    assert "utility floor 9 of 9" in full
+    assert "path~" not in full and "block R" not in full and "App.~" not in full
     assert MISSING not in _first_body(full)  # the contrast rows need only E1
     empty = pt.tab_replication({})
     assert empty.count(MISSING) > 100 and r"\pass" not in _first_body(empty)
@@ -468,12 +469,14 @@ def test_construct_table_and_missing():
     tab = pt.tab_construct(C_E1)
     # C1, C2, C4 judged on S_src and S_def, C3 on S_def only (prereg v2 section 4)
     assert _first_body(tab).count(r"\pass") == 7 and r"\fail" not in _first_body(tab)
-    c3 = next(line for line in tab.splitlines() if line.startswith("C3 "))
+    c3 = next(line for line in tab.splitlines() if line.startswith("$B{\\times}D$ on Update"))
     assert c3.split(" & ")[3] == "" and c3.split(" & ")[5] == r"\pass"  # S_src: no mark
-    assert r"C3 is registered for $\Sdef$ only" in tab.split(r"\label{tab:construct}")[0]
-    assert "$+$7.3" in tab and "46.7" in tab and "960" in tab
+    caption = tab.split(r"\label{tab:construct}")[0]
+    assert r"The interaction is registered for $\Sdef$ only" in caption
+    assert "block" not in caption and not re.search(r"\bC[1-4]\b", tab)  # no block or IDs
+    assert "$+$7.2" in tab and "47.3" in tab and "960" in tab
     # the share is an em dash where C1 is not positive (orphan: D_m falls below D=0)
-    share = next(line for line in tab.splitlines() if line.startswith("C2 share"))
+    share = next(line for line in tab.splitlines() if line.startswith("authored share"))
     assert share.count("---") == 1 and share.split(" & ")[-1].startswith("---")
     assert "182.9" not in tab and "35.7" in share
     assert C_E1["contrasts"]["orphan"]["C1_repair_D1s_minus_D0_source"]["est"] < 0
@@ -484,7 +487,9 @@ def test_construct_table_and_missing():
     flipped["contrasts"]["src"]["C1_repair_D1s_minus_D0_source"]["est"] = -0.01
     assert (
         next(
-            line for line in pt.tab_construct(flipped).splitlines() if line.startswith("C2 share")
+            line
+            for line in pt.tab_construct(flipped).splitlines()
+            if line.startswith("authored share")
         ).count("---")
         == 2
     )
@@ -539,7 +544,9 @@ def test_m1_macros_per_switch_and_pooled(tmp_path):
     assert out["MOneCaveats"] == "none"
     caveat = tier_name("cross:meta-llama/Llama-3.1-8B-Instruct")  # its underscores are escaped
     m["path3"]["tier_caveats"] = ["downgrade", caveat, "cross_unknown_model"]
-    assert pn.m1_numbers(m)["MOneCaveats"] == r"downgrade, Llama-3.1-8B, cross\_unknown\_model"
+    assert pn.m1_numbers(m)["MOneCaveats"] == (
+        r"the switch down from Qwen3.8-27B, the switch to Llama-3.1-8B and cross\_unknown\_model"
+    )
     assert out["MOneSlopeGemma"] != MISSING and out["MOneAurocGemma"] != MISSING
     tab = pt.tab_families(m, {f.key: None for f in FAMILIES}, {})
     assert "Ministral-3-14B" in tab and "pooled, 8 switches" in tab
@@ -905,7 +912,8 @@ def test_rendered_macros_checks_differences_and_descriptives(tmp_path):
     assert out["RendFidelityMin"] == "100.0\\%" and out["RendFidelityAllOne"] == "yes"
     assert out["RendFidelityChecked"] == "5,000" and out["RendModel"] == "google/gemma-4-12B-it"
     tab = pt.tab_rendered(m)
-    assert "chat messages & 400 & 6.0 & 3.0" in tab and r"\pass" in tab
+    assert r"Of the 1,000 bodies selected for rewriting, 5.0\% were retried once and 2.0\%" in tab
+    assert r"\pass" in tab and "block" not in tab
 
 
 def test_rendered_without_render_reports_leaves_the_descriptives_missing(tmp_path):
@@ -1121,12 +1129,10 @@ def test_rendered_table_wellformed(tmp_path):
 def test_tables_and_macros_are_deterministic(tmp_path):
     assert _all_tables() == _all_tables()
     assert pn.stage4_numbers(EMPTY) == pn.stage4_numbers(EMPTY)
-    inp = paper_data.load_stage4(
-        ROOT, json.loads((ROOT / "paper/results_sources.json").read_text())
-    )
+    inp = paper_data.load_stage4(ROOT, json.loads((ROOT / "results/sources.json").read_text()))
     assert pn.stage4_numbers(inp) == pn.stage4_numbers(inp)
     assert pn.stage4_numbers(inp) == pn.stage4_numbers(
-        paper_data.load_stage4(ROOT, json.loads((ROOT / "paper/results_sources.json").read_text()))
+        paper_data.load_stage4(ROOT, json.loads((ROOT / "results/sources.json").read_text()))
     )
 
 
@@ -1226,7 +1232,7 @@ def test_calibration_and_dissociation_figures_draw_with_and_without_the_curve(tm
 
 # ------------------------------------------------------------------------- sources and the paper
 def test_results_sources_name_every_stage4_group():
-    sources = json.loads((ROOT / "paper/results_sources.json").read_text())
+    sources = json.loads((ROOT / "results/sources.json").read_text())
     want = {"rep_e1", "rep_e2", "rep_e3", "pool_e1", "pool_e2", "pool_e3", "c", "m1", "m3", "n"}
     want |= {"ncost", "l", "rank", "mult"} | {f"m2_{f.key}" for f in FAMILIES}
     assert want <= set(sources)
@@ -1237,6 +1243,7 @@ def test_results_sources_name_every_stage4_group():
     assert all(str(v).startswith("runs/") for v in sources.values())
 
 
+@pytest.mark.paper
 def test_committed_generated_files_are_current():
     """paper/generated/* is what the generators print for the staged data: regenerate it (see
     paper/main.tex and the module docstrings) whenever a stage or a generator changes."""
@@ -1244,7 +1251,7 @@ def test_committed_generated_files_are_current():
     head = "% generated by memshift.analysis.paper_numbers; do not edit"
     text = "\n".join([head, *(pn._macro(k, macros[k]) for k in sorted(macros))]) + "\n"
     assert (ROOT / "paper/generated/numbers.tex").read_text() == text
-    sources = json.loads((ROOT / "paper/results_sources.json").read_text())
+    sources = json.loads((ROOT / "results/sources.json").read_text())
     inp = paper_data.load_stage4(ROOT, sources)
     head = "% generated by memshift.analysis.paper_tables; do not edit\n"
     want = {
@@ -1277,12 +1284,13 @@ def test_gate_table_reads_not_triggered_and_defines_its_paths():
     gate = json.loads((ROOT / SOURCES["gate"] / "analysis/gate_a.json").read_text())
     tex = pt.tab_gate(gate)
     assert "(held)" not in tex and tex.count("(not triggered)") == 3
-    assert "path & triggered if & observed (status)" in tex
+    assert "check & triggered if & observed (status)" in tex
+    assert "path~" not in tex and "App.~" not in tex
     caption = tex.split(r"\label{tab:gate}")[0]
     for term in (
-        "A path is triggered when its condition holds",
+        "A check is triggered when its condition holds",
         r"95\% world-bootstrap interval",
-        "for both keys (source epoch, cited cluster)",
+        "for both keys (source-epoch and cited-cluster)",
         r"with 90\% bounds",
     ):
         assert term in caption, term
@@ -1298,20 +1306,20 @@ def test_stage4_captions_define_their_rows_marks_and_cells():
         "whose re-derived value equals gold (mechanistic)",
     ):
         assert term in caption, term
-    assert "retention test T1" in rep and "Membership" not in rep
+    assert "retention test 3 of 3" in rep and "Membership" not in rep
     con = pt.tab_construct(inp["c"]).split(r"\label{tab:construct}")[0]
     for term in (
         "$D_0$: the $D{=}0$ cell",
         "authored derivation",
         "$t_0$, before any shift",
-        r"C2 share: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$",
+        r"Authored share: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$",
     ):
         assert term in con, term
     assert "benchmark-authored" not in con
     fam = pt.tab_families(inp["m1"], inp["m2"], inp["m3"])
     caption = fam.split(r"\label{tab:families}")[0]
     for term in (
-        "(i) path~2 not triggered",
+        "(i) leak check not triggered",
         "(ii) $B$ effect on Update",
         "(v) zero system below",
         r"registered 97\% bar",

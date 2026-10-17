@@ -1,0 +1,8 @@
+tree 9511a32b0df49b58e374b2f8f205c52ff7b1013c
+parent 9d670289509f37878291fb777a06b1d2d1b1b8af
+author zichuanxu <zichuanxu28@gmail.com> 1792176695 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792176695 +0900
+
+test_ex_e1_paper: the macro-collision check includes the review-round-3 exploratory macros (ExRThree), staged since ee9db44
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

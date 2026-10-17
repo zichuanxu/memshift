@@ -8,6 +8,10 @@ therefore stores exactly the same s_k bytes as a D=1 cell, without the parse.
 The records of a request are the BM25-selected in-scope records (`records_for`, 6,000 tokens),
 except for the D0full control (prereg v3 §6), whose definition items are re-derived from every live
 record of the item's declared sources (`full_records`).
+
+The definition-item writer of prereg v4 block H-a (another model, which reasons before it answers)
+sends the same request with its own output limit (`max_tokens`); a reply cut off by that limit is
+unreadable, as for a thinking request (`derive(reasoning=True)`).
 """
 
 from __future__ import annotations
@@ -39,8 +43,12 @@ FULL_BUDGET = 25_000
 # 8,192 of output fit the 16k context of the smaller serving configuration) and carries no JSON
 # schema (a grammar that has to open with `{` leaves the model no room to think on a server without
 # a reasoning parser); it names the answer's keys in the prompt instead, and the answer is parsed
-# from the reply as every other writer output is.
+# from the reply as every other writer output is. THINK_MAX_TOKENS is the default output limit; the
+# E1 flag `--think-max-tokens` sets another one (prereg v4 block H-b: 32,768 on a 40,960-token
+# server context), which only changes `max_tokens` in the request.
 THINK_MAX_TOKENS = 8192
+# finish reasons of a reply cut off by its output limit (OpenAI-compatible, Anthropic)
+CUT_OFF = ("length", "max_tokens")
 THINK_FORMAT = (
     'JSON format: {"value": ..., "statement": "...", "citations": [{"object_id": "...", '
     '"revision": 1, "quote": "..."}]}'
@@ -124,6 +132,7 @@ class WriterOutput:
     prompt_tokens: int = 0
     completion_tokens: int = 0
     access: dict[str, Any] | None = None  # D0full: what the writer was given (`FullAccess.note`)
+    finish_reason: str = ""  # of the model reply; empty when no request was sent
 
 
 def records_for(
@@ -259,7 +268,10 @@ def writer_request(
     records: list[tuple[Doc, str]],
     delta_since: datetime | None = None,
     think: bool = False,
+    max_tokens: int | None = None,
 ) -> dict[str, Any]:
+    """`max_tokens`: the output limit; by default THINK_MAX_TOKENS for a thinking request, else 700.
+    The request text does not depend on it."""
     lines = [
         f"Knowledge item: {slot.description}",
         f"Value format: {VALUE_FORMAT[slot.vtype]}",
@@ -280,12 +292,14 @@ def writer_request(
     lines += ["", TASK]
     if think:
         lines.append(THINK_FORMAT)
+    if max_tokens is None:
+        max_tokens = THINK_MAX_TOKENS if think else 700
     return {
         "messages": [
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": "\n".join(lines)},
         ],
-        "max_tokens": THINK_MAX_TOKENS if think else 700,
+        "max_tokens": max_tokens,
         "schema": None if think else WRITER_SCHEMA,
         "purpose": "write",
     }
@@ -326,19 +340,26 @@ def derive(
     since: datetime | None = None,
     think: bool = False,
     full: bool = False,
+    max_tokens: int | None = None,
+    reasoning: bool = False,
 ) -> WriterOutput:
-    """`full`: every in-scope record (D0full, `full_records`) instead of the BM25 selection."""
+    """`full`: every in-scope record (D0full, `full_records`) instead of the BM25 selection.
+    `max_tokens`: the output limit (`writer_request`). `reasoning`: the writer reasons before it
+    answers (the definition-item writer of prereg v4 block H-a), so, as for a thinking request, a
+    reply cut off by the output limit is unreadable."""
     access = full_records(log, slot, t) if full else None
     records = access.records if access is not None else records_for(log, slot, t, since)
     if since is not None and not records:
         # append-only delta with no new in-scope records: nothing to derive, no model call
         return WriterOutput(None, "", [], True, [], 0, 0)
-    res = llm.complete(**writer_request(world, slot, t, records, since, think))
-    if think and res.finish_reason == "length":
+    res = llm.complete(**writer_request(world, slot, t, records, since, think, max_tokens))
+    if (think or reasoning) and res.finish_reason in CUT_OFF:
         # the reasoning used the whole budget: whatever braces are left in it are not an answer
         readset = [(d.doc_id, d.revision) for d, _ in records]
-        return WriterOutput(None, "", [], False, readset, res.prompt_tokens, res.completion_tokens)
+        usage = (res.prompt_tokens, res.completion_tokens)
+        return WriterOutput(None, "", [], False, readset, *usage, finish_reason=res.finish_reason)
     out = parse_writer(res, records)
+    out.finish_reason = res.finish_reason
     if access is not None:
         out.access = access.note()
     return out

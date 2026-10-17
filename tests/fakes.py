@@ -7,11 +7,10 @@ import re
 import threading
 from collections.abc import Callable, Sequence
 from dataclasses import replace
-from types import SimpleNamespace
 from typing import Any
 
 from memshift.gen.llm_render import RETRY_MARK
-from memshift.llm import LLMClient, LLMResult, default_extra_body
+from memshift.llm import LLMClient, LLMResult, default_extra_body, is_claude
 from memshift.textutil import sha256_json
 
 _REC = re.compile(r"<record id=(\S+) rev=(\d+)>\n(.*?)\n</record>", re.S)
@@ -133,8 +132,12 @@ class RecordingLLM(FakeLLM):
     def request_key(
         self, messages: Sequence[dict[str, str]], max_tokens: int, schema: dict[str, Any] | None
     ) -> tuple[str, dict[str, Any]]:
-        shape = SimpleNamespace(model=self.model, extra_body=self.extra_body)
-        body = LLMClient.request_body(shape, messages, max_tokens, schema)  # type: ignore[arg-type]
+        # a client without HTTP or cache: `request_body` reads only the model, extras and API, so
+        # a Claude model gets the Messages API body it would send
+        shape = LLMClient.__new__(LLMClient)
+        shape.model, shape.extra_body = self.model, self.extra_body
+        shape.api = "anthropic" if is_claude(self.model) else "openai"
+        body = shape.request_body(messages, max_tokens, schema)
         return sha256_json(body), body
 
     def complete(

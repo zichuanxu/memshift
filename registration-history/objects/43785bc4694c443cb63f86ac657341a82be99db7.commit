@@ -1,0 +1,15 @@
+tree 63bc619acacaef290b162a0fca3ffcf64a3a9f47
+parent 5255a2a50e5c5b41a1cd712546f99d051759a197
+author zichuanxu <zichuanxu28@gmail.com> 1792202737 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792202737 +0900
+
+Paper figures: writers (main text), registered predictions, reader decomposition and cited-key misses; interval bars for estimate marks
+
+New figures, each with a data function and tests:
+- fig:writers (§4.2): (a) B x D at D_m after S_def per program set against how often the set's programs are right at the fork (ex_round3_writers, exploratory); (b) r_0 against B x D for the definition-item writers. The numbers it shows leave the prose of §4.1-4.3 so the main text still ends on page 9.
+- fig:registered (appendix B, two float pages): every registered prediction with an estimate against its registered bar, one panel and scale per question, one sub-row per shift or arm, judged as registered (point estimate or interval).
+- fig:reader (appendix B): the store part of B x D and what each reader adds or loses (arrows).
+- fig:misses (appendix C): the cited-cluster key's misses by cause.
+figstyle gains interval_bar (95% interval as a soft bar, estimate as a stroke), now used by fig_classsplit, fig_registered and fig_native_systems. The G-b and writers inputs are restaged once all program sets have run.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

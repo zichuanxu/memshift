@@ -1,0 +1,8 @@
+tree 71e9f6402c91715cf2ee6ac0f4ed3872f14d57f6
+parent 6408937d543b3407b0fdb2125af308eefe842dcb
+author zichuanxu <zichuanxu28@gmail.com> 1792182560 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792182560 +0900
+
+round3_paper: shorter X1 row in tab_round3 (fits the 6.5in text block); the caption says X1 counts (item class, shift) pairs
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

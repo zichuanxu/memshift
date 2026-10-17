@@ -1,0 +1,13 @@
+tree 815dc37502410e702f26e14770bc41069242748c
+parent 72261c05212f96598a7f26bef2823bae5d4e9afe
+author zichuanxu <zichuanxu28@gmail.com> 1792133859 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792133859 +0900
+
+Paper round 3: reviewer text fixes, registration-history scripts, round-3 analyses of committed runs
+
+Abstract leads with D_m; S_del naming unified; writer agreement defined with gold; worked
+m/r/a example; shift-safe claim restricted. Exploratory analyses (no model calls): shift vs
+drift composition and natural-branch pairing, stored value vs reader, D_m deletion failures,
+query-time view vs stored D_m.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

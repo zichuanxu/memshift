@@ -1,5 +1,5 @@
 """Emit LaTeX macros for every number the paper states (plan §10: tables and figures regenerate
-from runs). Sources are listed in paper/results_sources.json (macro group -> run directory whose
+from runs). Sources are listed in results/sources.json (macro group -> run directory whose
 analysis/*.json is committed); world statistics are recomputed from the seeded generator.
 Missing inputs yield a visible placeholder (\\textbf{??}) instead of a number.
 
@@ -900,6 +900,20 @@ def synth_numbers(m: dict[str, Any]) -> dict[str, str]:
     return out
 
 
+SWITCH_PROSE = {  # the three registered tiers in running prose (the tables keep `Tier.label`)
+    "Same": "the same-tier switch",
+    "Up": "the switch up to Qwen3.8-27B",
+    "Down": "the switch down from Qwen3.8-27B",
+}
+
+
+def _and(items: list[str]) -> str:
+    """A list in prose ("a", "a and b", "a, b and c"); "none" when empty."""
+    if not items:
+        return "none"
+    return items[0] if len(items) == 1 else f"{', '.join(items[:-1])} and {items[-1]}"
+
+
 def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
     """Block M1 (prereg v2 §2): pooled path 3 over the eight writer switches (M1-a), and per
     switch the calibration slope and AUROC, the survival of D=1 minus D=0 at source-epoch binding
@@ -919,9 +933,9 @@ def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
         MISSING if not p3 else ("triggered" if p3.get("triggered") else "not triggered")
     )
     out["MOnePathThreeHolds"] = _verdict(None if not p3 else not p3["triggered"])
-    labels = {tier_key(m, t): t.label for t in TIERS}
+    labels = {tier_key(m, t): SWITCH_PROSE.get(t.tag, f"the switch to {t.label}") for t in TIERS}
     caveats = [labels.get(k) or _tex_text(k) for k in p3.get("tier_caveats", [])]
-    out["MOneCaveats"] = (", ".join(caveats) or "none") if p3 else MISSING
+    out["MOneCaveats"] = _and(caveats) if p3 else MISSING
     keys = [tier_key(m, t) for t in TIERS]
     present = [k for k in keys if k]
     out["MOneStaged"] = str(len(present)) if present else MISSING
@@ -1315,7 +1329,7 @@ def stage4_numbers(inp: dict[str, Any]) -> dict[str, str]:
 
 
 def build_macros(root: Path) -> dict[str, str]:
-    src_file = root / "paper" / "results_sources.json"
+    src_file = root / "results" / "sources.json"
     sources = json.loads(src_file.read_text()) if src_file.exists() else {}
     macros: dict[str, str] = world_stats(list(range(10)))
     groups: list[tuple[str, Callable[[dict[str, Any]], dict[str, str]], str]] = [
@@ -1353,6 +1367,7 @@ def build_macros(root: Path) -> dict[str, str]:
         ex_numbers,
         ex_review_paper,
         ex_round2,
+        ex_round3,
         key_audit,
         l_tokens,
     )
@@ -1365,10 +1380,18 @@ def build_macros(root: Path) -> dict[str, str]:
         key_audit.numbers(key_audit.load(root, sources)),  # offline key audit (no model)
         l_tokens.numbers(l_tokens.load(root, sources)),  # block L: token shares (template counts)
         ex_round2.numbers(ex_round2.load(root, sources)),  # review round 2 (decisions 2026-10-08)
+        ex_round3.numbers(ex_round3.load(root, sources)),  # review round 3 (decisions 2026-10-16)
     ):
         if dup := macros.keys() & ex.keys():
             raise ValueError(f"exploratory macro collides with an existing one: {sorted(dup)[:3]}")
         macros.update(ex)
+    # Registered round-3 verdicts (prereg/v4_round3.md, v4b_round3_claude.md)
+    from memshift.analysis import round3_paper  # lazy, as above
+
+    reg = round3_paper.numbers(round3_paper.load(root, sources))
+    if dup := macros.keys() & reg.keys():
+        raise ValueError(f"round-3 macro collides with an existing one: {sorted(dup)[:3]}")
+    macros.update(reg)
     for text in (
         "ResultsAbstract",
         "ResultsIntro",

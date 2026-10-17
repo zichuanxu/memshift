@@ -1,0 +1,14 @@
+tree 79845c0f08496a36b3abe1fe90fefa4083708e40
+parent 81fefc9e7fabbd8dde9c008fe9c890b396998890
+author zichuanxu <zichuanxu28@gmail.com> 1792233992 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792233992 +0900
+
+Independent review applied: every registered verdict is counted (73: 55 held, 13 failed, 5 mixed) with tab:registered-tests for the predictions outside fig:registered; natural branch reported as one failed joint prediction; Figure 3b caption, the r_0 claim and the retention title corrected
+
+- tab:registered-tests (generated from staged verdicts) lists the 28 registered predictions that are not rows of fig:registered, plus the diagnostic tests per tier, switch, horizon and system (not counted); RegTab* and RegAll* macros
+- scope fixes: user's-words programs from three writers, cited-cluster effect pooled over D, deletion interaction exploratory, unnamed-probe prediction failed, five shifts throughout, the two tests that hold by construction named, five other writers
+- plan appendix: the native-system reading was fixed with Mem0's result known; the replication's class rows are exploratory, not registered
+- audit: Cognee and MemOS floor and cost from the native-system experiment
+- sign wording, "claim level" and "slot" removed from the text, abstract trimmed
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

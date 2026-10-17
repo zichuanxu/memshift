@@ -4,7 +4,7 @@
 
 JSONL 原始结果不进 git（留在计算主机，可由种子与代码提交重跑）；`stage*_*/` 是合并分析，其 manifest 列出来源运行与各自 manifest 的 SHA256。
 
-Cognee 的 18 个原生运行（`e5_cognee_*`、`e5_cognee_noise_*`）的 `manifest.json` 每个 12–13 MB（内含摄入日志），不进 git，与原始结果一起留在计算主机；各自的 SHA256 记在 `stage4_n_e5` 的 manifest 中。
+Cognee 的 18 个原生运行（`e5_cognee_*`、`e5_cognee_noise_*`）的 `manifest.json` 每个 12–13 MB，共约 211 MB（`files_sha256` 列出该运行 Cognee 存储中 5.6 万至 6.3 万个文件的 SHA256）。它们在工作仓库的 git 中；公开发布不把它们放进 GitHub，而是与原始结果一起放进 Hugging Face 数据集，GitHub 上保留这些运行的 `env.json`。各自的 SHA256 记在 `stage4_n_e5` 的 manifest 中。
 
 ## 作废的运行（保留记录，不进任何合并分析）
 

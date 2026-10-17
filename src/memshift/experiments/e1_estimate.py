@@ -72,6 +72,7 @@ class Recorder:
 
     def __init__(self, extra_body: dict[str, Any] | None = None):
         self.model = MODEL
+        self.api = "openai"  # LLMClient.request_body branches on it
         self.extra_body = extra_body or {}
         self.requests: list[tuple[str, str]] = []  # (cache key, purpose)
         self._lock = threading.Lock()

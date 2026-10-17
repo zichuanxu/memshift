@@ -1,0 +1,8 @@
+tree 2ad845a41893a83ca87fa0c0247391fe8e3208b0
+parent 4ab6315b670a14b5d4a21fad2b53fc8b8e656043
+author zichuanxu <zichuanxu28@gmail.com> 1792133877 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792133877 +0900
+
+Registration v4 amendment: Claude 5.5 settings the API accepts; Mem0 2.2.1 is add-only (before any Claude or X run)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

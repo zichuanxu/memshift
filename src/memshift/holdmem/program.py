@@ -11,6 +11,12 @@ The request depends only on the item description, its value type, the definition
 effect (definition items) and the declared sources, never on world data or on the time beyond the
 definition version, so identical items across worlds and times share one cached response. A source
 change re-runs the same program on the new records; a definition change is a new request.
+
+Program sets from other writers (prereg v4 block G-b) send the same request text through another
+client: another model, a sampling temperature (none for a Claude model, see
+`experiments.e1.program_extra_body`), and a sample index that the client's body carries as
+`memshift_sample` (part of the cache key, removed before the HTTP request), so each sample has its
+own cache entry.
 """
 
 from __future__ import annotations
@@ -172,9 +178,50 @@ def fields_text(sources: tuple[str, ...]) -> str:
     return "\n".join([COMMON_FIELDS, *(SOURCE_FIELDS[s] for s in sources)])
 
 
-def program_request(world: World, slot: Slot, t: datetime, ra: bool = False) -> dict[str, Any]:
+# prereg v4b block V: the six fixed definitions as the user would state them, with the same sources,
+# thresholds, windows and conditions as their `KAPPA_DEFS` statements (fixed in the registration)
+USER_WORDS: dict[str, dict[str, str]] = {
+    "important_contact": {
+        "v1": "Count someone as an important contact if they've been at five or more of my "
+        "one-off meetings in the past 90 days. Recurring series don't count.",
+        "v2": "Count someone as an important contact if they've been at two or more of my "
+        "one-off meetings in the past 30 days. Recurring series don't count.",
+    },
+    "close_friend": {
+        "v1": "Anyone I've had six or more chat messages with in the past 30 days, theirs and "
+        "mine together, is a close friend.",
+        "v2": "Anyone I've had four or more chat messages with in the past 14 days, theirs and "
+        "mine together, is a close friend.",
+    },
+    "active_project": {
+        "v1": "A project is active as long as it still has a task I haven't finished.",
+        "v2": "A project is active if any of its tasks, finished or not, was created or changed "
+        "in the past 14 days.",
+    },
+    "working_hours": {
+        "v1": "My working hours are whatever my latest 'Working hours' note says.",
+        "v2": "Go by my one-off work meetings in the past 30 days: from the earliest start to "
+        "the latest end, widened to whole hours.",
+    },
+    "vip_sender": {
+        "v1": "Treat a contact as a VIP sender if they've emailed me four or more times in the "
+        "past 30 days.",
+        "v2": "Treat a contact as a VIP sender if they've emailed me three or more times in the "
+        "past 30 days, or at least once if I've starred them.",
+    },
+    "overdue_task": {
+        "v1": "A task is overdue if I haven't finished it and its due date is before today.",
+        "v2": "Only high-priority tasks count as overdue: not finished, and due before today.",
+    },
+}
+
+
+def program_request(
+    world: World, slot: Slot, t: datetime, ra: bool = False, user_words: bool = False
+) -> dict[str, Any]:
     """Writer request for the item's program. `t` only selects the definition version. `ra`: the
-    retraction-aware variant (a different request, so it never collides with the D1s one)."""
+    retraction-aware variant (a different request, so it never collides with the D1s one).
+    `user_words` (prereg v4b block V): the definition in effect is stated as in `USER_WORDS`."""
     lines = [
         f"Knowledge item: {slot.description}",
         f"Value format: {VALUE_FORMAT[slot.vtype]}",
@@ -182,6 +229,10 @@ def program_request(world: World, slot: Slot, t: datetime, ra: bool = False) -> 
     if slot.kappa_id:
         ver = world.kappa_version(slot.kappa_id, t)
         stmt = world.kappa_defs[slot.kappa_id][ver].statement
+        if user_words:
+            if slot.kappa_id not in USER_WORDS:
+                raise ValueError(f"no user-words statement for {slot.kappa_id} (fixed six only)")
+            stmt = USER_WORDS[slot.kappa_id][ver]
         lines.append(f"Definition in effect ({slot.kappa_id} {ver}): {stmt}")
     is_set = slot.vtype.startswith("set_")
     if ra:
@@ -341,10 +392,16 @@ def _run_cached(code: str, log: SourceLog, slot: Slot, t: datetime) -> tuple[boo
 
 
 def synthesise(
-    llm: LLMClient, world: World, log: SourceLog, slot: Slot, t: datetime
+    llm: LLMClient,
+    world: World,
+    log: SourceLog,
+    slot: Slot,
+    t: datetime,
+    user_words: bool = False,
 ) -> ProgramOutcome:
-    """Ask the writer for the item's program and run it on the records live at t."""
-    res = llm.complete(**program_request(world, slot, t))
+    """Ask the writer for the item's program and run it on the records live at t. `user_words`:
+    see `program_request`."""
+    res = llm.complete(**program_request(world, slot, t, user_words=user_words))
     usage = (res.prompt_tokens, res.completion_tokens)
     code = extract_code(res)
     if code is None:

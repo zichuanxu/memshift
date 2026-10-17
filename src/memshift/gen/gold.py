@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from memshift.gen.kappa import SCOPE_PREDICATES, evaluate
+from memshift.gen.kappa import evaluate, scope_predicate
 from memshift.gen.model import Slot, World
 from memshift.gen.state import SourceLog
 
@@ -95,7 +95,7 @@ def gold_at(world: World, log: SourceLog, slot: Slot, t: datetime) -> Gold:
         assert slot.kappa_id is not None
         version = world.kappa_version(slot.kappa_id, t)
         value, ids = evaluate(slot.kappa_id, snap, t, version)
-        g = _mk(value, _with_revs(log, t, ids), SCOPE_PREDICATES[slot.kappa_id])
+        g = _mk(value, _with_revs(log, t, ids), scope_predicate(slot.kappa_id))
         g.kappa_version = version
         return g
     raise ValueError(slot.kind)

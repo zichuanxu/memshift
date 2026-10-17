@@ -1,4 +1,5 @@
-"""Envelope schema (copied from reference/research_2/schemas/response.schema.json on 2026-09-28).
+"""Envelope schema (`envelope.schema.json`, copied on 2026-09-28 from reference material that is
+not part of this repository).
 
 `diagnostics.items[{item_id, D, B, status, key}]` is the MemShift extension; the schema leaves
 `diagnostics` open, so it validates unchanged.

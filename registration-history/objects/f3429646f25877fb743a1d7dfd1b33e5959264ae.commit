@@ -1,0 +1,8 @@
+tree 075cdef9663f219b34c7bbac10539a51ef6895dd
+parent 87d42fd2ed063c98b8fa18ff68d24df61f29c743
+author zichuanxu <zichuanxu28@gmail.com> 1792162450 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792162450 +0900
+
+Batch 2 review: abstract names the main study's stores for the Claude reader; limitations state what B=0 covers and drop an over-strong reading of H-a
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

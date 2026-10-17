@@ -1,7 +1,7 @@
 """Paper numbers and table of the offline key audit (`analysis.e1_keys`; prereg/decisions.md
 2026-09-30, "WS2 offline audit"). The audit uses no model: the source-epoch key, the oracle key and
 the scope key on definition items are functions of the world, so what they detect is known before
-any run. The source is the staged audit named `keyaudit` in paper/results_sources.json
+any run. The source is the staged audit named `keyaudit` in results/sources.json
 (`analysis/e1_keys.json`, worlds 1000-1019, branches src / def / orphan); a stage that is not there
 renders every macro and table cell as the MISSING marker.
 
@@ -160,13 +160,13 @@ def numbers(view: Mapping[str, Any] | None) -> dict[str, str]:
 # ------------------------------------------------------------------------------------- table
 CAPTION = (
     r"Offline audit of the binding keys on the {n} test worlds (no model): what each key "
-    r"invalidates, from the worlds alone. Keys: the source-epoch key; the oracle key, built from "
-    r"the gold dependencies; the scope key, built from what each definition ranges over "
-    r"(definition items only). False invalidation is the share of unchanged item-times (gold "
-    r"value and status equal to those before the shift) that the key had nevertheless "
-    r"invalidated, for all items and for definition (def.), single-field (field) and free-text "
+    r"invalidates, from the worlds alone. Keys: the source-epoch key, the oracle key (built from "
+    r"the gold dependencies) and the scope key (built from what each definition ranges over, "
+    r"definition items only). False invalidation is the share of unchanged item-times (gold "
+    r"value and status equal to those before the shift) that the key invalidated. It is given "
+    r"for all items and for definition (def.), single-field (field) and free-text "
     r"(free) items. Re-derivations are invalidations over the four checkpoints, one writer "
-    r"request each: per world for all and definition items, and in total over the {n} worlds "
+    r"request each, per world for all and definition items, and in total over the {n} worlds "
     r"for single-field items. Def.\ share: the share of the {cp} definition item-times of a "
     r"branch that were re-derived. Item-times with a changed / unchanged gold value: $\Ssrc$ "
     r"{src_c} / {src_u}, $\Sdef$ {def_c} / {def_u}, $\Sdel$ {or_c} / {or_u}. No key missed a "

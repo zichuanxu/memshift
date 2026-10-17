@@ -1,0 +1,8 @@
+tree 271df45091cd207c722f54ea53c890f839394e30
+parent fdfddb469f6db67059c2bef14fa871c14dc5bbc9
+author zichuanxu <zichuanxu28@gmail.com> 1792182342 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792182342 +0900
+
+round3_paper: block X table wording in the paper's terms (query-time view, missed invalidation; a self-contained caption without \cref, so the generated tables compile alone)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,31 @@
+tree 2dcca72617a3a96bbe2b4fe6375a8cbbd3f82ddb
+parent 0717f1f942d80079042560ce09d3fcac8e4fc59f
+author zichuanxu <zichuanxu28@gmail.com> 1792176586 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792176586 +0900
+
+Paper batch 4 of round 3: unnamed probes (Q1, Q2), held-out definitions (G1, G2) and definitions in the user's own words (V1, V2) judged, staged and written into the paper
+
+Stage runs/stage7_round3 again from the raw runs (analysis code 0717f1f, clean): q.json is block Q on
+its seven e1_q_unnamed runs, g_a.json block G on the twelve G-a runs (G3 not judged: no program-set
+run given), v.json block V on its 45 runs with the 45 G-b runs of the same writers and samples that
+only V's per-writer comparison reads; u, u_delta, n, y, h_sonnet and h_opus differ only in the code
+field. Commit the manifests, env and hash checks of the 109 new runs. RThreeQ, RThreeGA and RThreeV
+macros, the Q, G and V rows of tab_round3, tab_heldout and tab_userwords generated; tests pin the
+verdicts and values, the named side of Q against the published class split, and the two-way
+intervals against the one-way ones.
+
+Verdicts: Q pairing ok (10,892 anchor answers); Q1 fails (B effect at D=1 after S_def, definition
+items, unnamed minus named 0.0 pp [-1.3, +1.2]; +38.0 pp either way), Q2 holds (B x D +39.5 pp
+[+33.3, +45.2]). G-a: G1 holds (two-way B x D after S_def +33.0 pp [+22.1, +44.9] at D=1, +27.4 pp
+[+15.2, +40.7] at D_m), G2 holds (after S_src +26.7 [+16.6, +38.3], +23.3 [+12.9, +36.4]). V pairing
+ok (103,680); V1 holds (+32.8 pp [+24.3, +41.3]), V2 holds (+22.4 pp [+14.7, +29.6]); per writer the
+user's words changed Update at D1sB1_source by +1.0 (Qwen3.5-9B), -7.3 (Sonnet) and -18.1 pp (Opus).
+
+Paper: abstract replaces "Intervals cover new worlds, not new definitions." (318 words, unchanged);
+introduction bullet, 4.1 paragraph on held-out definitions, the setup's probe sentence with Q's
+verdict, 4.2 with V and its registered reading, the statistics sentence and the Worlds limitation
+revised; appendix B round-3 subsection (G-a, Q and V paragraphs, held-out and user's-words tables),
+status, readings and the extended limitation on intervals updated. Prose elsewhere compressed so the
+main text still ends on page 9.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,632 @@
+{
+ "status": "exploratory, post hoc: answers a reviewer question and changes no registered contrast, margin, threshold or verdict",
+ "question": "incremental B x D attributable to the shift, relative to the natural branch",
+ "stage": "runs/stage2_e1",
+ "sources": [
+  "e1_test_s1000-1003_20260928T202242Z",
+  "e1_test_s1004-1007_20260928T202243Z",
+  "e1_test_s1008-1011_20260928T202244Z",
+  "e1_test_s1012-1015_20260928T202245Z",
+  "e1_test_s1016-1019_20260928T202246Z"
+ ],
+ "n_worlds": 20,
+ "units": "fractions (multiply by 100 for percentage points); 95% world-bootstrap intervals, 2,000 draws, seed 996",
+ "composition": {
+  "src": {
+   "pooled_definition_share": 0.2851027397260274,
+   "registered_all_item": {
+    "est": 0.07363013698630137,
+    "lo": 0.05033003300330033,
+    "hi": 0.09847806624888093,
+    "width": 0.048148033245580604,
+    "n_worlds": 20,
+    "n_items": 1168
+   },
+   "parts": {
+    "shift": {
+     "n": {
+      "definition": 111,
+      "other": 676,
+      "all": 787
+     },
+     "definition_share": {
+      "est": 0.14104193138500634,
+      "lo": 0.09457755359394704,
+      "hi": 0.19011406844106463,
+      "width": 0.09553651484711759,
+      "n_worlds": 20,
+      "n_items": 787
+     },
+     "class": {
+      "definition": {
+       "est": 0.24324324324324326,
+       "lo": 0.125,
+       "hi": 0.3565217391304348,
+       "width": 0.23152173913043478,
+       "n_worlds": 18,
+       "n_items": 111
+      },
+      "all": {
+       "est": 0.025412960609911054,
+       "lo": 0.005115089514066497,
+       "hi": 0.044213263979193757,
+       "width": 0.03909817446512726,
+       "n_worlds": 20,
+       "n_items": 787
+      },
+      "other": {
+       "est": -0.010355029585798817,
+       "lo": -0.046948356807511735,
+       "hi": 0.019943019943019943,
+       "width": 0.06689137675053168,
+       "n_worlds": 20,
+       "n_items": 676
+      }
+     },
+     "contribution": {
+      "definition": {
+       "est": 0.03430749682337993,
+       "lo": 0.015306122448979591,
+       "hi": 0.056265984654731455,
+       "width": 0.04095986220575186,
+       "n_worlds": 20,
+       "n_items": 787
+      },
+      "other": {
+       "est": -0.008894536213468869,
+       "lo": -0.03841229193341869,
+       "hi": 0.017879948914431672,
+       "width": 0.05629224084785037,
+       "n_worlds": 20,
+       "n_items": 787
+      }
+     },
+     "at_pooled_mix": {
+      "est": 0.06194653278754965,
+      "lo": 0.03344544525966707,
+      "hi": 0.09193855907265629,
+      "width": 0.05849311381298922,
+      "n_worlds": 20,
+      "n_items": 787
+     },
+     "identity_residual": -3.469446951953614e-18
+    },
+    "drift": {
+     "n": {
+      "definition": 222,
+      "other": 159,
+      "all": 381
+     },
+     "definition_share": {
+      "est": 0.5826771653543307,
+      "lo": 0.5142857142857142,
+      "hi": 0.6507462686567164,
+      "width": 0.13646055437100213,
+      "n_worlds": 20,
+      "n_items": 381
+     },
+     "class": {
+      "definition": {
+       "est": 0.2882882882882883,
+       "lo": 0.20502092050209206,
+       "hi": 0.36486486486486486,
+       "width": 0.1598439443627728,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "all": {
+       "est": 0.1732283464566929,
+       "lo": 0.11244019138755981,
+       "hi": 0.24,
+       "width": 0.12755980861244018,
+       "n_worlds": 20,
+       "n_items": 381
+      },
+      "other": {
+       "est": 0.012578616352201259,
+       "lo": -0.05405405405405406,
+       "hi": 0.08270676691729323,
+       "width": 0.13676082097134729,
+       "n_worlds": 20,
+       "n_items": 159
+      }
+     },
+     "contribution": {
+      "definition": {
+       "est": 0.1679790026246719,
+       "lo": 0.11306532663316583,
+       "hi": 0.22160664819944598,
+       "width": 0.10854132156628014,
+       "n_worlds": 20,
+       "n_items": 381
+      },
+      "other": {
+       "est": 0.005249343832020997,
+       "lo": -0.022443890274314215,
+       "hi": 0.035326086956521736,
+       "width": 0.05776997723083595,
+       "n_worlds": 20,
+       "n_items": 381
+      }
+     },
+     "at_pooled_mix": {
+      "est": 0.09118419919014387,
+      "lo": 0.03788686361813797,
+      "hi": 0.15365677212313095,
+      "width": 0.11576990850499297,
+      "n_worlds": 20,
+      "n_items": 381
+     },
+     "identity_residual": 0.0
+    }
+   }
+  },
+  "def": {
+   "pooled_definition_share": 0.6935483870967742,
+   "registered_all_item": {
+    "est": 0.2670250896057348,
+    "lo": 0.21243523316062177,
+    "hi": 0.3184931506849315,
+    "width": 0.10605791752430974,
+    "n_worlds": 20,
+    "n_items": 558
+   },
+   "parts": {
+    "shift": {
+     "n": {
+      "definition": 222,
+      "other": 0,
+      "all": 222
+     },
+     "definition_share": {
+      "est": 1.0,
+      "lo": 1.0,
+      "hi": 1.0,
+      "width": 0.0,
+      "n_worlds": 20,
+      "n_items": 222
+     },
+     "class": {
+      "definition": {
+       "est": 0.38738738738738737,
+       "lo": 0.3039647577092511,
+       "hi": 0.4694835680751174,
+       "width": 0.1655188103658663,
+       "n_worlds": 20,
+       "n_items": 222
+      },
+      "all": {
+       "est": 0.38738738738738737,
+       "lo": 0.3039647577092511,
+       "hi": 0.4694835680751174,
+       "width": 0.1655188103658663,
+       "n_worlds": 20,
+       "n_items": 222
+      }
+     },
+     "contribution": {
+      "definition": {
+       "est": 0.38738738738738737,
+       "lo": 0.3039647577092511,
+       "hi": 0.4694835680751174,
+       "width": 0.1655188103658663,
+       "n_worlds": 20,
+       "n_items": 222
+      }
+     },
+     "identity_residual": 0.0
+    },
+    "drift": {
+     "n": {
+      "definition": 165,
+      "other": 171,
+      "all": 336
+     },
+     "definition_share": {
+      "est": 0.49107142857142855,
+      "lo": 0.42934782608695654,
+      "hi": 0.5549132947976878,
+      "width": 0.12556546871073127,
+      "n_worlds": 20,
+      "n_items": 336
+     },
+     "class": {
+      "definition": {
+       "est": 0.3878787878787879,
+       "lo": 0.2925170068027211,
+       "hi": 0.4838709677419355,
+       "width": 0.19135396093921442,
+       "n_worlds": 20,
+       "n_items": 165
+      },
+      "all": {
+       "est": 0.1875,
+       "lo": 0.1238390092879257,
+       "hi": 0.2507936507936508,
+       "width": 0.1269546415057251,
+       "n_worlds": 20,
+       "n_items": 336
+      },
+      "other": {
+       "est": -0.005847953216374269,
+       "lo": -0.03954802259887006,
+       "hi": 0.026595744680851064,
+       "width": 0.06614376727972113,
+       "n_worlds": 20,
+       "n_items": 171
+      }
+     },
+     "contribution": {
+      "definition": {
+       "est": 0.19047619047619047,
+       "lo": 0.13513513513513514,
+       "hi": 0.2514450867052023,
+       "width": 0.11630995157006718,
+       "n_worlds": 20,
+       "n_items": 336
+      },
+      "other": {
+       "est": -0.002976190476190476,
+       "lo": -0.01971830985915493,
+       "hi": 0.014044943820224719,
+       "width": 0.03376325367937965,
+       "n_worlds": 20,
+       "n_items": 336
+      }
+     },
+     "at_pooled_mix": {
+      "est": 0.26722059302704465,
+      "lo": 0.19470010718856526,
+      "hi": 0.33594349762014436,
+      "width": 0.1412433904315791,
+      "n_worlds": 20,
+      "n_items": 336
+     },
+     "identity_residual": 0.0
+    }
+   }
+  },
+  "orphan": {
+   "pooled_definition_share": 0.17430673457838144,
+   "registered_all_item": {
+    "est": 0.04980192416525184,
+    "lo": 0.016552511415525113,
+    "hi": 0.08084163898117387,
+    "width": 0.06428912756564875,
+    "n_worlds": 20,
+    "n_items": 1767
+   },
+   "parts": {
+    "shift": {
+     "n": {
+      "definition": 48,
+      "other": 1322,
+      "all": 1370
+     },
+     "definition_share": {
+      "est": 0.035036496350364967,
+      "lo": 0.016224188790560472,
+      "hi": 0.05511811023622047,
+      "width": 0.03889392144566,
+      "n_worlds": 20,
+      "n_items": 1370
+     },
+     "class": {
+      "definition": {
+       "est": 0.3958333333333333,
+       "lo": 0.15,
+       "hi": 0.6,
+       "width": 0.44999999999999996,
+       "n_worlds": 9,
+       "n_items": 48
+      },
+      "all": {
+       "est": -0.00072992700729927,
+       "lo": -0.04491017964071856,
+       "hi": 0.04332386363636364,
+       "width": 0.0882340432770822,
+       "n_worlds": 20,
+       "n_items": 1370
+      },
+      "other": {
+       "est": -0.015128593040847202,
+       "lo": -0.05918057663125948,
+       "hi": 0.025236593059936908,
+       "width": 0.08441716969119639,
+       "n_worlds": 20,
+       "n_items": 1322
+      }
+     },
+     "contribution": {
+      "definition": {
+       "est": 0.013868613138686132,
+       "lo": 0.003032600454890068,
+       "hi": 0.027924528301886794,
+       "width": 0.024891927846996724,
+       "n_worlds": 20,
+       "n_items": 1370
+      },
+      "other": {
+       "est": -0.014598540145985401,
+       "lo": -0.05731523378582202,
+       "hi": 0.024339360222531293,
+       "width": 0.08165459400835332,
+       "n_worlds": 20,
+       "n_items": 1370
+      }
+     },
+     "at_pooled_mix": {
+      "est": 0.05650483838147742,
+      "lo": -0.0028182660786591485,
+      "hi": 0.11469427537383672,
+      "width": 0.11751254145249587,
+      "n_worlds": 20,
+      "n_items": 1370
+     },
+     "identity_residual": -1.1926223897340549e-18
+    },
+    "drift": {
+     "n": {
+      "definition": 260,
+      "other": 137,
+      "all": 397
+     },
+     "definition_share": {
+      "est": 0.654911838790932,
+      "lo": 0.6052631578947368,
+      "hi": 0.7020725388601037,
+      "width": 0.09680938096536684,
+      "n_worlds": 20,
+      "n_items": 397
+     },
+     "class": {
+      "definition": {
+       "est": 0.34615384615384615,
+       "lo": 0.29432624113475175,
+       "hi": 0.39299610894941633,
+       "width": 0.09866986781466458,
+       "n_worlds": 20,
+       "n_items": 260
+      },
+      "all": {
+       "est": 0.22418136020151133,
+       "lo": 0.17530864197530865,
+       "hi": 0.2722371967654987,
+       "width": 0.09692855479019002,
+       "n_worlds": 20,
+       "n_items": 397
+      },
+      "other": {
+       "est": -0.0072992700729927005,
+       "lo": -0.04375,
+       "hi": 0.02962962962962963,
+       "width": 0.07337962962962963,
+       "n_worlds": 20,
+       "n_items": 137
+      }
+     },
+     "contribution": {
+      "definition": {
+       "est": 0.22670025188916876,
+       "lo": 0.18439716312056736,
+       "hi": 0.2710526315789474,
+       "width": 0.08665546845838001,
+       "n_worlds": 20,
+       "n_items": 397
+      },
+      "other": {
+       "est": -0.0025188916876574307,
+       "lo": -0.015,
+       "hi": 0.010282776349614395,
+       "width": 0.025282776349614393,
+       "n_worlds": 20,
+       "n_items": 397
+      }
+     },
+     "at_pooled_mix": {
+      "est": 0.05430998844306071,
+      "lo": 0.0207932962003197,
+      "hi": 0.0878219564269467,
+      "width": 0.06702866022662701,
+      "n_worlds": 20,
+      "n_items": 397
+     },
+     "identity_residual": 0.0
+    }
+   }
+  }
+ },
+ "natural_availability": {
+  "e1_runs": 108,
+  "e1_branches": [
+   "def",
+   "orphan",
+   "src"
+  ],
+  "natural_holdmem_runs": [
+   {
+    "experiment": "E2",
+    "cells": [
+     "holdmem_D0B0",
+     "holdmem_D0B1_source",
+     "holdmem_D1B0",
+     "holdmem_D1B1_source"
+    ],
+    "as_of": [
+     "2026-09-30T23:59"
+    ],
+    "runs": [
+     "e2_dev_same_20260928T171953Z",
+     "e2_rep_20260930T174558Z",
+     "e2_test_27b_20260928T200630Z",
+     "e2_test_same_20260928T202249Z",
+     "m1_read_google_gemma-4-12b-it_20260930T175459Z",
+     "m1_read_meta-llama_llama-3_1-8b-instruct_20260930T175603Z",
+     "m1_read_mistralai_ministral-3-14b-instruct-2512-bf16_20260930T174601Z",
+     "m1_read_openai_gpt-oss-20b_20260930T180608Z",
+     "m1_read_qwen_qwen3-8b_20260930T191737Z"
+    ]
+   },
+   {
+    "experiment": "E3",
+    "cells": [
+     "holdmem_D1B1_source"
+    ],
+    "as_of": [
+     "2026-01-31T23:59",
+     "2026-03-31T23:59",
+     "2026-12-31T23:59"
+    ],
+    "runs": [
+     "e3_dev_s0-4_20260928T154338Z",
+     "e3_dev_s5-9_20260928T154342Z",
+     "e3_rep_s1020-1029_20260929T125913Z",
+     "e3_rep_s1030-1039_20260929T125914Z",
+     "e3_test_s1000-1009_20260928T202247Z",
+     "e3_test_s1010-1019_20260928T202248Z"
+    ]
+   }
+  ],
+  "postfork_checkpoints": [
+   "2026-10-08T00:00",
+   "2026-10-15T00:00",
+   "2026-10-29T00:00",
+   "2026-11-26T00:00"
+  ],
+  "answers_at_postfork_checkpoints": 0,
+  "available": false
+ },
+ "def_branch_as_natural": {
+  "def_worlds_with_events_identical_to_natural": 20,
+  "def_worlds": 20,
+  "other_item_times_covered_by_def_probes": {
+   "src_shift_other": {
+    "item_times": 676,
+    "covered": 149
+   },
+   "src_drift_other": {
+    "item_times": 159,
+    "covered": 159
+   },
+   "orphan_shift_other": {
+    "item_times": 1322,
+    "covered": 250
+   },
+   "orphan_drift_other": {
+    "item_times": 137,
+    "covered": 137
+   }
+  }
+ },
+ "code": {
+  "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+  "dirty": false
+ },
+ "natural_counterfactual": null,
+ "run_plan": {
+  "natural_is_a_generator_branch": true,
+  "command": "python -m memshift.experiments.e1 --seeds 1000-1019 --branches natural --no-baselines --cells D0B0,D0B1_source,D1B0,D1B1_source --name e1_natural",
+  "runner": "RUN_MODULE=memshift.experiments.e1 scripts/run.sh --seeds 1000-1003 ... (chunks of four worlds, a distinct --name per chunk, as for the control runs)",
+  "environment": "MEMSHIFT_ENDPOINTS: the main model only (writer and reader), no embedding",
+  "no_discriminative_flag": "`--discriminative` keeps the natural branch's own drift-changed item-times plus an equal-size sample of its unchanged ones, so it misses most item-times that only a shift changed; without it every slot is probed at each checkpoint",
+  "checkpoints_weeks": [
+   1,
+   2,
+   4,
+   8
+  ],
+  "cells": [
+   "holdmem_D0B0",
+   "holdmem_D0B1_source",
+   "holdmem_D1B0",
+   "holdmem_D1B1_source"
+  ],
+  "reader_systems": [
+   "holdmem_D0B0",
+   "holdmem_D0B1_source",
+   "holdmem_D1B0",
+   "holdmem_D1B1_source",
+   "holdmem_json_arm"
+  ],
+  "pre_shift": "k = 0 reads and writes are the published runs' (same t0 world): cache hits",
+  "needed_item_times": {
+   "src": 1168,
+   "def": 558,
+   "orphan": 1767,
+   "union": 2277,
+   "worlds": 20
+  },
+  "estimate": {
+   "kind": "replay with a stand-in model (no model call); an upper bound on reader calls: cache hits across branches need the stored outputs",
+   "slots_per_world": 48,
+   "asked_per_system_world": 192,
+   "reader_calls_upper": 19200,
+   "reader_calls_per_world": 960,
+   "mean_prompt_tokens": {
+    "holdmem_D0B0": 4378.822660098522,
+    "holdmem_D0B1_source": 4268.94842074761,
+    "holdmem_D1B0": 4283.2015357867285,
+    "holdmem_D1B1_source": 4098.452622428282,
+    "holdmem_json_arm": 2287.601999420458
+   },
+   "reader_prompt_tokens_upper": 74177384.59576933,
+   "gpu_hours_reader": {
+    "at_30M_tokens_per_hour": 2.4725794865256443,
+    "at_60M_tokens_per_hour": 1.2362897432628221
+   },
+   "writer_requests_natural_distinct": 8000,
+   "writer_requests_new": 135,
+   "writer_new_approx_prompt_tokens": 594608,
+   "writer_mean_tokens_per_write_published": 5463.816666666667,
+   "writer_new_tokens_at_published_mean": 737615.25,
+   "writer_new_per_world": {
+    "w1000": 12,
+    "w1001": 12,
+    "w1002": 4,
+    "w1003": 4,
+    "w1004": 3,
+    "w1005": 4,
+    "w1006": 9,
+    "w1007": 6,
+    "w1008": 9,
+    "w1009": 8,
+    "w1010": 8,
+    "w1011": 8,
+    "w1012": 4,
+    "w1013": 4,
+    "w1014": 0,
+    "w1015": 8,
+    "w1016": 3,
+    "w1017": 12,
+    "w1018": 10,
+    "w1019": 7
+   },
+   "gpu_hours_writer_new": {
+    "at_30M_tokens_per_hour": 0.024587175,
+    "at_60M_tokens_per_hour": 0.0122935875
+   },
+   "cold_cache_extra": {
+    "note": "added if the response cache of the published runs is not on the host: every distinct writer request, and the k = 0 reads, are then made again",
+    "writer_requests": 8000,
+    "writer_prompt_tokens": 43710533.333333336,
+    "k0_reader_calls": 4800,
+    "k0_reader_prompt_tokens": 18544346.148942333
+   },
+   "needed_subset": {
+    "note": "only the item-times a shifted branch changes; needs a probe-key filter that `experiments.e1` does not have (not run, not changed)",
+    "reader_calls_upper": 11385,
+    "reader_prompt_tokens_upper": 43984871.0220226,
+    "gpu_hours_reader": {
+     "at_30M_tokens_per_hour": 1.4661623674007533,
+     "at_60M_tokens_per_hour": 0.7330811837003767
+    }
+   },
+   "discriminative_flag": {
+    "asked_item_times": 920,
+    "needed_item_times_covered": 714,
+    "needed_item_times": 2277,
+    "coverage": 0.31357048748353095
+   }
+  }
+ }
+}

@@ -1,0 +1,27 @@
+name: check
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # make check (ruff, mypy, pytest in one process) takes about 46 min on a laptop
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --dev
+      - run: make check
+      - name: Verify the registration history
+        if: hashFiles('registration-history/verify.py') != ''
+        run: uv run python registration-history/verify.py

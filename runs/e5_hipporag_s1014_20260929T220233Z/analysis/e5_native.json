@@ -1,0 +1,19 @@
+[
+ {
+  "seed": 1014,
+  "system": "hipporag",
+  "prefix_events": 339,
+  "t_i": {
+   "events": 1.0,
+   "skipped": 0.0,
+   "ingested": 1.0,
+   "wall_s": 30.48052507374631,
+   "llm_calls": 1.9941002949852507,
+   "prompt_tokens": 2260.339233038348,
+   "completion_tokens": 430.811209439528,
+   "embed_calls": 1.7315634218289087,
+   "embed_tokens": 937.4837758112094
+  },
+  "identifiable": true
+ }
+]

@@ -1,0 +1,4630 @@
+{
+  "analysis_code": {
+    "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+    "dirty": false
+  },
+  "created_utc": "2026-10-17T05:16:48Z",
+  "experiment": "merged-round3",
+  "files_sha256": {
+    "analysis/g_a.json": "12c3e51ae9d5a97a794200457efc2adacf781ba48b91f24b477722bffcc51799",
+    "analysis/g_b.json": "28b557f19834dd4e5da6ef54249703b9dfc9ce03ed3ff1d3262542fe45e79f0a",
+    "analysis/h_b.json": "2e62208ca6947743c126ad4610a354ceb1095257c9c30781beb0c54dab382fd7",
+    "analysis/h_opus.json": "bd21545a465ddc50731fd6a33c6e13854578c1a72ad81eed64f72818f4c840d3",
+    "analysis/h_sonnet.json": "ad0e841edc56fea86bc57059513178b10b96f96b16af0bf5e6a2eb97c1deb1cd",
+    "analysis/n.json": "574aef3dd8f260ffeea6ac2b8f122210e5d6e05514b350a61b6c306de3478106",
+    "analysis/q.json": "685173032d0ab1058f09d0c42619eb444e132b25fca17d10e894fc9cd82bd1e5",
+    "analysis/u.json": "916bffa9526ef43c3123fa1f164bbf1a0bb4df720c9e2d3cf876e419bd11cd2f",
+    "analysis/u_delta.json": "a21a75a30e5efbf1774bf00d7b4354138f241085d8b9eecb917a9c0546b8460b",
+    "analysis/v.json": "e2692822a106c1d41892d74b57cb5b4590c426fb40596fb811e6ac48367da187",
+    "analysis/x.json": "c2407f082493a9110b5e3e43281981be94acdaed4266ed2530394bb4881e217d",
+    "analysis/y.json": "ffe36d079adf286cc2786d7bce49c8329962daa5cfe75b5eaa3dcfaba7ec9ced"
+  },
+  "note": "registered (prereg/v4_round3.md blocks U, N, Q, H and G; prereg/v4b_round3_claude.md blocks Y and V): verdicts of analysis.round3_registered on the raw runs listed in each command, no model call. u.json: block U, the main writer's refresh and upsert cells and U5 on the three M2 families (paired with the restaged stage4_m2 stages); h_sonnet.json, h_opus.json: the Claude Sonnet 5.5 and Claude Opus 5.5 definition writers (H-a, H-c: H1, H2); h_b.json: the thinking Qwen3.5-9B writer at a 32,768-token limit (H-b: H3, not judged by its registered validity rule); g_a.json: block G on the G-a re-runs (G1, G2); g_b.json: block G on the 18 G-b program sets (G3); v.json: block V on its nine program sets, with the G-b sets of the same writers and samples for its per-writer comparison. The G-a, V and the Qwen3.5-9B, Claude Sonnet 5.5 and Claude Opus 5.5 G-b runs are re-runs from the response cache, and stage4_c_e1 and the stage4_m2 Llama-3.1-8B and gpt-oss-20b stages are restaged with re-runs (prereg/decisions.md 2026-10-17). u_delta.json is exploratory (analysis.ex_round3_upsert): where the upsert can act. x.json is block X (Mem0) on worlds 1000-1009: void, its anchor answers differ from E5's, so X1 is not judged and its cells are exploratory (prereg/decisions.md 2026-10-17)",
+  "producers": {
+    "analysis/g_a.json": "python -m memshift.analysis.round3_registered G --runs runs/e1_ga_heldout4001_s1000-1002_20261017T022248Z runs/e1_ga_heldout4001_s1003-1005_20261017T022419Z runs/e1_ga_heldout4001_s1006-1007_20261017T022549Z runs/e1_ga_heldout4001_s1008-1009_20261017T022719Z runs/e1_ga_heldout4002_s1000-1002_20261017T022849Z runs/e1_ga_heldout4002_s1003-1005_20261017T023019Z runs/e1_ga_heldout4002_s1006-1007_20261017T023149Z runs/e1_ga_heldout4002_s1008-1009_20261017T023319Z runs/e1_ga_heldout4003_s1000-1002_20261017T023449Z runs/e1_ga_heldout4003_s1003-1005_20261017T023619Z runs/e1_ga_heldout4003_s1006-1007_20261017T023749Z runs/e1_ga_heldout4003_s1008-1009_20261017T023919Z --compare runs/stage2_e1 runs/stage4_c_e1 --out runs/stage7_round3/analysis/g_a.json",
+    "analysis/g_b.json": "python -m memshift.analysis.round3_registered G --runs runs/e1_gb_gemma_p0_s1000-1003_20261016T214712Z runs/e1_gb_gemma_p0_s1004-1007_20261016T214842Z runs/e1_gb_gemma_p0_s1008-1011_20261016T215012Z runs/e1_gb_gemma_p0_s1012-1015_20261016T215242Z runs/e1_gb_gemma_p0_s1016-1019_20261016T215812Z runs/e1_gb_gemma_p1_s1000-1003_20261016T215943Z runs/e1_gb_gemma_p1_s1004-1007_20261016T220113Z runs/e1_gb_gemma_p1_s1008-1011_20261016T220743Z runs/e1_gb_gemma_p1_s1012-1015_20261016T220913Z runs/e1_gb_gemma_p1_s1016-1019_20261016T221043Z runs/e1_gb_gemma_p2_s1000-1003_20261016T221513Z runs/e1_gb_gemma_p2_s1004-1007_20261016T221644Z runs/e1_gb_gemma_p2_s1008-1011_20261016T221914Z runs/e1_gb_gemma_p2_s1012-1015_20261016T222044Z runs/e1_gb_gemma_p2_s1016-1019_20261016T222614Z runs/e1_gb_gptoss_p0_s1000-1003_20261016T222744Z runs/e1_gb_gptoss_p0_s1004-1007_20261016T222914Z runs/e1_gb_gptoss_p0_s1008-1011_20261016T223144Z runs/e1_gb_gptoss_p0_s1012-1015_20261016T223514Z runs/e1_gb_gptoss_p0_s1016-1019_20261016T224645Z runs/e1_gb_gptoss_p1_s1000-1003_20261016T231718Z runs/e1_gb_gptoss_p1_s1004-1007_20261016T231847Z runs/e1_gb_gptoss_p1_s1008-1011_20261016T232017Z runs/e1_gb_gptoss_p1_s1012-1015_20261016T232148Z runs/e1_gb_gptoss_p1_s1016-1019_20261016T233018Z runs/e1_gb_gptoss_p2_s1000-1003_20261016T234949Z runs/e1_gb_gptoss_p2_s1004-1007_20261016T235120Z runs/e1_gb_gptoss_p2_s1008-1011_20261016T235250Z runs/e1_gb_gptoss_p2_s1012-1015_20261016T235820Z runs/e1_gb_gptoss_p2_s1016-1019_20261017T000650Z runs/e1_gb_llama_p0_s1000-1003_20261016T211640Z runs/e1_gb_llama_p0_s1004-1007_20261016T211810Z runs/e1_gb_llama_p0_s1008-1011_20261016T211940Z runs/e1_gb_llama_p0_s1012-1015_20261016T212110Z runs/e1_gb_llama_p0_s1016-1019_20261016T212240Z runs/e1_gb_llama_p1_s1000-1003_20261016T212411Z runs/e1_gb_llama_p1_s1004-1007_20261016T212541Z runs/e1_gb_llama_p1_s1008-1011_20261016T212711Z runs/e1_gb_llama_p1_s1012-1015_20261016T212841Z runs/e1_gb_llama_p1_s1016-1019_20261016T213411Z runs/e1_gb_llama_p2_s1000-1003_20261016T213541Z runs/e1_gb_llama_p2_s1004-1007_20261016T213711Z runs/e1_gb_llama_p2_s1008-1011_20261016T213841Z runs/e1_gb_llama_p2_s1012-1015_20261016T214011Z runs/e1_gb_llama_p2_s1016-1019_20261016T214141Z runs/e1_gb_opus_p0_s1000-1003_20261016T215133Z runs/e1_gb_opus_p0_s1004-1007_20261016T215403Z runs/e1_gb_opus_p0_s1008-1011_20261016T220034Z runs/e1_gb_opus_p0_s1012-1015_20261016T220204Z runs/e1_gb_opus_p0_s1016-1019_20261016T220334Z runs/e1_gb_opus_p1_s1000-1003_20261016T220704Z runs/e1_gb_opus_p1_s1004-1007_20261016T220834Z runs/e1_gb_opus_p1_s1008-1011_20261016T221004Z runs/e1_gb_opus_p1_s1012-1015_20261016T221134Z runs/e1_gb_opus_p1_s1016-1019_20261016T221404Z runs/e1_gb_opus_p2_s1000-1003_20261016T221934Z runs/e1_gb_opus_p2_s1004-1007_20261016T222105Z runs/e1_gb_opus_p2_s1008-1011_20261016T222535Z runs/e1_gb_opus_p2_s1012-1015_20261016T222705Z runs/e1_gb_opus_p2_s1016-1019_20261016T222835Z runs/e1_gb_qwen_p0_s1000-1003_20261016T223105Z runs/e1_gb_qwen_p0_s1004-1007_20261016T223235Z runs/e1_gb_qwen_p0_s1008-1011_20261016T223405Z runs/e1_gb_qwen_p0_s1012-1015_20261016T223635Z runs/e1_gb_qwen_p0_s1016-1019_20261016T225006Z runs/e1_gb_qwen_p1_s1000-1003_20261016T231838Z runs/e1_gb_qwen_p1_s1004-1007_20261016T232008Z runs/e1_gb_qwen_p1_s1008-1011_20261016T232138Z runs/e1_gb_qwen_p1_s1012-1015_20261016T233009Z runs/e1_gb_qwen_p1_s1016-1019_20261016T234940Z runs/e1_gb_qwen_p2_s1000-1003_20261016T235110Z runs/e1_gb_qwen_p2_s1004-1007_20261016T235240Z runs/e1_gb_qwen_p2_s1008-1011_20261016T235410Z runs/e1_gb_qwen_p2_s1012-1015_20261016T235941Z runs/e1_gb_qwen_p2_s1016-1019_20261017T000811Z runs/e1_gb_sonnet_p0_s1000-1003_20261017T000941Z runs/e1_gb_sonnet_p0_s1004-1007_20261017T001111Z runs/e1_gb_sonnet_p0_s1008-1011_20261017T001242Z runs/e1_gb_sonnet_p0_s1012-1015_20261017T001412Z runs/e1_gb_sonnet_p0_s1016-1019_20261017T001542Z runs/e1_gb_sonnet_p1_s1000-1003_20261017T001712Z runs/e1_gb_sonnet_p1_s1004-1007_20261017T001842Z runs/e1_gb_sonnet_p1_s1008-1011_20261017T002012Z runs/e1_gb_sonnet_p1_s1012-1015_20261017T002142Z runs/e1_gb_sonnet_p1_s1016-1019_20261017T002312Z runs/e1_gb_sonnet_p2_s1000-1003_20261017T002442Z runs/e1_gb_sonnet_p2_s1004-1007_20261017T002612Z runs/e1_gb_sonnet_p2_s1008-1011_20261017T002742Z runs/e1_gb_sonnet_p2_s1012-1015_20261017T002912Z runs/e1_gb_sonnet_p2_s1016-1019_20261017T003042Z --compare runs/stage2_e1 runs/stage4_c_e1 --out runs/stage7_round3/analysis/g_b.json",
+    "analysis/h_b.json": "python -m memshift.analysis.round3_registered H --runs runs/e1_hb_think32k_s1000-1001_20261016T211635Z runs/e1_hb_think32k_s1002-1003_20261016T211805Z runs/e1_hb_think32k_s1004-1005_20261016T211935Z runs/e1_hb_think32k_s1006-1007_20261016T212105Z runs/e1_hb_think32k_s1008-1009_20261016T212235Z --compare runs/stage2_e1 runs/stage4_c_e1 --out runs/stage7_round3/analysis/h_b.json",
+    "analysis/h_opus.json": "python -m memshift.analysis.round3_registered H --runs runs/e1_hc_opus_s1000-1001_20261016T115624Z runs/e1_hc_opus_s1002-1003_20261016T121055Z runs/e1_hc_opus_s1004-1005_20261016T123426Z runs/e1_hc_opus_s1006-1007_20261016T123857Z runs/e1_hc_opus_s1008-1009_20261016T124727Z --compare runs/stage2_e1 runs/stage4_c_e1 --response-cache runs/_snapshots/anthropic_claude-opus-5-5_20261016T1546Z.sqlite --out runs/stage7_round3/analysis/h_opus.json",
+    "analysis/h_sonnet.json": "python -m memshift.analysis.round3_registered H --runs runs/e1_ha_sonnet_s1000-1001_20261016T082038Z runs/e1_ha_sonnet_s1002-1003_20261016T082038Z runs/e1_ha_sonnet_s1004-1005_20261016T082038Z runs/e1_ha_sonnet_s1006-1007_20261016T082038Z runs/e1_ha_sonnet_s1008-1009_20261016T082038Z --compare runs/stage2_e1 runs/stage4_c_e1 --response-cache runs/_snapshots/anthropic_claude-sonnet-5-5_20261016T1335Z.sqlite --out runs/stage7_round3/analysis/h_sonnet.json",
+    "analysis/n.json": "python -m memshift.analysis.round3_registered N --runs runs/e1_n_natural_s1000-1004_20261016T094158Z runs/e1_n_natural_s1005-1009_20261016T094158Z runs/e1_n_natural_s1010-1014_20261016T094158Z runs/e1_n_natural_s1015-1019_20261016T094158Z --compare runs/stage2_e1 --out runs/stage7_round3/analysis/n.json",
+    "analysis/q.json": "python -m memshift.analysis.round3_registered Q --runs runs/e1_q_unnamed_s1000-1002_20261016T154710Z runs/e1_q_unnamed_s1003-1005_20261016T160742Z runs/e1_q_unnamed_s1006-1008_20261016T162213Z runs/e1_q_unnamed_s1009-1011_20261016T162343Z runs/e1_q_unnamed_s1012-1014_20261016T163113Z runs/e1_q_unnamed_s1015-1017_20261016T163844Z runs/e1_q_unnamed_s1018-1019_20261016T164915Z --compare runs/stage2_e1 runs/stage4_c_e1 --out runs/stage7_round3/analysis/q.json",
+    "analysis/u.json": "python -m memshift.analysis.round3_registered U --runs runs/e1_u_refresh_s1000-1003_20261016T060737Z runs/e1_u_refresh_s1004-1007_20261016T060737Z runs/e1_u_refresh_s1008-1011_20261016T060737Z runs/e1_u_refresh_s1012-1015_20261016T060737Z runs/e1_u_refresh_s1016-1019_20261016T060737Z runs/e1_u_upsert_s1000-1002_20261016T092158Z runs/e1_u_upsert_s1003-1005_20261016T110050Z runs/e1_u_upsert_s1006-1008_20261016T110521Z runs/e1_u_upsert_s1009-1011_20261016T110651Z runs/e1_u_upsert_s1012-1014_20261016T112722Z runs/e1_u_upsert_s1015-1017_20261016T115554Z runs/e1_u_upsert_s1018-1019_20261016T121025Z runs/e1_u5_gemma_s1000-1001_20261016T202715Z runs/e1_u5_gemma_s1002-1003_20261016T202845Z runs/e1_u5_gemma_s1004-1005_20261016T203015Z runs/e1_u5_gemma_s1006-1007_20261016T203145Z runs/e1_u5_gemma_s1008-1009_20261016T203315Z runs/e1_u5_gptoss_s1000-1001_20261016T205928Z runs/e1_u5_gptoss_s1002-1003_20261016T210058Z runs/e1_u5_gptoss_s1004-1005_20261016T210228Z runs/e1_u5_gptoss_s1006-1007_20261016T210358Z runs/e1_u5_gptoss_s1008-1009_20261016T210528Z runs/e1_u5_llama_s1000-1001_20261016T200247Z runs/e1_u5_llama_s1002-1003_20261016T200417Z runs/e1_u5_llama_s1004-1005_20261016T200547Z runs/e1_u5_llama_s1006-1007_20261016T200717Z runs/e1_u5_llama_s1008-1009_20261016T200847Z --compare runs/stage2_e1 runs/stage4_c_e1 runs/stage4_m2_google_gemma-4-12b-it runs/stage4_m2_meta-llama_llama-3_1-8b-instruct runs/stage4_m2_openai_gpt-oss-20b --out runs/stage7_round3/analysis/u.json",
+    "analysis/u_delta.json": "python -m memshift.analysis.ex_round3_upsert --runs runs/e1_u_upsert_s1000-1002_20261016T092158Z runs/e1_u_upsert_s1003-1005_20261016T110050Z runs/e1_u_upsert_s1006-1008_20261016T110521Z runs/e1_u_upsert_s1009-1011_20261016T110651Z runs/e1_u_upsert_s1012-1014_20261016T112722Z runs/e1_u_upsert_s1015-1017_20261016T115554Z runs/e1_u_upsert_s1018-1019_20261016T121025Z --compare runs/stage2_e1 runs/stage4_c_e1 --out runs/stage7_round3/analysis/u_delta.json",
+    "analysis/v.json": "python -m memshift.analysis.round3_registered V --runs runs/e1_v_qwen_p0_s1000-1003_20261017T005443Z runs/e1_v_qwen_p0_s1004-1007_20261017T005614Z runs/e1_v_qwen_p0_s1008-1011_20261017T005744Z runs/e1_v_qwen_p0_s1012-1015_20261017T005914Z runs/e1_v_qwen_p0_s1016-1019_20261017T010044Z runs/e1_v_qwen_p1_s1000-1003_20261017T010214Z runs/e1_v_qwen_p1_s1004-1007_20261017T010344Z runs/e1_v_qwen_p1_s1008-1011_20261017T010514Z runs/e1_v_qwen_p1_s1012-1015_20261017T010644Z runs/e1_v_qwen_p1_s1016-1019_20261017T014617Z runs/e1_v_qwen_p2_s1000-1003_20261017T014747Z runs/e1_v_qwen_p2_s1004-1007_20261017T014917Z runs/e1_v_qwen_p2_s1008-1011_20261017T015047Z runs/e1_v_qwen_p2_s1012-1015_20261017T015217Z runs/e1_v_qwen_p2_s1016-1019_20261017T015347Z runs/e1_v_sonnet_p0_s1000-1003_20261017T015717Z runs/e1_v_sonnet_p0_s1004-1007_20261017T015947Z runs/e1_v_sonnet_p0_s1008-1011_20261017T020318Z runs/e1_v_sonnet_p0_s1012-1015_20261017T020448Z runs/e1_v_sonnet_p0_s1016-1019_20261017T020618Z runs/e1_v_sonnet_p1_s1000-1003_20261017T020748Z runs/e1_v_sonnet_p1_s1004-1007_20261017T020918Z runs/e1_v_sonnet_p1_s1008-1011_20261017T021048Z runs/e1_v_sonnet_p1_s1012-1015_20261017T021218Z runs/e1_v_sonnet_p1_s1016-1019_20261017T021348Z runs/e1_v_sonnet_p2_s1000-1003_20261017T021518Z runs/e1_v_sonnet_p2_s1004-1007_20261017T021648Z runs/e1_v_sonnet_p2_s1008-1011_20261017T021818Z runs/e1_v_sonnet_p2_s1012-1015_20261017T021948Z runs/e1_v_sonnet_p2_s1016-1019_20261017T022118Z runs/e1_v_opus_p0_s1000-1003_20261017T003212Z runs/e1_v_opus_p0_s1004-1007_20261017T003343Z runs/e1_v_opus_p0_s1008-1011_20261017T003513Z runs/e1_v_opus_p0_s1012-1015_20261017T003643Z runs/e1_v_opus_p0_s1016-1019_20261017T003813Z runs/e1_v_opus_p1_s1000-1003_20261017T003943Z runs/e1_v_opus_p1_s1004-1007_20261017T004113Z runs/e1_v_opus_p1_s1008-1011_20261017T004243Z runs/e1_v_opus_p1_s1012-1015_20261017T004413Z runs/e1_v_opus_p1_s1016-1019_20261017T004543Z runs/e1_v_opus_p2_s1000-1003_20261017T004713Z runs/e1_v_opus_p2_s1004-1007_20261017T004843Z runs/e1_v_opus_p2_s1008-1011_20261017T005013Z runs/e1_v_opus_p2_s1012-1015_20261017T005143Z runs/e1_v_opus_p2_s1016-1019_20261017T005313Z runs/e1_gb_qwen_p0_s1000-1003_20261016T223105Z runs/e1_gb_qwen_p0_s1004-1007_20261016T223235Z runs/e1_gb_qwen_p0_s1008-1011_20261016T223405Z runs/e1_gb_qwen_p0_s1012-1015_20261016T223635Z runs/e1_gb_qwen_p0_s1016-1019_20261016T225006Z runs/e1_gb_qwen_p1_s1000-1003_20261016T231838Z runs/e1_gb_qwen_p1_s1004-1007_20261016T232008Z runs/e1_gb_qwen_p1_s1008-1011_20261016T232138Z runs/e1_gb_qwen_p1_s1012-1015_20261016T233009Z runs/e1_gb_qwen_p1_s1016-1019_20261016T234940Z runs/e1_gb_qwen_p2_s1000-1003_20261016T235110Z runs/e1_gb_qwen_p2_s1004-1007_20261016T235240Z runs/e1_gb_qwen_p2_s1008-1011_20261016T235410Z runs/e1_gb_qwen_p2_s1012-1015_20261016T235941Z runs/e1_gb_qwen_p2_s1016-1019_20261017T000811Z runs/e1_gb_sonnet_p0_s1000-1003_20261017T000941Z runs/e1_gb_sonnet_p0_s1004-1007_20261017T001111Z runs/e1_gb_sonnet_p0_s1008-1011_20261017T001242Z runs/e1_gb_sonnet_p0_s1012-1015_20261017T001412Z runs/e1_gb_sonnet_p0_s1016-1019_20261017T001542Z runs/e1_gb_sonnet_p1_s1000-1003_20261017T001712Z runs/e1_gb_sonnet_p1_s1004-1007_20261017T001842Z runs/e1_gb_sonnet_p1_s1008-1011_20261017T002012Z runs/e1_gb_sonnet_p1_s1012-1015_20261017T002142Z runs/e1_gb_sonnet_p1_s1016-1019_20261017T002312Z runs/e1_gb_sonnet_p2_s1000-1003_20261017T002442Z runs/e1_gb_sonnet_p2_s1004-1007_20261017T002612Z runs/e1_gb_sonnet_p2_s1008-1011_20261017T002742Z runs/e1_gb_sonnet_p2_s1012-1015_20261017T002912Z runs/e1_gb_sonnet_p2_s1016-1019_20261017T003042Z runs/e1_gb_opus_p0_s1000-1003_20261016T215133Z runs/e1_gb_opus_p0_s1004-1007_20261016T215403Z runs/e1_gb_opus_p0_s1008-1011_20261016T220034Z runs/e1_gb_opus_p0_s1012-1015_20261016T220204Z runs/e1_gb_opus_p0_s1016-1019_20261016T220334Z runs/e1_gb_opus_p1_s1000-1003_20261016T220704Z runs/e1_gb_opus_p1_s1004-1007_20261016T220834Z runs/e1_gb_opus_p1_s1008-1011_20261016T221004Z runs/e1_gb_opus_p1_s1012-1015_20261016T221134Z runs/e1_gb_opus_p1_s1016-1019_20261016T221404Z runs/e1_gb_opus_p2_s1000-1003_20261016T221934Z runs/e1_gb_opus_p2_s1004-1007_20261016T222105Z runs/e1_gb_opus_p2_s1008-1011_20261016T222535Z runs/e1_gb_opus_p2_s1012-1015_20261016T222705Z runs/e1_gb_opus_p2_s1016-1019_20261016T222835Z --compare runs/stage2_e1 runs/stage4_c_e1 --out runs/stage7_round3/analysis/v.json",
+    "analysis/x.json": "python -m memshift.analysis.round3_registered X --runs runs/x_mem0_s1000_20261016T165445Z runs/x_mem0_s1001_20261016T165615Z runs/x_mem0_s1002_20261016T165845Z runs/x_mem0_s1003_20261016T170416Z runs/x_mem0_s1004_20261016T170546Z runs/x_mem0_s1005_20261016T170716Z runs/x_mem0_s1006_20261016T170846Z runs/x_mem0_s1007_20261016T171016Z runs/x_mem0_s1008_20261016T171146Z runs/x_mem0_s1009_20261016T171416Z --out runs/stage7_round3/analysis/x.json",
+    "analysis/y.json": "python -m memshift.analysis.round3_registered Y --runs runs/e1_y_reader_s1000_20261016T095546Z runs/e1_y_reader_s1001-1002_20261016T105417Z runs/e1_y_reader_s1003-1004_20261016T105417Z runs/e1_y_reader_s1005-1006_20261016T105417Z runs/e1_y_reader_s1007-1008_20261016T105417Z runs/e1_y_reader_s1009-1010_20261016T105417Z runs/e1_y_reader_s1011-1012_20261016T105417Z runs/e1_y_reader_s1013-1014_20261016T105417Z runs/e1_y_reader_s1015-1016_20261016T105417Z runs/e1_y_reader_s1017-1018_20261016T105417Z runs/e1_y_reader_s1019_20261016T105417Z --compare runs/stage2_e1 runs/stage4_c_e1 --out runs/stage7_round3/analysis/y.json"
+  },
+  "response_caches": {
+    "runs/_snapshots/anthropic_claude-opus-5-5_20261016T1546Z.sqlite": "51d1c42fef625bd71d87f05c1a1d14cb424c7fe157d5e8358ed5baad30804b61",
+    "runs/_snapshots/anthropic_claude-sonnet-5-5_20261016T1335Z.sqlite": "5f029c6a75d1062d2a8eaab67ed1626c83efe78eddf0953689a4030e9eb9d1a5"
+  },
+  "run_id": "stage7_round3",
+  "sources": [
+    {
+      "code": {
+        "commit": "72261c05212f96598a7f26bef2823bae5d4e9afe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "01b88d64e0154d7799c6532aa9c3c7715b64eb53301f691d8161c8573a796dac",
+      "run_id": "e1_u_refresh_s1000-1003_20261016T060737Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "72261c05212f96598a7f26bef2823bae5d4e9afe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "866c1689abebebbf339a0b30c259a454bc2bfe9fb1d9119fcd8d2fee924bc1a5",
+      "run_id": "e1_u_refresh_s1004-1007_20261016T060737Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "72261c05212f96598a7f26bef2823bae5d4e9afe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a37608e5048d3d28a0226e89465a11ce6fc825ce33b541df355902da2b598377",
+      "run_id": "e1_u_refresh_s1008-1011_20261016T060737Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "72261c05212f96598a7f26bef2823bae5d4e9afe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "310d1892214be1c0cd6204fd540f6b218080f092646e3a4a8083de7205e2add3",
+      "run_id": "e1_u_refresh_s1012-1015_20261016T060737Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "72261c05212f96598a7f26bef2823bae5d4e9afe",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "7b299f1f9e18483219676f408dece909056639db4dd66ae5f4fbc7ac469ecec7",
+      "run_id": "e1_u_refresh_s1016-1019_20261016T060737Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "569fc8d098829a71b9ed0672c2964e7d03fa5717",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "cd1d63ba519490e7e48f081ec78305190deb13f4bb00f57dc15107550dd01b3a",
+      "run_id": "e1_u_upsert_s1000-1002_20261016T092158Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a793cfe8e836e9a48e614bd6ea906ee0bab33cc8273f21bd4cbe3ffe69375049",
+      "run_id": "e1_u_upsert_s1003-1005_20261016T110050Z",
+      "worlds": [
+        "w1003",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "bc511886856133d482449099102053d69aeb7581e0eee4841578ae5f9eba34fc",
+      "run_id": "e1_u_upsert_s1006-1008_20261016T110521Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007",
+        "w1008",
+        "w1008",
+        "w1008"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "559322dd023018376a786ea8fe5b32127a9e086b25e0d10035292a03a8e16795",
+      "run_id": "e1_u_upsert_s1009-1011_20261016T110651Z",
+      "worlds": [
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "af8a1439a0956a5a103d2b8c84e9d2d206c68d888a14701e288b7d3b75bafc86",
+      "run_id": "e1_u_upsert_s1012-1014_20261016T112722Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a9ae0f95ff8d290c137d920da6df0d5dd153e93f352fed5599982d17d9af375c",
+      "run_id": "e1_u_upsert_s1015-1017_20261016T115554Z",
+      "worlds": [
+        "w1015",
+        "w1015",
+        "w1015",
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "78d0926b6b73688ef763ff4f711b23c549a231e46956473e97518aec38b421b9",
+      "run_id": "e1_u_upsert_s1018-1019_20261016T121025Z",
+      "worlds": [
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b1b3e11b6f0e527abf1c39a95507f6bb888e4eaa8f29b1156f0c43d3cb207a48",
+      "run_id": "e1_u5_gemma_s1000-1001_20261016T202715Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "4ae88f4ad6f0517f187c5ce9d8d5b9a7b9015a6882184f15f9b6d88564aef6e6",
+      "run_id": "e1_u5_gemma_s1002-1003_20261016T202845Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "76fdae7f98e0a334f69d549d30a5cb8f0c9ed2368548f1cc1021d72caac2ffbc",
+      "run_id": "e1_u5_gemma_s1004-1005_20261016T203015Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "37727159ccac1a72cc7234c3d607b8592d528a2ac7fe300c970a7cee3b59f23c",
+      "run_id": "e1_u5_gemma_s1006-1007_20261016T203145Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ebce0f3ebec0754c02cbbd70406f32d80214d374f55019b37afe25885b164778",
+      "run_id": "e1_u5_gemma_s1008-1009_20261016T203315Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "04be22bd2a22021e31811836756e62f10eebbbfbd38a9d56e3b8bc26635c944d",
+      "run_id": "e1_u5_gptoss_s1000-1001_20261016T205928Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8c3491b9af898e45ba93a1c5de80b5461932e5ffe84e26833ecd0393b783ffb6",
+      "run_id": "e1_u5_gptoss_s1002-1003_20261016T210058Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d492cebea5036bd54146c00f9c310daed0f72bfcca433cda42885dac029e999d",
+      "run_id": "e1_u5_gptoss_s1004-1005_20261016T210228Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "bfe32c00e36397216c2fea356f295e089fb133322d39857d6d2ddcdbdff9a940",
+      "run_id": "e1_u5_gptoss_s1006-1007_20261016T210358Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c0a474e79b3b6e872172cedef9dc5c26a456390658422373a8fed0739961ad03",
+      "run_id": "e1_u5_gptoss_s1008-1009_20261016T210528Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f64a5aa679201c2303fa0a140e9b1ecb51a7ddf7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f2c1c97c82c710c4673c5f19ef9191b737662d9f2bfa3f2d565dc2edddb0ab24",
+      "run_id": "e1_u5_llama_s1000-1001_20261016T200247Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "de8133664e65efc2e069b33a9076543b37629114f0041b93a66477abf6605d2e",
+      "run_id": "e1_u5_llama_s1002-1003_20261016T200417Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5e1bd75662c868e0e8a0b7545ffa3d99013c5fa2e9e013b91d62de5510326ce5",
+      "run_id": "e1_u5_llama_s1004-1005_20261016T200547Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8f1ac830907c10b66bbe4645f1972f33e19108a6865f045c5e32bf73b196fe8b",
+      "run_id": "e1_u5_llama_s1006-1007_20261016T200717Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "23ec375086c7d87185d96ad4b0a075ac09afbe9d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "adc1cc9b157ea391069abfb30145e3a5f9531ad39f5aab96743e4d84535dc6f9",
+      "run_id": "e1_u5_llama_s1008-1009_20261016T200847Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "569fc8d098829a71b9ed0672c2964e7d03fa5717",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "7a3f3b551ee3f25ce542c431670cce22034f035ef06f008683c6bc9e1dd377eb",
+      "run_id": "e1_n_natural_s1000-1004_20261016T094158Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002",
+        "w1003",
+        "w1004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "569fc8d098829a71b9ed0672c2964e7d03fa5717",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8a909ba2f4e49b39e720318d5bdb10169e847b36bd3f4f3d95bb5de4b771fc43",
+      "run_id": "e1_n_natural_s1005-1009_20261016T094158Z",
+      "worlds": [
+        "w1005",
+        "w1006",
+        "w1007",
+        "w1008",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "569fc8d098829a71b9ed0672c2964e7d03fa5717",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "3807252c4cdcd976a80eceb578a7dbf9a2e32ebb81a93cd1577e9eaf2da0e3f4",
+      "run_id": "e1_n_natural_s1010-1014_20261016T094158Z",
+      "worlds": [
+        "w1010",
+        "w1011",
+        "w1012",
+        "w1013",
+        "w1014"
+      ]
+    },
+    {
+      "code": {
+        "commit": "569fc8d098829a71b9ed0672c2964e7d03fa5717",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "4aca70fa893f8767ef0ddd6ffd9cb560356f9a70b117306df97de41f29b5e7ab",
+      "run_id": "e1_n_natural_s1015-1019_20261016T094158Z",
+      "worlds": [
+        "w1015",
+        "w1016",
+        "w1017",
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "ce1da784f0aba7b5111fba39c5600d71ae73a65c",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "56261bf4e087c1f30eda721e7d7cb8cf1d61b0dd9fc2e954d7a24c2228b253c4",
+      "run_id": "e1_y_reader_s1000_20261016T095546Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b0af099b5e759ff9eb78c772f8174d772cf896ebc057fdaa4bb2ab930ed6ba9a",
+      "run_id": "e1_y_reader_s1001-1002_20261016T105417Z",
+      "worlds": [
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "bb4761d49df602639fb17bef6e541b637c5bdbb3b062f76ed6460871893daf4b",
+      "run_id": "e1_y_reader_s1003-1004_20261016T105417Z",
+      "worlds": [
+        "w1003",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "05bd5545869af420c78d96aecdab5b7b07388814da7419cc75faea32e7aac0ed",
+      "run_id": "e1_y_reader_s1005-1006_20261016T105417Z",
+      "worlds": [
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8a1a173249459c086b349f34752ff45169397bedb99e9b1d0cb0f0dd85d10b1c",
+      "run_id": "e1_y_reader_s1007-1008_20261016T105417Z",
+      "worlds": [
+        "w1007",
+        "w1007",
+        "w1007",
+        "w1008",
+        "w1008",
+        "w1008"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d055e1ca7de46d5e93cf224613cc9e5077387994a038b778cbfe760063a8e41a",
+      "run_id": "e1_y_reader_s1009-1010_20261016T105417Z",
+      "worlds": [
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "674ff55259215898e755683a20703189cdaf7aa857aa454d10be475f23a2f0ca",
+      "run_id": "e1_y_reader_s1011-1012_20261016T105417Z",
+      "worlds": [
+        "w1011",
+        "w1011",
+        "w1011",
+        "w1012",
+        "w1012",
+        "w1012"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "0899d6bcf448733085bb8bd2590872e95e1b3d94c90973f7ef34c226a447783b",
+      "run_id": "e1_y_reader_s1013-1014_20261016T105417Z",
+      "worlds": [
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f8761090f0c24cc63060e2c3898e20c5b6438ec290c71b0c989a036f11ba82e4",
+      "run_id": "e1_y_reader_s1015-1016_20261016T105417Z",
+      "worlds": [
+        "w1015",
+        "w1015",
+        "w1015",
+        "w1016",
+        "w1016",
+        "w1016"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "aee92da96a9e0794ee6a67d775b766394bead06b1aceadbd907c8f8c1ccfd784",
+      "run_id": "e1_y_reader_s1017-1018_20261016T105417Z",
+      "worlds": [
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b8425a30bf5521ec3860e508b760cd2cf10f76eafe53065689c8f9fcb606e84e",
+      "run_id": "e1_y_reader_s1019_20261016T105417Z",
+      "worlds": [
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d652b0fbe0320b9ce9af7dbc7ed49a2f1a6307868791a7ee2ef16dab68f57d5e",
+      "run_id": "e1_ha_sonnet_s1000-1001_20261016T082038Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "94b48a2c99f754273bc4aece74d622b00f8d9c99a747c2dfc84e75db993b75dc",
+      "run_id": "e1_ha_sonnet_s1002-1003_20261016T082038Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ccb6cd8685cd75427e249ee7578419c38c02c75f1e4fc9fe172ae20395c75d49",
+      "run_id": "e1_ha_sonnet_s1004-1005_20261016T082038Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "97853cb89f046e49a8e7adbcbd3ef23c77aa929d6f175f1080650e81abe37bba",
+      "run_id": "e1_ha_sonnet_s1006-1007_20261016T082038Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1480d3296f7d1f634e542e16e07b92f37661e5ac786620502334f19fdd48433b",
+      "run_id": "e1_ha_sonnet_s1008-1009_20261016T082038Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "2dc02530a6753b7823d331ce87edfe81ccd283176f506bd6739574cec3d1a20a",
+      "run_id": "e1_hc_opus_s1000-1001_20261016T115624Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b84106d44a915294217ef50691a2e1021ec2b16a3274eb1b1bd683ad9224d00a",
+      "run_id": "e1_hc_opus_s1002-1003_20261016T121055Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "98616a17cecd2262c8eb0ffcefc91fd4b141cabb8b43feb35540c413312ee8c6",
+      "run_id": "e1_hc_opus_s1004-1005_20261016T123426Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "90174fc3b900640fb12fed6f270d29378d5cee1112d4151579ff84e9314d15d9",
+      "run_id": "e1_hc_opus_s1006-1007_20261016T123857Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8138cee0cff0aef1d092b72e3bb57e4e21e880ce92d48222f8f26444951ee90c",
+      "run_id": "e1_hc_opus_s1008-1009_20261016T124727Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e5f39fbba81e3a7e14855c3db317de39795c95db90abc18ab50ac41615348801",
+      "run_id": "e1_hb_think32k_s1000-1001_20261016T211635Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e42874729330e81f143b3ab3e43073870ba6b2d90a581ed95f61b6dc1836a35e",
+      "run_id": "e1_hb_think32k_s1002-1003_20261016T211805Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "4396062e26779be1230cd21cc127d9c848acb66c65f5d1917fee7795901fcb01",
+      "run_id": "e1_hb_think32k_s1004-1005_20261016T211935Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "6895ee94e14bed56eb1a6a06a39892e368b6b3d39915aefbb4cd0a9b9d6d8d81",
+      "run_id": "e1_hb_think32k_s1006-1007_20261016T212105Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "00c5896df678cfb8bbf1651b0cf9125eaf88a17b3d99cbc1d50613f88d9ee8fe",
+      "run_id": "e1_hb_think32k_s1008-1009_20261016T212235Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f3429646f25877fb743a1d7dfd1b33e5959264ae",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "bbedba10d5eb5c8849613a01a87ebef7a52c4d67527fa7ec433bd84a1bca4ac8",
+      "run_id": "e1_q_unnamed_s1000-1002_20261016T154710Z",
+      "worlds": [
+        "w1000",
+        "w1001",
+        "w1002"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f3429646f25877fb743a1d7dfd1b33e5959264ae",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8d8b0459b8f900e4a2608da1fb495eb8069736ad4aacba7e6b94f55770126b58",
+      "run_id": "e1_q_unnamed_s1003-1005_20261016T160742Z",
+      "worlds": [
+        "w1003",
+        "w1004",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e3a39901f35f6154469132e92568a1b377c7bc6c001ba649d0499ee36099308c",
+      "run_id": "e1_q_unnamed_s1006-1008_20261016T162213Z",
+      "worlds": [
+        "w1006",
+        "w1007",
+        "w1008"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "2fccf2bd9680ce23079299b8777e85ff084455e08f7623fa6989d5a081de56e7",
+      "run_id": "e1_q_unnamed_s1009-1011_20261016T162343Z",
+      "worlds": [
+        "w1009",
+        "w1010",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f69cf1d9129e5af1d45901dcbe2e22aa6b11bc073f94e0f32c8c6c603dfbfc74",
+      "run_id": "e1_q_unnamed_s1012-1014_20261016T163113Z",
+      "worlds": [
+        "w1012",
+        "w1013",
+        "w1014"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c9dc5a75531ff92a0d0fae7f0eb83a73d5d6019ffce04b9454fdc4f8fe2e0d76",
+      "run_id": "e1_q_unnamed_s1015-1017_20261016T163844Z",
+      "worlds": [
+        "w1015",
+        "w1016",
+        "w1017"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "05f132b306ae9e8fdf82aac92d7b4a7102aee8567439a8b1d6f48ec21fb4ae61",
+      "run_id": "e1_q_unnamed_s1018-1019_20261016T164915Z",
+      "worlds": [
+        "w1018",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5b497f2af6cc1616493f9d9e7ead403e86894e6a5b6bb027938c3969c60541ab",
+      "run_id": "e1_ga_heldout4001_s1000-1002_20261017T022248Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c0a128a8745cfee099212d01e673e3c0c403ceb81e2f1278e6049bcdc3de0f4e",
+      "run_id": "e1_ga_heldout4001_s1003-1005_20261017T022419Z",
+      "worlds": [
+        "w1003",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b0e044ca67a33a39ad9299d76bb07b99dc1dd858967f8a0e1b0fd8c069c175fe",
+      "run_id": "e1_ga_heldout4001_s1006-1007_20261017T022549Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "6825a14caee31bda95469bc5e928c62727b6bae1d45baa023215bd366ee59f15",
+      "run_id": "e1_ga_heldout4001_s1008-1009_20261017T022719Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d562c7d91791b2851e20afb1388123bdd59f9461aa14461bdb65bc81e1a2b9b2",
+      "run_id": "e1_ga_heldout4002_s1000-1002_20261017T022849Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b3a068cc42be315e1e35cabf0c666978a202ef5ebc947e26cd1f900e3e7635f4",
+      "run_id": "e1_ga_heldout4002_s1003-1005_20261017T023019Z",
+      "worlds": [
+        "w1003",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ea57b308b1a4f5b3560f183ca59720c890caedbfb3763985436bbd574e00850a",
+      "run_id": "e1_ga_heldout4002_s1006-1007_20261017T023149Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8fa54ea0bfeca4cfc9cc44b8e89c93abaf69e1faaba071043da52663059c5ee4",
+      "run_id": "e1_ga_heldout4002_s1008-1009_20261017T023319Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "99c08d361f206a16787e05b8519080b7354d62855311116f2c602128649ef5d5",
+      "run_id": "e1_ga_heldout4003_s1000-1002_20261017T023449Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "6047790605cd6b3fd8fa94f0690059dc144e4cd974602661aa5503293478f014",
+      "run_id": "e1_ga_heldout4003_s1003-1005_20261017T023619Z",
+      "worlds": [
+        "w1003",
+        "w1003",
+        "w1003",
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "acef3bb0c4a531161fdad6b98051f4b9c08571db1da12957b4ec24a187f5c1ac",
+      "run_id": "e1_ga_heldout4003_s1006-1007_20261017T023749Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b9c96308691fe73d6ae84fcf6aafe915c5f8948f3a7105cc320291061f35a534",
+      "run_id": "e1_ga_heldout4003_s1008-1009_20261017T023919Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "bf8898ddf08477970ef9e5fc1ea05bafd3c5d4e68315b8593dbfb5d8a07c5319",
+      "run_id": "e1_gb_gemma_p0_s1000-1003_20261016T214712Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "273b325251b36974af36124640995abd4beff6d89bb324291dcf68b2a58e1a42",
+      "run_id": "e1_gb_gemma_p0_s1004-1007_20261016T214842Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "36401637b21e8e64ccc6a8dcac57fc0be426482996a12fab3c222fb2d23dc162",
+      "run_id": "e1_gb_gemma_p0_s1008-1011_20261016T215012Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a9634b6c9a0234822df6483c45f6c2e7e6cea8943847d7f9232d6873e6f1dda5",
+      "run_id": "e1_gb_gemma_p0_s1012-1015_20261016T215242Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d37ed3428515c3a810fe2ec86cc8f19ed3914160af4ec4ac527a9cfd085f013b",
+      "run_id": "e1_gb_gemma_p0_s1016-1019_20261016T215812Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f165883372b5f9f9ab6620aae5f65116d99b1eb5538e4001bfd91c3ab0c3997d",
+      "run_id": "e1_gb_gemma_p1_s1000-1003_20261016T215943Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "96b4d55232b5c62c8afb8b80239047369eb0475404a555abea5be54f3271dd19",
+      "run_id": "e1_gb_gemma_p1_s1004-1007_20261016T220113Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "af980bf6873e02dd3cb783fd5f9b2e205de558a9316c0ba28d25a13955132a3f",
+      "run_id": "e1_gb_gemma_p1_s1008-1011_20261016T220743Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b152698e9739d8e713fcded770e0a7baa3feb195b07854eefed9ae3bc3bce7e6",
+      "run_id": "e1_gb_gemma_p1_s1012-1015_20261016T220913Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b6c69d837085b5590b87b59d92a6b10599bc3e8c4997d4a6210ccaa5cadd8255",
+      "run_id": "e1_gb_gemma_p1_s1016-1019_20261016T221043Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "cc13c9a7b6bf48beb19955d31a6244ded84074b30115b3e3f48bc1a9679d7f0b",
+      "run_id": "e1_gb_gemma_p2_s1000-1003_20261016T221513Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "92f136da1bf1704d7ade59788e9d3327d05ca876",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "725f445a3cb8b849f503d7eee78c837c695ae3f087bd8aa01c4680d2f75e9ebf",
+      "run_id": "e1_gb_gemma_p2_s1004-1007_20261016T221644Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "92f136da1bf1704d7ade59788e9d3327d05ca876",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "902a0750db710841b21d3b7c26e46440a60795c6db3ae472a6492b991ca91aa8",
+      "run_id": "e1_gb_gemma_p2_s1008-1011_20261016T221914Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "92f136da1bf1704d7ade59788e9d3327d05ca876",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a79046d603bea51d010219262d2799d2e475430f722439ced2f15c4e34b7c5d2",
+      "run_id": "e1_gb_gemma_p2_s1012-1015_20261016T222044Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "9654fb1418ef9a682c26a0a8cd6aa04e1e2c227259687ca928683636f1c85b4a",
+      "run_id": "e1_gb_gemma_p2_s1016-1019_20261016T222614Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "36a59941905ee06eb1db53cef6fa4cb77d773cd11cc90bf81346a302861b8481",
+      "run_id": "e1_gb_gptoss_p0_s1000-1003_20261016T222744Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "6d6ef4d621bb12724777e72bfe7f22ce2b064f170521f830c8c265cf25949aad",
+      "run_id": "e1_gb_gptoss_p0_s1004-1007_20261016T222914Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "32cea7b63ab93aa2833033e7c339677d22fc658aafe9d76512425d12a426e67e",
+      "run_id": "e1_gb_gptoss_p0_s1008-1011_20261016T223144Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "89c6bcd1115f86405bec965a4d9942e6fdd15f12614ef03b95fa4fcf82ddf084",
+      "run_id": "e1_gb_gptoss_p0_s1012-1015_20261016T223514Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "83746cc531afc2d3086e42d0147c77df0edf65bfdce12ac062dea8eff9bb7bf8",
+      "run_id": "e1_gb_gptoss_p0_s1016-1019_20261016T224645Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ea54548ddf99c3e763594c8e12f6aa984bdecbf68cc025b8e5f32454147233bf",
+      "run_id": "e1_gb_gptoss_p1_s1000-1003_20261016T231718Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e4a8cde4ef1402967f1937e2480840789934ef0c2957450c8b76e2acaa09c388",
+      "run_id": "e1_gb_gptoss_p1_s1004-1007_20261016T231847Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "21f6509cab078b0b1cf82b56572318853add425f4b96f63f8b09b7b8e0732f20",
+      "run_id": "e1_gb_gptoss_p1_s1008-1011_20261016T232017Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ae176c6a0d81f7175525101fde8660380120b74c613b29ecc2f64791744fd17e",
+      "run_id": "e1_gb_gptoss_p1_s1012-1015_20261016T232148Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c89876091cec344024d99277d3aa52971aa34f309470aa84dea412444d472849",
+      "run_id": "e1_gb_gptoss_p1_s1016-1019_20261016T233018Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "aef2e5b9fd0d86b5b32511bfcb6ea714879da38593a08b484b5e77ec2a3c7418",
+      "run_id": "e1_gb_gptoss_p2_s1000-1003_20261016T234949Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "cb219cb6e688091f0d07fef920c59f5f825813461d98c1468bc4ae01cdf59337",
+      "run_id": "e1_gb_gptoss_p2_s1004-1007_20261016T235120Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a2a779957024557c0917f3a59a97f9c055479bb6377a4488945cc94333bab882",
+      "run_id": "e1_gb_gptoss_p2_s1008-1011_20261016T235250Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "3d3833e1e4ffa3eedd2657368dc6aacfe10be6a82f5e64055ef290e53a71fe03",
+      "run_id": "e1_gb_gptoss_p2_s1012-1015_20261016T235820Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "4bdbf31afdc2a06d65890ddccc4b683b024b32ab0308760a88091f12bfab7621",
+      "run_id": "e1_gb_gptoss_p2_s1016-1019_20261017T000650Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b58a09523049479ef3d6b7a9f5e4f0e8f3ac7f7b52921a459039576a69bcc4e6",
+      "run_id": "e1_gb_llama_p0_s1000-1003_20261016T211640Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a035638efebfbb8f835641c5f567f880ee79139165a9538dc751a775bd9377cd",
+      "run_id": "e1_gb_llama_p0_s1004-1007_20261016T211810Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "cacc212607768be5ed7113731f6b7d5fb08634f654c03f84123ceb48102c11a0",
+      "run_id": "e1_gb_llama_p0_s1008-1011_20261016T211940Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "47af63d4c4a234b7538035d2086cc79024e93fc692bad0646b47e3eb934270ba",
+      "run_id": "e1_gb_llama_p0_s1012-1015_20261016T212110Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c8a9fb6c02e96d046a6fad896c746e12705aae5017c6ee99290e87e080ccdbea",
+      "run_id": "e1_gb_llama_p0_s1016-1019_20261016T212240Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5c6ac149cbeda89df66d1f80600c92d8c5ef22d82eec5e6e563609bd694e4f36",
+      "run_id": "e1_gb_llama_p1_s1000-1003_20261016T212411Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "0548a9171e5b25aca55a08bb24c8dcb723db9b4a82265083ca70df103b04dba6",
+      "run_id": "e1_gb_llama_p1_s1004-1007_20261016T212541Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d057aef0fbe07c081f2f2a4ebd54b2fd924b12b2706e66d07924e75c38839cc8",
+      "run_id": "e1_gb_llama_p1_s1008-1011_20261016T212711Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "84908ddfbc69cb5df1e292367b490a9506cc13d99f4657ca4ff58cd6797e23a6",
+      "run_id": "e1_gb_llama_p1_s1012-1015_20261016T212841Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "aa2c148c27b5015379ceed326e34c6dadf53f3153ed932c24757d67f412442fa",
+      "run_id": "e1_gb_llama_p1_s1016-1019_20261016T213411Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c57f61419bcdc42d5d2782fa4f40258b718500d0314d23391461bd8ea0f208df",
+      "run_id": "e1_gb_llama_p2_s1000-1003_20261016T213541Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e588b20070121c59519c4f2cce760fa48c1e494aec75ec3e09cb72bfa34b7673",
+      "run_id": "e1_gb_llama_p2_s1004-1007_20261016T213711Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "30f4096aa48a14b17e207a4c96f4e1e0a87ecc6ea693b224bf116337ab8ed8f3",
+      "run_id": "e1_gb_llama_p2_s1008-1011_20261016T213841Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "2bad6d1b4992ef73a29f2a21f7ad9ba5f987f1f428cf20bb0fbee5c81f67cb72",
+      "run_id": "e1_gb_llama_p2_s1012-1015_20261016T214011Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "98855578f47753a5cea9f1c001a7aa7fecfd069d",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "94d313b9c69f5f2370a8232d3c40f40b696a7b141bec19aa35ee5b87aad7476f",
+      "run_id": "e1_gb_llama_p2_s1016-1019_20261016T214141Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "411334b1edf02ac3125b3620be780a38a93359ad1d13ba950e08b5f96349ac83",
+      "run_id": "e1_gb_opus_p0_s1000-1003_20261016T215133Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "fb7b0f61740b4427efb866fe9b93cf78a9122fd6e3821af72fb515acfa71ae1e",
+      "run_id": "e1_gb_opus_p0_s1004-1007_20261016T215403Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "39238a2de24d566784d1fcc62950d99f975b92a1e7e21384bf7411b43dad16d0",
+      "run_id": "e1_gb_opus_p0_s1008-1011_20261016T220034Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "efb2565587500ceb8c0d5f2b363a8d00576021e41188e7fbc31f32869f60c88a",
+      "run_id": "e1_gb_opus_p0_s1012-1015_20261016T220204Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "918cd28590232ef2b3993212f9b505c1e5f35fa4880a671df668df72f479f518",
+      "run_id": "e1_gb_opus_p0_s1016-1019_20261016T220334Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "84fad7d2ba7713905b8ba483d2272a6478ece495e2b39cbf66069ca84755ad40",
+      "run_id": "e1_gb_opus_p1_s1000-1003_20261016T220704Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "7f85b7486c79281d4f84337e5e50a8c2d242b0f5ababb660af4b17697fe7ae21",
+      "run_id": "e1_gb_opus_p1_s1004-1007_20261016T220834Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f72f3873ff70e99875ecaa04e0d3e4f8b64b0e431ce741420fba4b8c39515001",
+      "run_id": "e1_gb_opus_p1_s1008-1011_20261016T221004Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "58087c5175df778361e580bc0e29376f6da31d064d53ba4a078312c4ed08984e",
+      "run_id": "e1_gb_opus_p1_s1012-1015_20261016T221134Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9271219040ce83d76e66a49f263be78f8b44de25",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "fdbe71483f3550d492db1af35712dc961301f97409bc76794aadb9811ccd09a5",
+      "run_id": "e1_gb_opus_p1_s1016-1019_20261016T221404Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "92f136da1bf1704d7ade59788e9d3327d05ca876",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "9d7d413e12aaf0ed94f0172ed9e80dbaa8770acb79482b0860211a6094de6d82",
+      "run_id": "e1_gb_opus_p2_s1000-1003_20261016T221934Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "92f136da1bf1704d7ade59788e9d3327d05ca876",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "7e91971873055bc570c4e8cadfe1e9bcf1c79966b0533355a86440c0785ec76e",
+      "run_id": "e1_gb_opus_p2_s1004-1007_20261016T222105Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "14f0b433887f336bcc027a13b712f711c25bb6b5cf6b0b0fc897ae3f6fa46b4c",
+      "run_id": "e1_gb_opus_p2_s1008-1011_20261016T222535Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "984485128f825d756d041687a9893c028ffb9ceac41d27e3f78e2ae2c5557abf",
+      "run_id": "e1_gb_opus_p2_s1012-1015_20261016T222705Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "403c33e701b953dd8c0d1562814137cf8d57cdb8cec69ccb4c1c95c8aed601a8",
+      "run_id": "e1_gb_opus_p2_s1016-1019_20261016T222835Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "bee7d29d226118284d8ba6fdb4db6a0db1adccf7675e74ea1d7ce5c73f8903f0",
+      "run_id": "e1_gb_qwen_p0_s1000-1003_20261016T223105Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "fb00ae066e0be018dbfa804c34713fa5f1410b34daf54c2475db9a10a8f0a760",
+      "run_id": "e1_gb_qwen_p0_s1004-1007_20261016T223235Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "7669123890257f07f5a8aba11972d91e38897ef72a857e710bbf47beb48af2f7",
+      "run_id": "e1_gb_qwen_p0_s1008-1011_20261016T223405Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "04422767cc5e2ed1df7b4892c5e2f17ac42de3958097944e1bebe7e8aaeba421",
+      "run_id": "e1_gb_qwen_p0_s1012-1015_20261016T223635Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "a2c3047b3ade3b8faa617b9c118e4a93d0218f42",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "cf1af7554f34eed4614ba6e3a75db101d73a7fbb051603ea84b7435a49ad71cf",
+      "run_id": "e1_gb_qwen_p0_s1016-1019_20261016T225006Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "89085e633c729f596797aad08a88ae20222ead36bceff2807dc85601c455ac27",
+      "run_id": "e1_gb_qwen_p1_s1000-1003_20261016T231838Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5c5ef1d7dfc9f35f2c9d9bb7f71ad544e2164ac4f2199854e7ad340df7df542c",
+      "run_id": "e1_gb_qwen_p1_s1004-1007_20261016T232008Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1ff5e2540e3f2e50e37360319b27ca031fb63bdf2dc15e207f5432d7d4bc9a29",
+      "run_id": "e1_gb_qwen_p1_s1008-1011_20261016T232138Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1788cc00bd2b85d66f7b47af93c2744dec8e048edeae7e0313c4ff3665304a70",
+      "run_id": "e1_gb_qwen_p1_s1012-1015_20261016T233009Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "195f9c4191a0e803b650b0f2972311822477e789b7c04e9faf5515178aaecaef",
+      "run_id": "e1_gb_qwen_p1_s1016-1019_20261016T234940Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f6f88db324b82298e0311552ac3a9215d72c4a606a2cbab7a679315ef8ad6c7d",
+      "run_id": "e1_gb_qwen_p2_s1000-1003_20261016T235110Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "3c229c72199254fc9c142e20c1db29d1dd4abf319d9e278e6e9100d7f9a569c9",
+      "run_id": "e1_gb_qwen_p2_s1004-1007_20261016T235240Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "6b576ab5f2440e5769e2a0606936c4baa13a563dcd182aac00ed58240b500b34",
+      "run_id": "e1_gb_qwen_p2_s1008-1011_20261016T235410Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "95a878e138adf8d9fb4bbaa2d4b961cad3fb556fa5fd2482614aded17e7e266f",
+      "run_id": "e1_gb_qwen_p2_s1012-1015_20261016T235941Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d0e289bc6d09cf8a2f32c4e96a46499b74290efe13d7a03c611188e34487064b",
+      "run_id": "e1_gb_qwen_p2_s1016-1019_20261017T000811Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5006a81fff19a22eca2e0dfb8def1e7ae18f107025d8875d0dbe829a52656916",
+      "run_id": "e1_gb_sonnet_p0_s1000-1003_20261017T000941Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "4b7298bb718a02ff1706492b1f7db15a38166252131c6c3f51cd10f0ea196118",
+      "run_id": "e1_gb_sonnet_p0_s1004-1007_20261017T001111Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "6cfe186f577853e68b244fa0ccbd7b324852fef57c8742123e27c9acc2635432",
+      "run_id": "e1_gb_sonnet_p0_s1008-1011_20261017T001242Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "a86a12a3af2f05220e0e0e5d379878fb1fb4a67933118266c3dd58e1d2cfca90",
+      "run_id": "e1_gb_sonnet_p0_s1012-1015_20261017T001412Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ebc3e619ef31636b4f0239e5b7c8faf6c0e82ce4aafb8d9c320c4fce4b6b7eb6",
+      "run_id": "e1_gb_sonnet_p0_s1016-1019_20261017T001542Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1a3797a94c2a0e68b8fa8b587ca1f2ecea0b327218d7237c163d963b79dcfd99",
+      "run_id": "e1_gb_sonnet_p1_s1000-1003_20261017T001712Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5e2c3ee98c32c74f2c85fae43700cfc44ef57ee21e3ac75091c1c090dfccb3a4",
+      "run_id": "e1_gb_sonnet_p1_s1004-1007_20261017T001842Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "97a32d0b2eb2089579079c755da3adbda2101401ddc56e30cb008224b9006f0e",
+      "run_id": "e1_gb_sonnet_p1_s1008-1011_20261017T002012Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8a73fd1b34020ce3a9cbaca6060e33e8ae63601abce9edfcf11f68fc1c711400",
+      "run_id": "e1_gb_sonnet_p1_s1012-1015_20261017T002142Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "3d35c444848d2b0ac1ee8f6aca62b19a07d0d02f204226205035085192e719eb",
+      "run_id": "e1_gb_sonnet_p1_s1016-1019_20261017T002312Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "4216384a683fc65629ce69a7953ae7a20bde6e8524a4ab6a6e85617e7e25f59f",
+      "run_id": "e1_gb_sonnet_p2_s1000-1003_20261017T002442Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "9ea4047280199962787c9ea026ffdfcdf873ddd5a7145c85befbfa14c0b8cbac",
+      "run_id": "e1_gb_sonnet_p2_s1004-1007_20261017T002612Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "78578b58bba4922908d602d581c46e5024a769504e294a2e458f0e1ad7dce79a",
+      "run_id": "e1_gb_sonnet_p2_s1008-1011_20261017T002742Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d7b1567e88db2f4e0d845a22529f2541ae8e53259ee34c054f47a7342c04df7c",
+      "run_id": "e1_gb_sonnet_p2_s1012-1015_20261017T002912Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "78cb79b3fbd486291b15b51140d6055aff87492398903e79f34ee8f74b6d9297",
+      "run_id": "e1_gb_sonnet_p2_s1016-1019_20261017T003042Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "eae603b2a87127d14770993f13b653715d1650d80cbc15f23473e1365f9eb83a",
+      "run_id": "e1_v_qwen_p0_s1000-1003_20261017T005443Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "30f0079b21f1a8a5c8391408dae898ba10a20024fa1a1847d0a260d95bfa11f1",
+      "run_id": "e1_v_qwen_p0_s1004-1007_20261017T005614Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1afba7e4e9c448878d169a140c27b65e2ec8f6a8c564e6b968c388d71c6146dc",
+      "run_id": "e1_v_qwen_p0_s1008-1011_20261017T005744Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "930a030e086ea340af23c0772d0e54165c91aa25548a61ad319a0f01106f6f63",
+      "run_id": "e1_v_qwen_p0_s1012-1015_20261017T005914Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "69b0c423c8f515ae721f3abd86d19af8b651983a994a298755c6a27dbe5c1e32",
+      "run_id": "e1_v_qwen_p0_s1016-1019_20261017T010044Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "2ce928a730f561c3ebdc627639b7b8c3abc2d9aaaebfa555588c247b17d99c71",
+      "run_id": "e1_v_qwen_p1_s1000-1003_20261017T010214Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "3c74f764de8cd4316483a0c621e6bd3e71e84dfc9febc7795034f3dad6fc6341",
+      "run_id": "e1_v_qwen_p1_s1004-1007_20261017T010344Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "9907a34543b629e92e05c3fff5f832ff6806afeb6316c4dc792fbeb6aa7d5fd3",
+      "run_id": "e1_v_qwen_p1_s1008-1011_20261017T010514Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "392e31915dcb67462cb82356bf37fa3d9fa3ee4f2f396ec95f210e22e240336a",
+      "run_id": "e1_v_qwen_p1_s1012-1015_20261017T010644Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c73dfe513334c893edc23fc5adcd415aa7d7b86a6a9351b4329d5dc958c1c3d3",
+      "run_id": "e1_v_qwen_p1_s1016-1019_20261017T014617Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "972508dcf707cdae84a0f64e2605b6cdecf1cb96cf0264ae9916c2eb62df9055",
+      "run_id": "e1_v_qwen_p2_s1000-1003_20261017T014747Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b6e82e9e6d787619bc35f1f2e07a9d831ef52cf3555bf4f674194ac9559b4010",
+      "run_id": "e1_v_qwen_p2_s1004-1007_20261017T014917Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "34127cf486fffc95c12e411ceb42755dac2d53a35c3c6d6d3332fa717f4b9aeb",
+      "run_id": "e1_v_qwen_p2_s1008-1011_20261017T015047Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "9a28988d8686812dd65e8a3c78fb64dadef3f8d2ffbd2dcf7c494582b4f4d0ac",
+      "run_id": "e1_v_qwen_p2_s1012-1015_20261017T015217Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "48df44c0ca82c76000629006fa52687255b79c46115effabb657dbca1ca61228",
+      "run_id": "e1_v_qwen_p2_s1016-1019_20261017T015347Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "45f90af57cf28db138f0b1830c3ba3e8d1ae8eaab717829ab7c73f2ae54448e0",
+      "run_id": "e1_v_sonnet_p0_s1000-1003_20261017T015717Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c23af3788fcd082c80d4bc42cf46df37c1f6b368929e6c577c5f8241275390c5",
+      "run_id": "e1_v_sonnet_p0_s1004-1007_20261017T015947Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "09e97f631e721c1bff6461a1eff0cb07f5c7755e2df130c78cb980467b762e27",
+      "run_id": "e1_v_sonnet_p0_s1008-1011_20261017T020318Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "7d719fcdc95db94a9c63265d88d08bf11822a77f198a9c7f3a5dac9b7fa6184f",
+      "run_id": "e1_v_sonnet_p0_s1012-1015_20261017T020448Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5783e0e5b424f5c25d23ebb1edf64f12d746b846eeeea391dc50874b8ca59d82",
+      "run_id": "e1_v_sonnet_p0_s1016-1019_20261017T020618Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "993b3eb680e017fb05c8cbd5ea338730ee315da7c7f8d09c30e313531b99ce0b",
+      "run_id": "e1_v_sonnet_p1_s1000-1003_20261017T020748Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e26dd907b1f56334661a6c8ff39186fcc37f200ad1f7cf7e365cce354cd60b9f",
+      "run_id": "e1_v_sonnet_p1_s1004-1007_20261017T020918Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d5c1be8582934d6552b3ec63f9033d1b6f613ee5408c7e152b823cd219597577",
+      "run_id": "e1_v_sonnet_p1_s1008-1011_20261017T021048Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ea2decfa40f7db68c779e07085755aa22036d81b1600995bc9b3bd26bdf13e37",
+      "run_id": "e1_v_sonnet_p1_s1012-1015_20261017T021218Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8ca66a1d11d235e998c787bbc8cad3ca27ee6b4550da9bf8838a4ba7450f035b",
+      "run_id": "e1_v_sonnet_p1_s1016-1019_20261017T021348Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b2c2079c1b3bafab6c9da8abed92229642952ff63ea49ea6c4847f455f661360",
+      "run_id": "e1_v_sonnet_p2_s1000-1003_20261017T021518Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "f7f8358edb03c0cce9370e8123e69e4e7994eb1c9d68576ece5bd88fbb2f95c7",
+      "run_id": "e1_v_sonnet_p2_s1004-1007_20261017T021648Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "76a2407dee1df7f66be199774b353ec5290466ffcb5d7f19fe1b093d86b1caf9",
+      "run_id": "e1_v_sonnet_p2_s1008-1011_20261017T021818Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "e7c45427c6c65d99c27eec16f5538b7ef62f8cc3d465e14ce5e8f689e16cba0f",
+      "run_id": "e1_v_sonnet_p2_s1012-1015_20261017T021948Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "43785bc4694c443cb63f86ac657341a82be99db7",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "3a43ca009d83c8840c57500d27d0189b61ab536882b4e9bea09505e795837fba",
+      "run_id": "e1_v_sonnet_p2_s1016-1019_20261017T022118Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "0196055442d77e7c05bbb6c0741e3c5a6e3329323221eb040d49b73b9692596b",
+      "run_id": "e1_v_opus_p0_s1000-1003_20261017T003212Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "0cf32565395c08e4cb3973071c5639250725e0769f7f4379a8683bf4840c0e7e",
+      "run_id": "e1_v_opus_p0_s1004-1007_20261017T003343Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "5f08b46dc1b9b8a053624087a0bdb9428559e138c47e3311fa7b6fb2335b9c17",
+      "run_id": "e1_v_opus_p0_s1008-1011_20261017T003513Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1764893af5754da648df4b5def6637143cbf6f024cd2a2991a32c3a84c283294",
+      "run_id": "e1_v_opus_p0_s1012-1015_20261017T003643Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1fdc718ec216abb1203c1dfdb8768a9f9b540a57b66e96f0eaf0e75beab30d26",
+      "run_id": "e1_v_opus_p0_s1016-1019_20261017T003813Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ae3b296f48352eadf48942d7fdf2b06e8a5e5b3af84689f5b68cf95e90424f1e",
+      "run_id": "e1_v_opus_p1_s1000-1003_20261017T003943Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "38a066864278f0f3cdb0e0dbd2fc307904a148569fbd593ba9fcc8fe0a0c6cf5",
+      "run_id": "e1_v_opus_p1_s1004-1007_20261017T004113Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "7fae3a91570b1a744f684175d28a7a9facc23ab5688b91776dadd77b81083cd9",
+      "run_id": "e1_v_opus_p1_s1008-1011_20261017T004243Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c908b1ed813d6fb5f8c21aae4aaf2a7a745cc006675cddf5a7a2fa697f7aedbc",
+      "run_id": "e1_v_opus_p1_s1012-1015_20261017T004413Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "61e78974e64e38fdcaba1d73493de8b5ee9c77d583ccf99c82dec69cd08804dd",
+      "run_id": "e1_v_opus_p1_s1016-1019_20261017T004543Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "c46da69bca0d14c243b76b17e384cdb21de3101f1c21ba3752b403cd0c6a013d",
+      "run_id": "e1_v_opus_p2_s1000-1003_20261017T004713Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001",
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "cbb23b1ed09618516798be6b06a6664099d6c4828237ccc46c5a665d252fd151",
+      "run_id": "e1_v_opus_p2_s1004-1007_20261017T004843Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005",
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "494975af1c2aa38d43748c3753341514cb3e7ee2f6df583a1e8a7af339b70b83",
+      "run_id": "e1_v_opus_p2_s1008-1011_20261017T005013Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009",
+        "w1010",
+        "w1010",
+        "w1010",
+        "w1011",
+        "w1011",
+        "w1011"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "55f628ce2e8442d58ab9790ecd9f5a081d370e8b4718526026bc76006c9d5ba7",
+      "run_id": "e1_v_opus_p2_s1012-1015_20261017T005143Z",
+      "worlds": [
+        "w1012",
+        "w1012",
+        "w1012",
+        "w1013",
+        "w1013",
+        "w1013",
+        "w1014",
+        "w1014",
+        "w1014",
+        "w1015",
+        "w1015",
+        "w1015"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5255a2a50e5c5b41a1cd712546f99d051759a197",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "91217d55fa3b49cd63ce90a2e222df152072f0b8905c2c864a41f493b7e03225",
+      "run_id": "e1_v_opus_p2_s1016-1019_20261017T005313Z",
+      "worlds": [
+        "w1016",
+        "w1016",
+        "w1016",
+        "w1017",
+        "w1017",
+        "w1017",
+        "w1018",
+        "w1018",
+        "w1018",
+        "w1019",
+        "w1019",
+        "w1019"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "f80fbe12548ad09fca7fefc8047e04be039ce7bf0e56dda0369e7c97c3d5c408",
+      "run_id": "x_mem0_s1000_20261016T165445Z",
+      "worlds": [
+        "w1000"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "21c245a2010f29c4663853cf6715ff6eb7f0a02a388d397c4832ae8d52fa4d3c",
+      "run_id": "x_mem0_s1001_20261016T165615Z",
+      "worlds": [
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "fb059e91919a18313dce530ff882dade78261183c7cf8e992688feab2ded7e73",
+      "run_id": "x_mem0_s1002_20261016T165845Z",
+      "worlds": [
+        "w1002"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "233d865bd1233d8a336c0b662be2f5fe0b40d30ff6e3a3e8de40c3f64142843e",
+      "run_id": "x_mem0_s1003_20261016T170416Z",
+      "worlds": [
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "659ff7653cb699b985e8741f905393569ef6eedec3c890454343644b919c7cee",
+      "run_id": "x_mem0_s1004_20261016T170546Z",
+      "worlds": [
+        "w1004"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "a237738023e270a0f6a1def93ab451dbdc8b8727cfc8362db6d8ed1cf2eb354d",
+      "run_id": "x_mem0_s1005_20261016T170716Z",
+      "worlds": [
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "c136d09bb34276ccb463659988fd0ad646a2d384572d13eda0800340bf78b881",
+      "run_id": "x_mem0_s1006_20261016T170846Z",
+      "worlds": [
+        "w1006"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "6752d9d14e19a1378fffc86aeba12b4646899c2bf76aeb77b76e9dab9fc310f0",
+      "run_id": "x_mem0_s1007_20261016T171016Z",
+      "worlds": [
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "d015cb666c5d541733100483f3ace60f886532a9d441e35184e2a15bc1492257",
+      "run_id": "x_mem0_s1008_20261016T171146Z",
+      "worlds": [
+        "w1008"
+      ]
+    },
+    {
+      "code": {
+        "commit": "9d670289509f37878291fb777a06b1d2d1b1b8af",
+        "dirty": false
+      },
+      "experiment": "X-mem0",
+      "manifest_sha256": "57b188bcfa29aaa10e9b7e90ab2de2a73d1c27112db59d3c121eb53bd9ae1785",
+      "run_id": "x_mem0_s1009_20261016T171416Z",
+      "worlds": [
+        "w1009"
+      ]
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "run_id": "stage2_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "6128f3a59c20ce483b83076094557ea6736f1c2f790dc38b1e1b9efb0bfe1089",
+      "run_id": "stage4_c_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "9747c1191ca18b4f6a89246c8d03a278b8f8f43d6770dc0f068d6215da8895aa",
+      "run_id": "stage4_m2_google_gemma-4-12b-it",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "5a72810aeff2ec71a828f9ef5fd6fa0fe8dcd865916e1d1692cec20ab8aaa1cf",
+      "run_id": "stage4_m2_meta-llama_llama-3_1-8b-instruct",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-m2",
+      "manifest_sha256": "7149449c130f61cfde32f10785759e74e7998d01d80d1308ce9e15988af810f7",
+      "run_id": "stage4_m2_openai_gpt-oss-20b",
+      "worlds": []
+    }
+  ]
+}

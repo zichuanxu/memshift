@@ -1,6 +1,6 @@
 """Paper figures regenerated from the committed run analyses (plan §10: figures come from runs/).
 
-Sources are the analysis directories listed in paper/results_sources.json, the same ones the
+Sources are the analysis directories listed in results/sources.json, the same ones the
 paper's number macros are generated from.
 
 fig_dissociation   E1: detection (missed invalidation), repair (correct re-derivations) and the
@@ -13,7 +13,15 @@ fig_native_systems Block N (prereg v2 §8): predicted against observed for every
                    branch and metric (Update, Stability); systems that were not run show as such.
 fig_classsplit     exploratory (`ex_e1_paper`): B and B x D on Update by item class and branch
 fig_account        exploratory (`ex_review_paper`): B x D against the repair gap r1 - r0 by writer
+fig_writers        round 3 (`round3_figures`): B x D against how often the programs are right (G-b
+                   program sets) and against r_0 (definition-item writers of block H)
+fig_reader         round 3: B x D with each reader of the same stores against the store part
+fig_misses         exploratory: why the cited-cluster key misses changed item-times
+fig_registered     every registered prediction with an estimate against its registered bar; with it
+                   paper/generated/tab_registered_tests.tex (the other registered verdicts) and
+                   the counts (held, failed, mixed) as paper/generated/registered_counts.tex
 Usage: python -m memshift.analysis.figures [--root .] [--out paper/figures] [--only NAME ...]
+       [--counts paper/generated/registered_counts.tex]
 """
 
 from __future__ import annotations
@@ -336,7 +344,9 @@ def fig_zero_cost(e3: dict[str, Any], out: Path) -> Path:
     ax2.axhspan(0.5 * reread, top, color=fs.LIGHT, alpha=0.7, lw=0, zorder=0)
     ax2.axhline(reread, color=fs.BLACK, lw=0.8, zorder=1)
     ax2.text(1.0, reread * 1.3, "full re-read", fontsize=7.5, ha="center", va="bottom")
-    ax2.text(1.0, top / 1.6, "fails T4", fontsize=7.5, ha="center", va="top", color=fs.GREY)
+    ax2.text(
+        1.0, top / 1.6, "fails cost ceiling", fontsize=7.5, ha="center", va="top", color=fs.GREY
+    )
     for k, s in enumerate(systems):  # colour and marker as in panel (a), whose legend names them
         _, colour, _, marker = fs.SYSTEMS[s]
         c = last[s]
@@ -555,19 +565,9 @@ def fig_native_systems(e5: dict[str, Any] | None, out: Path) -> Path:
                         zorder=1,
                     )
                     ax.plot([pred["est"]] * 2, [y - 0.3, y + 0.3], color=fs.GREY, lw=0.9, zorder=2)
-                if nat:
-                    ax.errorbar(
-                        [nat["est"]],
-                        [y],
-                        xerr=_err(nat),
-                        fmt="o",
-                        ms=4.2,
-                        color=fs.VERMILION,
-                        mfc=fs.VERMILION if v["inside"] else "white",
-                        mew=1.1,
-                        elinewidth=0.9,
-                        zorder=4,
-                    )
+                if nat:  # filled inside the predicted interval, outlined outside it
+                    fs.interval_bar(ax, y, nat["est"], nat["lo"], nat["hi"], fs.VERMILION,
+                                    filled=bool(v["inside"]), size=4.0, zorder=4)  # fmt: skip
             ax.set_title(f"{m}, {br_name}", pad=3)
             # padded so that the 100 of one panel and the 0 of the next do not run together
             fs.pct_axis(ax, "x", -0.05, 1.07)
@@ -588,12 +588,16 @@ def fig_native_systems(e5: dict[str, Any] | None, out: Path) -> Path:
         Patch(color=fs.LIGHT, label="predicted, 95\\% interval"),
         Line2D([], [], marker="|", color=fs.GREY, ls="none", ms=8, mew=0.9,
                label="predicted estimate"),
-        Line2D([], [], marker="o", color=fs.VERMILION, lw=0.9, ms=4.2,
-               label="native estimate, 95\\% interval: inside"),
-        Line2D([], [], marker="o", mfc="white", mec=fs.VERMILION, mew=1.1, color=fs.VERMILION,
-               lw=0.9, ms=4.2, label="outside"),
+        fs.interval_handle(fs.VERMILION, True, "native, 95\\% interval: inside"),
+        fs.interval_handle(fs.VERMILION, False, "outside"),
     ]  # fmt: skip
-    fig.legend(handles=handles, loc="outside upper center", ncol=4, columnspacing=1.2)
+    fig.legend(
+        handles=handles,
+        handler_map=fs.INTERVAL_HANDLERS,
+        loc="outside upper center",
+        ncol=4,
+        columnspacing=1.2,
+    )
     path = out / "fig_native_systems.pdf"
     fig.savefig(path)
     plt.close(fig)
@@ -610,8 +614,14 @@ def main() -> None:
     ap.add_argument("--root", type=Path, default=Path("."))
     ap.add_argument("--out", type=Path, default=Path("paper/figures"))
     ap.add_argument("--only", nargs="*", default=[], help="figure names (fig_native, ...)")
+    ap.add_argument(
+        "--counts",
+        type=Path,
+        default=Path("paper/generated/registered_counts.tex"),
+        help="where fig_registered writes the counts the paper quotes (registered_counts)",
+    )
     a = ap.parse_args()
-    sources = json.loads((a.root / "paper" / "results_sources.json").read_text())
+    sources = json.loads((a.root / "results" / "sources.json").read_text())
     a.out.mkdir(parents=True, exist_ok=True)
     jobs = [
         (fig_dissociation, "e1", "e1_metrics.json"),
@@ -635,6 +645,22 @@ def main() -> None:
         from memshift.analysis import ex_review_paper
 
         print(ex_review_paper.fig_account(ex_review_paper.load(a.root, sources), a.out))
+    from memshift.analysis import round3_figures  # round 3 and the registration record
+
+    wanted = [n for n in round3_figures.FIGURES if not a.only or n in a.only]
+    if wanted:
+        inp = round3_figures.load(a.root, sources)
+        for name in wanted:
+            print(round3_figures.FIGURES[name](inp, a.out))
+        if "fig_registered" in wanted:  # the counts quoted in the paper, and the other verdicts
+            a.counts.parent.mkdir(parents=True, exist_ok=True)
+            a.counts.write_text(round3_figures.counts_tex(round3_figures.paper_counts(inp)))
+            print(a.counts)
+            table = a.counts.parent / "tab_registered_tests.tex"
+            table.write_text(
+                round3_figures.tab_registered_tests(round3_figures.registered_tests(inp))
+            )
+            print(table)
 
 
 if __name__ == "__main__":

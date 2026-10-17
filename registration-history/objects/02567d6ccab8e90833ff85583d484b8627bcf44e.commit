@@ -1,0 +1,8 @@
+tree bd3bb8a46e23c918cedbb7193bd4f8f4b5ea8781
+parent 22e2ae549d240a43ec21e578922e7cfb8561cca6
+author zichuanxu <zichuanxu28@gmail.com> 1792144250 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792144250 +0900
+
+Registration v4b: blocks Y (Claude Sonnet 5.5 as reader on the committed stores) and V (definitions in the user's own words for D_m programs), before any request
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

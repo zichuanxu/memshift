@@ -1,4 +1,4 @@
-.PHONY: setup lint fmt typecheck test check smoke release
+.PHONY: setup lint fmt typecheck test check smoke
 
 setup:            ## create the venv and install runtime + dev dependencies
 	uv sync --dev
@@ -19,8 +19,6 @@ test:             ## pytest
 
 check: lint typecheck test   ## everything CI runs
 
-smoke:            ## one-world smoke run (plan §7 stage 0.4); fills in as code lands
-	uv run memshift version
-
-release:          ## open-source package into dist/ (allowlist + internal-identifier scan)
-	uv run python scripts/make_release.py
+smoke:            ## offline, no model: generate one world branch from a seed, re-check its SHA256
+	@out=$$(mktemp -d) && dir=$$(uv run memshift gen --seed 0 --branch src --out "$$out") && \
+	  echo "$$dir" && uv run memshift verify "$$dir" && rm -r "$$out"

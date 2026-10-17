@@ -3,7 +3,7 @@ decisions.md 2026-09-30): the class-stratified contrasts, the Eq. (1) decomposit
 out-of-sample test, invalidation precision, per-definition spread, the post-shift JSON arm,
 Stability, the short worlds, replication accounting, cost and the noise floor. Every macro name
 starts with `Ex` (exploratory) and every source is a staged analysis named in
-paper/results_sources.json:
+results/sources.json:
 
   e1 / rep_e1 / c / m2_gemma / m2_llama / m2_gptoss / dev_e1 / dev_orphan_e1 / short_e1
                      analysis/e1_metrics.json, with the `explore_*` blocks of
@@ -549,9 +549,9 @@ def _branch_cols() -> str:
 
 def tab_classsplit(inp: Mapping[str, Any]) -> str:
     """Main text: B effect at each D, D effect at each B and B x D on Update, for the definition
-    items and all the others, per branch: the main study (first line) and R (second line); the
-    share of changed item-times of each class first. Each contrast's name heads its pair of lines,
-    so the label column is narrow and the six interval columns fit a 5.5in text width."""
+    items and all the others, per branch: the main study (first line) and the replication (second
+    line); the share of changed item-times of each class first. Each contrast's name heads its pair
+    of lines, so the label column is narrow and the six interval columns fit a 5.5in text width."""
     main, rep = inp.get("main"), inp.get("rep")
     rows_ = (
         ("B_effect_update_D0", r"$B$ effect, $D{=}0$"),
@@ -564,15 +564,14 @@ def tab_classsplit(inp: Mapping[str, Any]) -> str:
     n_rep = _get(rep, "n_worlds") or MISSING
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The registered contrasts on Update by item class (source-epoch binding; pp, "
-        r"95\% world-bootstrap intervals). $B$ effect: $B{=}1$ minus $B{=}0$ at the given $D$; "
-        r"$D$ effect: $D{=}1$ minus $D{=}0$ at the given $B$; $B{\times}D$: the $B$ effect at "
-        r"$D{=}1$ minus that at $D{=}0$. \emph{Definition}: the six evaluated definition items "
-        r"of each world; \emph{other}: the other 42 (single-field and free-text) items; share: "
+        r"\caption{The registered contrasts on Update by item class (source-epoch key, pp, "
+        r"95\% world-bootstrap intervals). $B$ effect: $B{=}1$ minus $B{=}0$ at the given $D$. "
+        r"$D$ effect: $D{=}1$ minus $D{=}0$ at the given $B$. $B{\times}D$: the $B$ effect at "
+        r"$D{=}1$ minus that at $D{=}0$. Definition: the six evaluated definition items "
+        r"of each world. Other: the other 42 (single-field and free-text) items. Share: "
         r"the class's share of the changed item-times in the main study. First line of each "
-        rf"pair: the main study ({n_main} worlds), whose class split is exploratory; second line, "
-        rf"in grey: the replication worlds R ({n_rep} worlds), whose registered class rows "
-        r"replicate it.}",
+        rf"pair: the main study ({n_main} worlds), whose class split is exploratory. Second line, "
+        rf"in grey: the replication ({n_rep} fresh worlds), whose class rows are registered.}}",
         r"\label{tab:classsplit}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{2pt}",
@@ -591,7 +590,7 @@ def tab_classsplit(inp: Mapping[str, Any]) -> str:
     lines += [_row("share", *cells), r"\midrule"]
     for key, label in rows_:
         lines.append(rf"\multicolumn{{7}}{{@{{}}l}}{{{label}}} \\")
-        for stage, name in (("main", r"\quad main"), ("rep", r"\quad\textcolor{gray}{R}")):
+        for stage, name in (("main", r"\quad main"), ("rep", r"\quad\textcolor{gray}{repl.}")):
             m = main if stage == "main" else rep
             vals = []
             for b, _ in BRANCH_TAGS:
@@ -698,7 +697,8 @@ def tables(inp: Mapping[str, Any]) -> dict[str, str]:
 # ---------------------------------------------------------------------------------- figure
 def fig_classsplit(inp: Mapping[str, Any], out: Path) -> Path:
     """Forest plot: per branch (panel) and item class, the B effect at D=0 and D=1 and B x D on
-    Update, main study (filled) and R (hollow), 95% intervals. Each class header carries the class's
+    Update as interval bars (`figstyle.interval_bar`), main study (filled) and R (outlined), 95%
+    intervals. Each class header carries the class's
     share of the branch's changed item-times (main study)."""
     from memshift.analysis import figstyle as fs
 
@@ -734,26 +734,8 @@ def fig_classsplit(inp: Mapping[str, Any], out: Path) -> Path:
                 e = _get(inp.get(stage), "explore_class_split", "D1", branch, "source", cls, key)
                 if not e or e["est"] != e["est"]:
                     continue
-                ax.errorbar(
-                    [100 * e["est"]],
-                    [yy + dy],
-                    xerr=[[100 * (e["est"] - e["lo"])], [100 * (e["hi"] - e["est"])]],
-                    fmt="none",
-                    ecolor=colour,
-                    elinewidth=1.0,
-                    zorder=3,
-                )
-                ax.plot(
-                    [100 * e["est"]],
-                    [yy + dy],
-                    marker="o" if filled else "s",
-                    ms=4.2,
-                    mec=colour,
-                    mew=1.1,
-                    mfc=colour if filled else "white",
-                    ls="none",
-                    zorder=4,
-                )
+                fs.interval_bar(ax, yy + dy, 100 * e["est"], 100 * e["lo"], 100 * e["hi"], colour,
+                                filled=filled, size=4.0)  # fmt: skip
         share = _get(inp.get("main"), "explore_class_mix", branch, "classes")
         for cls, _ in classes:
             s = _get(share, cls, "share")
@@ -778,13 +760,13 @@ def fig_classsplit(inp: Mapping[str, Any], out: Path) -> Path:
         ax.tick_params(axis="y", length=0)
     fig.supxlabel("effect on Update (pp)", fontsize=9)
     handles = [
-        plt.Line2D([], [], marker="o", ls="none", mfc="0.3", mec="0.3", ms=4.2, label="main study"),
-        plt.Line2D([], [], marker="s", ls="none", mfc="white", mec="0.3", mew=1.1, ms=4.2,
-                   label="replication"),
-    ]  # fmt: skip
+        fs.interval_handle(fs.GREY, True, "main study"),
+        fs.interval_handle(fs.GREY, False, "replication"),
+    ]
     # in the empty corner under the row labels, left of the first panel's tick labels
-    fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.0, 0.0), ncol=1,
-               handletextpad=0.3, labelspacing=0.25, borderaxespad=0.1, fontsize=7.5)  # fmt: skip
+    fig.legend(handles=handles, handler_map=fs.INTERVAL_HANDLERS, loc="lower left",
+               bbox_to_anchor=(0.0, 0.0), ncol=1, handletextpad=0.4, handlelength=1.6,
+               labelspacing=0.25, borderaxespad=0.1, fontsize=7.5)  # fmt: skip
     path = out / "fig_classsplit.pdf"
     fig.savefig(path)
     plt.close(fig)

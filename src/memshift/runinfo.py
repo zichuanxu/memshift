@@ -1,8 +1,10 @@
 """Run provenance (plan §8): every run writes `manifest.json` (world ids, seeds, model ids, image
 ids, parameters, code commit, SHA256 of every output file) and `env.json` (host facts, serving
-images, model revisions), following reference/research_1/results/manifest.json.
+images, model revisions).
 
 Serving metadata is read from `logs/serving/*.json`, written when a model container is launched.
+A `claude-*` model has no image or revision; its manifest entry names the API, the
+`anthropic-version` header and the time of this process's first request to it.
 Host names and addresses are deliberately not recorded.
 """
 
@@ -18,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from memshift.gen.model import World
+from memshift.llm import ANTHROPIC_VERSION, anthropic_first_call, is_claude
 from memshift.textutil import sha256_json
 
 REPO = Path(os.environ.get("MEMSHIFT_REPO", Path(__file__).resolve().parents[2]))
@@ -105,6 +108,21 @@ def write_env(run_dir: Path, models: dict[str, str]) -> None:
     (run_dir / "env.json").write_text(json.dumps(env, indent=2, sort_keys=True))
 
 
+def model_record(model: str, serving: dict[str, Any]) -> dict[str, Any]:
+    if is_claude(model):
+        return {
+            "api": "anthropic",
+            "model": model,
+            "anthropic_version": ANTHROPIC_VERSION,
+            "first_call_utc": anthropic_first_call(model),
+        }
+    return {
+        "model": model,
+        "revision": serving.get(model, {}).get("revision"),
+        "image_id": serving.get(model, {}).get("image_id"),
+    }
+
+
 def write_manifest(
     run_dir: Path,
     experiment: str,
@@ -128,9 +146,7 @@ def write_manifest(
         "worlds": worlds,
         "models": {
             role: {
-                "model": m,
-                "revision": serving.get(m, {}).get("revision"),
-                "image_id": serving.get(m, {}).get("image_id"),
+                **model_record(m, serving),
                 **({"cache_tag": tags[m]} if m in tags else {}),
             }
             for role, m in models.items()

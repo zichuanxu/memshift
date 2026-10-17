@@ -1,0 +1,8 @@
+tree 723739517cc9f98919a6c1344c72d52d08243a31
+parent 6ec4c3610891204b1a67d8d41a7bc7d44ce62767
+author zichuanxu <zichuanxu28@gmail.com> 1792187364 +0900
+committer zichuanxu <zichuanxu28@gmail.com> 1792187364 +0900
+
+Cache race: decision row (U5 void as registered; G-b, V and G-a re-run from the now single cached program per key, whatever the outcome; main-study and stage-4 effects disclosed, not re-run); qwen40k phase gains the 102 re-run jobs
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

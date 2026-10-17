@@ -1,7 +1,8 @@
 """Paper tables regenerated from the committed run analyses (plan §10), with compact number formats
-that fit one ICML column. Sources: paper/results_sources.json and paper/audit/system_audit.json.
+that fit one ICML column. Sources: results/sources.json and audit/system_audit.json.
 
-tab_gate        pre-registered falsification paths and what the result supports (gate A)
+tab_gate        pre-registered falsification paths (the paper's gain, leak and agreement checks)
+                and what the result supports (gate A)
 tab_robust      reader swap (theta_r) and embedding swap (theta_e): contrasts and post-shift scores
 tab_robust_ci   the same with 95% intervals (appendix)
 tab_membership  T1-T4 for a selection of systems (the full audit is in the appendix)
@@ -12,7 +13,9 @@ tab_construct   C1-C4 for the writer-authored derivations and program statistics
 tab_native      native systems: labels, six comparisons inside / outside, values, cost (block N)
 tab_families    writer switches, other families as writer and reader, reader swaps (M1-M3)
 tab_rendered    the M2 checks on LLM-rendered worlds against the template worlds (block L)
+The printed captions and labels name the blocks and paths in words (the paper's names).
 Usage: python -m memshift.analysis.paper_tables [--root .] [--out paper/generated]
+       [--only tab_gate.tex ...]   (write only the named files; every table is still computed)
 """
 
 from __future__ import annotations
@@ -94,11 +97,15 @@ def _minus(x: float, digits: int = 2) -> str:
 
 
 def _claim_test(claim: str) -> str:
-    """The clause that says what the quantitative claim level tested (re-review): its only
-    quantitative test is path 3, which concerns writer switches; nothing for another level."""
+    """The clause that says what tested the registered claim's quantitative prediction
+    (re-review): only the agreement check (falsification path 3), which concerns writer
+    switches; nothing for another claim."""
     if "quantitative" not in claim:
         return ""
-    return r", and the claim level's only quantitative test is path~3, on writer switches (App.~D)"
+    return (
+        r". The only test of the claim's quantitative prediction is the agreement check, on writer "
+        r"switches"
+    )
 
 
 def tab_gate(gate: dict[str, Any]) -> str:
@@ -116,38 +123,45 @@ def tab_gate(gate: dict[str, Any]) -> str:
         if sl and au
         else MISSING
     )
-    rows = [
+    rows = [  # the falsification paths 1-3 of the registrations, named by what each checks
         (
-            "1",
+            "gain",
             r"$B$ effect on Update ($\Ssrc$) $\le +2$\,pp",
             _ci(p1.get("estimate"), sign=True) + r"\,pp",
             verdict(p1),
         ),
         (
-            "2",
-            rf"$D$ moves missed invalidation ($\ge 2$\,pp in any of {len(checks)} checks)",
+            "leak",
+            rf"$D$ moves missed invalidation ($\ge 2$\,pp in any of {len(checks)} contrasts)",
             rf"all {_num(largest)}\,pp" if largest == 0 else rf"max {_num(largest)}\,pp",
             verdict(p2),
         ),
-        ("3", r"calibration slope $\le 0$ (90\% bound) or AUROC $<0.60$", slope, verdict(p3)),
+        (
+            "agreement",
+            r"calibration slope $\le 0$ (90\% bound) or AUROC $<0.60$",
+            slope,
+            verdict(p3),
+        ),
     ]
     claim = claim_label(gate.get("claim_level"))
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Registered falsification paths, decided mechanically on the "
-        rf"{gate.get('n_worlds_e1', MISSING)} test worlds. A path is triggered when its "
-        r"condition holds; a triggered path lowers the registered claim level (last row)"
+        r"\caption{Registered falsification checks, decided mechanically on the "
+        rf"{gate.get('n_worlds_e1', MISSING)} test worlds. A check is triggered when its "
+        r"condition holds. Last row: what the registration lets the paper claim when no check "
+        r"is triggered, and a triggered check restricts this claim"
         rf"{_claim_test(claim)}. "
-        r"Path~1: estimate with its 95\% world-bootstrap interval; path~2: the $D$ effect on "
-        r"missed invalidation for both keys (source epoch, cited cluster) after each of the three "
-        r"shifts; path~3: pooled calibration slope over the writer switches, with 90\% bounds.}",
+        r"Gain check: estimate with its 95\% world-bootstrap interval. Leak check: the $D$ effect "
+        r"on missed invalidation for both keys (source-epoch and cited-cluster) after each of the "
+        r"three shifts. Agreement check: pooled calibration slope over the writer switches, with "
+        r"90\% bounds.}",
         r"\label{tab:gate}",
         r"\centering\small",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}c >{\raggedright\arraybackslash}p{0.45\linewidth}"
-        r" >{\raggedright\arraybackslash}p{0.43\linewidth}@{}}",
+        r"\begin{tabular}{@{}l >{\raggedright\arraybackslash}p{0.43\linewidth}"
+        r" >{\raggedright\arraybackslash}p{0.40\linewidth}@{}}",
         r"\toprule",
-        r"path & triggered if & observed (status) \\",
+        r"check & triggered if & observed (status) \\",
         r"\midrule",
     ]
     lines += [rf"{n} & {cond} & {obs} ({status})" + r" \\" for n, cond, obs, status in rows]
@@ -314,19 +328,18 @@ def tab_replication(view: dict[str, Any]) -> str:
     lines = [
         r"\begin{table}[t]",
         r"\caption{Replication on "
-        rf"{n.get('rep') or MISSING} fresh test worlds (block R): the registered contrasts, "
-        rf"in pp (main study: {n.get('orig') or MISSING} worlds; R: estimate on the replication "
-        r"worlds). Detection: share of the changed item-times the cell invalidated; repair: "
-        r"among the re-derived item-times, the share the reader then answers correctly "
-        r"(behavioural) or whose re-derived value equals gold (mechanistic). "
-        r"repl.: \pass{} replicated (same sign as the main study, 95\% interval excludes 0), "
-        r"$\sim$ same direction (interval includes 0), \fail{} not replicated; for the $D$ "
-        r"effect on missed "
-        r"invalidation \pass{} is path 2 not triggered. As pred.: whether the main-study estimate "
-        r"and the R estimate (in this order) lie in the registered direction, \pass{} yes and "
-        r"\fail{} no: point estimate positive (before rounding) for every effect predicted "
-        r"non-zero, whatever the interval; path 2 not triggered for the $D$ effect on missed "
-        r"invalidation. A contrast can replicate and still be against the prediction.}",
+        rf"{n.get('rep') or MISSING} fresh test worlds. Registered contrasts in pp (main study: "
+        rf"{n.get('orig') or MISSING} worlds, fresh: estimate on the fresh worlds). Detection: "
+        r"share of the changed item-times the cell invalidated. Repair: among the re-derived "
+        r"item-times, the share the reader then answers correctly (behavioural) or whose "
+        r"re-derived value equals gold (mechanistic). Repl.: \pass{} replicated (same sign as the "
+        r"main study, 95\% interval excludes 0), $\sim$ same direction (interval includes 0), "
+        r"\fail{} not replicated. For the $D$ effect on missed invalidation \pass{} means the leak "
+        r"check is not triggered. As pred.: whether the main-study and the fresh-world estimate "
+        r"(in this order) lie in the registered direction, \pass{} yes and \fail{} no. The "
+        r"direction is a positive point estimate (before rounding) for every effect predicted "
+        r"non-zero, whatever the interval. A contrast can replicate and still be against the "
+        r"prediction.}",
         r"\label{tab:replication}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{2.2pt}",  # 13 columns in a 5.5in text width
@@ -335,10 +348,10 @@ def tab_replication(view: dict[str, Any]) -> str:
         r"& \multicolumn{4}{c}{$\Ssrc$} & \multicolumn{4}{c}{$\Sdef$} "
         r"& \multicolumn{4}{c}{$\Sdel$} \\",
         r"\cmidrule(lr){2-5}\cmidrule(lr){6-9}\cmidrule(l){10-13}",
-        r"contrast & main study & R & repl. & as pred. & main study & R & repl. & as pred. "
-        r"& main study & R & repl. & as pred. \\",
+        r"contrast & main & fresh & repl. & as pred. & main & fresh & repl. & as pred. "
+        r"& main & fresh & repl. & as pred. \\",
     ]
-    for g, title in (("source", "source-epoch binding"), ("cited", "cited-cluster binding")):
+    for g, title in (("source", "source-epoch key"), ("cited", "cited-cluster key")):
         lines += [r"\midrule", rf"\multicolumn{{13}}{{@{{}}l}}{{\emph{{{title}}}}} \\"]
         for key, label in REP_ROWS:
             cells = [rf"\quad {label}"]
@@ -370,15 +383,16 @@ def tab_replication(view: dict[str, Any]) -> str:
         )
 
     lines += [
-        rf"Falsification paths on R: path~1 {_trig(p1)} (main study: {_trig(orig.get('path1'))}; "
-        rf"$B$ effect on Update {_ci(p1['estimate'], True) if p1 else MISSING}\,pp); "
-        rf"path~2 {_trig(paths.get('path2'))} (largest $|D$ effect on missed invalidation$|$ "
-        rf"{_num(largest)}\,pp); path~3 {_trig(paths.get('path3'))} "
-        rf"(pooled slope {_num(p3['est'], 1, 2) if p3 else MISSING}); "
+        rf"Falsification checks on the fresh worlds: gain check {_trig(p1)} (main study: "
+        rf"{_trig(orig.get('path1'))}, $B$ effect on Update "
+        rf"{_ci(p1['estimate'], True) if p1 else MISSING}\,pp), "
+        rf"leak check {_trig(paths.get('path2'))} (largest $|D$ effect on missed invalidation$|$ "
+        rf"{_num(largest)}\,pp), agreement check {_trig(paths.get('path3'))} "
+        rf"(pooled slope {_num(p3['est'], 1, 2) if p3 else MISSING}). "
         rf"\emph{{{claim_label(view.get('claim_level'))}}}"
         rf"{_claim_test(claim_label(view.get('claim_level')))}. "
-        rf"Diagnostic tests with the main-study verdict: retention test T1 {tally(t1)}, "
-        rf"utility floor T3 {tally(t3)}, cost ceiling T4 {tally(t4)} replicated.",
+        rf"Diagnostic tests with the main-study verdict: retention test {tally(t1)}, "
+        rf"utility floor {tally(t3)}, cost ceiling {tally(t4)} replicated.",
         r"\par}",
         r"\end{table}",
     ]
@@ -389,16 +403,17 @@ SHARE = "C2_share_of_D_effect_source"
 C1 = "C1_repair_D1s_minus_D0_source"
 DM = r"$D_{\mathrm{m}}$"  # the D1s cell as displayed: D = 1 with a model-written derivation
 C_ROWS = (  # label, prediction, contrast key, rule (analysis.paper_data.synth_holds)
-    (r"C1 repair: $D_{\mathrm{m}}-D_0$", r"$>0$", C1, "above"),
-    (r"C2 repair: $D_1-D_{\mathrm{m}}$", r"$\ge 0$", "C2_repair_D1_minus_D1s_source", "nonneg"),
-    (r"C2 share of the $D$ effect (\%)", "", SHARE, None),
+    # the registered predictions C1-C4: repair gain, authored share, interaction, detection
+    (r"repair: $D_{\mathrm{m}}-D_0$", r"$>0$", C1, "above"),
+    (r"repair: $D_1-D_{\mathrm{m}}$", r"$\ge 0$", "C2_repair_D1_minus_D1s_source", "nonneg"),
+    (r"authored share of the $D$ effect (\%)", "", SHARE, None),
     (
-        rf"C3 $B{{\times}}D$ on Update, {DM}",
+        rf"$B{{\times}}D$ on Update, {DM}",
         r"$>0$",  # registered on S_def only: the caption says so (5.5in leaves no room here)
         "C3_BxD_interaction_update_D1s_source",
         "above",
     ),
-    (rf"C4 $D$ on missed invalidation, {DM}", "$=0$", "C4_D1s_effect_missed_source", "path2"),
+    (rf"$D$ on missed invalidation, {DM}", "$=0$", "C4_D1s_effect_missed_source", "path2"),
 )
 NO_SHARE = "---"  # the share of the D effect is meaningless where C1 is not positive
 # prereg v2 section 4 registers C3 on S_def only (C1, C2, C4 on S_src and S_def): the S_src value of
@@ -416,24 +431,24 @@ def tab_construct(c: dict[str, Any] | None) -> str:
     con = c.get("contrasts") or {}
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Construct check (block C, "
-        rf"{c.get('n_worlds') or MISSING} test worlds): repair with executable derivations written "
-        rf"by the writer model ({DM}: $D{{=}}1$ with a model-written derivation) instead of the "
-        r"authored derivation ($D_1$: the $D{=}1$ cell; $D_0$: the $D{=}0$ cell). Upper block: "
-        r"registered contrasts in pp at source-epoch binding with 95\% intervals; pred.: the "
-        r"registered prediction, \pass{} it holds, \fail{} it does not; C3 is registered for "
-        r"$\Sdef$ only, so its $\Ssrc$ value, like the orphan branch, is exploratory. C2 share: "
-        r"$(D_1-D_{\mathrm{m}})/(D_1-D_0)$ on repair, the part of the $D$ effect the model-written "
-        rf"derivation does not recover, not defined ({NO_SHARE}) where "
-        r"C1 is not positive. Lower block: the writer's program at $t_0$, before any shift "
-        r"(item-weighted means for the groups).}",
+        r"\caption{Model-written derivations ("
+        rf"{c.get('n_worlds') or MISSING} test worlds): repair when the writer model writes the "
+        rf"executable derivations instead of the authored derivation. {DM}: $D{{=}}1$ with a "
+        r"model-written derivation. $D_1$: the $D{=}1$ cell. $D_0$: the $D{=}0$ cell. Upper part: "
+        r"registered contrasts in pp (source-epoch key, 95\% intervals). Pred.: the "
+        r"registered prediction, \pass{} it holds, \fail{} it does not. The interaction is "
+        r"registered for $\Sdef$ only, so its $\Ssrc$ value, like $\Sdel$, is exploratory. "
+        r"Authored share: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$ on repair, the part of the $D$ effect "
+        rf"the model-written derivation does not recover, not defined ({NO_SHARE}) where the "
+        r"repair gain is not positive. Lower part: the writer's program at $t_0$, before any "
+        r"shift (item-weighted means for the groups).}",
         r"\label{tab:construct}",
         r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{3.5pt}",
         r"\begin{tabular}{@{}l c rc rc r@{}}",
         r"\toprule",
         r"& pred. & \multicolumn{2}{c}{$\Ssrc$} & \multicolumn{2}{c}{$\Sdef$} "
-        r"& $\Sdel$ (expl.) \\",
+        r"& $\Sdel$ \\",
         r"\midrule",
     ]
 
@@ -583,26 +598,28 @@ def tab_families(
     p3 = m1.get("path3") or {}
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Model families; \pass{} holds, \fail{} does not. (a) M1, writer switches from "
-        r"Qwen3.5-9B: calibration slope (90\% bounds) and AUROC of writer agreement for "
-        r"survival; M1-b: survival of $D{=}1$ minus $D{=}0$ across the switch (pp), \pass{} if "
-        r"not negative; retention test (T1): retention change $\Delta$ of \holdmem{}(1,1) (pp), "
-        r"\pass{} if retention stays above the registered 97\% bar. (b) M2, other families as "
-        r"writer and reader, checks: (i) path~2 not triggered; (ii) $B$ effect on Update after "
-        r"$\Ssrc$ above $+2$\,pp; (iii) $D$ effect on repair positive after $\Ssrc$ and after "
-        r"$\Sdef$; (iv) $B{\times}D$ on Update positive after $\Sdef$; (v) zero system below "
-        r"\holdmem{}(1,1) after $\Sdef$; (ii)--(v) with the 95\% interval excluding 0; "
-        r"pattern: (ii)--(iv) all hold. (c) M3, other readers: contrasts keeping the main "
-        r"reader's sign (of six), path~2 for the $D$ effect on missed invalidation, "
-        r"\holdmem{}(1,1) post-$\Sdef$ ContractValid (\%) under the main and the swapped reader. "
-        r"$^\ast$~Almost no item failed, so the slope (grey) is not usable (---: undefined); "
-        r"path~3 is judged pooled.}",
+        r"\caption{Other model families, \pass{} holds, \fail{} does not. (a) Writer switches "
+        r"from Qwen3.5-9B: calibration slope (90\% bounds) and AUROC of writer agreement for "
+        r"survival. $D$ surv.: survival of $D{=}1$ minus $D{=}0$ across the switch (pp), \pass{} "
+        r"if not negative. Retention $\Delta$: retention change of \holdmem{}(1,1) (pp), \pass{} "
+        r"if retention stays above the registered 97\% bar. (b) Other families as writer and "
+        r"reader. The five checks are (i) leak check not triggered, (ii) $B$ effect on Update "
+        r"after $\Ssrc$ above $+2$\,pp and (iii) $D$ effect on repair positive after $\Ssrc$ and "
+        r"after $\Sdef$. They also include (iv) $B{\times}D$ on Update positive after $\Sdef$ and "
+        r"(v) zero system below \holdmem{}(1,1) after $\Sdef$. Checks (ii)--(v) need the 95\% "
+        r"interval to exclude 0. "
+        r"Pattern: (ii)--(iv) all hold. (c) Other readers: contrasts that keep the main reader's "
+        r"sign (of six) and the leak check for the $D$ effect on missed invalidation. The last "
+        r"columns give \holdmem{}(1,1) post-$\Sdef$ ContractValid (\%) under the main and the "
+        r"swapped reader. "
+        r"$^\ast$~Almost no item failed, so the slope (grey) is not usable (---: undefined). The "
+        r"agreement check is judged pooled.}",
         r"\label{tab:families}",
         r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular}{@{}l rr rc rc@{}}",
         r"\toprule",
-        r"(a) writer switch & slope & AUROC & M1-b & & T1 $\Delta$ & \\",
+        r"(a) writer switch & slope & AUROC & $D$ surv. & & retention $\Delta$ & \\",
         r"\midrule",
     ]
     caveats = set(p3.get("tier_caveats", []))
@@ -629,7 +646,7 @@ def tab_families(
             rf"pooled, {len(p3.get('tiers', [])) or MISSING} switches",
             _slope(sl),
             _auroc(au),
-            r"\multicolumn{2}{c}{path 3 "
+            r"\multicolumn{2}{c}{agreement check "
             + _trig(None if not p3 else {"triggered": p3["triggered"]})
             + "}",
             "",
@@ -662,7 +679,7 @@ def tab_families(
         r"\par\medskip",
         r"\begin{tabular}{@{}l c cc cc@{}}",
         r"\toprule",
-        r"(c) reader & same sign & \multicolumn{2}{c}{path 2 ($D$ on missed)} & "
+        r"(c) reader & same sign & \multicolumn{2}{c}{leak check ($D$ on missed)} & "
         r"\multicolumn{2}{c}{\holdmem{}(1,1) post-$\Sdef$} \\",
         r"\cmidrule(lr){3-4}\cmidrule(l){5-6}",
         r"& & $\Ssrc$ & $\Sdef$ & main & swap \\",
@@ -717,19 +734,19 @@ def tab_rendered(m: dict[str, Any] | None) -> str:
     paired = {p["name"]: p for p in m.get("paired") or []}
     lines = [
         r"\begin{table}[t]",
-        r"\caption{LLM-rendered worlds (block L, "
-        rf"{len(m.get('worlds', [])) or MISSING} worlds). Upper block: the five checks of block "
-        r"M2 (Table~\ref{tab:families}; effects in pp; \pass{} holds, \fail{} fails) on rendered "
-        r"and same-seed template worlds, and the item-paired difference rendered minus template "
-        r"with its 95\% interval; check (i) is the largest absolute $D$ effect on missed "
-        r"invalidation, compared with the 2\,pp of path~2, and has no paired difference "
-        rf"({UNDEFINED}). Lower block: bodies attempted, retried once, and kept as template.}}",
+        r"\caption{LLM-rewritten worlds ("
+        rf"{len(m.get('worlds', [])) or MISSING} worlds): the five checks of the other families "
+        r"(Table~\ref{tab:families}b, effects in pp, \pass{} holds, \fail{} fails) on rewritten "
+        r"and template worlds of the same seeds. Difference: rewritten minus template, paired by "
+        r"item, with its 95\% interval. Check (i) is the largest absolute $D$ effect on missed "
+        r"invalidation, compared with the 2\,pp of the leak check, and has no paired difference "
+        rf"({UNDEFINED}).}}",
         r"\label{tab:rendered}",
         r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{3.5pt}",
         r"\begin{tabular}{@{}l rc rc r@{}}",
         r"\toprule",
-        r"& \multicolumn{2}{c}{rendered} & \multicolumn{2}{c}{template} & difference \\",
+        r"& \multicolumn{2}{c}{rewritten} & \multicolumn{2}{c}{template} & difference \\",
         r"\midrule",
     ]
     for label, key, name in REND_ROWS:
@@ -753,49 +770,37 @@ def tab_rendered(m: dict[str, Any] | None) -> str:
             ]
         lines.append(_row(*cells))
     rd = m.get("rendering") or {}
-    per = rd.get("per_source") or {}
     same = _get(m, "probe_identity", "identical")
     identical = MISSING if same is None else ("yes" if same else "no")
-    lines += [
-        r"\bottomrule",
-        r"\end{tabular}",
-        r"\par\medskip",
-        r"\begin{tabular}{@{}l rrr@{}}",
-        r"\toprule",
-        r"source & attempted & retried (\%) & kept as template (\%) \\",
-        r"\midrule",
-    ]
-    for src, label in (("email", "email"), ("messages", "chat messages"), ("notes", "notes")):
-        s = per.get(src) or {}
-        lines.append(
-            _row(
-                label,
-                f"{s['attempted']:,}" if "attempted" in s else MISSING,
-                _num(s.get("retried_share")),
-                _num(s.get("kept_template_share")),
-            )
-        )
     tot = rd.get("total") or {}
     fid = rd.get("fidelity") or {}
     lines += [
-        r"\midrule",
-        _row(
-            "all",
-            f"{tot['attempted']:,}" if "attempted" in tot else MISSING,
-            _num(tot.get("retried_share")),
-            _num(tot.get("kept_template_share")),
-        ),
         r"\bottomrule",
         r"\end{tabular}",
         r"\par\smallskip",
-        r"{\footnotesize\raggedright Fidelity of the rendered worlds (share of gold surface forms "
-        r"located): "
+        rf"{{\footnotesize\raggedright {_rewrite_note(tot)} Fidelity of the rewritten worlds "
+        r"(share of gold surface forms located): "
         rf"{_num(fid.get('min_rate'))}\% at the worst world and branch. "
         rf"Probes identical to the template worlds: {identical}."
         r"\par}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
+
+
+def _rewrite_note(tot: Mapping[str, Any]) -> str:
+    """One sentence on the bodies selected for rewriting: how many, and how many needed the one
+    retry or stayed template text (`rendered.json` rendering.total)."""
+    if "attempted" not in tot:
+        return f"Bodies selected for rewriting: {MISSING}."
+    n = f"{tot['attempted']:,}"
+    retried, kept = tot.get("retried_share"), tot.get("kept_template_share")
+    if retried == 0 and kept == 0:
+        return rf"All {n} bodies selected for rewriting were accepted on the first attempt."
+    return (
+        rf"Of the {n} bodies selected for rewriting, {_num(retried)}\% were retried once and "
+        rf"{_num(kept)}\% kept as template."
+    )
 
 
 def _load(root: Path, sources: dict[str, str], group: str, name: str) -> dict[str, Any] | None:
@@ -807,13 +812,14 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root", type=Path, default=Path("."))
     ap.add_argument("--out", type=Path, default=Path("paper/generated"))
+    ap.add_argument("--only", nargs="*", default=[], help="file names (tab_gate.tex, ...)")
     a = ap.parse_args()
-    sources = json.loads((a.root / "paper" / "results_sources.json").read_text())
+    sources = json.loads((a.root / "results" / "sources.json").read_text())
     a.out.mkdir(parents=True, exist_ok=True)
     head = "% generated by memshift.analysis.paper_tables; do not edit\n"
     gate = _load(a.root, sources, "gate", "gate_a.json") or {}
     e7 = _load(a.root, sources, "e7", "e7_metrics.json") or {}
-    audit = json.loads((a.root / "paper" / "audit" / "system_audit.json").read_text())
+    audit = json.loads((a.root / "audit" / "system_audit.json").read_text())
     outputs = {
         "tab_gate.tex": tab_gate(gate),
         "tab_robust.tex": tab_robust(e7),
@@ -847,7 +853,18 @@ def main() -> None:
     from memshift.analysis import ex_round2  # lazy, as above
 
     outputs |= ex_round2.tables(ex_round2.load(a.root, sources))  # review round 2 (2026-10-08)
+    from memshift.analysis import ex_round3  # lazy, as above
+
+    outputs |= ex_round3.tables(ex_round3.load(a.root, sources))  # review round 3 (2026-10-16)
+    from memshift.analysis import round3_paper  # lazy, as above
+
+    outputs |= round3_paper.tables(round3_paper.load(a.root, sources))  # registered round 3
+    unknown = sorted(set(a.only) - set(outputs))
+    if unknown:
+        raise SystemExit(f"unknown table file(s): {', '.join(unknown)}")
     for name, text in outputs.items():
+        if a.only and name not in a.only:
+            continue
         (a.out / name).write_text(head + text)
         print(a.out / name)
 

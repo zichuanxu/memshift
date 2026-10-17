@@ -33,10 +33,15 @@ as an existing cell wherever its design allows, so the response cache serves the
               their cited clusters. Built from definitions and writer citations only.
   B0_refresh  B=0 that re-derives, at every checkpoint, exactly the items the source-epoch B=1 cell
               re-derives and appends the new items without invalidating the old ones.
+  B0_upsert   slot-keyed upsert (prereg v4 block U): the append-only B=0 cell with the same delta
+              derivations, so the same requests, except that a new item for a slot retires every
+              older valid or unverifiable item of that slot (status `invalid`, history event
+              `supersede`). No key is kept: a slot whose delta yields nothing keeps its old item.
   D0t         D=0 (no checker, no sidecar) whose items written after the shift are rendered with
               the D=1 fallback template from the writer's own typed value and citations.
   D0think     D=0 whose definition items written after the shift come from the writer with
-              thinking switched on (separate client, so separate cache keys).
+              thinking switched on (separate client, so separate cache keys). Its output limit is
+              `writer.THINK_MAX_TOKENS` unless `think_max_tokens` sets another (prereg v4 H-b).
   D0full      D=0, B=1 source-epoch whose definition items written after the shift are derived from
               every live record of their declared sources (no BM25 selection, no 6,000-token
               budget; above `writer.FULL_BUDGET` the largest source is cut to its newest records
@@ -47,6 +52,18 @@ as an existing cell wherever its design allows, so the response cache serves the
   D1s ... _ra D1s whose programs are retraction-aware (`holdmem.program`): they declare the ids
               they read, may read nothing else, and receive the item's lineage (every id any earlier
               run declared) so that they can return no value once a record they read is gone.
+
+Definition-item writer (prereg v4 block H-a, `HoldMem(def_writer=...)`, set for every cell of a
+run): as in D0think, the pre-shift snapshot and every other item come from the main writer (same
+requests), and the definition items written after the shift (B=1 re-derivations, B=0 delta
+derivations, refreshes) come from a second client with the same request text and its own output
+limit. A reply cut off by that limit is unreadable; each such write records the model, its
+completion tokens and whether it reached the limit in the item's note, and every cell counts these
+writes in `def_stats`. Keys keep the main writer's id.
+
+Program sets (prereg v4 block G-b, `HoldMem(program_writer=...)`): the D1s program requests of the
+definition items, before and after the shift, go to another client (another model, a sampling
+temperature, a sample index); every other request is the writer's.
 """
 
 from __future__ import annotations
@@ -71,7 +88,7 @@ from memshift.holdmem.checker import (
     render_fallback_sk,
 )
 from memshift.holdmem.program import ProgramOutcome, program_check, synthesise, synthesise_ra
-from memshift.holdmem.writer import derive, render_sk
+from memshift.holdmem.writer import CUT_OFF, THINK_MAX_TOKENS, derive, render_sk
 from memshift.llm import LLMClient
 from memshift.probes import Probe
 from memshift.retrieval import Doc, select
@@ -111,6 +128,7 @@ class CellConfig:
     think: bool = False  # D0think: definition items written after the shift by a thinking writer
     full: bool = False  # D0full: definition items after the shift from every in-scope record
     ra: bool = False  # D1s with retraction-aware programs (declared reads, lineage)
+    upsert: bool = False  # B0_upsert: a new delta item for a slot retires the slot's older items
 
     def __post_init__(self) -> None:
         if self.granularity not in GRANULARITIES:
@@ -133,6 +151,8 @@ class CellConfig:
             raise ValueError("full is a separate control from present and think")
         if self.ra and not self.synth:
             raise ValueError("ra=True is a variant of the D1s programs (synth=True)")
+        if self.upsert and (self.B != 0 or self.refresh):
+            raise ValueError("upsert=True is the append-only B=0 cell (no key, no refresh)")
 
     @property
     def name(self) -> str:
@@ -144,6 +164,8 @@ class CellConfig:
             name += "_refresh"
         if self.ra:
             name += "_ra"
+        if self.upsert:
+            name += "_upsert"
         return f"{name}_nofb" if not self.fallback else name
 
 
@@ -204,7 +226,20 @@ class HoldMem:
         writer: LLMClient,
         theta_w: str,
         think_writer: LLMClient | None = None,
+        *,
+        think_max_tokens: int = THINK_MAX_TOKENS,
+        def_writer: LLMClient | None = None,
+        def_max_tokens: int | None = None,
+        program_writer: LLMClient | None = None,
+        program_user_words: bool = False,
     ):
+        """`think_max_tokens`: the output limit of the D0think writer's requests. `def_writer`:
+        the definition-item writer of prereg v4 block H-a, which writes the definition items after
+        the shift (not in a D0think cell, whose thinking writer writes them), with the output limit
+        `def_max_tokens` (default: the writer request's). `program_writer`: the client that answers
+        the D1s program requests of the definition items (prereg v4 block G-b; default: the
+        writer); the other items' programs stay the writer's. `program_user_words` (prereg v4b
+        block V): those requests state the definition in the user's words (`USER_WORDS`)."""
         if cfg.think and think_writer is None:
             raise ValueError("a D0think cell needs a think_writer (a client with thinking on)")
         self.world = world
@@ -212,6 +247,16 @@ class HoldMem:
         self.cfg = cfg
         self.writer = writer
         self.think_writer = think_writer
+        self.think_max_tokens = think_max_tokens
+        self.def_writer = def_writer
+        self.def_max_tokens = def_max_tokens
+        # the definition-item writer's requests: sent, unreadable replies, replies cut off by the
+        # output limit (B=0 drops an unreadable delta write, so its item never records it)
+        self.def_stats = {"writes": 0, "unreadable": 0, "at_limit": 0}
+        self.program_writer = program_writer
+        self.program_user_words = program_user_words
+        if program_user_words and cfg.ra:
+            raise ValueError("user-words programs are a variant of the D1s programs, not of _ra")
         self.theta_w = theta_w
         self.items: dict[str, Item] = {}
         self.by_slot: dict[str, list[str]] = {}
@@ -283,12 +328,17 @@ class HoldMem:
         self, slot: Slot, t: datetime, phase: str, prior: Item | None = None
     ) -> ProgramOutcome:
         """D1s: one more writer request per item write, counted in the same token bucket. The
-        retraction-aware program also gets the lineage of the item it replaces."""
+        retraction-aware program also gets the lineage of the item it replaces. A definition item's
+        program comes from `program_writer` when one is set."""
+        llm = self.writer
+        if self.program_writer is not None and slot.kappa_id:
+            llm = self.program_writer
         if self.cfg.ra:
             lineage = list(((prior.det if prior else None) or {}).get("program_lineage", []))
-            prog = synthesise_ra(self.writer, self.world, self.log, slot, t, lineage)
+            prog = synthesise_ra(llm, self.world, self.log, slot, t, lineage)
         else:
-            prog = synthesise(self.writer, self.world, self.log, slot, t)
+            words = self.program_user_words and bool(slot.kappa_id)
+            prog = synthesise(llm, self.world, self.log, slot, t, user_words=words)
         self._add_cost(f"{phase}_tokens", prog.prompt_tokens + prog.completion_tokens)
         self._add_cost("verify_cpu_s", prog.run_s)
         return prog
@@ -317,10 +367,35 @@ class HoldMem:
         think = self.cfg.think and apply_fallback and slot.kappa_id is not None
         # D0full: likewise, every in-scope record for the definition items written after the shift
         full = self.cfg.full and apply_fallback and slot.kappa_id is not None
-        writer = self.think_writer if think else self.writer
+        # H-a: likewise, from the definition-item writer (another model, same request text)
+        defw = (
+            self.def_writer is not None
+            and not think
+            and apply_fallback
+            and slot.kappa_id is not None
+        )
+        writer = self.think_writer if think else self.def_writer if defw else self.writer
         assert writer is not None
-        out = derive(writer, self.world, self.log, slot, t, since, think=think, full=full)
+        max_tokens = self.think_max_tokens if think else self.def_max_tokens if defw else None
+        out = derive(
+            writer,
+            self.world,
+            self.log,
+            slot,
+            t,
+            since,
+            think=think,
+            full=full,
+            max_tokens=max_tokens,
+            reasoning=defw,
+        )
         self._add_cost(f"{phase}_tokens", out.prompt_tokens + out.completion_tokens)
+        at_limit = out.finish_reason in CUT_OFF
+        if defw and out.finish_reason:  # a request was sent
+            with self._lock:
+                self.def_stats["writes"] += 1
+                self.def_stats["unreadable"] += not out.ok
+                self.def_stats["at_limit"] += at_limit
         if since is not None and (out.value is None or not out.ok):
             return None  # append-only delta produced nothing new
         snap = self.log.snapshot(t)
@@ -404,8 +479,18 @@ class HoldMem:
         note: dict[str, Any] = {}
         if think:
             note = {"think": {"ok": out.ok, "completion_tokens": out.completion_tokens}}
+        if defw:
+            assert self.def_writer is not None
+            note = {
+                "defwriter": {
+                    "model": self.def_writer.model,
+                    "ok": out.ok,
+                    "completion_tokens": out.completion_tokens,
+                    "at_limit": at_limit,
+                }
+            }
         if out.access is not None:
-            note = {"full": out.access}
+            note["full"] = out.access
         return Item(
             item_id="",
             slot_id=slot.slot_id,
@@ -535,14 +620,39 @@ class HoldMem:
                 lambda s: self._write(s, t, since, True, "maintain", self._latest(s)),
                 self.world.slots,
             )
+            if self.cfg.upsert:
+                stats["superseded"] = 0
             for new in news:
                 if new is not None:
+                    if self.cfg.upsert:
+                        stats["superseded"] += self._supersede(new.slot_id, t)
                     self._store(new, "append")
                     stats["appended"] += 1
                     stats["unverifiable"] += new.status == "unverifiable"
         self.last_t = t
         self._update_storage()
         return stats
+
+    def _supersede(self, slot_id: str, t: datetime) -> int:
+        """B0_upsert: retire every older valid or unverifiable item of the slot before its new item
+        is stored. Returns the number retired."""
+        n = 0
+        for item_id in self.by_slot.get(slot_id, []):
+            item = self.items[item_id]
+            if item.status not in ("valid", "unverifiable"):
+                continue
+            item.history.append(
+                {
+                    "ts": fmt_ts(t),
+                    "event": "supersede",
+                    "old": item.status,
+                    "new": "invalid",
+                    "value": None,
+                }
+            )
+            item.status = "invalid"
+            n += 1
+        return n
 
     def _update_storage(self) -> None:
         blob = json.dumps([i.to_json() for i in self.items.values()], default=str)

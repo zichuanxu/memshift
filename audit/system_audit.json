@@ -1,0 +1,2008 @@
+[
+  {
+    "system": "ChatGPT memory (saved memories + 2026 'dreaming' memory summary)",
+    "short_name": "ChatGPT memory",
+    "group": "vendor",
+    "owner": "vendor",
+    "owner_note": "OpenAI-hosted; user can view/edit/delete, not operate",
+    "D": "0",
+    "D_basis": "inferred",
+    "D_reason": "Memory is a background-synthesized prose summary plus optional free-text saved memories; attribution ('Sources') is per response, not per item, and has no spans.",
+    "B": "0",
+    "B_basis": "documented + inferred",
+    "B_key_components": "none documented (per-response Sources only)",
+    "B_reason": "No key: an LLM process rewrites memory in the background and deleting a source chat does not necessarily delete saved memories derived from it; writer model and per-item source are not documented.",
+    "T1": "undeterminable",
+    "T1_basis": "inferred",
+    "T1_reason": "Writer (dreaming) model is vendor-chosen and undocumented; no per-item theta_w; users cannot trigger re-derivation; S_wr cannot be applied or observed from outside.",
+    "T2": "fail",
+    "T2_basis": "documented",
+    "T2_reason": "No memory export: the data export covers chats and account data, memories do not transfer between accounts, no import exists; the only exit is asking the model to print memories as prose (-> .mem only through TransferTextAdapter, no derivation fields possible).",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "A controlled world cannot be ingested and no oracle comparison is possible from outside; vendor evals compare memory versions only.",
+    "T4": "undeterminable",
+    "T4_basis": "documented",
+    "T4_reason": "Serving cost is not exposed; the ~5x compute reduction is relative to the earlier dreaming system, not to a full re-read.",
+    "plan_expectation_s3_4": "D0 B0; T1 不可判定; T2 不通过（无导出）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "OAI-DREAM",
+        "kind": "doc",
+        "pointer": "https://openai.com/index/chatgpt-memory-dreaming/",
+        "accessed": "2026-09-28",
+        "note": "2026-06-04 rollout of a memory system that synthesizes memory in the background ('dreaming', built on the 2025 chat-history reference); memories reviewable through a summary page; ~5x lower serving compute vs earlier dreaming (not vs full re-read); internal evals only [Direct fetch returned HTTP 403; read via the r.jina.ai reader proxy. Eval charts not machine-readable]"
+      },
+      {
+        "id": "OAI-FAQ",
+        "kind": "doc",
+        "pointer": "https://help.openai.com/en/articles/8590148-memory-faq",
+        "accessed": "2026-09-28",
+        "note": "Improved memory keeps a continually updated summary; the summary may omit details; per-response Sources may not show every factor; deleting a chat does not necessarily delete a saved memory created from it [Read via proxy (403 direct)]"
+      },
+      {
+        "id": "OAI-RN",
+        "kind": "doc",
+        "pointer": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+        "accessed": "2026-09-28",
+        "note": "2026-06-04 memories updated automatically (revert via Saved memories); 2026-05-05 memory sources; 2025-10-15 saved-memory version history [Read via proxy (403 direct)]"
+      },
+      {
+        "id": "OAI-EXPORT",
+        "kind": "doc",
+        "pointer": "https://help.openai.com/en/articles/7260999-how-do-i-export-my-chatgpt-history-and-data",
+        "accessed": "2026-09-28",
+        "note": "Data export = ZIP of chat history and account data; memories / memory summary are not listed (the saved page never mentions memory) [Read via proxy]"
+      },
+      {
+        "id": "OAI-TRANSFER",
+        "kind": "doc",
+        "pointer": "https://help.openai.com/en/articles/9106926-transfer-exported-conversations-between-chatgpt-accounts",
+        "accessed": "2026-09-28",
+        "note": "Uploading an export into another account does not transfer custom instructions or memories [Read via proxy]"
+      },
+      {
+        "id": "PM-ADAPTERS",
+        "kind": "code",
+        "pointer": "portable_memory/adapters/{__init__,mem0,openai,claude,transfer}.py; portable_memory/cli.py @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Only four ingest adapters, all one-way foreign -> .mem: Mem0Adapter (Mem0 export JSON), OpenAIAdapter (ChatGPT conversations.json or a saved-memory list), ClaudeAdapter (Claude Code / API memory-tool markdown files), TransferTextAdapter (pasted '[date] - memory' text from ChatGPT/Claude/Gemini). The only way out is `mem render` to paste-ready text"
+      },
+      {
+        "id": "BG-CARDS",
+        "kind": "record",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
+      }
+    ]
+  },
+  {
+    "system": "Claude memory (claude.ai consumer, incl. import/export)",
+    "short_name": "Claude memory",
+    "group": "vendor",
+    "owner": "vendor",
+    "owner_note": "Anthropic-hosted; per-project memory spaces",
+    "D": "0",
+    "D_basis": "inferred",
+    "D_reason": "Entries are prose under topic headings; no per-entry source reference or typed value is documented.",
+    "B": "0",
+    "B_basis": "documented",
+    "B_key_components": "none documented",
+    "B_reason": "Claude updates entries during conversations (LLM-judged); when a conversation is deleted or expires, memory entries generated from it are not removed; no key.",
+    "T1": "undeterminable",
+    "T1_basis": "inferred",
+    "T1_reason": "Which model writes memory entries is undocumented; no per-entry theta_w; no user-triggered re-derivation.",
+    "T2": "fail",
+    "T2_basis": "documented",
+    "T2_reason": "Export = ask Claude to write its memories out verbatim and copy-paste (model-generated prose, completeness not guaranteed); consumer data export does not list memory; import is an experimental LLM re-extraction of pasted text. No derivation extension is possible. (Team/Enterprise exports include memory entries; format undocumented.)",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "Black box; no published comparison.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "Serving cost not exposed.",
+    "plan_expectation_s3_4": "D0 B0; T1 不可判定; T2 不通过（散文导出）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "ANT-IMPEXP",
+        "kind": "doc",
+        "pointer": "https://support.claude.com/en/articles/12123587-import-and-export-your-memory-from-claude",
+        "accessed": "2026-09-28",
+        "note": "Import = paste another assistant's '[date saved] - memory content' dump, Claude extracts entries (experimental; may not incorporate everything); export = ask Claude to write out its memories verbatim and copy-paste"
+      },
+      {
+        "id": "ANT-MEM",
+        "kind": "doc",
+        "pointer": "https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context",
+        "accessed": "2026-09-28",
+        "note": "Memory saved as individual topics during chats; per-project memory spaces; when a conversation is deleted, related memory entries are not removed; Team/Enterprise exports include memory entries (format undocumented)"
+      },
+      {
+        "id": "ANT-RN",
+        "kind": "doc",
+        "pointer": "https://support.claude.com/en/articles/12138966-release-notes",
+        "accessed": "2026-09-28",
+        "note": "2026-07-10 memory became individual categorized entries replacing the daily summary; 2026-08-25 Topics view"
+      },
+      {
+        "id": "ANT-EXPORT",
+        "kind": "doc",
+        "pointer": "https://support.claude.com/en/articles/9450526-export-your-claude-data",
+        "accessed": "2026-09-28",
+        "note": "Consumer data export lists conversation data and user data; memory not listed; export cannot be re-imported into another account"
+      },
+      {
+        "id": "ANT-IMPORT-PAGE",
+        "kind": "doc",
+        "pointer": "https://claude.com/import-memory",
+        "accessed": "2026-09-28",
+        "note": "Copy-paste memory import landing page"
+      },
+      {
+        "id": "PM-ADAPTERS",
+        "kind": "code",
+        "pointer": "portable_memory/adapters/{__init__,mem0,openai,claude,transfer}.py; portable_memory/cli.py @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Only four ingest adapters, all one-way foreign -> .mem: Mem0Adapter (Mem0 export JSON), OpenAIAdapter (ChatGPT conversations.json or a saved-memory list), ClaudeAdapter (Claude Code / API memory-tool markdown files), TransferTextAdapter (pasted '[date] - memory' text from ChatGPT/Claude/Gemini). The only way out is `mem render` to paste-ready text"
+      },
+      {
+        "id": "BG-CARDS",
+        "kind": "record",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
+      }
+    ]
+  },
+  {
+    "system": "Claude API memory tool (developer-managed /memories files)",
+    "short_name": "Claude API memory tool",
+    "group": "vendor (developer-side)",
+    "owner": "agent",
+    "owner_note": "client-side files the developer stores; extra row split from 'Claude memory'",
+    "D": "0",
+    "D_basis": "inferred",
+    "D_reason": "Free-form files edited by the model; the tool protocol has no provenance, model or version fields (a developer could add structure).",
+    "B": "0",
+    "B_basis": "inferred",
+    "B_key_components": "none",
+    "B_reason": "The model edits files through str_replace/delete/rename at its own judgment; nothing records a key or invalidates on change.",
+    "T1": "undeterminable",
+    "T1_basis": "inferred",
+    "T1_reason": "Model is selectable per request but files record no theta_w and nothing re-derives; runnable in principle, not in E2/E5.",
+    "T2": "undeterminable",
+    "T2_basis": "code",
+    "T2_reason": "Developer owns the complete files and Portable Memory's ClaudeAdapter ingests the directory into .mem episodes, but there are no derivation fields to carry and no import measurement.",
+    "T3": "undeterminable",
+    "T3_basis": "documented",
+    "T3_reason": "Published +39% is against a no-memory baseline, not an oracle.",
+    "T4": "undeterminable",
+    "T4_basis": "documented",
+    "T4_reason": "The 84% token reduction belongs to context editing, not the memory tool.",
+    "plan_expectation_s3_4": "（计划未单列）",
+    "deviation_from_plan": "新增行",
+    "evidence": [
+      {
+        "id": "ANT-MEMTOOL",
+        "kind": "doc",
+        "pointer": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "accessed": "2026-09-28",
+        "note": "API memory tool is client-side: developer controls storage; file commands view/create/str_replace/insert/delete/rename under /memories; no provenance fields in the protocol"
+      },
+      {
+        "id": "ANT-CTX",
+        "kind": "doc",
+        "pointer": "https://www.anthropic.com/news/context-management",
+        "accessed": "2026-09-28",
+        "note": "Memory tool + context editing +39% over a no-memory baseline on an internal eval (no full-context/oracle comparison)"
+      },
+      {
+        "id": "PM-ADAPTERS",
+        "kind": "code",
+        "pointer": "portable_memory/adapters/{__init__,mem0,openai,claude,transfer}.py; portable_memory/cli.py @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Only four ingest adapters, all one-way foreign -> .mem: Mem0Adapter (Mem0 export JSON), OpenAIAdapter (ChatGPT conversations.json or a saved-memory list), ClaudeAdapter (Claude Code / API memory-tool markdown files), TransferTextAdapter (pasted '[date] - memory' text from ChatGPT/Claude/Gemini). The only way out is `mem render` to paste-ready text"
+      }
+    ]
+  },
+  {
+    "system": "Gemini memory / saved info ('Instructions for Gemini'), Personal Intelligence",
+    "short_name": "Gemini memory",
+    "group": "vendor",
+    "owner": "vendor",
+    "owner_note": "Google-hosted",
+    "D": "0",
+    "D_basis": "inferred (low confidence)",
+    "D_reason": "Derived 'insights' are not exposed as items; the visible Instructions are user-authored free text. If memory is query-time retrieval over past chats, D would be N/A.",
+    "B": "0",
+    "B_basis": "documented + inferred",
+    "B_key_components": "source-chat deletion only (documented), no revision/definition/model key",
+    "B_reason": "To delete something Gemini remembered, the user deletes all chats containing it (short delay): deletion propagates from sources, but no key, no item list, no definition or model version is documented.",
+    "T1": "undeterminable",
+    "T1_basis": "inferred",
+    "T1_reason": "Memory works with all models in the picker; which model derives insights is undocumented; no re-derivation control.",
+    "T2": "fail",
+    "T2_basis": "documented",
+    "T2_reason": "No memory export: Takeout lists Gems and Gemini Apps activity, not memory or Instructions; import only by pasting a prompt dump or uploading a chat ZIP.",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "Black box.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "Serving cost not exposed.",
+    "plan_expectation_s3_4": "D0 B0; T1 不可判定; T2 不通过",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "GOO-MEM",
+        "kind": "doc",
+        "pointer": "https://support.google.com/gemini/answer/16598469",
+        "accessed": "2026-09-28",
+        "note": "Gemini 'memory' learns from past chats; to delete something Gemini remembered, delete all chats with that info (short delay before it stops using it); no item list is documented"
+      },
+      {
+        "id": "GOO-PERS",
+        "kind": "doc",
+        "pointer": "https://support.google.com/gemini/answer/15637730",
+        "accessed": "2026-09-28",
+        "note": "Personalization sources: memory of past chats, connected apps, user instructions"
+      },
+      {
+        "id": "GOO-HUB",
+        "kind": "doc",
+        "pointer": "https://support.google.com/gemini/answer/13594961",
+        "accessed": "2026-09-28",
+        "note": "Privacy Hub: memory uses chats in Gemini Apps Activity to generate personalized insights"
+      },
+      {
+        "id": "GOO-INSTR",
+        "kind": "doc",
+        "pointer": "https://support.google.com/gemini/answer/16598625",
+        "accessed": "2026-09-28",
+        "note": "Instructions ('saved info') are user-authored free text kept until deleted"
+      },
+      {
+        "id": "GOO-SWITCH",
+        "kind": "doc",
+        "pointer": "https://blog.google/innovation-and-ai/products/gemini-app/switch-to-gemini-app/",
+        "accessed": "2026-09-28",
+        "note": "2026-03-26: import memory via a suggested prompt (paste) and chat history as ZIP"
+      },
+      {
+        "id": "GOO-IMPORT",
+        "kind": "doc",
+        "pointer": "https://support.google.com/gemini/answer/16868299; https://gemini.google/import-memory/",
+        "accessed": "2026-09-28",
+        "note": "Imported memory becomes a new chat thread; ZIP limits; not available in EEA/CH/UK or work accounts"
+      },
+      {
+        "id": "GOO-TAKEOUT",
+        "kind": "doc",
+        "pointer": "https://support.google.com/gemini/answer/16920332",
+        "accessed": "2026-09-28",
+        "note": "Takeout covers Gems and Gemini Apps activity (chats, media, uploads); memory and instructions are not listed"
+      },
+      {
+        "id": "GOO-PI",
+        "kind": "doc",
+        "pointer": "https://blog.google/innovation-and-ai/products/gemini-app/personal-intelligence/",
+        "accessed": "2026-09-28",
+        "note": "Personal Intelligence works with all models in the picker and explains used info per response"
+      },
+      {
+        "id": "BG-CARDS",
+        "kind": "record",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
+      }
+    ]
+  },
+  {
+    "system": "Apple semantic index / Apple Intelligence personal context (iOS 27, WWDC26)",
+    "short_name": "Apple semantic index",
+    "group": "platform",
+    "owner": "platform",
+    "owner_note": "on-device index, accessible to the system alone",
+    "D": "partial",
+    "D_basis": "inferred",
+    "D_reason": "Entries are app-donated typed App Schema entities with source identifiers (copies of app data, not LLM-derived); no span or definition check; whatever Siri derives at request time is not exposed.",
+    "B": "0",
+    "B_basis": "inferred",
+    "B_key_components": "source object id (app-driven upsert/delete); no revision, definition or model key",
+    "B_reason": "Freshness depends on the app re-donating (upsert by entity id), delete APIs, and system reindex after OS updates or data changes; no key invalidates items.",
+    "T1": "undeterminable",
+    "T1_basis": "inferred",
+    "T1_reason": "Neither users nor developers control the model; full reindex after OS updates is documented but not tied to a model version.",
+    "T2": "fail",
+    "T2_basis": "documented",
+    "T2_reason": "The index is local and available to the system alone; third-party apps can retrieve only their own content; no user export or import of the index or personal context exists (only the PCC request report).",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "Black box.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "Not published.",
+    "plan_expectation_s3_4": "D1（结构化实体）B0; T2 不通过（只进不出）",
+    "deviation_from_plan": "D 由 1 改为部分",
+    "evidence": [
+      {
+        "id": "APL-240",
+        "kind": "doc",
+        "pointer": "https://developer.apple.com/videos/play/wwdc2026/240/",
+        "accessed": "2026-09-28",
+        "note": "WWDC26 Session 240: adopting IndexedEntity puts app entities into the system semantic index; entities conform to App Schemas with typed, indexing-keyed properties"
+      },
+      {
+        "id": "APL-GUIDE",
+        "kind": "doc",
+        "pointer": "https://developer.apple.com/wwdc26/guides/apple-intelligence/; https://developer.apple.com/videos/play/wwdc2026/102/",
+        "accessed": "2026-09-28",
+        "note": "Spotlight semantic index organizes personal context from supported apps, with attribution back to the app"
+      },
+      {
+        "id": "APL-SPOT",
+        "kind": "doc",
+        "pointer": "https://developer.apple.com/documentation/appintents/making-app-entities-available-in-spotlight",
+        "accessed": "2026-09-28",
+        "note": "indexAppEntities upserts by entity identifier; system can request reindexEntities / reindexAllEntities"
+      },
+      {
+        "id": "APL-CSS",
+        "kind": "doc",
+        "pointer": "https://developer.apple.com/documentation/corespotlight/cssearchableindex",
+        "accessed": "2026-09-28",
+        "note": "deleteAppEntities(identifiedBy:ofType:) and deleteAppEntities(ofType:)"
+      },
+      {
+        "id": "APL-8011",
+        "kind": "doc",
+        "pointer": "https://developer.apple.com/videos/play/wwdc2026/8011/",
+        "accessed": "2026-09-28",
+        "note": "Group Lab: retrieval limited to the app's own sandbox; indexed content available to the system alone"
+      },
+      {
+        "id": "APL-SUPPORT",
+        "kind": "doc",
+        "pointer": "https://support.apple.com/en-us/102321",
+        "accessed": "2026-09-28",
+        "note": "Local private index on device; re-indexes after software updates and as data changes"
+      },
+      {
+        "id": "APL-PCC",
+        "kind": "doc",
+        "pointer": "https://www.apple.com/legal/privacy/data/en/intelligence-engine/",
+        "accessed": "2026-09-28",
+        "note": "PCC does not store data; the only user export is the Apple Intelligence & PCC request report"
+      },
+      {
+        "id": "BG-CARDS",
+        "kind": "record",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
+      }
+    ]
+  },
+  {
+    "system": "Mem0 open source, self-hosted (v3 ADD-only pipeline, mem0ai 2.2.x)",
+    "short_name": "Mem0 (self-hosted)",
+    "group": "memory layer",
+    "owner": "agent",
+    "owner_note": "developer-run store scoped by user_id/agent_id/run_id",
+    "D": "0",
+    "D_basis": "code",
+    "D_reason": "The memory value is free text ('data') plus an MD5 hash; no source reference, span or typed value. E5: structured repair precision 1.00 (n=289), descriptive only (kappa_D below the bar); carryover inside the HoldMem (0,0) prediction on 5 of 6 pre-registered measures.",
+    "B": "0",
+    "B_basis": "code + documented",
+    "B_key_components": "none (scope ids, attributed_to, timestamps only)",
+    "B_reason": "The v3 pipeline is ADD-only (one extraction call, inserts only; new facts stored alongside old ones); UPDATE/DELETE only through explicit API calls; supersede ('Dream') and decay are Platform-only. E5 orphan probe: persistence 0.549 [0.490, 0.609] -> B=0 by the 0.5 threshold, between the white-box B=0 (0.90) and B=1 (0.13-0.17) cells.",
+    "T1": "undeterminable",
+    "T1_basis": "by construction",
+    "T1_reason": "No per-item theta_w and no re-derivation path: a writer switch changes no stored memory, so retention 1 would mean nothing was updated, not equivalence (as for HoldMem (0,0)); S_wr was not run on Mem0.",
+    "T2": "undeterminable",
+    "T2_basis": "not tested",
+    "T2_reason": "OSS has no export ('Memory Export: Not available'); the only .mem route is get_all JSON -> Portable Memory Mem0Adapter (episodes only); E6 has no Mem0 arm. Prediction (not measured): the no-extension outcome of E6, since Mem0 has no binding that would read a derivation record.",
+    "T3": "fail",
+    "T3_basis": "measured (E5, 15 short worlds)",
+    "T3_reason": "Static ContractValid 0.660 vs oracle context 0.829 on the same 15 three-month worlds: -16.9 pp [-20.6, -13.2] (floor -3 pp); zero system -16.8, RAG -20.7 pp on the same worlds.",
+    "T4": "pass",
+    "T4_basis": "measured (E5, 15 short worlds)",
+    "T4_reason": "Reader tokens per query 1.14% of one full re-read at t0 (ceiling 50%); ingestion: 1.0 LLM call and 10.4k prompt tokens per event (not part of T4).",
+    "plan_expectation_s3_4": "D0 B0（v3 只 ADD）; T1/T3/T4 待 E5; T2 待 E6（有 .mem 适配器）",
+    "deviation_from_plan": "E5 reduced to 15 three-month worlds (decisions.md 2026-09-29); T2 not tested (E6 has no Mem0 arm)",
+    "evidence": [
+      {
+        "id": "M0-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/mem0ai/mem0 @94c3fe9f238f3dbf29c9ce98643bd71eb13077cd: mem0/memory/main.py L881-1220 (V3 phased batch pipeline, inserts only, history event ADD), L1030-1039 (payload: data, hash, created_at, updated_at, attributed_to, scope ids, metadata); mem0/configs/prompts.py L472; mem0/memory/storage.py L108-118 (history table), L279-286 (evict messages beyond 10 per scope)",
+        "accessed": "2026-09-28",
+        "note": "OSS add() is ADD-only; no per-memory writer-model id and no source/message reference; raw messages kept only as a 10-message rolling window"
+      },
+      {
+        "id": "M0-MIG",
+        "kind": "doc",
+        "pointer": "https://docs.mem0.ai/migration/oss-v2-to-v3 (repo docs/migration/oss-v2-to-v3.mdx L16, L38, L309)",
+        "accessed": "2026-09-28",
+        "note": "Single-pass ADD-only extraction (no UPDATE/DELETE); when information changes the new fact is stored alongside the old one"
+      },
+      {
+        "id": "M0-PVO",
+        "kind": "doc",
+        "pointer": "docs/platform/platform-vs-oss.mdx L73, L81 @94c3fe9f238f3dbf29c9ce98643bd71eb13077cd",
+        "accessed": "2026-09-28",
+        "note": "Dream (supersede) and Memory Export are Platform-only; 'Not available' in OSS"
+      },
+      {
+        "id": "M0-4956",
+        "kind": "doc",
+        "pointer": "https://github.com/mem0ai/mem0/issues/4956",
+        "accessed": "2026-09-28",
+        "note": "Open bug: ADD-only extraction may surface stale/contradictory facts; soft-supersede PR #4969 closed unmerged 2026-07-22"
+      },
+      {
+        "id": "M0-5330",
+        "kind": "doc",
+        "pointer": "https://github.com/mem0ai/mem0/issues/5330",
+        "accessed": "2026-09-28",
+        "note": "Native decay/cleanup proposal closed 2026-06-17 in favour of a community plugin"
+      },
+      {
+        "id": "M0-STATE",
+        "kind": "doc",
+        "pointer": "https://mem0.ai/blog/state-of-ai-agent-memory-2026",
+        "accessed": "2026-09-28",
+        "note": "Vendor report lists staleness of high-relevance memories as an open problem (a fact 'becomes confidently wrong' after a change) [Page shows 'Published Sep 28, 2026' / 'Updated on Sep 22, 2026']"
+      },
+      {
+        "id": "M0-PAPER",
+        "kind": "paper",
+        "pointer": "arXiv:2504.19413 §4.2 Table 2",
+        "accessed": "2026-09-28",
+        "note": "LoCoMo: full-context J=72.90 at ~26k tokens vs Mem0 66.88 at ~7k tokens (different metric and world from T3/T4)"
+      },
+      {
+        "id": "CODE-NATIVE",
+        "kind": "code",
+        "pointer": "src/memshift/adapters/native.py module docstring L1-35 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Mem0 2.2.1: one additive extraction LLM call per add (mem0/memory/main.py:881-1220); Mem0 keeps extracted facts plus only the last 10 raw messages, so E5 archives raw records separately (keep_raw=True); Graphiti 0.30.2 episode per record [Cited at the coordinator's pointer; cross-checked against mem0@94c3fe9]"
+      },
+      {
+        "id": "CODE-MEMEXPORT",
+        "kind": "code",
+        "pointer": "src/memshift/adapters/mem_export.py module docstring; export_holdmem L244; import_to_holdmem L444; import_to_mem0 L529 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "HoldMem -> .mem export with/without derivation extension (carriers: custom kind, episode ext, fact ext); import into a second HoldMem; Mem0 import only via add(infer=False) because the SDK has no .mem -> Mem0 adapter"
+      },
+      {
+        "id": "CODE-E6",
+        "kind": "code",
+        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+      },
+      {
+        "id": "PM-MEM0",
+        "kind": "code",
+        "pointer": "portable_memory/adapters/mem0.py module docstring @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Mem0Adapter maps memories to episodes only; graph relations not mapped in v1; unmodelled keys kept in namespaced metadata"
+      },
+      {
+        "id": "PM-ADAPTERS",
+        "kind": "code",
+        "pointer": "portable_memory/adapters/{__init__,mem0,openai,claude,transfer}.py; portable_memory/cli.py @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Only four ingest adapters, all one-way foreign -> .mem: Mem0Adapter (Mem0 export JSON), OpenAIAdapter (ChatGPT conversations.json or a saved-memory list), ClaudeAdapter (Claude Code / API memory-tool markdown files), TransferTextAdapter (pasted '[date] - memory' text from ChatGPT/Claude/Gemini). The only way out is `mem render` to paste-ready text"
+      },
+      {
+        "id": "E27",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E27; reference/research_1/evidence/sources.json#S-MEM0",
+        "accessed": "2026-09-28",
+        "note": "Mem0 default example insufficient to show source-revision propagation"
+      },
+      {
+        "id": "BG-CARDS",
+        "kind": "record",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
+      },
+      {
+        "id": "RUN-STAGE3-E5",
+        "kind": "run",
+        "pointer": "runs/stage3_e5/analysis/e5_natives.json; runs/stage3_e5_cost/analysis/e5_cost.json; prereg/decisions.md 2026-09-29 (E5 reduction; T3 reference)",
+        "accessed": "2026-09-29",
+        "note": "Mem0 E5 on 15 short test worlds: labels, sufficient-statistic comparison, noise floor, T3/T4"
+      }
+    ]
+  },
+  {
+    "system": "Graphiti (open source) / Zep (hosted)",
+    "short_name": "Graphiti / Zep",
+    "group": "memory layer",
+    "owner": "agent",
+    "owner_note": "developer library partitioned by group_id; Zep Cloud = developer project",
+    "D": "partial",
+    "D_basis": "code",
+    "D_reason": "Typed edges (relation name, fact text, Pydantic attributes) with episode-UUID provenance; no spans and no deterministic checker.",
+    "B": "temporal validity only",
+    "B_basis": "code + paper + documented",
+    "B_key_components": "valid_at/invalid_at/expired_at + episode UUIDs; no source revision, definition or model key",
+    "B_reason": "Edges are invalidated only when an LLM judges that new information contradicts them; a revised episode is not re-derived (uuid reuse reprocesses stored content); deleting the creator episode removes its edges but does not restore edges it invalidated; ontology changes are not re-applied.",
+    "T1": "undeterminable",
+    "T1_basis": "not tested",
+    "T1_reason": "E5 not run on Graphiti (budget, plan 12: keep one native system). Measured ingestion cost on a three-month world: 6.1 LLM calls, 13.3k prompt and 1.2k completion tokens per event; ingestion stopped at the 33rd event when the model's output was still invalid JSON after retries.",
+    "T2": "undeterminable",
+    "T2_basis": "not tested",
+    "T2_reason": "E6 has no Graphiti importer arm.",
+    "T3": "undeterminable",
+    "T3_basis": "not tested",
+    "T3_reason": "E5 not run on Graphiti (budget, plan 12: keep one native system). Measured ingestion cost on a three-month world: 6.1 LLM calls, 13.3k prompt and 1.2k completion tokens per event; ingestion stopped at the 33rd event when the model's output was still invalid JSON after retries.",
+    "T4": "undeterminable",
+    "T4_basis": "not tested",
+    "T4_reason": "E5 not run on Graphiti (budget, plan 12: keep one native system). Measured ingestion cost on a three-month world: 6.1 LLM calls, 13.3k prompt and 1.2k completion tokens per event; ingestion stopped at the 33rd event when the model's output was still invalid JSON after retries.",
+    "plan_expectation_s3_4": "D 部分; B 时间有效性; T1/T3/T4 待 E5; T2 待 E6",
+    "deviation_from_plan": "T2 待 E6 的前提当前不成立",
+    "evidence": [
+      {
+        "id": "GR-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/getzep/graphiti @6b4b56ff6f4b1e4e69c3c3c5487cf1b8762c483a: graphiti_core/edges.py L263-285 (EntityEdge: fact, episodes, valid_at, invalid_at, expired_at, attributes); graphiti_core/utils/maintenance/edge_operations.py L538-573 (resolve_edge_contradictions), L576-620 (LLM timestamps), L623-847 (resolve_extracted_edge); graphiti_core/graphiti.py L1156-1168 (uuid reuse loads stored episode), L1824-1852 (remove_episode); graphiti_core/llm_client/config.py L40-66",
+        "accessed": "2026-09-28",
+        "note": "Typed edges with episode-UUID provenance; invalidation only when an LLM judges new information contradicts an old edge; no revise-episode path; no per-edge model id; no export API"
+      },
+      {
+        "id": "ZEP-PAPER",
+        "kind": "paper",
+        "pointer": "arXiv:2501.13956 §2.2.3, §4.3.2 Table 2",
+        "accessed": "2026-09-28",
+        "note": "Bi-temporal edge model (t_valid/t_invalid, t'_created/t'_expired); LongMemEval full context 60.2% at ~115k tokens vs Zep 71.2% at ~1.6k (vendor, gpt-4o)"
+      },
+      {
+        "id": "ZEP-DOCS",
+        "kind": "doc",
+        "pointer": "https://help.getzep.com/source-traceability; https://help.getzep.com/deleting-data-from-the-graph; https://help.getzep.com/customizing-graph-structure; https://help.getzep.com/reading-data-from-the-graph; https://help.getzep.com/bring-your-own-llm",
+        "accessed": "2026-09-28",
+        "note": "Edges carry source-episode UUIDs; a fact invalidated by a deleted episode stays invalidated; ontology changes do not update existing nodes/edges; only paginated list reads (no bulk export); BYOM per project (recording/reprocessing undocumented)"
+      },
+      {
+        "id": "CODE-NATIVE",
+        "kind": "code",
+        "pointer": "src/memshift/adapters/native.py module docstring L1-35 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Mem0 2.2.1: one additive extraction LLM call per add (mem0/memory/main.py:881-1220); Mem0 keeps extracted facts plus only the last 10 raw messages, so E5 archives raw records separately (keep_raw=True); Graphiti 0.30.2 episode per record [Cited at the coordinator's pointer; cross-checked against mem0@94c3fe9]"
+      },
+      {
+        "id": "CODE-E6",
+        "kind": "code",
+        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+      },
+      {
+        "id": "PM-SPEC-PROV",
+        "kind": "code",
+        "pointer": "Spec/portable-memory-spec.md §2 'Identity, time & provenance' @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Edges carry tValidFrom/tValidTo/supersededBy/evidenceEpisodeIDs; facts carry episodeID; provenance is at episode granularity; no field for definition version or writer-model id"
+      },
+      {
+        "id": "PM-SPEC-MAP",
+        "kind": "code",
+        "pointer": "Spec/portable-memory-spec.md §10 'Mapping reference', §12 'Prior art' @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Mapping table lists Letta but no Letta adapter ships; Zep appears only as prior art"
+      },
+      {
+        "id": "GH-SEARCH",
+        "kind": "code",
+        "pointer": "GitHub code search 'portable-memory repo:<r>' for mem0ai/mem0, getzep/graphiti, letta-ai/letta, topoteretes/cognee, plastic-labs/honcho, supermemoryai/supermemory, khoj-ai/khoj, MemTensor/MemOS, vectorize-io/hindsight; plus grep of the cloned repos",
+        "accessed": "2026-09-28",
+        "note": "No memory engine ships a native .mem importer or exporter (0 hits; code search covers default branches only, so this is weak evidence of absence)"
+      },
+      {
+        "id": "E20",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E20; reference/research_1/evidence/sources.json#S-GRAPHITI",
+        "accessed": "2026-09-28",
+        "note": "Graphiti temporal KG with source episodes"
+      },
+      {
+        "id": "RUN-STAGE3-E5COST",
+        "kind": "run",
+        "pointer": "runs/stage3_e5_cost/analysis/e5_cost.json; prereg/decisions.md 2026-09-29 (E5 reduced per plan 12)",
+        "accessed": "2026-09-29",
+        "note": "Graphiti ingestion cost measured; E5 not run"
+      }
+    ]
+  },
+  {
+    "system": "Letta (Letta Code MemFS; legacy Agent File .af)",
+    "short_name": "Letta (.af)",
+    "group": "memory layer",
+    "owner": "agent",
+    "owner_note": "person when Letta Code runs with local MemFS",
+    "D": "0",
+    "D_basis": "code",
+    "D_reason": "Memory is free-text markdown (frontmatter name/description only) or block values; no source references.",
+    "B": "0",
+    "B_basis": "code + documented",
+    "B_key_components": "none (git history of edits, commit author = agent id)",
+    "B_reason": "The agent or its reflection subagent rewrites stale entries in place at LLM judgment; git records edits but there is no key and no invalidation on source, definition or model change.",
+    "T1": "undeterminable",
+    "T1_basis": "code + inferred",
+    "T1_reason": "Model switchable (subagents inherit it) but not recorded on memory and nothing re-derives; not in E5.",
+    "T2": "undeterminable",
+    "T2_basis": "documented + code",
+    "T2_reason": "Own formats only: `letta memory export` copies the MemFS directory; .af is legacy V1, omits archival passages and block history, and no other framework imports it; no .mem adapter (the .mem spec maps Letta but ships none).",
+    "T3": "undeterminable",
+    "T3_basis": "documented",
+    "T3_reason": "Only a LoCoMo 74% vendor figure without a full-context floor.",
+    "T4": "undeterminable",
+    "T4_basis": "documented",
+    "T4_reason": "Sleep-time compute numbers concern reasoning compute, not serving vs full re-read.",
+    "plan_expectation_s3_4": "D0 B0; T1 待审计; T2 部分（自有格式）",
+    "deviation_from_plan": "T2 记为不可判定（自有格式存在，第三方格式路径不存在）",
+    "evidence": [
+      {
+        "id": "LT-REPO",
+        "kind": "code",
+        "pointer": "https://github.com/letta-ai/letta @5bcdd177d70fa2b31a754cfcd801e77b2e1ab16a README.md, AGENTS.md",
+        "accessed": "2026-09-28",
+        "note": "Letta main is now a landing page; current code is letta-ai/letta-code; V1 server archived and unsupported"
+      },
+      {
+        "id": "LT-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/letta-ai/letta-code @c864f1532b328aab4bb76cc68a86d5f014de27b8: src/memory-frontmatter.ts L64-66; src/agent/memory-git.ts L1184-1206; src/agent/subagents/builtin/reflection-v2.md L5, L102; src/cli/subcommands/memory.ts L284-316",
+        "accessed": "2026-09-28",
+        "note": "MemFS markdown memory with name/description frontmatter only; git commits authored by agent id, not model; reflection subagent inherits model and rewrites stale entries in place; `letta memory export` copies the directory"
+      },
+      {
+        "id": "LT-MEMFS",
+        "kind": "doc",
+        "pointer": "https://docs.letta.com/concepts/memfs; https://docs.letta.com/configuration/memory",
+        "accessed": "2026-09-28",
+        "note": "Git-backed memory filesystem; background reflection updates memory"
+      },
+      {
+        "id": "AF-REPO",
+        "kind": "code",
+        "pointer": "https://github.com/letta-ai/agent-file @78212eb571e59e10b35b924375a997319b89c280 README.md L170-199, L191, L230-236",
+        "accessed": "2026-09-28",
+        "note": ".af = Letta's own serialization (blocks, messages, tools, llm_config); archival passages not included; other frameworks 'theoretically' could load it; converters between frameworks not done"
+      },
+      {
+        "id": "LT-AFDOC",
+        "kind": "doc",
+        "pointer": "https://docs.letta.com/guides/core-concepts/agent-file",
+        "accessed": "2026-09-28",
+        "note": "Agent File page sits under 'V1 SDK (legacy)'"
+      },
+      {
+        "id": "PM-SPEC-MAP",
+        "kind": "code",
+        "pointer": "Spec/portable-memory-spec.md §10 'Mapping reference', §12 'Prior art' @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Mapping table lists Letta but no Letta adapter ships; Zep appears only as prior art"
+      },
+      {
+        "id": "CG-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/topoteretes/cognee @c4cd8ceb9509dff6bddfabdadbeab7cc040bc32b: cognee/infrastructure/engine/models/DataPoint.py; cognee/infrastructure/databases/provenance/source_refs.py; cognee/infrastructure/databases/unified/provenance_delete_planner.py; cognee/api/v1/update/update.py, incremental.py; cognee/api/v1/forget/forget.py; cognee/modules/pipelines/operations/run_tasks_data_item.py ~L197-207; cognee/modules/pipelines/models/PipelineRun.py; cognee/modules/cognify/config.py L22; cognee/api/v1/export/export.py; cognee/modules/migration/cogx.py; cognee/modules/migration/sources/{mem0,zep,letta,langmem,cogx_archive}.py",
+        "accessed": "2026-09-28",
+        "note": "Typed DataPoint nodes/triples with dataset/data/chunk source refs; source delete cascades with ref-counting; caller-invoked update() re-derives changed chunks; completed items skipped on re-run regardless of LLM config; no model id stored; span-level provenance ledger opt-in and off by default; COGX export and importers for Mem0, Zep/Graphiti, Letta, LangMem"
+      },
+      {
+        "id": "GH-SEARCH",
+        "kind": "code",
+        "pointer": "GitHub code search 'portable-memory repo:<r>' for mem0ai/mem0, getzep/graphiti, letta-ai/letta, topoteretes/cognee, plastic-labs/honcho, supermemoryai/supermemory, khoj-ai/khoj, MemTensor/MemOS, vectorize-io/hindsight; plus grep of the cloned repos",
+        "accessed": "2026-09-28",
+        "note": "No memory engine ships a native .mem importer or exporter (0 hits; code search covers default branches only, so this is weak evidence of absence)"
+      }
+    ]
+  },
+  {
+    "system": "Cognee (open source; Cognee Cloud)",
+    "short_name": "Cognee",
+    "group": "memory layer",
+    "owner": "agent",
+    "owner_note": "developer library keyed by user/dataset; person if self-hosted by an individual; vendor on Cognee Cloud",
+    "D": "partial",
+    "D_basis": "code",
+    "D_reason": "Typed DataPoint nodes and triples with dataset/data/chunk source refs and chunk content hashes; span-level provenance ledger exists but is opt-in, off by default, and fills chunk_index instead of offsets.",
+    "B": "0",
+    "B_basis": "code + documented",
+    "B_key_components": "source (dataset_id, data_id, chunk_id, content hash), caller-triggered; no definition/prompt or model key",
+    "B_reason": "Formally 0 but the strongest source binding among external engines: deleting a source cascades with ref-counting and caller-invoked update() re-derives only changed chunks; completed items are skipped on re-run whatever the LLM config, so model/prompt changes invalidate nothing.",
+    "T1": "undeterminable",
+    "T1_basis": "code",
+    "T1_reason": "Global LLM setting, not recorded; re-derivation needs manual forget(memory_only=True) + re-cognify (raw data retained, so runnable); not in E5.",
+    "T2": "undeterminable",
+    "T2_basis": "code + documented",
+    "T2_reason": "Most portable engine audited: COGX archive (facts with valid_at/invalid_at/provenance, raw nodes verbatim) plus importers from Mem0, Zep/Graphiti, Letta, LangMem; but no .mem path and no carryover measurement.",
+    "T3": "pass",
+    "T3_basis": "measured (native-system experiment, 15 short worlds)",
+    "T3_reason": "Margin over the gold-dependency context before the fork: -1.8 pp [-4.2, +0.7], within the floor (NatCogneeTThree).",
+    "T4": "pass",
+    "T4_basis": "measured (native-system experiment, 15 short worlds)",
+    "T4_reason": "Serving costs 0.82% of a full re-read (NatCogneeTFour).",
+    "plan_expectation_s3_4": "D 部分; B0; T1/T2 待审计",
+    "deviation_from_plan": "B 形式上为 0，但有源级级联（与计划一致，补充说明）",
+    "evidence": [
+      {
+        "id": "CG-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/topoteretes/cognee @c4cd8ceb9509dff6bddfabdadbeab7cc040bc32b: cognee/infrastructure/engine/models/DataPoint.py; cognee/infrastructure/databases/provenance/source_refs.py; cognee/infrastructure/databases/unified/provenance_delete_planner.py; cognee/api/v1/update/update.py, incremental.py; cognee/api/v1/forget/forget.py; cognee/modules/pipelines/operations/run_tasks_data_item.py ~L197-207; cognee/modules/pipelines/models/PipelineRun.py; cognee/modules/cognify/config.py L22; cognee/api/v1/export/export.py; cognee/modules/migration/cogx.py; cognee/modules/migration/sources/{mem0,zep,letta,langmem,cogx_archive}.py",
+        "accessed": "2026-09-28",
+        "note": "Typed DataPoint nodes/triples with dataset/data/chunk source refs; source delete cascades with ref-counting; caller-invoked update() re-derives changed chunks; completed items skipped on re-run regardless of LLM config; no model id stored; span-level provenance ledger opt-in and off by default; COGX export and importers for Mem0, Zep/Graphiti, Letta, LangMem"
+      },
+      {
+        "id": "CG-DOCS",
+        "kind": "doc",
+        "pointer": "https://docs.cognee.ai/core-concepts/main-operations/forget; https://docs.cognee.ai/python-api/update; https://docs.cognee.ai/core-concepts/further-concepts/cogx.md; https://docs.cognee.ai/examples/migrate-memory-systems.md",
+        "accessed": "2026-09-28",
+        "note": "Forget removes nodes/edges derived from a source; update replaces derived nodes; COGX archive round-trip; migration from other memory systems"
+      },
+      {
+        "id": "CG-BEAM",
+        "kind": "doc",
+        "pointer": "cognee/eval_framework/beam/REPORT.md §4.1 @c4cd8ceb9509dff6bddfabdadbeab7cc040bc32b",
+        "accessed": "2026-09-28",
+        "note": "BEAM scores without a full-context/oracle baseline or serving-token comparison"
+      },
+      {
+        "id": "GH-SEARCH",
+        "kind": "code",
+        "pointer": "GitHub code search 'portable-memory repo:<r>' for mem0ai/mem0, getzep/graphiti, letta-ai/letta, topoteretes/cognee, plastic-labs/honcho, supermemoryai/supermemory, khoj-ai/khoj, MemTensor/MemOS, vectorize-io/hindsight; plus grep of the cloned repos",
+        "accessed": "2026-09-28",
+        "note": "No memory engine ships a native .mem importer or exporter (0 hits; code search covers default branches only, so this is weak evidence of absence)"
+      },
+      {
+        "id": "E25",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E25-E26; reference/research_1/evidence/sources.json#S-COGNEE",
+        "accessed": "2026-09-28",
+        "note": "Cognee API, lineage and stores"
+      }
+    ]
+  },
+  {
+    "system": "Honcho (Plastic Labs; managed or self-hosted)",
+    "short_name": "Honcho",
+    "group": "memory layer",
+    "owner": "agent",
+    "owner_note": "developer platform keyed by workspace/peer; vendor on managed service; person when self-hosted",
+    "D": "partial",
+    "D_basis": "code",
+    "D_reason": "Conclusions are free text with a typed level; they carry an internal batch-level message-id range (not exposed by the API); no spans or parsed values.",
+    "B": "0",
+    "B_basis": "code + documented",
+    "B_key_components": "internal message-id range (batch-level); no key",
+    "B_reason": "No key: heuristic dedup replacement and an LLM 'dreamer' deletes/replaces outdated conclusions; messages are immutable (sources cannot be revised); session deletion cascades only to explicit conclusions; model not stored.",
+    "T1": "undeterminable",
+    "T1_basis": "code + inferred",
+    "T1_reason": "Models set in operator config, not recorded, no re-derivation; messages retained so a full re-derive by re-ingest is possible; not in E5.",
+    "T2": "undeterminable",
+    "T2_basis": "code",
+    "T2_reason": "No export endpoint or format; list APIs return conclusions (without message ids) and messages; migrations re-ingest via the API; no .mem.",
+    "T3": "undeterminable",
+    "T3_basis": "documented",
+    "T3_reason": "Vendor reports accuracy above full context on LongMem-S/LoCoMo; different metric and world, not verified.",
+    "T4": "undeterminable",
+    "T4_basis": "documented",
+    "T4_reason": "Vendor reports ~11% of full-context tokens, which would clear c = 0.5 if it held here; not measured.",
+    "plan_expectation_s3_4": "D0 B0; T1/T2 待审计",
+    "deviation_from_plan": "D 记为部分（有内部源引用）",
+    "evidence": [
+      {
+        "id": "HO-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/plastic-labs/honcho @2eb27b6cc0595d3f8deb693f0560e7241c2aeaff: src/models.py (Document, DocumentSource); src/schemas/internal.py (DocumentMetadata.message_ids); src/deriver/deriver.py; src/schemas/api.py (Conclusion); src/crud/document.py (_semantic_dup_decision); src/utils/agent_tools.py (delete_observations); src/routers/messages.py (update_message: metadata only); config.toml.example",
+        "accessed": "2026-09-28",
+        "note": "Conclusions = free-text documents with a typed level and an internal batch-level message-id range; heuristic dedup; dreamer LLM can delete conclusions; messages immutable; model set in config, not stored per item; no export endpoint"
+      },
+      {
+        "id": "HO-DOCS",
+        "kind": "doc",
+        "pointer": "docs/v3/documentation/features/advanced/{dreaming,deleting-data,evidence}.mdx; docs/v3/guides/migrations/mem0.mdx @2eb27b6cc0595d3f8deb693f0560e7241c2aeaff",
+        "accessed": "2026-09-28",
+        "note": "Dreaming deletes outdated conclusions and creates new ones; session delete cascades only to explicit conclusions; Mem0 migration re-ingests via the API"
+      },
+      {
+        "id": "HO-BENCH",
+        "kind": "doc",
+        "pointer": "https://plasticlabs.ai/blog/research/Benchmarking-Honcho",
+        "accessed": "2026-09-28",
+        "note": "Vendor benchmark vs full context (e.g. LongMem-S, LoCoMo) and ~11% of full-context tokens (not independently verified)"
+      },
+      {
+        "id": "GH-SEARCH",
+        "kind": "code",
+        "pointer": "GitHub code search 'portable-memory repo:<r>' for mem0ai/mem0, getzep/graphiti, letta-ai/letta, topoteretes/cognee, plastic-labs/honcho, supermemoryai/supermemory, khoj-ai/khoj, MemTensor/MemOS, vectorize-io/hindsight; plus grep of the cloned repos",
+        "accessed": "2026-09-28",
+        "note": "No memory engine ships a native .mem importer or exporter (0 hits; code search covers default branches only, so this is weak evidence of absence)"
+      }
+    ]
+  },
+  {
+    "system": "Supermemory (hosted app/API; self-hosted local binary)",
+    "short_name": "Supermemory",
+    "group": "memory layer",
+    "owner": "vendor",
+    "owner_note": "agent for developer API (containerTag); person only for the self-hosted binary",
+    "D": "partial",
+    "D_basis": "inferred",
+    "D_reason": "Free-text memories with typed relations (updates/extends/derives) and document-level source links without span or revision (client validation schema; server engine not public).",
+    "B": "temporal validity only",
+    "B_basis": "inferred",
+    "B_key_components": "version chain (isLatest, parentMemoryId) + forgetAfter; document id without revision; no definition or model key",
+    "B_reason": "A newer contradicting memory supersedes the old one through an 'updates' relation (old kept, isLatest=false); expiry via forgetAfter; document update triggers full reprocessing but the effect on derived memories is undocumented.",
+    "T1": "undeterminable",
+    "T1_basis": "documented",
+    "T1_reason": "Cloud extraction uses proprietary models; self-hosted uses the configured model; neither recorded per memory.",
+    "T2": "undeterminable",
+    "T2_basis": "documented",
+    "T2_reason": "No export format (list APIs incl. version history; 'you can always export your data' without a documented mechanism); Mem0/Zep migration scripts only; no .mem.",
+    "T3": "undeterminable",
+    "T3_basis": "documented",
+    "T3_reason": "Vendor LongMemEval figures vs full context use a recall metric; not comparable.",
+    "T4": "undeterminable",
+    "T4_basis": "documented",
+    "T4_reason": "Vendor reports ~720 context tokens; not measured.",
+    "plan_expectation_s3_4": "D0 B0; T1/T2 待审计",
+    "deviation_from_plan": "B 记为仅时间有效性（版本链），D 记为部分",
+    "evidence": [
+      {
+        "id": "SM-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/supermemoryai/supermemory @cfa6c7cb17476d19ea896867406c80e8186a72ec: packages/validation/schemas.ts ~L239-295",
+        "accessed": "2026-09-28",
+        "note": "Memory entry schema: free text, version/isLatest/parentMemoryId, relations updates|extends|derives, forgetAfter, memoryEmbeddingModel (no LLM field); document links without span or revision (client validation schema; server engine not in the repo)"
+      },
+      {
+        "id": "SM-DOCS",
+        "kind": "doc",
+        "pointer": "apps/docs/{concepts/graph-memory,recall/memory-operations,ingestion/document-operations,connectors/overview,self-hosting/local-vs-enterprise,overview/comparison}.mdx @cfa6c7cb17476d19ea896867406c80e8186a72ec",
+        "accessed": "2026-09-28",
+        "note": "Updates keep the old version with isLatest=false; document update triggers full reprocessing; effect of document delete on derived memories undocumented; connectors cloud-only; list APIs but no export format"
+      },
+      {
+        "id": "SM-BENCH",
+        "kind": "doc",
+        "pointer": "https://supermemory.ai/research; README 'Benchmarks'",
+        "accessed": "2026-09-28",
+        "note": "Vendor LongMemEval recall figures vs full context; ~720 context tokens (metric differs from T3)"
+      },
+      {
+        "id": "GH-SEARCH",
+        "kind": "code",
+        "pointer": "GitHub code search 'portable-memory repo:<r>' for mem0ai/mem0, getzep/graphiti, letta-ai/letta, topoteretes/cognee, plastic-labs/honcho, supermemoryai/supermemory, khoj-ai/khoj, MemTensor/MemOS, vectorize-io/hindsight; plus grep of the cloned repos",
+        "accessed": "2026-09-28",
+        "note": "No memory engine ships a native .mem importer or exporter (0 hits; code search covers default branches only, so this is weak evidence of absence)"
+      }
+    ]
+  },
+  {
+    "system": "Khoj (self-hostable; app.khoj.dev)",
+    "short_name": "Khoj",
+    "group": "memory layer",
+    "owner": "person",
+    "owner_note": "self-hosted is the primary pitch; vendor on app.khoj.dev",
+    "D": "0",
+    "D_basis": "code",
+    "D_reason": "UserMemory is free text + embedding with no conversation/source reference.",
+    "B": "0",
+    "B_basis": "code",
+    "B_key_components": "none",
+    "B_reason": "After each chat turn an LLM creates new facts and deletes related ones (update = delete + create); deleting a conversation cannot cascade (no link); no model field. The file index re-embeds changed files, but that is RAG, not derived memory.",
+    "T1": "undeterminable",
+    "T1_basis": "code",
+    "T1_reason": "Chat model user-switchable, not recorded; admin `manage_memories --force` can regenerate memories from conversation history, so a full re-derive is possible but unmeasured.",
+    "T2": "undeterminable",
+    "T2_basis": "code",
+    "T2_reason": "Memories readable via GET /api/memories (id, raw, created_at); only chats have an export (own JSON); no import; no .mem.",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "Not reported for memory.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "Not reported.",
+    "plan_expectation_s3_4": "D0 B0; T1/T2 待审计",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "KH-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/khoj-ai/khoj @ae229ca894c0b80ad84664afcfdde523b5e87057: src/khoj/database/models/__init__.py (UserMemory ~L855, Entry); src/khoj/routers/helpers.py (extract_facts_from_query, ai_update_memories); src/khoj/routers/api_memories.py; src/khoj/database/management/commands/manage_memories.py; src/khoj/processor/content/text_to_entries.py; src/khoj/routers/api_chat.py (export_conversation)",
+        "accessed": "2026-09-28",
+        "note": "UserMemory = free text + embedding, no conversation/source ref, no chat-model field; LLM creates/deletes facts after each turn; admin can regenerate memories from history; file index re-embeds changed files (RAG only); chat export only"
+      },
+      {
+        "id": "KH-REL",
+        "kind": "doc",
+        "pointer": "https://github.com/khoj-ai/khoj/releases",
+        "accessed": "2026-09-28",
+        "note": "Long-term memories introduced in 2.0.0-beta.25"
+      },
+      {
+        "id": "GH-SEARCH",
+        "kind": "code",
+        "pointer": "GitHub code search 'portable-memory repo:<r>' for mem0ai/mem0, getzep/graphiti, letta-ai/letta, topoteretes/cognee, plastic-labs/honcho, supermemoryai/supermemory, khoj-ai/khoj, MemTensor/MemOS, vectorize-io/hindsight; plus grep of the cloned repos",
+        "accessed": "2026-09-28",
+        "note": "No memory engine ships a native .mem importer or exporter (0 hits; code search covers default branches only, so this is weak evidence of absence)"
+      }
+    ]
+  },
+  {
+    "system": "Opal (arXiv 2604.02522, private memory for personal AI)",
+    "short_name": "Opal",
+    "group": "paper system",
+    "owner": "vendor",
+    "owner_note": "provider-hosted enclave + ORAM; the user holds only a key and a counter",
+    "D": "partial",
+    "D_basis": "paper",
+    "D_reason": "KG nodes/links are deterministically extracted from application metadata (no LLM); LLM summaries are linked to the artifacts they compress; no spans on derived items.",
+    "B": "0",
+    "B_basis": "paper",
+    "B_key_components": "artifact links only; no revision, definition or model key",
+    "B_reason": "Items expire by a TTL in logical operations refreshed on access (LRU-like); summaries outlive the chunks they compress; source edits, deletion requests and model changes are not handled.",
+    "T1": "undeterminable",
+    "T1_basis": "paper",
+    "T1_reason": "Two model stacks evaluated; the model is not recorded per item; no code.",
+    "T2": "undeterminable",
+    "T2_basis": "paper",
+    "T2_reason": "Export/portability not discussed; no code release.",
+    "T3": "undeterminable",
+    "T3_basis": "paper",
+    "T3_reason": "No full-context or oracle baseline (only vs semantic search and Graphiti).",
+    "T4": "undeterminable",
+    "T4_basis": "paper",
+    "T4_reason": "Cost compared with a secure in-memory baseline, not a full re-read.",
+    "plan_expectation_s3_4": "人; D 部分（KG）; B0",
+    "deviation_from_plan": "拥有者由人改为厂商",
+    "evidence": [
+      {
+        "id": "OPAL",
+        "kind": "paper",
+        "pointer": "arXiv:2604.02522v1 §3.2.1, §3.3.1, §3.3.3, §6.2-6.3, Table 1",
+        "accessed": "2026-09-28",
+        "note": "Provider-hosted enclave + ORAM; KG of metadata deterministically extracted from app metadata; LLM summaries every T=5 ingests linked to artifacts; TTL/LRU expiry; no export; no full-context/oracle baseline; cost vs secure in-memory baseline only"
+      },
+      {
+        "id": "BG-CARDS",
+        "kind": "record",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
+      }
+    ]
+  },
+  {
+    "system": "Plain RAG (chunks + embedding index; our baseline)",
+    "short_name": "Plain RAG",
+    "group": "baseline",
+    "owner": "person",
+    "owner_note": "whoever holds the sources; our baseline in src/memshift/adapters/baselines.py",
+    "D": "N/A",
+    "D_basis": "code",
+    "D_reason": "No derived items: only source chunks and their embeddings.",
+    "B": "N/A",
+    "B_basis": "code",
+    "B_key_components": "n/a",
+    "B_reason": "No derived items; the index is rebuilt from the sources as of the probe time.",
+    "T1": "pass",
+    "T1_basis": "by construction",
+    "T1_reason": "No writer model in the path; theta_e changes are a separate axis (E7).",
+    "T2": "pass",
+    "T2_basis": "by construction",
+    "T2_reason": "Nothing derived to lose: .mem resource/chunk kinds carry source text and receivers re-embed from text; not exercised by E6 (no RAG arm).",
+    "T3": "fail",
+    "T3_basis": "measured (E3, 20 test worlds)",
+    "T3_reason": "Static ContractValid minus oracle context: -14.3 / -22.1 / -17.5 pp at 1 / 3 / 12 months (floor -3 pp).",
+    "T4": "pass",
+    "T4_basis": "measured (E3, 20 test worlds)",
+    "T4_reason": "Serving cost per query 1.8% / 0.70% / 0.19% of one full re-read (ceiling 50%).",
+    "plan_expectation_s3_4": "T1 通过; T2 通过; T3 待 E3; T4 不通过（预期）",
+    "deviation_from_plan": "T4 的\"不通过\"预期与 prereg 预算不一致（推断）",
+    "evidence": [
+      {
+        "id": "CODE-BASELINES",
+        "kind": "code",
+        "pointer": "src/memshift/adapters/baselines.py @56876e3634ca9493d9511e67d98e935be81cb887 (ZeroSystem L56-72; Oracle L74-89; PlainRAG L164-)",
+        "accessed": "2026-09-29",
+        "note": "Zero system = granted sources + lexical index + fixed reader budget, no derived store; Plain RAG = chunk + embedding index over sources, no derived store"
+      },
+      {
+        "id": "PM-SPEC-EMB",
+        "kind": "code",
+        "pointer": "Spec/portable-memory-spec.md §2 kinds table (resource, chunk) and 'Embeddings & engine-agnostic representation' @f341f0703d739edfdf94eba58e66a4cc7c925df7",
+        "accessed": "2026-09-28",
+        "note": "Source text is mandatory and authoritative; resource/chunk kinds carry text; importers re-embed from text unless the model tag matches"
+      },
+      {
+        "id": "CODE-NOEXPORT-OURS",
+        "kind": "code",
+        "pointer": "grep over src/memshift @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Zero system and Plain RAG have no .mem export path; E6 has no arm for them"
+      },
+      {
+        "id": "PREREG-V0",
+        "kind": "record",
+        "pointer": "prereg/v0.md §1 and E3 rule @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "T3 epsilon = 3 pp; T4 c = 0.5 x per-query full re-read; reader evidence budget 4,096 tokens for every system; world ~2.2M tokens"
+      },
+      {
+        "id": "PLAN-S3",
+        "kind": "record",
+        "pointer": "docs/MEMSHIFT_RESEARCH_PLAN_ZH.md §2.2, §3.1-§3.4, §6 E2/E3/E5/E6 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Definitions of B, D, T1-T4; boundary table §3.3; expected 16-system table §3.4 (treated as hypotheses, not evidence)"
+      },
+      {
+        "id": "RUN-STAGE2-E3",
+        "kind": "run",
+        "pointer": "runs/stage2_e3/analysis/e3_metrics.json (horizons.*.T3_pass, T4_pass, minus_oracle, serve_ratio_to_full_reread)",
+        "accessed": "2026-09-29",
+        "note": "T3 measured on the 20-world test set"
+      }
+    ]
+  },
+  {
+    "system": "Solid pod (Solid Protocol v0.11; W3C LWS 1.0 draft)",
+    "short_name": "Solid pod",
+    "group": "personal data store",
+    "owner": "person",
+    "owner_note": "stated design intent: data stays the user's across providers and apps",
+    "D": "N/A",
+    "D_basis": "documented",
+    "D_reason": "Stores resources that apps write; neither Solid nor LWS defines derived or inferred memory.",
+    "B": "N/A",
+    "B_basis": "documented",
+    "B_key_components": "n/a (ETags on resources, not on derived items)",
+    "B_reason": "No derived items.",
+    "T1": "pass",
+    "T1_basis": "by construction",
+    "T1_reason": "No writer model and no derived items.",
+    "T2": "pass",
+    "T2_basis": "by construction",
+    "T2_reason": "No derived state to lose; resources are retrievable over HTTP. Caveat: no standardized bulk export/migration (LWS §15 Portability left blank), so leaving needs ad hoc tooling.",
+    "T3": "fail",
+    "T3_basis": "inferred",
+    "T3_reason": "A pod alone offers storage and access control but no query path for a reader; any serving layer on top turns it into the zero system or RAG.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "No serving path, so serving cost is undefined.",
+    "plan_expectation_s3_4": "T1 通过; T2 通过; T3 不通过",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "SOLID-PROTO",
+        "kind": "doc",
+        "pointer": "https://solidproject.org/TR/protocol",
+        "accessed": "2026-09-28",
+        "note": "Solid Protocol v0.11 (2024-05-12): storage, access control, notifications; no export/migration section; no derived memory"
+      },
+      {
+        "id": "SOLID-ABOUT",
+        "kind": "doc",
+        "pointer": "https://solidproject.org/about",
+        "accessed": "2026-09-28",
+        "note": "Data stays the user's across providers and apps (stated intent)"
+      },
+      {
+        "id": "LWS",
+        "kind": "doc",
+        "pointer": "https://www.w3.org/TR/lws10-core/; https://www.w3.org/TR/lws-ucs/; https://www.w3.org/2024/09/linked-web-storage-wg-charter.html",
+        "accessed": "2026-09-28",
+        "note": "LWS Protocol 1.0 WD (2026-09-21): §15 Portability Considerations left blank; use cases require whole-storage portability; charter excludes new data formats"
+      },
+      {
+        "id": "E01",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E01",
+        "accessed": "2026-09-28",
+        "note": "ADI survey: Solid/DuckDB/pgvector/LOTUS alone do not take on semantic organisation"
+      },
+      {
+        "id": "PLAN-S3",
+        "kind": "record",
+        "pointer": "docs/MEMSHIFT_RESEARCH_PLAN_ZH.md §2.2, §3.1-§3.4, §6 E2/E3/E5/E6 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Definitions of B, D, T1-T4; boundary table §3.3; expected 16-system table §3.4 (treated as hypotheses, not evidence)"
+      }
+    ]
+  },
+  {
+    "system": "User as Code (arXiv 2606.16707)",
+    "short_name": "User as Code",
+    "group": "paper system",
+    "owner": "agent",
+    "owner_note": "'a directory in the agent's workspace'; person if the user runs it",
+    "D": "partial",
+    "D_basis": "code + paper",
+    "D_reason": "Typed Python dataclass values, but the typed state carries no source reference (only the flat facts carry [session, date]); no deterministic check of values against sources.",
+    "B": "0",
+    "B_basis": "code + paper",
+    "B_key_components": "none (session id on facts only)",
+    "B_reason": "Phase 1 appends flat facts, never overwritten; Phase 2 regenerates the whole typed view whenever any new session arrives (full rebuild, no per-item key, no definition or model version).",
+    "T1": "undeterminable",
+    "T1_basis": "code",
+    "T1_reason": "Model is an environment constant, not recorded; a new model rebuilds the view from facts written by the old model on the next ingest, so re-derivation is only partial.",
+    "T2": "undeterminable",
+    "T2_basis": "code",
+    "T2_reason": "Plain Python files in a directory (copyable) but no exporter/importer, no provenance fields, no .mem.",
+    "T3": "undeterminable",
+    "T3_basis": "paper",
+    "T3_reason": "LOCOMO 78.8% vs full context 79.8% (judged accuracy, within 1 pp) and 99% on aggregate queries: suggestive of clearing a 3 pp floor, but a different metric, baseline and reader.",
+    "T4": "undeterminable",
+    "T4_basis": "paper",
+    "T4_reason": "Per-query cost below FC+REPL (1.2-2.3 vs 1.9-37.8 m$): suggestive, not our cost definition.",
+    "plan_expectation_s3_4": "人; D1 B0; T1 通过; T2 部分",
+    "deviation_from_plan": "D 由 1 改为部分；T1 由通过改为不可判定；T2 由部分改为不可判定",
+    "evidence": [
+      {
+        "id": "UAC-PAPER",
+        "kind": "paper",
+        "pointer": "arXiv:2606.16707v1 §3.2, §5, Tables 1, 3, 5, 6",
+        "accessed": "2026-09-28",
+        "note": "Phase 1 LLM appends flat facts (never overwritten); Phase 2 LLM regenerates the whole typed Python view; LOCOMO 78.8% vs full context 79.8% (judged accuracy); aggregate queries 99%; per-query cost below FC+REPL"
+      },
+      {
+        "id": "UAC-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/19PINE-AI/user-as-code @3d473617a27e7ace8cbbde531b667d515864c21e: experiments/user_as_code_v5.py L29-31 (MODEL = KRILL_MODEL), L89 (_code_stale on ingest), L129 ([session, date] prefix), L166-218 (structure), L183-184 (30,000-char prefix)",
+        "accessed": "2026-09-28",
+        "note": "Typed state carries no source reference; any new session marks the whole view stale; model not recorded per item"
+      },
+      {
+        "id": "BG-CARDS",
+        "kind": "record",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
+      }
+    ]
+  },
+  {
+    "system": "Zero system (ours: sources + lexical index + fixed-budget re-read)",
+    "short_name": "零系统（ours）",
+    "group": "ours",
+    "owner": "person",
+    "owner_note": "",
+    "D": "N/A",
+    "D_basis": "code",
+    "D_reason": "No derived store.",
+    "B": "N/A",
+    "B_basis": "code",
+    "B_key_components": "n/a",
+    "B_reason": "No derived store; every probe re-reads the sources granted at probe time.",
+    "T1": "pass",
+    "T1_basis": "by construction",
+    "T1_reason": "No writer model in the path; E2 does not include the zero system, so this is not measured.",
+    "T2": "pass",
+    "T2_basis": "by construction",
+    "T2_reason": "No derived state: leaving means taking the sources, which the zero system re-reads; nothing to bind.",
+    "T3": "fail",
+    "T3_basis": "measured (E3, 20 test worlds)",
+    "T3_reason": "Static ContractValid minus oracle context: -3.6 / -18.1 / -13.6 pp at 1 / 3 / 12 months (floor -3 pp; the one-month shortfall is marginal).",
+    "T4": "pass",
+    "T4_basis": "measured (E3, 20 test worlds)",
+    "T4_reason": "Serving cost per query 1.8% / 0.64% / 0.18% of one full re-read (ceiling 50%).",
+    "plan_expectation_s3_4": "T1 通过; T2 通过; T3/T4 待 E3",
+    "deviation_from_plan": "T2 由通过改为待 E6（无导出路径与 E6 臂）",
+    "evidence": [
+      {
+        "id": "CODE-BASELINES",
+        "kind": "code",
+        "pointer": "src/memshift/adapters/baselines.py @56876e3634ca9493d9511e67d98e935be81cb887 (ZeroSystem L56-72; Oracle L74-89; PlainRAG L164-)",
+        "accessed": "2026-09-29",
+        "note": "Zero system = granted sources + lexical index + fixed reader budget, no derived store; Plain RAG = chunk + embedding index over sources, no derived store"
+      },
+      {
+        "id": "PREREG-V0",
+        "kind": "record",
+        "pointer": "prereg/v0.md §1 and E3 rule @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "T3 epsilon = 3 pp; T4 c = 0.5 x per-query full re-read; reader evidence budget 4,096 tokens for every system; world ~2.2M tokens"
+      },
+      {
+        "id": "STATUS-S1",
+        "kind": "record",
+        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+      },
+      {
+        "id": "CODE-E6",
+        "kind": "code",
+        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+      },
+      {
+        "id": "CODE-NOEXPORT-OURS",
+        "kind": "code",
+        "pointer": "grep over src/memshift @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Zero system and Plain RAG have no .mem export path; E6 has no arm for them"
+      },
+      {
+        "id": "PLAN-S3",
+        "kind": "record",
+        "pointer": "docs/MEMSHIFT_RESEARCH_PLAN_ZH.md §2.2, §3.1-§3.4, §6 E2/E3/E5/E6 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Definitions of B, D, T1-T4; boundary table §3.3; expected 16-system table §3.4 (treated as hypotheses, not evidence)"
+      },
+      {
+        "id": "RUN-STAGE2-E3",
+        "kind": "run",
+        "pointer": "runs/stage2_e3/analysis/e3_metrics.json (horizons.*.T3_pass, T4_pass, minus_oracle, serve_ratio_to_full_reread)",
+        "accessed": "2026-09-29",
+        "note": "T3 measured on the 20-world test set"
+      }
+    ]
+  },
+  {
+    "system": "HoldMem (D=1, B=1) (ours)",
+    "short_name": "HoldMem (1,1)",
+    "group": "ours",
+    "owner": "person",
+    "owner_note": "",
+    "D": "1",
+    "D_basis": "code",
+    "D_reason": "Item carries (parse, spans); the checker verifies citations against live source revisions and the kappa evaluator; rule fallback; else unverifiable.",
+    "B": "1",
+    "B_basis": "code",
+    "B_key_components": "(scope epochs or cited-cluster epochs, kappa_version, theta_w)",
+    "B_reason": "key_at compares the stored key with the current (scope epoch, kappa version, theta_w); any change -> invalid -> re-derive with the current writer.",
+    "T1": "pass",
+    "T1_basis": "measured (E2, 20 test worlds)",
+    "T1_reason": "TOST at +/-3 pp, 90% world-bootstrap intervals: same tier -1.36 pp [-1.86, -0.86], upgrade -0.37 pp [-0.87, 0.00], downgrade -0.36 pp [-0.85, 0.00]; all equivalent. Exploratory (not pre-registered): free-text attributes retain 0.851 at the same tier; the aggregate rests on items the D=1 fallback computes as gold does (decisions.md 2026-09-29).",
+    "T2": "pass",
+    "T2_basis": "measured (E6, 20 test worlds)",
+    "T2_reason": "Export to .mem (format 1.1) with the derivation extension, import by a second HoldMem implementation from the bundle alone: static, post-shift ContractValid and missed invalidation differences all 0.0 pp (90% intervals [0, 0]), ExportFidelity 1.000. Without the extension: missed invalidation +100 pp, post-shift -15.4 pp [-17.3, -13.6]. Importer shares our data model; no third-party importer measured.",
+    "T3": "pass",
+    "T3_basis": "measured (E3, 20 test worlds)",
+    "T3_reason": "Static ContractValid minus the same reader's oracle-context score: +0.7 / +1.3 / +12.2 pp at 1 / 3 / 12 months (floor -3 pp).",
+    "T4": "pass",
+    "T4_basis": "measured (E3, 20 test worlds)",
+    "T4_reason": "Serving cost per query 2.1% / 0.74% / 0.19% of one full re-read at 1 / 3 / 12 months (ceiling 50%).",
+    "plan_expectation_s3_4": "D1 B1; T1 待 E2; T2 待 E6; T3/T4 待 E3",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "CODE-HOLDMEM",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "accessed": "2026-09-29",
+        "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
+      },
+      {
+        "id": "CODE-CHECKER",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/checker.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "D=1 checker: citations must name a live object at its current revision and quote text in it; typed surface match; definition-dependent values equal the kappa evaluator; rule fallback; else unverifiable"
+      },
+      {
+        "id": "CODE-MEMEXPORT",
+        "kind": "code",
+        "pointer": "src/memshift/adapters/mem_export.py module docstring; export_holdmem L244; import_to_holdmem L444; import_to_mem0 L529 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "HoldMem -> .mem export with/without derivation extension (carriers: custom kind, episode ext, fact ext); import into a second HoldMem; Mem0 import only via add(infer=False) because the SDK has no .mem -> Mem0 adapter"
+      },
+      {
+        "id": "CODE-EXTSURV",
+        "kind": "code",
+        "pointer": "src/memshift/adapters/mem_export.py ext_survival L377-420; tests/test_native_offline.py::test_ext_survival_by_carrier L405-429 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Observed round trip through portable-memory 0.3.0: custom record kind and episode `ext` survive; `ext` on fact records is dropped on import (test passes locally 2026-09-29) [Cited at the coordinator's pointer; re-run by the auditor: 2 tests passed]"
+      },
+      {
+        "id": "CODE-E6",
+        "kind": "code",
+        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+      },
+      {
+        "id": "STATUS-S1",
+        "kind": "record",
+        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+      },
+      {
+        "id": "PREREG-V0",
+        "kind": "record",
+        "pointer": "prereg/v0.md §1 and E3 rule @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "T3 epsilon = 3 pp; T4 c = 0.5 x per-query full re-read; reader evidence budget 4,096 tokens for every system; world ~2.2M tokens"
+      },
+      {
+        "id": "RUN-STAGE2-E2",
+        "kind": "run",
+        "pointer": "runs/stage2_e2/analysis/e2_metrics.json (t1, retention, explore_retention_by_class)",
+        "accessed": "2026-09-29",
+        "note": "T1 measured on the 20-world test set"
+      },
+      {
+        "id": "RUN-STAGE2-E3",
+        "kind": "run",
+        "pointer": "runs/stage2_e3/analysis/e3_metrics.json (horizons.*.T3_pass, T4_pass, minus_oracle, serve_ratio_to_full_reread)",
+        "accessed": "2026-09-29",
+        "note": "T3 measured on the 20-world test set"
+      },
+      {
+        "id": "RUN-STAGE3-E6",
+        "kind": "run",
+        "pointer": "runs/stage3_e6/analysis/e6_t2.json (imports.imported_with_ext / imported_no_ext)",
+        "accessed": "2026-09-29",
+        "note": "T2 measured on the 20-world test set"
+      }
+    ]
+  },
+  {
+    "system": "HoldMem (D=0, B=1) (ours)",
+    "short_name": "HoldMem (0,1)",
+    "group": "ours",
+    "owner": "person",
+    "owner_note": "",
+    "D": "0",
+    "D_basis": "code",
+    "D_reason": "No parse/spans; the value exists only in s_k.",
+    "B": "1",
+    "B_basis": "code",
+    "B_key_components": "(scope epochs, kappa_version, theta_w)",
+    "B_reason": "Same key and invalidation as (1,1); repair is re-derivation without a checker.",
+    "T1": "undeterminable",
+    "T1_basis": "not tested",
+    "T1_reason": "T1 is pre-registered on HoldMem (1,1) only (prereg v1); retention after the switch is reported descriptively: 0.984 same, 0.996 upgrade, 0.970 downgrade.",
+    "T2": "undeterminable",
+    "T2_basis": "not tested",
+    "T2_reason": "E6 exports HoldMem (1,1) only.",
+    "T3": "undeterminable",
+    "T3_basis": "not tested",
+    "T3_reason": "E3 measures HoldMem (1,1) only; the pre-intervention snapshot is byte-identical across cells, later horizons are not.",
+    "T4": "undeterminable",
+    "T4_basis": "not tested",
+    "T4_reason": "E3 measures HoldMem (1,1) only; serving path is shared with (1,1).",
+    "plan_expectation_s3_4": "按格; T1 按 E1–E3; T2 按 E6",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "CODE-HOLDMEM",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "accessed": "2026-09-29",
+        "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
+      },
+      {
+        "id": "CODE-E6",
+        "kind": "code",
+        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+      },
+      {
+        "id": "STATUS-S1",
+        "kind": "record",
+        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+      },
+      {
+        "id": "RUN-STAGE2-E2",
+        "kind": "run",
+        "pointer": "runs/stage2_e2/analysis/e2_metrics.json (t1, retention, explore_retention_by_class)",
+        "accessed": "2026-09-29",
+        "note": "T1 measured on the 20-world test set"
+      },
+      {
+        "id": "RUN-STAGE2-E3",
+        "kind": "run",
+        "pointer": "runs/stage2_e3/analysis/e3_metrics.json (horizons.*.T3_pass, T4_pass, minus_oracle, serve_ratio_to_full_reread)",
+        "accessed": "2026-09-29",
+        "note": "T3 measured on the 20-world test set"
+      }
+    ]
+  },
+  {
+    "system": "HoldMem (D=1, B=0) (ours)",
+    "short_name": "HoldMem (1,0)",
+    "group": "ours",
+    "owner": "person",
+    "owner_note": "",
+    "D": "1",
+    "D_basis": "code",
+    "D_reason": "Checker on write; B=0 means maintenance appends new checked items.",
+    "B": "0",
+    "B_basis": "code",
+    "B_key_components": "none (append-only)",
+    "B_reason": "Append-only: new items derived from the delta; old items never invalidate.",
+    "T1": "undeterminable",
+    "T1_basis": "by construction",
+    "T1_reason": "B=0 never re-derives after a writer switch; retention 1.000 means nothing was updated, not equivalence (prereg v1 §4: reported separately, not in T1).",
+    "T2": "undeterminable",
+    "T2_basis": "not tested",
+    "T2_reason": "E6 exports HoldMem (1,1) only.",
+    "T3": "undeterminable",
+    "T3_basis": "not tested",
+    "T3_reason": "E3 measures HoldMem (1,1) only.",
+    "T4": "undeterminable",
+    "T4_basis": "not tested",
+    "T4_reason": "E3 measures HoldMem (1,1) only.",
+    "plan_expectation_s3_4": "按格",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "CODE-HOLDMEM",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "accessed": "2026-09-29",
+        "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
+      },
+      {
+        "id": "CODE-E6",
+        "kind": "code",
+        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+      },
+      {
+        "id": "STATUS-S1",
+        "kind": "record",
+        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+      },
+      {
+        "id": "RUN-STAGE2-E2",
+        "kind": "run",
+        "pointer": "runs/stage2_e2/analysis/e2_metrics.json (t1, retention, explore_retention_by_class)",
+        "accessed": "2026-09-29",
+        "note": "T1 measured on the 20-world test set"
+      },
+      {
+        "id": "RUN-STAGE2-E3",
+        "kind": "run",
+        "pointer": "runs/stage2_e3/analysis/e3_metrics.json (horizons.*.T3_pass, T4_pass, minus_oracle, serve_ratio_to_full_reread)",
+        "accessed": "2026-09-29",
+        "note": "T3 measured on the 20-world test set"
+      }
+    ]
+  },
+  {
+    "system": "HoldMem (D=0, B=0) (ours)",
+    "short_name": "HoldMem (0,0)",
+    "group": "ours",
+    "owner": "person",
+    "owner_note": "",
+    "D": "0",
+    "D_basis": "code",
+    "D_reason": "No parse/spans.",
+    "B": "0",
+    "B_basis": "code",
+    "B_key_components": "none (append-only)",
+    "B_reason": "Append-only; the memory-layer-like cell.",
+    "T1": "undeterminable",
+    "T1_basis": "by construction",
+    "T1_reason": "B=0 never re-derives after a writer switch; retention 1.000 means nothing was updated, not equivalence (prereg v1 §4: reported separately, not in T1).",
+    "T2": "undeterminable",
+    "T2_basis": "not tested",
+    "T2_reason": "E6 exports HoldMem (1,1) only.",
+    "T3": "undeterminable",
+    "T3_basis": "not tested",
+    "T3_reason": "E3 measures HoldMem (1,1) only.",
+    "T4": "undeterminable",
+    "T4_basis": "not tested",
+    "T4_reason": "E3 measures HoldMem (1,1) only.",
+    "plan_expectation_s3_4": "按格",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "CODE-HOLDMEM",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "accessed": "2026-09-29",
+        "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
+      },
+      {
+        "id": "CODE-E6",
+        "kind": "code",
+        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+      },
+      {
+        "id": "STATUS-S1",
+        "kind": "record",
+        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "accessed": "2026-09-29",
+        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+      },
+      {
+        "id": "RUN-STAGE2-E2",
+        "kind": "run",
+        "pointer": "runs/stage2_e2/analysis/e2_metrics.json (t1, retention, explore_retention_by_class)",
+        "accessed": "2026-09-29",
+        "note": "T1 measured on the 20-world test set"
+      },
+      {
+        "id": "RUN-STAGE2-E3",
+        "kind": "run",
+        "pointer": "runs/stage2_e3/analysis/e3_metrics.json (horizons.*.T3_pass, T4_pass, minus_oracle, serve_ratio_to_full_reread)",
+        "accessed": "2026-09-29",
+        "note": "T3 measured on the 20-world test set"
+      }
+    ]
+  },
+  {
+    "system": "Hindsight (vectorize.io memory banks)",
+    "short_name": "Hindsight",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "developer memory bank",
+    "D": "partial",
+    "D_basis": "documented",
+    "D_reason": "Observations track supporting evidence with exact quotes and a proof count; no typed parse or deterministic checker documented.",
+    "B": "0",
+    "B_basis": "documented",
+    "B_key_components": "source document id (replace/delete cascade + re-consolidation); no definition or model key",
+    "B_reason": "Formally 0, but re-retaining a document_id replaces the document and all its memories and deleting it deletes derived observations; writer model per item undocumented.",
+    "T1": "undeterminable",
+    "T1_basis": "documented",
+    "T1_reason": "Not documented; not measured.",
+    "T2": "undeterminable",
+    "T2_basis": "documented",
+    "T2_reason": "Complete own-format ZIP (export-bank/import-bank) between Hindsight instances, i.e. the same implementation; no .mem.",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "Not measured.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "Not measured.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "HS-DOCS",
+        "kind": "doc",
+        "pointer": "https://github.com/vectorize-io/hindsight @8924a5bcfd6ff64fb20cace098021a3b61e76391: hindsight-docs/docs/developer/api/retain.mdx L116-133; observations.mdx L14, L257-269; api/documents.mdx L122-125; admin-cli.md L395-460",
+        "accessed": "2026-09-28",
+        "note": "Re-retain with same document_id replaces the document and all its memories; deleting a document deletes its observations; observations track supporting evidence with exact quotes; export-bank/import-bank own ZIP format between Hindsight instances"
+      },
+      {
+        "id": "E21",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E21-E22",
+        "accessed": "2026-09-28",
+        "note": "Hindsight source-id lifecycle and observation re-consolidation"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "OpenViking (resource watches, context compilation)",
+    "short_name": "OpenViking",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "person if self-hosted",
+    "D": "partial",
+    "D_basis": "documented",
+    "D_reason": "Summary layers keyed to directory URIs with generated_by metadata; no spans.",
+    "B": "0",
+    "B_basis": "documented",
+    "B_key_components": "source directory via watches (periodic re-ingest); no model/definition key",
+    "B_reason": "Formally 0: parents refresh when a child's text changes (directory granularity, batched at 10%); no model id.",
+    "T1": "undeterminable",
+    "T1_basis": "documented",
+    "T1_reason": "Not documented.",
+    "T2": "undeterminable",
+    "T2_basis": "documented",
+    "T2_reason": ".ovpack own export format; no .mem.",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "Not measured.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "Not measured.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "OV-DOCS",
+        "kind": "doc",
+        "pointer": "https://github.com/volcengine/OpenViking @1f4f7039fc394c5d04637828166f4e4e74e249e0: docs/en/api/15-watches.md; docs/en/concepts/03-context-layers.md L78-153; docs/en/api/14-ovpack.md",
+        "accessed": "2026-09-28",
+        "note": "Periodic re-ingest watches; summary layers refreshed when child text changes (directory granularity); generated_by without model id; .ovpack own export format"
+      },
+      {
+        "id": "E23",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E23-E24",
+        "accessed": "2026-09-28",
+        "note": "OpenViking watches and context compilation"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "MemOS (self-hosted modes)",
+    "short_name": "MemOS",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "",
+    "D": "partial",
+    "D_basis": "code",
+    "D_reason": "Textual memories carry SourceMessage refs (message id, snippet; spans optional).",
+    "B": "0",
+    "B_basis": "code",
+    "B_key_components": "version/history chain; no key",
+    "B_reason": "LLM-decided updates with versioned history; no writer-model field found.",
+    "T1": "undeterminable",
+    "T1_basis": "code",
+    "T1_reason": "Not recorded; not measured.",
+    "T2": "undeterminable",
+    "T2_basis": "code",
+    "T2_reason": "MemCube dump/load own format; no .mem.",
+    "T3": "fail",
+    "T3_basis": "measured (native-system experiment, 15 short worlds)",
+    "T3_reason": "Below the floor (NatMemosTThree).",
+    "T4": "pass",
+    "T4_basis": "measured (native-system experiment, 15 short worlds)",
+    "T4_reason": "Within the cost ceiling (NatMemosTFour).",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "MOS-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/MemTensor/MemOS @a7367d07e55db61099f7b4e2c1108bc5831a24f3: src/memos/memories/textual/item.py L16-45 (SourceMessage), L49-127 (status, version, history); src/memos/mem_cube/general.py L92-126 (dump/load)",
+        "accessed": "2026-09-28",
+        "note": "Versioned textual memories with source-message refs (spans optional); no writer-model field found; MemCube dump/load own format"
+      },
+      {
+        "id": "E28",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E28; reference/research_1/evidence/sources.json#S-MEMOS",
+        "accessed": "2026-09-28",
+        "note": "MemOS persistent memory, modes"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "GraphRAG (incremental update path)",
+    "short_name": "GraphRAG",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "developer indexing pipeline, not personal memory",
+    "D": "partial",
+    "D_basis": "code",
+    "D_reason": "Entities/relationships carry text_unit_ids -> document ids; no spans.",
+    "B": "0",
+    "B_basis": "code",
+    "B_key_components": "document title (for incremental diff); no revision key",
+    "B_reason": "Incremental update diffs by title and consumes only new inputs; a document revised under the same title is neither re-derived nor removed.",
+    "T1": "undeterminable",
+    "T1_basis": "inferred",
+    "T1_reason": "Not measured.",
+    "T2": "undeterminable",
+    "T2_basis": "code",
+    "T2_reason": "Parquet outputs, no importer.",
+    "T3": "undeterminable",
+    "T3_basis": "inferred",
+    "T3_reason": "Not measured.",
+    "T4": "undeterminable",
+    "T4_basis": "inferred",
+    "T4_reason": "Not measured.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "GRAG-CODE",
+        "kind": "code",
+        "pointer": "https://github.com/microsoft/graphrag @769542fbf1d8e5b4c6a8677fefc34621c87894c5: packages/graphrag/graphrag/index/update/incremental_index.py L29-57; load_update_documents.py L62; docs/index/outputs.md",
+        "accessed": "2026-09-28",
+        "note": "Incremental update diffs documents by title and consumes only new inputs; revised documents under the same title are not re-derived; parquet outputs with text_unit_ids provenance"
+      },
+      {
+        "id": "E30",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E30",
+        "accessed": "2026-09-28",
+        "note": "GraphRAG title-driven incremental path at f40e9a26"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "MemTX (arXiv 2607.23929)",
+    "short_name": "MemTX",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "research prototype",
+    "D": "partial",
+    "D_basis": "paper",
+    "D_reason": "Records carry evidence, provenance and validity intervals; no span-level checker documented.",
+    "B": "0",
+    "B_basis": "paper",
+    "B_key_components": "derived-from dependency graph with cascade on retraction; no model/definition key",
+    "B_reason": "Formally 0: typed cascading repair on retraction, but invalidation on source revision or writer-model change is not documented.",
+    "T1": "undeterminable",
+    "T1_basis": "paper",
+    "T1_reason": "Not documented.",
+    "T2": "undeterminable",
+    "T2_basis": "paper",
+    "T2_reason": "Not documented.",
+    "T3": "undeterminable",
+    "T3_basis": "paper",
+    "T3_reason": "Not comparable.",
+    "T4": "undeterminable",
+    "T4_basis": "paper",
+    "T4_reason": "Not comparable.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "MEMTX",
+        "kind": "paper",
+        "pointer": "arXiv:2607.23929v2 abstract, §3",
+        "accessed": "2026-09-28",
+        "note": "Records with evidence, provenance, validity intervals and derived-from edges; typed cascading repair on retraction; no documented invalidation on writer-model change"
+      },
+      {
+        "id": "E12",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E12",
+        "accessed": "2026-09-28",
+        "note": "MemTX transactional belief commit, declared-dependency repair"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "Document-to-Database / DataMosaic (PVLDB 19)",
+    "short_name": "Document-to-Database",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "document-extraction prototype, not personal memory",
+    "D": "partial",
+    "D_basis": "paper",
+    "D_reason": "Typed relational cells with a snippet-level provenance index; constraint checks but no documented value-vs-span check.",
+    "B": "0",
+    "B_basis": "paper",
+    "B_key_components": "source snippets (two-way provenance) + constraint re-evaluation; no writer-model key",
+    "B_reason": "Formally 0 but closest external system to B=1: document deltas re-extract affected tuples, tuples losing all evidence are retracted, constraints are re-evaluated; extractor model not recorded.",
+    "T1": "undeterminable",
+    "T1_basis": "paper",
+    "T1_reason": "Not studied.",
+    "T2": "undeterminable",
+    "T2_basis": "paper",
+    "T2_reason": "Not studied.",
+    "T3": "undeterminable",
+    "T3_basis": "paper",
+    "T3_reason": "Not comparable.",
+    "T4": "undeterminable",
+    "T4_basis": "paper",
+    "T4_reason": "Not comparable.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "D2DB",
+        "kind": "paper",
+        "pointer": "PVLDB 19(9):2522-2535 (2026), doi:10.14778/3819518.3819568, §3, evaluation Table 8",
+        "accessed": "2026-09-28",
+        "note": "Typed relational cells with snippet-level provenance index; document deltas re-extract affected tuples; constraints re-evaluated; extractor model not recorded"
+      },
+      {
+        "id": "E29",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E29",
+        "accessed": "2026-09-28",
+        "note": "Document-to-Database keys and update dependencies"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "AnnoIndex (arXiv 2608.13384)",
+    "short_name": "AnnoIndex",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "research prototype",
+    "D": "partial",
+    "D_basis": "paper",
+    "D_reason": "Document-level typed attribute values; no spans.",
+    "B": "0",
+    "B_basis": "paper + inferred",
+    "B_key_components": "none described",
+    "B_reason": "Re-annotation on document or schema change is not addressed.",
+    "T1": "undeterminable",
+    "T1_basis": "paper",
+    "T1_reason": "Not studied.",
+    "T2": "undeterminable",
+    "T2_basis": "paper",
+    "T2_reason": "Not studied.",
+    "T3": "undeterminable",
+    "T3_basis": "paper",
+    "T3_reason": "Not comparable.",
+    "T4": "undeterminable",
+    "T4_basis": "paper",
+    "T4_reason": "Not comparable.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "ANNO",
+        "kind": "paper",
+        "pointer": "arXiv:2608.13384v1",
+        "accessed": "2026-09-28",
+        "note": "Document-level typed attribute index built by small models; re-annotation on document/schema change not addressed"
+      },
+      {
+        "id": "E04",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E04",
+        "accessed": "2026-09-28",
+        "note": "AnnoIndex persistent attributes; source-revision lifecycle not shown"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "Agentic Context Cracking (arXiv 2608.31082)",
+    "short_name": "Agentic Context Cracking",
+    "group": "extra (starting audit)",
+    "owner": "agent",
+    "owner_note": "research prototype",
+    "D": "partial",
+    "D_basis": "paper",
+    "D_reason": "Cracked objects carry evidence <document, supporting region>; region form unspecified.",
+    "B": "0",
+    "B_basis": "paper",
+    "B_key_components": "none (static corpus)",
+    "B_reason": "Static corpus assumed; structures are reused across model upgrades, i.e. no model keying.",
+    "T1": "undeterminable",
+    "T1_basis": "paper",
+    "T1_reason": "Not studied.",
+    "T2": "undeterminable",
+    "T2_basis": "paper",
+    "T2_reason": "Not studied.",
+    "T3": "undeterminable",
+    "T3_basis": "paper",
+    "T3_reason": "Not comparable.",
+    "T4": "undeterminable",
+    "T4_basis": "paper",
+    "T4_reason": "Not comparable.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "ACC",
+        "kind": "paper",
+        "pointer": "arXiv:2608.31082v2 §3, §5, §6",
+        "accessed": "2026-09-28",
+        "note": "Cracked objects carry evidence <doc, region>; static corpus assumed; structures reused across model upgrades"
+      },
+      {
+        "id": "E05",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E05",
+        "accessed": "2026-09-28",
+        "note": "Agentic Context Cracking query-driven structure reuse"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  },
+  {
+    "system": "DuckDB / pgvector / LOTUS alone (components)",
+    "short_name": "DuckDB / pgvector / LOTUS",
+    "group": "extra (starting audit)",
+    "owner": "n/a (component)",
+    "owner_note": "",
+    "D": "N/A",
+    "D_basis": "documented",
+    "D_reason": "Components without derived personal memory.",
+    "B": "N/A",
+    "B_basis": "documented",
+    "B_key_components": "n/a",
+    "B_reason": "No derived items.",
+    "T1": "undeterminable",
+    "T1_basis": "documented",
+    "T1_reason": "Not a data layer by itself.",
+    "T2": "undeterminable",
+    "T2_basis": "documented",
+    "T2_reason": "Not a data layer by itself.",
+    "T3": "undeterminable",
+    "T3_basis": "documented",
+    "T3_reason": "Not a data layer by itself.",
+    "T4": "undeterminable",
+    "T4_basis": "documented",
+    "T4_reason": "Not a data layer by itself.",
+    "plan_expectation_s3_4": "（起点审计额外系统）",
+    "deviation_from_plan": "",
+    "evidence": [
+      {
+        "id": "COMPONENTS",
+        "kind": "doc",
+        "pointer": "https://duckdb.org/; https://github.com/pgvector/pgvector; https://github.com/lotus-data/lotus",
+        "accessed": "2026-09-28",
+        "note": "DuckDB (OLAP DBMS), pgvector (vector search extension), LOTUS (semantic operators) hold no derived personal memory by themselves"
+      },
+      {
+        "id": "E01",
+        "kind": "record",
+        "pointer": "reference/research_2/evidence_registry.jsonl#E01",
+        "accessed": "2026-09-28",
+        "note": "ADI survey: Solid/DuckDB/pgvector/LOTUS alone do not take on semantic organisation"
+      },
+      {
+        "id": "RA2-AUDIT",
+        "kind": "record",
+        "pointer": "reference/research_2/system_audit.json",
+        "accessed": "2026-09-28",
+        "note": "Starting 15-system documentary audit (criteria S/O/Q/U, not T1-T4)"
+      }
+    ]
+  }
+]

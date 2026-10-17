@@ -1,7 +1,7 @@
 {
- "head": "72261c05212f96598a7f26bef2823bae5d4e9afe",
+ "head": "a42ab9ae75508c2ea0aa5abe52c693a996039d9e",
  "root_commit_hash_only": "729605ba0a1ce1935060d9896211211fe7003067",
- "commits": 312,
+ "commits": 376,
  "registrations": {
   "v0": {
    "commit": "f469617d0a64eba2bcef84c947f7edc1408f3868",
@@ -52,6 +52,16 @@
     "9128f4fa636c5d0d3e2581af6efb58733209ca65"
    ],
    "blob": "9128f4fa636c5d0d3e2581af6efb58733209ca65"
+  },
+  "v4b": {
+   "commit": "02567d6ccab8e90833ff85583d484b8627bcf44e",
+   "path": "prereg/v4b_round3_claude.md",
+   "tree_path": [
+    "bd3bb8a46e23c918cedbb7193bd4f8f4b5ea8781",
+    "5c526b21b1e8c4d2277c9ca9f39bf516fb9b3d57",
+    "35aae65831a5ff280eca894e22ec66468a502fe1"
+   ],
+   "blob": "35aae65831a5ff280eca894e22ec66468a502fe1"
   }
  }
 }
