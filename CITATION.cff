@@ -19,6 +19,9 @@ authors:
   - family-names: Xu
     given-names: Zichuan
     affiliation: Osaka University
+  - family-names: Zhang
+    given-names: Haochen
+    affiliation: "Osaka University; Initial S"
   - family-names: Dong
     given-names: Yuyang
     affiliation: Initial S
@@ -37,6 +40,9 @@ preferred-citation:
     - family-names: Xu
       given-names: Zichuan
       affiliation: Osaka University
+    - family-names: Zhang
+      given-names: Haochen
+      affiliation: "Osaka University; Initial S"
     - family-names: Dong
       given-names: Yuyang
       affiliation: Initial S

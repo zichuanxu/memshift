@@ -310,7 +310,7 @@ runs. The paper reports every registered result, whether it held or failed.
 ```bibtex
 @misc{xu2026memshift,
   title  = {{MemShift}: Noticing a Change Is Not Repairing It in {LLM}-Derived Personal Memory},
-  author = {Xu, Zichuan and Dong, Yuyang and Onizuka, Makoto and Xiao, Chuan},
+  author = {Xu, Zichuan and Zhang, Haochen and Dong, Yuyang and Onizuka, Makoto and Xiao, Chuan},
   year   = {2026},
   note   = {Preprint}
 }

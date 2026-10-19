@@ -8,6 +8,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 authors = [
   { name = "Zichuan Xu" },
+  { name = "Haochen Zhang" },
   { name = "Yuyang Dong" },
   { name = "Makoto Onizuka" },
   { name = "Chuan Xiao" },
