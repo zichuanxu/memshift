@@ -18,6 +18,7 @@ from memshift.analysis import ex_review_paper as rp
 from memshift.analysis import ex_round2 as r2
 from memshift.analysis import ex_round3 as r3
 from memshift.analysis import ex_round3_review as rv
+from memshift.analysis import ex_round4_detection as det
 from memshift.analysis import paper_numbers as pn
 from memshift.analysis.paper_data import MISSING
 from tests.test_paper_stage4 import check_tex
@@ -171,6 +172,7 @@ def test_macro_names_do_not_collide_with_the_earlier_ones():
     ex |= {k: v for k, v in round2.items() if k.startswith("Ex")}  # not its ETwoExWriter ones
     ex |= r3.numbers(r3.load(ROOT, SOURCES))  # and the block of `ex_round3` (ExRThree)
     ex |= rv.numbers(rv.load(ROOT, SOURCES))  # and the block of `ex_round3_review` (ExRev)
+    ex |= det.numbers(det.load(ROOT, SOURCES))  # and the block of `ex_round4_detection` (ExDet)
     assert ex.keys() <= macros.keys() and all(k.startswith("Ex") for k in ex)
     assert not any(k.startswith("Ex") for k in macros.keys() - ex.keys() if not k.endswith("Est"))
 

@@ -26,7 +26,7 @@ directories, and the two audit tables from `audit/`.
 record as typed fields, execution feedback and extracted fields. It reads the analyses of the
 `round3b` stage from the directory given by `--analysis-dir`.
 
-`make results` and the commands in the README of the public package write their outputs to
+`make results` and the commands in `docs/REPRODUCE.md` write their outputs to
 `results/numbers.tex`, `results/tables/` and `results/figures/`.
 
 ## Keys
@@ -53,7 +53,7 @@ record as typed fields, execution feedback and extracted fields. It reads the an
 | `m3` | `stage4_m3` | e7 | other model families as reader |
 | `n`, `ncost` | `stage4_n_e5`, `stage4_n_cost` | e5, e5_cost | six native memory systems (Mem0, A-Mem, MemOS, LightRAG, HippoRAG 2, Cognee) and their cost |
 | `l`, `ltokens` | `stage4_l_rendered`, `stage4_l_tokens` | rendered, l_tokens | rewritten worlds and the share of rewritten tokens |
-| `rank` | `stage4_rank_corr` | rank_corr | rank correlation across shifts |
+| `rank` | `stage4_rank_corr` | rank_corr | rank correlation across shifts, over all systems and within the HoldMem cells, the native systems and the native systems with no-store BM25 and plain RAG |
 | `mult` | `stage4_multiplicity` | multiplicity | multiplicity corrections |
 | `short_e1` | `stage5_short_e1` | e1 | HoldMem cells on the three-month worlds |
 | `ex`, `ex_account`, `ex_more`, `ex_misses` | `stage5_ex_e1`, `stage5_ex_account`, `stage5_ex_more`, `stage5_ex_misses` | ex_e1, ex_account, ex_e1_more, ex_misses | the main experiment by item class, the accounting identity, further splits, the misses of the cited-cluster key |
@@ -63,6 +63,7 @@ record as typed fields, execution feedback and extracted fields. It reads the an
 | `round3` | `stage7_round3` | round3 | refresh and upsert, Claude writers, held-out definitions, program sets from six writers, Mem0 interventions, unnamed probes, natural branch, Claude reader, definitions in the user's own words |
 | `ex_round3_review` | `stage8_ex_round3_review` | ex_round3_review | refresh against binding, shift and drift splits, clock-only changes, the writer's evidence coverage, typed-input sizes, forced re-derivation on the cited-cluster key's misses, and the estimates the design fixes (`fixed.json`) |
 | `round3b` | `stage9_round3b` | round3b_typed, round3b_feedback, round3b_extract | every record as typed fields, execution feedback, extracted fields (read by `memshift.analysis.paper_round3b`) |
+| `ex_round4_detection` | `stage10_ex_round4_detection` | ex_round4_detection | detection counted from the latest change (m, r and a by shift, item class and key), the oracle key against the source key, and the key's effect with Claude writers of the definition items |
 
 A stage's `manifest.json` lists its source runs with the SHA256 of their manifests, the code that
 built it and the SHA256 of each analysis file. Its `experiment` field (`merged-KIND`) names the
