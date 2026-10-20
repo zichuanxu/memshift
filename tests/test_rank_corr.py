@@ -1,6 +1,7 @@
 import json
 import math
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -158,8 +159,9 @@ def test_correlations_within_subsets():
     }
     assert tuple(sub) == rank_corr.SUBSETS
 
-    def src_def(among: list[str]) -> dict:
-        return rank_corr.correlations(samples, among)["update_src_vs_update_def"]
+    def src_def(among: list[str]) -> dict[str, Any]:
+        out: dict[str, Any] = rank_corr.correlations(samples, among)["update_src_vs_update_def"]
+        return out
 
     # HoldMem cells: S_src ranks (D 1, C 2, B 3, A 4), S_def (D 1, A 2, B 3, C 4): sum d^2 = 8,
     # rho = 1 - 6 * 8 / 60
