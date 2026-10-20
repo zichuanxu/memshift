@@ -1,4 +1,4 @@
-"""Command-line entry point (plan §7). One subcommand per stage task as it lands."""
+"""Command-line entry point: one subcommand per task."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ def gen(
     months: int = typer.Option(12),
     out: Path = typer.Option(Path("worlds"), help="Output root (not in git)."),
 ) -> None:
-    """Generate one world branch and write JSONL + manifest + SHA256 (plan §4.2)."""
+    """Generate one world branch and write JSONL + manifest + SHA256."""
     from memshift.gen.io import write_world
     from memshift.gen.shifts import generate_branch
 
@@ -49,7 +49,7 @@ def e4(
     name: str = typer.Option("e4", help="Run name prefix under runs/."),
     analyse: bool = typer.Option(True, help="Write analysis/e4_metrics.json after the run."),
 ) -> None:
-    """E4: calendar sync semantics, {ideal, official} x {B} x {HoldMem, zero} (plan §6)."""
+    """E4: calendar sync semantics, {ideal, official} x {B} x {HoldMem, zero}."""
     from memshift.experiments.e1 import parse_seeds
     from memshift.experiments.e4 import run
 

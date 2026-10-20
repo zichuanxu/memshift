@@ -1,16 +1,17 @@
-"""Emit LaTeX macros for every number the paper states (plan §10: tables and figures regenerate
-from runs). Sources are listed in results/sources.json (macro group -> run directory whose
+"""Emit LaTeX macros for every number the paper states (tables and figures regenerate from
+runs). Sources are listed in results/sources.json (macro group -> run directory whose
 analysis/*.json is committed); world statistics are recomputed from the seeded generator.
 Missing inputs yield a visible placeholder (\\textbf{??}) instead of a number.
 
-Stage 4 (prereg v2 §8; stage inputs in `analysis.paper_data`): Rep* replication worlds (block R,
-with RepPool* the forty pooled worlds), Synth* construct check (C), MOne* / MTwo* / MThree* model
-families (M1-M3), Nat* native systems (N), Rend* LLM-rendered worlds (L), Rank* rank correlation
-(§6), Mult* multiplicity check on the predicted-non-zero E1 contrasts (exploratory); `Ex` marks
-exploratory values; `Ctl` the registered post-review control cells (`analysis.controls_paper`);
+Robustness stages (stage inputs in `analysis.paper_data`): Rep* replication worlds (block R,
+with RepPool* the forty pooled worlds), Synth* model-written derivations (C), MOne* / MTwo* /
+MThree* model families (M1-M3), Nat* native systems (N), Rend* LLM-rendered worlds (L), Rank*
+rank correlation, Mult* multiplicity corrections over the E1 contrasts expected to be non-zero;
+`Ex` marks the further analyses of the main-study outputs; `Ctl` the control cells
+(`analysis.controls_paper`);
 `KeyAudit` the offline audit of the binding keys (`analysis.key_audit`); `Rend*TokenShare` the
 token shares of block L (`analysis.l_tokens`). A
-stage that has not been staged renders as MISSING, and a verdict over a whole set (families,
+stage that has not been staged renders as MISSING, and a count over a whole set (families,
 systems, switches) only once the set is complete.
 
 Usage: python -m memshift.analysis.paper_numbers > paper/generated/numbers.tex
@@ -25,14 +26,11 @@ from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import Any
 
-from memshift.analysis import replication
 from memshift.analysis.e2 import T1_SYSTEM
 from memshift.analysis.e5 import DOCUMENTED_LABELS, _inferred
-from memshift.analysis.e7 import same_sign
 from memshift.analysis.paper_data import (
     BRANCH_TAGS,
     FAMILIES,
-    FAMILY_CHECKS,
     FAMILY_ESTIMATES,
     HORIZON_TAGS,
     ITEM_TYPES,
@@ -43,15 +41,12 @@ from memshift.analysis.paper_data import (
     TIERS,
     TYPE_GROUPS,
     camel,
-    claim_label,
     in_group,
     label_text,
     load_stage4,
-    m3_signs,
     pooled_rate,
     pooled_view,
     replication_view,
-    synth_holds,
     tier_key,
 )
 from memshift.analysis.paper_data import get as _get
@@ -74,9 +69,17 @@ METRIC_NAMES = (
 )
 
 
+ZERO_WIDTH = re.compile(r"(?P<est>\S+) \[(?P<lo>[^,\]]+), (?P<hi>[^\]]+)\]")
+
+
 def _macro(name: str, value: str) -> str:
+    """One `\\newcommand`. An estimate whose printed interval has zero width ("0.0 pp [0.0, 0.0]")
+    is printed alone, as the paper states for such estimates."""
     if not re.fullmatch(r"[A-Za-z]+", name):
         raise ValueError(f"macro names must be letters only: {name}")
+    m = ZERO_WIDTH.fullmatch(value)
+    if m and _bare(m["est"]) == m["lo"] == m["hi"]:
+        value = m["est"]
     return f"\\newcommand{{\\{name}}}{{{value}}}"
 
 
@@ -158,11 +161,11 @@ def e1_numbers(m: dict[str, Any]) -> dict[str, str]:
         out[f"EOneGranMissed{tag}"] = ci(c.get("granularity_missed_D1_cited"), pp)
         for key, name in (("fallback", "Fallback"), ("check_only", "CheckOnly")):
             out[f"EOneEx{name}Repair{tag}"] = ci(c.get(f"explore_{key}_effect_repair_source"), pp)
-            for cls, cname in CLASS_NAMES:  # exploratory, decisions.md 2026-09-29
+            for cls, cname in CLASS_NAMES:  # by item class
                 out[f"EOneEx{name}Repair{cname}{tag}"] = ci(
                     c.get(f"explore_{key}_effect_repair_source_{cls}"), pp
                 )
-        for cls, cname in CLASS_NAMES:  # exploratory (decisions.md)
+        for cls, cname in CLASS_NAMES:  # by item class
             out[f"EOneExDRepair{cname}{tag}"] = ci(
                 c.get(f"explore_D_effect_repair_source_{cls}"), pp
             )
@@ -177,8 +180,8 @@ def e1_numbers(m: dict[str, Any]) -> dict[str, str]:
 
 
 def nofb_numbers(m: dict[str, Any]) -> dict[str, str]:
-    """Exploratory no-fallback split (decisions.md 2026-09-29) from the stage that merges the E1
-    test runs with the no-fallback cell; the pre-registered E1 macros stay with group e1."""
+    """The no-fallback split from the stage that merges the E1 test runs with the no-fallback
+    cell; the other E1 macros stay with group e1."""
     return {
         k: v for k, v in e1_numbers(m).items() if k.startswith(("EOneExFallback", "EOneExCheck"))
     }
@@ -196,9 +199,6 @@ def e2_numbers(m: dict[str, Any]) -> dict[str, str]:
     out["ETwoPathThreeAuroc"] = num(_get(p3, "pooled_auroc", "est"))
     n_items = _get(p3, "pooled_slope", "n_items")
     out["ETwoPathThreeN"] = f"{int(n_items):,}" if n_items else MISSING
-    out["ETwoPathThreeTriggered"] = (
-        MISSING if not p3 else ("triggered" if p3.get("triggered") else "not triggered")
-    )
     out["ETwoTierCaveats"] = ", ".join(p3.get("tier_caveats", [])) or "none"
     for tier, tag in (("same", "Same"), ("upgrade", "Up"), ("downgrade", "Down")):
         cal = _get(m, "calibration", tier) or {}
@@ -211,7 +211,7 @@ def e2_numbers(m: dict[str, Any]) -> dict[str, str]:
         out[f"ETwoAuroc{tag}"] = num(_get(cal, "auroc", "est"))
         for cell, name in CELL_NAMES:
             out[f"ETwoRetention{name}{tag}"] = ci(_get(m, "retention", f"{tier}:{cell}"))
-            for cls, cname in CLASS_NAMES:  # exploratory (decisions.md)
+            for cls, cname in CLASS_NAMES:  # by item class
                 out[f"ETwoExRetention{name}{cname}{tag}"] = ci(
                     _get(m, "explore_retention_by_class", f"{tier}:{cell}:{cls}")
                 )
@@ -220,7 +220,7 @@ def e2_numbers(m: dict[str, Any]) -> dict[str, str]:
         out[f"ETwoTOnePass{tag}"] = (
             MISSING if not t1 else ("within" if t1.get("equivalent") else "outside")
         )
-        for cell, name in CELL_NAMES:  # exploratory: T1 for the cells other than the primary one
+        for cell, name in CELL_NAMES:  # T1 for the cells other than the primary one
             if cell == T1_SYSTEM:
                 continue
             t1c = _get(m, "explore_t1_cells", tier, cell) or {}
@@ -260,13 +260,13 @@ def e3_numbers(m: dict[str, Any]) -> dict[str, str]:
         per = _get(m, "horizons", h) or {}
         for s, name in systems:
             out[f"EThreeCv{name}{tag}"] = ci(_get(per, s, "contract_valid"))
-            for cls, cname in CLASS_NAMES:  # exploratory (decisions.md)
+            for cls, cname in CLASS_NAMES:  # by item class
                 out[f"EThreeExCv{name}{cname}{tag}"] = ci(_get(per, s, "explore_by_class", cls))
         out[f"EThreeZeroMinusHold{tag}"] = ci(per.get("zero_minus_holdmem"), pp)
         for s, name in systems[:3]:
             out[f"EThreeMinusOracle{name}{tag}"] = ci(_get(per, s, "minus_oracle"), pp)
         out[f"EThreeServeRatioZero{tag}"] = pct(_get(per, "zero", "serve_ratio_to_full_reread"), 2)
-        for s, name in systems:  # exploratory: without definition items (system and oracle)
+        for s, name in systems:  # without definition items (system and oracle)
             nd = _get(per, s, "explore_no_definition") or {}
             out[f"EThreeExNoDefCv{name}{tag}"] = ci(nd.get("contract_valid"))
         for s, name in systems[:3]:
@@ -319,7 +319,7 @@ SOURCES = (
 def e4_numbers(m: dict[str, Any]) -> dict[str, str]:
     """Stage-1 E4 (development worlds, calendar only), lag 1 minute."""
     c1 = _get(m, "contrasts", "L1") or {}
-    c5 = _get(m, "contrasts", "L5") or {}  # the lag pre-registered for the replication
+    c5 = _get(m, "contrasts", "L5") or {}  # the lag of the test-world extension
     return {
         "EFourDevInteraction": ci(c1.get("interaction_B_all"), pp),
         "EFourDevInteractionFive": ci(c5.get("interaction_B_all"), pp),
@@ -328,8 +328,8 @@ def e4_numbers(m: dict[str, Any]) -> dict[str, str]:
 
 
 def e4x_numbers(m: dict[str, Any]) -> dict[str, str]:
-    """E4 extension (test worlds, six sources): the calendar interaction over all probes is the
-    pre-registered replication; the other sources and the pooled value are descriptive."""
+    """E4 extension (test worlds, six sources): the calendar interaction over all probes, the
+    other sources and the pooled value."""
     con = m.get("contrasts") or {}
     lag = sorted(con)[0] if con else None
     c = con.get(lag, {}) if lag else {}
@@ -408,14 +408,14 @@ def e5_numbers(m: dict[str, Any]) -> dict[str, str]:
         out[f"EFive{name}Units"] = f"{units:,.0f}" if fail else MISSING
         nw = _get(m, "noise_floor", "worlds")
         out[f"EFive{name}NoiseWorlds"] = str(len(nw)) if nw else MISSING
-    # Exploratory (not pre-registered): discriminability of the six comparisons, each native
-    # estimate placed against the interval of the white-box cell of the other B label
+    # Discriminability of the six comparisons: each native estimate placed against the
+    # interval of the HoldMem cell with the other B label
     per = _get(m, "systems", "mem0") or {}
     out.update(
         disc_numbers("EFiveExMem", per, _get(m, "stage4", "discriminability", "per_system", "mem0"))
     )
-    # Exploratory (not pre-registered): label-rate intervals, white-box cells on the same worlds
-    ex = m.get("exploratory") or {}
+    # Label-rate intervals, and the HoldMem cells on the same worlds
+    ex = m.get("white_box_reference") or {}
     for system, name in (
         ("mem0", "Mem"),
         ("holdmem_D0B0", "DzeroBzero"),
@@ -444,7 +444,7 @@ def e5_numbers(m: dict[str, Any]) -> dict[str, str]:
 
 
 def disc_numbers(prefix: str, per: dict[str, Any], counts: dict[str, Any] | None) -> dict[str, str]:
-    """Discriminability of one native system (`analysis.e5`, exploratory): the white-box cell of the
+    """Discriminability of one native system (`analysis.e5`): the HoldMem cell with the
     other B label (`<prefix>OtherReference`), the counts of comparisons (of six: Update and
     Stability after S_src, S_def and the orphan branch) with a predicted interval that contain the
     native estimate, that lie inside the other label's interval, and that discriminate (inside the
@@ -473,7 +473,7 @@ def disc_numbers(prefix: str, per: dict[str, Any], counts: dict[str, Any] | None
                 MISSING if not d else ("inside" if d["inside_other"] else "outside")
             )
             out[f"{prefix}{mname}Discriminates{btag}"] = (
-                MISSING if not d else _verdict(d["discriminates"], "yes", "no")
+                MISSING if not d else _flag(d["discriminates"], "yes", "no")
             )
     return out
 
@@ -503,12 +503,7 @@ def e5cost_numbers(m: dict[str, Any]) -> dict[str, str]:
 
 
 def gate_numbers(m: dict[str, Any]) -> dict[str, str]:
-    out: dict[str, str] = {"GateClaimLevel": claim_label(m.get("claim_level"))}
-    for key, name in (("path1", "One"), ("path2", "Two"), ("path3", "Three")):
-        p = m.get(key)
-        out[f"GatePath{name}"] = (
-            MISSING if p is None else ("triggered" if p["triggered"] else "not triggered")
-        )
+    out: dict[str, str] = {}
     out["GatePathOneEstimate"] = ci(_get(m, "path1", "estimate"), pp)
     checks = _get(m, "path2", "checks") or {}
     largest = max((abs(c["estimate"]["est"]) for c in checks.values()), default=None)
@@ -559,12 +554,12 @@ def e7_numbers(m: dict[str, Any]) -> dict[str, str]:
     return out
 
 
-# --------------------------------------------------------------------- stage 4 (prereg v2 §8)
+# ------------------------------------------------------------------------ robustness stages
 # Every macro below is generated from a staged run analysis; a stage that has not run renders as
-# MISSING (never a placeholder value), and a verdict that pools a set of systems, families or
+# MISSING (never a placeholder value), and a count that pools a set of systems, families or
 # switches is only rendered once the whole set is staged (`<Block>Staged` counts what is there).
-# Prefixes: Rep (block R), Synth (C), MOne / MTwo / MThree (M1-M3), Nat (N), Rend (L), Rank (§6),
-# Mult (multiplicity check); `Ex` marks exploratory values (outside the pre-registered lists).
+# Prefixes: Rep (block R), Synth (C), MOne / MTwo / MThree (M1-M3), Nat (N), Rend (L), Rank (rank
+# correlation), Mult (multiplicity corrections); `Ex` marks the further analyses.
 R_BASE = (
     "B_effect_detected_D0",
     "B_effect_detected_D1",
@@ -582,7 +577,6 @@ R_KEYS = (
     *(f"{k}_{g}" for g in ("source", "cited") for k in R_BASE),
     *(f"granularity_{k}_D{d}_cited" for d in (0, 1) for k in ("false_inval", "missed")),
 )
-R_VERDICT_PREFIXES = (*replication.PREDICTED_NONZERO, "D_effect_missed_")
 R_TIERS = (("same", "Same"), ("upgrade", "Up"), ("downgrade", "Down"))
 HORIZON_SYSTEMS = (*SYSTEM_TAGS, ("oracle", "Oracle"))
 
@@ -601,7 +595,7 @@ class _Macros(dict[str, str]):
             self[key] = value
 
 
-def _verdict(ok: bool | None, yes: str = "holds", no: str = "does not hold") -> str:
+def _flag(ok: bool | None, yes: str, no: str) -> str:
     return MISSING if ok is None else (yes if ok else no)
 
 
@@ -609,12 +603,8 @@ def _count(hits: int, total: int) -> str:
     return f"{hits} of {total}"
 
 
-def _trigger(p: dict[str, Any] | None) -> str:
-    return MISSING if p is None else ("triggered" if p["triggered"] else "not triggered")
-
-
 def _pass(ok: bool | None) -> str:
-    return _verdict(ok, "pass", "fail")
+    return _flag(ok, "pass", "fail")
 
 
 def _worlds(n: Any) -> str:
@@ -626,11 +616,9 @@ def _tex_text(s: str) -> str:
 
 
 def rep_numbers(view: dict[str, Any]) -> dict[str, str]:
-    """Block R (prereg v2 §1): every contrast of the v1 §4 list on the replication worlds, beside
-    the stage-2 estimate, with the verdict of `analysis.replication` (effects predicted non-zero:
-    replicated / same direction / not replicated; the D effect on missed invalidation: path 2;
-    the rest descriptive); the three falsification paths, T1, T3 and T4 on the replication
-    worlds."""
+    """Block R: every E1 contrast of the main study on the replication worlds, beside
+    the stage-2 estimate; binding's effect pooled over D, the D effect on missed invalidation and
+    writer agreement, T1, T3 and T4 on the replication worlds."""
     out = _Macros()
     rows = view.get("rows") or {}
     for branch, btag in BRANCH_TAGS:
@@ -639,8 +627,6 @@ def rep_numbers(view: dict[str, Any]) -> dict[str, str]:
             name = f"Rep{camel(key)}{btag}"
             out[name] = ci(row.get("rep"), pp)
             out[f"{name}Orig"] = ci(row.get("orig"), pp)
-            if key.startswith(R_VERDICT_PREFIXES):
-                out[f"{name}Verdict"] = row.get("verdict") or MISSING
     effects = [r for r in rows.values() if r["kind"] == "effect"]
     for suffix, part in (
         ("", effects),
@@ -650,17 +636,8 @@ def rep_numbers(view: dict[str, Any]) -> dict[str, str]:
         ),
     ):
         out[f"RepEffects{suffix}"] = str(len(part)) if part else MISSING
-        for verdict, name in (
-            ("replicated", "Replicated"),
-            ("same direction", "SameDirection"),
-            ("not replicated", "NotReplicated"),
-        ):
-            out[f"Rep{name}{suffix}"] = (
-                str(sum(r["verdict"] == verdict for r in part)) if part else MISSING
-            )
-    # Direction against the pre-registered prediction (prereg v1 §4: every effect predicted non-zero
-    # is predicted positive), which the replication verdict does not judge: it compares R with the
-    # sign of the stage-2 estimate. Per stage ("Orig": stage 2, "": R) and granularity.
+    # Direction against the stated one (every effect expected non-zero is expected positive), per
+    # stage ("Orig": stage 2, "": R) and granularity.
     for suffix, part in (
         ("", effects),
         ("Source", [r for r in effects if r["contrast"].endswith("_source")]),
@@ -673,37 +650,19 @@ def rep_numbers(view: dict[str, Any]) -> dict[str, str]:
                 "ExcludesZero": sum(e["lo"] > 0 or e["hi"] < 0 for e in ests),
                 "ExcludesPredicted": sum(e["lo"] > 0 for e in ests),
                 "ExcludesOpposite": sum(e["hi"] < 0 for e in ests),
-                "EstimatePredicted": sum(
-                    replication.as_predicted("effect", e) is True for e in ests
-                ),
+                "EstimatePredicted": sum(bool(e["est"] > 0) for e in ests),
             }
             for name, n in counts.items():
                 out[f"Rep{stage}{name}{suffix}"] = str(n) if part else MISSING
-        replicated = [r for r in part if r["verdict"] == "replicated"]
-        as_predicted = [r for r in replicated if replication.as_predicted("effect", r["orig"])]
-        out[f"RepReplicatedAsPredicted{suffix}"] = str(len(as_predicted)) if part else MISSING
-        out[f"RepReplicatedAgainstPrediction{suffix}"] = (
-            str(len(replicated) - len(as_predicted)) if part else MISSING
-        )
-    path2 = [r for r in rows.values() if r["kind"] == "path2"]
-    out["RepPathTwoTriggered"] = (
-        str(sum(r["verdict"] == "triggered" for r in path2)) if path2 else MISSING
-    )
     n = view.get("n_worlds") or {}
     out["RepWorlds"], out["RepWorldsOrig"] = _worlds(n.get("rep")), _worlds(n.get("orig"))
-    paths, orig = view.get("paths") or {}, view.get("paths_orig") or {}
+    paths = view.get("paths") or {}
     checks = _get(paths, "path2", "checks") or {}
     largest = max((abs(c["estimate"]["est"]) for c in checks.values()), default=None)
     out.update(
         {
-            "RepPathOne": _trigger(paths.get("path1")),
-            "RepPathOneOrig": _trigger(orig.get("path1")),
             "RepPathOneEstimate": ci(_get(paths, "path1", "estimate"), pp),
-            "RepPathTwo": _trigger(paths.get("path2")),
-            "RepPathTwoOrig": _trigger(orig.get("path2")),
             "RepPathTwoMaxAbs": pp(largest),
-            "RepPathThree": _trigger(paths.get("path3")),
-            "RepPathThreeOrig": _trigger(orig.get("path3")),
             "RepPathThreeSlope": (
                 f"{num(_get(paths, 'path3', 'pooled_slope', 'est'))} (90\\% lower bound "
                 f"{num(_get(paths, 'path3', 'pooled_slope', 'lo90'))})"
@@ -711,7 +670,6 @@ def rep_numbers(view: dict[str, Any]) -> dict[str, str]:
                 else MISSING
             ),
             "RepPathThreeAuroc": num(_get(paths, "path3", "pooled_auroc", "est")),
-            "RepClaimLevel": claim_label(view.get("claim_level")),
         }
     )
     t1 = view.get("t1") or {}
@@ -719,12 +677,6 @@ def rep_numbers(view: dict[str, Any]) -> dict[str, str]:
         m = t1.get(tier) or {}
         out[f"RepTOne{tag}"] = ci(m.get("rep_delta_90"), pp)
         out[f"RepTOnePass{tag}"] = MISSING if not m else ("within" if m["rep"] else "outside")
-        out[f"RepTOneVerdict{tag}"] = m.get("verdict") or MISSING
-    out["RepTOneReplicated"] = (
-        _count(sum(m["verdict"] == "replicated" for m in t1.values()), len(t1))
-        if len(t1) == len(R_TIERS)
-        else MISSING
-    )
     for h, htag in HORIZON_TAGS:
         for s, stag in HORIZON_SYSTEMS:
             unit = f"{h}m:{s}"
@@ -736,24 +688,13 @@ def rep_numbers(view: dict[str, Any]) -> dict[str, str]:
             t3, t4 = (view.get("t3") or {}).get(unit) or {}, (view.get("t4") or {}).get(unit) or {}
             out[f"RepTThree{stag}{htag}"] = ci(t3.get("rep_minus_oracle"), pp)
             out[f"RepTThreeResult{stag}{htag}"] = _pass(t3.get("rep")) if t3 else MISSING
-            out[f"RepTThreeVerdict{stag}{htag}"] = t3.get("verdict") or MISSING
             out[f"RepTFour{stag}{htag}"] = pct(t4.get("ratio"), 2)
             out[f"RepTFourResult{stag}{htag}"] = _pass(t4.get("rep")) if t4 else MISSING
-            out[f"RepTFourVerdict{stag}{htag}"] = t4.get("verdict") or MISSING
-    for label, unit_rows, size in (
-        ("RepTThreeReplicated", view.get("t3") or {}, len(HORIZON_TAGS) * len(SYSTEM_TAGS)),
-        ("RepTFourReplicated", view.get("t4") or {}, len(HORIZON_TAGS) * len(SYSTEM_TAGS)),
-    ):
-        out[label] = (
-            _count(sum(m["verdict"] == "replicated" for m in unit_rows.values()), len(unit_rows))
-            if len(unit_rows) >= size
-            else MISSING
-        )
     return out
 
 
 def rep_pool_numbers(view: dict[str, Any]) -> dict[str, str]:
-    """Block R, secondary: stage 2 and R pooled over the forty test worlds (prereg v2 §1)."""
+    """Block R, secondary: stage 2 and R pooled over the forty test worlds."""
     out = _Macros()
     con = view.get("contrasts") or {}
     for branch, btag in BRANCH_TAGS:
@@ -764,14 +705,10 @@ def rep_pool_numbers(view: dict[str, Any]) -> dict[str, str]:
     checks = _get(paths, "path2", "checks") or {}
     out.update(
         {
-            "RepPoolPathOne": _trigger(paths.get("path1")),
             "RepPoolPathOneEstimate": ci(_get(paths, "path1", "estimate"), pp),
-            "RepPoolPathTwo": _trigger(paths.get("path2")),
             "RepPoolPathTwoMaxAbs": pp(
                 max((abs(c["estimate"]["est"]) for c in checks.values()), default=None)
             ),
-            "RepPoolPathThree": _trigger(paths.get("path3")),
-            "RepPoolClaimLevel": claim_label(view.get("claim_level")),
         }
     )
     for tier, tag in R_TIERS:
@@ -791,10 +728,9 @@ def rep_pool_numbers(view: dict[str, Any]) -> dict[str, str]:
 def rep_e3_numbers(orig: dict[str, Any] | None, rep: dict[str, Any] | None) -> dict[str, str]:
     """E3 on the replication worlds beside stage 2. `RepZeroMinusHold<H>`: the zero system minus
     HoldMem(1,1), paired on the replication worlds (stage 2: `EThreeZeroMinusHold<H>`), so both
-    values of a comparison come from one world set; with `RepCv...` (static ContractValid) and
-    `RepTThree...` (minus the oracle) that gives every E3 quantity on the R worlds. Exploratory
-    (`Ex`): ContractValid and T3 without definition items, with `RepExNoDefTThreeReplicated`
-    counting the (horizon, system) units where R and stage 2 reach the same T3 verdict."""
+    values of a comparison come from one world set; with `RepCv...` (ContractValid before any
+    shift) and `RepTThree...` (minus the oracle) that gives every E3 quantity on the R worlds.
+    `Ex`: ContractValid and T3 without definition items."""
     out = _Macros()
     for h, htag in HORIZON_TAGS:
         per = _get(rep, "horizons", h) or {}
@@ -807,19 +743,6 @@ def rep_e3_numbers(orig: dict[str, Any] | None, rep: dict[str, Any] | None) -> d
             out[f"RepExNoDefTThree{stag}{htag}"] = ci(nd.get("minus_oracle"), pp)
             out[f"RepExNoDefTThreeResult{stag}{htag}"] = _pass(nd.get("T3_pass"))
     out.update(t3_counts("Rep", rep or {}))
-    same = [
-        _get(orig, "horizons", h, s, "explore_no_definition", "T3_pass")
-        == _get(rep, "horizons", h, s, "explore_no_definition", "T3_pass")
-        for h, _ in HORIZON_TAGS
-        for s, _name in SYSTEM_TAGS
-    ]
-    staged = all(
-        _get(x, "horizons", h, s, "explore_no_definition", "T3_pass") is not None
-        for x in (orig, rep)
-        for h, _ in HORIZON_TAGS
-        for s, _name in SYSTEM_TAGS
-    )
-    out["RepExNoDefTThreeReplicated"] = _count(sum(same), len(same)) if staged else MISSING
     return out
 
 
@@ -827,12 +750,6 @@ PROGRAM_METRICS = (
     ("Exec", "exec_t0"),
     ("Agree", "agree_t0"),
     ("AgreeExec", "agree_t0_given_exec"),
-)
-SYNTH_RULES = (  # block C's pre-registered predictions (macro name, E1 contrast key, rule)
-    ("COne", "C1_repair_D1s_minus_D0_source", "above"),
-    ("CTwo", "C2_repair_D1_minus_D1s_source", "nonneg"),
-    ("CThree", "C3_BxD_interaction_update_D1s_source", "above"),
-    ("CFour", "C4_D1s_effect_missed_source", "path2"),
 )
 PROGRAM_SYSTEM = "holdmem_D1sB1_source"  # every D1s cell runs the same programs at t0
 
@@ -848,11 +765,9 @@ def program_stats(m: dict[str, Any]) -> dict[str, Any]:
 
 
 def synth_numbers(m: dict[str, Any]) -> dict[str, str]:
-    """Block C (prereg v2 §4): C1-C4 for the D1s cell with intervals and, on S_src and S_def,
-    verdicts (C1, C3: estimate > 0 with the 95% interval excluding 0; C2: estimate >= 0; C4: not
-    triggered by the path-2 rule); the share of the D effect (C2); the orphan branch and the
-    cited-cluster granularity are outside the list and carry `Ex`; program statistics at t0. Also
-    exploratory: C1 and C2 by item class (`SynthExCOne<Class><Branch>`, `SynthExCTwo<Class><Branch>`
+    """Block C: C1-C4 for the D1s cell with intervals; the share of the D effect (C2); the
+    orphan branch and the cited-cluster granularity carry `Ex`; program statistics at t0. Also
+    with `Ex`: C1 and C2 by item class (`SynthExCOne<Class><Branch>`, `SynthExCTwo<Class><Branch>`
     with the classes of `CLASS_NAMES`, and `SynthExCItems<Class><Branch>` the paired items)."""
     out = _Macros()
     con = m.get("contrasts") or {}
@@ -869,7 +784,7 @@ def synth_numbers(m: dict[str, Any]) -> dict[str, str]:
                 ("CFour", f"C4_D1s_effect_missed_{g}", pp),
             ):
                 out[f"Synth{ex}{name}{gtag}{btag}"] = ci(c.get(pre + key), f)
-    for b, btag in BRANCH_TAGS:  # exploratory: C1 and C2 by item class, source-epoch binding
+    for b, btag in BRANCH_TAGS:  # C1 and C2 by item class, source-epoch binding
         c = con.get(b) or {}
         for cls, cname in CLASS_NAMES:
             for name, key in (
@@ -879,10 +794,6 @@ def synth_numbers(m: dict[str, Any]) -> dict[str, str]:
                 out[f"SynthEx{name}{cname}{btag}"] = ci(c.get(f"explore_{key}_source_{cls}"), pp)
             n_items = _get(c, f"explore_C1_repair_D1s_minus_D0_source_{cls}", "n_items")
             out[f"SynthExCItems{cname}{btag}"] = f"{int(n_items):,}" if n_items else MISSING
-    for b, btag in BRANCH_TAGS[:2]:
-        c = con.get(b) or {}
-        for name, key, rule in SYNTH_RULES:
-            out[f"Synth{name}Verdict{btag}"] = _verdict(synth_holds(rule, c.get(key)))
     stats = program_stats(m)
     for kind in [*ITEM_TYPES, "all"]:
         entry = stats.get(kind)
@@ -900,7 +811,7 @@ def synth_numbers(m: dict[str, Any]) -> dict[str, str]:
     return out
 
 
-SWITCH_PROSE = {  # the three registered tiers in running prose (the tables keep `Tier.label`)
+SWITCH_PROSE = {  # the three tiers in running prose (the tables keep `Tier.label`)
     "Same": "the same-tier switch",
     "Up": "the switch up to Qwen3.8-27B",
     "Down": "the switch down from Qwen3.8-27B",
@@ -915,9 +826,9 @@ def _and(items: list[str]) -> str:
 
 
 def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
-    """Block M1 (prereg v2 §2): pooled path 3 over the eight writer switches (M1-a), and per
+    """Block M1: writer agreement pooled over the eight writer switches (M1-a), and per
     switch the calibration slope and AUROC, the survival of D=1 minus D=0 at source-epoch binding
-    (M1-b, holds when the estimate is >= 0), and T1 (decisions.md 2026-09-29)."""
+    (M1-b, with the switches where the estimate is >= 0), and T1."""
     out = _Macros()
     p3 = m.get("path3") or {}
     out["MOnePathThreeSlope"] = (
@@ -929,10 +840,6 @@ def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
     out["MOnePathThreeAuroc"] = num(_get(p3, "pooled_auroc", "est"))
     n_items = _get(p3, "pooled_slope", "n_items")
     out["MOnePathThreeN"] = f"{int(n_items):,}" if n_items else MISSING
-    out["MOnePathThreeTriggered"] = (
-        MISSING if not p3 else ("triggered" if p3.get("triggered") else "not triggered")
-    )
-    out["MOnePathThreeHolds"] = _verdict(None if not p3 else not p3["triggered"])
     labels = {tier_key(m, t): SWITCH_PROSE.get(t.tag, f"the switch to {t.label}") for t in TIERS}
     caveats = [labels.get(k) or _tex_text(k) for k in p3.get("tier_caveats", [])]
     out["MOneCaveats"] = _and(caveats) if p3 else MISSING
@@ -940,7 +847,6 @@ def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
     present = [k for k in keys if k]
     out["MOneStaged"] = str(len(present)) if present else MISSING
     out["MOneSwitches"] = str(len(p3.get("tiers", []))) if p3 else MISSING
-    quant = m.get("path3_quantitative_prediction_holds") or {}
     for tier, key in zip(TIERS, keys, strict=True):
         tag = tier.tag
         cal = _get(m, "calibration", key) or {}
@@ -952,11 +858,9 @@ def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
         )
         out[f"MOneAuroc{tag}"] = num(_get(cal, "auroc", "est"))
         out[f"MOneCalN{tag}"] = str(_get(cal, "slope", "n_items") or MISSING)
-        out[f"MOneQuant{tag}"] = _verdict(quant.get(key) if key else None)
         out[f"MOneRetention{tag}"] = ci(_get(m, "retention", f"{key}:holdmem_D1B1_source"))
         mb = _get(m, "m1b_d_protects_switch", key) or {}
         out[f"MOneMB{tag}"] = ci(mb.get("d1_minus_d0_survival"), pp)
-        out[f"MOneMBHolds{tag}"] = _verdict(mb.get("holds"))
         t1 = _get(m, "t1", key) or {}
         out[f"MOneTOne{tag}"] = ci(t1.get("delta_90"), pp)
         out[f"MOneTOnePass{tag}"] = (
@@ -964,11 +868,10 @@ def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
         )
     complete = all(keys)
     n = len(keys)
-    out["MOneQuantHolding"] = (
-        _count(sum(quant.get(k) is True for k in keys), n) if complete else MISSING
-    )
     out["MOneMBHolding"] = (
-        _count(sum(_get(m, "m1b_d_protects_switch", k, "holds") is True for k in keys), n)
+        _count(
+            sum(_get(m, "m1b_d_protects_switch", k, "est_at_least_zero") is True for k in keys), n
+        )
         if complete
         else MISSING
     )
@@ -981,28 +884,16 @@ def m1_numbers(m: dict[str, Any]) -> dict[str, str]:
 
 
 def m2_numbers(families: Mapping[str, Any]) -> dict[str, str]:
-    """Block M2 (prereg v2 §2): checks (i)-(v) per family (`analysis.families`), the pattern
-    verdict ((ii)-(iv) all hold) and the number of families where it holds."""
+    """Block M2: the estimates behind checks (i)-(v) per family (`analysis.families`)."""
     out = _Macros()
     for fam in FAMILIES:
         f = families.get(fam.key) or {}
         pre = f"MTwo{fam.tag}"
         out[f"{pre}Worlds"] = _worlds(f.get("n_worlds"))
-        for key, name in FAMILY_CHECKS:
-            out[f"{pre}{name}"] = _verdict(_get(f, "checks", key), "holds", "fails")
         for key, name in FAMILY_ESTIMATES:
             out[f"{pre}{name}"] = ci(_get(f, "estimates", key), pp)
-        out[f"{pre}Pattern"] = _verdict(f.get("pattern_holds"))
     staged = [fam for fam in FAMILIES if families.get(fam.key)]
     out["MTwoStaged"] = str(len(staged)) if staged else MISSING
-    out["MTwoHolding"] = (
-        _count(
-            sum(bool((families.get(f.key) or {}).get("pattern_holds")) for f in FAMILIES),
-            len(FAMILIES),
-        )
-        if len(staged) == len(FAMILIES)
-        else MISSING
-    )
     return out
 
 
@@ -1015,11 +906,8 @@ M3_CONTRASTS = (
 
 
 def m3_numbers(readers: Mapping[str, Any]) -> dict[str, str]:
-    """Block M3 (prereg v2 §2): per reader, the four v1 contrasts under the main and the swapped
-    reader, whether the swapped point estimate keeps the main reader's sign
-    (`analysis.e7.same_sign`; the D effect on missed invalidation is 0 by construction and is
-    judged by the path-2 rule), and post-shift ContractValid of HoldMem(1,1), the zero system and
-    plain RAG."""
+    """Block M3: per reader, the four E1 contrasts under the main and the swapped
+    reader, and post-shift ContractValid of HoldMem(1,1), the zero system and plain RAG."""
     out = _Macros()
     for fam in FAMILIES:
         sw = readers.get(fam.key) or {}
@@ -1029,32 +917,14 @@ def m3_numbers(readers: Mapping[str, Any]) -> dict[str, str]:
             cons = _get(sw, b, "contrasts") or {}
             for key, name in M3_CONTRASTS:
                 c = cons.get(key) or {}
-                main, swap = c.get("main"), c.get("swap")
-                out[f"{pre}{name}Main{btag}"] = ci(main, pp)
-                out[f"{pre}{name}Swap{btag}"] = ci(swap, pp)
-                if name == "DMissed":
-                    out[f"{pre}DMissedPath{btag}"] = (
-                        replication.path2_verdict(swap) if swap else MISSING
-                    )
-                    continue
-                sign = same_sign(main, swap)
-                out[f"{pre}{name}Sign{btag}"] = (
-                    MISSING if not c else "n/a" if sign is None else ("same" if sign else "flipped")
-                )
+                out[f"{pre}{name}Main{btag}"] = ci(c.get("main"), pp)
+                out[f"{pre}{name}Swap{btag}"] = ci(c.get("swap"), pp)
             for s, stag in SYSTEM_TAGS:
                 for arm, aname in (("main", "Main"), ("swap", "Swap")):
                     est = _get(sw, b, "systems", s, arm, "ContractValid_post")
                     out[f"{pre}Cv{stag}{aname}{btag}"] = ci(est)
-        signs = m3_signs(sw)
-        out[f"{pre}SameSign"] = _count(sum(signs), len(signs)) if signs else MISSING
-        out[f"{pre}Holds"] = _verdict(all(signs)) if signs else MISSING
     staged = [f for f in FAMILIES if readers.get(f.key)]
     out["MThreeStaged"] = str(len(staged)) if staged else MISSING
-    out["MThreeHolding"] = (
-        _count(sum(all(m3_signs(readers[f.key])) for f in FAMILIES), len(FAMILIES))
-        if len(staged) == len(FAMILIES)
-        else MISSING
-    )
     return out
 
 
@@ -1081,11 +951,11 @@ def cost_tokens(entry: dict[str, Any] | None) -> float | None:
 
 
 def nat_numbers(res: dict[str, Any] | None, cost: dict[str, Any]) -> dict[str, str]:
-    """Block N (prereg v2 §3): per native system the documented and the inferred (D, B) label, the
-    six comparisons with the interval predicted by the white-box cell of that label (inside or
-    outside), noise floor, ingestion failures, T3 / T4 and the measured cost per event; and the
-    predictions N-1..N-4 (`analysis.e5.stage4_summary`), rendered only when all six systems (Mem0
-    and the five stage-4 systems) are staged."""
+    """Block N: per native system the documented and the inferred (D, B) label, the
+    six comparisons with the interval of the HoldMem cell with that label (inside or outside),
+    noise floor, ingestion failures, T3 / T4 and the measured cost per event; and the counts over
+    the systems (`analysis.e5.stage4_summary`), rendered only when all six systems (Mem0 and the
+    five stage-4 systems) are staged."""
     res = res or {}
     out = _Macros()
     systems = res.get("systems") or {}
@@ -1103,7 +973,7 @@ def nat_numbers(res: dict[str, Any] | None, cost: dict[str, Any]) -> dict[str, s
             MISSING if not inferred else ("--" if inferred[1] is None else str(inferred[1]))
         )
         out[f"{pre}LabelAgrees"] = (
-            _verdict(doc == inferred, "yes", "no") if inferred and doc else MISSING
+            _flag(doc == inferred, "yes", "no") if inferred and doc else MISSING
         )
         for dim in ("B", "D"):
             out[f"{pre}{dim}Rate"] = pct(_get(lab, dim, "rate"))
@@ -1115,7 +985,6 @@ def nat_numbers(res: dict[str, Any] | None, cost: dict[str, Any]) -> dict[str, s
         out[f"{pre}Inside"] = str(n2["inside"]) if n2 else MISSING
         out[f"{pre}Comparisons"] = str(n2["comparisons"]) if n2 else MISSING
         out[f"{pre}InsideOf"] = _count(n2["inside"], n2["comparisons"]) if n2 else MISSING
-        out[f"{pre}NTwo"] = _verdict(n2.get("n2_holds"))
         for b, btag in BRANCH_TAGS:
             br = _get(per, "branches", b) or {}
             nf = _get(res, "noise_floor", "systems", s, b) or {}
@@ -1166,12 +1035,6 @@ def nat_numbers(res: dict[str, Any] | None, cost: dict[str, Any]) -> dict[str, s
         if complete and agree
         else MISSING
     )
-    out["NatNOneHolds"] = _verdict(s4.get("n1_holds")) if complete else MISSING
-    out["NatNTwoHolding"] = (
-        _count(sum(v["n2_holds"] is True for v in per_system.values()), len(per_system))
-        if complete and per_system
-        else MISSING
-    )
     out["NatNThreeInside"] = (
         _count(
             sum(v["inside"] for v in per_system.values()),
@@ -1181,7 +1044,6 @@ def nat_numbers(res: dict[str, Any] | None, cost: dict[str, Any]) -> dict[str, s
         else MISSING
     )
     out["NatNThreeShare"] = pct(s4.get("n3_share_inside")) if complete else MISSING
-    out["NatNThreeHolds"] = _verdict(s4.get("n3_holds")) if complete else MISSING
     total = _get(s4, "discriminability", "total") or {}
     for key, name in (
         ("comparisons", "Comparisons"),
@@ -1194,10 +1056,6 @@ def nat_numbers(res: dict[str, Any] | None, cost: dict[str, Any]) -> dict[str, s
         _count(total["discriminating"], total["comparisons"])
         if complete and total.get("comparisons")
         else MISSING
-    )
-    n4 = s4.get("n4_holds")
-    out["NatNFourHolds"] = (
-        MISSING if not complete else ("not testable" if n4 is None else _verdict(n4))
     )
     by_b = s4.get("n4_orphan_stability_by_B") or {}
     for b, name in (("0", "BZero"), ("1", "BOne")):
@@ -1212,22 +1070,14 @@ REND_SOURCES = (("email", "Email"), ("messages", "Messages"), ("notes", "Notes")
 
 
 def rend_numbers(m: dict[str, Any]) -> dict[str, str]:
-    """Block L (prereg v2 §5): checks (i)-(v) on the LLM-rendered worlds and on the same-seed
-    template worlds, the rendered-minus-template item-paired differences behind them, the
+    """Block L: the estimates behind checks (i)-(v) on the LLM-rendered worlds and on the
+    same-seed template worlds, the rendered-minus-template item-paired differences, the
     ContractValid differences per cell, and the rendering descriptives (kept-template share,
     retries, fidelity)."""
     out = _Macros()
     rend, temp = m.get("rendered") or {}, m.get("template_same_seeds") or {}
     out["RendWorlds"] = _worlds(len(m.get("worlds", [])))
-    out["RendProbesIdentical"] = _verdict(_get(m, "probe_identity", "identical"), "yes", "no")
-    for key, name in FAMILY_CHECKS:
-        out[f"Rend{name}"] = _verdict(_get(rend, "checks", key), "holds", "fails")
-        out[f"RendTemplate{name}"] = _verdict(_get(temp, "checks", key), "holds", "fails")
-        out[f"RendAgree{name}"] = _verdict(
-            _get(m, "check_comparison", "checks", key, "agree"), "agree", "differ"
-        )
-    out["RendPattern"] = _verdict(rend.get("pattern_holds"))
-    out["RendTemplatePattern"] = _verdict(temp.get("pattern_holds"))
+    out["RendProbesIdentical"] = _flag(_get(m, "probe_identity", "identical"), "yes", "no")
     paired = {p["name"]: p for p in m.get("paired") or []}
     for key, name in FAMILY_ESTIMATES:
         p = paired.get(key) or {}
@@ -1257,7 +1107,7 @@ def rend_numbers(m: dict[str, Any]) -> dict[str, str]:
     out["RendRequests"] = f"{rd['requests']:,}" if "requests" in rd else MISSING
     out["RendFidelityMin"] = pct(fid.get("min_rate"))
     out["RendFidelityChecked"] = f"{fid['checked']:,}" if "checked" in fid else MISSING
-    out["RendFidelityAllOne"] = _verdict(fid.get("all_one"), "yes", "no") if fid else MISSING
+    out["RendFidelityAllOne"] = _flag(fid.get("all_one"), "yes", "no") if fid else MISSING
     for src, tag in REND_SOURCES:
         per = _get(rd, "per_source", src) or {}
         out[f"RendAttempted{tag}"] = f"{per['attempted']:,}" if "attempted" in per else MISSING
@@ -1267,7 +1117,7 @@ def rend_numbers(m: dict[str, Any]) -> dict[str, str]:
 
 
 def rank_numbers(m: dict[str, Any]) -> dict[str, str]:
-    """Section 6 (prereg v2, exploratory): Spearman correlation between the ranking of the systems
+    """Rank correlation: Spearman correlation between the ranking of the systems
     by Update after S_src and their rankings by Update after S_def and by orphan Stability."""
     out = _Macros()
     for key, name in (
@@ -1293,9 +1143,9 @@ MULT_COUNTS = (
 
 
 def mult_numbers(view: Mapping[str, Any]) -> dict[str, str]:
-    """Multiplicity check (exploratory; `analysis.multiplicity`, not part of prereg v1 or v2): for
-    stage 2 (`Orig`) and block R (`Rep`), the number of predicted-non-zero E1 contrasts (one family
-    per stage), how many have a 95% interval excluding 0 in the predicted direction, and how many
+    """Multiplicity corrections (`analysis.multiplicity`): for
+    stage 2 (`Orig`) and block R (`Rep`), the number of E1 contrasts expected to be positive (one
+    family per stage), how many have a 95% interval above 0, and how many
     survive Holm-Bonferroni (familywise alpha = 0.05) and Benjamini-Hochberg (q = 0.05)."""
     out = _Macros()
     for tag, name in MULT_STAGES:
@@ -1358,9 +1208,9 @@ def build_macros(root: Path) -> dict[str, str]:
         macros.update(fn(data))
     inp = load_stage4(root, sources)
     macros.update(stage4_numbers(inp))
-    # Exploratory (decisions.md 2026-09-30); names carry `Ex` and must not collide with an existing
-    # macro: the E1-family analyses, then the writer-switch predictors, T1 / T3 sensitivity and the
-    # native null baselines
+    # The further analyses; names carry `Ex` and must not collide with an existing
+    # macro: the E1-family analyses, then the writer-switch predictors, T1 / T3 by item class and
+    # the native null baselines
     from memshift.analysis import (
         controls_paper,  # lazy, as above
         ex_e1_paper,  # lazy: it builds on this module's formatters
@@ -1368,6 +1218,7 @@ def build_macros(root: Path) -> dict[str, str]:
         ex_review_paper,
         ex_round2,
         ex_round3,
+        ex_round3_review,
         key_audit,
         l_tokens,
     )
@@ -1376,16 +1227,18 @@ def build_macros(root: Path) -> dict[str, str]:
         ex_e1_paper.numbers(ex_e1_paper.load(root, sources)),
         ex_numbers.build(root, sources, inp),
         ex_review_paper.numbers(ex_review_paper.load(root, sources)),
-        controls_paper.numbers(controls_paper.load(root, sources)),  # registered controls
+        controls_paper.numbers(controls_paper.load(root, sources)),  # control cells
         key_audit.numbers(key_audit.load(root, sources)),  # offline key audit (no model)
         l_tokens.numbers(l_tokens.load(root, sources)),  # block L: token shares (template counts)
-        ex_round2.numbers(ex_round2.load(root, sources)),  # review round 2 (decisions 2026-10-08)
-        ex_round3.numbers(ex_round3.load(root, sources)),  # review round 3 (decisions 2026-10-16)
+        ex_round2.numbers(ex_round2.load(root, sources)),  # drift, per definition, D_m
+        ex_round3.numbers(ex_round3.load(root, sources)),  # store and reader, view, natural
+        # the checks of what the design fixes, and further splits
+        ex_round3_review.numbers(ex_round3_review.load(root, sources)),
     ):
         if dup := macros.keys() & ex.keys():
-            raise ValueError(f"exploratory macro collides with an existing one: {sorted(dup)[:3]}")
+            raise ValueError(f"`Ex` macro collides with an existing one: {sorted(dup)[:3]}")
         macros.update(ex)
-    # Registered round-3 verdicts (prereg/v4_round3.md, v4b_round3_claude.md)
+    # Round-3 results (`round3_paper`)
     from memshift.analysis import round3_paper  # lazy, as above
 
     reg = round3_paper.numbers(round3_paper.load(root, sources))

@@ -1,4 +1,4 @@
-"""E4 analysis (plan §6 E4, §2.5 H_S): ContractValid by (mode, lag, B, system), the lag-window
+"""E4 analysis (sync semantics, H_S): ContractValid by (mode, lag, B, system), the lag-window
 split, state divergence, and the sync-semantics x B interaction.
 
 Cells        (mode, lag, system); B is 0 / 1 for the HoldMem cells and None for the zero system.
@@ -9,8 +9,8 @@ Window       a probe is inside the lag window when its delay after the triggerin
              also counts the poll interval.
 Drop         CV(official, L) - CV(ideal) for one system, paired by probe, clustered by world.
 Interaction  per L: Drop(B=1) - Drop(B=0), paired by (world, probe). H_S predicts a drop that does
-             not depend on B and sits inside the lag window; an interval that excludes 0 is the
-             plan's trigger for promoting sync semantics to a main axis.
+             not depend on B and sits inside the lag window; an interval that excludes 0 shows a
+             sync-semantics x B interaction.
 All intervals are world-level bootstraps (scoring.stats).
 """
 

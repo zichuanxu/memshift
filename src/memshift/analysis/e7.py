@@ -1,4 +1,4 @@
-"""E7 analysis (plan §6 E7): failure analysis. All rates are world-bootstrap estimates.
+"""E7 analysis: failure analysis. All rates are world-bootstrap estimates.
 
 conflict  AbstainAccuracy = P(status abstain | conflicting item) per system (gold is abstain for
           an unresolvable conflict); controls: ContractValid on the same number of
@@ -12,9 +12,9 @@ readset   S2, the read set that cannot be declared: MissedInvalidation of scope-
           predicate's scope includes objects that do not exist yet, so a key built from the
           cited clusters cannot contain them; the source epoch does.
 theta_r   external validity of the reader (E1-style runs with `--reader`) and, as theta_e, of the
-theta_e   RAG embedding (`--cells none --embed`): per-system metrics and the pre-registered
+theta_e   RAG embedding (`--cells none --embed`): per-system metrics and the E1
           contrasts under the main and the swapped model, on the swap runs' worlds and probes.
-          Prereg v2 §2 (M3) reader swaps over several models: `theta_r_by_reader` holds one swap
+          M3 reader swaps over several models: `theta_r_by_reader` holds one swap
           per reader model, grouped by the model each run's manifest records.
 """
 
@@ -100,8 +100,8 @@ SWAP_CONTRASTS = (
 
 
 def same_sign(main: dict[str, Any] | None, swap: dict[str, Any] | None) -> bool | None:
-    """M3 (prereg v2 §2): the swapped reader's point estimate has the main reader's sign; None when
-    either is missing or the main estimate is exactly 0 (a contrast predicted zero by
+    """M3: the swapped reader's point estimate has the main reader's sign; None when
+    either is missing or the main estimate is exactly 0 (a contrast that is zero by
     construction, such as the D effect on missed invalidation, has no sign to keep)."""
     if not main or not swap or main.get("est") in (None, 0) or swap.get("est") is None:
         return None

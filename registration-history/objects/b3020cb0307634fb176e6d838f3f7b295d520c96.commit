@@ -1,9 +1,0 @@
-tree 7dcc3324913121428cce4b576a9a5e901c673741
-parent 4638d5954ad1dedaf2d71959fb55efd2c8e75a6e
-parent 0877a284083a4c27b966fe0515ed355329d33ec7
-author zichuanxu <zichuanxu28@gmail.com> 1790716601 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790716601 +0900
-
-Merge paper rewrite phase 1: stage 4 integrated (replication and construct check observed; model families, native systems and rendered worlds set up with generated macros and marked result sentences)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,8 +1,0 @@
-tree a292858636646fda60ebcf0559b51ef74918a17b
-parent 1e4ad96f9a373af0802763754422cd8e9a94d2fe
-author zichuanxu <zichuanxu28@gmail.com> 1790777764 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790777764 +0900
-
-E2 and E3 exploratory analyses for the review response: the writer-switch predictors (registered agreement against the writers' per-type accuracy, P(new correct | old correct) and a definition indicator, slope and AUROC, world and type-level bootstrap, leave-one-type-out, failure counts), T1 survival, recovery, net change, the eps grid and T1 by item class, and T3 by item class with the oracle ceiling; every key starts with explore_, no existing field changes (restaging reproduces the committed analyses exactly)
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

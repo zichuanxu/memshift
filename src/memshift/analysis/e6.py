@@ -1,4 +1,4 @@
-"""E6 analysis (plan §3.2 T2, prereg v1 §5): the leave test through Portable Memory (.mem).
+"""E6 analysis: the leave test T2 through Portable Memory (.mem).
 
 Each imported store is paired with the native HoldMem (1,1) source-epoch store per probe and
 clustered by world. T2 holds for an import when all three differences have their 90% world
@@ -23,7 +23,7 @@ from memshift.analysis import e1
 from memshift.scoring.stats import paired_diff, tost
 
 NATIVE = "native_holdmem_D1B1_source"
-T2_MARGIN = 0.03  # prereg v1 §5: epsilon of plan §4.6
+T2_MARGIN = 0.03  # T2 equivalence margin epsilon of each difference
 Vec = dict[str, dict[str, float]]
 
 

@@ -78,7 +78,7 @@ def test_the_estimate_counts_the_new_requests_of_d0full_and_reports_what_its_wri
     assert access["rederivations"] == len(rows) > 0
     assert access["truncated"] == sum(h["full"]["dropped"] > 0 for h in rows) > 0  # the e-mail
     assert access["range_incomplete"] <= access["truncated"]
-    assert access["newest_first"] == 0  # the fallback rule is not needed at the registered cap
+    assert access["newest_first"] == 0  # the fallback rule is not needed at the default cap
     assert set(access["dropped_by_source"]) == {"email"}  # only the e-mail is cut, never the cards
     assert set(access["by_item"]) == {s.kappa_id for s in rep.world.slots if s.kappa_id}
     assert access["prompt_tokens"]["max"] > access["record_tokens"]["max"]

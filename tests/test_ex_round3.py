@@ -1,6 +1,5 @@
-"""Paper numbers and tables of the analyses requested by the third review round
-(`analysis.ex_round3`, prereg/decisions.md 2026-10-16): read from the staged round-3 analyses, they
-reproduce the published values they build on, and the committed generated files are current."""
+"""Paper numbers and tables of `analysis.ex_round3`: read from the staged analyses, they reproduce
+the published values they build on, and the committed generated files are current."""
 
 import json
 import re
@@ -176,7 +175,7 @@ def test_deletion_taxonomy_accounts_for_the_whole_loss():
 
 
 @pytest.mark.paper
-def test_view_reproduces_the_registered_control_and_isolates_working_hours():
+def test_view_reproduces_the_control_cell_and_isolates_working_hours():
     for b in ("Src", "Def"):
         assert MACROS[f"ExRThreeView{b}DefinitionUpdateVsDm"] == committed(
             f"CtlZVsDones{b}Definition"
@@ -195,9 +194,7 @@ def test_view_reproduces_the_registered_control_and_isolates_working_hours():
 
 # ------------------------------------------------------------------------------------ tables
 LABELS = {
-    "tab_main_store.tex": "tab:main",
     "tab_store_reader.tex": "tab:store-reader",
-    "tab_store_reader_bxd.tex": "tab:store-reader-bxd",
     "tab_dm_deletion.tex": "tab:dm-deletion",
     "tab_view.tex": "tab:view",
 }
@@ -223,23 +220,6 @@ def _rows(tex: str) -> list[list[str]]:
     ]
 
 
-@pytest.mark.paper
-def test_main_table_is_the_round2_table_without_the_cited_key():
-    old = _rows((ROOT / "paper/generated/tab_main.tex").read_text())
-    new = _rows(r3.tab_main_store(INP))
-    assert len(old) == len(new) == 6
-    for o, n in zip(old, new, strict=True):
-        assert n == o[:-1]  # r0, r1, a0, a1 and B x D; the cited key's m1 is left out
-    assert new[0][2:8] == [
-        "29",
-        "16.2",
-        "99.1",
-        "10.2",
-        "65.8",
-        "$+$27.3\\,{\\scriptsize [$+$21.6,\\,$+$32.6]}",
-    ]
-
-
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile_at_the_paper_width(tmp_path):
     names = []
@@ -250,7 +230,9 @@ def test_tables_compile_at_the_paper_width(tmp_path):
         "\n".join(
             [
                 r"\documentclass[10pt]{article}\usepackage[T1]{fontenc}",
-                r"\usepackage[textwidth=5.5in,textheight=9in]{geometry}",
+                r"\usepackage[textwidth=6.75in,textheight=9in]{geometry}",
+                r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
+                r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\holdmem}{\textsc{HoldMem}}"
@@ -266,7 +248,7 @@ def test_tables_compile_at_the_paper_width(tmp_path):
         text=True,
     )
     assert done.returncode == 0, done.stdout[-1500:]
-    assert "Overfull \\hbox" not in done.stdout  # every table fits 5.5in
+    assert "Overfull \\hbox" not in done.stdout  # every table fits the 6.75in text block
 
 
 # ------------------------------------------------------------------------- generated files
@@ -288,6 +270,6 @@ def test_the_text_uses_defined_macros():
     assert used, "the text cites no round-3 macro"
     defined = set(MACROS) | {f"{k}Est" for k, v in MACROS.items() if " [" in v}
     assert used <= defined, sorted(used - defined)[:5]
-    # the registered natural-branch test is reported (tests/test_round3_paper.py)
+    # the natural-branch test is reported (tests/test_round3_paper.py)
     assert "NatPending" not in text + (ROOT / "paper/main.tex").read_text()
-    assert "\\input{generated/tab_main_store}" in text and "generated/tab_main}" not in text
+    assert "generated/tab_main" not in text

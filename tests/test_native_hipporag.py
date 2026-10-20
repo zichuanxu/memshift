@@ -1,4 +1,4 @@
-"""Offline tests for the HippoRAG 2 adapter (prereg/v2.md §3): passage headers, the object map
+"""Offline tests for the HippoRAG 2 adapter (E5 native systems): passage headers, the object map
 and its sequencing, the embedder, the OpenIE audit, and, when `hipporag` is installed
 (docker/native/hipporag.txt), the adapter end to end on fake OpenAI-compatible clients. No
 network, no GPU; the library-backed tests are skipped without the package."""

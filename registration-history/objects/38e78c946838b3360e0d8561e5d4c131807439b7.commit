@@ -1,8 +1,0 @@
-tree deed37dc00579536bff55842af19c1d5a0d6960d
-parent 525f7abaec3b662ca1c564bc10e64b5c3ce6315c
-author zichuanxu <zichuanxu28@gmail.com> 1790695424 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790695424 +0900
-
-Block N (prereg v2 §3): MemOS native adapter (MemoryOS 2.0.33): general_text memory on embedded Qdrant behind MemOS's own MemReader (fine mode), each event one message with our object id and revision in the reader's info; Qwen3-Embedding through MemOS's OpenAI-compatible embedder; swallowed extraction failures surfaced to on_error, raw-text fallback counted; own image (openai<2)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

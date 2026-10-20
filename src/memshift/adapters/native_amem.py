@@ -1,4 +1,4 @@
-"""A-Mem behind the MemShift native-system interface (prereg/v2.md §3, decisions.md 2026-09-29).
+"""A-Mem behind the MemShift native-system interface (E5).
 
 A-Mem is "A-MEM: Agentic Memory for LLM Agents" (Xu et al., NeurIPS 2025, arXiv 2502.12110). The
 abstract page links two repositories: `WujiangXu/A-mem` (the LoCoMo evaluation harness) and

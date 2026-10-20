@@ -1,4 +1,4 @@
-"""Versioned personal definitions kappa with deterministic evaluators (plan §4.2 "定义 κ").
+"""Versioned personal definitions kappa with deterministic evaluators.
 
 Each definition has v1 and v2. A definition change bumps the version while source bytes stay the
 same; gold is recomputed by the evaluator. Evaluators read only structured fields of source
@@ -6,7 +6,7 @@ objects (calendar, contacts, tasks, message and email headers, the working-hours
 also what HoldMem's D=1 checker has access to: a person who has codified a definition can
 re-evaluate it mechanically. This is the D=1 extreme by construction, reported as such.
 
-Held-out definitions (prereg v4_round3 §G-a). Besides the six fixed definitions (`KAPPA_DEFS`), a
+Held-out definitions. Besides the six fixed definitions (`KAPPA_DEFS`), a
 grammar samples definitions as (source, predicate over records, aggregate, window, threshold):
 
 - predicate (`GRAMMAR`): a filter over the records of one source, optionally joined with contact
@@ -1037,6 +1037,6 @@ def list_heldout(seeds: Sequence[int]) -> str:
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(description="held-out definitions (prereg v4_round3 §G-a)")
+    ap = argparse.ArgumentParser(description="held-out definitions")
     ap.add_argument("--list-heldout", type=int, nargs="+", metavar="SEED", required=True)
     print(list_heldout(ap.parse_args().list_heldout))

@@ -1,4 +1,4 @@
-"""Data model of a MemShift world (plan §4.2).
+"""Data model of a MemShift world.
 
 A world is a person's 12-month multi-source event stream plus everything needed to score it:
 fact slots (the knowledge items), per-slot gold timelines for script-level facts, versioned

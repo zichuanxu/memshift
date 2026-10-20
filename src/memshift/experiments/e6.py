@@ -1,4 +1,4 @@
-"""E6 (plan §3.2 T2, §5.5, §6 E6): the leave test through Portable Memory (.mem).
+"""E6: the leaving test (T2) through Portable Memory (.mem).
 
 Per world and branch (src, def): HoldMem (1,1) with source-epoch binding is built at
 t0 = t_f - 1 min and exported twice, with the derivation record (custom record kind, which the
@@ -45,7 +45,7 @@ def _answer(item: tuple[str, Any], probes: list[Probe], llm: LLMClient) -> list[
 
 def _mem0_arms(world: Any, log: SourceLog, bdir: Path, run_dir: Path, t0: Any) -> dict[str, Any]:
     """Mem0 as importer: each bundle enters through Mem0's raw add path, later source events
-    through Mem0's own extraction path (plan §6 E6 "导入方：Mem0 自身导入路径")."""
+    through Mem0's own extraction path."""
     from memshift.adapters.mem_export import import_to_mem0
     from memshift.experiments.common import EMBED_MODEL, endpoints
     from memshift.experiments.e5 import NATIVE_LLM

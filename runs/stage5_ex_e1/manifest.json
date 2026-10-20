@@ -6,9 +6,9 @@
   "created_utc": "2026-10-17T05:16:47Z",
   "experiment": "merged-ex_e1",
   "files_sha256": {
-    "analysis/ex_e1.json": "fcda291c24c3e0e5e4cfcdc0521a9da113bfdc2022d13727666a1cd89f890734"
+    "analysis/ex_e1.json": "80c6ee52c4e37471743e0731a21727043ab4c4ffe5141508b731e1ef49a0f8e8"
   },
-  "note": "exploratory (prereg/decisions.md 2026-09-30): out-of-sample test of Eq. (1), replication accounting, short-world prediction, cost model and noise floor across the E1-family stages, no model call; restaged after stage4_c_e1 took the re-run e1_synth_s1016-1019_20261016T222156Z (prereg/decisions.md 2026-10-17), which only the listed (not pooled) noise-floor entry of stage4_c_e1 reads; stage5_short_e1's item table (not kept in git) was regenerated from its three source runs by its stage command and equals the SHA256 in that stage's manifest",
+  "note": "additional analyses: out-of-sample test of Eq. (1), replication accounting, short-world prediction, cost model and noise floor across the E1-family stages, no model call; restaged after stage4_c_e1 took the re-run e1_synth_s1016-1019_20261016T222156Z, which only the listed (not pooled) noise-floor entry of stage4_c_e1 reads; stage5_short_e1's item table (not kept in git) was regenerated from its three source runs by its stage command and equals the SHA256 in that stage's manifest",
   "producers": {
     "analysis/ex_e1.json": "python -m memshift.analysis.ex_e1_cross runs/stage5_ex_e1 dev:runs/stage1_e1 devorphan:runs/stage1_orphan main:runs/stage2_e1 rep:runs/stage4_rep_e1 short:runs/stage5_short_e1 e3:runs/stage2_e3 e3rep:runs/stage4_rep_e3 noisepool:runs/stage2_e1 noisepool:runs/stage4_rep_e1 noise:runs/stage1_e1 noise:runs/stage1_orphan noise:runs/stage4_c_e1 noise:runs/stage4_m2_google_gemma-4-12b-it noise:runs/stage5_short_e1"
   },
@@ -17,35 +17,35 @@
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "c4896ee09108a2c449bd41349cfdbeabbc420086b144fa331091a9c793a854b6",
+      "manifest_sha256": "84b2b477bf1bbc9ee36808f142a0415db5df473ffce63439b38b171ae178c081",
       "run_id": "stage1_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "aecd627574294160a19ea540f46cca7e67013f325b05057cdec002b20439eaf4",
+      "manifest_sha256": "9d9f975561c9efd3ee2133d184673a041eae8495234beadad021e7c1f13bb646",
       "run_id": "stage1_orphan",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "manifest_sha256": "c2d9112ae0a27377b9293e69becb1505bf2e07c4fc9be61abc8fcb00e50ad863",
       "run_id": "stage2_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "aabb9fdaf7409e7a8d6cb59dbda41b5af2b4c189e21b36af01e7c46982272e69",
+      "manifest_sha256": "56f05b126c99067fc42e912c6998d8b372b738403a2d8ffd53bee01f661add16",
       "run_id": "stage4_rep_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "b63e0ff5d9eaa3b29cb3f8be24d2bf831ba6c2456e0c820fd47e24809d7f8376",
+      "manifest_sha256": "9dbd118d514d5fab3a4be04783bc5fac5c14c70b206a96162a16fd6dbee31aca",
       "run_id": "stage5_short_e1",
       "worlds": []
     },
@@ -66,49 +66,49 @@
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "manifest_sha256": "c2d9112ae0a27377b9293e69becb1505bf2e07c4fc9be61abc8fcb00e50ad863",
       "run_id": "stage2_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "aabb9fdaf7409e7a8d6cb59dbda41b5af2b4c189e21b36af01e7c46982272e69",
+      "manifest_sha256": "56f05b126c99067fc42e912c6998d8b372b738403a2d8ffd53bee01f661add16",
       "run_id": "stage4_rep_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "c4896ee09108a2c449bd41349cfdbeabbc420086b144fa331091a9c793a854b6",
+      "manifest_sha256": "84b2b477bf1bbc9ee36808f142a0415db5df473ffce63439b38b171ae178c081",
       "run_id": "stage1_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "aecd627574294160a19ea540f46cca7e67013f325b05057cdec002b20439eaf4",
+      "manifest_sha256": "9d9f975561c9efd3ee2133d184673a041eae8495234beadad021e7c1f13bb646",
       "run_id": "stage1_orphan",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "6128f3a59c20ce483b83076094557ea6736f1c2f790dc38b1e1b9efb0bfe1089",
+      "manifest_sha256": "d32178ada1af98059192e463e33dd83af83047e8129c664ca24a168cbff1f8ea",
       "run_id": "stage4_c_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-m2",
-      "manifest_sha256": "9747c1191ca18b4f6a89246c8d03a278b8f8f43d6770dc0f068d6215da8895aa",
+      "manifest_sha256": "f272af2dfe10c7c906c3b9a8dad524d57de3458e0b7d6c13a83911bc9039a21c",
       "run_id": "stage4_m2_google_gemma-4-12b-it",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "b63e0ff5d9eaa3b29cb3f8be24d2bf831ba6c2456e0c820fd47e24809d7f8376",
+      "manifest_sha256": "9dbd118d514d5fab3a4be04783bc5fac5c14c70b206a96162a16fd6dbee31aca",
       "run_id": "stage5_short_e1",
       "worlds": []
     }

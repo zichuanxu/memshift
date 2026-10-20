@@ -1,8 +1,0 @@
-tree 55dfbb9bc4f094dcdefd04ced4830cb1fb6496aa
-parent 4d06bc71a8e40d94e1d3cfa93d32a2eb9776e681
-author zichuanxu <zichuanxu28@gmail.com> 1790621774 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790621774 +0900
-
-Gate A evaluator: paths 1-3, claim level (prereg v1 §6), T1/T3/T4 membership
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

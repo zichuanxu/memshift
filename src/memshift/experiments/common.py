@@ -81,8 +81,8 @@ def new_run_dir(name: str, root: Path | None = None) -> Path:
 def world_params(months: int, kappa_set: str | None = None) -> dict[str, Any] | None:
     """Generator parameters for a shortened world (E5 natives and their white-box references):
     `months` long, forked one month before the end, token target scaled with length. None for the
-    default twelve-month world with the fixed definitions. `kappa_set` ("heldout:<seed>", prereg
-    v4_round3 §G-a) swaps the six definitions for a draw of `gen.kappa.heldout_draw`."""
+    default twelve-month world with the fixed definitions. `kappa_set` ("heldout:<seed>", the
+    held-out definitions) swaps the six definitions for a draw of `gen.kappa.heldout_draw`."""
     extra = {"kappa_set": kappa_set} if kappa_set else {}
     if months == 12:
         return extra or None

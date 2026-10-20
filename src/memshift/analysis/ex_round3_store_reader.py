@@ -1,7 +1,6 @@
-"""Store x reader split of the repair term of Eq. (1) (exploratory; post hoc, answers the third
-review round of the paper, reviewer 2, W5: a correct stored value that the reader misreads is not
-a failed re-derivation). It changes no registered contrast, margin, threshold or verdict, makes no
-model call and reads the raw runs the staged analyses were built from.
+"""Store x reader split of the repair term of Eq. (1): a correct stored value that the reader
+misreads is not a failed re-derivation. It makes no model call and reads the raw runs the staged
+analyses were built from.
 
 Eq. (1), Update = (1 - m) r + m a, is computed on the changed, asked item-times of a cell. Its
 terms are answers of the reader, so `r` mixes two things: whether the re-derivation put the right
@@ -73,7 +72,7 @@ from memshift.analysis.ex_round2 import BRANCH_LABELS
 from memshift.analysis.paper_tables import _row, interval
 from memshift.scoring.normalize import contract_valid
 
-STATUS = ex.STATUS + "; post hoc, third review round (reviewer 2, W5)"
+STATUS = ex.STATUS
 SOURCES_FILE = "results/sources.json"
 MAIN_KEY, DM_KEY = "e1", "c"  # staged analyses: main study, block C
 ARMS = (("D1", MAIN_KEY), ("D1s", DM_KEY))  # D=1 arm of the cell set, sources.json key
@@ -463,16 +462,16 @@ def tab_levels(res: Mapping[str, Any]) -> str:
     lines = [
         r"\begin{table}[t]",
         r"\caption{Store and reader terms of the repair term $r$ and of $a$ in Eq.~(1) (main "
-        r"study and block C, 20 worlds each; source-epoch key; percent, point estimates; "
-        r"exploratory). On the changed item-times, $r_{\mathrm{store}}$ ($a_{\mathrm{store}}$): "
+        r"study and block C, 20 worlds each; source key; percent, point estimates). On "
+        r"the changed item-times, $r_{\mathrm{store}}$ ($a_{\mathrm{store}}$): "
         r"share whose stored state, status and typed value, equals gold under the scorer's "
-        r"matcher, among the re-derived (missed) item-times; $u$: ContractValid given a correct "
-        r"store; $l$: ContractValid given a wrong store, so $r=r_{\mathrm{store}}u+"
+        r"matcher, among the re-derived (missed) item-times; $u$: accuracy given a correct "
+        r"store; $l$: accuracy given a wrong store, so $r=r_{\mathrm{store}}u+"
         r"(1{-}r_{\mathrm{store}})l$, and likewise $a$. $u$ also holds the retrieval of the "
         r"statement and the reader's reading. $m$: share of changes the key misses; at "
         r"$B{=}0$ no item is invalidated, so $a$ is Update and the store is the newest served "
         r"item. JSON: the $D{=}1$ store served as JSON records, so the same stored state. "
-        r"$D_{\mathrm{m}}$: model-written derivation (block C, whose $D{=}0$ cells equal the "
+        r"$D_{\mathrm{m}}$: the writer's programs (block C, whose $D{=}0$ cells equal the "
         r"main study's).}",
         r"\label{tab:store-reader}",
         r"\centering\scriptsize",
@@ -528,10 +527,11 @@ def tab_interaction(res: Mapping[str, Any]) -> str:
         r"\caption{The $B{\times}D$ interaction $(r_1{-}a_1)-(r_0{-}a_0)$ split into a store "
         r"part, the same contrast of the stored-correct shares, and a reader part, the same "
         r"contrast of the net reader terms $r-r_{\mathrm{store}}$ and $a-a_{\mathrm{store}}$ "
-        r"(pp, 95\% world-bootstrap interval; source-epoch key, which misses no change; "
-        r"exploratory). Store share (\%): store part over the interaction, where the "
-        r"interaction's interval excludes zero. $D_{\mathrm{m}}$ replaces the authored $D{=}1$ "
-        r"cell by the model-written derivation (block C).}",
+        r"(pp, 95\% world-bootstrap interval; source key, which misses no changed "
+        r"item-time since the fork). Store share (\%): store part over the interaction, where "
+        r"the "
+        r"interaction's interval excludes zero. $D_{\mathrm{m}}$ replaces exact recomputation "
+        r"($D{=}1$) by the writer's programs (block C).}",
         r"\label{tab:store-reader-bxd}",
         r"\centering\scriptsize",
         r"\setlength{\tabcolsep}{3.5pt}",

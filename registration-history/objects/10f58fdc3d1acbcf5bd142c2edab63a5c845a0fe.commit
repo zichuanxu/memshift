@@ -1,8 +1,0 @@
-tree 8122394b0b34ef040c4453e88a32351932c7344c
-parent dbc3672388b9261369f1bbcae95f82dbed130d4d
-author zichuanxu <zichuanxu28@gmail.com> 1790713285 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790713285 +0900
-
-Block N relaunch: LightRAG request timeouts raised as a deployment setting (its 240 s LLM timeout had expired under a shared-server queue and would have been recorded as extraction failures); natives run alone on GPU1; first launch voided
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

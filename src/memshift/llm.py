@@ -3,7 +3,7 @@
 `base_url` may list several replicas of the same model separated by "|"; requests are spread
 round-robin. The cache key is the SHA256 of the full request (model, messages, sampling, schema;
 not the replica), so identical requests from different cells share one response: this is how the
-four HoldMem cells are instantiated from the same writer outputs (plan §5.1) and how reruns are
+four HoldMem cells are instantiated from the same writer outputs and how reruns are
 replayable. HTTP errors are retried at most three times and then raised; a failed call never
 becomes a scored answer.
 
@@ -20,8 +20,8 @@ id, served model, `stop_reason`, raw `usage` and time.
 Top-level request keys starting with `memshift_` (e.g. `memshift_sample`) enter the cache key but
 are removed before the request is sent, on both paths. On the Anthropic path `seed` (which E1's
 second ingestion adds to every writer's extras) is handled the same way, and a `temperature` or
-`top_p` raises ValueError before the cache is read: the 5.5 models reject any sampling parameter
-(prereg/decisions.md, 2026-10-16), so a request that carries one is a mistake, not a setting.
+`top_p` raises ValueError before the cache is read: the 5.5 models reject any sampling
+parameter, so a request that carries one is a mistake, not a setting.
 
 Batch collection (`MEMSHIFT_ANTHROPIC_COLLECT=<file>`): an Anthropic request that misses the cache
 is not sent; its key, model and wire body are appended to the file and the caller gets an empty,
@@ -342,8 +342,8 @@ class LLMClient:
         refused = [k for k in _ANTHROPIC_REFUSED if k in body]
         if refused:
             raise ValueError(
-                f"{self.model}: the API rejects {' and '.join(refused)} on the Claude 5.5 models "
-                "(prereg/decisions.md, 2026-10-16); remove it from the client's extra_body"
+                f"{self.model}: the API rejects {' and '.join(refused)} on the Claude 5.5 models; "
+                "remove it from the client's extra_body"
             )
         if schema is not None:
             fmt = {"type": "json_schema", "schema": structured_schema(schema)}

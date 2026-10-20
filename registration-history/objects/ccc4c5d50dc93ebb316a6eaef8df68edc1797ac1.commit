@@ -1,8 +1,0 @@
-tree b0fa2fb2f985974925b21bb8f4e64a0d9516ec90
-parent 24f622c259dfd95211f845a7751be77d0c020d6e
-author zichuanxu <zichuanxu28@gmail.com> 1790784773 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790784773 +0900
-
-Paper: results reorganised by claim (detection is cheap and repair decides, with the class-split table, the measured terms of Eq. 1, the out-of-sample test and the regime; what repair needs; citations are not dependencies; stored derived state against reading at query time; changing the writer with T1 net change and the predictor baselines; replication with the 15 non-identity contrasts and model families; native systems as B-label consistency against null baselines; rendered worlds and rank correlation); registered controls pending as TODO-RESULT(ctl); replication, construct, family, native and rendered tables, the calibration and zero-system figures and the new exploratory tables moved to the appendix
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

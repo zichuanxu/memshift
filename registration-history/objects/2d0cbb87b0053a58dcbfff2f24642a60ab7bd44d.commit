@@ -1,8 +1,0 @@
-tree be5c47cd178e3ecf651451fa1dca591c4491020b
-parent 4338aea8110f8167b4ee08114b4c953c7d18cd9d
-author zichuanxu <zichuanxu28@gmail.com> 1790786376 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790786376 +0900
-
-Paper: hostile-review pass over the main text (abstract and introduction scoped, cost and interaction wording, registered controls and uncontrolled information access stated, limitations completed, one-line consistency fixes in related work); design-rule table condensed
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

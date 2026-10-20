@@ -1,6 +1,7 @@
-"""Statistics (plan §6 "统计"): the unit is a per-item paired difference, clustered by world; the
-confidence interval is a world-level bootstrap. Equivalence uses TOST on the world-level mean
-difference with the bootstrap distribution (stage 2 only; stage 1 reports estimates and widths).
+"""Statistics: the unit is a per-item paired difference, clustered by world;
+the confidence interval is a world-level bootstrap. Equivalence uses TOST on the world-level mean
+difference with the bootstrap distribution (test worlds only; the development worlds report
+estimates and widths).
 """
 
 from __future__ import annotations

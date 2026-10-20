@@ -1,4 +1,4 @@
-"""E4 extension analysis (prereg v1 §4 "E4 扩展"): ContractValid by (stream, system) per source
+"""E4 extension analysis: ContractValid by (stream, system) per source
 and pooled, the official - ideal drop per system, and the sync-semantics x B interaction, over all
 probes and over touched probes.
 
@@ -7,7 +7,7 @@ Source       the source of the true event that triggered a probe (tag `source`);
 Cells        ContractValid per (stream, system), per source and pooled, all and touched probes.
 Drop         CV(official, L) - CV(ideal) for one system, paired by probe, clustered by world.
 Interaction  Drop(B=1) - Drop(B=0), paired by (world, probe). The calendar value over all probes is
-             the pre-registered primary result (replication of the stage-1 E4 interaction); the
+             the primary result (replication of the stage-1 E4 interaction); the
              other sources and the pooled value are descriptive.
 Divergence   state divergence per (stream, source) over the probe times, and pooled over sources.
 All intervals are world-level bootstraps (scoring.stats: 2,000 draws, seed 996).

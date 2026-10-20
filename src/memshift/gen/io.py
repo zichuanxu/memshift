@@ -1,4 +1,4 @@
-"""Write a generated world to disk: JSONL + manifest + SHA256 (plan §4.2 "规模与种子").
+"""Write a generated world to disk: JSONL + manifest + SHA256.
 
 worlds/<world_id>/<branch>/events.jsonl   one Event per line (see model.Event.to_json)
 worlds/<world_id>/<branch>/world.json     slots, timelines, kappa, agents, consent, params

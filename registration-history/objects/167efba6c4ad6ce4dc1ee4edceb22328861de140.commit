@@ -1,8 +1,0 @@
-tree 98536abdc4ec4d698c38021f16226c495e372cf5
-parent 25d5fccbbbec6ac0a611380e0d9249b427f3b940
-author zichuanxu <zichuanxu28@gmail.com> 1790776825 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790776825 +0900
-
-Stages re-merged with the exploratory E1-family analyses (WS1a): explore_* blocks added to the development, orphan-development, test, replication, block C and gemma M2 E1 analyses (every registered field is unchanged; the development stages also gain the earlier exploratory explore_D_effect_repair_* contrasts), new stages for the fifteen short worlds and for the cross-stage analyses (out-of-sample test, replication accounting, short-world prediction, cost model, noise floor)
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

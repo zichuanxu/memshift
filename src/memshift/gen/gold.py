@@ -1,4 +1,4 @@
-"""Gold value, status and dependency set of every slot at any time t (plan §4.2 "gold 事实").
+"""Gold value, status and dependency set of every slot at any time t.
 
 `deps = (positive object ids with revisions, scope predicate, negative deps)`. Script-level user
 attributes come from timelines; everything structured is recomputed from source state, so gold

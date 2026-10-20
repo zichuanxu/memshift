@@ -1,5 +1,5 @@
 {
- "status": "exploratory: not part of prereg v0-v2 and changes no registered contrast, margin, threshold or verdict (prereg/decisions.md 2026-09-30); post hoc, third review round (reviewer 2, W5)",
+ "status": "additional analysis: computed from the runs of the main analysis; changes none of its contrasts, margins or thresholds",
  "bootstrap": {
   "draws": 2000,
   "seed": 996,

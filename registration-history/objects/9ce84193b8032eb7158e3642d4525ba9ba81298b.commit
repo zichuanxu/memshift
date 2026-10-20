@@ -1,8 +1,0 @@
-tree 6892e5524b23f96ecf66740ebe64466a130accd5
-parent bbd6152604326be95ed23e1bef345ddd25249c6f
-author zichuanxu <zichuanxu28@gmail.com> 1790696964 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790696964 +0900
-
-Paper appendix H, stage-4 protocols (prereg v2): design and implementation of blocks R, M, N, C and L with no results. R: fresh worlds 1020-1039, replication verdicts (replicated / same direction / not replicated, equivalence verdicts, the three falsification paths re-judged). M: five model families with pinned revisions and engine and request settings, M1 cross-family writer switches with the pooled path-3 rule over eight switches, M2 checks (i)-(v) and the family verdict, M3 reader swaps. N: the five pre-registered systems, Letta replaced by Cognee with its recorded reason, the integration contract, one table row per system (pin, storage, sync path, LLM use, embedder, pre-registered (D,B) label and reason; Cognee details left as a TODO), label inference, N-1..N-4, white-box cited-cluster cells, membership, exploratory rank correlation. C: D1s cell, program request, restricted interpreter, checking of definition items against the writer's own program, C1-C4. L: what is and is not rendered, anchors and guards, retry then template, fidelity, byte-identical shared events, paired comparison. Labels app:stage4-R/-M/-N/-C/-L. Every citation key exists in references.bib; missing system papers are listed in a comment at the top of the file.
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

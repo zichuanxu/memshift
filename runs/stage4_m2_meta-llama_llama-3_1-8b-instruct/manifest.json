@@ -7,10 +7,10 @@
   "experiment": "merged-m2",
   "files_sha256": {
     "analysis/e1_item_table.jsonl": "05c0ae02af9e0b93c18405eb08bba33e5d88cd30a66445b8d6fcb5d23eef3059",
-    "analysis/e1_metrics.json": "302dc90d09e0df4d77b6a59b5b2de9b9ab0ad95cb27adcab73094b0f1676b134",
-    "analysis/families.json": "8584d44897d79d9863c5571315f2b6c0c22cabaca991c04be41b986356cc8be4"
+    "analysis/e1_metrics.json": "007426d9959b0fb16ad208a3d6523a322d81b434e77e9b525cdf5ba6fcf15053",
+    "analysis/families.json": "64eeea4a3ad680127306cbaf0dc9393c0ef2db73b529e02cb99815810daad8ac"
   },
-  "note": "registered block M2 (prereg/v2.md \u00a72) for Llama-3.1-8B-Instruct as writer and reader on worlds 1000-1009: the E1 analysis and checks (i)-(v) in families.json, computed from the raw runs, no model call; the runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache with the original parameters (their src t0 stores were not in the cache before), replacing the 20260930 runs (prereg/decisions.md 2026-10-17); the runs of worlds 1004-1005 and 1008-1009 are unchanged",
+  "note": "block M2 for Llama-3.1-8B-Instruct as writer and reader on worlds 1000-1009: the E1 analysis and checks (i)-(v) in families.json, computed from the raw runs, no model call; the runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache with the original parameters (their src t0 stores were not in the cache before), replacing the 20260930 runs; the runs of worlds 1004-1005 and 1008-1009 are unchanged",
   "producers": {
     "analysis/e1_item_table.jsonl": "python -m memshift.analysis.stage m2 runs/stage4_m2_meta-llama_llama-3_1-8b-instruct runs/m2_meta-llama_llama-3_1-8b-instruct_s1000-1001_20261017T041418Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1002-1003_20261017T041548Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1004-1005_20260930T090503Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1006-1007_20261017T041718Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1008-1009_20260930T090507Z",
     "analysis/e1_metrics.json": "python -m memshift.analysis.stage m2 runs/stage4_m2_meta-llama_llama-3_1-8b-instruct runs/m2_meta-llama_llama-3_1-8b-instruct_s1000-1001_20261017T041418Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1002-1003_20261017T041548Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1004-1005_20260930T090503Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1006-1007_20261017T041718Z runs/m2_meta-llama_llama-3_1-8b-instruct_s1008-1009_20260930T090507Z",

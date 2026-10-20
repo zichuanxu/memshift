@@ -1,5 +1,5 @@
 """Send collected Claude requests through Anthropic's Message Batches API (half the online price)
-and write the results into the response cache (prereg v4b block Y; `memshift.llm`, batch
+and write the results into the response cache (the Claude reader; `memshift.llm`, batch
 collection).
 
     python -m memshift.claude_batch submit --state S.json COLLECTED.jsonl ...

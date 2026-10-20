@@ -1,13 +1,14 @@
-"""Block M2 (prereg/v2.md §2): is the two-factor pattern a property of the layer or of one model
-family? For an E1 stage run with another family as writer and reader, the pre-registered checks:
+"""Block M2: is the two-factor pattern a property of the layer or of one model family? For an E1
+stage run with another family as writer and reader, the checks:
 
-(i)   path 2: the D effect on missed invalidation is not triggered at either granularity or branch;
+(i)   path 2: the D effect on missed invalidation is within its threshold at either granularity or
+      branch (`gate.path2`);
 (ii)  B effect on Update (source epoch, D pooled) on S_src > +2 pp, 95% interval excluding 0;
 (iii) D effect on repair correctness (source epoch) > 0 on S_src and on S_def (interval > 0);
 (iv)  B x D interaction on Update (source epoch) on S_def > 0 (interval > 0);
 (v)   after S_def, the zero system's ContractValid is below HoldMem(1,1)'s: item-paired difference
       zero - HoldMem(1,1) over the asked post-shift probes, world bootstrap, interval below 0.
-The family verdict ("two-factor pattern holds") is (ii)-(iv) all true.
+`ii_to_iv_true`: checks (ii)-(iv) are all true.
 
 Usage: python -m memshift.analysis.families OUT LABEL=E1_STAGE [LABEL=E1_STAGE ...]
 (each stage directory holds analysis/e1_metrics.json and analysis/e1_item_table.jsonl)
@@ -56,7 +57,7 @@ def zero_minus_hm(items: list[dict[str, Any]], branch: str = "def") -> dict[str,
 def family_checks(e1: dict[str, Any], items: list[dict[str, Any]]) -> dict[str, Any]:
     c = e1["contrasts"]
     checks = {
-        "i_path2_not_triggered": not path2(e1)["triggered"],
+        "i_D_missed_within_threshold": path2(e1)["within_threshold"],
         "ii_B_update_src": _above(c["src"]["B_effect_update_pooled_source"], PATH1_MIN),
         "iii_D_repair_src": _above(c["src"]["D_effect_repair_source"]),
         "iii_D_repair_def": _above(c["def"]["D_effect_repair_source"]),
@@ -67,7 +68,7 @@ def family_checks(e1: dict[str, Any], items: list[dict[str, Any]]) -> dict[str, 
     core = ("ii_B_update_src", "iii_D_repair_src", "iii_D_repair_def", "iv_BxD_def")
     return {
         "checks": checks,
-        "pattern_holds": all(checks[k] for k in core),
+        "ii_to_iv_true": all(checks[k] for k in core),
         "estimates": {
             "B_update_src": c["src"]["B_effect_update_pooled_source"],
             "D_repair_src": c["src"]["D_effect_repair_source"],
@@ -88,7 +89,9 @@ def analyse(out: Path, stages: dict[str, Path]) -> dict[str, Any]:
         res[label] = family_checks(
             json.loads((d / "e1_metrics.json").read_text()), read_jsonl(d / "e1_item_table.jsonl")
         )
-    res["families_holding"] = sum(v["pattern_holds"] for v in res.values() if isinstance(v, dict))
+    res["families_ii_to_iv_true"] = sum(
+        v["ii_to_iv_true"] for v in res.values() if isinstance(v, dict)
+    )
     Path(out, "analysis").mkdir(parents=True, exist_ok=True)
     Path(out, "analysis", "families.json").write_text(json.dumps(res, indent=1))
     return res
@@ -99,4 +102,4 @@ if __name__ == "__main__":
         Path(sys.argv[1]),
         {spec.split("=", 1)[0]: Path(spec.split("=", 1)[1]) for spec in sys.argv[2:]},
     )
-    print(json.dumps({k: v["pattern_holds"] for k, v in res.items() if isinstance(v, dict)}))
+    print(json.dumps({k: v["ii_to_iv_true"] for k, v in res.items() if isinstance(v, dict)}))

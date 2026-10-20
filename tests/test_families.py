@@ -26,11 +26,11 @@ def _items(zero_cv: int, hm_cv: int) -> list[dict]:
 
 def test_stage2_main_family_passes_all_checks():
     res = family_checks(json.loads(E1.read_text()), _items(0, 1))
-    assert res["pattern_holds"]
+    assert res["ii_to_iv_true"]
     assert all(res["checks"].values())
     assert res["estimates"]["zero_minus_hm11_def"]["est"] == -1.0
 
 
 def test_zero_not_below_fails_check_v_only():
     res = family_checks(json.loads(E1.read_text()), _items(1, 1))
-    assert res["pattern_holds"] and not res["checks"]["v_zero_below_hm11_def"]
+    assert res["ii_to_iv_true"] and not res["checks"]["v_zero_below_hm11_def"]

@@ -1,5 +1,5 @@
-"""Block C analysis (prereg v2 §4): C1-C4 and program statistics, on synthetic rows and one
-offline end-to-end run."""
+"""Analysis of the D1s cell (writer-authored programs): C1-C4 and program statistics, on
+synthetic rows and one offline end-to-end run."""
 
 import json
 import math
@@ -143,7 +143,7 @@ def test_c4_sees_a_d_effect_on_detection_if_there_is_one():
     assert c["C4_D1s_effect_missed_source"].est == 1.0  # D1s missed everything, D0 nothing
 
 
-def test_contrasts_need_their_cells_and_label_the_cited_ones_exploratory():
+def test_contrasts_need_their_cells_and_label_the_cited_ones_explore():
     assert e1_synth.contrasts(rows_for("holdmem_D0B0", lambda wi, i: 1), "def") == {}
     only_d1s = [
         r for r in table() if r["system"] in ("holdmem_D1sB1_source", "holdmem_D0B1_source")

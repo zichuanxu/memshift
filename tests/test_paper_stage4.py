@@ -1,7 +1,7 @@
-"""Stage-4 paper generators (prereg v2 §8): every number, table and the predicted-vs-observed figure
-come from staged analyses; a stage that has not run renders as the MISSING marker, and nothing is
-invented for it. Real analyses (committed stages, and the analysis functions run on small
-synthetic data) supply the input structures, so the readers follow the writers' actual keys."""
+"""Stage-4 paper generators: every number, table and figure come from staged analyses; a stage
+that has not run renders as the MISSING marker, and nothing is invented for it. Real analyses
+(committed stages, and the analysis functions run on small synthetic data) supply the input
+structures, so the readers follow the writers' actual keys."""
 
 import copy
 import json
@@ -31,6 +31,18 @@ from tests.test_rendered import _table as rendered_table
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "runs"
 BLOCK_PREFIXES = ("Rep", "Synth", "MOne", "MTwo", "MThree", "Nat", "Rend", "Rank", "Mult")
+VERDICT_WORDS = {
+    "holds",
+    "fails",
+    "does not hold",
+    "not judged",
+    "judged",
+    "triggered",
+    "not triggered",
+    "replicated",
+    "not replicated",
+    "same direction",
+}
 
 
 def _load(stage: str, name: str) -> Any:
@@ -77,6 +89,13 @@ def _est(x, lo=None, hi=None):
     }
 
 
+def no_verdicts(out: dict[str, str]) -> None:
+    """No macro states a verdict: no such name, and no value that is a verdict word."""
+    for name, value in out.items():
+        assert not re.search(r"Verdict|Holds|Triggered|Replicated|Claim|Pattern|Check[IV]", name)
+        assert value not in VERDICT_WORDS, (name, value)
+
+
 def _first_body(tex: str) -> str:
     """The rows of a table's first tabular, without the caption (which explains the marks)."""
     return tex.split(r"\toprule", 1)[1].split(r"\bottomrule", 1)[0]
@@ -111,9 +130,19 @@ def test_no_stage_is_staged_renders_only_missing_markers():
     for name, value in macros.items():
         pn._macro(name, value)  # letters-only names
         assert name.startswith(BLOCK_PREFIXES), name
-        # the documented labels are pre-registered predictions, not results
+        # the documented labels come from the system audit, not from a stage
         assert value == MISSING or name.endswith("Documented"), (name, value)
     assert macros["NatLightRagDocumented"] == "(0,1)" and macros["NatMemDocumented"] == "(0,0)"
+
+
+def test_an_estimate_whose_printed_interval_has_zero_width_is_printed_alone():
+    assert pn._macro("A", r"0.0\,pp [0.0, 0.0]") == r"\newcommand{\A}{0.0\,pp}"
+    assert pn._macro("A", r"$+$100.0\,pp [$+$100.0, $+$100.0]") == r"\newcommand{\A}{$+$100.0\,pp}"
+    assert pn._macro("A", r"0.0\% [0.0, 0.0]") == r"\newcommand{\A}{0.0\%}"
+    assert pn._macro("A", "1.00 [1.00, 1.00]") == r"\newcommand{\A}{1.00}"
+    kept = r"0.0\,pp [$-$0.9, $+$0.9]"
+    assert pn._macro("A", kept) == rf"\newcommand{{\A}}{{{kept}}}"
+    assert pn._macro("A", "12 of 20") == r"\newcommand{\A}{12 of 20}"
 
 
 def test_stage4_names_do_not_collide_with_the_earlier_macros():
@@ -152,13 +181,13 @@ def test_a_name_produced_by_two_blocks_is_an_error(monkeypatch):
         pn.stage4_numbers(EMPTY)
 
 
-# --------------------------------------------------------- stage 2 and stage 3 exploratory macros
+# ---------------------------------------------------------------- stage 2 and stage 3 Ex macros
 def test_t1_macros_for_the_cells_other_than_the_primary_one():
     e2m = ORIG["e2"]
     out = pn.e2_numbers(e2m)
     cells = e2m["explore_t1_cells"]
     for tier, tag in (("same", "Same"), ("upgrade", "Up"), ("downgrade", "Down")):
-        # the pre-registered cell is the same computation as the primary T1
+        # the primary cell's T1 is the same computation as `t1`
         assert cells[tier]["holdmem_D1B1_source"] == e2m["t1"][tier]
         c = cells[tier]["holdmem_D0B1_source"]
         assert out[f"ETwoExTOneDzeroBone{tag}"] == pn.ci(c["delta_90"], pn.pp)
@@ -223,18 +252,21 @@ def test_replication_e3_macros_give_both_values_on_the_replication_worlds():
     assert full["RepCvZeroTwelveEst"] == pn.pct(zero["est"])
     assert full["RepCvHoldTwelveEst"] == pn.pct(hold["est"])
     assert full["RepCvOracleTwelveEst"] == pn.pct(per["oracle"]["contract_valid"]["est"])
-    # without definition items, and against the stage-2 verdicts
+    # without definition items: the same T3 outcome as stage 2 in every unit
     nd = per["holdmem_D1B1_source"]["explore_no_definition"]
     assert out["RepExNoDefTThreeHoldTwelve"] == pn.ci(nd["minus_oracle"], pn.pp)
     assert out["RepExNoDefTThreeResultHoldOne"] == "fail"
-    assert out["RepExNoDefTThreeReplicated"] == "9 of 9"
+    for h, htag in paper_data.HORIZON_TAGS:
+        for system, stag in paper_data.SYSTEM_TAGS:
+            orig_nd = ORIG["e3"]["horizons"][h][system]["explore_no_definition"]
+            assert out[f"RepExNoDefTThreeResult{stag}{htag}"] == pn._pass(orig_nd["T3_pass"])
     assert out["RepTThreePassAll"] == "3 of 9" and out["RepExNoDefTThreePassAll"] == "1 of 9"
     oracle_nd = per["oracle"]["explore_no_definition"]["contract_valid"]
     assert out["RepExNoDefCvOracleTwelve"] == pn.ci(oracle_nd)
     assert set(pn.rep_e3_numbers(None, None).values()) == {MISSING}
     only_rep = pn.rep_e3_numbers(None, rep)
     assert only_rep["RepZeroMinusHoldOne"] != MISSING
-    assert only_rep["RepExNoDefTThreeReplicated"] == MISSING
+    no_verdicts(out)
 
 
 def test_mem0_discriminability_macros_from_stage_3():
@@ -267,72 +299,54 @@ def test_mem0_discriminability_macros_from_stage_3():
 # ------------------------------------------------------------------------------------- block R
 def test_replication_view_partial_stage_keeps_what_needs_only_e1_and_e3():
     view = paper_data.replication_view(ORIG, REP_PARTIAL)
-    assert set(view["paths"]) == {"path1", "path2"} and view["claim_level"] is None
+    assert set(view["paths"]) == {"path1", "path2"} and "claim_level" not in view
     assert view["t1"] == {} and len(view["t3"]) == 9 and len(view["t4"]) == 9
     assert view["n_worlds"] == {"orig": 20, "rep": 20}
     out = pn.rep_numbers(view)
-    assert out["RepPathOne"] == "not triggered" and out["RepPathTwo"] == "not triggered"
-    assert out["RepPathOneOrig"] == "not triggered"
-    assert out["RepPathThree"] == MISSING and out["RepClaimLevel"] == MISSING
-    assert out["RepTOneReplicated"] == MISSING and out["RepTOneVerdictSame"] == MISSING
-    assert out["RepTThreeReplicated"] == "9 of 9" and out["RepTFourReplicated"] == "9 of 9"
+    p1 = view["paths"]["path1"]["estimate"]
+    assert out["RepPathOneEstimate"] == pn.ci(p1, pn.pp) and out["RepPathTwoMaxAbs"] == pn.pp(0.0)
+    assert out["RepPathThreeSlope"] == MISSING and out["RepTOneSame"] == MISSING
+    # T3 and T4 have the main study's outcome in every unit
+    for unit in ("t3", "t4"):
+        assert all(v["rep"] == v["orig"] for v in view[unit].values()), unit
     assert out["RepTThreeResultHoldOne"] == "pass" and out["RepTThreeResultRagOne"] == "fail"
+    no_verdicts(out)
 
 
-def test_replication_macros_follow_the_analysis_verdicts():
+def test_replication_macros_give_both_estimates_of_every_contrast():
     view = paper_data.replication_view(ORIG, REP_PARTIAL)
     out = pn.rep_numbers(view)
     rows = replication.contrast_rows(ORIG["e1"], REP_PARTIAL["e1"])
     effects = [r for r in rows if r["kind"] == "effect"]
-    assert out["RepEffects"] == str(len(effects))
-    assert int(out["RepReplicated"]) + int(out["RepSameDirection"]) + int(
-        out["RepNotReplicated"]
-    ) == len(effects)
-    assert out["RepEffectsSource"] == out["RepReplicatedSource"] == "21"  # all replicate
-    row = next(
-        r for r in rows if (r["branch"], r["contrast"]) == ("src", "B_effect_update_pooled_source")
-    )
-    assert out["RepBEffectUpdatePooledSourceSrc"] == pn.ci(row["rep"], pn.pp)
-    assert out["RepBEffectUpdatePooledSourceSrcOrig"] == pn.ci(row["orig"], pn.pp)
-    assert out["RepBEffectUpdatePooledSourceSrcVerdict"] == row["verdict"] == "replicated"
-    # descriptive contrasts have an estimate but no verdict macro
-    assert "RepDEffectFalseInvalSourceSrc" in out
-    assert "RepDEffectFalseInvalSourceSrcVerdict" not in out
-    assert out["RepDEffectMissedSourceDefVerdict"] == "not triggered"
+    assert out["RepEffects"] == str(len(effects)) and out["RepEffectsSource"] == "21"
+    for r in rows:
+        name = f"Rep{paper_data.camel(r['contrast'])}{dict(paper_data.BRANCH_TAGS)[r['branch']]}"
+        assert out[name] == pn.ci(r["rep"], pn.pp) and out[f"{name}Orig"] == pn.ci(r["orig"], pn.pp)
+    assert "RepDEffectFalseInvalSourceSrc" in out and "RepDEffectMissedSourceDefOrig" in out
     assert out["RepWorlds"] == out["RepWorldsOrig"] == "20"
+    no_verdicts(out)
 
 
-def test_self_replication_with_all_three_stages_gives_the_claim_level():
+def test_self_replication_with_all_three_stages_gives_every_quantity():
     view = paper_data.replication_view(ORIG, ORIG)
     out = pn.rep_numbers(view)
-    assert (
-        out["RepClaimLevel"] == "registered claim: two-factor account with quantitative prediction"
-    )
-    assert out["RepPathThree"] == "not triggered"
-    assert out["RepTOneReplicated"] == "3 of 3" and out["RepTThreeReplicated"] == "9 of 9"
-    # the estimate for the tier called "same" and the count of replicated tiers are two macros
     assert out["RepTOneSame"] == pn.ci(ORIG["e2"]["t1"]["same"]["delta_90"], pn.pp)
-    assert out["RepTOnePassSame"] == "within" and out["RepTOneVerdictUp"] == "replicated"
-    assert out["RepNotReplicated"] == "0"
+    assert out["RepTOnePassSame"] == "within"
     assert out["RepPathThreeSlope"].startswith("1.01 (90\\% lower bound 0.90)")
-    assert MISSING not in [
-        v for k, v in out.items() if k.startswith(("RepPath", "RepTOne", "RepClaim"))
-    ]
+    assert MISSING not in [v for k, v in out.items() if k.startswith(("RepPath", "RepTOne"))]
+    no_verdicts(out)
 
 
-def test_a_flipped_effect_is_not_replicated_and_marked_so():
+def test_a_flipped_effect_shows_in_the_fresh_estimate():
     rep = copy.deepcopy(ORIG)
-    rep["e1"]["contrasts"]["src"]["B_effect_update_pooled_source"].update(
-        est=-0.01, lo=-0.03, hi=0.01
-    )
+    flipped = rep["e1"]["contrasts"]["src"]["B_effect_update_pooled_source"]
+    flipped.update(est=-0.01, lo=-0.03, hi=0.01)
     view = paper_data.replication_view(ORIG, rep)
     out = pn.rep_numbers(view)
-    assert out["RepBEffectUpdatePooledSourceSrcVerdict"] == "not replicated"
-    assert out["RepPathOne"] == "triggered"  # the path-1 threshold is +2 pp
-    assert out["RepClaimLevel"] == "registered claim: repair single factor (D)"
-    assert int(out["RepNotReplicated"]) >= 1
+    assert out["RepBEffectUpdatePooledSourceSrc"] == pn.ci(flipped, pn.pp)
+    assert out["RepPathOneEstimate"] == pn.ci(flipped, pn.pp)  # binding's effect pooled over D
     tab = pt.tab_replication(view)
-    assert r"\fail" in tab and "$-$1.0" in tab
+    assert pt.ci_pair_cells(flipped, sign=True) in tab and r"\fail" not in tab
 
 
 def test_pooled_forty_worlds_macros_and_partial_stage():
@@ -340,31 +354,26 @@ def test_pooled_forty_worlds_macros_and_partial_stage():
     out = pn.rep_pool_numbers(pooled)
     est = ORIG["e1"]["contrasts"]["src"]["B_effect_update_pooled_source"]
     assert out["RepPoolBEffectUpdatePooledSourceSrc"] == pn.ci(est, pn.pp)
-    assert out["RepPoolPathThree"] == "not triggered"
+    assert out["RepPoolPathOneEstimate"] == pn.ci(est, pn.pp)
     assert out["RepPoolTOneSame"] == pn.ci(ORIG["e2"]["t1"]["same"]["delta_90"], pn.pp)
     assert out["RepPoolTThreeResultHoldTwelve"] == "pass"
     only_e1 = pn.rep_pool_numbers(
         paper_data.pooled_view({"e1": ORIG["e1"], "e2": None, "e3": None})
     )
-    assert only_e1["RepPoolPathOne"] == "not triggered"
-    assert only_e1["RepPoolPathThree"] == MISSING and only_e1["RepPoolTThreeHoldOne"] == MISSING
+    assert only_e1["RepPoolPathOneEstimate"] == pn.ci(est, pn.pp)
+    assert only_e1["RepPoolTOneSame"] == MISSING and only_e1["RepPoolTThreeHoldOne"] == MISSING
+    no_verdicts(out)
 
 
 def test_replication_direction_counts_come_from_the_estimates():
     out = pn.rep_numbers(paper_data.replication_view(ORIG, REP_PARTIAL))
-    # 42 contrasts predicted non-zero; 37 intervals exclude 0 in either stage, 36 of them in the
-    # predicted (positive) direction and one, the orphan cited B x D, the other way
+    # 42 contrasts expected to be non-zero; 37 intervals exclude 0 in either stage, 36 of them in
+    # the expected (positive) direction and one, the orphan cited B x D, the other way
     assert out["RepDirectional"] == out["RepOrigDirectional"] == "42"
     assert (out["RepOrigExcludesZero"], out["RepExcludesZero"]) == ("37", "37")
     assert (out["RepOrigExcludesPredicted"], out["RepExcludesPredicted"]) == ("36", "36")
     assert out["RepOrigExcludesOpposite"] == out["RepExcludesOpposite"] == "1"
     assert (out["RepOrigEstimatePredicted"], out["RepEstimatePredicted"]) == ("37", "38")
-    # 37 replicate, 36 as predicted: the 37th replicates a negative effect
-    assert out["RepReplicated"] == "37"
-    assert out["RepReplicatedAsPredicted"] == "36"
-    assert out["RepReplicatedAgainstPrediction"] == "1"
-    assert out["RepReplicatedAgainstPredictionSource"] == "0"
-    assert out["RepReplicatedAgainstPredictionCited"] == "1"
     assert out["RepDirectionalSource"] == out["RepDirectionalCited"] == "21"
     assert out["RepOrigExcludesPredictedSource"] == "21"  # every source-epoch contrast
     view = paper_data.multiplicity_view(MULT_RESULT, SOURCES)
@@ -380,59 +389,62 @@ def test_replication_direction_counts_come_from_the_estimates():
     }
 
 
-def test_replication_table_has_a_separate_as_predicted_column():
-    tab = pt.tab_replication(paper_data.replication_view(ORIG, REP_PARTIAL))
-    assert "as pred." in tab and "repl." in tab
-    assert r"\begin{tabular}{@{}l rrcc rrcc rrcc@{}}" in tab
-    label = r"$B{\times}D$ interaction, Update"
-    rows = [line.split(" & ") for line in tab.splitlines() if line.startswith(rf"\quad {label}")]
-    assert len(rows) == 2  # source-epoch and cited-cluster binding
-    cited = rows[1]
-    assert len(cited) == 13
-    # orphan B x D at cited-cluster binding: negative in both stages and replicated (same sign,
-    # interval excludes 0), so replicated and against the prediction
-    assert cited[11] == r"\pass" and cited[12].removesuffix(r" \\") == r"\fail\,\fail"
-    # every source-epoch row (the D effect on missed invalidation, judged by path 2, included) is
-    # as predicted in both stages, on all three branches
-    source_rows = [
-        line.split(" & ")
-        for line in tab.split(r"\emph{cited-cluster key}")[0].splitlines()
-        if line.startswith(r"\quad ")
-    ]
-    assert len(source_rows) == 8 and any("missed invalidation" in c[0] for c in source_rows)
-    for cells in source_rows:
-        for k in (4, 8, 12):
-            assert cells[k].removesuffix(r" \\") == r"\pass\,\pass", cells[0]
+def test_replication_table_gives_both_estimates_with_their_intervals():
+    view = paper_data.replication_view(ORIG, REP_PARTIAL)
+    tab = pt.tab_replication(view)
+    assert "agrees" not in tab and "as pred." not in tab and "repl." not in tab
+    assert r"\begin{tabular}{@{}ll r@{\,}l r@{\,}l r@{\,}l@{}}" in tab
+    lines = [ln.removesuffix(r" \\").split(" & ") for ln in _first_body(tab).splitlines()]
+    rows = [c for c in lines if len(c) == 8 and c[1] in ("main", "fresh")]
+    assert len(rows) == 2 * 2 * len(pt.REP_ROWS)  # both keys, main and fresh per contrast
+    label = r"\quad $B{\times}D$ interaction, Update"
+    for g in ("source", "cited"):
+        k = next(i for i, c in enumerate(rows) if c[0] == label and (g == "source" or i > 16))
+        main, fresh = rows[k], rows[k + 1]
+        assert (main[1], fresh[0], fresh[1]) == ("main", "", "fresh")
+        for j, b in zip((2, 4, 6), ("src", "def", "orphan"), strict=True):
+            row = view["rows"][b, f"BxD_interaction_update_{g}"]
+            # every estimate with its interval, in two cells
+            assert " & ".join(main[j : j + 2]) == pt.ci_pair_cells(row["orig"], sign=True)
+            assert " & ".join(fresh[j : j + 2]) == pt.ci_pair_cells(row["rep"], sign=True)
 
 
-def test_replication_table_marks_and_partial_stage():
+def test_replication_table_without_marks_and_partial_stage():
     full = pt.tab_replication(paper_data.replication_view(ORIG, REP_PARTIAL))
-    assert r"\pass" in full and r"$\sim$" in full and r"\fail" in full  # cited-cluster rows
-    assert "agreement check " + MISSING in full  # E2 not staged: path 3 and T1 are missing
-    assert "utility floor 9 of 9" in full
+    assert r"\pass" not in full and r"$\sim$" not in full and r"\fail" not in full
+    assert "slope of writer agreement" not in full  # the design quantities are in the text
+    assert "same outcome" not in full and "diagnostic tests" not in full
+    assert "regist" not in full and "triggered" not in full and "prediction" not in full
     assert "path~" not in full and "block R" not in full and "App.~" not in full
     assert MISSING not in _first_body(full)  # the contrast rows need only E1
     empty = pt.tab_replication({})
-    assert empty.count(MISSING) > 100 and r"\pass" not in _first_body(empty)
+    assert _first_body(empty).count(MISSING) == 2 * 2 * len(pt.REP_ROWS) * 3
 
 
 # ------------------------------------------------------------------------------------- block C
 C_E1 = _load("stage4_c_e1", "e1_metrics.json")
 
 
-def test_construct_macros_and_verdict_rules():
+def test_construct_macros():
     out = pn.synth_numbers(C_E1)
     con = C_E1["contrasts"]
     assert out["SynthCOneSrc"] == pn.ci(con["src"]["C1_repair_D1s_minus_D0_source"], pn.pp)
     assert out["SynthCTwoShareDef"] == pn.ci(con["def"]["C2_share_of_D_effect_source"], pn.pct)
-    for name in ("COne", "CTwo", "CThree", "CFour"):
-        assert out[f"Synth{name}VerdictSrc"] == out[f"Synth{name}VerdictDef"] == "holds"
-    assert "SynthCOneVerdictOrphan" not in out and "SynthExCOneOrphan" in out  # exploratory
+    for name, key in (
+        ("COne", "C1_repair_D1s_minus_D0_source"),
+        ("CTwo", "C2_repair_D1_minus_D1s_source"),
+        ("CThree", "C3_BxD_interaction_update_D1s_source"),
+        ("CFour", "C4_D1s_effect_missed_source"),
+    ):
+        for b, btag in paper_data.BRANCH_TAGS[:2]:
+            assert out[f"Synth{name}{btag}"] == pn.ci(con[b][key], pn.pp)
+    assert "SynthCOneOrphan" not in out and "SynthExCOneOrphan" in out  # the orphan branch: Ex
+    no_verdicts(out)
     assert out["SynthExCOneCitedSrc"] == pn.ci(
         con["src"]["explore_C1_repair_D1s_minus_D0_cited"], pn.pp
     )
     assert out["SynthWorlds"] == "20"
-    for cls, cname in pn.CLASS_NAMES:  # exploratory: C1 and C2 by item class
+    for cls, cname in pn.CLASS_NAMES:  # C1 and C2 by item class
         for b, btag in paper_data.BRANCH_TAGS:
             c = con[b]
             assert out[f"SynthExCOne{cname}{btag}"] == pn.ci(
@@ -454,30 +466,21 @@ def test_construct_macros_and_verdict_rules():
     assert set(paper_data.ITEM_TYPES) == set(sp) - {"all"}  # the static list is the data's
 
 
-def test_synthetic_verdict_rules():
-    holds = paper_data.synth_holds
-    assert holds("above", _est(0.05, 0.02, 0.08)) is True
-    assert holds("above", _est(0.05, -0.01, 0.08)) is False  # interval reaches 0
-    assert holds("above", None) is None
-    assert holds("nonneg", _est(0.0, -0.02, 0.02)) is True  # the point estimate decides
-    assert holds("nonneg", _est(-0.001, -0.02, 0.02)) is False
-    assert holds("path2", _est(0.0, 0.0, 0.0)) is True
-    assert holds("path2", _est(0.05, 0.03, 0.07)) is False
-
-
 def test_construct_table_and_missing():
     tab = pt.tab_construct(C_E1)
-    # C1, C2, C4 judged on S_src and S_def, C3 on S_def only (prereg v2 section 4)
-    assert _first_body(tab).count(r"\pass") == 7 and r"\fail" not in _first_body(tab)
+    # the contrasts with their intervals after each shift, without marks
+    assert r"\pass" not in tab and r"\fail" not in tab and "pred." not in tab
     c3 = next(line for line in tab.splitlines() if line.startswith("$B{\\times}D$ on Update"))
-    assert c3.split(" & ")[3] == "" and c3.split(" & ")[5] == r"\pass"  # S_src: no mark
+    # label, an empty count, then an estimate and its interval per shift (two aligned cells)
+    assert len(c3.split(" & ")) == 8 and c3.split(" & ")[3].startswith(r"{\scriptsize [")
     caption = tab.split(r"\label{tab:construct}")[0]
-    assert r"The interaction is registered for $\Sdef$ only" in caption
+    assert "regist" not in caption and "exploratory" not in caption
     assert "block" not in caption and not re.search(r"\bC[1-4]\b", tab)  # no block or IDs
     assert "$+$7.2" in tab and "47.3" in tab and "960" in tab
     # the share is an em dash where C1 is not positive (orphan: D_m falls below D=0)
-    share = next(line for line in tab.splitlines() if line.startswith("authored share"))
-    assert share.count("---") == 1 and share.split(" & ")[-1].startswith("---")
+    share = next(line for line in tab.splitlines() if line.startswith("share of the $D$ effect"))
+    assert share.count("---") == 1
+    assert share.split(" & ")[-1].startswith(r"\multicolumn{2}{c}{---}")  # across the pair
     assert "182.9" not in tab and "35.7" in share
     assert C_E1["contrasts"]["orphan"]["C1_repair_D1s_minus_D0_source"]["est"] < 0
     # the D1s cell is displayed as D_m; no display string spells it D1s
@@ -489,7 +492,7 @@ def test_construct_table_and_missing():
         next(
             line
             for line in pt.tab_construct(flipped).splitlines()
-            if line.startswith("authored share")
+            if line.startswith("share of the $D$ effect")
         ).count("---")
         == 2
     )
@@ -497,8 +500,9 @@ def test_construct_table_and_missing():
     assert MISSING in empty and r"\pass" not in _first_body(empty)
     bad = copy.deepcopy(C_E1)
     bad["contrasts"]["def"]["C1_repair_D1s_minus_D0_source"].update(est=0.01, lo=-0.01)
-    assert r"\fail" in pt.tab_construct(bad)
-    assert pn.synth_numbers(bad)["SynthCOneVerdictDef"] == "does not hold"
+    assert r"$+$1.0 & {\scriptsize [$-$1.0," in pt.tab_construct(bad)
+    c1 = bad["contrasts"]["def"]["C1_repair_D1s_minus_D0_source"]
+    assert pn.synth_numbers(bad)["SynthCOneDef"] == pn.ci(c1, pn.pp)
 
 
 # ------------------------------------------------------------------------------------ block M1
@@ -528,20 +532,22 @@ def test_m1_macros_per_switch_and_pooled(tmp_path):
     m = _eight(tmp_path)
     out = pn.m1_numbers(m)
     assert out["MOneStaged"] == out["MOneSwitches"] == "8"
-    assert out["MOnePathThreeTriggered"] == "not triggered" and out["MOnePathThreeHolds"] == "holds"
     assert out["MOnePathThreeN"] == f"{8 * 10 * 20:,}"  # eight tiers, ten worlds, twenty items
     # D=1 loses nothing in six tiers (survival 1 vs 0.75), one item in five in `upgrade` (0.8),
     # one in two in `downgrade` (0.5 < 0.75: D does not protect this switch)
-    assert out["MOneMBHoldsSame"] == out["MOneMBHoldsUp"] == out["MOneMBHoldsLlama"] == "holds"
-    assert out["MOneMBHoldsDown"] == "does not hold"
+    mb = m["m1b_d_protects_switch"]
+    for tier in paper_data.TIERS:
+        key = paper_data.tier_key(m, tier)
+        assert out[f"MOneMB{tier.tag}"] == pn.ci(mb[key]["d1_minus_d0_survival"], pn.pp)
+    assert mb["downgrade"]["d1_minus_d0_survival"]["est"] < 0
     assert out["MOneMBHolding"] == "7 of 8"
     assert out["MOneTOnePassSame"] == "within" and out["MOneTOnePassUp"] == "outside"
     assert out["MOneTOneHolding"] == "6 of 8"
     assert out["MOneTOneQwenPrev"] == pn.ci(
         m["t1"][tier_name("cross:Qwen/Qwen3-8B")]["delta_90"], pn.pp
     )
-    assert out["MOneQuantHolding"] == "8 of 8"
     assert out["MOneCaveats"] == "none"
+    no_verdicts(out)
     caveat = tier_name("cross:meta-llama/Llama-3.1-8B-Instruct")  # its underscores are escaped
     m["path3"]["tier_caveats"] = ["downgrade", caveat, "cross_unknown_model"]
     assert pn.m1_numbers(m)["MOneCaveats"] == (
@@ -550,16 +556,19 @@ def test_m1_macros_per_switch_and_pooled(tmp_path):
     assert out["MOneSlopeGemma"] != MISSING and out["MOneAurocGemma"] != MISSING
     tab = pt.tab_families(m, {f.key: None for f in FAMILIES}, {})
     assert "Ministral-3-14B" in tab and "pooled, 8 switches" in tab
-    assert r"\pass" in tab and r"\fail" in tab
+    assert r"\pass" not in tab and r"\fail" not in tab and "triggered" not in tab
+    down = next(ln for ln in tab.splitlines() if ln.startswith("downgrade"))
+    surv = m["m1b_d_protects_switch"]["downgrade"]["d1_minus_d0_survival"]
+    assert pt.ci_pair_cells(surv, sign=True) in down  # the survival difference, interval
 
 
 def test_m1_partial_stage_counts_only_when_all_eight_are_staged(tmp_path):
     m = _m1(tmp_path, {"same": 0, "upgrade": 5, "downgrade": 0})
     out = pn.m1_numbers(m)
     assert out["MOneStaged"] == "3" and out["MOneSwitches"] == "3"
-    assert out["MOneSlopeLlama"] == MISSING and out["MOneMBHoldsGemma"] == MISSING
-    assert out["MOneMBHolding"] == out["MOneTOneHolding"] == out["MOneQuantHolding"] == MISSING
-    assert out["MOneMBHoldsSame"] == "holds"  # the staged switches still render
+    assert out["MOneSlopeLlama"] == MISSING and out["MOneMBGemma"] == MISSING
+    assert out["MOneMBHolding"] == out["MOneTOneHolding"] == MISSING
+    assert out["MOneMBSame"] != MISSING  # the staged switches still render
     tab = pt.tab_families(m, {f.key: None for f in FAMILIES}, {})
     assert "same tier" in tab and MISSING in tab
 
@@ -575,24 +584,29 @@ def _family(zero_cv: int = 0, break_pattern: bool = False) -> Any:
     return _roundtrip(families.family_checks(e1, family_items(zero_cv, 1)))
 
 
-def test_m2_macros_checks_estimates_and_family_count():
+def test_m2_macros_estimates_and_family_count():
     fams = {"llama": _family(), "gemma": _family(zero_cv=1), "gptoss": _family(break_pattern=True)}
     out = pn.m2_numbers(fams)
-    assert out["MTwoLlamaPattern"] == "holds" and out["MTwoLlamaCheckV"] == "holds"
-    assert out["MTwoGemmaPattern"] == "holds" and out["MTwoGemmaCheckV"] == "fails"
-    assert out["MTwoGptOssPattern"] == "does not hold" and out["MTwoGptOssCheckIV"] == "fails"
-    assert out["MTwoGptOssCheckIIISrc"] == "holds"
-    assert out["MTwoLlamaBxDDef"] == pn.ci(fams["llama"]["estimates"]["BxD_def"], pn.pp)
-    assert out["MTwoHolding"] == "2 of 3" and out["MTwoStaged"] == "3"
+    for fam in FAMILIES:
+        for key, name in paper_data.FAMILY_ESTIMATES:
+            want = pn.ci(fams[fam.key]["estimates"][key], pn.pp)
+            assert out[f"MTwo{fam.tag}{name}"] == want, (fam.key, key)
+    assert out["MTwoGptOssBxDDef"] != out["MTwoLlamaBxDDef"]  # the broken pattern
+    assert out["MTwoStaged"] == "3"
+    no_verdicts(out)
     assert out["MTwoLlamaWorlds"] == "20"
-    tab = pt.tab_families(None, fams, {})
-    assert "families where (ii)--(iv) all hold: 2 of 3" in tab
+    tab = pt.tab_families(None, fams, {}, {"llama": 0.0})
+    assert "families where" not in tab and r"\pass" not in tab
+    assert pt.ci_pair_cells(fams["llama"]["estimates"]["BxD_def"], sign=True) in tab
+    largest = next(ln for ln in tab.splitlines() if ln.startswith("(i) "))
+    missing = rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"
+    assert largest.split(" & ")[1:] == ["0.0", "", missing, missing, r"\multicolumn{2}{c}{} \\"]
 
 
 def test_m2_count_needs_all_three_families():
     out = pn.m2_numbers({"llama": _family(), "gemma": None, "gptoss": None})
-    assert out["MTwoStaged"] == "1" and out["MTwoHolding"] == MISSING
-    assert out["MTwoLlamaPattern"] == "holds" and out["MTwoGemmaPattern"] == MISSING
+    assert out["MTwoStaged"] == "1"
+    assert out["MTwoLlamaBxDDef"] != MISSING and out["MTwoGemmaBxDDef"] == MISSING
 
 
 def test_load_families_reads_the_saved_json_then_the_item_table(tmp_path):
@@ -606,11 +620,13 @@ def test_load_families_reads_the_saved_json_then_the_item_table(tmp_path):
         "".join(json.dumps(r) + "\n" for r in items)
     )
     computed = paper_data.load_families(tmp_path, "stage4_m2_x")
-    assert computed and computed["pattern_holds"] and all(computed["checks"].values())
+    assert computed and computed["ii_to_iv_true"] and all(computed["checks"].values())
     res = families.analyse(stage, {stage.name: stage})  # what `analysis.stage m2` writes
     saved = json.loads((stage / "analysis" / "families.json").read_text())
-    assert saved["families_holding"] == 1 and saved[stage.name]["checks"] == computed["checks"]
-    assert res["families_holding"] == 1
+    assert (
+        saved["families_ii_to_iv_true"] == 1 and saved[stage.name]["checks"] == computed["checks"]
+    )
+    assert res["families_ii_to_iv_true"] == 1
     assert paper_data.load_families(tmp_path, "stage4_m2_x") == computed
 
 
@@ -629,7 +645,7 @@ def test_stage_m2_writes_e1_and_families_json(tmp_path, monkeypatch):
     stage.main()
     assert (out / "analysis" / "e1_metrics.json").exists()
     saved = json.loads((out / "analysis" / "families.json").read_text())
-    assert saved[out.name]["n_worlds"] == 1 and "families_holding" in saved
+    assert saved[out.name]["n_worlds"] == 1 and "families_ii_to_iv_true" in saved
     manifest = json.loads((out / "manifest.json").read_text())
     assert "analysis/families.json" in manifest["files_sha256"]
     assert paper_data.load_families(tmp_path, out.name) == saved[out.name]
@@ -642,28 +658,52 @@ THETA_R = _load("stage3_e7", "e7_metrics.json")["theta_r"]  # a real swap (5 wor
 def test_m3_macros_from_a_real_reader_swap():
     out = pn.m3_numbers({"llama": THETA_R})
     assert out["MThreeLlamaWorlds"] == "5"
-    assert out["MThreeLlamaSameSign"] == "6 of 6" and out["MThreeLlamaHolds"] == "holds"
-    assert out["MThreeLlamaBUpdateSignSrc"] == "same"
-    assert out["MThreeLlamaBUpdateMainSrc"] == pn.ci(
-        THETA_R["src"]["contrasts"]["B_effect_update_pooled_source"]["main"], pn.pp
-    )
-    assert out["MThreeLlamaDMissedPathDef"] == "not triggered"
+    for b, btag in paper_data.BRANCH_TAGS[:2]:
+        for key, name in pn.M3_CONTRASTS:
+            c = THETA_R[b]["contrasts"][key]
+            assert out[f"MThreeLlama{name}Main{btag}"] == pn.ci(c["main"], pn.pp)
+            assert out[f"MThreeLlama{name}Swap{btag}"] == pn.ci(c["swap"], pn.pp)
     assert out["MThreeLlamaCvHoldSwapDef"] == pn.ci(
         THETA_R["def"]["systems"]["holdmem_D1B1_source"]["swap"]["ContractValid_post"]
     )
-    assert out["MThreeGemmaSameSign"] == MISSING and out["MThreeGemmaBxDMainSrc"] == MISSING
-    assert out["MThreeStaged"] == "1" and out["MThreeHolding"] == MISSING
+    assert out["MThreeGemmaBxDMainSrc"] == MISSING
+    assert out["MThreeStaged"] == "1"
+    no_verdicts(out)
 
 
-def test_m3_flipped_sign_and_full_count():
+def test_m3_flipped_sign_and_the_reader_table():
     flipped = copy.deepcopy(THETA_R)
     flipped["def"]["contrasts"]["BxD_interaction_update_source"]["swap"]["est"] = -0.05
     out = pn.m3_numbers({"llama": THETA_R, "gemma": flipped, "gptoss": THETA_R})
-    assert out["MThreeGemmaBxDSignDef"] == "flipped" and out["MThreeGemmaSameSign"] == "5 of 6"
-    assert out["MThreeGemmaHolds"] == "does not hold"
-    assert out["MThreeStaged"] == "3" and out["MThreeHolding"] == "2 of 3"
+    swap = flipped["def"]["contrasts"]["BxD_interaction_update_source"]["swap"]
+    assert out["MThreeGemmaBxDSwapDef"] == pn.ci(swap, pn.pp)
+    assert out["MThreeStaged"] == "3"
     tab = pt.tab_families(None, {f.key: None for f in FAMILIES}, {"llama": THETA_R})
-    assert "6/6" in tab and "not triggered" in tab
+    missed = THETA_R["src"]["contrasts"]["D_effect_missed_source"]["swap"]
+    assert "6/6" not in tab and "triggered" not in tab
+    assert pt.ci_pair_cells(missed, sign=True).split(" & ")[0] in tab  # 0.0: no interval
+    # one row per quantity: the swapped reader of each family, then the main reader
+    readers = tab.split("(b) as reader only", 1)[1].splitlines()
+    assert readers[0].split(" & ")[1:] == [
+        *(rf"\multicolumn{{2}}{{c}}{{{f.label}}}" for f in FAMILIES),
+        r"\multicolumn{2}{c}{Qwen3.5-9B} \\",
+    ]
+    missing = rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"
+    for label, key, b in pt.READER_ROWS:
+        c = THETA_R[b]["contrasts"][key]
+        line = next(ln for ln in readers if ln.startswith(label + " &")).removesuffix(r" \\")
+        swap, rest = line.split(" & ", 1)[1].split(f" & {missing} & {missing} & ")
+        assert swap == pt.ci_pair_cells(c["swap"], sign=True), label  # Llama, then not staged
+        assert rest == pt.ci_pair_cells(c["main"], sign=True), label  # the main reader last
+    labels = [lab for lab, _, _ in pt.READER_ROWS]
+    for quantity in ("$B$ effect on Update", "$D$ effect on accuracy on re-derived items"):
+        assert {f"{quantity}, $\\Ssrc$", f"{quantity}, $\\Sdef$"} <= set(labels), quantity
+    cv = next(ln for ln in readers if ln.startswith(r"\holdmem{}(1,1) accuracy"))
+    hold = THETA_R["def"]["systems"]["holdmem_D1B1_source"]
+    cells = cv.removesuffix(r" \\").split(" & ")
+    assert [cells[1], cells[-2]] == [
+        pt._est(hold[arm]["ContractValid_post"]) for arm in ("swap", "main")
+    ]
 
 
 def test_reader_groups_from_run_manifests_and_load_readers(tmp_path: Path):
@@ -765,17 +805,17 @@ def test_native_macros_for_all_six_systems():
     assert out["NatLightRagLabel"] == "(0,1)" and out["NatLightRagLabelAgrees"] == "yes"
     assert out["NatLightRagReference"] == r"\holdmem{}(0,1), cited cluster"
     assert out["NatMemReference"] == r"\holdmem{}(0,0)"
-    assert out["NatLightRagInsideOf"] == "4 of 6" and out["NatLightRagNTwo"] == "holds"
+    assert out["NatLightRagInsideOf"] == "4 of 6"
     assert out["NatAmemInsideOf"] == "6 of 6"
     assert out["NatLightRagUpdateConsistentDef"] == "inside"
     assert out["NatLightRagStabilityConsistentSrc"] == "outside"
     assert out["NatStaged"] == "6"
-    assert out["NatNOneAgree"] == "5 of 5" and out["NatNOneHolds"] == "holds"
-    assert out["NatNTwoHolding"] == "6 of 6"
-    assert out["NatNThreeInside"] == "34 of 36" and out["NatNThreeHolds"] == "holds"
+    assert out["NatNOneAgree"] == "5 of 5"
+    assert out["NatNThreeInside"] == "34 of 36"
     assert out["NatNThreeShare"] == pn.pct(34 / 36)
-    assert out["NatNFourHolds"] in ("holds", "does not hold")  # B=0 and B=1 systems both present
-    assert out["NatNFourStabilityBOne"] != MISSING
+    assert out["NatNFourStabilityBOne"] != MISSING  # B=0 and B=1 systems both present
+    assert out["NatNFourStabilityBZero"] != MISSING
+    no_verdicts(out)
     assert out["NatMemFailRate"] == "1.00\\%" and out["NatMemUnits"] == "1,000"
     assert out["NatMemTThreeResult"] == "fail" and out["NatMemTFourResult"] == "pass"
     # cost per event, and its token ratio to Mem0 (10,200 tokens per event)
@@ -784,22 +824,21 @@ def test_native_macros_for_all_six_systems():
     assert out["NatAmemCostRatio"] == pn.num(5200 / 10200, 2)
 
 
-def test_native_verdicts_need_every_system_and_disagreeing_labels_count():
+def test_native_counts_need_every_system_and_disagreeing_labels_count():
     inside = {s: [True] * 6 for s in SYSTEMS}
     three = {s: DOCUMENTED[s] for s in ("mem0", "amem", "lightrag")}
     partial = _natives(three, inside)
     out = pn.nat_numbers(partial, COST)
     assert out["NatStaged"] == "3" and out["NatAmemInsideOf"] == "6 of 6"
-    for k in ("NatNOneAgree", "NatNOneHolds", "NatNTwoHolding", "NatNThreeShare", "NatNFourHolds"):
+    for k in ("NatNOneAgree", "NatNThreeInside", "NatNThreeShare", "NatNFourStabilityBOne"):
         assert out[k] == MISSING
     assert out["NatMemosLabel"] == MISSING and out["NatMemosDocumented"] == "(0,0)"
-    # two systems whose inferred label differs from the documented one: N-1 fails (3 of 5)
+    # two systems whose inferred label differs from the documented one: 3 of 5 agree
     wrong = {s: DOCUMENTED[s] for s in SYSTEMS} | {"amem": (0, 1), "memos": (0, 1)}
     res = _natives(wrong, {s: [True] * 6 for s in SYSTEMS} | {"amem": [False] * 6})
     out = pn.nat_numbers(res, COST)
     assert out["NatAmemLabelAgrees"] == "no" and out["NatNOneAgree"] == "3 of 5"
-    assert out["NatNOneHolds"] == "does not hold" and out["NatNTwoHolding"] == "5 of 6"
-    assert out["NatAmemNTwo"] == "does not hold"
+    assert out["NatAmemInsideOf"] == "0 of 6" and out["NatNThreeInside"] == "30 of 36"
     assert out["NatAmemReference"] == r"\holdmem{}(0,1), source epoch"
 
 
@@ -828,23 +867,6 @@ def test_native_discriminability_macros_and_totals_need_every_system():
     assert partial["NatAmemExDiscriminating"] == "6"
     assert partial["NatMemosExDiscriminating"] == MISSING
     assert pn.nat_numbers(None, {})["NatMemExDiscriminating"] == MISSING
-
-
-def test_native_table_and_marks():
-    tab = pt.tab_native(ALL_SIX, COST)
-    assert MISSING not in tab
-    assert r"$\bullet\circ\bullet\bullet\circ\bullet$" in tab and "4/6" in tab
-    assert tab.count("6/6") == 5 and "LightRAG & (0,1) & (0,1)" in tab
-    only_mem = pt.tab_native(
-        paper_data.native_results({"n": None, "n3": _load("stage3_e5", "e5_natives.json")}), {}
-    )
-    mem_row = next(line for line in only_mem.splitlines() if line.startswith("Mem0"))
-    assert r"$\circ\bullet\bullet\bullet\bullet\bullet$" in mem_row and "5/6" in mem_row
-    assert "70.6" in mem_row and MISSING in mem_row  # no cost measured: missing
-    amem = next(line for line in only_mem.splitlines() if line.startswith("A-Mem"))
-    assert amem.count(MISSING) == 8 and "(0,0)" in amem
-    none = pt.tab_native(None, {})
-    assert none.count(MISSING) == 6 * 8
 
 
 def test_native_results_falls_back_to_stage3_for_mem0_only():
@@ -896,24 +918,24 @@ def test_rendered_macros_checks_differences_and_descriptives(tmp_path):
     m = _rendered(tmp_path)
     out = pn.rend_numbers(m)
     assert out["RendWorlds"] == "3" and out["RendProbesIdentical"] == "yes"
-    # the fixture: HoldMem(1,1) repairs half of the items in the rendered worlds, all in template
-    # the fixture's D effect on repair is 0.5 - 0 in the rendered worlds but its interval over
-    # three worlds reaches 0 (check fails); in the template worlds the effect is 1 (holds)
-    assert m["rendered"]["checks"]["iii_D_repair_src"] is False
-    assert out["RendCheckIIISrc"] == "fails" and out["RendTemplateCheckIIISrc"] == "holds"
-    assert out["RendAgreeCheckIIISrc"] == "differ"
+    # the fixture: HoldMem(1,1) repairs half of the items in the rendered worlds, all in template;
+    # the D effect on repair is 0.5 - 0 in the rendered worlds, with an interval over three worlds
+    # that reaches 0, and 1 in the template worlds
     assert out["RendDiffDRepairSrc"] == pn.ci(m["paired"][1]["diff"], pn.pp)
     assert out["RendDRepairSrc"] == pn.ci(m["rendered"]["estimates"]["D_repair_src"], pn.pp)
+    assert m["rendered"]["estimates"]["D_repair_src"]["lo"] <= 0
     assert out["RendTemplateDRepairSrc"].startswith("$+$100.0")
-    assert out["RendPattern"] in ("holds", "does not hold") and out["RendAgreeCheckI"] == "agree"
     assert out["RendDMissedSourceSrc"].startswith("0.0")
+    no_verdicts(out)
     assert out["RendCvDiffHoldDef"] != MISSING
     assert out["RendKeptTemplate"] == "2.0\\%" and out["RendRetriedEmail"] == "4.0\\%"
     assert out["RendFidelityMin"] == "100.0\\%" and out["RendFidelityAllOne"] == "yes"
     assert out["RendFidelityChecked"] == "5,000" and out["RendModel"] == "google/gemma-4-12B-it"
     tab = pt.tab_rendered(m)
-    assert r"Of the 1,000 bodies selected for rewriting, 5.0\% were retried once and 2.0\%" in tab
-    assert r"\pass" in tab and "block" not in tab
+    assert "surface forms" not in tab  # the rendering descriptives are in the text (macros)
+    assert "first attempt" not in tab and "Probes identical" not in tab and ": yes" not in tab
+    assert r"\pass" not in tab and r"\fail" not in tab and "block" not in tab
+    assert pt.ci_pair_cells(m["rendered"]["estimates"]["D_repair_src"], sign=True) in tab
 
 
 def test_rendered_without_render_reports_leaves_the_descriptives_missing(tmp_path):
@@ -921,7 +943,8 @@ def test_rendered_without_render_reports_leaves_the_descriptives_missing(tmp_pat
     out = pn.rend_numbers(m)
     assert out["RendKeptTemplate"] == MISSING and out["RendFidelityMin"] == MISSING
     assert out["RendKeptEmail"] == MISSING and out["RendModel"] == MISSING
-    assert out["RendCheckIIISrc"] != MISSING  # the checks do not depend on the reports
+    assert out["RendDRepairSrc"] != MISSING  # the estimates do not depend on the reports
+    assert MISSING not in pt.tab_rendered(m)  # the table needs no report
 
 
 # --------------------------------------------------------------------------------- section 6
@@ -942,7 +965,7 @@ def test_rank_macros_from_the_real_correlations():
     assert pn.rank_numbers({}) == dict.fromkeys(out, MISSING)
 
 
-# ------------------------------------------------------------------ multiplicity (exploratory)
+# ------------------------------------------------------------------------------- multiplicity
 MULT_STAGE_DIRS = {"orig": "stage2_e1", "rep": "stage4_rep_e1"}
 
 
@@ -1067,19 +1090,48 @@ def test_all_stages_staged_macros_compile_as_text(tmp_path):
 
 
 # ------------------------------------------------------------------------------ table structure
+def _group(s: str, i: int) -> tuple[str, int]:
+    """The brace group that opens at s[i] (nested groups included) and the index after it."""
+    depth = 0
+    for j in range(i, len(s)):
+        depth += {"{": 1, "}": -1}.get(s[j], 0)
+        if depth == 0:
+            return s[i + 1 : j], j + 1
+    raise ValueError(s[i : i + 40])
+
+
+def _columns(spec: str) -> int:
+    """The columns of a tabular spec: l, c, r and p{...}; @{...} and >{...} are not columns."""
+    count, i = 0, 0
+    while i < len(spec):
+        c = spec[i]
+        if c in "@>p" and spec[i + 1 : i + 2] == "{":
+            _, i = _group(spec, i + 1)
+            count += c == "p"
+            continue
+        count += c in "lcr"
+        i += 1
+    return count
+
+
 def _tabulars(tex: str) -> list[tuple[int, list[str]]]:
-    """(column count, body lines) of every tabular in `tex`."""
+    """(column count, body lines) of every tabular and tabular* in `tex`."""
     out = []
-    for m in re.finditer(r"\\begin\{tabular\}\{([^\n]*)\}\n(.*?)\\end\{tabular\}", tex, re.S):
-        spec = re.sub(r"@\{[^}]*\}", "", m.group(1))
-        out.append((len(re.findall(r"[lcrp]", spec)), m.group(2).splitlines()))
+    for m in re.finditer(r"\\begin\{tabular(\*?)\}", tex):
+        i = m.end()
+        if m.group(1):
+            _, i = _group(tex, i)  # the width of a tabular*
+        spec, i = _group(tex, i)
+        end = tex.index(f"\\end{{tabular{m.group(1)}}}", i)
+        out.append((_columns(spec), tex[i:end].strip("\n").splitlines()))
     return out
 
 
 def check_tex(tex: str) -> None:
     """Environments balance, and every table row has as many cells as its tabular has columns."""
-    for env in ("table", "tabular"):
-        assert tex.count(f"\\begin{{{env}}}") == tex.count(f"\\end{{{env}}}") >= 1
+    assert tex.count("\\begin{table}") == tex.count("\\end{table}") >= 1
+    begins = tex.count("\\begin{tabular}") + tex.count("\\begin{tabular*}")
+    assert begins == tex.count("\\end{tabular}") + tex.count("\\end{tabular*}") >= 1
     assert tex.count("{") == tex.count("}")
     tabulars = _tabulars(tex)
     assert tabulars
@@ -1100,7 +1152,6 @@ def _all_tables() -> dict[str, str]:
     return {
         "replication": pt.tab_replication(paper_data.replication_view(ORIG, REP_PARTIAL)),
         "construct": pt.tab_construct(C_E1),
-        "native": pt.tab_native(ALL_SIX, COST),
         "families": pt.tab_families(None, fams, {"llama": THETA_R}),
     }
 
@@ -1112,7 +1163,6 @@ def test_tables_are_wellformed_with_data_and_without():
     for tex in (
         pt.tab_replication({}),
         pt.tab_construct(None),
-        pt.tab_native(None, {}),
         pt.tab_families(None, {f.key: None for f in FAMILIES}, {}),
         pt.tab_rendered(None),
     ):
@@ -1123,7 +1173,10 @@ def test_tables_are_wellformed_with_data_and_without():
 def test_rendered_table_wellformed(tmp_path):
     tex = pt.tab_rendered(_rendered(tmp_path))
     check_tex(tex)
-    assert "(iii) $D$ effect on repair, $\\Sdef$" in tex and "\\label{tab:rendered}" in tex
+    assert (
+        "(iii) $D$ effect on accuracy on re-derived items, $\\Sdef$" in tex
+        and "\\label{tab:rendered}" in tex
+    )
 
 
 def test_tables_and_macros_are_deterministic(tmp_path):
@@ -1141,7 +1194,6 @@ def test_tables_compile(tmp_path):
     tables = _all_tables() | {"rendered": pt.tab_rendered(_rendered(tmp_path))}
     tables |= {f"{k}_missing": v for k, v in {
         "replication": pt.tab_replication({}),
-        "native": pt.tab_native(None, {}),
         "families": pt.tab_families(None, {f.key: None for f in FAMILIES}, {}),
     }.items()}  # fmt: skip
     body = "".join(f"\\input{{{name}.tex}}\n" for name in tables)
@@ -1204,30 +1256,105 @@ def test_native_systems_figure_is_a_vector_pdf_with_and_without_systems(tmp_path
         assert figs.fig_native_systems(res, out).read_bytes()[:5] == b"%PDF-"
 
 
-def test_by_design_detection_lines_are_exactly_zero_or_one_in_the_data():
-    """fig_dissociation marks the B=0 and source-epoch detection lines as 0 or 100 by design;
-    that is only honest if the data have exactly those values on every branch, and the cited
-    arm (not by design) must not."""
-    for branch in ("src", "def"):
-        cells = ORIG["e1"]["cells"][branch]
-        for arm, want in (("none", 1.0), ("source", 0.0)):
-            for cell in figs.ARM_CELLS[arm]:
-                e = cells[cell]["MissedInvalidation"]
-                assert e["est"] == want and e["lo"] == want and e["hi"] == want, (branch, cell)
-        assert set(figs.BY_DESIGN) == {"none", "source"}
-        for cell in figs.ARM_CELLS["cited"]:
-            assert 0 < cells[cell]["MissedInvalidation"]["est"] < 1
-
-
 @pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
-def test_calibration_and_dissociation_figures_draw_with_and_without_the_curve(tmp_path):
+def test_calibration_figure_draws_with_and_without_the_curve(tmp_path):
     with_curve = figs.fig_calibration(ORIG["e2"], tmp_path).read_bytes()
     assert with_curve.startswith(b"%PDF") and b"/Subtype /Image" not in with_curve
+    box = re.search(rb"/MediaBox \[\s*0 0 ([\d.]+) ([\d.]+)\s*\]", with_curve)
+    assert box and float(box.group(1)) == pytest.approx(72 * figs.fs.NARROW)  # one panel
     bare = {k: v for k, v in ORIG["e2"].items() if k != "explore_pooled_curve"}
     (tmp_path / "bare").mkdir()
     without = figs.fig_calibration(bare, tmp_path / "bare").read_bytes()
     assert without.startswith(b"%PDF") and with_curve != without
-    assert figs.fig_dissociation(ORIG["e1"], tmp_path).read_bytes().startswith(b"%PDF")
+    (tmp_path / "empty").mkdir()
+    assert figs.fig_calibration({}, tmp_path / "empty").read_bytes().startswith(b"%PDF")
+
+
+def test_direct_labels_keep_their_order_and_spacing():
+    assert figs._spread([0.9, 0.5, 0.1], 0.05) == [0.9, 0.5, 0.1]  # far apart: left alone
+    ys = figs._spread([0.66, 0.62, 0.92], 0.05)  # the zero system and plain RAG at 12 months
+    assert ys[2] == 0.92 and ys[0] > ys[1] and ys[0] - ys[1] == pytest.approx(0.05)
+    assert (ys[0] + ys[1]) / 2 == pytest.approx(0.64)  # the pair stays centred on its targets
+    assert figs._spread([0.5, 0.5, 0.5], 0.1) == pytest.approx([0.4, 0.5, 0.6])
+
+
+def test_calibration_counts_reproduce_the_pooled_auroc():
+    e2 = ORIG["e2"]
+    counts = figs.calibration_counts(e2)
+    alive, dead = sum(s for _, s, _ in counts), sum(f for *_, f in counts)
+    assert alive + dead == e2["path3"]["pooled_auroc"]["n_items"] == 2446 and dead == 41
+    assert [a for a, *_ in counts] == sorted({a for a, *_ in counts})  # one row per agreement
+    # the ROC of agreement as a predictor: flag the items at or below a cut, share of surviving
+    # (x) and of failed (y) items flagged, straight lines between the cuts (ties count one half).
+    # Its area is the AUROC of the analysis, so the counts are the items the analysis scored
+    xs, ys = [0.0], [0.0]
+    for _, s, f in counts:
+        xs.append(xs[-1] + s / alive)
+        ys.append(ys[-1] + f / dead)
+    steps = zip(xs, xs[1:], ys, ys[1:], strict=False)
+    area = sum((x1 - x0) * (y0 + y1) / 2 for x0, x1, y0, y1 in steps)
+    assert area == pytest.approx(e2["path3"]["pooled_auroc"]["est"], abs=1e-12)
+    assert round(area, 4) == 0.8319
+
+
+def test_calibration_bins_hold_every_item_and_none_is_empty():
+    e2 = ORIG["e2"]
+    bins = figs.calibration_bins(e2)
+    edges = figs.CALIBRATION_BINS
+    pairs = list(zip(edges, edges[1:], strict=False))
+    assert [(b["lo"], b["hi"]) for b in bins] == pairs  # no bin is empty
+    assert sum(b["n"] for b in bins) == 2446
+    for b in bins:
+        assert b["lo"] <= b["agreement"] <= b["hi"] and 0 <= b["survival"] <= 1
+    counts = figs.calibration_counts(e2)
+    assert sum(b["survival"] * b["n"] for b in bins) == pytest.approx(sum(s for _, s, _ in counts))
+    assert figs.calibration_bins({}) == []
+    bad = {"calibration": {"same": {"per_type": {"t": {"predicted": 1, "observed": 0.5, "n": 3}}}}}
+    with pytest.raises(ValueError):
+        figs.calibration_counts(bad)  # 1.5 survivals: not whole items
+
+
+def test_native_cells_take_the_colour_of_their_binding_arm():
+    fs = figs.fs
+    assert figs._cell_style("holdmem_D0B0") == (r"\textsc{HoldMem}(0,0)", fs.ARMS["none"][1])
+    label, colour = figs._cell_style("holdmem_D0B1_cited")
+    assert label.endswith("(0,1), citation key") and colour == fs.ARMS["cited"][1]
+    assert figs._cell_style("holdmem_D0B1_source")[1] == fs.ARMS["source"][1]
+    assert figs._cell_style(None)[1] == fs.GREY
+    panels = figs.native_panels(ALL_SIX)
+    assert [p["cell"] for p in panels[:2]] == ["holdmem_D0B0", "holdmem_D0B0"]
+
+
+def test_native_bars_start_at_zero_with_their_interval_as_error_bar():
+    from matplotlib.colors import to_rgba
+
+    fs = figs.fs
+    plt = fs.plt()
+    fig, ax = plt.subplots()
+    e = {"est": 0.6, "lo": 0.45, "hi": 0.7}
+    figs._native_bar(ax, 2.0, e, "white", fs.DARK)  # outlined: one dark error bar
+    figs._native_bar(ax, 1.0, e, fs.DARK, fs.DARK)  # dark: a white copy clipped to the bar
+    assert [(b.get_x(), b.get_width()) for b in ax.patches] == [(0, pytest.approx(0.6))] * 2
+    assert [c.get_segments()[0][:, 0].tolist() for c in ax.collections] == [[0.45, 0.7]] * 3
+    assert [tuple(c.get_colors()[0]) for c in ax.collections] == [
+        to_rgba(fs.BLACK),
+        to_rgba(fs.BLACK),
+        to_rgba("white"),
+    ]
+    clips = [c.get_clip_box().bounds for c in ax.collections]
+    assert clips[:2] == [ax.bbox.bounds] * 2
+    assert clips[2] == pytest.approx(ax.patches[1].get_window_extent().bounds)
+    plt.close(fig)
+
+
+@pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
+def test_zero_cost_figure_is_a_full_width_vector_pdf(tmp_path):
+    path = figs.fig_zero_cost(ORIG["e3"], tmp_path)
+    data = path.read_bytes()
+    assert data.startswith(b"%PDF") and b"/Subtype /Image" not in data
+    box = re.search(rb"/MediaBox \[\s*0 0 ([\d.]+) ([\d.]+)\s*\]", data)
+    assert box and float(box[1]) == pytest.approx(72 * figs.fs.TEXT)
+    assert float(box[2]) == pytest.approx(72 * figs.ZERO_H)
 
 
 # ------------------------------------------------------------------------- sources and the paper
@@ -1259,8 +1386,9 @@ def test_committed_generated_files_are_current():
             paper_data.replication_view(inp["orig"], inp["rep"])
         ),
         "tab_construct.tex": pt.tab_construct(inp["c"]),
-        "tab_native.tex": pt.tab_native(paper_data.native_results(inp), inp["ncost"]),
-        "tab_families.tex": pt.tab_families(inp["m1"], inp["m2"], inp["m3"]),
+        "tab_families.tex": pt.tab_families(
+            inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, sources)
+        ),
         "tab_rendered.tex": pt.tab_rendered(inp["rendered"]),
     }
     for name, tex in want.items():
@@ -1275,25 +1403,20 @@ def test_interval_format_is_signed_scriptsize_with_a_thin_space():
     assert pt._ci({"est": -0.005, "lo": -0.02, "hi": 0.0}, sign=True) == (
         r"$-$0.5\,{\scriptsize [$-$2.0,\,0.0]}"
     )
-    assert pt._slope({"est": -3.52, "lo90": -99.29, "hi90": -0.96}, unusable=True) == (
-        r"\textcolor{gray}{$-$3.52\,{\scriptsize [$-$99.29,\,$-$0.96]}}"
+    assert pt._slope_cells({"est": -3.52, "lo90": -99.29, "hi90": -0.96}, unusable=True) == (
+        r"\textcolor{gray}{$-$3.52} & \textcolor{gray}{\scriptsize [$-$99.29,\,$-$0.96]}"
     )
-
-
-def test_gate_table_reads_not_triggered_and_defines_its_paths():
-    gate = json.loads((ROOT / SOURCES["gate"] / "analysis/gate_a.json").read_text())
-    tex = pt.tab_gate(gate)
-    assert "(held)" not in tex and tex.count("(not triggered)") == 3
-    assert "check & triggered if & observed (status)" in tex
-    assert "path~" not in tex and "App.~" not in tex
-    caption = tex.split(r"\label{tab:gate}")[0]
-    for term in (
-        "A check is triggered when its condition holds",
-        r"95\% world-bootstrap interval",
-        "for both keys (source-epoch and cited-cluster)",
-        r"with 90\% bounds",
-    ):
-        assert term in caption, term
+    # an interval whose ends equal the estimate as printed: the estimate alone
+    assert pt.ci_pair_cells({"est": 0.0, "lo": 0.0, "hi": 0.0}, sign=True) == "0.0 & "
+    assert pt.ci_pair_cells({"est": 1.0, "lo": 0.9996, "hi": 1.0}) == "100.0 & "
+    assert pt.est_ci_cells({"est": 1.0, "lo": 0.9996, "hi": 1.0}) == "100.0 &"
+    # both helpers print one cell text, apart from the space after an estimate alone
+    e = {"est": 0.092, "lo": 0.067, "hi": 0.119}
+    assert (
+        pt.ci_pair_cells(e, sign=True)
+        == pt.est_ci_cells(e, sign=True)
+        == (r"$+$9.2 & {\scriptsize [$+$6.7,\,$+$11.9]}")
+    )
 
 
 def test_stage4_captions_define_their_rows_marks_and_cells():
@@ -1302,34 +1425,40 @@ def test_stage4_captions_define_their_rows_marks_and_cells():
     caption = rep.split(r"\label{tab:replication}")[0]
     for term in (
         "Detection: share",
-        "the reader then answers correctly (behavioural)",
-        "whose re-derived value equals gold (mechanistic)",
+        "Value equals gold: share of the re-derived item-times whose value equals gold",
     ):
         assert term in caption, term
-    assert "retention test 3 of 3" in rep and "Membership" not in rep
+    assert "behavioural" not in rep and "mechanistic" not in rep
+    assert "the retention test in" not in rep and "Membership" not in rep
     con = pt.tab_construct(inp["c"]).split(r"\label{tab:construct}")[0]
     for term in (
-        "$D_0$: the $D{=}0$ cell",
-        "authored derivation",
+        "$D_1$, $D_0$: the $D{=}1$ and $D{=}0$ cells",
+        "against exact recomputation",
         "$t_0$, before any shift",
-        r"Authored share: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$",
+        r"only exact recomputation gives: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$",
     ):
         assert term in con, term
     assert "benchmark-authored" not in con
-    fam = pt.tab_families(inp["m1"], inp["m2"], inp["m3"])
+    fam = pt.tab_families(inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, SOURCES))
+    switches, families_ = fam.split("\n\n\\begin{table}")  # two tables
+    assert r"\label{tab:switches}" in switches and r"\label{tab:families}" in families_
     caption = fam.split(r"\label{tab:families}")[0]
     for term in (
-        "(i) leak check not triggered",
-        "(ii) $B$ effect on Update",
-        "(v) zero system below",
-        r"registered 97\% bar",
+        "Row (i): the largest absolute $D$ effect on missed invalidation",
         "slope (grey) is not usable",
+        "(90\\% interval)",
+        "In (b) the last column is the main reader on the same worlds",
     ):
         assert term in caption, term
-    assert r"$\pm3$" not in caption
+    for label in ("(ii) $B$ effect on Update", "(v) no-store BM25 $-$"):
+        assert label in families_, label
+    assert "same sign" not in fam and "keep the main reader's sign" not in caption
+    assert r"$\pm3$" not in caption and "regist" not in caption and "check" not in caption
+    largest = next(ln for ln in fam.splitlines() if ln.startswith("(i) "))
+    assert MISSING not in largest  # every family's E1 analysis is staged
     upgrade = next(ln for ln in fam.splitlines() if ln.startswith("upgrade (27B)$^\\ast$"))
     assert r"\textcolor{gray}{" in upgrade  # the unusable slope is grey
     ren = pt.tab_rendered(inp["rendered"])
     first = next(ln for ln in ren.splitlines() if ln.startswith("(i) "))
-    assert first.removesuffix(r" \\").endswith(pt.UNDEFINED)
+    assert first.removesuffix(r" \\").endswith(rf"\multicolumn{{2}}{{c}}{{{pt.UNDEFINED}}}")
     assert "has no paired difference" in ren.split(r"\label{tab:rendered}")[0]

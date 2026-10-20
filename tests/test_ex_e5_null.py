@@ -1,4 +1,4 @@
-"""Exploratory native null baselines (`analysis.ex_e5_null`, stored by `e5.analyse` as
+"""Native null baselines (`analysis.ex_e5_null`, stored by `e5.analyse` as
 `explore_native_null`) on the synthetic multi-system fixture of `tests/ex_e5_fixture.py`."""
 
 import json

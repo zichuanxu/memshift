@@ -1,8 +1,8 @@
-"""The E1 analysis of the cells of prereg v4 block U: the upsert cells (`D0B0_upsert`,
+"""The E1 analysis of the slot-keyed upsert cells (`D0B0_upsert`,
 `D1B0_upsert`, `D1sB0_upsert`) and `D1sB0_refresh` join the pre-intervention identity check, and
 an upsert cell's `supersede` events count as detection for that cell only. The item rows, cell
 metrics, contrasts and pre-intervention results of the existing cells are pinned on one run; the
-digest was taken on the analysis code before the change (commit 85ed9e1)."""
+digest is that of the analysis code without the upsert cells."""
 
 from pathlib import Path
 from typing import Any

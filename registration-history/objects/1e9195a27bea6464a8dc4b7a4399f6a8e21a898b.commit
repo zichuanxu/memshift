@@ -1,8 +1,0 @@
-tree aa40bfdcb7bfd26874c3961c2848e822cc3d674c
-parent c80a3d59dbe49e3cbdab0ce8cd55e0709bdd972d
-author zichuanxu <zichuanxu28@gmail.com> 1790745540 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790745540 +0900
-
-Block N: A-Mem runs admitted by a load controller on GPU1 once HippoRAG 2 finished (thaw one when KV < 0.65 with no queue and no new preemption, freeze one on preemption); decision and STATUS row. Paper: the orphan-branch B x D interaction is marked exploratory (v1 registers it for S_src and S_def), statements use "robustness study"
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,16 +1,16 @@
-"""Native memory systems behind the MemShift interface (plan §4.5, §6 E5): Mem0 and Graphiti.
+"""Native memory systems behind the MemShift interface (E5): Mem0 and Graphiti.
 
 Both use their own extraction path with the LLM and the embedder pointed at our OpenAI-compatible
 vLLM endpoints, and both persist to a local directory so that one prefix ingest can be branched:
-ingest the prefix once, `snapshot()` the store, and `restore()` it into every branch (plan §9
-budget rule 2). The native libraries are optional (`uv sync --extra native`) and imported lazily.
+ingest the prefix once, `snapshot()` the store, and `restore()` it into every branch. The native
+libraries are optional (`uv sync --extra native`) and imported lazily.
 
 Mem0 (mem0ai 2.2.1, `Memory.from_config`): OpenAI LLM + OpenAI embedder with custom base URLs,
   embedded Qdrant (path mode) and a SQLite history DB under `store_dir`. Each source event is one
   `add(messages=[user message], user_id, metadata, infer=True)`: the v3 additive pipeline makes
   one extraction LLM call per add (mem0/memory/main.py:881-1220) plus embedding calls. Mem0
   keeps only the extracted facts and the last 10 raw messages, so with `keep_raw=True` (the
-  default, the configuration the plan prefers) the raw record is also archived in the same store
+  default, the configuration of the experiments) the raw record is also archived in the same store
   with `infer=False` under a separate user scope that extraction and serving never search.
   Without spaCy (`mem0ai[nlp]`) and fastembed (`mem0ai[extras]`), which this install omits, Mem0
   falls back to dense-only search with no entity boost.
@@ -479,8 +479,8 @@ class NativeSystem:
 
     @property
     def identifiable(self) -> bool:
-        """(D, B) is identifiable from outside only when raw text and source metadata are kept
-        (plan §6 E5 step 5); otherwise it is declared unidentifiable."""
+        """(D, B) is identifiable from outside only when raw text and source metadata are kept;
+        otherwise it is declared unidentifiable."""
         return self.retains_raw_text and self.retains_source_metadata
 
     def describe(self) -> dict[str, Any]:

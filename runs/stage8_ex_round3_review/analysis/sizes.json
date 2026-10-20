@@ -1,0 +1,733 @@
+{
+ "status": "additional analysis: reads committed run outputs and the seeded generator only, adds no run and calls no model",
+ "tokenizer": {
+  "model": "Qwen/Qwen3.5-9B",
+  "file": "tokenizer.json",
+  "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4"
+ },
+ "fit_tokens": 31000,
+ "checkpoints_weeks_after_fork": [
+  1,
+  2,
+  4,
+  8
+ ],
+ "kappa_sets": {
+  "main": "fixed",
+  "heldout": [
+   "heldout:4001",
+   "heldout:4002",
+   "heldout:4003"
+  ]
+ },
+ "main": {
+  "worlds": [
+   "w1000",
+   "w1001",
+   "w1002",
+   "w1003",
+   "w1004",
+   "w1005",
+   "w1006",
+   "w1007",
+   "w1008",
+   "w1009",
+   "w1010",
+   "w1011",
+   "w1012",
+   "w1013",
+   "w1014",
+   "w1015",
+   "w1016",
+   "w1017",
+   "w1018",
+   "w1019"
+  ],
+  "definitions": {
+   "important_contact": {
+    "item_times": 240,
+    "sources": [
+     "calendar"
+    ],
+    "records_median": 142.0,
+    "dicts": {
+     "n": 240,
+     "median": 15653.0,
+     "max": 19741,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 240,
+     "median": 15653.0,
+     "max": 19741,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 240,
+     "median": 12477.0,
+     "max": 15705,
+     "fit": 1.0
+    }
+   },
+   "close_friend": {
+    "item_times": 240,
+    "sources": [
+     "messages"
+    ],
+    "records_median": 550.0,
+    "dicts": {
+     "n": 240,
+     "median": 53638.0,
+     "max": 63375,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 240,
+     "median": 48270.0,
+     "max": 57002,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 240,
+     "median": 37314.0,
+     "max": 44109,
+     "fit": 0.0
+    }
+   },
+   "active_project": {
+    "item_times": 240,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 32.0,
+    "dicts": {
+     "n": 240,
+     "median": 2516.0,
+     "max": 3141,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 240,
+     "median": 2516.0,
+     "max": 3141,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 240,
+     "median": 1870.0,
+     "max": 2327,
+     "fit": 1.0
+    }
+   },
+   "working_hours": {
+    "item_times": 240,
+    "sources": [
+     "calendar",
+     "notes"
+    ],
+    "records_median": 155.0,
+    "dicts": {
+     "n": 240,
+     "median": 16722.5,
+     "max": 20889,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 240,
+     "median": 16722.5,
+     "max": 20889,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 240,
+     "median": 13370.5,
+     "max": 16663,
+     "fit": 1.0
+    }
+   },
+   "vip_sender": {
+    "item_times": 240,
+    "sources": [
+     "contacts",
+     "email"
+    ],
+    "records_median": 497.5,
+    "dicts": {
+     "n": 240,
+     "median": 1232390.5,
+     "max": 1385497,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 240,
+     "median": 50025.5,
+     "max": 61489,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 240,
+     "median": 38532.5,
+     "max": 47326,
+     "fit": 0.0
+    }
+   },
+   "overdue_task": {
+    "item_times": 240,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 32.0,
+    "dicts": {
+     "n": 240,
+     "median": 2516.0,
+     "max": 3141,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 240,
+     "median": 2516.0,
+     "max": 3141,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 240,
+     "median": 1870.0,
+     "max": 2327,
+     "fit": 1.0
+    }
+   },
+   "all": {
+    "item_times": 1440,
+    "sources": [
+     "calendar",
+     "contacts",
+     "email",
+     "messages",
+     "notes",
+     "tasks"
+    ],
+    "records_median": 148.0,
+    "dicts": {
+     "n": 1440,
+     "median": 16115.0,
+     "max": 1385497,
+     "fit": 0.6666666666666666
+    },
+    "dicts_no_body": {
+     "n": 1440,
+     "median": 16115.0,
+     "max": 61489,
+     "fit": 0.6666666666666666
+    },
+    "columns_no_body": {
+     "n": 1440,
+     "median": 12865.0,
+     "max": 47326,
+     "fit": 0.6666666666666666
+    }
+   }
+  }
+ },
+ "heldout": {
+  "worlds": [
+   "w1000",
+   "w1001",
+   "w1002",
+   "w1003",
+   "w1004",
+   "w1005",
+   "w1006",
+   "w1007",
+   "w1008",
+   "w1009"
+  ],
+  "definitions": {
+   "h4001_priority_project": {
+    "item_times": 120,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 31.0,
+    "dicts": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 1821.0,
+     "max": 2273,
+     "fit": 1.0
+    }
+   },
+   "h4001_social_hours": {
+    "item_times": 120,
+    "sources": [
+     "calendar"
+    ],
+    "records_median": 140.0,
+    "dicts": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 12296.5,
+     "max": 14775,
+     "fit": 1.0
+    }
+   },
+   "h4001_recently_completed_task": {
+    "item_times": 120,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 31.0,
+    "dicts": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 1821.0,
+     "max": 2273,
+     "fit": 1.0
+    }
+   },
+   "h4001_evening_chat_partner": {
+    "item_times": 120,
+    "sources": [
+     "messages"
+    ],
+    "records_median": 550.5,
+    "dicts": {
+     "n": 120,
+     "median": 53548.0,
+     "max": 63375,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 48189.0,
+     "max": 57002,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 37206.0,
+     "max": 44109,
+     "fit": 0.0
+    }
+   },
+   "h4001_after_hours_sender": {
+    "item_times": 120,
+    "sources": [
+     "contacts",
+     "email"
+    ],
+    "records_median": 500.0,
+    "dicts": {
+     "n": 120,
+     "median": 1232390.5,
+     "max": 1382582,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 50118.5,
+     "max": 60059,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 38664.0,
+     "max": 46241,
+     "fit": 0.0
+    }
+   },
+   "h4001_team_regular": {
+    "item_times": 120,
+    "sources": [
+     "calendar"
+    ],
+    "records_median": 140.0,
+    "dicts": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 12296.5,
+     "max": 14775,
+     "fit": 1.0
+    }
+   },
+   "h4002_frequent_recipient": {
+    "item_times": 120,
+    "sources": [
+     "messages"
+    ],
+    "records_median": 550.5,
+    "dicts": {
+     "n": 120,
+     "median": 53548.0,
+     "max": 63375,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 48189.0,
+     "max": 57002,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 37206.0,
+     "max": 44109,
+     "fit": 0.0
+    }
+   },
+   "h4002_deep_dive_partner": {
+    "item_times": 120,
+    "sources": [
+     "calendar"
+    ],
+    "records_median": 140.0,
+    "dicts": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 12296.5,
+     "max": 14775,
+     "fit": 1.0
+    }
+   },
+   "h4002_after_hours_sender": {
+    "item_times": 120,
+    "sources": [
+     "contacts",
+     "email"
+    ],
+    "records_median": 500.0,
+    "dicts": {
+     "n": 120,
+     "median": 1232390.5,
+     "max": 1382582,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 50118.5,
+     "max": 60059,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 38664.0,
+     "max": 46241,
+     "fit": 0.0
+    }
+   },
+   "h4002_productive_project": {
+    "item_times": 120,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 31.0,
+    "dicts": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 1821.0,
+     "max": 2273,
+     "fit": 1.0
+    }
+   },
+   "h4002_team_regular": {
+    "item_times": 120,
+    "sources": [
+     "calendar"
+    ],
+    "records_median": 140.0,
+    "dicts": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 12296.5,
+     "max": 14775,
+     "fit": 1.0
+    }
+   },
+   "h4002_priority_project": {
+    "item_times": 120,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 31.0,
+    "dicts": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 1821.0,
+     "max": 2273,
+     "fit": 1.0
+    }
+   },
+   "h4003_frequent_recipient": {
+    "item_times": 120,
+    "sources": [
+     "messages"
+    ],
+    "records_median": 550.5,
+    "dicts": {
+     "n": 120,
+     "median": 53548.0,
+     "max": 63375,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 48189.0,
+     "max": 57002,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 37206.0,
+     "max": 44109,
+     "fit": 0.0
+    }
+   },
+   "h4003_social_hours": {
+    "item_times": 120,
+    "sources": [
+     "calendar"
+    ],
+    "records_median": 140.0,
+    "dicts": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 15429.5,
+     "max": 18567,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 12296.5,
+     "max": 14775,
+     "fit": 1.0
+    }
+   },
+   "h4003_upcoming_task": {
+    "item_times": 120,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 31.0,
+    "dicts": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 1821.0,
+     "max": 2273,
+     "fit": 1.0
+    }
+   },
+   "h4003_recently_completed_task": {
+    "item_times": 120,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 31.0,
+    "dicts": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 1821.0,
+     "max": 2273,
+     "fit": 1.0
+    }
+   },
+   "h4003_hot_task": {
+    "item_times": 120,
+    "sources": [
+     "tasks"
+    ],
+    "records_median": 31.0,
+    "dicts": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 2446.0,
+     "max": 3066,
+     "fit": 1.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 1821.0,
+     "max": 2273,
+     "fit": 1.0
+    }
+   },
+   "h4003_close_relative": {
+    "item_times": 120,
+    "sources": [
+     "contacts",
+     "messages"
+    ],
+    "records_median": 577.5,
+    "dicts": {
+     "n": 120,
+     "median": 56280.5,
+     "max": 66823,
+     "fit": 0.0
+    },
+    "dicts_no_body": {
+     "n": 120,
+     "median": 50915.5,
+     "max": 60450,
+     "fit": 0.0
+    },
+    "columns_no_body": {
+     "n": 120,
+     "median": 39251.5,
+     "max": 46704,
+     "fit": 0.0
+    }
+   },
+   "all": {
+    "item_times": 2160,
+    "sources": [
+     "calendar",
+     "contacts",
+     "email",
+     "messages",
+     "tasks"
+    ],
+    "records_median": 136.0,
+    "dicts": {
+     "n": 2160,
+     "median": 14930.5,
+     "max": 1382582,
+     "fit": 0.6666666666666666
+    },
+    "dicts_no_body": {
+     "n": 2160,
+     "median": 14930.5,
+     "max": 60450,
+     "fit": 0.6666666666666666
+    },
+    "columns_no_body": {
+     "n": 2160,
+     "median": 11887.5,
+     "max": 46704,
+     "fit": 0.6666666666666666
+    }
+   }
+  }
+ },
+ "code": {
+  "commit": "fabdc90e7e29757c55ce339c18986bf125406797",
+  "dirty": true
+ }
+}

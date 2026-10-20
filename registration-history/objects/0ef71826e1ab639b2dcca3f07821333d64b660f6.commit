@@ -1,8 +1,0 @@
-tree e82ce8e529729c9ff4763154deedd7842079ad6f
-parent ccc4c5d50dc93ebb316a6eaef8df68edc1797ac1
-author zichuanxu <zichuanxu28@gmail.com> 1790784922 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790784922 +0900
-
-Paper: introduction and abstract rewritten around the surviving claims (detection is cheap and repair decides by item class; a model's citations are not its dependencies; repair needs an executable derivation; writer switches; breadth), scoped to structured personal records and codified definitions, with the registration order stated and the class analyses marked exploratory
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

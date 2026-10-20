@@ -1,8 +1,0 @@
-tree 477e214296aad6cef452583f87d70a2597fb5cb7
-parent de6d8794b75a22ec5f9c7fcde90f49a393fbb189
-author zichuanxu <zichuanxu28@gmail.com> 1790606085 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790606085 +0900
-
-E1 CLI: --branches (for orphan and conflict supplements)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

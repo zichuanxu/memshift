@@ -1,4 +1,4 @@
-"""E1 analysis (plan §4.4, §6 E1): item-paired detection and repair metrics per cell.
+"""E1 analysis: item-paired detection and repair metrics per cell.
 
 For every (world, branch, slot, checkpoint k) the gold at k is compared with the gold at t0:
   changed   gold value or status differs from t0
@@ -11,15 +11,15 @@ Update / Stability = ContractValid on changed / unchanged items (discriminative 
 changed items plus an equal-size seeded sample of unchanged ones per world-branch-k).
 Contrasts are world-clustered paired differences with bootstrap intervals.
 
-Exploratory (decisions.md 2026-09-28): `_nofb` cells keep the D=1 checker but disable its
-programmatic fallback, isolating checking from executable extraction in the repair contrasts.
+`_nofb` cells keep the D=1 checker but disable its programmatic fallback, isolating checking from
+executable extraction in the repair contrasts.
 
-Exploratory (decisions.md 2026-09-30): `ex_e1_classes` adds class-stratified contrasts, the Eq. (1)
-decomposition and other splits of this item table under `explore_*` keys; nothing above changes.
+`ex_e1_classes` adds class-stratified contrasts, the Eq. (1) decomposition and other splits of this
+item table under `explore_*` keys; nothing above changes.
 
-Prereg v2 §4 (block C): when D1s cells are present (D=1 with writer-authored programs instead of
-benchmark-authored rules), `e1_synth` adds C1-C4 to the contrasts and per-type program statistics
-under `synth_programs`; runs without D1s cells analyse exactly as before.
+When D1s cells are present (D=1 with writer-authored programs instead of benchmark-authored rules),
+`e1_synth` adds C1-C4 to the contrasts and per-type program statistics under `synth_programs`; runs
+without D1s cells analyse exactly as before.
 """
 
 from __future__ import annotations
@@ -54,12 +54,12 @@ HM_CELLS = (
     "holdmem_D1B1_cluster",
     "holdmem_D0B1_cited",
     "holdmem_D1B1_cited",
-    # exploratory D=1 no-fallback cells (checker-only)
+    # D=1 no-fallback cells (checker-only)
     "holdmem_D1B0_nofb",
     "holdmem_D1B1_source_nofb",
     "holdmem_D1B1_cluster_nofb",
     "holdmem_D1B1_cited_nofb",
-    # D1s: writer-authored programs (prereg v2 §4)
+    # D1s: writer-authored programs
     "holdmem_D1sB0",
     "holdmem_D1sB1_source",
     "holdmem_D1sB1_cited",
@@ -78,7 +78,7 @@ HM_CELLS = (
     "holdmem_D1sB0_ra",
     "holdmem_D1sB1_source_ra",
     "holdmem_D0fullB1_source",
-    # prereg v4 block U: slot-keyed upsert cells and the D1s refresh cell
+    # slot-keyed upsert cells and the D1s refresh cell
     "holdmem_D0B0_upsert",
     "holdmem_D1B0_upsert",
     "holdmem_D1sB0_upsert",
@@ -87,8 +87,8 @@ HM_CELLS = (
 
 
 def detection_events(system: str) -> tuple[str, ...]:
-    """History events that count as detection in a cell: `invalidate`; in an upsert cell (prereg
-    v4 block U) also `supersede`, the retirement of a slot's older items by its new delta item."""
+    """History events that count as detection in a cell: `invalidate`; in an upsert cell also
+    `supersede`, the retirement of a slot's older items by its new delta item."""
     return ("invalidate", "supersede") if "_upsert" in system else ("invalidate",)
 
 
@@ -230,7 +230,7 @@ def _repaired_in(prefixes: tuple[str, ...]) -> Cond:
 def contrasts(
     rows: list[Row], branch: str, paired_diff: Callable[..., Any] = paired_diff
 ) -> dict[str, Any]:
-    """Pre-registered E1 contrasts (prereg v0 §5, v1 §4), world-clustered paired differences.
+    """The E1 contrasts, world-clustered paired differences.
 
     `paired_diff` may be replaced by a function that keeps its two per-world item maps (the return
     value only needs `to_json()`): `analysis.rendered` takes each contrast's item-level values that
@@ -264,7 +264,7 @@ def contrasts(
             _vec(rows, d1, branch, "repair_mech", rep), _vec(rows, d0, branch, "repair_mech", rep)
         )
     for g in grans:
-        # prereg v0 §4 path 1: B effect on Update, pooled over D
+        # B effect on Update, pooled over D
         a: dict[str, dict[str, float]] = defaultdict(dict)
         b: dict[str, dict[str, float]] = defaultdict(dict)
         for d in (0, 1):
@@ -273,7 +273,7 @@ def contrasts(
             for w, v in _vec(rows, f"holdmem_D{d}B0", branch, "cv", ch).items():
                 b[w].update({f"{k}|D{d}": x for k, x in v.items()})
         out[f"B_effect_update_pooled_{g}"] = paired_diff(a, b)
-        # prereg v1 §4: B x D interaction on Update, [B effect | D=1] - [B effect | D=0]
+        # B x D interaction on Update, [B effect | D=1] - [B effect | D=0]
         u = {
             (d, bb): _vec(
                 rows, f"holdmem_D{d}B1_{g}" if bb else f"holdmem_D{d}B0", branch, "cv", ch
@@ -289,7 +289,7 @@ def contrasts(
             _vec(rows, f"holdmem_D1B1_{g}", branch, "cv", rep_ch),
             _vec(rows, f"holdmem_D0B1_{g}", branch, "cv", rep_ch),
         )
-    # Exploratory (not pre-registered; decisions.md 2026-09-28): D effect on repair by item class.
+    # D effect on repair by item class.
     # D=1's programmatic extraction computes rule-covered structured items and definition items
     # exactly as gold is defined; free-text user attributes have no rule (checker only).
     for g in grans:
@@ -299,9 +299,8 @@ def contrasts(
                 _vec(rows, f"holdmem_D1B1_{g}", branch, "cv", rc),
                 _vec(rows, f"holdmem_D0B1_{g}", branch, "cv", rc),
             )
-    # Exploratory (not pre-registered; decisions.md 2026-09-28): the D=1 fallback vs checker-only
-    # (_nofb) split, isolating the programmatic fallback's contribution from the checker's, only
-    # reported when a run includes the _nofb cell.
+    # The D=1 fallback vs checker-only (_nofb) split, isolating the programmatic fallback's
+    # contribution from the checker's, only reported when a run includes the _nofb cell.
     systems_present = {r["system"] for r in rows}
     for g in grans:
         d1, d1_nofb, d0 = f"holdmem_D1B1_{g}", f"holdmem_D1B1_{g}_nofb", f"holdmem_D0B1_{g}"
@@ -376,7 +375,7 @@ def analyse(*run_dirs: Path, out: Path | None = None) -> dict[str, Any]:
         result["synth_programs"] = e1_synth.program_stats(data)
     from memshift.analysis import ex_e1_classes  # lazy, see `contrasts`
 
-    result.update(ex_e1_classes.analyse_rows(rows, run_dirs))  # exploratory: every key explore_*
+    result.update(ex_e1_classes.analyse_rows(rows, run_dirs))  # every key explore_*
     adir = (out or run_dirs[0]) / "analysis"
     adir.mkdir(parents=True, exist_ok=True)
     (adir / "e1_metrics.json").write_text(json.dumps(result, indent=1))

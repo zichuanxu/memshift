@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the block-N image of one native memory system on top of the CPU run image
+# Build the image of one native memory system of E5 on top of the CPU run image
 # (docker/Dockerfile.native). Prints the image tag; run a driver with it through run.sh by setting
 # MEMSHIFT_RUN_IMAGE to that tag.
 # Usage: build_native.sh SYSTEM   (a file docker/native/SYSTEM.txt must exist)

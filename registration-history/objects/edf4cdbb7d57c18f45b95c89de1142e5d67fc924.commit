@@ -1,8 +1,0 @@
-tree e25582d8d36d5bc10e211482431321b5992815c4
-parent 85ed9e1db7f76f7280c0bc2ab2bc939801a3dabb
-author zichuanxu <zichuanxu28@gmail.com> 1792134134 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792134134 +0900
-
-e1_estimate Recorder: set api for LLMClient.request_body (round-3 Anthropic client)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,12 +1,12 @@
 """
-探针生成：点查询，带 as-of 时间与 gold；分叉后 k = 1, 2, 4, 8。负责：研究员 1。
+Probe generation: point queries with an as-of time and gold; k = 1, 2, 4, 8 after the fork.
 
-Probe schema (plan §4.3): `{probe_id, fact_id, as_of, question_text, gold_value, gold_status,
+Probe schema: `{probe_id, fact_id, as_of, question_text, gold_value, gold_status,
 deps, kappa_version, agent_id}`. Gold status is `abstain` when the fact has no current value and
 `blocked` when the asking agent lacks consent for a source the fact depends on.
 
 A definition item's question ends with "Definition in effect: <statement>" of the version in effect
-at the probe time. `unnamed_defs=True` (prereg v4 block Q) leaves that sentence out; the question
+at the probe time. `unnamed_defs=True` leaves that sentence out; the question
 keeps "under the user's current definition", and the probe ids, gold and dependencies are unchanged.
 """
 

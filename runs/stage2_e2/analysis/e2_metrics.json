@@ -1174,7 +1174,7 @@
     "n_worlds": 20,
     "n_items": 830
    },
-   "holds": true
+   "est_at_least_zero": true
   },
   "same": {
    "d1_minus_d0_survival": {
@@ -1185,7 +1185,7 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": true
+   "est_at_least_zero": true
   },
   "upgrade": {
    "d1_minus_d0_survival": {
@@ -1196,10 +1196,10 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": true
+   "est_at_least_zero": true
   }
  },
- "path3_quantitative_prediction_holds": {
+ "path3_within_threshold_by_tier": {
   "downgrade": true,
   "same": true,
   "upgrade": false
@@ -1562,7 +1562,7 @@
    "hi90": 0.9023087865193128,
    "hi95": 0.9181482740204884
   },
-  "triggered": false,
+  "within_threshold": true,
   "tier_caveats": [
    "upgrade"
   ]

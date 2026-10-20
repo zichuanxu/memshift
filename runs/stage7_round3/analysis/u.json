@@ -1,6 +1,6 @@
 {
  "block": "U",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -3998,109 +3998,89 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "U1": {
-   "verdict": "holds",
-   "reason": "4 of 4 R_refresh >= 0.8",
    "tests": [
     {
      "key": "R_refresh_D1_src_definition",
      "value": 1.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0.8"
     },
     {
      "key": "R_refresh_D1_def_definition",
      "value": 0.9931972789115646,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0.8"
     },
     {
      "key": "R_refresh_Dm_src_definition",
      "value": 0.9369369369369369,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0.8"
     },
     {
      "key": "R_refresh_Dm_def_definition",
      "value": 0.9166666666666666,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0.8"
     }
    ]
   },
   "U3": {
-   "verdict": "judged",
-   "reason": "R_upsert 0.01 over ['D1/src', 'D1/def', 'Dm/src', 'Dm/def']",
    "tests": [
     {
      "key": "R_upsert_pooled",
      "value": 0.007984031936127744,
-     "ok": null,
+     "meets_threshold": null,
      "threshold": ">= 0.8 executability; <= 0.5 key_schedule"
     }
-   ],
-   "reading": "key_schedule"
+   ]
   },
   "U4": {
-   "verdict": "fails",
-   "reason": "0 of 1 met; not met: Update(D1B0_upsert) - Update(D1B0), S_del, all items -0.0283",
    "tests": [
     {
      "key": "Update(D1B0_upsert) - Update(D1B0), S_del, all items",
      "value": -0.028296547821165818,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "est > 0 and lo > 0"
     }
-   ],
-   "reading_if_fails": "the deletion benefit of binding is not available to an upsert memory"
+   ]
   },
   "U5": {
-   "verdict": "holds",
-   "reason": "3 of 3 families read 'key_schedule' (0 without a reading)",
    "tests": [],
    "families": {
     "google/gemma-4-12B-it": {
-     "verdict": "judged",
-     "reason": "R_upsert 0.07 over ['D1/src', 'D1/def']",
      "tests": [
       {
        "key": "R_upsert_pooled",
        "value": 0.07246376811594203,
-       "ok": null,
+       "meets_threshold": null,
        "threshold": ">= 0.8 executability; <= 0.5 key_schedule"
       }
-     ],
-     "reading": "key_schedule"
+     ]
     },
     "meta-llama/Llama-3.1-8B-Instruct": {
-     "verdict": "judged",
-     "reason": "R_upsert -0.16 over ['D1/src', 'D1/def']",
      "tests": [
       {
        "key": "R_upsert_pooled",
        "value": -0.16129032258064516,
-       "ok": null,
+       "meets_threshold": null,
        "threshold": ">= 0.8 executability; <= 0.5 key_schedule"
       }
-     ],
-     "reading": "key_schedule"
+     ]
     },
     "openai/gpt-oss-20b": {
-     "verdict": "judged",
-     "reason": "R_upsert -0.03 over ['D1/src', 'D1/def']",
      "tests": [
       {
        "key": "R_upsert_pooled",
        "value": -0.02843601895734597,
-       "ok": null,
+       "meets_threshold": null,
        "threshold": ">= 0.8 executability; <= 0.5 key_schedule"
       }
-     ],
-     "reading": "key_schedule"
+     ]
     }
-   },
-   "main_reading": "key_schedule"
+   }
   }
  },
  "reported": {
@@ -11906,10 +11886,10 @@
   }
  },
  "notes": {
-  "U1": "\"Holds if true in at least 3 of the 4\": an R that is not evaluated (denominator < 5 pp) is neither true nor false; holds with 3 true, fails when fewer than 3 can be true, else not judged.",
-  "U3": "pooled over the four (arm, shift) combinations: one ratio of the item-times of all four. The verdict is `judged` with the reading (executability >= 0.8, key_schedule <= 0.5, both between), both bounds inclusive.",
-  "U4": "the D=1 arm (D1B0_upsert against D1B0), all items, S_del (branch orphan); holds when the point estimate and the lower bound are above 0.",
-  "U5": "per M2 family U3's ratio over D=1 (the M2 runs have no D_m) and S_src, S_def; holds when at least 2 of the 3 families give the main study's U3 reading."
+  "U1": "R_refresh >= 0.8 for each of the four (arm, shift) combinations (D=1 and D_m, S_src and S_def, definition items); an R that is not evaluated (denominator < 5 pp) has no value.",
+  "U3": "pooled over the four (arm, shift) combinations: one ratio of the item-times of all four, against 0.8 (executability) and 0.5 (key schedule), both bounds inclusive.",
+  "U4": "the D=1 arm (D1B0_upsert against D1B0), all items, S_del (branch orphan): the point estimate and the lower bound above 0.",
+  "U5": "per M2 family U3's ratio over D=1 (the M2 runs have no D_m) and S_src, S_def, against the same bounds."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

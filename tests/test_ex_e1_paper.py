@@ -1,5 +1,5 @@
-"""Paper numbers, tables and figure of the exploratory E1-family analyses (`analysis.ex_e1_paper`),
-and the committed stage analyses they read: the class `all` of the split reproduces the registered
+"""Paper numbers, tables and figure of the further E1-family analyses (`analysis.ex_e1_paper`),
+and the committed stage analyses they read: the class `all` of the split reproduces the main
 contrasts to the last digit, the Eq. (1) identity holds in every cell, the numbers a reviewer
 recomputed from the item tables are the ones staged, and the committed generated files are
 current."""
@@ -17,6 +17,7 @@ from memshift.analysis import ex_e1_paper as xp
 from memshift.analysis import ex_review_paper as rp
 from memshift.analysis import ex_round2 as r2
 from memshift.analysis import ex_round3 as r3
+from memshift.analysis import ex_round3_review as rv
 from memshift.analysis import paper_numbers as pn
 from memshift.analysis.paper_data import MISSING
 from tests.test_paper_stage4 import check_tex
@@ -25,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
 INP = xp.load(ROOT, SOURCES)
 EMPTY = xp.load(ROOT, {})
-REGISTERED = {  # class-split key -> the registered e1.contrasts key (source-epoch cells)
+MAIN_CONTRASTS = {  # class-split key -> the e1.contrasts key (source-epoch cells)
     "B_effect_update_D0": "B_effect_update_D0_source",
     "B_effect_update_D1": "B_effect_update_D1_source",
     "B_effect_update_pooled": "B_effect_update_pooled_source",
@@ -41,11 +42,11 @@ def _same(a: float, b: float) -> bool:
 
 # ---------------------------------------------------------------- the committed stage analyses
 @pytest.mark.parametrize("key", ["main", "rep", "gem", "llama", "gpt", "dev"])
-def test_class_all_reproduces_the_registered_contrasts_to_the_last_digit(key):
+def test_class_all_reproduces_the_main_contrasts_to_the_last_digit(key):
     m = INP[key]
     for b, contrasts in m["contrasts"].items():
         allc = m["explore_class_split"]["D1"][b]["source"]["all"]
-        for new, old in REGISTERED.items():
+        for new, old in MAIN_CONTRASTS.items():
             for f in ("est", "lo", "hi", "n_worlds", "n_items"):
                 assert _same(allc[new][f], contrasts[old][f]), (key, b, new, f)
 
@@ -123,7 +124,7 @@ def test_replication_accounting_and_holm_on_the_committed_stages():
     rep = INP["cross"]["explore_replication"]
     se = rep["source_epoch"]
     assert (se["n_contrasts"], se["n_identities"], se["n_non_identity"]) == (21, 6, 15)
-    assert se["verdicts_non_identity"]["replicated"] == 15
+    assert se["replication_non_identity"]["replicated"] == 15
     holm = rep["holm_non_detection"]
     for stage in ("main", "rep"):
         h = holm[stage]
@@ -168,7 +169,8 @@ def test_macro_names_do_not_collide_with_the_earlier_ones():
     round2 = r2.numbers(r2.load(ROOT, SOURCES))  # and the review-round-2 block
     assert round2.keys() <= macros.keys()
     ex |= {k: v for k, v in round2.items() if k.startswith("Ex")}  # not its ETwoExWriter ones
-    ex |= r3.numbers(r3.load(ROOT, SOURCES))  # and the review-round-3 exploratory block (ExRThree)
+    ex |= r3.numbers(r3.load(ROOT, SOURCES))  # and the block of `ex_round3` (ExRThree)
+    ex |= rv.numbers(rv.load(ROOT, SOURCES))  # and the block of `ex_round3_review` (ExRev)
     assert ex.keys() <= macros.keys() and all(k.startswith("Ex") for k in ex)
     assert not any(k.startswith("Ex") for k in macros.keys() - ex.keys() if not k.endswith("Est"))
 
@@ -184,6 +186,10 @@ def test_macros_carry_the_staged_estimates():
     assert m["ExMixLlamaSrcDefinitionItems"] == m["ExMixGemSrcDefinitionItems"] == "165"
     assert m["ExDecLlamaSrcOtherDzeroBoneRepair"].startswith("75.7")
     assert m["ExRepIdentities"] == "6" and m["ExRepNonIdentity"] == "15"
+    assert m["ExRepClassDefinitionN"] == m["ExRepClassOtherN"] == "24"
+    assert m["ExRepClassDefinitionExcludesZero"] == "23" and m["ExRepClassOtherSameSign"] == "17"
+    assert not any("Replicated" in k or k.startswith("ExRepNonIdentity") and k != "ExRepNonIdentity"
+                   for k in m)  # fmt: skip
     assert m["ExNoiseHoldPooledValues"] == "66" and m["ExNoiseHoldPooledAnswers"] == "18"
     assert m["ExNoiseHoldPooledItems"] == "5,760" and m["ExNoiseHoldPooledWorlds"] == "40"
     assert m["ExNoiseHoldPooledWorldValues"] == "22" and m["ExNoiseHoldPooledWorldAnswers"] == "6"
@@ -211,31 +217,33 @@ def test_tables_are_wellformed_with_data_and_without():
         for name, tex in xp.tables(inp).items():
             check_tex(tex)
             assert tex.startswith("\\begin{table}") and f"\\label{{tab:{name[4:-4]}}}" in tex
-    assert MISSING in xp.tab_classsplit(EMPTY) and MISSING in xp.tab_decomp(EMPTY)
-    assert MISSING not in xp.tab_classsplit(INP) and MISSING not in xp.tab_decomp(INP)
+    assert set(xp.tables(INP)) == {"tab_classsplit.tex"}
+    assert MISSING in xp.tab_classsplit(EMPTY) and MISSING not in xp.tab_classsplit(INP)
 
 
-def test_class_table_shows_both_studies_for_every_contrast():
+def test_class_table_shows_both_studies_for_every_shift_and_class():
     tex = xp.tab_classsplit(INP)
-    for label in ("$B$ effect, $D{=}0$", "$D$ effect, $B{=}1$", "$B{\\times}D$ interaction"):
+    for label in ("$B$ effect", "$D$ effect", "$B{\\times}D$", "share (\\%)"):
         assert label in tex
-    assert tex.count("\\quad\\textcolor{gray}{repl.}") == 5  # one replication line per contrast
-    # the one interval format: estimate and bounds signed, scriptsize, a thin space after the comma
-    assert "$-$0.6\\,{\\scriptsize [$-$3.8,\\,$+$2.5]}" in tex and "\\tiny" not in tex
+    assert tex.count("& \\color{gray}repl. &") == 6  # one replication row per shift and class
+    assert tex.count(" \\\\\n") == 2 + 12  # two header rows, then shift x class x study
+    # estimate and interval as two aligned cells: signed, scriptsize, a thin space after the comma
+    assert "$-$0.6 & {\\scriptsize [$-$3.8,\\,$+$2.5]}" in tex and "\\tiny" not in tex
+    assert tex.count("r@{\\,}l") == 5  # one column pair per contrast
+    assert "\\%" not in tex.split("\\midrule", 1)[1]  # units in the header only
 
 
-def test_class_table_caption_defines_the_contrasts_and_the_status_of_each_study():
+def test_class_table_caption_names_both_studies_and_the_share():
     caption = xp.tab_classsplit(INP).split("\\label{tab:classsplit}")[0]
     for term in (
-        "$B$ effect: $B{=}1$ minus $B{=}0$ at the given $D$",
-        "$D$ effect: $D{=}1$ minus $D{=}0$ at the given $B$",
-        "$B{\\times}D$: the $B$ effect at $D{=}1$ minus that at $D{=}0$",
+        "in the main study and in the replication on",
+        "fresh worlds (grey)",
         "Share: the class's share of the changed item-times in the main study",
-        "whose class split is exploratory",
-        "fresh worlds), whose class rows are registered",
     ):
         assert term in caption, term
-    assert "pre-registered" not in caption and "\nshare & " in xp.tab_classsplit(INP)
+    assert "regist" not in caption and "exploratory" not in caption
+    # the contrasts are defined once, in the opening of the appendix of results
+    assert "minus" not in caption and "95\\%" not in caption
 
 
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
@@ -245,12 +253,14 @@ def test_tables_compile(tmp_path):
     (tmp_path / "t.tex").write_text(
         "\n".join(
             [
-                r"\documentclass[11pt]{article}\usepackage[T1]{fontenc}",
-                r"\usepackage[letterpaper,margin=1in]{geometry}",
+                r"\documentclass[10pt]{article}\usepackage[T1]{fontenc}",
+                r"\usepackage[textwidth=6.75in,textheight=9in]{geometry}",  # the appendix block
+                r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
+                r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
-                r"\begin{document}\input{tab_classsplit.tex}\input{tab_decomp.tex}\end{document}",
+                r"\begin{document}\input{tab_classsplit.tex}\end{document}",
             ]
         )
     )
@@ -286,7 +296,7 @@ def test_committed_generated_files_are_current():
         assert pn._macro(name, value) in numbers, name
 
 
-def test_results_sources_name_the_exploratory_stages():
+def test_results_sources_name_the_further_stages():
     assert SOURCES["dev_e1"] == "runs/stage1_e1"
     assert SOURCES["dev_orphan_e1"] == "runs/stage1_orphan"
     assert SOURCES["short_e1"] == "runs/stage5_short_e1"

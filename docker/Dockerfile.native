@@ -1,4 +1,4 @@
-# Per-system image for block N (prereg/v2.md §3): the CPU run image plus one native memory
+# Per-system image for the native memory systems of E5: the CPU run image plus one native memory
 # system's pinned closure from docker/native/<system>.txt. Build with scripts/build_native.sh,
 # which passes the base image, the system and the pip flags that system's file asks for.
 ARG BASE

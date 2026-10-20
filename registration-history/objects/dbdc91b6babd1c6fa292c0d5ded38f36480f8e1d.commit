@@ -1,8 +1,0 @@
-tree 2aabc5ccd1102f58c3fa1e76e9d0daaabe2804bd
-parent cea8a80b1c2bb6db8929342e814157c487f41e28
-author zichuanxu <zichuanxu28@gmail.com> 1790741587 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790741587 +0900
-
-E2: T1 computed for every cell of a tier (exploratory explore_t1_cells; the pre-registered HoldMem(1,1) entry is the same computation), so HoldMem(0,1) has a T1 verdict per tier
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

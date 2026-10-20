@@ -6,13 +6,13 @@
   "created_utc": "2026-10-17T05:16:47Z",
   "experiment": "merged-ex_round3",
   "files_sha256": {
-    "analysis/dm_deletion.json": "8d1e4b5c6d857836be89e93fbfb324151ee712975153cf29947c0f2e779a1033",
-    "analysis/natural.json": "fa5443167c56867f3a336e8ae68c966d82587069e3735afd16a344dcf45d2bff",
-    "analysis/store_reader.json": "14717a281c8fef99520b149602eaae158056c02a9eabc4de12dc13dd5c27dd1d",
-    "analysis/view.json": "fa3e4d8d322a0260ce705b5daa6cf0c86f76180cda4fb13514fe30d13dc7a773",
-    "analysis/writers.json": "9d50bbef3025ef6c291c358b1a78c31146b617811c712a23a2f134b7832aaae6"
+    "analysis/dm_deletion.json": "76e6000c6f5faa4c193a8970f0b3eb4dafe290d84977d7cc23614ff93807a95b",
+    "analysis/natural.json": "11f5c3e6f6fa222da24542e2d4c2bd091b29dc63f540b7078c0a4ee55f5aba9a",
+    "analysis/store_reader.json": "18ba7d963872b89db1e989828a8290ad20a87522e725aa138bc9233ff893d92c",
+    "analysis/view.json": "8d1ed5ef8b7c261cad98f75bd946e6a680b1f952557c94404b7e07d55156f347",
+    "analysis/writers.json": "eb6dc2c4c93fffbba24eb47497c980333158189aa17c57f3eab01e081a62075b"
   },
-  "note": "exploratory, post hoc (prereg/decisions.md 2026-10-16); computed from the raw runs of the source stages and the seeded generator, no model call; the draft tables the store_reader and view producers also write are not staged. dm_deletion.json, store_reader.json and view.json are recomputed after stage4_c_e1 took the re-run e1_synth_s1016-1019_20261016T222156Z (prereg/decisions.md 2026-10-17). natural.json reads stage2_e1 only and is the file staged on 2026-10-16: rerunning its producer now changes only its audit of natural-branch answers, which finds the block N runs made after it. writers.json (the axes of the writer figure) reads the 18 G-b program sets, whose Qwen3.5-9B, Claude Sonnet 5.5 and Claude Opus 5.5 sets are re-runs from the response cache (prereg/decisions.md 2026-10-17), and the H-a and H-c runs",
+  "note": "additional analyses, computed from the raw runs of the source stages and the seeded generator, no model call; the draft tables the store_reader and view producers also write are not staged. dm_deletion.json, store_reader.json and view.json are recomputed after stage4_c_e1 took the re-run e1_synth_s1016-1019_20261016T222156Z. natural.json reads stage2_e1 only and is the file staged on 2026-10-16: rerunning its producer now changes only its audit of natural-branch answers, which finds the block N runs made after it. writers.json (the axes of the writer figure) reads the 18 G-b program sets, whose Qwen3.5-9B, Claude Sonnet 5.5 and Claude Opus 5.5 sets are re-runs from the response cache, and the H-a and H-c runs",
   "producers": {
     "analysis/dm_deletion.json": "python -m memshift.analysis.ex_round3_dm_deletion --out runs/stage6_ex_round3/analysis/dm_deletion.json",
     "analysis/natural.json": "python -m memshift.analysis.ex_round3_natural --check-published --out runs/stage6_ex_round3/analysis/natural.json",
@@ -25,21 +25,21 @@
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "manifest_sha256": "c2d9112ae0a27377b9293e69becb1505bf2e07c4fc9be61abc8fcb00e50ad863",
       "run_id": "stage2_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "6128f3a59c20ce483b83076094557ea6736f1c2f790dc38b1e1b9efb0bfe1089",
+      "manifest_sha256": "d32178ada1af98059192e463e33dd83af83047e8129c664ca24a168cbff1f8ea",
       "run_id": "stage4_c_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-ctl",
-      "manifest_sha256": "4496b8be50b97205a17dd8bab0970576ff3b490ea52646cfc4f0c081712959bd",
+      "manifest_sha256": "916b18f1775fbd2bf1fa7fd18d7e73fbaec89cefd5c8463c0f0757a33c23b0ab",
       "run_id": "stage5_controls",
       "worlds": []
     },

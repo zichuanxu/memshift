@@ -7,9 +7,9 @@
   "experiment": "merged-e1",
   "files_sha256": {
     "analysis/e1_item_table.jsonl": "c7eeed3c0e45dff90970dea78ce6ab70d35473b614f96d05b0ad67efcdb9cd77",
-    "analysis/e1_metrics.json": "328ae37e1d4b094743146e433bd75786276627b051e1d73f4a9ebeaf481de9d3"
+    "analysis/e1_metrics.json": "804b952d8fffc30267fe56552f08fd95b73144761fb124d06501198b94e11b0b"
   },
-  "note": "registered block C (prereg/v2.md \u00a74: C1-C4 under contrasts in e1_metrics.json; the explore_* blocks are exploratory) on worlds 1000-1019, computed from the raw runs, no model call; e1_synth_s1016-1019_20261016T222156Z, a re-run from the response cache with the original parameters (one program per program key), replaces e1_synth_s1016-1019_20260929T150913Z (prereg/decisions.md 2026-10-17); the other nine runs are unchanged",
+  "note": "block C (C1-C4 under contrasts in e1_metrics.json; the explore_* blocks are additional analyses) on worlds 1000-1019, computed from the raw runs, no model call; e1_synth_s1016-1019_20261016T222156Z, a re-run from the response cache with the original parameters (one program per program key), replaces e1_synth_s1016-1019_20260929T150913Z; the other nine runs are unchanged",
   "producers": {
     "analysis/e1_item_table.jsonl": "python -m memshift.analysis.stage e1 runs/stage4_c_e1 runs/e1_synth_s1000b_20260929T144647Z runs/e1_synth_s1001-1002_20260929T180353Z runs/e1_synth_s1003-1004_20260929T180355Z runs/e1_synth_s1005-1006_20260929T180357Z runs/e1_synth_s1007-1008_20260929T180359Z runs/e1_synth_s1009-1010_20260929T180401Z runs/e1_synth_s1011-1012_20260929T180403Z runs/e1_synth_s1013-1014_20260929T180405Z runs/e1_synth_s1015_20260929T180407Z runs/e1_synth_s1016-1019_20261016T222156Z",
     "analysis/e1_metrics.json": "python -m memshift.analysis.stage e1 runs/stage4_c_e1 runs/e1_synth_s1000b_20260929T144647Z runs/e1_synth_s1001-1002_20260929T180353Z runs/e1_synth_s1003-1004_20260929T180355Z runs/e1_synth_s1005-1006_20260929T180357Z runs/e1_synth_s1007-1008_20260929T180359Z runs/e1_synth_s1009-1010_20260929T180401Z runs/e1_synth_s1011-1012_20260929T180403Z runs/e1_synth_s1013-1014_20260929T180405Z runs/e1_synth_s1015_20260929T180407Z runs/e1_synth_s1016-1019_20261016T222156Z"

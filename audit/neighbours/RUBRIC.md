@@ -4,7 +4,7 @@ Context: we build a verified property table comparing a new benchmark (MemShift:
 worlds with byte-identical counterfactual branches; shifts of source revision, of the person's own
 definitions with source bytes unchanged, source deletion/orphan, memory-writing model, memory
 implementation/export-import; 48 derived knowledge items per world with gold dependency sets; deterministic
-scoring, no LLM judge; pre-registered) with its nearest neighbours. You extract properties of ONE neighbour
+scoring, no LLM judge) with its nearest neighbours. You extract properties of ONE neighbour
 paper at a time from its full text. Work only from the paper text in
 `src/<name>.txt` next to this file (not part of the repository)
 (pdftotext of the arXiv PDF; form-feed characters separate PDF pages; `<name>.pdf` is next to it; use `pdftotext -layout -f P -l P`
@@ -42,8 +42,7 @@ Fields:
 7. `scoring` — free text: exact/deterministic match, token F1, LLM judge (name the judge model and prompt origin if given), human evaluation, rule-based; list all used and which is primary.
 8. `memory_systems` — free text: number and names of memory systems/architectures evaluated (count them from tables; say whether long-context/RAG baselines are counted separately).
 9. `counterfactual` — {`yes`,`no`,`partial`}: controlled counterfactual comparison, i.e. the same history/input with vs without the change (matched pair, byte-identical or otherwise controlled), so the change's effect is isolated. `partial` if the contrast is controlled in some other way (e.g. same question with a swapped rendering); explain.
-10. `prereg` — {`yes`,`no`,`not stated`}: pre-registration or frozen analysis plan (hypotheses/thresholds fixed before running). `not stated` if the paper never mentions it (list grep terms: preregist, pre-regist, frozen, hypothes, registered report).
-11. `extras` — optional free text (1-3 sentences) of anything important for comparing with MemShift that the fields above miss (e.g. explicit detection-vs-repair split, temporal validity handling). Keep factual, with an evidence quote if possible.
+10. `extras` — optional free text (1-3 sentences) of anything important for comparing with MemShift that the fields above miss (e.g. explicit detection-vs-repair split, temporal validity handling). Keep factual, with an evidence quote if possible.
 
 Top-level keys: `key` (bib key given in your task), `src` (the <name> of the .txt), `title`, `arxiv` (id and version read), `venue_status` (as printed in the PDF: e.g. "ICLR 2025", "arXiv preprint"), `readability` ("full" or which parts were unreadable), `fields`.
 
@@ -59,10 +58,9 @@ Do not write any other files. No emojis.
 ## Derived table fields and PLANNED flags (added for the paper table)
 
 `properties.json` is the single source of the paper's neighbour table (`python -m
-memshift.analysis.neighbour_table audit/neighbours/properties.json
-paper/generated/tab_neighbours.tex` writes the Section 2 table, the appendix table
-`tab_neighbours_full.tex` and the count macros `neighbour_counts.tex`; `tests/test_neighbour_table.py`
-fails if a generated file is out of date). Every object also carries `short_name` (the row label).
+memshift.analysis.neighbour_table audit/neighbours/properties.json paper/generated` writes the
+table `tab_neighbours_full.tex` and the count macros `neighbour_counts.tex`;
+`tests/test_neighbour_table.py` fails if a generated file is out of date). Every object also carries `short_name` (the row label).
 Besides the fields above, each object has derived fields of the form `{"value", "derived_from",
 "note"}`, condensed by hand from the free-text field named in `derived_from` (the note says how):
 
@@ -81,9 +79,9 @@ Besides the fields above, each object has derived fields of the form `{"value", 
   (`runs/stage2_e1/analysis/e1_metrics.json`), and a test recomputes the count from that file.
 
 Two optional flags are read on the MemShift row only (a neighbour row that carries one is rejected):
-`planned_extra` (a string shown as `value (+extra dagger)`, for something stage 4 adds on top of the
+`planned_extra` (a string shown as `value (+extra dagger)`, for something not yet run on top of the
 observed value) and `planned` (the whole cell is a plan; dagger). `inferred` (double dagger) marks a
-value the audit inferred but the paper does not state. Once a stage-4 result exists, set the observed
+value the audit inferred but the paper does not state. Once the result exists, set the observed
 value, delete `planned_extra` / `planned`, and rerun the generator; the footnote disappears with the
 last mark. The MemShift quotes name a repository file and are checked by `verify.py`; the neighbour
 quotes are checked against the paper texts, which are not in the repository (see `verify.py`).

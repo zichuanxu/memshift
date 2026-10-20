@@ -1,4 +1,4 @@
-"""The D1s cell (prereg v2 §4): D=1 whose replacement values are the writer's own programs."""
+"""The D1s cell: D=1 whose replacement values are the writer's own programs."""
 
 import json
 from datetime import timedelta

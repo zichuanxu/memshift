@@ -7,8 +7,8 @@
   "experiment": "merged-m2",
   "files_sha256": {
     "analysis/e1_item_table.jsonl": "bb1d33ee3d346f0794e5e245536b99afae0d6c53ab7f9429b05e9e2aa48ccfa8",
-    "analysis/e1_metrics.json": "af2740ae9c584ee91cea9d3dbb5004b7119feed26a7d1f20a070f04ef67bc3d3",
-    "analysis/families.json": "0ef0486e989064efd07043a959512e19d40f753626fbeb59bec7a04f4563cd97"
+    "analysis/e1_metrics.json": "c6980526546d464f8109f9433b6c29b2bbc7f6dfe5c1a10a7e6e21734ed5b88d",
+    "analysis/families.json": "a6ec149b6b3f8787ef9625b3c0a93d1f099f42002bf99ce9472093a42fa6f1ef"
   },
   "run_id": "stage4_m2_google_gemma-4-12b-it",
   "sources": [

@@ -1,7 +1,6 @@
-"""Exploratory null baselines for the native-system test (decisions.md 2026-09-30; not
-pre-registered, no registered verdict changes; stored by `e5.analyse` as `explore_native_null`).
+"""Null baselines for the native-system test (stored by `e5.analyse` as `explore_native_null`).
 
-The registered criterion (prereg v2 §3, N-2 / N-3) counts a comparison "inside" when the native
+The criterion of predictions N-2 and N-3 (`e5`) counts a comparison "inside" when the native
 estimate lies in the 95% interval of the white-box cell with the inferred (D, B) label, and
 `e5.stage4_summary` adds "discriminating" (inside, and outside the other B label's interval). It has
 no null: a system that stores nothing could be inside as often. For every native system in the

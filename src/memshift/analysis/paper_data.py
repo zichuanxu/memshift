@@ -1,11 +1,11 @@
-"""Inputs of the stage-4 paper numbers, tables and figure (prereg v2 §8): which staged analysis
-feeds which block, and the views derived from it that the three generators share.
+"""Inputs of the stage-4 paper numbers, tables and figure: which staged analysis feeds which block,
+and the views derived from it that the three generators share.
 
 A stage that has not been staged is None (or an empty view), and every consumer renders that as
 the MISSING marker; nothing here supplies a value that a run has not produced. Sources are named
 in results/sources.json (group -> stage directory whose analysis/*.json is committed):
 
-  rep_e1 / rep_e2 / rep_e3   block R, the frozen stage-2 analyses on the replication worlds
+  rep_e1 / rep_e2 / rep_e3   block R, the unchanged stage-2 analyses on the replication worlds
   pool_e1 / pool_e2 / pool_e3   stage 2 and R pooled over the forty test worlds (secondary)
   c                          block C, E1 with the D1s cells (analysis/e1_metrics.json)
   m1                         block M1, E2 merged over the stage-2 tiers and `cross_<slug>` tiers
@@ -13,9 +13,9 @@ in results/sources.json (group -> stage directory whose analysis/*.json is commi
   m3                         block M3, reader swaps (analysis/e7_metrics.json, theta_r_by_reader)
   n, ncost                   block N, E5 over Mem0 and the stage-4 systems; native cost per event
   l                          block L, analysis/rendered.json
-  rank                       section 6, analysis/rank_corr.json
-  mult                       exploratory multiplicity check (analysis/multiplicity.json) of the
-                             predicted-non-zero E1 contrasts of `e1` (stage 2) and `rep_e1` (R)
+  rank                       the rank correlation, analysis/rank_corr.json
+  mult                       multiplicity check (analysis/multiplicity.json) of the E1
+                             contrasts expected to be non-zero, of `e1` (stage 2) and `rep_e1` (R)
 """
 
 from __future__ import annotations
@@ -27,29 +27,12 @@ from pathlib import Path
 from typing import Any, NamedTuple
 
 from memshift.analysis import gate, replication
-from memshift.analysis.e7 import same_sign
 
 MISSING = r"\textbf{??}"
 DIGIT_WORDS = ("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
 BRANCH_TAGS = (("src", "Src"), ("def", "Def"), ("orphan", "Orphan"))
 HORIZON_TAGS = (("1", "One"), ("3", "Three"), ("12", "Twelve"))
 SYSTEM_TAGS = (("holdmem_D1B1_source", "Hold"), ("zero", "Zero"), ("rag", "Rag"))
-
-
-# the registered claim levels (`gate.claim_level`) as the paper words them
-CLAIM_LABELS = {
-    "two-factor theory + quantitative prediction": (
-        "two-factor account with quantitative prediction"
-    ),
-    "two-factor theory, qualitative predictions": "two-factor account, qualitative predictions",
-}
-
-
-def claim_label(level: str | None) -> str:
-    """The registered claim level as displayed: a registered claim, not a finding (Eq. (1) is an
-    accounting identity, so the paper speaks of an account, not a theory); MISSING when the paths
-    are not all decided."""
-    return MISSING if not level else f"registered claim: {CLAIM_LABELS.get(level, level)}"
 
 
 def get(d: Any, *path: Any) -> Any:
@@ -147,26 +130,6 @@ def stage_json(root: Path, sources: dict[str, str], group: str, name: str) -> di
     return read_json(root / sources.get(group, "__missing__") / "analysis" / name)
 
 
-# ---------------------------------------------------------------------------- verdict rules
-def above(e: dict[str, Any] | None, floor: float = 0.0) -> bool | None:
-    """Predicted positive: the estimate exceeds `floor` and its 95% interval excludes 0 (v1 §4,
-    v2 §2 (ii)-(iv)); None when the estimate is not there."""
-    return None if not e else bool(e["est"] > floor and e["lo"] > 0)
-
-
-def synth_holds(rule: str, e: dict[str, Any] | None) -> bool | None:
-    """Block C's predictions on one estimate: "above" (C1, C3: > 0, interval excluding 0),
-    "nonneg" (C2: D1 - D1s >= 0, point estimate) and "path2" (C4: the D effect on missed
-    invalidation is not triggered by the path-2 rule)."""
-    if not e:
-        return None
-    if rule == "above":
-        return above(e)
-    if rule == "nonneg":
-        return bool(e["est"] >= 0)
-    return replication.path2_verdict(e) == "not triggered"
-
-
 # ------------------------------------------------------------------------------- block R views
 def _have(d: dict[str, Any] | None, *path: str) -> bool:
     for p in path:
@@ -178,9 +141,10 @@ def _have(d: dict[str, Any] | None, *path: str) -> bool:
 
 def replication_view(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> dict[str, Any]:
     """Stage 2 (`orig`) against R (`rep`), each a dict with the analyses e1, e2, e3 (None when not
-    staged): the contrast rows and verdicts of `analysis.replication`, T1 / T3 / T4 verdicts, and
-    the three falsification paths of `analysis.gate` on R. Whatever needs a missing stage is left
-    out of the view; nothing is estimated here."""
+    staged): the contrast rows of `analysis.replication`, T1 / T3 / T4 in both, and the three
+    design quantities of `analysis.gate` (binding's effect pooled over D, D's effect on missed
+    invalidation, writer agreement) on R. Whatever needs a missing stage is left out of the
+    view; nothing is estimated here."""
     oe1, oe2, oe3 = orig.get("e1"), orig.get("e2"), orig.get("e3")
     re1, re2, re3 = rep.get("e1"), rep.get("e2"), rep.get("e3")
     view: dict[str, Any] = {
@@ -190,8 +154,6 @@ def replication_view(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> dict[st
         "t4": {},
         "cv": {},
         "paths": {},
-        "paths_orig": {},
-        "claim_level": None,
         "n_worlds": {"orig": (oe1 or {}).get("n_worlds"), "rep": (re1 or {}).get("n_worlds")},
     }
     if oe1 and re1:
@@ -225,31 +187,24 @@ def replication_view(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> dict[st
                         "orig": o["T4_pass"],
                         "rep": r["T4_pass"],
                         "ratio": r["serve_ratio_to_full_reread"],
-                        "verdict": "replicated" if o["T4_pass"] == r["T4_pass"] else "differs",
                     }
-    for name, e1, e2, into in (("rep", re1, re2, "paths"), ("orig", oe1, oe2, "paths_orig")):
-        paths = view[into]
-        if _have(e1, "contrasts", "src", "B_effect_update_pooled_source"):
-            paths["path1"] = gate.path1(e1 or {})
-        if e1 and e1.get("contrasts"):
-            paths["path2"] = gate.path2(e1)
-        if _have(e2, "path3"):
-            paths["path3"] = gate.path3(e2 or {})
-        if name == "rep" and len(paths) == 3:
-            view["claim_level"] = gate.claim_level(
-                *(paths[p]["triggered"] for p in ("path1", "path2", "path3"))
-            )
+    paths = view["paths"]
+    if _have(re1, "contrasts", "src", "B_effect_update_pooled_source"):
+        paths["path1"] = gate.path1(re1 or {})
+    if re1 and re1.get("contrasts"):
+        paths["path2"] = gate.path2(re1)
+    if _have(re2, "path3"):
+        paths["path3"] = gate.path3(re2 or {})
     return view
 
 
 def pooled_view(pool: Mapping[str, Any]) -> dict[str, Any]:
-    """The same falsification paths, and E1 contrasts, T1 / T3 for the forty pooled worlds."""
+    """The same design quantities, and E1 contrasts, T1 / T3 for the forty pooled worlds."""
     e1, e2, e3 = pool.get("e1"), pool.get("e2"), pool.get("e3")
     view = replication_view({}, {"e1": e1, "e2": e2, "e3": e3})
     return {
         "contrasts": (e1 or {}).get("contrasts") or {},
         "paths": view["paths"],
-        "claim_level": view["claim_level"],
         "t1": {t: v for t, v in ((e2 or {}).get("t1") or {}).items()},
         "t3": {
             f"{h}m:{s}": v
@@ -264,7 +219,7 @@ def pooled_view(pool: Mapping[str, Any]) -> dict[str, Any]:
 def multiplicity_view(
     res: Mapping[str, Any] | None, sources: Mapping[str, str]
 ) -> dict[str, dict[str, Any]]:
-    """The exploratory multiplicity check (`analysis.multiplicity`) for the two stages the paper
+    """The multiplicity check (`analysis.multiplicity`) for the two stages the paper
     compares, "orig" (stage 2, source group `e1`) and "rep" (block R, `rep_e1`): each stage's
     `summary` (counts of the family, of intervals excluding 0, of Holm and BH survivors). A stage
     the result does not hold, or a group that is not in `sources`, is left out."""
@@ -279,7 +234,7 @@ def multiplicity_view(
 
 # ----------------------------------------------------------------------- blocks M2, M3 and N
 def load_families(root: Path, stage: str) -> dict[str, Any] | None:
-    """Checks (i)-(v) of prereg v2 §2 for one M2 stage: `analysis/families.json` (written by
+    """Checks (i)-(v) of `families` for one M2 stage: `analysis/families.json` (written by
     `analysis.stage m2`, or by `python -m memshift.analysis.families`), else computed from the
     stage's E1 metrics and item table when both are there, else None."""
     d = root / stage / "analysis"
@@ -395,15 +350,6 @@ def pooled_rate(stats: dict[str, Any], types: list[str], metric: str) -> float |
     return num_ / den if den else None
 
 
-FAMILY_CHECKS = (
-    ("i_path2_not_triggered", "CheckI"),
-    ("ii_B_update_src", "CheckII"),
-    ("iii_D_repair_src", "CheckIIISrc"),
-    ("iii_D_repair_def", "CheckIIIDef"),
-    ("iv_BxD_def", "CheckIV"),
-    ("v_zero_below_hm11_def", "CheckV"),
-)
-
 FAMILY_ESTIMATES = (
     ("B_update_src", "BUpdateSrc"),
     ("D_repair_src", "DRepairSrc"),
@@ -412,19 +358,6 @@ FAMILY_ESTIMATES = (
     ("BxD_src", "BxDSrc"),
     ("zero_minus_hm11_def", "ZeroMinusHoldDef"),
 )
-
-
-def m3_signs(sw: Mapping[str, Any]) -> list[bool]:
-    """Same-sign judgements of one reader swap over S_src and S_def: the three contrasts with a
-    non-zero main estimate (B effect on Update, D effect on repair, B x D)."""
-    signs = []
-    for b in ("src", "def"):
-        for key, c in (get(sw, b, "contrasts") or {}).items():
-            if key != "D_effect_missed_source":
-                s = same_sign(c.get("main"), c.get("swap"))
-                if s is not None:
-                    signs.append(s)
-    return signs
 
 
 def label_text(d: int | None, b: int | None) -> str:

@@ -1,6 +1,6 @@
-"""Paper numbers and tables of the control cells (`analysis.controls_paper`): a stage that is not
-staged renders only MISSING markers, a staged one carries the estimates, verdicts and counts the
-analysis produced, the tables are well-formed and compile, and the committed generated files are
+"""Paper numbers and the table of the control cells (`analysis.controls_paper`): a stage that is
+not staged renders only MISSING markers, a staged one carries the estimates and counts the
+analysis produced, the table is well-formed and compiles, and the committed generated files are
 current."""
 
 import json
@@ -45,24 +45,22 @@ def test_unstaged_control_cells_render_only_missing_markers():
         assert name.startswith("Ctl") and value == MISSING, (name, value)
 
 
-def test_every_contrast_prediction_and_check_has_a_macro_name():
+def test_every_contrast_and_check_has_a_macro_name_and_no_threshold_outcome_has_one():
     names = set(cp.numbers(None))
     for key in ctl.contrast_keys():
         assert f"Ctl{camel(key)}" in names, key
-    for pred in ctl.PREDICTIONS:
-        for suffix in ("Verdict", "Hits", "Total", "Need", "Count"):
-            assert f"Ctl{camel(pred)}{suffix}" in names
     for tag in ("Hash", "Probes", "Anchor", "Audit", "ScopeCited"):
         assert f"CtlCheck{tag}Pass" in names
-    for extra in ("CtlGoneStrong", "CtlTonePresentation", "CtlChecksPassed", "CtlSummaryHolds"):
-        assert extra in names
+    assert "CtlChecksPassed" in names and "CtlWorlds" in names
+    for pred in ctl.CONTROLS:
+        for suffix in ("Verdict", "Hits", "Total", "Need", "Count"):
+            assert f"Ctl{camel(pred)}{suffix}" not in names
+    assert not [n for n in names if re.search(r"Summary|Strong|Presentation|Reading|AsReg", n)]
 
 
 def test_the_full_access_control_has_its_macros_for_src_and_def_only():
     names = set(cp.numbers(None))
     for name in (
-        "CtlFoneVerdict",
-        "CtlFoneReading",
         "CtlFRepSrcDefinition",
         "CtlFRepDefDefinition",
         "CtlFRepmechSrcDefinition",
@@ -80,7 +78,6 @@ def test_the_full_access_control_has_its_macros_for_src_and_def_only():
         "CtlFullVipSenderEmailDroppedDef",
         "CtlFullVipSenderContactsTruncatedAll",
         "CtlFullWorkingHoursNotesTruncatedSrc",
-        "CtlFullAsRegistered",
         "CtlFullWhichTruncated",
     ):
         assert name in names, name
@@ -90,26 +87,14 @@ def test_the_full_access_control_has_its_macros_for_src_and_def_only():
     assert len([n for n in names if n.startswith("CtlFull")]) > 100
 
 
-def test_staged_macros_carry_estimates_intervals_verdicts_and_counts(staged):
+def test_staged_macros_carry_estimates_intervals_and_counts(staged):
     m = with_estimates(cp.numbers(staged))
     # an estimate with its interval, and the estimate alone
     assert m["CtlZUpdSrcDefinition"] == "$+$80.0\\,pp [$+$80.0, $+$80.0]"
     assert m["CtlZUpdSrcDefinitionEst"] == "$+$80.0\\,pp"
     assert m["CtlGUpdDzeroSrcAll"].startswith("0.0\\,pp")
     assert m["CtlRRatioSrcDefinition"].startswith("0.65")  # (0.80 - 0.50) / (0.96 - 0.50)
-    # verdicts, counts and flags
-    assert m["CtlGoneVerdict"] == "holds" and m["CtlGoneCount"] == "6 of 6 contrasts"
-    assert (m["CtlGthreeHits"], m["CtlGthreeNeed"], m["CtlGthreeTotal"]) == ("6", "5", "6")
-    assert m["CtlGoneStrong"] == "yes" and m["CtlTonePresentation"] == "no"
-    assert m["CtlZtwoCount"] == "8 of 8 contrasts" and m["CtlRoneCount"] == "3 of 3 contrasts"
-    assert (
-        m["CtlSummaryHolds"] == "20"
-        and m["CtlSummaryFails"] == "0"
-        and m["CtlSummaryTotal"] == "20"
-    )
-    # the D0full control: verdict, reading, the gap with its interval, the sensitivity analysis
-    assert m["CtlFoneVerdict"] == "holds" and m["CtlFoneCount"] == "4 of 4 contrasts"
-    assert m["CtlFoneReading"] == "execution"
+    # the D0full control: the gap with its interval, the sensitivity analysis
     assert m["CtlFRepSrcDefinitionEst"] == "$+$66.0\\,pp"
     assert m["CtlFRepmechDefDefinitionEst"] == "$+$66.0\\,pp"
     assert m["CtlFGainRepSrcDefinitionEst"] == "$+$16.0\\,pp"
@@ -136,7 +121,30 @@ def test_staged_macros_carry_estimates_intervals_verdicts_and_counts(staged):
     assert m["CtlFullVipSenderEmailDroppedDef"] == "240"
     assert m["CtlFullVipSenderContactsDroppedDef"] == "0"  # the small source is given whole
     assert m["CtlFullActiveProjectTasksTruncatedAll"] == "0"
-    assert m["CtlFullAsRegistered"] == "yes"
+    # per definition and declared source after S_src and S_def: writes, writes cut, records left out
+    for b in ("Src", "Def"):
+        assert (
+            m[f"CtlFullCloseFriendWrites{b}"],
+            m[f"CtlFullCloseFriendMessagesTruncated{b}"],
+            m[f"CtlFullCloseFriendMessagesDropped{b}"],
+        ) == ("6", "6", "72")
+        assert (
+            m[f"CtlFullVipSenderWrites{b}"],
+            m[f"CtlFullVipSenderEmailTruncated{b}"],
+            m[f"CtlFullVipSenderEmailDropped{b}"],
+        ) == ("6", "6", "240")
+        assert (
+            m[f"CtlFullVipSenderContactsTruncated{b}"],
+            m[f"CtlFullVipSenderContactsDropped{b}"],
+        ) == (
+            "0",
+            "0",
+        )
+        assert (
+            m[f"CtlFullActiveProjectWrites{b}"],
+            m[f"CtlFullActiveProjectTasksTruncated{b}"],
+            m[f"CtlFullActiveProjectTasksDropped{b}"],
+        ) == ("6", "0", "0")
     assert m["CtlFullWhichTruncated"] == "close\\_friend, vip\\_sender"
 
 
@@ -148,26 +156,20 @@ NOTHING_TO_SHOW = re.compile(
 )
 
 
-def test_every_estimate_and_verdict_macro_has_a_number_when_everything_ran(staged):
+def test_every_estimate_macro_has_a_number_when_everything_ran(staged):
     macros = cp.numbers(staged)
     missing = sorted(k for k, v in macros.items() if v == MISSING)
     assert all(NOTHING_TO_SHOW.fullmatch(k) for k in missing), missing[:10]
     for key in ctl.contrast_keys():
         if not NOTHING_TO_SHOW.fullmatch(f"Ctl{camel(key)}"):
             assert macros[f"Ctl{camel(key)}"] != MISSING, key
-    for pred in ctl.PREDICTIONS:
-        assert macros[f"Ctl{camel(pred)}Verdict"] in ("holds", "fails", "not judged")
 
 
-def test_a_prediction_that_was_not_judged_says_so_and_a_missing_cell_leaves_missing_contrasts(
-    partial,
-):
+def test_a_missing_cell_leaves_its_contrasts_missing(partial):
     m = cp.numbers(partial)
-    assert m["CtlZoneVerdict"] == "not judged" and m["CtlZoneCount"] == "not judged"
-    assert m["CtlZoneHits"] == MISSING and m["CtlZUpdSrcDefinition"] == MISSING
-    assert m["CtlRtwoVerdict"] == "not judged" and m["CtlGoneVerdict"] == "holds"
-    assert m["CtlSummaryNotJudged"] == "6" and m["CtlSummaryHolds"] == "14"
-    assert m["CtlFoneVerdict"] == "holds"  # D1 and D0full were run in `partial`
+    assert m["CtlZUpdSrcDefinition"] == MISSING  # the zero system's D_m cell was dropped
+    assert m["CtlGUpdDzeroSrcAll"] != MISSING
+    assert m["CtlFRepSrcDefinition"] != MISSING  # D1 and D0full were run in `partial`
     assert "CtlZUpdSrcDefinitionEst" not in with_estimates(m)  # `with_estimates` invents none
 
 
@@ -202,51 +204,47 @@ def test_macro_values_compile_as_text(staged, tmp_path):
 # ---------------------------------------------------------------------------------- tables
 def test_tables_are_wellformed_staged_partly_staged_and_unstaged(staged, partial):
     for view in (staged, partial, None):
-        for name, tex in cp.tables(view).items():
+        assert set(cp.tables(view)) == {"tab_controls.tex"}
+        for tex in cp.tables(view).values():
             check_tex(tex)
-            assert tex.count("\\begin{table}") == (1 if name == "tab_controls.tex" else 8)
-    assert MISSING in cp.tab_controls(None) and MISSING in cp.tab_controls_full(None)
+            assert tex.count("\\begin{table}") == 1
+    assert MISSING in cp.tab_controls(None)
     # a table cell that cannot be computed is MISSING, the rest stay
     assert cp.tab_controls(partial).count(MISSING) > 10
     assert cp.tab_controls(partial).count(MISSING) < cp.tab_controls(None).count(MISSING)
 
 
-def test_compact_table_rows_are_the_registered_predictions_with_their_verdicts(staged):
+def test_compact_table_rows_are_the_control_arms_with_their_contrasts(staged):
     tex = cp.tab_controls(staged)
-    for arm, contrast in (  # the arm's name, not a prediction ID, heads each prediction's row
+    for arm, contrast in (  # the arm's name on the first row of its block, once
         ("oracle", "Update, oracle"),
-        ("oracle", "Stability, oracle"),
+        ("", "Stability, oracle"),
         ("add-only", "Update, add-only"),
-        ("add-only", "(add-only"),
         ("template", "Update, template"),
-        ("template", "(template"),
-        ("deletion-aware", "Repair, deletion-aware"),
-        ("deletion-aware", "Update, deletion-aware"),
-        ("deletion-aware", "Programs ok"),
         ("scope", "Update, scope $-$ source"),
-        ("scope", "Update, scope $-$ cited"),
-        ("view", "Update, view $-$ zero system"),
-        ("view, before the shift", "Accuracy at $t_0$"),
-        ("view", "Update, view $-$ zero, single-field"),
-        ("view", "Update, view $-$ $D_"),
-        ("thinking", "Repair, $D{=}1$ $-$ thinking"),
-        ("thinking", "Thinking writes"),
+        ("", "Update, scope $-$ cited"),
+        ("view", "Update, view $-$ no-store BM25"),
+        ("", "\\quad single-field items"),
+        ("", "Stability, view $-$ no-store BM25"),
+        ("", "Update, view $-$ $D_"),
+        ("", "Accuracy at $t_0$"),
+        ("full access", "Acc.\\ on re-derived, $D{=}1$ $-$ full-access"),
+        ("add-only", "(add-only"),  # the two ratios in a block of their own, last
+        ("template", "(template"),
     ):
         assert f"\n{arm} & {contrast}" in tex, (arm, contrast)
-    assert "P-" not in tex and "prereg" not in tex  # no prediction IDs or registration files
-    assert "registered after the main results were known" in tex  # the caption says it
-    assert tex.count("\\pass\\,6/6") >= 2  # G1 and G2 carry a verdict each, T1 and T3 as well
-    rows = [r for r in cp.ROWS if r.verdict]
-    assert {p for r in rows for p in r.verdict} == set(
-        ctl.PREDICTIONS
-    )  # every prediction has a row
-    # the cells a prediction judges are in bold, the others are not
-    g = next(line for line in tex.splitlines() if line.startswith("oracle & Update, oracle"))
-    assert g.count("\\textbf{") == 6  # definition and all items, three branches each
+    ratios = tex.split("\\midrule")[-1]
+    assert ratios.count("ratio") == 0 and ratios.count(" \\\\") == 2
+    assert tex.index("\nfull access &") < tex.index("\nadd-only & (add-only")
+    # the two arms that could not be tested as designed are not in the table
+    assert "deletion-aware" not in tex and "thinking" not in tex.lower()
+    assert "P-" not in tex and "prereg" not in tex and "regist" not in tex
+    assert "verdict" not in tex and "\\pass" not in tex and "\\fail" not in tex
+    assert "\\textbf{" not in tex.replace(MISSING, "") and "n.j." not in tex
+    assert "Implementation checks" not in tex
     z1 = next(
-        line for line in tex.splitlines() if line.startswith("view & Update, view $-$ zero s")
+        line for line in tex.splitlines() if line.startswith("view & Update, view $-$ no-store")
     )
-    assert z1.count("\\textbf{") == 2  # the two branches the view prediction judges
     assert "$+$80.0" in z1
 
 
@@ -259,127 +257,46 @@ def cells_of(tex: str, start: str) -> list[str]:
     return split_row(next(line for line in tex.splitlines() if line.startswith(start)))
 
 
-def table_of(tex: str, label: str) -> str:
-    """The table with `\\label{tab:<label>}` (its caption, the label and its rows)."""
-    return tex.split("\\begin{table}")[
-        [f"\\label{{tab:{label}}}" in t for t in tex.split("\\begin{table}")].index(True)
-    ]
-
-
-def contrast_rows(tex: str, label: str) -> list[list[str]]:
-    """The rows of the full table (contrast, items, S_src, S_def, orphan) of one section."""
-    return [
-        split_row(line)
-        for line in table_of(tex, f"controls_full_{label}").splitlines()
-        if line.count(" & ") == 4 and not line.startswith("contrast")
-    ]
-
-
 def test_compact_table_has_the_full_access_rows_for_src_and_def_only(staged):
     cells = cells_of(cp.tab_controls(staged), "full access &")
-    # arm, contrast, definition (3 branches), non-definition (3), all items (3), verdict
-    assert len(cells) == 12 and cells[0] == "full access" and "full-access" in cells[1]
-    assert cells[2:5] == [r"\textbf{$+$66.0}", r"\textbf{$+$66.0}", cp.UNDEFINED]
-    assert cells[5:8] == [cp.UNDEFINED] * 3  # the prediction is about the definition items
-    assert cells[8:11] == ["$+$32.2", "$+$32.2", cp.UNDEFINED]  # not judged, so not in bold
-    assert cells[11] == r"\pass\,4/4"
+    # arm, contrast, definition (3 branches), other items (3), all items (3)
+    assert len(cells) == 11 and cells[0] == "full access" and "full-access" in cells[1]
+    assert cells[2:5] == ["$+$66.0", "$+$66.0", cp.UNDEFINED]
+    assert cells[5:8] == [cp.NOT_TAKEN] * 3  # empty: the contrast is about definition items
+    assert cells[8:11] == ["$+$32.2", "$+$32.2", cp.UNDEFINED]
     lines = cp.tab_controls(staged).splitlines()
     mech = split_row(
         lines[lines.index(next(x for x in lines if x.startswith("full access &"))) + 1]
     )
-    assert mech[:2] == ["", r"\quad mechanistic repair"]  # the row after the full-access row
-    assert mech[2:5] == [r"\textbf{$+$66.0}", r"\textbf{$+$66.0}", cp.UNDEFINED]
+    assert mech[:2] == ["", r"\quad value equals gold"]  # the row after the full-access row
+    assert mech[2:5] == ["$+$66.0", "$+$66.0", cp.UNDEFINED]
     assert "full access &" in cp.tab_controls(staged) and "$\\Ssrc$ and $\\Sdef$ only" in cp.CAPTION
 
 
-def test_the_full_access_rows_are_missing_when_unstaged_and_not_judged_without_the_cell():
+def test_the_full_access_rows_are_missing_when_unstaged_or_without_the_cell():
     cells = cells_of(cp.tab_controls(None), "full access &")
-    assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp.UNDEFINED and cells[11] == MISSING
+    assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp.UNDEFINED
     b = Builder()
     b.drop |= {"D0fullB1"}
     cells = cells_of(cp.tab_controls(ev(b.table())), "full access &")
     assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp.UNDEFINED  # `---`: no orphan run
-    assert cells[11] == cp.NOT_JUDGED
     m = cp.numbers(ev(b.table()))
-    assert m["CtlFoneVerdict"] == "not judged" and m["CtlFoneReading"] == MISSING
     assert m["CtlFRepSrcDefinition"] == MISSING and m["CtlFullTruncatedAll"] == MISSING
     assert m["CtlFullCloseFriendMessagesTruncatedSrc"] == MISSING
-    assert m["CtlFullAsRegistered"] == "no"  # the flag is a statement about the notes: none given
-    # the full table: MISSING where nothing is staged, `---` where the contrast cannot be computed
-    # (as every contrast of a cell that was not run) and for the branch the control was not run on
-    rows = contrast_rows(cp.tab_controls_full(None), "e")
-    assert len(rows) == 12 and all(r[2:] == [MISSING, MISSING, cp.UNDEFINED] for r in rows)
-    rows = contrast_rows(cp.tab_controls_full(ev(b.table())), "e")
-    assert len(rows) == 12 and all(r[2:] == [cp.UNDEFINED] * 3 for r in rows)
-    trunc = table_of(cp.tab_controls_full(ev(b.table())), "controls_truncation")
-    assert cells_of(trunc, "close\\_friend &")[2:] == [MISSING] * 6
 
 
-def test_the_full_table_carries_the_full_access_contrasts_the_sensitivity_and_the_truncations(
-    staged,
-):
-    tex = cp.tab_controls_full(staged)
-    f = table_of(tex, "controls_full_e")
-    rows = contrast_rows(tex, "e")  # four families, three classes each
-    assert len(rows) == 12 and all(r[4] == cp.UNDEFINED and "scriptsize" in r[2] for r in rows)
-    assert [r[1] for r in rows[:3]] == ["all items", "definition", "definition, truncated left out"]
-    assert "Full-access writer (P-F1" in f and "close\\_friend and vip\\_sender" in f
-    for label in (
-        "Repair, $D{=}1$ $-$ full-access $D{=}0$",
-        "Mechanistic repair, $D{=}1$ $-$ full-access $D{=}0$",
-        "Repair, full-access $-$ $D{=}0$ (access gain)",
-        "Update, full-access $-$ $D{=}0$ (access gain)",
-        "definition, truncated left out",
-    ):
-        assert label in f, label
-    # the reported table and the truncation table carry the notes' counts
-    assert "full-access writes (definition items re-derived after the shift) & 72 \\\\" in tex
-    assert "of which truncated (records of a declared source left out) & 24 \\\\" in tex
-    assert "approximate tokens given, median and maximum (cap 25,000) & 9,000, 24,900" in tex
-    assert "the two registered & yes (close\\_friend, vip\\_sender)" in tex
-    trunc = table_of(tex, "controls_truncation")
-    assert cells_of(trunc, "close\\_friend &") == [
-        "close\\_friend", "messages", "6", "6", "72", "6", "6", "72",
-    ]  # fmt: skip
-    assert cells_of(trunc, "vip\\_sender &") == [
-        "vip\\_sender", "email", "6", "6", "240", "6", "6", "240",
-    ]  # fmt: skip
-    assert cells_of(trunc, " & contacts &")[1:] == ["contacts", "6", "0", "0", "6", "0", "0"]
-    assert cells_of(trunc, "active\\_project &")[2:] == ["6", "0", "0", "6", "0", "0"]
-    assert "Counts over the re-derivations" in trunc and "estimates in pp" not in trunc.lower()
-
-
-def test_compact_table_shows_a_failed_and_a_not_judged_verdict():
+def test_compact_table_shows_the_estimates_of_every_arm():
     b = Builder({("D1B1gold", "definition", "orphan"): 0.50})
     b.drop |= {"zeroDm"}
     res = ev(b.table())
     tex = cp.tab_controls(res)
-    g = next(line for line in tex.splitlines() if line.startswith("oracle & Update, oracle"))
-    assert g.endswith("\\fail\\,5/6 \\\\") or "\\fail" in g
-    z = next(line for line in tex.splitlines() if line.startswith("view & Update, view $-$ zero s"))
-    assert z.rstrip(" \\").endswith("n.j.")
+    g = cells_of(tex, "oracle & Update, oracle")
+    assert len(g) == 11 and "\\fail" not in tex and "n.j." not in tex
+    z = cells_of(tex, "view & Update, view $-$ no-store")
+    assert len(z) == 11
 
 
-def test_full_table_lists_every_contrast_with_its_interval(staged):
-    tex = cp.tab_controls_full(staged)
-    assert tex.count("\\label{tab:controls_full_") == 5
-    assert "tab:controls_reported" in tex and "tab:controls_checks" in tex
-    assert "tab:controls_truncation" in tex
-    assert "\\tiny" not in tex and "world-clustered bootstrap (2,000 draws, seed 996)" in tex
-    assert "{\\scriptsize [" in tex and ",\\," in tex  # the one interval format of the tables
-    for label in (
-        "Update, oracle $-$ source, $D{=}1$",
-        "Mechanistic repair, thinking $-$ $D{=}0$",
-        "task definitions",
-    ):
-        assert label in tex
-    assert "(add-only $-$ $B{=}0$)/($B{=}1$ $-$ $B{=}0$)" in tex
-    # every contrast family of the analysis has rows in the full table
-    for tag in ctl.families():
-        assert cp.TAG_LABELS[tag] in tex, tag
-
-
-def test_checks_table_marks_each_check():
+def test_check_macros_mark_each_check():
     anchors = {"r": {"holdmem_D0B1_source": {"share": 0.05, "answers": 100}}}
     audit_cell = {"pass": True, "branches": {"src": {"definition": {"pass": True}}}}
     view = {
@@ -395,11 +312,6 @@ def test_checks_table_marks_each_check():
             "not_evaluated": 1,
         },
     }
-    tex = cp.tab_controls_full(view)
-    assert "worst cell 5.0\\% of answers differ, fail" in tex
-    assert "D0B1\\_gold equal the audit & 1/1 groups, pass" in tex
-    assert "not evaluated" in tex
-    assert "\\fail\\,3/5" in cp.tab_controls(view)
     m = cp.numbers(view)
     assert m["CtlCheckAnchorPass"] == "fail" and m["CtlCheckScopeCitedPass"] == "not evaluated"
     assert m["CtlCheckAnchorWorst"].startswith("5.0\\%") and m["CtlChecksPassed"] == "3 of 5"
@@ -418,8 +330,9 @@ def test_tables_compile_and_fit_the_page(staged, tmp_path):
                 r"\usepackage[font=small,labelfont=bf,skip=5pt]{caption}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
-                r"\newcommand{\pass}{\checkmark}\newcommand{\fail}{$\times$}",
-                r"\begin{document}\input{tab_controls.tex}\clearpage\input{tab_controls_full.tex}",
+                r"\newcommand{\pass}{\checkmark}\newcommand{\fail}{$\times$}"
+                r"\newcommand{\cref}[1]{Appendix~A}",
+                r"\begin{document}\input{tab_controls.tex}",
                 r"\end{document}",
             ]
         )
@@ -434,38 +347,30 @@ def test_tables_compile_and_fit_the_page(staged, tmp_path):
     assert not re.search(r"Overfull \\hbox \(([5-9]|\d{2,})\.", done.stdout)  # nothing sticks out
 
 
-def test_compact_caption_defines_every_arm_and_term_and_rows_count_each_verdict(staged):
+def test_compact_caption_defines_every_arm_and_term(staged):
     tex = cp.tab_controls(staged)
     caption = tex.split("\\label{tab:controls}")[0]
-    assert "prereg" not in caption and "P-" not in caption  # no registration file or IDs
+    assert "prereg" not in caption and "P-" not in caption and "regist" not in caption
     for term in (
-        "Arms: oracle, scope:",
-        "(source) or cited-cluster (cited) key",
-        "Add-only:",
-        "Template:",
-        "Deletion-aware (del.-aware):",
-        "View:",
-        "Thinking, full access:",
-        "Repair: share of the re-derived items the reader answers correctly",
-        "Mechanistic repair: share whose re-derived value equals gold",
+        "The arms are those of \\cref{app:controls}",  # defined once, in the appendix
+        "Source, cited: the source key and the citation key",
+        "Full access: the full-access writer",
+        "Acc.\\ on re-derived: accuracy on re-derived items",
+        "Value equals gold: the share of re-derived values that equal gold",
+        "The last two rows are ratios",
         "$t_0$: before the shift",
         r"$\Ssrc$, $\Sdef$ and $\Sdel$",
     ):
         assert term in caption, term
+    assert "Deletion-aware" not in caption and "Thinking" not in caption
     assert "retraction" not in tex and "gold $-$" not in tex and "refresh $-$" not in tex
-    # a row that carries two predictions gives the count of each, in their order
     t = cells_of(tex, "template & Update, template")
-    v = staged["verdicts"]
-    assert t[-1] == ", ".join(cp._mark(v[p]) for p in ("T1", "T3"))
-    assert t[-1].count("/") == 2
+    assert len(t) == 11  # arm, contrast and the nine cells
 
 
 def test_a_negative_ratio_has_a_typeset_minus():
     ratio = next(r for r in cp.ROWS if r.unit == "ratio")
-    assert cp._compact_cell(-0.01, ratio, bold=False) == "$-$0.01"
-    assert cp._cell({"est": -0.01, "lo": -0.02, "hi": 0.03}, "ratio") == (
-        r"$-$0.01\,{\scriptsize [$-$0.02,\,0.03]}"
-    )
+    assert cp._compact_cell(-0.01, ratio) == "$-$0.01"
 
 
 # --------------------------------------------------------------------- sources and generated files

@@ -1,4 +1,4 @@
-"""E4 (plan §6 E4, §2.5 H_S): calendar sync semantics, {ideal, official} x {B} x {HoldMem, zero}.
+"""E4: calendar sync semantics, {ideal, official} x {B} x {HoldMem, zero}.
 
 Per world (S_src branch, calendar source only):
   streams   ideal (every calendar event once, at its own time; lag recorded as 0) and official at

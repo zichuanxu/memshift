@@ -1,8 +1,0 @@
-tree b5c95607e744af3aad2b32abefb07c5cfe0f6d84
-parent edf4cdbb7d57c18f45b95c89de1142e5d67fc924
-author zichuanxu <zichuanxu28@gmail.com> 1792134305 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792134305 +0900
-
-LLMClient: stand-in clients without .api take the OpenAI path
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

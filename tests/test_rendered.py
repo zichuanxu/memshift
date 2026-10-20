@@ -130,12 +130,12 @@ def test_checks_on_rendered_and_template_are_family_checks(tmp_path):
     assert res["template_same_seeds"] == families.family_checks(rendered.summarise(rows_t), rows_t)
     assert res["rendered"] == families.family_checks(rendered.summarise(rows_r), rows_r)
     cmp = res["check_comparison"]
-    assert cmp["pattern_holds"] == {"rendered": False, "template": True}
+    assert cmp["ii_to_iv_true"] == {"rendered": False, "template": True}
     assert all(v["template"] for v in cmp["checks"].values())  # true by construction
     # no repair, no Update benefit and no gap to the zero system in the rendered worlds
     for check in ("ii_B_update_src", "iii_D_repair_src", "iv_BxD_def", "v_zero_below_hm11_def"):
         assert cmp["checks"][check] == {"rendered": False, "template": True, "agree": False}
-    assert cmp["checks"]["i_path2_not_triggered"]["agree"]  # detection does not move
+    assert cmp["checks"]["i_D_missed_within_threshold"]["agree"]  # detection does not move
 
 
 def test_identical_conditions_give_zero_differences_and_full_agreement(tmp_path):
@@ -148,7 +148,7 @@ def test_identical_conditions_give_zero_differences_and_full_agreement(tmp_path)
     )
     assert all(c["diff"]["est"] == 0.0 for c in res["cells"])
     assert all(v["agree"] for v in res["check_comparison"]["checks"].values())
-    assert res["rendered"]["pattern_holds"] and res["probe_identity"]["identical"]
+    assert res["rendered"]["ii_to_iv_true"] and res["probe_identity"]["identical"]
 
 
 def test_restriction_to_the_rendered_seeds_and_determinism(tmp_path):

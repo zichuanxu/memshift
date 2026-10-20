@@ -1,4 +1,4 @@
-"""Exploratory writer-switch predictors, baselines and type-level intervals
+"""Writer-switch predictors, baselines and type-level intervals
 (`analysis.ex_e2_predictors`, wired into `e2.analyse` as `explore_writer_*`)."""
 
 import json
@@ -13,7 +13,7 @@ from memshift.analysis import e2
 from memshift.analysis import ex_e2_predictors as ex
 from memshift.analysis.ex_e2_predictors import Point
 
-# ------------------------------------------------------------------ count statistics = registered
+# --------------------------------------------------------------- count statistics = e2 functions
 XS = [0.0, 0.3, 0.6, 0.83, 0.97, 0.995, 1.0]  # includes values the logit clip merges
 
 
@@ -29,7 +29,7 @@ def _one_cluster(x: list[float], y: list[float]) -> ex._Tables:
 
 
 @pytest.mark.parametrize("seed", [1, 2, 3])
-def test_statistics_from_count_tables_equal_the_registered_functions(seed):
+def test_statistics_from_count_tables_equal_the_main_functions(seed):
     x, y = _random_points(seed)
     auc, a, b = _one_cluster(x, y).stats(np.ones((1, 1)))
     assert auc[0] == pytest.approx(e2.auroc(x, y), abs=1e-12)
@@ -39,7 +39,7 @@ def test_statistics_from_count_tables_equal_the_registered_functions(seed):
 
 
 def test_statistics_at_the_edges_match_too():
-    # one class, one predictor value: undefined, as in the registered functions
+    # one class, one predictor value: undefined, as in the e2 functions
     for x, y in (([0.5, 0.9], [1.0, 1.0]), ([0.9, 0.9], [1.0, 0.0])):
         auc, a, b = _one_cluster(x, y).stats(np.ones((1, 1)))
         assert math.isnan(b[0]) and math.isnan(e2.slope_on_logit(x, y))
@@ -55,7 +55,7 @@ def test_statistics_at_the_edges_match_too():
     assert b[0] == pytest.approx(e2.slope_on_logit(x, y), rel=1e-6) and b[0] > 10
 
 
-def test_multiplicities_replay_the_registered_draw_order():
+def test_multiplicities_replay_the_main_draw_order():
     m = ex.multiplicities(5, 7, seed=996)
     assert m.shape == (7, 5) and (m.sum(axis=1) == 5).all()
     rng = random.Random(996)
@@ -76,7 +76,7 @@ def _by_world(seed: int = 4) -> dict[str, list[tuple[float, float]]]:
     return out
 
 
-def test_world_bootstrap_of_the_agreement_rate_reproduces_the_registered_intervals():
+def test_world_bootstrap_of_the_agreement_rate_reproduces_the_main_intervals():
     by_world = _by_world()
     points = [
         Point(
@@ -191,7 +191,7 @@ def test_analyse_scores_every_predictor_pooled_and_per_tier(tmp_path):
     failures = sum(not r["valid_after"] for r in rows)
     assert pooled["n_failures"] == failures and pooled["n_worlds"] == 6 and pooled["n_types"] == 5
     assert set(pooled["predictors"]) == {"agree", "new_acc", "old_acc", "cond", "nondef"}
-    # the registered predictor reproduces path 3's estimates on the same rows
+    # the agreement predictor reproduces path 3's estimates on the same rows
     pts: dict[str, list[tuple[float, float]]] = {}
     for r in rows:
         pts.setdefault(r["world_id"], []).append((r["predicted"], float(r["valid_after"])))
@@ -286,7 +286,7 @@ def test_no_calibration_at_all_leaves_empty_scopes_and_no_crash(tmp_path):
     assert out["explore_failures_by_type"]["summary"]["n_failures"] == 0
 
 
-def test_e2_analyse_stores_the_explore_fields_beside_the_registered_ones(tmp_path):
+def test_e2_analyse_stores_the_explore_fields_beside_the_main_ones(tmp_path):
     rows = _synthetic(tmp_path)
     for r in rows:  # e2.analyse needs the other cells and keys of a survival row
         r.setdefault("check", None)

@@ -1,4 +1,4 @@
-"""The slot-keyed upsert cells of prereg v4 block U (`D0B0_upsert`, `D1B0_upsert`, `D1sB0_upsert`)
+"""The slot-keyed upsert cells (`D0B0_upsert`, `D1B0_upsert`, `D1sB0_upsert`)
 and the refresh cell with D1s programs (`D1sB0_refresh`). Each test replays the cells on one small
 world with recording fake writers (`tests/e1_replay.py`)."""
 

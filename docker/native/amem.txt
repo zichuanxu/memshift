@@ -1,4 +1,4 @@
-# A-Mem (native system for block N, src/memshift/adapters/native_amem.py), on top of
+# A-Mem (native system of E5, src/memshift/adapters/native_amem.py), on top of
 # docker/requirements.lock:  pip install -r docker/requirements.lock -r docker/native/amem.txt
 # The package is the system repository linked from the paper's abstract page (the LoCoMo harness is
 # a separate repository), at the pinned commit. The archive URL is the same commit as

@@ -1,9 +1,0 @@
-tree 2dc349ca40c4fe7c9c4d3cbbefa72fee660851ae
-parent 6dd1db10bde07ad28cb56682c338e21e44ef0ba3
-parent c03afbb4d07671d8aa5b09fd26f36dc60c9ee494
-author zichuanxu <zichuanxu28@gmail.com> 1790690963 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790690963 +0900
-
-Merge block N HippoRAG 2 adapter
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

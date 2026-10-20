@@ -1,8 +1,0 @@
-tree 2810f4a3adf9644b13773545b3e11a0696952323
-parent 2e95172d3ea3c9899876f8ba9f2b494c66dbe2f1
-author zichuanxu <zichuanxu28@gmail.com> 1790642193 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790642193 +0900
-
-Paper macros for E5 (native labels, carryover vs white-box prediction) and E6 (T2 differences, ExportFidelity)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

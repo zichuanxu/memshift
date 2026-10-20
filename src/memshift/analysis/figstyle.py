@@ -1,26 +1,30 @@
-"""One visual language for every paper figure (single-column preprint layout).
+"""One visual language for every paper figure (two-column preprint, one-column appendix).
 
 Text is typeset by LaTeX with the paper's own fonts (newtx Times text and math), so figures match
 the body and embed only Type-1 fonts. Figures are saved at their printed size (no tight bounding
 box) and included at 100%, so the 9/8 pt figure text sits next to the 10 pt body at a fixed ratio.
-A full-width figure is 5.5 in wide, centred in the 6.5 in text block. The encoding is fixed across
-figures: hue = binding (blue B=1
-source epoch, light blue B=1 cited cluster, orange B=0), filled vs. hollow marker = D. The round-3
-figures have no binding arm: there hue = the model (`MODELS`) and, in the scatter of writers,
-marker shape = the shift (`SHIFTS`).
+A full-width figure is `TEXT` = 6.75 in wide, the whole text block (both columns of the main text,
+or the appendix's one column); a single-panel appendix figure is at most `NARROW` wide.
+
+Hue has one meaning per figure. In the figures of the HoldMem cells it is the binding arm (blue
+B=1 source epoch, light blue B=1 cited cluster, orange B=0), and filled vs. hollow marks D. In
+the figures that compare models it is the model (`MODELS`). Item class, shift (`SHIFTS`),
+replication, tier and inside/outside an interval are never hue: they are marker shape, fill or line
+style. Neutral series (the zero system, plain RAG, the gold-dependency context, native systems,
+store parts) are black or grey (`SYSTEMS`), told apart by line style and marker.
 
 An estimate with its 95% interval is drawn as an interval bar (`interval_bar`): the interval is a
 soft translucent bar with exact ends, the estimate a short dark stroke across it. A second series
-that must stay apart in print and greyscale (the replication, a failed prediction, a value outside
-its predicted interval) is an outlined bar instead of a filled one. Lines with bands over time keep
-their bands.
+that must stay apart in print and greyscale (such as the replication) is an outlined bar instead of
+a filled one. Lines with bands over time keep their bands.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-TEXT = 5.5  # width of a full-width figure (in); the text block is 6.5 in
+TEXT = 6.75  # width of a full-width figure (in): the text block
+NARROW = 4.5  # largest width of a single-panel appendix figure (in)
 
 # Okabe-Ito, colour-blind safe
 BLUE = "#0072B2"
@@ -30,20 +34,22 @@ VERMILION = "#D55E00"
 GREEN = "#009E73"
 PURPLE = "#CC79A7"
 GREY = "#6E6E6E"
+DARK = "#4A4A4A"  # dark grey: the native systems and the gold-dependency context
 LIGHT = "#DCDCDC"
 BLACK = "#222222"
 
 ARMS = {  # binding arm -> (label, colour, line style)
-    "source": (r"$B{=}1$, source epoch", BLUE, "-"),
-    "cited": (r"$B{=}1$, cited cluster", SKY, "--"),
+    "source": (r"$B{=}1$, source key", BLUE, "-"),
+    "cited": (r"$B{=}1$, citation key", SKY, "--"),
     "none": (r"$B{=}0$", ORANGE, "-"),
 }
 SYSTEMS = {  # baseline -> (label, colour, line style, marker)
-    "oracle": ("gold-dependency context", GREEN, ":", "D"),
+    "oracle": ("oracle context", DARK, ":", "D"),
     "holdmem_D1B1_source": (r"\textsc{HoldMem}(1,1)", BLUE, "-", "o"),
-    "zero": ("zero system", BLACK, "-", "s"),
-    "rag": ("plain RAG", PURPLE, "-", "^"),
-    "mem0": ("Mem0", VERMILION, "-", "*"),
+    "zero": ("no-store BM25", BLACK, "-", "s"),
+    "rag": ("plain RAG", GREY, "--", "^"),
+    "mem0": ("Mem0", DARK, "-", "*"),
+    "native": ("native system", DARK, "-", "*"),  # every native memory system
 }
 # round-3 figures: hue = the model (writer of programs or definition items, or reader), marker
 # shape = the shift; a model without an entry is drawn in GREY under its own name
@@ -185,6 +191,52 @@ def interval_bar(
         x, y = at(est, est)
         ax.plot(x[:1], y[:1], marker="_" if vertical else "|", ms=size * 1.55, mew=STROKE_PT,
                 color=darker(colour), ls="none", zorder=zorder + 0.1)  # fmt: skip
+
+
+CAP_PT = 4.0  # width of the caps of an error bar (points)
+ERR_PT = 0.8  # line width of an error bar (points)
+
+
+def ink(fill: str) -> str:
+    """The colour of an error bar where it crosses a bar of this fill: white on a dark bar, black
+    on a light one."""
+    from matplotlib.colors import to_rgb
+
+    r, g, b = to_rgb(fill)
+    return "white" if 0.299 * r + 0.587 * g + 0.114 * b < 0.3 else BLACK
+
+
+def ci_bar(
+    ax: Any,
+    x: float,
+    est: float,
+    lo: float,
+    hi: float,
+    colour: str,
+    width: float,
+    *,
+    filled: bool = True,
+) -> None:
+    """A vertical bar from 0 to `est` at `x`, `width` data units wide, with its interval [lo, hi]
+    as a black error bar with caps. A filled bar is `colour` with a thin white edge, an outlined
+    one white with a `colour` edge (the second series of a pair, such as the replication). Where
+    the error bar crosses a dark filled bar it is white, so that it shows there too."""
+    if filled:
+        ax.bar([x], [est], width=width, color=colour, edgecolor="white", lw=0.4, zorder=2)
+    else:
+        ax.bar([x], [est], width=width, facecolor="white", edgecolor=colour, lw=EDGE_PT,
+               zorder=2)  # fmt: skip
+    if hi <= lo:
+        return
+    inside = ink(colour) if filled else BLACK
+    b0, b1 = min(0.0, est), max(0.0, est)  # the extent of the bar
+    for y0, y1, c in ((lo, min(hi, b0), BLACK), (max(lo, b0), min(hi, b1), inside),
+                      (max(lo, b1), hi, BLACK)):  # fmt: skip
+        if y1 > y0:
+            ax.plot([x, x], [y0, y1], color=c, lw=ERR_PT, solid_capstyle="butt", zorder=3)
+    for end in (lo, hi):
+        ax.plot([x], [end], ls="none", marker="_", ms=CAP_PT, mew=ERR_PT, zorder=3,
+                color=inside if b0 < end < b1 else BLACK)  # fmt: skip
 
 
 def interval_handle(colour: str, filled: bool = True, label: str = "") -> Any:

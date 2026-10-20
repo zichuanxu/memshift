@@ -1,4 +1,4 @@
-"""Exploratory multi-stage analyses of the E1 family (`analysis.ex_e1_cross`): the out-of-sample
+"""Multi-stage analyses of the E1 family (`analysis.ex_e1_cross`): the out-of-sample
 predictors on tables small enough to add up, the replication accounting on the committed stage-2
 contrasts, the short-world prediction, the cost model against the committed E3 analysis, and the
 stage driver end to end on synthetic stages."""
@@ -127,12 +127,12 @@ def test_source_epoch_accounting_counts_identities_and_the_rest():
     )
     assert acc["n_d_effect_on_repair"] == 6 and acc["n_update_contrasts"] == 9
     assert acc["independent_update_estimates"] == 6
-    assert acc["verdicts_non_identity"]["replicated"] == 15
+    assert acc["replication_non_identity"]["replicated"] == 15
     flipped = json.loads(json.dumps(STAGE2))
     est = flipped["contrasts"]["src"]["B_effect_update_D1_source"]
     flipped["contrasts"]["src"]["B_effect_update_D1_source"] = {**est, "est": -est["est"]}
     again = cross.source_epoch_accounting(STAGE2, flipped)
-    assert again["verdicts_non_identity"]["not replicated"] == 1
+    assert again["replication_non_identity"]["not replicated"] == 1
 
 
 def _split(est_def, est_other):
@@ -162,7 +162,7 @@ def test_class_replication_reads_sign_and_interval_on_r():
     o = res["summary"]["other"]
     assert o["rep_same_sign"] == 0 and o["rep_excludes_zero"] == 0 and o["replicated"] == 0
     row = next(r for r in res["rows"] if r["class"] == "other")
-    assert row["verdict"] == "not replicated" and not row["same_sign"]
+    assert row["replication"] == "not replicated" and not row["same_sign"]
     assert cross.class_replication({}, {})["rows"] == []
 
 

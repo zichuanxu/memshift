@@ -2738,7 +2738,7 @@
    "T3_pass": false
   }
  },
- "exploratory": {
+ "white_box_reference": {
   "label_rates": {
    "holdmem_D0B0": {
     "B": {

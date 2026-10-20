@@ -1,4 +1,4 @@
-"""Sandbox and request of the writer-authored programs (prereg v2 §4, cell D1s)."""
+"""Sandbox and request of the writer-authored programs (cell D1s)."""
 
 import json
 import re

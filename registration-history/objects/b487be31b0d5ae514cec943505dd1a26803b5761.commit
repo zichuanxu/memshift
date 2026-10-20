@@ -1,8 +1,0 @@
-tree 1db5756f7fe5f618be82a0d429cbbfecc7712571
-parent a2f7205a6d4a88891b031b9bf8acb9fccbe52a51
-author zichuanxu <zichuanxu28@gmail.com> 1790632729 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790632729 +0900
-
-Release builder: allowlisted open-source package with internal-identifier scan (LICENSE TBD)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

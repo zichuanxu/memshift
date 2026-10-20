@@ -1,8 +1,0 @@
-tree b5533774b1b0c3278ebbe203164dac57bb78d5e8
-parent 79b57562e8099648bb59b27517b74a1610ea8c33
-author zichuanxu <zichuanxu28@gmail.com> 1790712447 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790712447 +0900
-
-decisions: block-C verdict rules as applied by the paper generators
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

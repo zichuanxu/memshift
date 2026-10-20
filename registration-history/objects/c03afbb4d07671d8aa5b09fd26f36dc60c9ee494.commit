@@ -1,8 +1,0 @@
-tree 37e4cc27d99a700ee5f1b07a9431ffc9b9f4262b
-parent 525f7abaec3b662ca1c564bc10e64b5c3ce6315c
-author zichuanxu <zichuanxu28@gmail.com> 1790690959 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790690959 +0900
-
-Block N (prereg v2 §3): HippoRAG 2 native adapter (hipporag 2.0.0a4) through its own index / delete / retrieve API; object map for text-keyed deletes, retrieval caches reset after every index and delete (upstream never resets them), swallowed OpenIE failures counted, dense-only fallback counted, full export of passages, OpenIE, facts, phrases and edges; pinned install file (installed with --no-deps over the lock)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

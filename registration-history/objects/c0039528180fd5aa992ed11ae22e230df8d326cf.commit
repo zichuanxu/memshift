@@ -1,8 +1,0 @@
-tree 39b4316abbd0e21217d219e05f884e4be7b91b77
-parent 10f58fdc3d1acbcf5bd142c2edab63a5c845a0fe
-author zichuanxu <zichuanxu28@gmail.com> 1790715178 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790715178 +0900
-
-Serving batch limit 48 -> 128 on both GPUs (scheduling only; same model, revision, image, requests); native runs and gemma jobs relaunched; STATUS compute rows and void-run record
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

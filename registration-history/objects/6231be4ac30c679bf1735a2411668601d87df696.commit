@@ -1,8 +1,0 @@
-tree 228a0448bf8a163f333cfd07357339c11b006c8c
-parent 5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140
-author zichuanxu <zichuanxu28@gmail.com> 1792155707 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792155707 +0900
-
-Round-3 swap phase on one GPU (G-b open-weight program sets, U5, H-b): memshift.experiments.program_prewarm sends a G-b/V replay's definition-item program requests through the replay's client (same cache keys), so the replay runs with only the reader served; scripts/r3_swap: phase driver, swap runner, resume cases and job files; no runs
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

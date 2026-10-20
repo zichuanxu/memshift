@@ -35,6 +35,10 @@ dependencies = [
   "matplotlib>=3.11.2",
 ]
 
+[project.urls]
+Repository = "https://github.com/zichuanxu/memshift"
+Dataset = "https://huggingface.co/datasets/zichuanxu/memshift"
+
 [project.scripts]
 memshift = "memshift.cli:app"
 

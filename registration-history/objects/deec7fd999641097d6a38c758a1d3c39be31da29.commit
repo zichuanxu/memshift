@@ -1,8 +1,0 @@
-tree 613651edbc00ff12f0176a01f0dfdf992d09cc9d
-parent 426bcf06aa33169c92d6896c73cd34610d65ec2a
-author zichuanxu <zichuanxu28@gmail.com> 1790650783 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790650783 +0900
-
-Results: E1 (detection follows B, B pays only with working repair, repair follows executability), E4 (unreplicated interaction; sync costs all systems), E7 read set and theta_e
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

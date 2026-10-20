@@ -1,4 +1,4 @@
-"""The D0full control (prereg v3 section 6): the D=0, B=1 source-epoch cell whose definition items
+"""The D0full control: the D=0, B=1 source-epoch cell whose definition items
 are re-derived after the shift from every live record of their declared sources instead of a BM25
 selection of 6,000 tokens. Each test replays D0B1_source and D0fullB1_source on one small world
 with recording fake writers (`tests/e1_replay.py`), which gives the request set of each cell as
@@ -41,7 +41,7 @@ TINY_BUDGET = 700  # approximate tokens: about nine records of the 3-month world
 
 
 def replay_with_budget(budget: int | None) -> Replay:
-    """Replay both cells with `writer.FULL_BUDGET` set to `budget` (None: the registered cap)."""
+    """Replay both cells with `writer.FULL_BUDGET` set to `budget` (None: the default cap)."""
     saved = writer_module.FULL_BUDGET
     writer_module.FULL_BUDGET = saved if budget is None else budget
     try:
@@ -52,7 +52,7 @@ def replay_with_budget(budget: int | None) -> Replay:
 
 @pytest.fixture(scope="module")
 def rep() -> Replay:
-    """The cap as registered (the 3-month world's e-mail already exceeds it)."""
+    """The default cap (the 3-month world's e-mail already exceeds it)."""
     return replay_with_budget(None)
 
 
@@ -328,7 +328,7 @@ def check_replay(replay_: Replay, budget: int) -> set[str]:
     return seen
 
 
-def test_the_registered_cap_cuts_only_what_exceeds_it_and_the_small_sources_stay_whole(rep):
+def test_the_cap_cuts_only_what_exceeds_it_and_the_small_sources_stay_whole(rep):
     seen = check_replay(rep, FULL_BUDGET)
     assert seen == {"none", "source"}  # e-mail is cut in a 3-month world, tasks are not
 
@@ -512,8 +512,8 @@ PIN = {
 
 def test_the_cell_is_pinned(rep):
     """The requests and item rows of the cell on the small world: a change here means a cached run
-    of the cell would no longer be a hit, or the cell behaves differently from the registered
-    one."""
+    of the cell would no longer be a hit, or the cell behaves differently from the one that was
+    run."""
     requests = sorted(rep.llms[D0FULL.name].keys())
     items = [i.to_json() for i in rep.cells[D0FULL.name].items.values()]
     assert digest(requests) == PIN["requests"]

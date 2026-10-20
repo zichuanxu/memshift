@@ -1,4 +1,4 @@
-"""Cognee behind the MemShift interface (plan §4.5, §6 E5; prereg v2 §3, substitute for Letta).
+"""Cognee behind the MemShift interface (E5, in place of Letta).
 
 Cognee 1.6.1 (topoteretes) is knowledge-graph memory for agents: `add` stores a document,
 `cognify` chunks it, has the LLM extract a graph and a summary per chunk and indexes everything,
@@ -56,8 +56,8 @@ dimensions set explicitly. The tokenizer for chunk sizing falls back to `cl100k_
 so it needs no download); counts only decide chunking: the budget is min(8191, 16384 // 2) tokens
 (llm/utils.py:14-56), so almost every record is one chunk and a very long one is cut in two.
 
-Integration contract (prereg decisions 2026-09-29: the system's own sync path, not a deletion the
-benchmark performs for it). Every source object is ONE data item pinned to `Data.id =
+Integration contract (the system's own sync path, not a deletion the benchmark performs for
+it). Every source object is ONE data item pinned to `Data.id =
 uuid5(object_id)` through `DataItem(data=event_text, label=object_id, external_metadata=
 event_metadata, data_id=...)` (data_item.py:14-22, ingest_data.py:277-283, 484-507). A new
 revision is `datasets.delete_data` of the object's current item, then an add of the new text; a

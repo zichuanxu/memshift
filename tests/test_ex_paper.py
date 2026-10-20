@@ -1,4 +1,4 @@
-"""Macros and appendix tables of the exploratory analyses (`analysis.ex_numbers`,
+"""Macros and the appendix table of the further analyses (`analysis.ex_numbers`,
 `analysis.ex_tables`): they read the keys the analyses write, render MISSING for a stage that is
 not there, and do not collide with the existing macros."""
 
@@ -159,7 +159,7 @@ def test_e2_macros_follow_the_analysis(e2_res):
     assert out["ETwoExWriterItemsPooled"] == f"{pooled['n_items']:,}" == "900"
     assert out["ETwoExWriterFailuresPooled"] == str(pooled["n_failures"])
     agree = pooled["predictors"]["agree"]
-    # the same estimate the registered macro prints, with both interval types beside it
+    # the same estimate the main macro prints, with both interval types beside it
     slope = out["ETwoExWriterAgreePooledSlope"].replace("$-$", "-")
     assert slope.startswith(f"{agree['slope']['est']:.2f} [")
     w, t = agree["slope"]["world"], agree["slope"]["type"]
@@ -211,8 +211,6 @@ def test_a_cross_family_switch_is_covered_without_a_change(tmp_path):
     assert out["MOneExWriterAgreePooledSlope"] != MISSING
     # the pooled scope covers both switches
     assert w["sets"]["all"]["pooled"]["n_items"] == 2 * 300
-    tex = ex_tables.tab_writer_predictors(None, res)
-    assert "block M1, pooled over its switches; 600 items" in tex
 
 
 def test_t3_macros_by_class_horizon_and_system(e3_res):
@@ -258,9 +256,9 @@ def test_null_macros_for_one_system_and_the_totals_need_all_six(e5_res):
     assert six["NatCogneeExNullInsideOf"] == "6 of 6"
 
 
-def test_all_exploratory_names_are_new_and_letters_only():
+def test_all_ex_names_are_new_and_letters_only():
     inp = pd.load_stage4(ROOT, SOURCES)
-    macros = pn.build_macros(ROOT)  # raises when an exploratory name collides with another macro
+    macros = pn.build_macros(ROOT)  # raises when an `Ex` name collides with another macro
     assert not [k for k in macros if not re.fullmatch(r"[A-Za-z]+", k)]
     ex = ex_numbers.build(ROOT, SOURCES, inp)
     assert len(ex) > 2500 and set(ex) <= set(macros)
@@ -268,7 +266,7 @@ def test_all_exploratory_names_are_new_and_letters_only():
 
 
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
-def test_the_exploratory_macros_compile_as_text(tmp_path):
+def test_the_ex_macros_compile_as_text(tmp_path):
     macros = pn.with_estimates(ex_numbers.build(ROOT, SOURCES, pd.load_stage4(ROOT, SOURCES)))
     (tmp_path / "numbers.tex").write_text(
         "\n".join(pn._macro(k, v) for k, v in sorted(macros.items())) + "\n"
@@ -296,7 +294,7 @@ def test_the_exploratory_macros_compile_as_text(tmp_path):
     assert done.returncode == 0, done.stdout[-1500:]
 
 
-def test_the_committed_analyses_answer_the_review_questions():
+def test_the_committed_analyses_give_the_pinned_values():
     """What the staged data say (pinned: a restaged analysis that changes these is a finding)."""
     macros = pn.build_macros(ROOT)
     assert macros["ETwoExFailTotal"] == "41" and macros["ETwoExFailItems"] == "2,446"
@@ -309,53 +307,18 @@ def test_the_committed_analyses_answer_the_review_questions():
 
 
 # ------------------------------------------------------------------------------------- tables
-def _tables(e2_res, e3_res, e5_res) -> dict[str, str]:
-    return {
-        "writer": ex_tables.tab_writer_predictors(e2_res, e2_res),
-        "tests": ex_tables.tab_tests_sensitivity(e2_res, e3_res, e3_res),
-        "native": ex_tables.tab_native_null(_six(e5_res)),
+def test_table_is_wellformed_with_data_and_without(e5_res):
+    tex = ex_tables.tab_native_null(_six(e5_res))
+    check_tex(tex)
+    assert MISSING not in tex.split(r"\toprule", 1)[1].split(r"\bottomrule", 1)[0]
+    empty = ex_tables.tab_native_null(None)
+    check_tex(empty)
+    assert MISSING in empty
+    # the five other native systems are not staged: missing
+    assert MISSING in ex_tables.tab_native_null(e5_res)
+    assert set(ex_tables.build(ROOT, SOURCES, pd.load_stage4(ROOT, SOURCES))) == {
+        "tab_native_null.tex"
     }
-
-
-def test_tables_are_wellformed_with_data_and_without(e2_res, e3_res, e5_res):
-    for tex in _tables(e2_res, e3_res, e5_res).values():
-        check_tex(tex)
-    for tex in (
-        ex_tables.tab_writer_predictors(None, None),
-        ex_tables.tab_tests_sensitivity(None, None, None),
-        ex_tables.tab_native_null(None),
-    ):
-        check_tex(tex)
-        assert MISSING in tex
-    # the block that is not staged (M1, replication, the five other native systems) is missing
-    tests = ex_tables.tab_tests_sensitivity(e2_res, e3_res, None)
-    assert "(d) replication" in tests and MISSING in tests
-    assert "\\label{tab:writer-predictors}" in _tables(e2_res, e3_res, e5_res)["writer"]
-
-
-def test_writer_table_carries_the_baselines_and_both_interval_types(e2_res):
-    tex = ex_tables.tab_writer_predictors(e2_res, None)
-    for label in ("agreement (registered)", "new-writer accuracy", "old-writer accuracy"):
-        assert label in tex
-    pooled = e2_res["explore_writer_predictors"]["sets"]["all"]["pooled"]["predictors"]["agree"]
-    t = pooled["slope"]["type"]
-    w = pooled["slope"]["world"]
-    assert f"[{ex_numbers.sn(w['lo90'])},\\,{ex_numbers.sn(w['hi90'])}]" in tex
-    assert f"[{ex_numbers.sn(t['lo90'])},\\,{ex_numbers.sn(t['hi90'])}]" in tex
-    assert "block M1" in tex and MISSING in tex  # M1 is not staged
-    assert tex.count(r"\midrule") == 6
-
-
-def test_tests_table_orders_the_cells_and_states_what_holds_by_construction(e2_res, e3_res):
-    tex = ex_tables.tab_tests_sensitivity(e2_res, e3_res, None)
-    heads = [r for r in ex_tables._t1_cell_rows(e2_res) if r.startswith(r"\multicolumn")]
-    assert "(1,1)" in heads[0] and "(0,1)" in heads[1]  # the T1 cell first
-    assert "(1,0)" in heads[2] and "(0,0)" in heads[3] and "no item changes" in heads[3]
-    assert "no item changes in any tier" in tex  # the B = 0 cells
-    by = ex_tables._by_construction(e2_res, None)
-    assert [r[0] for r in by] == ["T1", "T1", "T2", "T3", "T4"]
-    assert by[0][2].startswith("6 of 6 B=0 cell-tiers")
-    assert r"\label{tab:tests-sensitivity}" in tex and r"\label{tab:tests-sensitivity-t3}" in tex
 
 
 def test_native_table_lists_every_system_and_the_references_that_hold_the_value(e5_res):
@@ -363,35 +326,40 @@ def test_native_table_lists_every_system_and_the_references_that_hold_the_value(
     body = tex.split(r"\toprule", 1)[1]
     for nat in NATIVES:
         assert nat.label in body
-    assert "Mem0, predicted by (0,0)" in tex.replace(r"\emph{Mem0}", "Mem0")
+    assert "\nMem0 & " in tex and "\ncell (0,0) & " in tex  # the system above its cell
     assert "zero, RAG" in tex or "(0,0)" in tex
-    assert r"$^\circ$" in tex  # the label-circular comparisons are marked
+    assert r"$^\circ$" in tex  # the comparisons after S_del, from which B is inferred
+    assert "predicted" not in tex and "exploratory" not in tex and r"\pass" not in tex
     check_tex(tex)
 
 
-def test_native_table_defines_its_counts_and_gives_the_out_of_sample_baselines(e5_res):
+def test_native_table_defines_its_counts_and_gives_the_baselines_after_src_and_def(e5_res):
     tex = ex_tables.tab_native_null(e5_res)
-    caption = tex.split(r"\label{tab:native-null}")[0]
+    caption = " ".join(re.findall(r"\\caption\{(.*?)\}\n\\label", tex))  # both tables
     for term in (
-        r"Inside: inside the 95\% interval of the cell with the inferred label",
-        r"Discriminating: inside, and outside that of the cell with the other $B$",
+        r"$k$ comparisons inside the 95\% interval of the \holdmem{} cell with the inferred label",
+        r"$(D,B)$: \holdmem{} cell, c: citation key",
+        r"$j$ of them also outside that of the cell with the other $B$",
         "the share of deleted items still answered",
-        "gold-dep.: gold-dependency context",
+        "no-store: no-store BM25, oracle: oracle context",
         "Last row: sums",
-        r"$^\circ$: label-circular comparison",
+        r"$^\circ$: after $\Sdel$, from which $B$ is inferred",
     ):
         assert term in caption, term
+    for word in ("circular", "out-of-sample", "discriminating", "inflated", "exploratory"):
+        assert word not in tex, word
+    assert "white-box" not in tex and "(d,b)" not in tex
     head = next(ln for ln in tex.splitlines() if ln.startswith("system & label"))
-    assert head.count("out-of-sample") == 3  # the native estimate, the zero system, plain RAG
-    assert "oracle" not in tex.split(r"\label{tab:native-null}")[1]  # named as in the paper
+    assert head.count(r"$\Ssrc$, $\Sdef$") == 3  # the native estimate, no-store BM25, RAG
+    assert "zero" not in tex.split(r"\label{tab:native-null}")[1]  # named as in the paper
     # with all six systems: per system and in the last row, the baselines out of sample
     six = _six(e5_res)
     tex = ex_tables.tab_native_null(six)
     ex = six["explore_native_null"]
     mem = next(ln for ln in tex.splitlines() if ln.startswith("Mem0 &")).split(" & ")
     total = next(ln for ln in tex.splitlines() if ln.startswith("total &")).split(" & ")
-    assert len(mem) == len(total) == 13
-    for k, name in ((7, "zero"), (9, "rag")):
+    assert len(mem) == len(total) == 14  # P: estimate and interval
+    for k, name in ((8, "zero"), (10, "rag")):
         bc = ex["systems"]["mem0"]["baseline_counts"].get(name)
         tbc = ex["total"]["baseline_counts"].get(name)
         for j, part in ((0, "all"), (1, "out_of_sample")):
@@ -399,16 +367,14 @@ def test_native_table_defines_its_counts_and_gives_the_out_of_sample_baselines(e
             assert mem[k + j] == want, (name, part)
             if tbc:
                 assert total[k + j] == ex_tables._pair(tbc["baseline"][part]), (name, part)
-    assert total[4] == ex_tables._pair(ex["total"]["counts"]["all"])
-    assert total[3] == f"{ex['total']['b_identified']}/6"
+    assert total[5] == ex_tables._pair(ex["total"]["counts"]["all"])
+    assert total[4] == f"{ex['total']['b_identified']}/6"
 
 
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
-def test_tables_compile(tmp_path, e2_res, e3_res, e5_res):
-    tables = _tables(e2_res, e3_res, e5_res)
-    tables |= {
-        "writer_missing": ex_tables.tab_writer_predictors(None, None),
-        "tests_missing": ex_tables.tab_tests_sensitivity(None, None, None),
+def test_tables_compile(tmp_path, e5_res):
+    tables = {
+        "native": ex_tables.tab_native_null(_six(e5_res)),
         "native_missing": ex_tables.tab_native_null(None),
     }
     for name, tex in tables.items():
@@ -440,10 +406,10 @@ def test_tables_compile(tmp_path, e2_res, e3_res, e5_res):
 
 
 @pytest.mark.paper
-def test_committed_exploratory_tables_are_current():
-    """paper/generated/tab_{writer_predictors,tests_sensitivity,native_null}.tex are what the
-    generators print for the staged data: regenerate them with `python -m
-    memshift.analysis.paper_tables` whenever a stage or a generator changes."""
+def test_committed_table_is_current():
+    """paper/generated/tab_native_null.tex is what the generator prints for the staged data:
+    regenerate it with `python -m memshift.analysis.paper_tables` whenever a stage or a generator
+    changes."""
     inp = pd.load_stage4(ROOT, SOURCES)
     head = "% generated by memshift.analysis.paper_tables; do not edit\n"
     for name, tex in ex_tables.build(ROOT, SOURCES, inp).items():

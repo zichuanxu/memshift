@@ -1,8 +1,0 @@
-tree bfd37f1a1d41ce6f6a070a88b654a176545ee1ff
-parent 7ce47f6e4e45955dabafbab87aa79c5ae295cf9b
-author zichuanxu <zichuanxu28@gmail.com> 1790661866 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790661866 +0900
-
-T3 reference run: oracle, zero system and RAG on the 15 short E5 worlds (15 hash checks pass)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,14 +1,14 @@
-"""E3 analysis (plan §3.2 T3/T4, §6 E3; prereg v0 §6).
+"""E3 analysis: static quality, serving cost and the membership tests T3 and T4.
 
 Per horizon and system: static ContractValid (world bootstrap), the five cost parts, serving
 cost per query relative to one full re-read, and the membership tests
   T3  ContractValid(system) >= ContractValid(oracle) - epsilon (3 pp)
   T4  serving tokens per query <= c (0.5) x full re-read tokens per query.
-Exploratory: `explore_no_definition` per system repeats ContractValid and T3 with the definition
-items (class `definition` of `e1.ITEM_CLASSES`) left out of both the system and the oracle.
-Exploratory (decisions.md 2026-09-30; `ex_tests`): `explore_t3_by_class` gives the T3 margin per
-item class (and the oracle's own ContractValid per class), `explore_t4_slack` the factor by which a
-system's serving cost is below the T4 ceiling.
+`explore_no_definition` per system repeats ContractValid and T3 with the definition items (class
+`definition` of `e1.ITEM_CLASSES`) left out of both the system and the oracle.
+From `ex_tests`: `explore_t3_by_class` gives the T3 margin per item class (and the oracle's own
+ContractValid per class), `explore_t4_slack` the factor by which a system's serving cost is below
+the T4 ceiling.
 The zero-system decision (H_U) needs Update after S_src / S_def from E1; `decide_hu` combines both.
 """
 
@@ -70,8 +70,8 @@ def analyse(run_dir: Path) -> dict[str, Any]:
                     per[s]["T3_pass"] = d["est"] >= -EPSILON
         if "zero" in per and HM in per:
             per["zero_minus_holdmem"] = paired_diff(cv[(h, "zero")], cv[(h, HM)]).to_json()
-        # Exploratory (decisions.md 2026-09-28): ContractValid by item class; D=1's programmatic
-        # extraction coincides with the gold computation on the rule and definition classes.
+        # ContractValid by item class; D=1's programmatic extraction coincides with the gold
+        # computation on the rule and definition classes.
         for s in systems:
             per[s]["explore_by_class"] = {
                 cls: world_bootstrap(
@@ -82,9 +82,9 @@ def analyse(run_dir: Path) -> dict[str, Any]:
                 ).to_json()
                 for cls, prefixes in ITEM_CLASSES.items()
             }
-        # Exploratory (not pre-registered): ContractValid and T3 without the definition items, on
-        # which the oracle context is weak (the reader must evaluate a definition over every record
-        # it ranges over) while D=1 computes them exactly; the same items in system and oracle.
+        # ContractValid and T3 without the definition items, on which the oracle context is weak
+        # (the reader must evaluate a definition over every record it ranges over) while D=1
+        # computes them exactly; the same items in system and oracle.
         kept = {
             s: {
                 w: {f: x for f, x in v.items() if not f.startswith(DEFINITION_PREFIXES)}
@@ -102,8 +102,8 @@ def analyse(run_dir: Path) -> dict[str, Any]:
                 d = paired_diff(kept[s], kept["oracle"]).to_json()
                 entry.update({"minus_oracle": d, "T3_pass": d["est"] >= -EPSILON})
             per[s]["explore_no_definition"] = entry
-        # Exploratory (decisions.md 2026-09-30): the T3 margin per item class, and how far each
-        # system's serving cost is from the T4 ceiling
+        # The T3 margin per item class, and how far each system's serving cost is from the T4
+        # ceiling
         for s, by_class in ex_tests.t3_by_class({s: cv[(h, s)] for s in systems}, EPSILON).items():
             per[s]["explore_t3_by_class"] = by_class
             per[s]["explore_t4_slack"] = ex_tests.t4_slack(
@@ -117,7 +117,7 @@ def analyse(run_dir: Path) -> dict[str, Any]:
 
 
 def decide_hu(e3: dict[str, Any], e1_update: dict[str, float]) -> dict[str, Any]:
-    """Zero system "meets the bar" (prereg v0 §6): (a) static CV at 12 months within 3 pp of
+    """Zero system "meets the bar" (H_U): (a) static CV at 12 months within 3 pp of
     HoldMem(1,1); (b) Update after S_src and S_def within 3 pp (from E1); (c) serving cost per
     query <= 0.5 x full re-read. `e1_update` maps branch -> Update(zero) - Update(HoldMem)."""
     h12 = e3["horizons"].get(12) or e3["horizons"].get("12") or {}

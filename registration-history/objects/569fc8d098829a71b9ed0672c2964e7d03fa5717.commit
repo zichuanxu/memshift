@@ -1,8 +1,0 @@
-tree b35416eef6c7199b8410c8e9643608763a1bfb78
-parent f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd
-author zichuanxu <zichuanxu28@gmail.com> 1792139843 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792139843 +0900
-
-Runs: MEMSHIFT_HTTP_TIMEOUT sets the model-request timeout (long server queues); no request or key changes
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

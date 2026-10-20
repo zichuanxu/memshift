@@ -11,14 +11,14 @@ Usage: python -m memshift.analysis.stage e1 runs/stage1_e1 RUN_DIR [RUN_DIR ...]
        python -m memshift.analysis.stage engine runs/stage3_theta_r_engine old:RUN new:RUN
        python -m memshift.analysis.stage ctl runs/stage5_controls ctl:RUN [ctl:RUN ...] \\
            base:RUN_OR_STAGE [base:RUN_OR_STAGE ...]
-(`ctl`: the control cells of prereg/v3_controls.md; `ctl:` runs are the new runs, `base:` runs (or a
+(`ctl`: the control cells; `ctl:` runs are the new runs, `base:` runs (or a
 stage directory, which expands to the runs its manifest lists) the published runs they are compared
 with, see `analysis.controls`.
 E7 sources carry their role: E7 runs, the main E1 runs, and the reader / embedding swaps; the
 readers of several `theta_r` runs are told apart by the reader model in each run's manifest
 (block M3: `theta_r_by_reader`). E5 sources: native runs, white-box E1 runs on the same worlds,
 second ingestions, baseline runs; engine sources: the same runs served by two engine versions.
-`m2` is `e1` plus the checks (i)-(v) of prereg v2 §2 for one model family, written to
+`m2` is `e1` plus the checks (i)-(v) of `analysis.families` for one model family, written to
 analysis/families.json.)
 Source run directories must contain the raw JSONL (fetch them from the compute host first); only
 their manifest.json is referenced, not copied.

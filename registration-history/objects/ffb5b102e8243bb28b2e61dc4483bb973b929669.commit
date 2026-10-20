@@ -1,8 +1,0 @@
-tree 030075cb909c06f01b7e1aba13f60a56e8fdbc29
-parent c2b403ee7d029ded7fa3ec6cdcc826ea586587f6
-author zichuanxu <zichuanxu28@gmail.com> 1790636826 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790636826 +0900
-
-Exploratory E2 retention by item class: free-text items lose 11.5 pp at the same tier
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

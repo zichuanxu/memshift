@@ -1,8 +1,0 @@
-tree b1817da003487163af6ac2001262fc5cd05e3f7c
-parent ef70d0fc64c6d1f770df84d3fbd215e951b48a1e
-author zichuanxu <zichuanxu28@gmail.com> 1790650116 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790650116 +0900
-
-E4 extension on test worlds: the calendar sync x B interaction does not replicate (-2.5 pp vs -42.0 pp on dev); official sync costs every system alike; theta_e run fetched
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

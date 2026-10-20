@@ -1,6 +1,6 @@
 {
  "block": "H",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -3711,44 +3711,37 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "H1": {
-   "verdict": "judged",
-   "reason": "B x D +16.4 pp [+9.7 pp, +22.4 pp]",
    "tests": [
     {
      "key": "BxD_def_definition_D1",
      "value": 0.16417910447761194,
-     "ok": null,
+     "meets_threshold": null,
      "threshold": "<= 10 pp or CI incl. 0; >= 20 pp, CI > 0"
     }
-   ],
-   "reading": "both"
+   ]
   },
   "H2": {
-   "verdict": "holds",
-   "reason": "1 of 1 met",
    "tests": [
     {
-     "key": "r0_minus_registered_qwen",
+     "key": "r0_minus_qwen_main_study",
      "value": 0.29254545454545455,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 20 pp"
     }
    ]
   },
   "H3": {
-   "verdict": "not_judged",
-   "reason": "no run of this arm given",
    "tests": []
   }
  },
  "reported": {
-  "H_c_trigger": {
+  "sonnet_r0_below_70pct": {
    "r0": 0.45454545454545453,
-   "runs_H_c": true,
-   "on_registered_worlds": true,
-   "rule": "H-c runs iff Sonnet's r_0 on changed definition items after S_src < 70%"
+   "below_70pct": true,
+   "on_all_worlds": true,
+   "threshold": "r_0 of Claude Sonnet 5.5 on changed definition items after S_src < 70%"
   }
  },
  "quantities": {
@@ -3786,18 +3779,18 @@
       {
        "key": "at_limit_share",
        "value": 0.0,
-       "ok": true,
+       "meets_threshold": true,
        "threshold": "<= 10%"
       },
       {
        "key": "unreadable_share",
        "value": 0.0,
-       "ok": true,
+       "meets_threshold": true,
        "threshold": "<= 2%"
       }
      ],
      "unreadable_basis": "distinct requests (response cache)",
-     "valid": true
+     "within_limits": true
     },
     "worlds": [
      "w1000",
@@ -4014,7 +4007,7 @@
       "n_worlds": 10,
       "n_items": 165
      },
-     "registered_qwen": 0.162
+     "qwen_main_study": 0.162
     }
    }
   },
@@ -4022,10 +4015,10 @@
   "ignored_runs": []
  },
  "notes": {
-  "H1": "B x D with the authored D=1 cells (the registered main-study contrast); the D_m version is reported. Reading writer_property (est <= 10 pp, or the interval includes 0), execution_pays (est >= 20 pp and the interval above 0), else both.",
-  "H2": "r_0 = ContractValid of the changed definition item-times the source-epoch key invalidated in D0B1_source after S_src (the `r` of Eq. (1), whose main-study value is the registered 16.2%); holds when r_0 - 0.162 >= 20 pp (point estimate). The same quantity of Qwen3.5-9B on the same worlds, and the paired difference, are reported.",
-  "H": "validity (amended): at most 10% of the writer's distinct write requests stop at the output limit (`finish_reason` \"length\" in calls.jsonl: max_tokens or the context window), at most 2% unreadable. calls.jsonl records the finish reason, prompt and output tokens (thinking included) but not whether the reply parsed; the unreadable share is per distinct request from the response cache when given, else from the run summaries' `def_stats` (per cell write, so a request several cells send counts once per cell), and `basis` says which.",
-  "H3": "v3 P-D1 as v3 judged it: repair and mechanical repair, S_src and S_def, D1B1_source minus D0thinkB1_source on definition items, each >= 30 pp. Validity as the v4 text states it: at most 10% of the thinking writes cut off (completion tokens at the run's limit); v3 P-D2's 20%-unreadable rule is reported beside it."
+  "H1": "B x D with the authored D=1 cells (the main-study contrast); the D_m version is reported. Bounds: at most 10 pp or the interval includes 0; at least 20 pp with the interval above 0.",
+  "H2": "r_0 = ContractValid of the changed definition item-times the source-epoch key invalidated in D0B1_source after S_src (the `r` of Eq. (1), whose main-study value is 16.2%); r_0 - 0.162 >= 20 pp (point estimate). The same quantity of Qwen3.5-9B on the same worlds, and the paired difference, are reported.",
+  "H": "validity: at most 10% of the writer's distinct write requests stop at the output limit (`finish_reason` \"length\" in calls.jsonl: max_tokens or the context window), at most 2% unreadable (`within_limits`); H1 and H2 are computed only within these limits. calls.jsonl records the finish reason, prompt and output tokens (thinking included) but not whether the reply parsed; the unreadable share is per distinct request from the response cache when given, else from the run summaries' `def_stats` (per cell write, so a request several cells send counts once per cell), and `basis` says which.",
+  "H3": "repair and mechanical repair, S_src and S_def, D1B1_source minus D0thinkB1_source on definition items, each >= 30 pp; computed only when at most 10% of the thinking writes are cut off (completion tokens at the run's limit). The share of unreadable thinking writes against 20% is reported beside it."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

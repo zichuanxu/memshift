@@ -1,8 +1,8 @@
-"""The round-3 swap phase (scripts/r3_swap/): the job files ask for what prereg v4 G-b, U5 and H-b
-register (as amended 2026-10-16) with e1's own flags, and the phase driver serves one model at a
-time, pre-warms before U5, runs every job once, never passes a Claude key and refuses to leave a
-phase with unfinished jobs. The driver runs here against stand-ins for docker, the model servers
-and scripts/run.sh."""
+"""The round-3 swap phase (scripts/r3_swap/): the job files ask for the G-b program sets, the U5
+upsert runs and the H-b thinking-writer runs with e1's own flags, and the phase driver serves one
+model at a time, pre-warms before U5, runs every job once, never passes a Claude key and refuses to
+leave a phase with unfinished jobs. The driver runs here against stand-ins for docker, the model
+servers and scripts/run.sh."""
 
 import ast
 import json
@@ -351,7 +351,7 @@ def test_phase_driver(tmp_path):
     assert re.search(r"fam:llama +jobs_u5_llama\.txt +done +5 ", status)
     assert re.search(r"qwen40k +jobs_gb_open\.txt +done +0 .* not started +45", status)
 
-    # qwen40k (the other families' pre-warms done): Qwen with the registered context, H-b and the
+    # qwen40k (the other families' pre-warms done): Qwen with the 40k context, H-b and the
     # G-b replays; a server that does not report its context is checked against logs/serving
     for fam in ("gemma", "gptoss"):
         for i in range(3):

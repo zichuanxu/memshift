@@ -1,19 +1,18 @@
-"""How often a writer's programs are right, and how much a definition-item writer re-derives
-(exploratory, post hoc; no model call). It changes no registered contrast, margin, threshold or
-verdict; it supplies the axes of the writer figure (`round3_figures.fig_writers`) that the
-registered results do not hold.
+"""How often a writer's programs are right, and how much a definition-item writer re-derives (no
+model call). It supplies the axes of the writer figure (`round3_figures.fig_writers`) that the
+results of `round3_blocks` do not hold.
 
-Program sets (block G-b of prereg/v4_round3.md; the runs `round3_registered G` judges G3 on). Per
-program set (writer, temperature, sample) and branch: the share of the definition slots whose
-program value at t0 (the `derive` event at the fork, before any shift) equals gold, in the
-D1sB1_source cell (the indicator of `e1_synth.program_stats`' agree_t0 and of
-`round3_registered._program_t0`), and the share whose program ran at all. These item-times precede
-every shift, so the measure shares no item-time with the post-shift B x D of G3. Per-item
-indicators pooled over worlds, world bootstrap (`ex_e1_classes`).
+Program sets (block G-b; the runs `round3_blocks G` computes G3 on). Per program set (writer,
+temperature, sample) and branch: the share of the definition slots whose program value at t0 (the
+`derive` event at the fork, before any shift) equals gold, in the D1sB1_source cell (the indicator
+of `e1_synth.program_stats`' agree_t0 and of `round3_blocks._program_t0`), and the share whose
+program ran at all. These item-times precede every shift, so the measure shares no item-time with
+the post-shift B x D of G3. Per-item indicators pooled over worlds, world bootstrap
+(`ex_e1_classes`).
 
 Definition-item writers (blocks H-a and H-c). Per writer and branch, on the worlds the writer ran:
 r_0 (ContractValid of the changed definition item-times the source-epoch key invalidated in
-D0B1_source, `round3_registered.r0`; after S_src it is H2's quantity) and B x D on the changed
+D0B1_source, `round3_blocks.r0`; after S_src it is H2's quantity) and B x D on the changed
 definition item-times with the authored D=1 cells (after S_def it is H1's quantity), each with the
 same quantity of Qwen3.5-9B (the committed runs) on the same worlds and item-times and the paired
 difference. Block H itself reports r_0 after S_src only and no Qwen3.5-9B B x D on its worlds.
@@ -23,7 +22,7 @@ difference. Block H itself reports r_0 after S_src only and no Qwen3.5-9B B x D 
 
 --programs: the G-b program-set runs (V runs, held-out-definition runs and other runs are
 ignored). --defwriters: the H-a and H-c runs. --compare: the committed runs or stages they pair
-with, as for `round3_registered H`.
+with, as for `round3_blocks H`.
 """
 
 from __future__ import annotations
@@ -37,12 +36,12 @@ from typing import Any
 
 from memshift.analysis import e1
 from memshift.analysis import ex_e1_classes as ex
-from memshift.analysis import round3_registered as rr
+from memshift.analysis import round3_blocks as rr
 from memshift.runinfo import code_state
 
 STATUS = (
-    "exploratory, post hoc: the axes of the writer figure; changes no registered contrast, margin, "
-    "threshold or verdict"
+    "additional analysis: the axes of the writer figure; changes no contrast, margin or threshold "
+    "of the main analysis"
 )
 UNITS = rr.UNITS
 DM_CELL = rr.ARMS["Dm"][1]  # holdmem_D1sB1_source: the cell whose programs block G-b replays
@@ -85,7 +84,7 @@ def program_sets(paths: Sequence[Path], draws: int = rr.DRAWS) -> dict[str, Any]
     over all three."""
     runs, skipped = rr.read_runs(paths, systems=lambda s: False, items=DM_CELL.__eq__)
     gb = [r for r in runs if r.program is not None and not r.user_words and not r.kappa_set]
-    # one owner run per (set, cell, world, branch), the newest, as `round3_registered` merges;
+    # one owner run per (set, cell, world, branch), the newest, as `round3_blocks` merges;
     # these runs carry no answers here, so the owners are found from the items
     owner: dict[tuple[str, str, str], rr.Run] = {}
     for run in sorted(gb, key=lambda r: (r.created, r.name)):

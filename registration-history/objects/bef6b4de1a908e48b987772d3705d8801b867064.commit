@@ -1,8 +1,0 @@
-tree c65a9fcd210e44a016ca8a1895b5d7d8314a1f72
-parent c16c94105a98cecdfb4e1bdeb8525e79705c9012
-author zichuanxu <zichuanxu28@gmail.com> 1790787652 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790787652 +0900
-
-Decision: batch admission thresholds 40 / 10 with all batch jobs managed, so the last A-Mem branch chains are served at once
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

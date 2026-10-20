@@ -1,4 +1,4 @@
-"""Block X (prereg/v4_round3.md): the Mem0 event log, the two interventions and the analysis, on a
+"""Block X, the Mem0 diagnosis: the Mem0 event log, the two interventions and the analysis, on a
 stand-in Memory and on synthetic event logs. No mem0, network or GPU."""
 
 from __future__ import annotations
@@ -482,20 +482,21 @@ def _cell(dom: str, judged: bool, det: float, rep: float) -> dict:
     }
 
 
-def test_x1_verdict():
+def test_x1_counts():
     cells = {
         "src/definition": _cell("detection", True, 0.10, 0.30),
         "src/other": _cell("detection", True, 0.20, 0.00),
         "def/definition": _cell("detection", True, 0.05, 0.01),
         "def/other": _cell("repair", True, 0.00, 0.02),
-        "orphan/definition": _cell("detection", False, 0.50, 0.00),  # not judged
+        "orphan/definition": _cell("detection", False, 0.50, 0.00),  # no diagnosis
     }
     v = xa.x1(cells)
-    assert v["n_judged"] == 4 and v["n_favour_target"] == 3 and v["judged"] and not v["holds"]
+    assert v["n_cells"] == 4 and v["n_favour_target"] == 3
+    assert not v["cells"]["src/definition"]["favours_target"]
     cells["src/definition"] = _cell("detection", True, 0.40, 0.30)
-    assert xa.x1(cells)["holds"]
+    assert xa.x1(cells)["n_favour_target"] == 4
     few = {k: cells[k] for k in ("src/other", "def/other")}
-    assert xa.x1(few) == {**xa.x1(few), "judged": False, "holds": None}
+    assert xa.x1(few)["n_cells"] == 2
 
 
 # ---------------------------------------------------------------------- the analysis end to end
@@ -585,7 +586,7 @@ def test_analysis_on_synthetic_logs(tmp_path):
     assert det["n"] == 3 and det["detected"] == 3 and det["m"]["est"] == 0.0
     assert det["r"]["est"] == pytest.approx(2 / 3)
     assert other["effects"]["mem0_det"]["est"] == pytest.approx(2 / 3)
-    assert res["X1"]["n_judged"] == 2 and not res["X1"]["judged"]
+    assert res["X1"]["n_cells"] == 2
     assert json.loads((d / "analysis" / "x_mem0.json").read_text())["X1"] == res["X1"]
 
 

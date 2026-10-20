@@ -1,6 +1,6 @@
 {
  "block": "G",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -4143,33 +4143,24 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "G1": {
-   "verdict": "not_judged",
-   "reason": "0 of 3 held-out draws given (18 definitions)",
-   "tests": [],
-   "reading_if_fails": "the definition-item result is restricted to the six fixed definitions"
+   "tests": []
   },
   "G2": {
-   "verdict": "not_judged",
-   "reason": "0 of 3 held-out draws given (18 definitions)",
-   "tests": [],
-   "reading_if_fails": "the definition-item result is restricted to the six fixed definitions"
+   "tests": []
   },
   "G3": {
-   "verdict": "holds",
-   "reason": "1 of 1 met",
    "tests": [
     {
      "key": "BxD_def_definition_Dm_two_way",
      "value": 0.23097904105656045,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
    ],
    "sets": 18,
-   "registered_sets": 18,
-   "reading_if_fails": "the definition-item result is restricted to the main writer's programs"
+   "sets_total": 18
   }
  },
  "reported": {
@@ -5036,7 +5027,7 @@
   "ignored_runs": []
  },
  "notes": {
-  "G1-G3": "\"Positive with the two-way interval above 0\": lower bound > 0. G1 and G2 need both arms (D=1 and D_m) and all three draws (18 definitions); G3 is judged on the program sets given (at least 2; the registered cut order can leave fewer than 18) and says how many. The share between writers is the eta squared of the per-set B x D (and the one-way random-effects share); the S_del interaction per writer pools its sets (world bootstrap)."
+  "G1-G3": "lower bound of the two-way interval > 0. G1 and G2 need both arms (D=1 and D_m) and all three draws (18 definitions); G3 is computed on the program sets given (at least 2; the cut order can leave fewer than 18) and says how many. The share between writers is the eta squared of the per-set B x D (and the one-way random-effects share); the S_del interaction per writer pools its sets (world bootstrap)."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

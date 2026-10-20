@@ -1,8 +1,0 @@
-tree baad38f3076a472a30efbe5f9cd77aae1a709673
-parent 16956fc5af1fabc4f13e25933cf8d25be1f6d9fd
-author zichuanxu <zichuanxu28@gmail.com> 1790698317 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790698317 +0900
-
-Native D label from export structure regardless of repair-sample size (a native without typed spans is D=0), so no native loses its white-box comparison cell to a small sample; decision logged; appendix sentence updated
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

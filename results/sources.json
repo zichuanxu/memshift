@@ -41,5 +41,7 @@
  "ex_misses": "runs/stage5_ex_misses",
  "keyaudit": "runs/stage5_key_audit",
  "ex_round3": "runs/stage6_ex_round3",
- "round3": "runs/stage7_round3"
+ "round3": "runs/stage7_round3",
+ "ex_round3_review": "runs/stage8_ex_round3_review",
+ "round3b": "runs/stage9_round3b"
 }

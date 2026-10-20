@@ -6,9 +6,9 @@
   "created_utc": "2026-10-17T05:16:47Z",
   "experiment": "merged-ex_account",
   "files_sha256": {
-    "analysis/ex_account.json": "04174173d3078626ca8b2a3d939a084bde85bc3efad3e529fbc24517836678f2"
+    "analysis/ex_account.json": "9bd222abdaec47e88415c33ec885f027bca156ad4e42e590aec2f6485fe45e38"
   },
-  "note": "exploratory (second review round): the account of Update across the main study, R and the three M2 families, no model call; restaged with the restaged stage4_m2 Llama-3.1-8B and gpt-oss-20b stages, whose runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache (prereg/decisions.md 2026-10-17)",
+  "note": "additional analysis: the account of Update across the main study, R and the three M2 families, no model call; restaged with the restaged stage4_m2 Llama-3.1-8B and gpt-oss-20b stages, whose runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache",
   "producers": {
     "analysis/ex_account.json": "python -m memshift.analysis.ex_account runs/stage5_ex_account main:runs/stage2_e1 rep:runs/stage4_rep_e1 gemma:runs/stage4_m2_google_gemma-4-12b-it llama:runs/stage4_m2_meta-llama_llama-3_1-8b-instruct gptoss:runs/stage4_m2_openai_gpt-oss-20b"
   },
@@ -17,35 +17,35 @@
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "dcedd1b9ead42cfe9c51c57116b91f52ab65e23bd116a823f89dfda7fe5d276d",
+      "manifest_sha256": "c2d9112ae0a27377b9293e69becb1505bf2e07c4fc9be61abc8fcb00e50ad863",
       "run_id": "stage2_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-e1",
-      "manifest_sha256": "aabb9fdaf7409e7a8d6cb59dbda41b5af2b4c189e21b36af01e7c46982272e69",
+      "manifest_sha256": "56f05b126c99067fc42e912c6998d8b372b738403a2d8ffd53bee01f661add16",
       "run_id": "stage4_rep_e1",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-m2",
-      "manifest_sha256": "9747c1191ca18b4f6a89246c8d03a278b8f8f43d6770dc0f068d6215da8895aa",
+      "manifest_sha256": "f272af2dfe10c7c906c3b9a8dad524d57de3458e0b7d6c13a83911bc9039a21c",
       "run_id": "stage4_m2_google_gemma-4-12b-it",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-m2",
-      "manifest_sha256": "5a72810aeff2ec71a828f9ef5fd6fa0fe8dcd865916e1d1692cec20ab8aaa1cf",
+      "manifest_sha256": "cb78a69ca8e6b02f7e4691a7b87bf1e1bd897b0aa91142ba00c3c96cd0e4d232",
       "run_id": "stage4_m2_meta-llama_llama-3_1-8b-instruct",
       "worlds": []
     },
     {
       "code": null,
       "experiment": "merged-m2",
-      "manifest_sha256": "7149449c130f61cfde32f10785759e74e7998d01d80d1308ce9e15988af810f7",
+      "manifest_sha256": "2996196d5222d7fd1e788eef24178b9f5d3b2b64f1a8ad41d5a68583309bdc10",
       "run_id": "stage4_m2_openai_gpt-oss-20b",
       "worlds": []
     }

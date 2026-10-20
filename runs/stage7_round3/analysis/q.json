@@ -1,6 +1,6 @@
 {
  "block": "Q",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -3730,27 +3730,23 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "Q1": {
-   "verdict": "fails",
-   "reason": "0 of 1 met; not met: B_effect_D1_unnamed_minus_named 0.0000",
    "tests": [
     {
      "key": "B_effect_D1_unnamed_minus_named",
      "value": 0.0,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 5 pp"
     }
    ]
   },
   "Q2": {
-   "verdict": "holds",
-   "reason": "1 of 1 met",
    "tests": [
     {
      "key": "BxD_def_definition_D1_unnamed",
      "value": 0.3953488372093023,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
    ]
@@ -3865,7 +3861,7 @@
   ]
  },
  "notes": {
-  "Q1": "point estimate of (B effect at D=1, unnamed) - (B effect at D=1, named), paired per item, >= 5 pp. Q2 is judged at the authored D=1 (D_m reported), lower bound > 0."
+  "Q1": "point estimate of (B effect at D=1, unnamed) - (B effect at D=1, named), paired per item, >= 5 pp. Q2 is computed at the authored D=1 (D_m reported), lower bound > 0."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

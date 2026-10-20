@@ -1,20 +1,19 @@
-"""E5 (plan §6, docs/E5_PROTOCOL.md): native systems (Mem0, Graphiti; stage 4: A-Mem, MemOS,
-LightRAG, HippoRAG 2, Cognee) under S_src and S_def, the orphan test for black-box B inference, and
-cost.
+"""E5: native systems (Mem0, Graphiti, A-Mem, MemOS, LightRAG, HippoRAG 2, Cognee) under S_src
+and S_def, the orphan test for black-box B inference, and cost.
 
 Per world and native system: the natural prefix up to t0 = t_f - 1 min is ingested once and the
-store is snapshotted (plan §9 budget rule 2). Every branch (src, def, orphan) restores the
-snapshot and ingests that branch's events after t0 incrementally, probing every slot at
+store is snapshotted, so that the prefix is ingested once per world. Every branch (src, def, orphan)
+restores the snapshot and ingests that branch's events after t0 incrementally, probing every slot at
 t_f + {1, 2, 4, 8} weeks (orphan: 1 week only). All probes are also asked at t0 (static
-ContractValid). The shared reader, template and 4k budget apply. White-box references for the
-same worlds and branches come from `memshift.experiments.e1` (cells at source-epoch binding).
+ContractValid). The shared reader, template and 4k budget apply. White-box references for the same
+worlds and branches come from `memshift.experiments.e1` (cells at source-epoch binding).
 
 `--measure` ingests one world's prefix only and reports native t_i (LLM calls, tokens and wall
-seconds per attempted event), which sets the number of worlds under the budget (plan §9 rule 4,
-§12); `--measure-events N` caps the measured prefix at its first N events. Each world's result is
+seconds per attempted event), which sets the number of worlds the compute budget allows;
+`--measure-events N` caps the measured prefix at its first N events. Each world's result is
 appended to `world_results.jsonl` as soon as it finishes.
 
-Split runs (decisions.md 2026-09-30; same systems, settings, events and probes). `--phase prefix`
+Split runs (same systems, settings, events and probes). `--phase prefix`
 ingests the prefix, snapshots it and answers the t0 probes; `--phase branch --prefix-run RUN`
 restores that run's snapshot and runs the branches given by `--branches` (one per container lets a
 world's three branches run in parallel; they are independent after the snapshot). `--resume-from
@@ -79,8 +78,8 @@ NATIVE_LLM = "MEMSHIFT_NATIVE_LLM"  # endpoints key for the long-context server 
 GRAPHITI_BATCH = 1  # >1: Graphiti's documented bulk path (same extraction and invalidation)
 # >1: the documented bulk ingestion of HippoRAG 2 (`index(list)`) and LightRAG (`ainsert(list)`,
 # with as many documents in parallel), and concurrent MemOS extractions with adds kept in event
-# order. Batches hold distinct objects in time order and never cross a probe time (decisions.md
-# 2026-09-29). A-Mem, Cognee and Mem0 are unaffected.
+# order. Batches hold distinct objects in time order and never cross a probe time. A-Mem, Cognee
+# and Mem0 are unaffected.
 NATIVE_BATCH = 1
 ON_ERROR = "raise"  # "skip": a unit whose ingestion fails is recorded (failures.jsonl) and skipped
 
@@ -91,7 +90,7 @@ def _make(kind: str, world: World, store: Path, llm_url: str, embed_url: str) ->
         kw["batch_size"] = NATIVE_BATCH
     if NATIVE_BATCH > 1 and kind == "lightrag":
         # documents in parallel and, so that the server's KV cache is not oversubscribed, as many
-        # concurrent LLM calls per store (library default 4; decisions.md 2026-09-29)
+        # concurrent LLM calls per store (library default 4)
         kw["options"] = {"max_parallel_insert": NATIVE_BATCH, "llm_model_max_async": NATIVE_BATCH}
     if NATIVE_BATCH > 1 and kind == "memos":
         kw["workers"] = NATIVE_BATCH

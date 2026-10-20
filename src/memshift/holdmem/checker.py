@@ -1,4 +1,4 @@
-"""HoldMem write path, step 2 (plan §5.2): the D=1 deterministic checker and programmatic fallback.
+"""HoldMem write path, step 2: the D=1 deterministic checker and programmatic fallback.
 
 check(parse, spans, sources, kappa): every citation must name a live object at its current
 revision and quote text that occurs in it; the parsed value must be supported by the quotes

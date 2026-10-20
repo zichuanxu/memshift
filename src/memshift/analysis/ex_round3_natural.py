@@ -1,6 +1,5 @@
 """What part of the B x D interaction on Update is attributable to the shift, against the natural
-branch (third review round, ICML Reviewer 2, question 3; post hoc; no model call). It changes no
-registered contrast, margin, threshold or verdict. Two parts, written to one JSON file
+branch (no model call). Two parts, written to one JSON file
 (`runs/stage6_ex_round3/natural.json` by default):
 
 composition  The all-item "by the shift" and "drift only" B x D of `analysis.ex_round2`
@@ -9,11 +8,11 @@ composition  The all-item "by the shift" and "drift only" B x D of `analysis.ex_
              branch and part: the class shares, the class B x D, each class's contribution
              (share x class B x D, with its own world-bootstrap interval), the identity residual,
              and the all-item B x D re-weighted to the branch's pooled class mix (the mix of the
-             registered all-item contrasts: shift and drift together). A small all-item value that
-             comes from a large definition effect on few item-times shows as a definition
-             contribution that exceeds it, balanced by a near-zero or slightly negative other-class
-             contribution. The class values are the ones of the paper (`ex_round2._contrasts`,
-             asserted equal to the last digit).
+             all-item contrasts of `e1.contrasts`: shift and drift together). A small all-item
+             value that comes from a large definition effect on few item-times shows as a
+             definition contribution that exceeds it, balanced by a near-zero or slightly negative
+             other-class contribution. The class values are the ones of the paper
+             (`ex_round2._contrasts`, asserted equal to the last digit).
 natural      Whether any committed run answers the natural branch (no shift) of the test worlds in
              the four cells D0B0, D0B1_source, D1B0, D1B1_source at the checkpoints the shifted
              branches are probed at (fork + 1, 2, 4, 8 weeks). The audit lists every run with
@@ -69,8 +68,8 @@ from memshift.runinfo import REPO, code_state
 from memshift.textutil import approx_tokens
 
 STATUS = (
-    "exploratory, post hoc: answers a reviewer question and changes no registered contrast, "
-    "margin, threshold or verdict"
+    "additional analysis: the shifted branches against the natural branch; changes no contrast, "
+    "margin or threshold of the main analysis"
 )
 BRANCHES = ("src", "def", "orphan")  # the shifted branches of the main study
 PARTS = ("shift", "drift")  # changed by the shift; the same change happens without it
@@ -198,12 +197,12 @@ def composition(
     n_def = sum(float(per[p][:, 1].sum()) for p in PARTS)
     n_all = n_def + sum(float(per[p][:, 3].sum()) for p in PARTS)
     w_star = n_def / n_all if pooled_share is None else pooled_share
-    registered = r2._contrasts(tab, branch, ex._changed("all"))["BxD_interaction_update"]
+    all_item = r2._contrasts(tab, branch, ex._changed("all"))["BxD_interaction_update"]
     out: dict[str, Any] = {
         "pooled_definition_share": w_star,
-        # the registered all-item B x D (shift and drift item-times together) and the item-weighted
-        # mean of the two parts, which it must equal
-        "registered_all_item": registered,
+        # the all-item B x D of `e1.contrasts` (shift and drift item-times together) and the
+        # item-weighted mean of the two parts, which it must equal
+        "all_item": all_item,
         "parts": {},
     }
     for part in PARTS:
@@ -235,8 +234,8 @@ def composition(
         out["parts"][part] = node
     parts = out["parts"]
     mean_of_parts = sum(parts[p]["n"]["all"] * parts[p]["class"]["all"]["est"] for p in PARTS)
-    if abs(mean_of_parts / n_all - registered["est"]) > 1e-12:
-        raise ValueError(f"{branch}: the parts do not average to the registered all-item B x D")
+    if abs(mean_of_parts / n_all - all_item["est"]) > 1e-12:
+        raise ValueError(f"{branch}: the parts do not average to the all-item B x D")
     return out
 
 

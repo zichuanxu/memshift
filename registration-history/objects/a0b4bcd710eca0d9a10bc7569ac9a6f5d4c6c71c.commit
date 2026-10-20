@@ -1,8 +1,0 @@
-tree 22c7cadf4f393624925665529fc64909846798a2
-parent efd52de43021cc51bfa405066632a04f33ef2bcf
-author zichuanxu <zichuanxu28@gmail.com> 1790693204 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790693204 +0900
-
-Block C sandbox: 'from datetime import datetime / timedelta' (names the sandbox already provides) runs as a no-op; every other import stays disallowed. Found by the one-world smoke before scaling: 49 of 51 program requests failed only on that redundant import. Requests and cache keys unchanged; decision logged first
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

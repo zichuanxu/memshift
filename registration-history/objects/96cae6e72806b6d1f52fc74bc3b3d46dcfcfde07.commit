@@ -1,8 +1,0 @@
-tree 2839763de2dd1b840fa159657973edc467b9891f
-parent f3d91f6f0b7a07916e370c4f7e1aead80b82d8e4
-author zichuanxu <zichuanxu28@gmail.com> 1790600526 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790600526 +0900
-
-STATUS: gate G0 passed (endpoints, t_i/t_q, generator decision, prereg v0 f469617)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,8 +1,0 @@
-tree 74a2f03d6107658813770c2da5b1ade1272d8d4f
-parent 9271219040ce83d76e66a49f263be78f8b44de25
-author zichuanxu <zichuanxu28@gmail.com> 1792188962 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792188962 +0900
-
-Re-runs from the response cache (author decision): six stage-4 M2 runs (Llama, gpt-oss; src t0 stores no longer cached) and the main-study D_m run of 1016-1019; family phases serve the embedding model for the M2 baselines; U5 pairs with the re-run M2 runs; X not re-run
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

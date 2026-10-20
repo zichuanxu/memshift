@@ -1,6 +1,6 @@
-"""HippoRAG 2 (hipporag 2.0.0a4) as a native memory system (prereg/v2.md §3, plan §4.5, §6 E5).
+"""HippoRAG 2 (hipporag 2.0.0a4) as a native memory system (E5).
 
-Integration contract (decisions.md, 2026-09-29): HippoRAG's own document API is the sync path.
+Integration contract: HippoRAG's own document API is the sync path.
 Each source object is one document whose text is `event_text(e)` (object id, revision and time in
 a header line). A new revision is `delete([old text])` then `index([new text])`; a source delete
 event is `delete([current text])`. `store_dir/objects.jsonl` keeps object_id -> (revision, current

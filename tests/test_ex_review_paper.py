@@ -1,6 +1,6 @@
-"""Paper numbers, tables and figure of the second-round exploratory analyses
-(`analysis.ex_review_paper`), the leftover-wording fixes of the generators, and the committed
-generated files."""
+"""Paper numbers, tables and figure of the account across writers and the further analyses of
+the main-study outputs (`analysis.ex_review_paper`), the wording of the generated files, and the
+committed generated files."""
 
 import json
 import re
@@ -11,11 +11,10 @@ from pathlib import Path
 import pytest
 
 from memshift.analysis import ex_review_paper as rp
-from memshift.analysis import paper_data as pd
 from memshift.analysis import paper_numbers as pn
-from memshift.analysis import paper_tables as pt
 from memshift.analysis.ex_e1_paper import UNDEFINED
 from memshift.analysis.paper_data import MISSING
+from memshift.analysis.paper_tables import est_ci_cells
 from tests.test_paper_stage4 import check_tex
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -109,7 +108,6 @@ def test_formatters():
 # -------------------------------------------------------------------------- tables, figure
 LABELS = {
     "tab_writers.tex": "tab:writers",
-    "tab_baselines.tex": "tab:baselines",
     "tab_misses.tex": "tab:misses",
     "tab_zero_after.tex": "tab:zero-after",
     "tab_json_arm.tex": "tab:json-arm",
@@ -128,40 +126,68 @@ def test_tables_are_wellformed_with_data_and_without():
         assert MISSING not in tex, name
 
 
-def test_writers_table_has_every_writer_and_class_and_the_test():
+def test_writers_table_has_every_writer_and_class_and_the_fit():
     tex = rp.tab_writers(INP)
     for label in ("Qwen3.5-9B", "Qwen3.5-9B, repl.", "gemma-4-12B", "Llama-3.1-8B", "gpt-oss-20b"):
         assert label in tex
-    for cls in ("definition", "field", "free text", "other"):
+    for cls in ("definition", "other", "\\quad field", "\\quad free text"):  # other, its two kinds
         assert len(re.findall(rf"& {re.escape(cls)} & \d", tex)) == 5
-    assert "leave-one-writer-out error" in tex and "class label" in tex
+    assert "(b) across the cells & \\multicolumn{2}{c}{$\\rho$, all}" in tex
+    assert "Spearman's $\\rho$" in tex and "least-squares line" in tex
+    # the leave-one-writer-out error comparison is not part of the table
+    assert "leave-one-writer-out" not in tex and "class label" not in tex
+    caption = tex.split(r"\label{tab:writers}")[0]
+    assert r"(a) repair correctness $r_D$ at $D$ (\%)" in caption
+    assert "(writer, class, shift) cells" in caption and "branch" not in caption
+    # two panels of one width
+    assert tex.count("\\begin{tabular*}{\\linewidth}") == 2 and "exploratory" not in tex
+    assert "$-$0.21 & {\\scriptsize [$-$0.53,\\,0.31]}" in tex  # a statistic and its interval
     assert "rule" not in re.sub(r"\\(top|mid|bottom|cmid)rule", "", tex)
 
 
-def test_misses_and_zero_tables_show_both_studies():
+def test_misses_and_zero_tables_show_their_rows():
     tex = rp.tab_misses(INP)
-    assert tex.count("\\quad\\textcolor{gray}{repl.}") == 9  # one replication line per cell
+    # every shift and class, each at both D, and n once per class
+    assert len(re.findall(r"\n(?:\$\\S\w+\$)? & (?:definition|other|all) & \d+ & 0 & ", tex)) == 9
+    assert len(re.findall(r"\n &  &  & 1 & ", tex)) == 9
     assert "{R}" not in tex and "R's" not in rp.tab_writers(INP)  # no block letter
     zero = rp.tab_zero_after(INP)
     assert "\\emph{main study}} \\\\" in zero and "\\emph{replication}} \\\\" in zero
+    # the main study's totals are in the main text's overview table, the replication's here
+    main, rep = zero.split("\\emph{replication}")
+    assert "& all &" not in main and rep.count("& all &") == 3
+    assert "Table~\\ref{tab:overview}" in zero
+
+
+def test_misses_table_holds_the_accuracies_of_the_missed_items():
+    """The cited and B=0 columns of `tab_misses` (forced.json) are the accuracies of the missed
+    items of `ex_e1_more` at the printed precision, so the appendix prints them once."""
+    more = INP["more"]["explore_missed_items"]["main"]
+    forced = INP["forced"]["results"]
+    for b in ("src", "def", "orphan"):
+        for d in ("D0", "D1"):
+            for cls in ("definition", "other", "all"):
+                a, f = more[b][d][cls], forced[d][b][cls]
+                assert f["n_items"] == a["missed_item_times"]
+                for mine, theirs in (("cited", "a_missed_B1_cited"), ("B0", "a_missed_B0")):
+                    assert rp._num(f["update"][mine]["est"]) == rp._num(a[theirs]["est"])
 
 
 def test_misses_zero_and_json_tables_are_one_grid_each():
-    # one tabular per table, so the blocks share their column widths (main study and R; (a), (b))
+    # one tabular per table, so the blocks share their column widths (main study and R)
     for tex in (rp.tab_misses(INP), rp.tab_zero_after(INP), rp.tab_json_arm(INP)):
         assert tex.count("\\begin{tabular}") == 1
-    misses = rp.tab_misses(INP)
-    assert "\n(b) & & missed &" in misses and "\\midrule[\\heavyrulewidth]" in misses
+    assert "\\label{tab:forced}\\label{tab:misses}" in rp.tab_misses(INP)
 
 
-def test_misses_caption_defines_its_columns_and_says_where_r_is():
-    caption = rp.tab_misses(INP).split("\\label{tab:misses}")[0]
+def test_misses_caption_defines_its_columns():
+    caption = rp.tab_misses(INP).split("\\label{tab:forced}")[0]
     for term in (
-        "Missed: the number of missed item-times",  # a count, the rest are shares
-        "shares of them in percent",
-        r"$a{\wedge}b$: item-times of class $a$ into whose dependency set a record also entered",
-        "(a) Why, main study and, in grey, the replication",
-        "main study. Missed: the number of missed item-times at $D{=}1$",  # (b): no R
+        "Cited: the citation-key cell, which served the stale item",
+        "Forced: the source-key cell, which re-derived the same item-times",
+        "$B{=}0$: the append-only cell",
+        "Gain: forced minus cited",
+        "$n$: missed item-times",
     ):
         assert term in caption, term
 
@@ -169,11 +195,9 @@ def test_misses_caption_defines_its_columns_and_says_where_r_is():
 def test_interval_format_is_signed_scriptsize_with_a_thin_space():
     zero = rp.tab_zero_after(INP)
     assert "\\tiny" not in zero and "{\\scriptsize [" in zero and ",\\," in zero
-    assert rp._mae_cell({"est": 10.66, "lo": 9.4, "hi": 12.7}) == (
-        r"10.7\,{\scriptsize [9.4,\,12.7]}"
-    )
-    assert rp._snum_cell({"est": -0.214, "lo": -0.54, "hi": 0.3}) == (
-        r"$-$0.21\,{\scriptsize [$-$0.54,\,0.30]}"
+    # a statistic and its interval as two aligned cells, the minus typeset
+    assert est_ci_cells({"est": -0.214, "lo": -0.54, "hi": 0.3}, f=rp.snum) == (
+        r"$-$0.21 & {\scriptsize [$-$0.54,\,0.30]}"
     )
 
 
@@ -186,8 +210,10 @@ def test_tables_compile(tmp_path):
     (tmp_path / "t.tex").write_text(
         "\n".join(
             [
-                r"\documentclass[11pt]{article}\usepackage[T1]{fontenc}",
-                r"\usepackage[letterpaper,margin=1in]{geometry}",
+                r"\documentclass[10pt]{article}\usepackage[T1]{fontenc}",
+                r"\usepackage[textwidth=6.75in,textheight=9in]{geometry}",  # the appendix block
+                r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
+                r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
@@ -215,21 +241,40 @@ def test_figure_draws_with_and_without_data(tmp_path):
     assert bare.read_bytes().startswith(b"%PDF") and bare.read_bytes() != full.read_bytes()
 
 
+def test_figure_colours_each_writer_by_its_model_and_marks_the_class_by_shape():
+    from memshift.analysis import figstyle as fs
+
+    for w, _, _ in rp.WRITER_TAGS:  # every writer of the account has its model colour
+        assert rp.WRITER_MODELS[w] in fs.MODELS, w
+    assert rp.WRITER_MODELS["main"] == rp.WRITER_MODELS["rep"]  # R: hollow, not another hue
+    assert set(rp.CLASS_MARKERS) == {"definition", "other"}
+    assert len(set(rp.CLASS_MARKERS.values())) == 2
+    fit = (INP.get("acct") or {}).get("explore_account_fit", {}).get("two_class", {})
+    for c, _ in rp._fit_cells(fit):
+        assert c["writer"] in rp.WRITER_MODELS and c["class"] in rp.CLASS_MARKERS
+
+
+def test_spread_sets_apart_only_the_markers_that_cover_one_another():
+    from memshift.analysis import figstyle as fs
+
+    plt = fs.plt()
+    fig, ax = plt.subplots(figsize=(3, 3))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    dx = rp._spread(ax, [(50, 50), (50.1, 50), (10, 10)], 5.0)
+    assert dx[2] == 0.0  # alone
+    assert sorted(dx[:2]) == [-2.5, 2.5]  # side by side around their centre, in the order of x
+    assert dx[0] < dx[1]
+    plt.close(fig)
+
+
 # -------------------------------------------------------------- leftover wording of the generators
-def test_claim_level_is_a_registered_claim_not_a_theory():
-    assert pd.claim_label("two-factor theory + quantitative prediction") == (
-        "registered claim: two-factor account with quantitative prediction"
-    )
-    assert pd.claim_label("two-factor theory, qualitative predictions") == (
-        "registered claim: two-factor account, qualitative predictions"
-    )
-    assert pd.claim_label("measurement methodology") == "registered claim: measurement methodology"
-    assert pd.claim_label(None) == MISSING and pd.claim_label("") == MISSING
+def test_the_design_quantities_are_estimates_only():
     gate = json.loads((ROOT / SOURCES["gate"] / "analysis/gate_a.json").read_text())
-    tex = pt.tab_gate(gate)
-    assert "registered claim: two-factor account with quantitative prediction" in tex
-    assert "theory" not in tex and "what the result supports" not in tex
-    assert pn.gate_numbers(gate)["GateClaimLevel"].startswith("registered claim: ")
+    out = pn.gate_numbers(gate)
+    assert set(out) == {"GatePathOneEstimate", "GatePathTwoMaxAbs", "GateWorlds"}
+    assert out["GatePathOneEstimate"] == pn.ci(gate["path1"]["estimate"], pn.pp)
+    assert out["GatePathTwoMaxAbs"] == pn.pp(0.0) and out["GateWorlds"] == "20"
 
 
 GENERATED = sorted((ROOT / "paper/generated").glob("*.tex"))
@@ -244,6 +289,41 @@ def test_generated_files_carry_no_leftover_wording(path):
     assert not LEFTOVERS.search(text), (path.name, LEFTOVERS.search(text))
     if path.name.startswith("tab_"):  # the structured-field class is "field" in every table
         assert not PLAIN_RULE.search(text), (path.name, PLAIN_RULE.search(text))
+
+
+def _inputs() -> set[str]:
+    """The generated files the paper inputs."""
+    sources = [ROOT / "paper/main.tex", *sorted((ROOT / "paper/sections").glob("*.tex"))]
+    return {
+        m
+        for p in sources
+        if p.exists()
+        for m in re.findall(r"\\input\{generated/([\w-]+)\}", p.read_text())
+    }
+
+
+def _shown() -> list[Path]:
+    """The generated tables the paper inputs, except the main file of macros."""
+    return [ROOT / "paper/generated" / f"{n}.tex" for n in sorted(_inputs() - {"numbers"})]
+
+
+@pytest.mark.paper
+def test_every_generated_file_is_one_the_paper_inputs():
+    assert {p.stem for p in GENERATED} == _inputs()
+
+
+VERDICT_WORDING = re.compile(
+    r"regist|exploratory|post hoc|as pred\.|n\.j\.|not judged|triggered|falsif|verdict"
+    r"|gain check|leak check|agreement check|behavioural|mechanistic",
+    re.IGNORECASE,
+)
+
+
+@pytest.mark.parametrize("path", _shown(), ids=lambda p: p.name)
+@pytest.mark.paper
+def test_tables_the_paper_shows_state_estimates_not_verdicts(path):
+    text = "\n".join(ln for ln in path.read_text().splitlines() if not ln.startswith("%"))
+    assert not VERDICT_WORDING.search(text), (path.name, VERDICT_WORDING.search(text))
 
 
 # ------------------------------------------------------------------------- generated files

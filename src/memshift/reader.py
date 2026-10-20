@@ -1,4 +1,4 @@
-"""The shared reader (plan §4.3): one model, one fixed template, one evidence budget for every
+"""The shared reader: one model, one fixed template, one evidence budget for every
 system under test. Systems differ only in the evidence blocks they hand over.
 """
 

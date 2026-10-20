@@ -1,8 +1,0 @@
-tree 70953129cd0964f087c04917afe5dcfa75c96c9c
-parent 5eb0d66b5a353e3b381c55747d5e2382b989f5fa
-author zichuanxu <zichuanxu28@gmail.com> 1790683848 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790683848 +0900
-
-Paper as an arXiv preprint: 11pt single-column layout with the author block, related work as Section 2 (the memory-benchmark neighbours all place it there), citations audited entry by entry against arXiv, Crossref and publisher pages (156 references, published versions where they exist, misused citations rephrased, padding removed), figures redrawn at printed size, side-by-side robustness and membership tables, Ethics and Reproducibility statements; release scan allows the one author address
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

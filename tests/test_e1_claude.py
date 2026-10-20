@@ -1,5 +1,5 @@
-"""The exact bodies the E1 Claude clients send to Anthropic (prereg v4 blocks H-a and G-b as amended
-on 2026-10-16, prereg/decisions.md), with a mocked HTTP transport: the clients are built as E1
+"""The exact bodies the E1 Claude clients send to Anthropic (the Claude definition writer and the
+Claude program writers), with a mocked HTTP transport: the clients are built as E1
 builds them (`common.client` with `defwriter_settings` / `program_extra_body`), and the requests
 go through the HoldMem writer and program paths (`writer.derive`, `program.synthesise`)."""
 

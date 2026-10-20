@@ -1,11 +1,9 @@
-"""Analysis of the control cells registered on 2026-09-30 (prereg/v3_controls.md; the dated rows of
-prereg/decisions.md, the last of which, "WS2 execution scope", reduces what is run).
+"""Analysis of the control cells: each control cell against the published HoldMem cells of the
+same worlds, as per-item paired contrasts by item class and branch, and the comparison of these
+contrasts with the thresholds of each control.
 
-Exploratory status: these are registered post-review controls, not confirmatory analyses of prereg
-v1 or v2. The macro prefix is `Ctl`; every table says that the predictions were registered before
-running. The predictions, thresholds and the common analysis are exactly those of the registration;
-a prediction that refers to a cell that was not run is withdrawn in the decision row, and is judged
-here only on the contrasts that remain.
+The macro prefix is `Ctl`. A control that refers to a cell that was not run is computed only on
+the contrasts that remain (`WITHDRAWN` names them).
 
 Staging (one command; run directory names are the ones the compute host wrote):
 
@@ -20,7 +18,7 @@ Staging (one command; run directory names are the ones the compute host wrote):
 The four new runs (worlds 1000 to 1009, branches src/def/orphan, `--discriminative --no-baselines`):
 cells `D0B1_source` (anchor), `D0B1_gold`, `D1B1_gold`, `D1B1_scope`, `D1B0_refresh`,
 `D0tB1_source`; cells `D1sB1_source` (anchor), `D1sB1_source_ra`; the view `zero_Dm`; cells
-`D0B1_source` (anchor), `D0thinkB1_source`. The D0full control (prereg v3 section 6) is three more
+`D0B1_source` (anchor), `D0thinkB1_source`. The D0full control (the access control) is three more
 runs, `e1_full_s1000-1003`, `e1_full_s1004-1007` and `e1_full_s1008-1009` (worlds 1000 to 1009,
 branches src and def only), with the cells `D0B1_source` (anchor) and `D0fullB1_source`; a run of
 two branches is merged beside the runs of three (`controls_data`). A `ctl:` directory is a new run
@@ -28,12 +26,11 @@ with its raw JSONL (split runs of a four-world chunk each are listed one by one)
 directory is a published run of the same worlds with its raw JSONL, or a stage directory, which
 expands to the source runs its manifest lists. The comparison cells missing from the new runs
 (`D0B0`, `D1B0`, `D0B1_source`, `D1B1_source`, `D1B1_cited`, `D1sB1_source`, and the zero system)
-come from the published runs (`D1B1_source`, the comparison cell of P-F1, from the main-study E1
+come from the published runs (`D1B1_source`, the comparison cell of F1, from the main-study E1
 runs), paired by (world, branch, fact id, checkpoint k); `analysis/ctl_metrics.json`,
 `analysis/ctl_item_table.jsonl` (not committed) and `manifest.json` are written to the stage
 directory. `python -m memshift.analysis.paper_numbers` and `paper_tables` then render the `Ctl`
-macros and `tab_controls.tex` / `tab_controls_full.tex` (every macro is MISSING until this stage
-exists).
+macros and `tab_controls.tex` (every macro is MISSING until this stage exists).
 
 What the stage does, in order (`controls_data` holds the first two):
 
@@ -47,43 +44,42 @@ What the stage does, in order (`controls_data` holds the first two):
      the re-derivations) of the gold cells, and of the scope cells on definition items, equal the
      offline audit (`e1_keys.audit`, counts and rates); the scope cell's non-definition items are
      the cited cell's;
-  4. every registered contrast, as a per-item paired difference by class and branch with the
-     world-clustered bootstrap of `scoring.stats` (2,000 draws, seed 996), then the verdict of each
-     prediction (holds / fails / not judged, with the reason);
+  4. every contrast of `specs`, as a per-item paired difference by class and branch with the
+     world-clustered bootstrap of `scoring.stats` (2,000 draws, seed 996), then, per control, each
+     comparison with its threshold (`threshold_tests`);
   5. the quantities reported without a threshold.
 
-Readings of the registration that this module fixes (each point is one the text leaves open; every
-threshold comparison is listed in `verdicts[...]["tests"]` with the value it was made on):
+Each control in `threshold_tests` lists its comparisons under `tests` (key, value, threshold, unit
+and `meets_threshold`, None when the value is missing), with `n_met` of `n_tests` comparisons
+meeting their threshold and `n_required`, the number the design asks for. The comparisons:
 
-  * P-G1 "holds strongly": the 95% lower bound of the estimate pooled over the six (D, branch)
-    contrasts on all items is above -4 pp.
-  * P-R1 is judged at D = 1 on both inequalities per branch (refresh - B0 >= -1 pp and
-    B1 - refresh >= -1 pp, all items), two of three branches; P-R2 is not judged when the
+  * G1: the six (D, branch) contrasts on all items; `pooled_lo_above_minus_4pp`: the 95% lower bound
+    of the estimate pooled over the six is above -4 pp.
+  * R1 is computed at D = 1 on both inequalities per branch (refresh - B0 >= -1 pp and
+    B1 - refresh >= -1 pp, all items), two of three branches required; R2 is not computed when the
     denominator of either branch is below 5 pp.
-  * P-T1 and P-T3 are judged at B = 1, three contrasts each; P-T2 is not judged when the D effect it
+  * T1 and T3 are computed at B = 1, three contrasts each; T2 is not computed when the D effect it
     divides by is not positive; `presentation_dominated` flags a gain of 10 pp on definition items.
-  * P-M3 is the ratio of the share of retraction-aware programs that ran at t0 to that of the D1s
-    programs (all branches, paired by item); P-M1 and P-M2 are not judged unless it holds.
-  * P-K2: the non-definition items are the rule and free-text items; the scope cell's missed rate
-    is read per branch over all items, each above 5%.
-  * P-Z1 also needs the lower bound of the S_src and S_def definition items pooled above 20 pp; its
-    k = 0 statement is the separate prediction `Z1k`; the free-text clause of P-Z2 (at most +3 pp)
-    is read in all three branches.
-  * P-D2: a thinking write is unreadable when its note has `ok` false (cut off by the token limit
-    or not parseable); the share that used the whole budget is reported beside it.
-  * P-F1 is judged on four point estimates, repair and mechanical repair in S_src and S_def, each
-    at least 30 pp (the mechanical variant "the same way"), on the definition items. The readings
-    of the registration are applied to the same four gaps: a gap of at least 30 pp reads
-    "execution", one of at most 15 pp "access", one in between "both" (inclusive at both bounds).
-    The reading of the control is the common one when the four agree ("execution" is the P-F1
-    verdict holds) and "mixed" when they do not; the registration does not say what to do with gaps
-    that disagree across branches or across the two variants, so none of them is merged into a
-    reading that one of the four gaps contradicts. Reported without a threshold: the access gain
-    (D0full minus D0, repair and Update), and every F contrast once more on the definition items
-    without `TRUNCATED_DEFS` (`untruncated`; the two definitions the offline audit found cut), no
-    verdict and no reading; and, from the notes of the D0full cell, the truncation counts per
-    definition and source (`full_stats`), with whether the definitions that were cut are the two
-    registered ones.
+  * M3 is the ratio of the share of retraction-aware programs that ran at t0 to that of the D1s
+    programs (all branches, paired by item); M1 and M2 are computed only when it meets its
+    threshold.
+  * K2: the non-definition items are the rule and free-text items; the scope cell's missed rate is
+    read per branch over all items, each above 5%.
+  * Z1 also compares the lower bound of the S_src and S_def definition items pooled with 20 pp; its
+    k = 0 part is the separate control `Z1k`; the free-text clause of Z2 (at most +3 pp) is read in
+    all three branches.
+  * D2: a thinking write is unreadable when its note has `ok` false (cut off by the token limit or
+    not parseable); the share that used the whole budget is reported beside it. D1 is computed only
+    when D2 meets its threshold.
+  * F1 is computed on four point estimates, repair and mechanical repair in S_src and S_def, each
+    at least 30 pp (the mechanical variant "the same way"), on the definition items. `regions`
+    places each of the same four gaps (`gap_region`): at least 30 pp "execution", at most 15 pp
+    "access", in between "both" (inclusive at both bounds). Reported without a threshold: the
+    access gain (D0full minus D0, repair and Update), and every F contrast once more on the
+    definition items without `TRUNCATED_DEFS` (`untruncated`; the two definitions the offline audit
+    found cut); and, from the notes of the D0full cell, the truncation counts per definition and
+    source (`full_stats`), with whether the definitions that were cut are the two of
+    `TRUNCATED_DEFS` (`same_as_audit`).
   * The error text of a failed program is kept only in `det.reason` of an item's final state, so
     undeclared-read failures are counted there (items whose last program run failed); the
     `lineage_ok` share is over all post-shift runs of the retraction-aware programs.
@@ -95,7 +91,7 @@ import json
 import math
 import statistics
 from collections import defaultdict
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
 from functools import cache
 from pathlib import Path
@@ -111,13 +107,13 @@ from memshift.scoring.stats import Estimate, item_diffs, world_bootstrap
 Row = e1.Row
 Vec = dict[str, dict[str, float]]
 STATUS = (
-    "exploratory: registered post-review controls (prereg/v3_controls.md), predictions registered "
-    "before running; not part of the confirmatory analyses of prereg v1 and v2"
+    "control cells against the HoldMem cells of the main study on the same worlds: per-item paired "
+    "contrasts and their comparison with each control's thresholds"
 )
 BRANCHES = ("src", "def", "orphan")
-SD = ("src", "def")  # the branches of the predictions that leave the orphan branch out
+SD = ("src", "def")  # the branches of the controls that leave the orphan branch out
 EPS = 1e-12
-DRAWS = 2000  # bootstrap draws and seed of the registered analysis (`scoring.stats`)
+DRAWS = 2000  # bootstrap draws and seed of the main analysis (`scoring.stats`)
 SEED = 996
 
 # short name -> system name in the runs
@@ -142,8 +138,8 @@ CELLS = {
 }
 TASK_DEFS = tuple(f"k.{k}" for k, v in KAPPA_DEFS.items() if "tasks" in v["sources"])
 # the definitions whose declared sources do not fit the D0full cap, found by the offline audit
-# before the first run (decisions.md 2026-10-01): the sensitivity analysis leaves them out, and
-# `full_stats` reports whether the notes of the run say the same
+# before the first run: the sensitivity analysis leaves them out, and `full_stats` reports whether
+# the notes of the run say the same
 TRUNCATED_DEFS = ("k.close_friend", "k.vip_sender")
 
 
@@ -158,7 +154,7 @@ def _in_classes(*names: str) -> Callable[[str], bool]:
 # = structured fields, free = `norule`), their union outside the definitions (`other`) and all; the
 # task definitions (`active_project`, `overdue_task`, which a program must read every task for) and
 # the other definitions, for the over-retraction of rule 3; the definition items without the ones
-# D0full truncates (the sensitivity analysis of P-F1)
+# D0full truncates (the sensitivity analysis of F1)
 CLASSES: dict[str, Callable[[str], bool]] = {
     "all": lambda fact: True,
     "definition": _in_classes("definition"),
@@ -202,8 +198,8 @@ FC = ("all", "definition", "untruncated")
 
 
 def specs() -> list[Spec]:
-    """Every contrast of the registration that the executed cells allow, in one place: the analysis
-    computes exactly these and the paper generators name their macros after them."""
+    """Every control contrast that the executed cells allow, in one place: the analysis computes
+    exactly these and the paper generators name their macros after them."""
     out: list[Spec] = []
 
     def add(
@@ -218,32 +214,32 @@ def specs() -> list[Spec]:
             for cls in classes:
                 out.append(Spec(f"{tag}_{br}_{cls}", a, b, br, metric, cls))
 
-    for d in (0, 1):  # P-G1 (all items), P-G2 (definition items), P-G3 (stability)
+    for d in (0, 1):  # G1 (all items), G2 (definition items), G3 (stability)
         add(f"G_upd_D{d}", f"D{d}B1gold", f"D{d}B1", "update", DA)
         add(f"G_stab_D{d}", f"D{d}B1gold", f"D{d}B1", "stability", DA)
-    add("R_ref", "D1B0refresh", "D1B0", "update", RC)  # P-R1, P-R2, refresh on orphan
+    add("R_ref", "D1B0refresh", "D1B0", "update", RC)  # R1, R2, refresh on orphan
     add("R_b1", "D1B1", "D1B0", "update", RC)
     add("R_gap", "D1B1", "D1B0refresh", "update", RC)
-    add("T_upd", "D0tB1", "D0B1", "update", DA)  # P-T1, P-T3 (B = 1 only)
-    add("T_den", "D1B1", "D0B1", "update", DA)  # P-T2 denominator
-    add("M_rep_D0", "D1sB1ra", "D0B1", "repair", DA)  # P-M1 (a)
-    add("M_rep_D1s", "D1sB1ra", "D1sB1", "repair", DA)  # P-M1 (b)
-    add("M_upd", "D1sB1ra", "D1sB1", "update", DA)  # P-M2
+    add("T_upd", "D0tB1", "D0B1", "update", DA)  # T1, T3 (B = 1 only)
+    add("T_den", "D1B1", "D0B1", "update", DA)  # T2 denominator
+    add("M_rep_D0", "D1sB1ra", "D0B1", "repair", DA)  # M1 (a)
+    add("M_rep_D1s", "D1sB1ra", "D1sB1", "repair", DA)  # M1 (b)
+    add("M_upd", "D1sB1ra", "D1sB1", "update", DA)  # M2
     add("O_upd", "D1sB1ra", "D1sB1", "update", ("taskdef", "otherdef"))  # over-retraction
     add("O_rep", "D1sB1ra", "D1sB1", "repair", ("taskdef", "otherdef"))
-    add("K_upd", "D1B1scope", "D1B1", "update", DA)  # P-K1 (D = 1 only)
-    add("K_cited", "D1B1scope", "D1B1cited", "update", ("definition", "other", "all"))  # P-K2
+    add("K_upd", "D1B1scope", "D1B1", "update", DA)  # K1 (D = 1 only)
+    add("K_cited", "D1B1scope", "D1B1cited", "update", ("definition", "other", "all"))  # K2
     add("Z_upd", "zeroDm", "zero", "update", ("all", "definition", "rule", "free", "other"))
-    add("Z_stab", "zeroDm", "zero", "stability", ("all", "definition", "other"))  # P-Z1, P-Z2
-    add("Z_vs_D1s", "zeroDm", "D1sB1", "update", DA)  # P-Z3
+    add("Z_stab", "zeroDm", "zero", "stability", ("all", "definition", "other"))  # Z1, Z2
+    add("Z_vs_D1s", "zeroDm", "D1sB1", "update", DA)  # Z3
     add("Z0_upd", "zeroDm", "zero", "acc0", ("all", "definition", "rule", "free"))  # k = 0
     add("Z0_vs_D1s", "zeroDm", "D1sB1", "acc0", DA)
-    add("D_rep", "D1B1", "D0thinkB1", "repair", DA)  # P-D1
+    add("D_rep", "D1B1", "D0thinkB1", "repair", DA)  # D1
     add("D_repmech", "D1B1", "D0thinkB1", "repair_mech", DA)
     add("D_gain_upd", "D0thinkB1", "D0B1", "update", DA)  # the thinking gain, no threshold
     add("D_gain_rep", "D0thinkB1", "D0B1", "repair", DA)
     add("D_gain_repmech", "D0thinkB1", "D0B1", "repair_mech", DA)
-    add("F_rep", "D1B1", "D0fullB1", "repair", FC, SD)  # P-F1 (S_src and S_def only)
+    add("F_rep", "D1B1", "D0fullB1", "repair", FC, SD)  # F1 (S_src and S_def only)
     add("F_repmech", "D1B1", "D0fullB1", "repair_mech", FC, SD)
     add("F_gain_rep", "D0fullB1", "D0B1", "repair", FC, SD)  # the access gain, no threshold
     add("F_gain_upd", "D0fullB1", "D0B1", "update", FC, SD)
@@ -412,12 +408,9 @@ def present(e: Estimate | None) -> float | None:
     return None if e is None or e.n_worlds == 0 or math.isnan(e.est) else e.est
 
 
-# ------------------------------------------------------------------------------------ verdicts
-HOLDS, FAILS, NOT_JUDGED = "holds", "fails", "not judged"
-
-
+# ---------------------------------------------------------------------------- threshold tests
 def pp_text(x: float | None, unit: str = "pp") -> str:
-    """A value as the reasons print it: a difference in pp, a ratio, or a share."""
+    """A value as text: a difference in pp, a ratio, or a share."""
     if x is None:
         return "missing"
     return (
@@ -431,12 +424,12 @@ def pp_text(x: float | None, unit: str = "pp") -> str:
 
 @dataclass
 class Test:
-    """One threshold comparison of a prediction: the contrast (or rate), its point value and
-    whether it meets the threshold (None when the value is missing)."""
+    """One threshold comparison of a control: the contrast (or rate), its point value and whether
+    it meets the threshold (None when the value is missing)."""
 
     key: str
     value: float | None
-    ok: bool | None
+    meets: bool | None
     threshold: str
     unit: str = "pp"  # pp (a difference), ratio or share
 
@@ -444,7 +437,7 @@ class Test:
         return {
             "key": self.key,
             "value": self.value,
-            "ok": self.ok,
+            "meets_threshold": self.meets,
             "threshold": self.threshold,
             "unit": self.unit,
         }
@@ -478,43 +471,45 @@ def _bound(bound: float, unit: str) -> str:
     )
 
 
-def verdict(tests: list[Test], need: int | None = None, **extra: Any) -> dict[str, Any]:
-    """holds when at least `need` (default: all) of the tests are met; not judged when any value
-    is missing; else fails."""
+def threshold_tests(tests: list[Test], need: int | None = None, **extra: Any) -> dict[str, Any]:
+    """The comparisons of one control: `n_met` of the `n_tests` comparisons meet their threshold,
+    and the design asks for `n_required` of them (default: all)."""
     need = len(tests) if need is None else need
-    missing = [t.key for t in tests if t.ok is None]
-    hits = sum(bool(t.ok) for t in tests)
-    if missing:
-        status, reason = NOT_JUDGED, "missing: " + ", ".join(missing[:4])
-    elif hits >= need:
-        status, reason = HOLDS, f"{hits} of {len(tests)} met"
-    else:
-        bad = ", ".join(f"{t.key} {pp_text(t.value, t.unit)}" for t in tests if not t.ok)
-        status, reason = FAILS, f"{hits} of {len(tests)} met (need {need}); not met: {bad}"
     return {
-        "status": status,
-        "reason": reason,
-        "hits": hits,
-        "total": len(tests),
-        "need": need,
+        "n_met": sum(bool(t.meets) for t in tests),
+        "n_tests": len(tests),
+        "n_required": need,
         "tests": [t.to_json() for t in tests],
         **extra,
     }
 
 
-def not_judged(reason: str, total: int = 0) -> dict[str, Any]:
-    return {"status": NOT_JUDGED, "reason": reason, "hits": 0, "total": total, "need": total,
-            "tests": []}  # fmt: skip
+def not_computed(total: int = 0) -> dict[str, Any]:
+    """A control whose comparisons are not computed (a denominator too small, or a control it
+    depends on below its threshold)."""
+    return {"n_met": 0, "n_tests": total, "n_required": total, "tests": []}
 
 
-# the readings registered with P-F1 (prereg/v3_controls.md section 6): the gap between D=1 and the
-# full-access D=0 cell is execution at 30 pp or more, access at 15 pp or less, both in between
+def outcome(tests: Mapping[str, Any]) -> str:
+    """`not_computed` (no comparison, or a value missing), `met_required` (at least `n_required`
+    comparisons meet their threshold) or `below_required`."""
+    rows = tests["tests"]
+    if not rows or any(t["meets_threshold"] is None for t in rows):
+        return "not_computed"
+    return "met_required" if tests["n_met"] >= tests["n_required"] else "below_required"
+
+
+OUTCOMES = ("met_required", "below_required", "not_computed")
+
+
+# the regions of an F1 gap: the gap between D=1 and the full-access D=0 cell is execution at
+# 30 pp or more, access at 15 pp or less, both in between
 EXECUTION_GAP = 0.30
 ACCESS_GAP = 0.15
 
 
 def gap_region(gap: float | None) -> str | None:
-    """Which reading one P-F1 gap supports: execution, access or both (None when missing)."""
+    """Where one F1 gap falls: execution, access or both (None when missing)."""
     if gap is None:
         return None
     return (
@@ -526,8 +521,8 @@ def gap_region(gap: float | None) -> str | None:
     )
 
 
-class Judge:
-    """The verdicts of the registered predictions, from the contrasts and what is reported."""
+class Thresholds:
+    """The threshold comparisons of the controls, from the contrasts and what is reported."""
 
     def __init__(
         self, contrasts: dict[str, Estimate], reported: dict[str, Any], rates: dict[str, Any]
@@ -546,23 +541,23 @@ class Judge:
     def each(self, keys: Sequence[str], make: Callable[[str, float | None], Test]) -> list[Test]:
         return [make(k, self.est(k)) for k in keys]
 
-    # 3.1 oracle key
+    # oracle key
     def g1(self) -> dict[str, Any]:
         keys = [f"G_upd_D{d}_{br}_all" for d in (0, 1) for br in BRANCHES]
         tests = self.each(keys, lambda k, v: _at_least(k, v, -0.02))
         pooled = self.lo("G_pool_all")
-        strong = None if pooled is None else pooled > -0.04
-        return verdict(tests, strong=strong)
+        above = None if pooled is None else pooled > -0.04
+        return threshold_tests(tests, pooled_lo_above_minus_4pp=above)
 
     def g2(self) -> dict[str, Any]:
         keys = [f"G_upd_D{d}_{br}_definition" for d in (0, 1) for br in BRANCHES]
-        return verdict(self.each(keys, lambda k, v: _within(k, v, 0.03)))
+        return threshold_tests(self.each(keys, lambda k, v: _within(k, v, 0.03)))
 
     def g3(self) -> dict[str, Any]:
         keys = [f"G_stab_D{d}_{br}_all" for d in (0, 1) for br in BRANCHES]
-        return verdict(self.each(keys, lambda k, v: _at_least(k, v, 0.0)), need=5)
+        return threshold_tests(self.each(keys, lambda k, v: _at_least(k, v, 0.0)), need=5)
 
-    # 3.2 refresh without invalidation (D = 1 only: D0B0_refresh was not run)
+    # refresh without invalidation (D = 1 only: D0B0_refresh was not run)
     def r1(self) -> dict[str, Any]:
         tests: list[Test] = []
         for br in BRANCHES:  # Update(B0) - 0.01 <= Update(refresh) <= Update(B1) + 0.01
@@ -580,23 +575,23 @@ class Judge:
                     "refresh - B0 >= -1 pp and B1 - refresh >= -1 pp",
                 )
             )
-        return verdict(tests, need=2)
+        return threshold_tests(tests, need=2)
 
     def r2(self) -> dict[str, Any]:
         tests: list[Test] = []
         for br in ("src", "def"):
             den = self.est(f"R_b1_{br}_definition")
             if den is not None and den < 0.05:
-                return not_judged(f"denominator {pp_text(den)} in {br} is below 5 pp", 2)
+                return not_computed(2)  # the denominator is below 5 pp
             ratio = self.est(f"R_ratio_{br}_definition")
             tests.append(_at_least(f"R_ratio_{br}_definition", ratio, 0.5, "ratio"))
-        return verdict(tests)
+        return threshold_tests(tests)
 
-    # 3.3 template presentation (B = 1 only: D0tB0 was not run)
+    # template presentation (B = 1 only: D0tB0 was not run)
     def t1(self) -> dict[str, Any]:
         keys = [f"T_upd_{br}_definition" for br in BRANCHES]
         big = [k for k in keys if (v := self.est(k)) is not None and v >= 0.10]
-        return verdict(
+        return threshold_tests(
             self.each(keys, lambda k, v: _within(k, v, 0.03)), presentation_dominated=bool(big)
         )
 
@@ -605,55 +600,55 @@ class Judge:
         for br in ("src", "def"):
             den = self.est(f"T_den_{br}_definition")
             if den is not None and den <= 0:
-                return not_judged(f"the D effect {pp_text(den)} in {br} is not positive", 2)
+                return not_computed(2)  # the D effect it divides by is not positive
             tests.append(
                 _at_most(
                     f"T_ratio_{br}_definition", self.est(f"T_ratio_{br}_definition"), 0.15, "ratio"
                 )
             )
-        return verdict(tests)
+        return threshold_tests(tests)
 
     def t3(self) -> dict[str, Any]:
         keys = [f"T_upd_{br}_all" for br in BRANCHES]
-        return verdict(self.each(keys, lambda k, v: _within(k, v, 0.03)))
+        return threshold_tests(self.each(keys, lambda k, v: _within(k, v, 0.03)))
 
-    # 3.4 retraction-aware programs (B = 1 only)
+    # retraction-aware programs (B = 1 only)
     def m3(self) -> dict[str, Any]:
         r = (self.reported.get("program_t0") or {}).get("all") or {}
         ratio = r.get("ratio")
         value = None if not ratio or math.isnan(ratio["est"]) else ratio["est"]
-        return verdict(
+        return threshold_tests(
             [_at_least("program_ok_t0_ratio", value, 0.8, "ratio")],
             share_ra=r.get("ra"),
             share_d1s=r.get("d1s"),
         )
 
     @staticmethod
-    def _validity(label: str, valid: dict[str, Any]) -> dict[str, Any] | None:
-        """A validity condition that does not hold makes the predictions that depend on it not
-        judged (prereg/v3_controls.md P-M3, P-D2)."""
-        if valid["status"] == HOLDS:
+    def _requires(first: dict[str, Any]) -> dict[str, Any] | None:
+        """The controls computed only when another one meets its threshold (M3 for M1 and M2, D2
+        for D1): None when it does, else the empty result."""
+        if outcome(first) == "met_required":
             return None
-        return not_judged(f"{label} (validity) is {valid['status']}: {valid['reason']}")
+        return not_computed()
 
     def m1(self, m3: dict[str, Any]) -> dict[str, Any]:
-        if (stop := self._validity("P-M3", m3)) is not None:
+        if (stop := self._requires(m3)) is not None:
             return stop
         a = _at_least("M_rep_D0_orphan_all", self.est("M_rep_D0_orphan_all"), 0.0)
         lo = self.lo("M_rep_D1s_orphan_all")
         b = _test("M_rep_D1s_orphan_all (95% lower bound)", lo, lambda v: v > 0, "> 0 pp")
-        return verdict([a, b])
+        return threshold_tests([a, b])
 
     def m2(self, m3: dict[str, Any]) -> dict[str, Any]:
-        if (stop := self._validity("P-M3", m3)) is not None:
+        if (stop := self._requires(m3)) is not None:
             return stop
         keys = [f"M_upd_{br}_all" for br in ("src", "def")]
-        return verdict(self.each(keys, lambda k, v: _at_least(k, v, -0.03)))
+        return threshold_tests(self.each(keys, lambda k, v: _at_least(k, v, -0.03)))
 
-    # 3.5 scope-aware key (D = 1 only)
+    # scope-aware key (D = 1 only)
     def k1(self) -> dict[str, Any]:
         keys = [f"K_upd_{br}_definition" for br in BRANCHES]
-        return verdict(self.each(keys, lambda k, v: _at_least(k, v, -0.02)))
+        return threshold_tests(self.each(keys, lambda k, v: _at_least(k, v, -0.02)))
 
     def k2(self) -> dict[str, Any]:
         tests = self.each(
@@ -670,9 +665,9 @@ class Judge:
             tests.append(
                 _test(f"scope_missed_{br}_all", value, lambda v: v > 0.05, "> 5%", "share")
             )
-        return verdict(tests)
+        return threshold_tests(tests)
 
-    # 3.6 query-time view
+    # query-time view
     def z1(self) -> dict[str, Any]:
         tests = self.each(
             [f"Z_upd_{br}_definition" for br in ("src", "def")], lambda k, v: _at_least(k, v, 0.30)
@@ -685,11 +680,11 @@ class Judge:
                 "> 20 pp",
             )
         )
-        return verdict(tests)
+        return threshold_tests(tests)
 
     def z1k(self) -> dict[str, Any]:
         keys = [f"Z0_upd_{br}_definition" for br in ("src", "def")]
-        return verdict(self.each(keys, lambda k, v: _at_least(k, v, 0.30)))
+        return threshold_tests(self.each(keys, lambda k, v: _at_least(k, v, 0.30)))
 
     def z2(self) -> dict[str, Any]:
         tests = self.each(
@@ -702,35 +697,33 @@ class Judge:
         tests += self.each(
             [f"Z_stab_{br}_all" for br in ("src", "def")], lambda k, v: _at_least(k, v, -0.03)
         )
-        return verdict(tests)
+        return threshold_tests(tests)
 
     def z3(self) -> dict[str, Any]:
         keys = [f"Z_vs_D1s_{br}_definition" for br in ("src", "def")]
-        return verdict(self.each(keys, lambda k, v: _within(k, v, 0.10)))
+        return threshold_tests(self.each(keys, lambda k, v: _within(k, v, 0.10)))
 
-    # 3.7 thinking writer (B = 1 only)
+    # thinking writer (B = 1 only)
     def d2(self) -> dict[str, Any]:
         r = (self.reported.get("think") or {}).get("all") or {}
         share = r.get("unreadable")
         value = None if not share or math.isnan(share["est"]) else share["est"]
-        return verdict(
+        return threshold_tests(
             [_at_most("think_unreadable_share", value, 0.20, "share")], writes=r.get("writes")
         )
 
     def d1(self, d2: dict[str, Any]) -> dict[str, Any]:
-        if (stop := self._validity("P-D2", d2)) is not None:
+        if (stop := self._requires(d2)) is not None:
             return stop
         keys = [f"{t}_{br}_definition" for t in ("D_rep", "D_repmech") for br in ("src", "def")]
-        return verdict(self.each(keys, lambda k, v: _at_least(k, v, 0.30)))
+        return threshold_tests(self.each(keys, lambda k, v: _at_least(k, v, 0.30)))
 
-    # 6 (registered 2026-10-01) the access control: D0full against D1
+    # the access control: D0full against D1
     def f1(self) -> dict[str, Any]:
         keys = [f"{t}_{br}_definition" for t in ("F_rep", "F_repmech") for br in SD]
         tests = self.each(keys, lambda k, v: _at_least(k, v, 0.30))
         regions = [gap_region(t.value) for t in tests]
-        common = set(regions)
-        reading = None if None in common else common.pop() if len(common) == 1 else "mixed"
-        return verdict(tests, reading=reading, regions=dict(zip(keys, regions, strict=True)))
+        return threshold_tests(tests, regions=dict(zip(keys, regions, strict=True)))
 
     def all(self) -> dict[str, dict[str, Any]]:
         m3, d2 = self.m3(), self.d2()
@@ -745,14 +738,14 @@ class Judge:
         }  # fmt: skip
 
 
-PREDICTIONS = ("G1", "G2", "G3", "R1", "R2", "T1", "T2", "T3", "M1", "M2", "M3", "K1", "K2",
-               "Z1", "Z1k", "Z2", "Z3", "D1", "D2", "F1")  # fmt: skip
+CONTROLS = ("G1", "G2", "G3", "R1", "R2", "T1", "T2", "T3", "M1", "M2", "M3", "K1", "K2",
+            "Z1", "Z1k", "Z2", "Z3", "D1", "D2", "F1")  # fmt: skip
 WITHDRAWN = {
-    "R1": "D = 0 contrasts withdrawn (D0B0_refresh not run); judged on the three D = 1 contrasts",
-    "T1": "B = 0 contrasts withdrawn (D0tB0 not run); judged on the three B = 1 contrasts",
-    "T3": "B = 0 contrasts withdrawn (D0tB0 not run); judged on the three B = 1 contrasts",
-    "K1": "D = 0 contrasts withdrawn (D0B1_scope not run); judged on the three D = 1 contrasts",
-    "K2": "judged at D = 1 (D0B1_scope not run)",
+    "R1": "D = 0 contrasts withdrawn (D0B0_refresh not run); computed on the three D = 1 contrasts",
+    "T1": "B = 0 contrasts withdrawn (D0tB0 not run); computed on the three B = 1 contrasts",
+    "T3": "B = 0 contrasts withdrawn (D0tB0 not run); computed on the three B = 1 contrasts",
+    "K1": "D = 0 contrasts withdrawn (D0B1_scope not run); computed on the three D = 1 contrasts",
+    "K2": "computed at D = 1 (D0B1_scope not run)",
     "M1": "B = 0 counterpart (D1sB0_ra) not run, not reported",
     "D1": "B = 0 counterpart (D0thinkB0) not run, not reported",
 }
@@ -777,7 +770,7 @@ def _t0_ok(items: list[Row], system: str) -> Vec:
 
 
 def program_t0(items: list[Row]) -> dict[str, Any]:
-    """P-M3: the share of programs that ran at t0, for the retraction-aware programs and for the
+    """M3: the share of programs that ran at t0, for the retraction-aware programs and for the
     D1s ones, over all items (per branch as well), and the ratio of the two (paired by item)."""
     ra, d1s = _t0_ok(items, CELLS["D1sB1ra"]), _t0_ok(items, CELLS["D1sB1"])
     out: dict[str, Any] = {}
@@ -886,7 +879,7 @@ def over_retraction(eng: Engine) -> dict[str, Any]:
 
 
 def think_stats(items: list[Row]) -> dict[str, Any]:
-    """The thinking writer's definition writes after the shift (P-D2 and the reported tokens):
+    """The thinking writer's definition writes after the shift (D2 and the reported tokens):
     how many, the share that is unreadable (the reply was cut off by the token limit or could not
     be parsed: `note.think.ok` false), the share that used the whole budget, and the completion
     tokens per write, per branch and pooled. The unreadable share counts both causes; the
@@ -936,7 +929,7 @@ def full_stats(items: list[Row]) -> dict[str, Any]:
     truncated (world-clustered) and the approximate tokens given against the cap. Per definition
     (`definitions`) and within it per declared source: the re-derivations, those that lost records
     of that source, the records given and left out, summed. `truncated_definitions` are the ones
-    with a truncated re-derivation; `as_registered` is whether they are `TRUNCATED_DEFS`."""
+    with a truncated re-derivation; `same_as_audit` is whether they are `TRUNCATED_DEFS`."""
     by_label: dict[str, dict[str, dict[str, list[float]]]] = defaultdict(
         lambda: defaultdict(lambda: defaultdict(list))
     )
@@ -990,8 +983,8 @@ def full_stats(items: list[Row]) -> dict[str, Any]:
     cut_defs = sorted(f for f, d in defs.items() if d.get("all", {}).get("truncated"))
     out["definitions"] = {f: defs[f] for f in sorted(defs)}
     out["truncated_definitions"] = cut_defs
-    out["registered_truncated"] = list(TRUNCATED_DEFS)
-    out["as_registered"] = bool(defs) and cut_defs == sorted(TRUNCATED_DEFS)
+    out["audit_truncated"] = list(TRUNCATED_DEFS)
+    out["same_as_audit"] = bool(defs) and cut_defs == sorted(TRUNCATED_DEFS)
     return out
 
 
@@ -1037,7 +1030,7 @@ def _audit_counts(table: cd.Table, system: str, key: str) -> dict[str, dict[str,
 
 def audit_checks(table: cd.Table, audit_fn: AuditFn) -> dict[str, Any]:
     """The missed and false invalidation of the gold cells, and of the scope cells on definition
-    items, equal the offline audit of the keys (prereg/v3_controls.md section 1 and 2)."""
+    items, equal the offline audit of the keys."""
     cache: dict[tuple[tuple[int, ...], tuple[str, ...]], dict[str, Any]] = {}
     cells: dict[str, Any] = {}
     for short, key in KEY_CELLS:
@@ -1132,8 +1125,8 @@ def scope_cited_check(table: cd.Table) -> dict[str, Any]:
 def evaluate(
     table: cd.Table, audit_fn: AuditFn | None = None, draws: int = DRAWS
 ) -> dict[str, Any]:
-    """Every contrast, verdict, check and reported quantity of one merged table (`draws` is the
-    registered 2,000 of the bootstrap; tests of the verdict logic use fewer)."""
+    """Every contrast, threshold comparison, check and reported quantity of one merged table
+    (`draws` is the 2,000 of the main analysis' bootstrap; tests use fewer)."""
     eng = Engine(table, draws)
     contrasts = eng.compute_all()
     rates = eng.cell_rates()
@@ -1144,7 +1137,7 @@ def evaluate(
         "think": think_stats(table.items),
         "full": full_stats(table.items),
     }
-    verdicts = Judge(contrasts, reported, rates).all()
+    thresholds = Thresholds(contrasts, reported, rates).all()
     checks = dict(table.checks)
     checks["audit"] = audit_checks(table, audit_fn or e1_keys.audit)
     checks["scope_cited"] = scope_cited_check(table)
@@ -1155,9 +1148,7 @@ def evaluate(
     checks["passed"] = sum(m is True for m in marks)
     checks["failed"] = sum(m is False for m in marks)
     checks["not_evaluated"] = sum(m is None for m in marks)
-    summary = {
-        s: sum(v["status"] == s for v in verdicts.values()) for s in (HOLDS, FAILS, NOT_JUDGED)
-    }
+    summary = {s: sum(outcome(v) == s for v in thresholds.values()) for s in OUTCOMES}
     return {
         "status": STATUS,
         "worlds": table.worlds,
@@ -1167,7 +1158,7 @@ def evaluate(
         "checks": checks,
         "cells": rates,
         "contrasts": {k: v.to_json() for k, v in contrasts.items()},
-        "verdicts": verdicts,
+        "threshold_tests": thresholds,
         "withdrawn": WITHDRAWN,
         "reported": reported,
         "summary": summary,
@@ -1176,8 +1167,8 @@ def evaluate(
 
 def stage_sources(roles: Sequence[Sequence[str]]) -> tuple[list[Path], list[Path]]:
     """The new runs and the published runs of a `stage ctl` command line (`ctl:RUN`, `base:RUN`);
-    a published stage directory expands to those of its source runs that cover the registered
-    worlds."""
+    a published stage directory expands to those of its source runs that cover the control
+    worlds (`controls_data.CTL_SEEDS`)."""
     by_role: dict[str, list[Path]] = {"ctl": [], "base": []}
     for role, path in roles:
         if role not in by_role:

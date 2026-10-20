@@ -1,4 +1,4 @@
-"""Typed answer matching (plan §4.3): no LLM judge.
+"""Typed answer matching: no LLM judge.
 
 Dates, times and weekdays are parsed and compared as values; entity strings are compared after
 standardisation (case, punctuation, whitespace), allowing at most three extra words around the

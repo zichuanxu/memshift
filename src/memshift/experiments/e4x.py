@@ -1,5 +1,6 @@
-"""E4 extension (prereg v1 §4 "E4 扩展", plan §6 E4): official sync semantics for all six sources,
-{ideal, official L = 5 min} x B in {0, 1} (D = 1) x {HoldMem, zero system}, discriminative probes.
+"""E4 extension: official sync semantics for all six
+sources, {ideal, official L = 5 min} x B in {0, 1} (D = 1) x {HoldMem, zero system},
+discriminative probes.
 
 Per world (S_src branch; test worlds 1000-1004):
   streams   ideal (every event once, at its own time; lag recorded as 0) and official at L = 5 min:
@@ -12,7 +13,7 @@ Per world (S_src branch; test worlds 1000-1004):
             on the delivered world with all slots; HoldMem is built at t0 = t_f - 1 min.
   events    true change events in (t_f, t_f + 8 weeks] that touch at least one slot (below),
             a seeded sample per source (seed string names world seed and source). Calendar, the
-            pre-registered replication: up to 10 per world, stratified as in E4 (series,
+            replication of E4: up to 10 per world, stratified as in E4 (series,
             appointment and settings changes first, then meetings). Other sources (descriptive):
             up to 2 each, shift-tagged events first, then updates / deletes, then inserts.
   probes    a slot is touched by event e when e.object_id is in the dependency set of the true
@@ -84,7 +85,7 @@ LAG = 5
 DELTAS = (10, 60)
 B_VALUES = (0, 1)
 MAX_EVENTS_PER_SOURCE = 2
-MAX_CALENDAR_EVENTS = 10  # decisions.md 2026-09-28: the calendar replication, sampled as in E4
+MAX_CALENDAR_EVENTS = 10  # the calendar replication, sampled as in E4
 WINDOW_WEEKS = 8
 _WRITE_LOCK = threading.Lock()
 

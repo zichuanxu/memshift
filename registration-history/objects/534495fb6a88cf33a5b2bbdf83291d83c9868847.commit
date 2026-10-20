@@ -1,8 +1,0 @@
-tree da3b9cb0763f4e2ce7bc13c288c25946bc4cc61c
-parent 64ce7b310d109f0075870b2ee3482e6c0b8e1c23
-author zichuanxu <zichuanxu28@gmail.com> 1790781500 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790781500 +0900
-
-Decision: GPU1 batch starts once every native branch is launched and at most three native runs remain (the last A-Mem world's branch chains), with the batch limit restored to 128 first
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

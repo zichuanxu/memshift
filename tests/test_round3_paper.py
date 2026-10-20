@@ -1,9 +1,7 @@
-"""Paper numbers and tables of the registered round-3 blocks (`analysis.round3_paper`,
-prereg/v4_round3.md blocks U, N, H, Q and G, prereg/v4b_round3_claude.md blocks Y and V,
-the exploratory upsert split of `analysis.ex_round3_upsert`, and block X, void and reported as
-exploratory): the stage is complete and traceable, the verdicts and values the paper states are
-pinned, the staged results agree with the published analyses they pair with, and the committed
-generated files are current."""
+"""Paper numbers and tables of the round-3 blocks (`analysis.round3_paper`: blocks U, N, H, Q and
+G, the Claude blocks Y and V, the upsert split of `analysis.ex_round3_upsert`, and block X): the
+stage is complete and traceable, the values the paper states are pinned, the staged results agree
+with the published analyses they pair with, and the committed generated files are current."""
 
 import json
 import re
@@ -115,77 +113,54 @@ def test_u_n_y_h_q_g_and_v_pass_every_pairing_check():
 
 def test_y_contexts_equal_the_committed_ones():
     """With the restaged block C stage every answer of the Claude reader has the committed
-    reader's context, so no answer is left out and no prediction carries a pairing note."""
+    reader's context, so no answer is left out and no comparison carries a pairing note."""
     y = INP["y"]
     assert not any(y["pairing"]["counts"].values())
     assert y["pairing"]["detail"].get("context_differs") is None
     assert y["quantities"]["answers_left_out_context_differs"] == 0
     for name in ("Y1", "Y2", "Y3"):
-        assert "pairing_note" not in y["predictions"][name], name
+        assert "pairing_note" not in y["threshold_tests"][name], name
     assert MACROS["RThreeYContextDiffers"] == MACROS["RThreeYStoreRequestsSent"] == "0"
     assert MACROS["RThreeYContextWorldBranches"] == "0"
 
 
-# ---------------------------------------------------------------------------------- verdicts
-def test_registered_verdicts():
-    assert MACROS["RThreeUOneVerdict"] == "holds" and MACROS["RThreeUOneTrue"] == "4"
-    assert MACROS["RThreeUThreeVerdict"] == "judged"
-    assert MACROS["RThreeUThreeReading"] == "key schedule"
-    assert MACROS["RThreeUFourVerdict"] == "fails"
-    assert MACROS["RThreeUFiveVerdict"] == "holds"
-    assert (
-        INP["u"]["predictions"]["U5"]["reason"]
-        == "3 of 3 families read 'key_schedule' (0 without a reading)"
-    )
-    assert MACROS["RThreeNOneVerdict"] == "fails"
-    assert MACROS["RThreeYOneVerdict"] == MACROS["RThreeYTwoVerdict"] == "holds"
-    assert MACROS["RThreeYThreeVerdict"] == "fails"
-    assert INP["y"]["predictions"]["Y1"]["reading"].startswith("the interaction is not confined")
-    assert MACROS["RThreeHSonnetOneVerdict"] == "judged"
-    assert MACROS["RThreeHSonnetOneReading"] == "both"
-    assert MACROS["RThreeHSonnetTwoVerdict"] == "holds"
-    preds = INP["h_sonnet"]["predictions"]
-    assert preds["H3"]["verdict"] == "not_judged"  # H-b is judged in h_b.json
-    assert set(preds) == {"H1", "H2", "H3"}  # no other writer's predictions
-    # H-c ran because Sonnet's r_0 after S_src was below 70% (decided from H-a's analysis)
-    trigger = INP["h_sonnet"]["reported"]["H_c_trigger"]
-    assert trigger["runs_H_c"] is True and trigger["on_registered_worlds"] is True
-    assert MACROS["RThreeHOpusOneVerdict"] == "judged"
-    assert MACROS["RThreeHOpusOneReading"] == "both"
-    assert MACROS["RThreeHOpusTwoVerdict"] == "holds"
-    preds = INP["h_opus"]["predictions"]  # another writer's predictions carry its model name
-    assert set(preds) == {"H1", "H2", "H3", "H1_claude-opus-5-5", "H2_claude-opus-5-5"}
-    assert all(preds[k]["verdict"] == "not_judged" for k in ("H1", "H2", "H3"))
-    assert INP["h_opus"]["reported"]["H_c_trigger"] is None
-    assert MACROS["RThreeQOneVerdict"] == "fails" and MACROS["RThreeQTwoVerdict"] == "holds"
-    assert MACROS["RThreeGOneVerdict"] == MACROS["RThreeGTwoVerdict"] == "holds"
-    preds = INP["g_a"]["predictions"]  # G3 is judged on the program-set runs (g_b.json)
-    assert set(preds) == {"G1", "G2", "G3"}
-    assert preds["G3"]["verdict"] == "not_judged"
-    assert preds["G3"]["reason"] == "no program-set run given"
-    assert MACROS["RThreeGThreeVerdict"] == "holds"
-    preds = INP["g_b"]["predictions"]  # G1 and G2 are judged on the held-out runs (g_a.json)
-    assert set(preds) == {"G1", "G2", "G3"}
-    assert preds["G1"]["verdict"] == preds["G2"]["verdict"] == "not_judged"
-    assert preds["G3"]["sets"] == preds["G3"]["registered_sets"] == 18
-    assert MACROS["RThreeHThreeVerdict"] == "not judged"  # its registered validity rule fails
-    preds = INP["h_b"]["predictions"]
-    assert set(preds) == {"H1", "H2", "H3"}
-    assert preds["H3"]["reason"] == "validity failed: cut off 12.6% > 10%"
-    assert preds["H1"]["verdict"] == preds["H2"]["verdict"] == "not_judged"  # no Claude writer
-    assert MACROS["RThreeVOneVerdict"] == MACROS["RThreeVTwoVerdict"] == "holds"
-    preds = INP["v"]["predictions"]  # judged on all nine registered program sets
-    assert set(preds) == {"V1", "V2"}
-    assert preds["V1"]["sets"] == preds["V2"]["sets"] == 9
-    assert MACROS["RThreeXOneVerdict"] == "not judged"  # the run is void
+# ---------------------------------------------------------------------- the staged results
+def test_the_staged_block_results_and_no_outcome_macro():
+    assert not [k for k in MACROS if re.search(r"Verdict|Reading|Registered|UOneTrue|Same$", k)]
+    fams = INP["u"]["threshold_tests"]["U5"]["families"]
+    assert all(f["tests"][0]["value"] <= 0.5 for f in fams.values())  # 3 of 3 below 0.5
+    assert INP["u"]["threshold_tests"]["U3"]["tests"][0]["value"] <= 0.5
+    tests = INP["h_sonnet"]["threshold_tests"]
+    assert tests["H3"] == {"tests": []}  # H-b is computed in h_b.json
+    assert set(tests) == {"H1", "H2", "H3"}  # no other writer's comparisons
+    # Sonnet's r_0 after S_src was below 70% (the Opus runs follow it)
+    r0 = INP["h_sonnet"]["reported"]["sonnet_r0_below_70pct"]
+    assert r0["below_70pct"] is True and r0["on_all_worlds"] is True
+    tests = INP["h_opus"]["threshold_tests"]  # another writer's comparisons carry its model name
+    assert set(tests) == {"H1", "H2", "H3", "H1_claude-opus-5-5", "H2_claude-opus-5-5"}
+    assert all(tests[k] == {"tests": []} for k in ("H1", "H2", "H3"))
+    assert INP["h_opus"]["reported"]["sonnet_r0_below_70pct"] is None
+    tests = INP["g_a"]["threshold_tests"]  # G3 is computed on the program-set runs (g_b.json)
+    assert set(tests) == {"G1", "G2", "G3"}
+    assert tests["G3"] == {"tests": []}
+    tests = INP["g_b"]["threshold_tests"]  # G1 and G2 are computed on the held-out runs
+    assert set(tests) == {"G1", "G2", "G3"}
+    assert tests["G1"] == tests["G2"] == {"tests": []}
+    assert tests["G3"]["sets"] == tests["G3"]["sets_total"] == 18
+    tests = INP["h_b"]["threshold_tests"]
+    assert set(tests) == {"H1", "H2", "H3"}
+    assert tests["H3"] == {"tests": []}  # 12.6% of the thinking writes cut off, above 10%
+    assert tests["H1"] == tests["H2"] == {"tests": []}  # no Claude writer
+    tests = INP["v"]["threshold_tests"]  # over all nine program sets
+    assert set(tests) == {"V1", "V2"}
+    assert tests["V1"]["sets"] == tests["V2"]["sets"] == 9
 
 
 # ---------------------------------------------------------------------------------- block X
 def test_x_is_void_and_carries_no_x1_outcome():
-    """Block X's anchor failed (decisions.md 2026-10-17): every world's prefix was restored from
-    E5, yet 3 of the 480 answers at the fork differ from E5's committed ones. X1 is not judged,
-    and the staged result holds no outcome X1 would have had: no tests, no count of cells that
-    favour an arm, no verdict before the amendment."""
+    """Block X's anchor check failed: every world's prefix was restored from E5, yet 3 of the 480
+    answers at the fork differ from E5's committed ones. The staged result computes no comparison
+    for X1: no tests and no count of cells that favour an arm."""
     x = INP["x"]
     pair = x["pairing"]
     assert pair["ok"] is False and pair["counts"] == {"anchor_answers_differ": 3}
@@ -200,15 +175,8 @@ def test_x_is_void_and_carries_no_x1_outcome():
         "w1008",
     }
     assert sum(a["compared"] - a["context_identical"] for a in per_world.values()) == 50
-    assert x["predictions"] == {
-        "X1": {
-            "verdict": "not_judged",
-            "reason": "pairing check failed (anchor_answers_differ 3); the run is void until "
-            "repaired",
-            "tests": [],
-        }
-    }
-    assert x["reported"]["X1_before_amendment"] is None
+    assert x["threshold_tests"] == {"X1": {"tests": []}}
+    assert "X1_before_amendment" not in x["reported"]
     text = (ROOT / r3p.STAGE_DIR / "analysis" / "x.json").read_text()
     assert "favour" not in text and '"holds"' not in text
     # the paper reports the cells, not the anchor counts: no macro or table states them
@@ -220,7 +188,7 @@ def test_x_is_void_and_carries_no_x1_outcome():
 
 
 def test_x_values_the_paper_states():
-    """Exploratory: Mem0 only adds, so it invalidates nothing in any class and shift (m = 1, r
+    """Mem0 only adds, so it invalidates nothing in any class and shift (m = 1, r
     undefined, a = Update); the query-time view acts on definition items only; invalidation is
     the only arm that deletes."""
     cells = INP["x"]["quantities"]["cells"]
@@ -281,7 +249,7 @@ def test_upsert_values_the_paper_states():
 
 
 def test_the_upsert_acts_only_where_the_delta_yields_an_item():
-    """Exploratory split: binding pays on definition items where the delta yielded no new item,
+    """Split by the delta: binding pays on definition items where the delta yielded no new item,
     where both B=0 memories were almost never right; where it yielded one, the append-only cell
     already answered from it and the upsert moved almost no answer. Its few moves are on the
     other items."""
@@ -305,7 +273,7 @@ def test_the_upsert_acts_only_where_the_delta_yields_an_item():
     assert MACROS["RThreeUDeltaDoneShiftsOtherMoved"] == "120"
     arms = INP["u_delta"]["families"]["main"]["arms"]
     for arm in ("D1", "Dm"):
-        for b in BRANCHES:  # the parts add up to the binding effect of the registered quantity
+        for b in BRANCHES:  # the parts add up to the binding effect of the block's quantity
             q = arms[arm][b]["definition"]
             ref = INP["u"]["quantities"]["families"]["main"]["R"]["upsert"][b][arm]["definition"]
             assert q["n_items"] == ref["n_items"]
@@ -319,13 +287,12 @@ def test_definition_writer_values_the_paper_states():
     assert MACROS["RThreeHSonnetWorlds"] == "10"
     assert MACROS["RThreeHSonnetDefDefinitionDoneBxD"] == "$+$16.4\\,pp [$+$9.7, $+$22.4]"
     assert MACROS["RThreeHSonnetRZero"] == "45.5\\% [36.0, 53.1]"
-    assert MACROS["RThreeHSonnetRZeroRegistered"] == "16.2\\%"
     assert MACROS["RThreeHSonnetRZeroQwenEst"] == "12.7\\%"
     assert MACROS["RThreeHSonnetRZeroDiff"] == "$+$32.7\\,pp [$+$26.6, $+$38.5]"
     v = INP["h_sonnet"]["quantities"]["writers"]["claude-sonnet-5-5"]["validity"]
-    assert v["valid"] is True and v["unreadable_basis"].startswith("distinct requests")
+    assert v["within_limits"] is True and v["unreadable_basis"].startswith("distinct requests")
     assert v["cache"]["missing_in_cache"] == 0
-    # the registered Qwen3.5-9B value of H2 is the published r_0 of the main study
+    # Qwen3.5-9B's r_0 in the main study, the reference of the Claude writers
     assert committed("ExAcctMainSrcDefinitionRZeroEst") == "16.2\\%"
 
 
@@ -341,13 +308,12 @@ def test_opus_writer_values_the_paper_states():
     assert MACROS["RThreeHOpusSrcDefinitionDoneBxDEst"] == "$+$23.6\\,pp"
     assert MACROS["RThreeHOpusOrphanDefinitionDoneBxDEst"] == "$+$30.5\\,pp"
     assert MACROS["RThreeHOpusRZero"] == "43.0\\% [32.9, 51.1]"
-    assert MACROS["RThreeHOpusRZeroRegistered"] == "16.2\\%"
     est = "RThreeH{}DefDefinitionDoneBxDEst"
     assert MACROS[est.format("Opus")] == MACROS[est.format("Sonnet")]
     for name in ("RZeroQwen", "Worlds", "Writes", "AnchorCompared"):  # same Qwen side and design
         assert MACROS[f"RThreeHOpus{name}"] == MACROS[f"RThreeHSonnet{name}"], name
     v = INP["h_opus"]["quantities"]["writers"]["claude-opus-5-5"]["validity"]
-    assert v["valid"] is True and v["unreadable_basis"].startswith("distinct requests")
+    assert v["within_limits"] is True and v["unreadable_basis"].startswith("distinct requests")
     assert v["cache"]["missing_in_cache"] == 0
     son = INP["h_sonnet"]["quantities"]["writers"]["claude-sonnet-5-5"]["bxd"]
     opus = INP["h_opus"]["quantities"]["writers"]["claude-opus-5-5"]["bxd"]
@@ -478,8 +444,8 @@ def test_user_words_values_the_paper_states():
     ):
         assert MACROS[f"RThreeV{tag}UpdatePooledDiff"] == update, tag
         assert MACROS[f"RThreeV{tag}AgreeDiff"] == agree, tag
-    # G3 is judged in g_b.json, on the 18 program sets of six writers, not in v.json
-    assert "G3" not in INP["v"]["predictions"]
+    # G3 is computed in g_b.json, on the 18 program sets of six writers, not in v.json
+    assert "G3" not in INP["v"]["threshold_tests"]
     assert {s.split("#")[0] for s in q["G_b_sets"]} <= {m for m, _ in r3p.G_B_WRITERS}
 
 
@@ -517,7 +483,7 @@ def test_program_set_values_the_paper_states():
         assert two["hi"] - two["lo"] > one["hi"] - one["lo"], b
         for model, tag in r3p.G_B_WRITERS:
             assert MACROS[f"RThreeGB{tag}{bt}BxD"] == _pp(node["per_writer"][model]), (b, tag)
-    # eta squared is over the 18 per-set values after S_def, the registered G3 contrast
+    # eta squared is over the 18 per-set values after S_def, the G3 contrast
     share = q["programs"]["writer_variance_share"]
     assert share["sets"] == 18 and share["writers"] == 6
     per_set = q["programs"]["branches"]["def"]["definition"]["per_set"]
@@ -538,9 +504,9 @@ def test_program_set_values_the_paper_states():
 @pytest.mark.paper
 def test_thinking_writer_validity_the_paper_states():
     """H-b (H3): 89 of the 708 thinking writes were cut off at the 32,768-token limit, above the
-    registered 10%, so H3 is not judged; the same writes are the unreadable ones."""
+    10% validity limit; the same writes are the unreadable ones."""
     v = INP["h_b"]["quantities"]["think"]["validity"]
-    assert v["limits"] == [32768] and v["valid"] is False
+    assert v["limits"] == [32768] and v["within_limits"] is False
     assert MACROS["RThreeHThinkLimit"] == "32,768"
     assert MACROS["RThreeHThinkWrites"] == f"{v['writes']:,}" == "708"
     assert MACROS["RThreeHThinkCutOff"] == f"{v['cut_off']:,}" == "89"
@@ -555,21 +521,20 @@ def test_thinking_writer_validity_the_paper_states():
 
 def test_upsert_in_other_families_values_the_paper_states():
     """U5: each M2 family's upsert recovers almost none of binding's effect on definition items
-    (D=1, S_src and S_def pooled), the key-schedule reading of the main writer, in 3 of 3."""
+    (D=1, S_src and S_def pooled), below the 0.5 bound as for the main writer, in 3 of 3."""
     fam = INP["u"]["quantities"]["families"]
-    u5 = INP["u"]["predictions"]["U5"]
-    assert u5["main_reading"] == INP["u"]["predictions"]["U3"]["reading"] == "key_schedule"
+    u5 = INP["u"]["threshold_tests"]["U5"]
     for f in FAMILIES:
         node = fam[f.model]["pooled_definition_D1_Dm_src_def"]["upsert"]
         assert node["combinations"] == ["D1/src", "D1/def"], f.key
         assert MACROS[f"RThreeUFive{f.tag}R"] == pn.ci(node["R"], r3p.ratio), f.key
-        assert MACROS[f"RThreeUFive{f.tag}Reading"] == "key schedule", f.key
+        assert f"RThreeUFive{f.tag}Reading" not in MACROS, f.key
         assert u5["families"][f.model]["tests"][0]["value"] == node["R"]["est"], f.key
         assert fam[f.model]["worlds"]["upsert_D1"] == [f"w{s}" for s in range(1000, 1010)]
     assert MACROS["RThreeUFiveGemmaR"] == "0.07 [$-$0.04, 0.18]"
     assert MACROS["RThreeUFiveLlamaR"] == "$-$0.16 [$-$0.44, 0.01]"
     assert MACROS["RThreeUFiveGptOssR"] == "$-$0.03 [$-$0.08, 0.02]"
-    assert MACROS["RThreeUFiveSame"] == MACROS["RThreeUFiveFamilies"] == "3"
+    assert MACROS["RThreeUFiveFamilies"] == "3" and "RThreeUFiveSame" not in MACROS
 
 
 # ------------------------------------------------------------------------------------ macros
@@ -585,7 +550,7 @@ def test_no_stage_staged_renders_only_missing_markers():
 
 # ------------------------------------------------------------------------------------ tables
 LABELS = {
-    "tab_refresh_upsert.tex": "tab:round3",
+    "tab_refresh_upsert.tex": "tab:refresh-upsert",
     "tab_natural.tex": "tab:natural",
     "tab_reader.tex": "tab:reader",
     "tab_heldout.tex": "tab:heldout",
@@ -619,7 +584,25 @@ def test_natural_branch_table_prints_only_classes_the_shift_changed():
     assert empty.count(" & other & ") == 3  # without data every row stays, as a MISSING marker
 
 
-def test_tables_name_the_experiments_without_codes_or_registration_files():
+def test_reader_table_sets_the_claude_reader_beside_the_split_of_the_committed_reader():
+    """One table for both readers of the same stores (it carries the label of either table): the
+    Claude reader's rows leave the store part empty, as it is the committed reader's."""
+    tex = r3p.tables(INP)["tab_reader.tex"]
+    assert "\\label{tab:store-reader-bxd}\\label{tab:reader}" in tex
+    rows = [
+        re.split(r"\s*&\s*", line.removesuffix(r" \\"))
+        for line in tex.splitlines()
+        if "$D{=}1$, Sonnet &" in line
+    ]
+    assert len(rows) == 6  # definition and other items after each shift
+    for cells in rows:
+        assert len(cells) == 11 and cells[5] == cells[6] == ""  # no store part of its own
+        assert cells[9]  # its B x D minus the committed reader's
+    committed = [line for line in tex.splitlines() if " & $D{=}1$ & " in line]
+    assert len(committed) == 9 and all(line.endswith(r" &  & \\") for line in committed)
+
+
+def test_tables_name_the_experiments_without_codes_or_record_files():
     for tex in r3p.tables(INP).values():
         caption = tex.split("\\label{", 1)[0]
         assert "prereg" not in tex and "block" not in caption and "round" not in caption
@@ -639,11 +622,13 @@ def test_tables_compile_at_the_paper_width(tmp_path):
         "\n".join(
             [
                 r"\documentclass[10pt]{article}\usepackage[T1]{fontenc}",
-                r"\usepackage[textwidth=6.5in,textheight=9in]{geometry}",
+                r"\usepackage[textwidth=6.75in,textheight=9in]{geometry}",
+                r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
+                r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\pass}{\checkmark}"
-                r"\newcommand{\fail}{$\times$}",
+                r"\newcommand{\fail}{$\times$}\newcommand{\cref}[1]{Table~1}",
                 r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",
             ]
         )
@@ -655,7 +640,7 @@ def test_tables_compile_at_the_paper_width(tmp_path):
         text=True,
     )
     assert done.returncode == 0, done.stdout[-1500:]
-    assert "Overfull \\hbox" not in done.stdout  # every table fits the 6.5in text block
+    assert "Overfull \\hbox" not in done.stdout  # every table fits the 6.75in text block
 
 
 # ------------------------------------------------------------------------- generated files
@@ -670,11 +655,11 @@ def test_committed_generated_files_are_current():
 
 
 @pytest.mark.paper
-def test_the_text_reports_the_judged_blocks_with_defined_macros():
+def test_the_text_reports_the_blocks_with_defined_macros():
     sections = ROOT / "paper/sections"
     text = "\n".join(p.read_text() for p in sorted(sections.glob("*.tex")))
     used = set(re.findall(r"\\(RThree[A-Za-z]+)", text))
-    assert used, "the text cites no registered round-3 macro"
+    assert used, "the text cites no round-3 macro"
     defined = set(MACROS) | {f"{k}Est" for k, v in MACROS.items() if " [" in v}
     assert used <= defined, sorted(used - defined)[:5]
     main = (ROOT / "paper/main.tex").read_text()
@@ -689,16 +674,16 @@ def test_the_text_reports_the_judged_blocks_with_defined_macros():
     ):
         assert f"\\input{{generated/{name}}}" in text, name
     # U3, U4, H-a and H-c are reported
-    for name in ("RThreeUThreeR", "RThreeUFourDiff", "RThreeHSonnetRZeroEst"):
+    for name in ("RThreeUThreeR", "RThreeUFourDiff", "RThreeHSonnetRZero"):
         assert name in used, name
-    for name in ("RThreeHSonnetDefDefinitionDoneBxDEst", "RThreeHOpusRZeroEst"):
+    for name in ("RThreeHSonnetDefDefinitionDoneBxDEst", "RThreeHOpusRZero"):
         assert name in used, name
     # G3, H3 and U5 are reported
-    for name in ("RThreeGBDefBxD", "RThreeGBDefWriterEtaSq", "RThreeHThinkCutOffShare"):
+    for name in ("RThreeGBDefBxD", "RThreeGBDefWriterEtaSq", "RThreeHSonnetWrites"):
         assert name in used, name
     assert {f"RThreeUFive{f.tag}R" for f in FAMILIES} <= used
     # Q, G-a and V are reported
     for name in ("RThreeQOneDiff", "RThreeGADefDoneBxD", "RThreeGASrcDoneBxD", "RThreeVDefBxD"):
         assert name in used, name
-    # X: the exploratory effects are reported (its anchor counts are not)
-    assert "RThreeXSrcDefinitionRepEffectEst" in used
+    # X: the effects are reported (its anchor counts are not)
+    assert "RThreeXSrcDefinitionRepEffect" in used

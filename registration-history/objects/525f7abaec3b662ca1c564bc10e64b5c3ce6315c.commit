@@ -1,8 +1,0 @@
-tree 529ea8b07e546b3d512b31aa0bb6ce65e644cdfa
-parent e0b27585158656b1fa67c0b544d67ba6a83f2bf9
-author zichuanxu <zichuanxu28@gmail.com> 1790686209 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790686209 +0900
-
-Pre-registration v2 (stage 4), frozen before any stage-4 run: replication on 20 fresh test worlds, model families (cross-family writer switches, E1 with other families as writer and reader, reader swaps), five more native memory systems with documented label predictions, a construct check where the writer model writes the executable derivation, and LLM-rendered worlds; budget and cut order; model roles and native integration contract logged in decisions.md first
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

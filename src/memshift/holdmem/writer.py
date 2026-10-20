@@ -1,4 +1,4 @@
-"""HoldMem write path, step 1 (plan §5.2): the writer model theta_w turns in-scope source records
+"""HoldMem write path, step 1: the writer model theta_w turns in-scope source records
 into one knowledge-item string s_k with cited object ids and quoted source text.
 
 The writer returns JSON {value, statement, citations}. s_k is rendered from the statement and the
@@ -6,16 +6,22 @@ citations only; the typed `value` is kept solely for the D=1 sidecar (`det.parse
 therefore stores exactly the same s_k bytes as a D=1 cell, without the parse.
 
 The records of a request are the BM25-selected in-scope records (`records_for`, 6,000 tokens),
-except for the D0full control (prereg v3 §6), whose definition items are re-derived from every live
-record of the item's declared sources (`full_records`).
+except for the D0full control, whose definition items are re-derived from every live record of
+the item's declared sources (`full_records`), and the D0typed control, whose
+definition items are re-derived from the typed records a D_m program reads (`typed_records`: the
+records of `holdmem.program.program_records` as one columnar JSON table per declared source,
+without the rendered text and the bodies of e-mail and chat messages, never truncated). Its
+request is `writer_request` with the record block replaced by the typed block (`TypedInput.text`);
+everything else in the request is the same.
 
-The definition-item writer of prereg v4 block H-a (another model, which reasons before it answers)
+The definition-item writer (another model, which reasons before it answers)
 sends the same request with its own output limit (`max_tokens`); a reply cut off by that limit is
 unreadable, as for a thinking request (`derive(reasoning=True)`).
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
@@ -31,7 +37,7 @@ WRITER_DOC_CAP = 600
 # D0full: the writer of a definition item gets every live record of the item's declared sources, not
 # a BM25 selection of 6,000 tokens; above FULL_BUDGET tokens (`textutil.approx_tokens` over the
 # rendered records, as every budget here) the largest source is cut to its most recent records (see
-# `full_records`). The registered cap is 28,000 tokens for a 32,768-token context, but
+# `full_records`). A cap of 28,000 tokens would suit a 32,768-token context, but
 # `approx_tokens` undercounts the serving tokenizer on dates and digits: on the 3,789 writer
 # requests of eight replication worlds (both branches) with a recorded `prompt_tokens`, the server
 # counted 1.11-1.15 tokens per approximate token for prompts of calendar or message records (up to
@@ -44,8 +50,8 @@ FULL_BUDGET = 25_000
 # schema (a grammar that has to open with `{` leaves the model no room to think on a server without
 # a reasoning parser); it names the answer's keys in the prompt instead, and the answer is parsed
 # from the reply as every other writer output is. THINK_MAX_TOKENS is the default output limit; the
-# E1 flag `--think-max-tokens` sets another one (prereg v4 block H-b: 32,768 on a 40,960-token
-# server context), which only changes `max_tokens` in the request.
+# E1 flag `--think-max-tokens` sets another one (32,768 in the long-thinking runs, on a
+# 40,960-token server context), which only changes `max_tokens` in the request.
 THINK_MAX_TOKENS = 8192
 # finish reasons of a reply cut off by its output limit (OpenAI-compatible, Anthropic)
 CUT_OFF = ("length", "max_tokens")
@@ -131,7 +137,8 @@ class WriterOutput:
     readset: list[tuple[str, int]] = field(default_factory=list)
     prompt_tokens: int = 0
     completion_tokens: int = 0
-    access: dict[str, Any] | None = None  # D0full: what the writer was given (`FullAccess.note`)
+    # D0full / D0typed: what the writer was given (`FullAccess.note`, `TypedInput.note`)
+    access: dict[str, Any] | None = None
     finish_reason: str = ""  # of the model reply; empty when no request was sent
 
 
@@ -261,6 +268,120 @@ def full_records(log: SourceLog, slot: Slot, t: datetime, budget: int | None = N
     )
 
 
+# D0typed: the typed records of a definition item, one table per declared source. A
+# table names its source once and lists each record as an array of its field values in the fixed
+# order of `TYPED_FIELDS` (the record metadata, then the source's fields in the order
+# `holdmem.program.SOURCE_FIELDS` describes them); a field a record does not have is null (the
+# calendar's four kinds share one table). This is the "ColumnsNoBody" layout whose sizes
+# `analysis.ex_round3_review` (sizes.json) measured, with one table per source instead of one per
+# calendar kind, so that every record of a source is in one table and the order of
+# `program_records` (oldest `updated` first within a source) is kept. The field names are written
+# once per table instead of once per record, about a quarter fewer tokens than the dict layout on
+# the largest inputs (stage 8: 44,109 against 57,002 for close friends, 47,326 against 61,489 for
+# VIP senders, maxima over 20 worlds), and the nulls of the calendar union cost a token each.
+# Dropped: `source` (the table's), the rendered `text` of every record and the `body` of e-mail and
+# chat messages; the note bodies stay (working_hours v1 reads the latest "Working hours" note).
+TYPED_META = ("object_id", "revision", "updated", "cluster")
+TYPED_FIELDS: dict[str, tuple[str, ...]] = {
+    "contacts": (
+        *TYPED_META,
+        *("name", "email", "phone", "employer", "city", "relation", "starred"),
+    ),
+    "calendar": (
+        *(*TYPED_META, "kind", "timezone", "title", "weekday", "time", "duration_min"),
+        *("attendees", "category", "appt_type", "provider", "start", "end"),
+    ),
+    "tasks": (*TYPED_META, "title", "project", "due", "status", "priority"),
+    "email": (*TYPED_META, "from_name", "from_addr", "to", "subject", "sent"),
+    "messages": (*TYPED_META, "conversation_with", "contact", "sender", "sent"),
+    "notes": (*TYPED_META, "title", "body"),
+}
+TYPED_DROPPED: dict[str, tuple[str, ...]] = {"email": ("body",), "messages": ("body",)}
+TYPED_HEAD = (
+    "Source records, as typed fields: one table per declared source, one JSON object per line "
+    '{"source": ..., "fields": [...], "rows": [[...], ...]}, each row one record with its values '
+    "in the order of `fields` (null where the record has no such field), oldest `updated` first. "
+    "The rendered text of the records and the bodies of e-mail and chat messages are omitted."
+)
+TYPED_COMMON = (
+    "Every table has the fields object_id (str), revision (int), updated (str "
+    '"YYYY-MM-DD HH:MM", time of the last change) and cluster (str, grouping id), then the '
+    "source-specific fields below."
+)
+
+
+def typed_fields_text(sources: tuple[str, ...]) -> str:
+    """`holdmem.program.fields_text` for the typed tables: the common fields without `source` and
+    `text`, and the source lines without the omitted bodies (fixed text, no world data)."""
+    from memshift.holdmem.program import SOURCE_FIELDS  # program imports this module
+
+    lines = [TYPED_COMMON]
+    for s in sources:
+        text = SOURCE_FIELDS[s]
+        for f in TYPED_DROPPED.get(s, ()):
+            cut = text.replace(f"{f} (str), ", "")
+            if cut == text:
+                raise ValueError(f"{s}: the field description has no {f!r} to omit")
+            text = cut
+        lines.append(text)
+    return "\n".join(lines)
+
+
+def _compact(o: object) -> str:
+    return json.dumps(o, separators=(",", ":"), ensure_ascii=False)
+
+
+@dataclass(frozen=True)
+class TypedInput:
+    """The typed records a D0typed writer is given for one definition item (`typed_records`)."""
+
+    sources: tuple[str, ...]
+    tables: list[dict[str, Any]]  # one per declared source, in declared order
+    readset: list[tuple[str, int]]  # (object_id, revision) of every row, in table order
+
+    def block(self) -> str:
+        """The JSON of the tables, one compact table per line."""
+        return "\n".join(_compact(tab) for tab in self.tables)
+
+    def text(self) -> str:
+        """What replaces the record block of the writer request."""
+        return "\n".join([TYPED_HEAD, typed_fields_text(self.sources), self.block()])
+
+    def note(self) -> dict[str, Any]:
+        """The record kept in the item's notes, one entry per re-derivation: the records given
+        per source, the characters and `approx_tokens` of the JSON block (no cap, so nothing is
+        dropped)."""
+        block = self.block()
+        return {
+            "records": len(self.readset),
+            "by_source": {tab["source"]: len(tab["rows"]) for tab in self.tables},
+            "chars": len(block),
+            "tokens": approx_tokens(block),
+        }
+
+
+def typed_records(log: SourceLog, slot: Slot, t: datetime) -> TypedInput:
+    """Every live record of the slot's declared sources at t, as the D_m program reads them
+    (`holdmem.program.program_records`, same records, same order), in the columnar layout of
+    `TYPED_FIELDS`. A field outside `TYPED_FIELDS` would be kept after the fixed ones (sorted);
+    the generated sources have none. No evaluator output, gold or definition predicate is read."""
+    from memshift.holdmem.program import program_records  # program imports this module
+
+    rows: dict[str, list[dict[str, Any]]] = {s: [] for s in slot.sources}
+    for r in program_records(log, slot, t):
+        rows[r["source"]].append(r)
+    tables = []
+    readset = []
+    for s in slot.sources:
+        drop = {"source", "text", *TYPED_DROPPED.get(s, ())}
+        extra = sorted({k for r in rows[s] for k in r} - drop - set(TYPED_FIELDS[s]))
+        fields = [*TYPED_FIELDS[s], *extra]
+        table_rows = [[r.get(f) for f in fields] for r in rows[s]]
+        tables.append({"source": s, "fields": fields, "rows": table_rows})
+        readset += [(str(r["object_id"]), int(r["revision"])) for r in rows[s]]
+    return TypedInput(tuple(slot.sources), tables, readset)
+
+
 def writer_request(
     world: World,
     slot: Slot,
@@ -269,9 +390,11 @@ def writer_request(
     delta_since: datetime | None = None,
     think: bool = False,
     max_tokens: int | None = None,
+    typed: TypedInput | None = None,
 ) -> dict[str, Any]:
     """`max_tokens`: the output limit; by default THINK_MAX_TOKENS for a thinking request, else 700.
-    The request text does not depend on it."""
+    The request text does not depend on it. `typed` (D0typed): the typed block replaces the record
+    block (`records` is then empty); every other line is the same."""
     lines = [
         f"Knowledge item: {slot.description}",
         f"Value format: {VALUE_FORMAT[slot.vtype]}",
@@ -285,10 +408,13 @@ def writer_request(
         lines.append(
             f"The records below are only those added or changed since {delta_since:%Y-%m-%d %H:%M}."
         )
-    lines += ["", "Source records (each starts with its id and revision):"]
-    lines += [record_block(d, text) for d, text in records]
-    if not records:
-        lines.append("(no records)")
+    if typed is not None:
+        lines += ["", typed.text()]
+    else:
+        lines += ["", "Source records (each starts with its id and revision):"]
+        lines += [record_block(d, text) for d, text in records]
+        if not records:
+            lines.append("(no records)")
     lines += ["", TASK]
     if think:
         lines.append(THINK_FORMAT)
@@ -342,24 +468,35 @@ def derive(
     full: bool = False,
     max_tokens: int | None = None,
     reasoning: bool = False,
+    typed: bool = False,
 ) -> WriterOutput:
     """`full`: every in-scope record (D0full, `full_records`) instead of the BM25 selection.
-    `max_tokens`: the output limit (`writer_request`). `reasoning`: the writer reasons before it
-    answers (the definition-item writer of prereg v4 block H-a), so, as for a thinking request, a
-    reply cut off by the output limit is unreadable."""
+    `typed`: the typed records instead (D0typed, `typed_records`); the read set is every record
+    given and `access` its `TypedInput.note`. `max_tokens`: the output limit (`writer_request`).
+    `reasoning`: the writer reasons before it answers (the definition-item writer), so, as for a
+    thinking request, a reply cut off by the output limit is unreadable."""
+    if typed and (full or since is not None):
+        raise ValueError("typed input is a full re-derivation: not with full or a delta")
+    given = typed_records(log, slot, t) if typed else None
     access = full_records(log, slot, t) if full else None
-    records = access.records if access is not None else records_for(log, slot, t, since)
+    if given is not None:
+        records: list[tuple[Doc, str]] = []
+    else:
+        records = access.records if access is not None else records_for(log, slot, t, since)
     if since is not None and not records:
         # append-only delta with no new in-scope records: nothing to derive, no model call
         return WriterOutput(None, "", [], True, [], 0, 0)
-    res = llm.complete(**writer_request(world, slot, t, records, since, think, max_tokens))
+    res = llm.complete(**writer_request(world, slot, t, records, since, think, max_tokens, given))
     if (think or reasoning) and res.finish_reason in CUT_OFF:
         # the reasoning used the whole budget: whatever braces are left in it are not an answer
         readset = [(d.doc_id, d.revision) for d, _ in records]
         usage = (res.prompt_tokens, res.completion_tokens)
-        return WriterOutput(None, "", [], False, readset, *usage, finish_reason=res.finish_reason)
-    out = parse_writer(res, records)
-    out.finish_reason = res.finish_reason
-    if access is not None:
-        out.access = access.note()
+        out = WriterOutput(None, "", [], False, readset, *usage, finish_reason=res.finish_reason)
+    else:
+        out = parse_writer(res, records)
+        out.finish_reason = res.finish_reason
+        if access is not None:
+            out.access = access.note()
+    if given is not None:
+        out.readset, out.access = list(given.readset), given.note()
     return out

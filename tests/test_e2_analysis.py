@@ -59,17 +59,17 @@ def test_t1_tost_and_pooled_path3(tmp_path):
     assert res["t1"]["same"]["equivalent"]
     assert not res["t1"]["upgrade"]["equivalent"]
     assert abs(res["t1"]["upgrade"]["delta_90"]["est"] + 0.2) < 1e-9
-    # higher agreement -> higher survival in both tiers: slope > 0, path 3 not triggered
+    # higher agreement -> higher survival in both tiers: slope > 0, path 3 within its threshold
     assert res["path3"]["tiers"] == ["same", "upgrade"]
     assert res["path3"]["pooled_slope"]["est"] > 0
-    assert not res["path3"]["triggered"]
+    assert res["path3"]["within_threshold"]
     assert res["path3"]["tier_caveats"] == []
     # M1-b: D=1 survival minus D=0 survival, paired by item (D=0 keeps 15 of 20 items)
     m1b = res["m1b_d_protects_switch"]
     assert abs(m1b["same"]["d1_minus_d0_survival"]["est"] - 0.25) < 1e-9
     assert abs(m1b["upgrade"]["d1_minus_d0_survival"]["est"] - 0.05) < 1e-9
-    assert m1b["same"]["holds"] and m1b["upgrade"]["holds"]
-    # exploratory T1 for every cell: the pre-registered cell is the same computation, and
+    assert m1b["same"]["est_at_least_zero"] and m1b["upgrade"]["est_at_least_zero"]
+    # T1 for every cell: the primary T1 cell is the same computation, and
     # HoldMem(0,1) (D=0 keeps 15 of 20 items) is 25 pp below retention 1, outside the margin
     cells = res["explore_t1_cells"]
     assert cells["same"][T1_SYSTEM] == res["t1"]["same"]
@@ -79,14 +79,24 @@ def test_t1_tost_and_pooled_path3(tmp_path):
     assert d0b1["margin"] == res["t1"]["same"]["margin"]
 
 
-def test_gate_claim_levels():
-    from memshift.analysis.gate import claim_level
+def test_gate_paths_compare_each_estimate_with_its_threshold():
+    from memshift.analysis import gate
 
-    assert claim_level(False, False, False) == "two-factor theory + quantitative prediction"
-    assert claim_level(False, False, True) == "two-factor theory, qualitative predictions"
-    assert claim_level(True, False, False) == "repair single factor (D)"
-    assert claim_level(False, True, False) == "measurement methodology"
-    assert claim_level(True, True, True).startswith("measurement methodology + zero")
+    zero = {"est": 0.0, "lo": 0.0, "hi": 0.0}
+    moved = {"est": 0.03, "lo": 0.01, "hi": 0.05}
+    e1 = {
+        "contrasts": {
+            "src": {"B_effect_update_pooled_source": dict(moved), "D_effect_missed_source": zero},
+            "def": {"D_effect_missed_cited": moved},
+        }
+    }
+    assert gate.path1(e1)["within_threshold"]  # +3 pp is above +2 pp
+    p2 = gate.path2(e1)
+    assert p2["checks"]["src:D_effect_missed_source"]["within_threshold"]
+    assert not p2["checks"]["def:D_effect_missed_cited"]["within_threshold"]
+    assert not p2["within_threshold"]
+    e1["contrasts"]["src"]["B_effect_update_pooled_source"]["est"] = 0.02
+    assert not gate.path1(e1)["within_threshold"]
 
 
 def test_cross_family_tier_tokens():

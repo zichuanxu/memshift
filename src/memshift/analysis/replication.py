@@ -1,15 +1,14 @@
-"""Block R (prereg/v2.md §1): the frozen stage-2 analyses re-estimated on 20 fresh test worlds.
+"""Block R: the unchanged stage-2 analyses re-estimated on 20 fresh test worlds.
 
-Each contrast of the v1 §4 list is estimated on the replication worlds alone and compared with the
-stage-2 (pre-registered) estimate:
-- effects predicted non-zero (B on detection and on Update, D on repair, the B x D interaction):
-  replicated = same sign and the 95% interval excludes 0; "same direction" = same sign, interval
-  includes 0; "not replicated" = opposite sign;
-- the D effect on missed invalidation (predicted zero) is re-judged by path 2;
-- T1 (per tier) and T3 (per system and horizon): replicated when the verdict is the same;
-- the three falsification paths are re-judged with `analysis.gate` on the replication worlds;
-- every other contrast (false invalidations, granularity, JSON arm) is reported side by side
-  without a verdict.
+Each E1 contrast of `e1.contrasts` is estimated on the replication worlds alone and compared with
+the stage-2 estimate:
+- effects predicted non-zero (B on detection and on Update, D on repair, the B x D interaction),
+  `replication`: "replicated" = same sign and the 95% interval excludes 0; "same direction" = same
+  sign, interval includes 0; "not replicated" = opposite sign;
+- the D effect on missed invalidation (predicted zero): `within_threshold` of path 2;
+- T1 (per tier) and T3 (per system and horizon): replicated when the outcome is the same;
+- the three paths of `analysis.gate` on the replication worlds (`within_threshold`);
+- every other contrast (false invalidations, granularity, JSON arm) is reported side by side.
 
 Usage: python -m memshift.analysis.replication ORIG_E1 ORIG_E2 ORIG_E3 REP_E1 REP_E2 REP_E3 OUT
 (stage directories, each with analysis/e{1,2,3}_metrics.json)
@@ -35,8 +34,9 @@ PREDICTED_NONZERO = (
 )
 
 
-def effect_verdict(orig: dict[str, Any], rep: dict[str, Any]) -> str:
-    """Verdict for an effect predicted non-zero, in the direction of the stage-2 estimate."""
+def replication_class(orig: dict[str, Any], rep: dict[str, Any]) -> str:
+    """The replicate estimate of an effect predicted non-zero, in the direction of the stage-2
+    estimate: "replicated", "same direction" or "not replicated"."""
     sign = 1 if orig["est"] >= 0 else -1
     if sign * rep["est"] <= 0:
         return "not replicated"
@@ -44,24 +44,25 @@ def effect_verdict(orig: dict[str, Any], rep: dict[str, Any]) -> str:
     return "replicated" if excludes else "same direction"
 
 
-def as_predicted(kind: str, est: dict[str, Any] | None) -> bool | None:
-    """Is one stage's estimate in the pre-registered direction (prereg v1 §4)? Every effect
-    predicted non-zero is predicted positive, so the point estimate must be > 0 (this is not the
-    replication verdict, which compares R with the sign of the stage-2 estimate); the D effect on
-    missed invalidation is predicted zero and judged by path 2 (not triggered). None for the
-    descriptive contrasts, which carry no prediction, and for a missing estimate."""
+def in_predicted_direction(kind: str, est: dict[str, Any] | None) -> bool | None:
+    """Is one stage's estimate in the predicted direction? Every effect predicted non-zero is
+    predicted positive, so the point estimate must be > 0 (this is not `replication_class`, which
+    compares R with the sign of the stage-2 estimate); the D effect on missed invalidation is
+    predicted zero: within the threshold of path 2. None for the descriptive contrasts, which
+    carry no prediction, and for a missing estimate."""
     if not est or est["est"] != est["est"]:  # missing or NaN
         return None
     if kind == "effect":
         return bool(est["est"] > 0)
     if kind == "path2":
-        return path2_verdict(est) == "not triggered"
+        return path2_within_threshold(est)
     return None
 
 
-def path2_verdict(rep: dict[str, Any]) -> str:
+def path2_within_threshold(rep: dict[str, Any]) -> bool:
+    """Path 2 of `analysis.gate` on one estimate: not (|est| >= 2 pp, interval excluding 0)."""
     excl = rep["lo"] > 0 or rep["hi"] < 0
-    return "triggered" if abs(rep["est"]) >= PATH2_MIN and excl else "not triggered"
+    return not (abs(rep["est"]) >= PATH2_MIN and excl)
 
 
 def contrast_rows(orig_e1: dict[str, Any], rep_e1: dict[str, Any]) -> list[dict[str, Any]]:
@@ -71,12 +72,13 @@ def contrast_rows(orig_e1: dict[str, Any], rep_e1: dict[str, Any]) -> list[dict[
             r = rep_e1["contrasts"].get(branch, {}).get(key)
             if r is None or key.startswith("explore_"):
                 continue
-            if key.startswith("D_effect_missed_"):
-                kind, verdict = "path2", path2_verdict(r)
-            elif key.startswith(PREDICTED_NONZERO):
-                kind, verdict = "effect", effect_verdict(o, r)
-            else:
-                kind, verdict = "descriptive", None
+            kind = (
+                "path2"
+                if key.startswith("D_effect_missed_")
+                else "effect"
+                if key.startswith(PREDICTED_NONZERO)
+                else "descriptive"
+            )
             rows.append(
                 {
                     "branch": branch,
@@ -84,7 +86,8 @@ def contrast_rows(orig_e1: dict[str, Any], rep_e1: dict[str, Any]) -> list[dict[
                     "kind": kind,
                     "orig": o,
                     "rep": r,
-                    "verdict": verdict,
+                    "replication": replication_class(o, r) if kind == "effect" else None,
+                    "within_threshold": path2_within_threshold(r) if kind == "path2" else None,
                 }
             )
     return rows
@@ -104,7 +107,9 @@ def membership_rows(
                     "orig": o["equivalent"],
                     "rep": r["equivalent"],
                     "rep_delta_90": r["delta_90"],
-                    "verdict": "replicated" if o["equivalent"] == r["equivalent"] else "differs",
+                    "replication": (
+                        "replicated" if o["equivalent"] == r["equivalent"] else "differs"
+                    ),
                 }
             )
     for h, per in orig_e3["horizons"].items():
@@ -119,7 +124,7 @@ def membership_rows(
                     "orig": o["T3_pass"],
                     "rep": r.get("T3_pass"),
                     "rep_minus_oracle": r.get("minus_oracle"),
-                    "verdict": "replicated" if o["T3_pass"] == r.get("T3_pass") else "differs",
+                    "replication": "replicated" if o["T3_pass"] == r.get("T3_pass") else "differs",
                 }
             )
     return rows
@@ -136,19 +141,18 @@ def replicate(
     return {
         "contrasts": contrasts,
         "membership": membership,
-        "gate_on_replication": {
-            "claim_level": rep_gate["claim_level"],
-            "path1": rep_gate["path1"]["triggered"],
-            "path2": rep_gate["path2"]["triggered"],
-            "path3": rep_gate["path3"]["triggered"],
+        "paths_within_threshold": {
+            "path1": rep_gate["path1"]["within_threshold"],
+            "path2": rep_gate["path2"]["within_threshold"],
+            "path3": rep_gate["path3"]["within_threshold"],
         },
         "summary": {
             "effects": len(effects),
-            "replicated": sum(c["verdict"] == "replicated" for c in effects),
-            "same_direction": sum(c["verdict"] == "same direction" for c in effects),
-            "not_replicated": sum(c["verdict"] == "not replicated" for c in effects),
-            "path2_triggered": sum(c["verdict"] == "triggered" for c in contrasts),
-            "membership_same": sum(m["verdict"] == "replicated" for m in membership),
+            "replicated": sum(c["replication"] == "replicated" for c in effects),
+            "same_direction": sum(c["replication"] == "same direction" for c in effects),
+            "not_replicated": sum(c["replication"] == "not replicated" for c in effects),
+            "path2_outside_threshold": sum(c["within_threshold"] is False for c in contrasts),
+            "membership_same": sum(m["replication"] == "replicated" for m in membership),
             "membership": len(membership),
             "n_worlds_rep": rep[0].get("n_worlds"),
         },
@@ -167,4 +171,4 @@ if __name__ == "__main__":
     res = replicate(o, r)
     (out / "analysis").mkdir(parents=True, exist_ok=True)
     (out / "analysis" / "replication.json").write_text(json.dumps(res, indent=1))
-    print(json.dumps({**res["summary"], **res["gate_on_replication"]}, indent=1))
+    print(json.dumps({**res["summary"], **res["paths_within_threshold"]}, indent=1))

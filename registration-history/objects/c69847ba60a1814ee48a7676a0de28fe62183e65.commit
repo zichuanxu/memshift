@@ -1,8 +1,0 @@
-tree cb33d834be24482a318bc3ac9242df388cf79779
-parent b76cb3d0b487065c4f0b38183487d79cd925ce79
-author zichuanxu <zichuanxu28@gmail.com> 1790746766 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790746766 +0900
-
-Paper: placeholders replaced by generated macros (replication direction counts, C1 by item class, T1 for HoldMem(0,1), E3 on one world set, T3 without definition items, Mem0 discriminability); figure captions describe the by-design detection lines and the pooled calibration fit with its band and rug
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,6 +1,5 @@
-"""Why the model-written derivation D_m repairs worse than D=0 after a deletion (a reply to a
-reviewer question of the third review round; post hoc, exploratory). It makes no model call, changes
-no registered contrast, margin, threshold or verdict, and every key of its output is exploratory.
+"""Why the model-written derivation D_m repairs worse than D=0 after a deletion. It makes no model
+call.
 
 Design rule 3 of the paper rests on the hypothesis that a program returns a value for a deleted
 record where the authored derivation returns none. This module tests it on the items, probes and

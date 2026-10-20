@@ -1,0 +1,134 @@
+{
+ "status": "block T (typed input): quantities only; reads the runs, the committed runs they pair with and the seeded generator, and calls no model",
+ "worlds": [
+  "w1000",
+  "w1001",
+  "w1002",
+  "w1003",
+  "w1004",
+  "w1005",
+  "w1006",
+  "w1007",
+  "w1008",
+  "w1009"
+ ],
+ "world_months": 12,
+ "branches": [
+  "src",
+  "def"
+ ],
+ "checkpoints_weeks_after_fork": [
+  1,
+  2,
+  4,
+  8
+ ],
+ "omitted": {
+  "all": [
+   "text"
+  ],
+  "email": [
+   "body"
+  ],
+  "messages": [
+   "body"
+  ]
+ },
+ "a_gold_invariant": {
+  "evaluations": 1200,
+  "item_times": 600,
+  "differ": [],
+  "identical": true
+ },
+ "a_programs": null,
+ "b_requests": {
+  "rederivations": 472,
+  "rederivations_distinct": 468,
+  "per_definition_branch": {
+   "k.active_project def": 38,
+   "k.active_project src": 38,
+   "k.close_friend def": 40,
+   "k.close_friend src": 40,
+   "k.important_contact def": 40,
+   "k.important_contact src": 40,
+   "k.overdue_task def": 38,
+   "k.overdue_task src": 38,
+   "k.vip_sender def": 40,
+   "k.vip_sender src": 40,
+   "k.working_hours def": 40,
+   "k.working_hours src": 40
+  },
+  "t0_diagnostic": 120,
+  "t0_distinct": 66,
+  "distinct_all": 534
+ },
+ "code": {
+  "commit": "672f2f18411ec12fc17bfc36178dc91d28c01ce7",
+  "dirty": false
+ },
+ "c_prompt_tokens": {
+  "tokenizer": {
+   "model": "Qwen/Qwen3.5-9B",
+   "sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42"
+  },
+  "rederivations": {
+   "k.active_project": {
+    "n": 76,
+    "median": 2169.5,
+    "p95": 2439,
+    "max": 2535,
+    "sum": 165086
+   },
+   "k.close_friend": {
+    "n": 80,
+    "median": 35446.0,
+    "p95": 40805,
+    "max": 41967,
+    "sum": 2870878
+   },
+   "k.important_contact": {
+    "n": 80,
+    "median": 13560.0,
+    "p95": 15561,
+    "max": 16146,
+    "sum": 1088355
+   },
+   "k.overdue_task": {
+    "n": 76,
+    "median": 2167.5,
+    "p95": 2441,
+    "max": 2537,
+    "sum": 165186
+   },
+   "k.vip_sender": {
+    "n": 80,
+    "median": 37339.5,
+    "p95": 41850,
+    "max": 44357,
+    "sum": 3020610
+   },
+   "k.working_hours": {
+    "n": 80,
+    "median": 14438.5,
+    "p95": 16583,
+    "max": 17174,
+    "sum": 1161949
+   },
+   "all": {
+    "n": 472,
+    "median": 14063.0,
+    "p95": 40340,
+    "max": 44357,
+    "sum": 8472064
+   }
+  },
+  "t0_diagnostic": {
+   "n": 120,
+   "median": 12836.5,
+   "p95": 35204,
+   "max": 37395,
+   "sum": 1934956
+  },
+  "distinct_sum": 9463567
+ }
+}

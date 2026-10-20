@@ -1,12 +1,11 @@
-"""Exploratory multiplicity check on the pre-registered directional E1 contrasts (not part of prereg
-v1 or v2; it changes no verdict).
+"""Multiplicity check on the directional E1 contrasts.
 
-prereg v1 §7 and v2 §0 report the contrasts of the v1 §4 list without a multiplicity correction.
-This module adds one as a robustness check. The family is every contrast of a stage's
+The main analysis reports the E1 contrasts without a multiplicity correction. This module adds one
+as a robustness check. The family is every contrast of a stage's
 `e1_metrics.json` predicted non-zero (`replication.PREDICTED_NONZERO`: the B effects on detection
 and on Update, the D effects on repair, the B x D interaction), over all branches and both
 granularities, so the family size is the same for every stage with the same cells. Every one of them
-is predicted positive (v1 §4: B raises detection and Update, D raises repair, the interaction is
+is predicted positive (B raises detection and Update, D raises repair, the interaction is
 predicted > 0), the direction `predicted_sign` returns.
 
 For each contrast the per-world item differences are taken exactly as `e1.contrasts` builds them
@@ -45,19 +44,19 @@ from memshift.scoring.stats import world_bootstrap_draws
 
 ALPHA = 0.05  # Holm: familywise error rate
 Q = 0.05  # Benjamini-Hochberg: false discovery rate
-DRAWS = 2000  # the main analysis' bootstrap (prereg v1 §7)
+DRAWS = 2000  # the main analysis' bootstrap (`scoring.stats`)
 SEED = 996
 MATCH_TOL = 1e-12  # recomputed vs stored estimate and interval; they agree exactly on the data
 STATUS = (
-    "exploratory: not part of prereg v1 or v2, no pre-registered verdict changes; the family is "
-    "the contrasts predicted non-zero in v1 §4 (replication.PREDICTED_NONZERO)"
+    "additional analysis: Holm and Benjamini-Hochberg over the contrasts predicted non-zero "
+    "(replication.PREDICTED_NONZERO)"
 )
 
 Row = dict[str, Any]
 
 
 def predicted_sign(key: str) -> int:
-    """+1: every contrast predicted non-zero is predicted positive (prereg v1 §4)."""
+    """+1: every contrast predicted non-zero is predicted positive."""
     if not key.startswith(PREDICTED_NONZERO):
         raise ValueError(f"{key}: not a contrast predicted non-zero")
     return 1
@@ -221,7 +220,7 @@ def analyse(stages: Sequence[Path], out: Path) -> dict[str, Any]:
         "method": {
             "family": "contrasts of e1_metrics.json with a key starting with one of "
             f"{list(PREDICTED_NONZERO)}, all branches, one family per stage",
-            "predicted_sign": "+1 for every contrast in the family (prereg v1 §4)",
+            "predicted_sign": "+1 for every contrast in the family",
             "p_value": "one-sided bootstrap over worlds, (1 + #{draws with mean <= 0}) / "
             "(1 + draws); the draws are those of the interval in e1_metrics.json",
             "bootstrap": {"draws": DRAWS, "seed": SEED},

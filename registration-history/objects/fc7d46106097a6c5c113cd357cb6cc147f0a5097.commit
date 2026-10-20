@@ -1,8 +1,0 @@
-tree 435c7fcb8590faa711843dd721a2f5026d9e24b9
-parent 6a6465c97c90b20e87425a7ecd8ab498e4072152
-author zichuanxu <zichuanxu28@gmail.com> 1790740432 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790740432 +0900
-
-Block C by item class (exploratory): C1 and C2 split into definition items, structured fields and free text at source-epoch binding, with the class assignment of the E1 class split; tests on synthetic rows
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

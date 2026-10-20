@@ -1,12 +1,11 @@
-"""Exploratory baselines and intervals for the writer-switch calibration (decisions.md 2026-09-30;
-not pre-registered, no registered verdict changes; keys start with `explore_`).
+"""Baselines and intervals for the writer-switch calibration (keys start with `explore_`).
 
-Path 3 of prereg v1 regresses survival on the per-type agreement rate of the old and the new writer
-(`e2.analyse`: D = 0, B = 1 items valid before the switch, intervals from resampled worlds with the
-item types held fixed). Added here, for the pooled items of every tier present and for each tier
+`path3` of `e2.analyse` regresses survival on the per-type agreement rate of the old and the new
+writer (D = 0, B = 1 items valid before the switch, intervals from resampled worlds with the item
+types held fixed). Added here, for the pooled items of every tier present and for each tier
 (so the cross-family switches of block M1 are covered once staged, no change needed):
   predictors, each scored by the calibration slope of logit P(survive) on logit(x) and by AUROC:
-    agree     the registered per-type agreement rate (a);
+    agree     the per-type agreement rate of `path3` (a);
     new_acc   the new writer's per-type accuracy on the calibration set (b);
     old_acc   the old writer's per-type accuracy (c);
     cond      P(new correct | old correct) per type, the plug-in for survival itself (d); a type
@@ -14,8 +13,8 @@ item types held fixed). Added here, for the pooled items of every tier present a
     nondef    1 for an item outside the definition class and 0 inside it (e);
   the same predictors (a)-(d) on the items outside the definition class only ("nodef"; (f) is agree
     there), so that each baseline is compared on the same items;
-  intervals: the registered world bootstrap (same seed, resampling order and quantile rule as
-    `e2.boot`, so the agree rows reproduce path 3) and a type-level cluster bootstrap that
+  intervals: the world bootstrap of `e2.boot` (same seed, resampling order and quantile rule,
+    so the agree rows reproduce `path3`) and a type-level cluster bootstrap that
     resamples item types (all items of a drawn type, across tiers when pooled) with the same
     seed; AUROC minus agree with both;
   leave-one-type-out estimates, and failure counts per type and tier.
@@ -86,8 +85,8 @@ def load_calibration(run_dir: Path, tiers: list[str]) -> dict[str, list[Row]]:
 
 
 def collect_points(rows: list[Row], cal: dict[str, list[Row]]) -> list[Point]:
-    """The D = 0, B = 1 items valid before the switch (path 3's items) of the tiers in `cal`, each
-    with the predictor values of its type."""
+    """The D = 0, B = 1 items valid before the switch (the items of `path3`) of the tiers in `cal`,
+    each with the predictor values of its type."""
     rates = {t: type_rates(c) for t, c in cal.items()}
     out = []
     for r in rows:
@@ -96,7 +95,7 @@ def collect_points(rows: list[Row], cal: dict[str, list[Row]]) -> list[Point]:
             continue
         definition = str(r.get("slot_id", "")).startswith(DEFINITION_PREFIXES)
         x = {**rates[r["tier"]][r["type"]], "nondef": 0.0 if definition else 1.0}
-        x["agree"] = float(r["predicted"])  # the registered value
+        x["agree"] = float(r["predicted"])  # the agreement rate of `path3`
         out.append(
             Point(r["tier"], r["world_id"], r["type"], definition, float(r["valid_after"]), x)
         )

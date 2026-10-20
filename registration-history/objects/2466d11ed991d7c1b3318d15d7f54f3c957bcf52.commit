@@ -1,8 +1,0 @@
-tree d2be0581990ede0c1414fddea0335b19c0647613
-parent 5f8e3c66a4808fab3b248260cb67d8ab18dba9e1
-author zichuanxu <zichuanxu28@gmail.com> 1790638949 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790638949 +0900
-
-E7 theta_r / theta_e: E1 --embed and --cells none (baselines only); swap analysis compares metrics and contrasts on the same worlds
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

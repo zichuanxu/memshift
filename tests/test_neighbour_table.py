@@ -40,7 +40,7 @@ def test_sixteen_rows_and_the_memshift_row_last() -> None:
     assert len(rows) == 16
     assert [r["key"] for r in rows].count("memshift") == 1
     assert rows[-1]["key"] == "memshift" and rows[-1]["is_reference"]
-    tex = nt.tab_neighbours(rows)
+    tex = nt.tab_neighbours_full(rows)
     body = _data_rows(tex)
     assert len(body) == 16 and body[-1].startswith(r"\textbf{\memshift{}} &")
     assert sum(r"\citep{" in ln or r"\citet{" in ln for ln in body) == 15
@@ -51,9 +51,8 @@ def test_sixteen_rows_and_the_memshift_row_last() -> None:
     ]
 
 
-@pytest.mark.parametrize("render", [nt.tab_neighbours, nt.tab_neighbours_full])
-def test_every_row_has_one_cell_per_column(render: Any) -> None:
-    tex = render(nt.load(PROPS))
+def test_every_row_has_one_cell_per_column() -> None:
+    tex = nt.tab_neighbours_full(nt.load(PROPS))
     spec = re.search(r"\\begin\{tabular\}\{@\{\}l ([c ]+)@\{\}\}", tex)
     assert spec is not None
     n_columns = spec.group(1).count("c")
@@ -74,16 +73,14 @@ def test_neighbour_keys_are_in_the_bibliography_and_cited_in_related_work() -> N
 
 
 def test_observed_cells_render_without_a_dagger_and_no_process_note() -> None:
-    rows = nt.load(PROPS)
-    for render in (nt.tab_neighbours, nt.tab_neighbours_full):
-        tex = render(rows)
-        ms = _data_rows(tex)[-1]
-        # native systems: six observed, none planned
-        assert " & 6 & " in ms and r"6\,(+" not in ms
-        assert r"T\,(+L)" in ms and nt.DAGGER not in ms  # world text: block L has run
-        assert "pre-registered" not in tex and "not yet run" not in tex  # no process note
-        assert all(nt.DAGGER not in ln for ln in _data_rows(tex)[:-1])
-        assert " 40 & " in ms and r"40\,(+" not in ms  # histories: block R has run, no mark
+    tex = nt.tab_neighbours_full(nt.load(PROPS))
+    ms = _data_rows(tex)[-1]
+    # native systems: six observed, none planned
+    assert " & 6 & " in ms and r"6\,(+" not in ms
+    assert r"T\,(+L)" in ms and nt.DAGGER not in ms  # world text: block L has run
+    assert "not yet run" not in tex and "frozen plan" not in tex  # no process note or column
+    assert all(nt.DAGGER not in ln for ln in _data_rows(tex)[:-1])
+    assert " 40 & " in ms and r"40\,(+" not in ms  # histories: block R has run, no mark
 
 
 def test_flipping_the_json_removes_the_marks(raw: list[dict[str, Any]], tmp_path: Path) -> None:
@@ -92,10 +89,9 @@ def test_flipping_the_json_removes_the_marks(raw: list[dict[str, Any]], tmp_path
     ms["native_systems"] = {"value": "6", "derived_from": "memory_systems", "note": "run"}
     assert "planned_extra" not in ms["n_histories"]  # block R has run
     assert "planned_extra" not in ms["text_origin"]  # block L has run
-    rows = nt.load(_write(tmp_path, objs))
-    for tex in (nt.tab_neighbours(rows), nt.tab_neighbours_full(rows)):
-        assert nt.DAGGER not in tex and "planned" not in tex
-        assert " 6 & " in _data_rows(tex)[-1]
+    tex = nt.tab_neighbours_full(nt.load(_write(tmp_path, objs)))
+    assert nt.DAGGER not in tex and "planned" not in tex
+    assert " 6 & " in _data_rows(tex)[-1]
 
 
 def test_a_planned_categorical_cell_and_an_inferred_cell(
@@ -109,7 +105,7 @@ def test_a_planned_categorical_cell_and_an_inferred_cell(
     assert writer == r"\checkmark$^\dagger$"
     goyal = next(r for r in rows if r["key"] == GOYAL)
     assert nt.cell(goyal, nt.COLUMNS["gold_first"]) == r"\checkmark$^\ddagger$"
-    assert "inferred by the audit" in nt.tab_neighbours(rows)
+    assert "inferred by the audit" in nt.tab_neighbours_full(rows)
 
 
 def test_only_the_memshift_row_can_be_planned(raw: list[dict[str, Any]], tmp_path: Path) -> None:
@@ -121,7 +117,7 @@ def test_only_the_memshift_row_can_be_planned(raw: list[dict[str, Any]], tmp_pat
 
 def test_invalid_input_is_rejected(raw: list[dict[str, Any]], tmp_path: Path) -> None:
     bad = copy.deepcopy(raw)
-    bad[0]["fields"]["prereg"]["value"] = "maybe"
+    bad[0]["fields"]["chg_definition_change"]["value"] = "maybe"
     with pytest.raises(ValueError, match="bad value"):
         nt.load(_write(tmp_path, bad))
     missing = copy.deepcopy(raw)
@@ -136,11 +132,9 @@ def test_invalid_input_is_rejected(raw: list[dict[str, Any]], tmp_path: Path) ->
 @pytest.mark.paper
 def test_output_is_deterministic_and_the_generated_files_are_current(tmp_path: Path) -> None:
     first, second = nt.load(PROPS), nt.load(PROPS)
-    assert nt.tab_neighbours(first) == nt.tab_neighbours(second)
     assert nt.tab_neighbours_full(first) == nt.tab_neighbours_full(second)
     assert nt.macros(first) == nt.macros(second)
     committed = {
-        "tab_neighbours.tex": nt.tab_neighbours(first),
         "tab_neighbours_full.tex": nt.tab_neighbours_full(first),
         "neighbour_counts.tex": nt.macros(first),
     }
@@ -148,15 +142,19 @@ def test_output_is_deterministic_and_the_generated_files_are_current(tmp_path: P
         assert (GENERATED / name).read_text() == nt.HEAD + text, f"regenerate {name}"
 
 
-def test_cli_writes_the_table_the_appendix_table_and_the_counts(
+def test_cli_writes_the_table_and_the_counts(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    out = tmp_path / "gen" / "tab_neighbours.tex"
+    out = tmp_path / "gen"
     monkeypatch.setattr(sys, "argv", ["neighbour_table", str(PROPS), str(out)])
     nt.main()
-    assert out.read_text().startswith(nt.HEAD + r"\begin{table}")
-    assert (tmp_path / "gen" / "tab_neighbours_full.tex").exists()
-    assert r"\newcommand{\NbrTotal}{15}" in (tmp_path / "gen" / "neighbour_counts.tex").read_text()
+    table = (out / "tab_neighbours_full.tex").read_text()
+    assert table.startswith(nt.HEAD + r"\begin{table}")
+    assert r"\newcommand{\NbrTotal}{15}" in (out / "neighbour_counts.tex").read_text()
+    assert sorted(p.name for p in out.iterdir()) == [
+        "neighbour_counts.tex",
+        "tab_neighbours_full.tex",
+    ]
 
 
 def test_counts_partition_the_neighbours_and_back_the_related_work_text() -> None:
@@ -210,7 +208,8 @@ def test_memshift_questions_are_the_graded_probes_of_the_e1_test_runs() -> None:
     assert field["items"] == stage2_items + rep_items
     assert stage2_worlds + rep_worlds == int(nt.load(PROPS)[-1]["fields"]["n_histories"]["value"])
     assert "graded probes" in field["unit"] and f"{field['items']:,}" in field["unit"]
-    assert field["unit"] in nt.tab_neighbours(nt.load(PROPS))
+    unit = f"graded probes over {field['items']:,} knowledge items"
+    assert unit in nt.tab_neighbours_full(nt.load(PROPS))
     assert "planned_extra" not in field
 
 
@@ -258,7 +257,7 @@ def test_derived_fields_agree_with_the_audit_free_text(raw: list[dict[str, Any]]
 
 
 def test_latex_special_characters_are_escaped() -> None:
-    tex = nt.tab_neighbours(nt.load(PROPS))
+    tex = nt.tab_neighbours_full(nt.load(PROPS))
     assert r"\citet{arxiv2609_05339} &" in tex and "Goyal" not in tex  # no name twice
     assert r"LoCoMo~\citep{maharana2024locomo}" in tex  # a benchmark keeps its name
     assert nt._tex("a_b & 50%") == r"a\_b \& 50\%"
@@ -266,21 +265,43 @@ def test_latex_special_characters_are_escaped() -> None:
     assert not nt._author_named("Ground Truth First")
 
 
-def test_the_appendix_table_is_self_contained() -> None:
+def test_the_caption_keys_every_mark_and_code() -> None:
     rows = nt.load(PROPS)
     full = nt.tab_neighbours_full(rows)
     caption = full.split(r"\label{tab:neighbours-full}")[0]
-    assert r"\cref{tab:neighbours}" not in full  # the Section 2 table is no longer shown
-    compact = nt.tab_neighbours(rows).split(r"\label{tab:neighbours}")[0]
-    legend = compact.split("). ", 1)[1].split(r" $^\ddagger$")[0]  # the legend after the head
-    assert legend in caption  # every mark and column of the Section 2 table is explained
-    for term in (
-        "Derived items: the graded items aggregate several records",
-        "as in \\memshift{}: every item is derived by a writer, but of a world's 48 items only",
-        "Implicit conflict: conflicting information without an explicit replacement",
-        "Consent revoked: the user withdraws consent or asks to forget",
-        "inferred by the audit",
-    ):
-        assert term in caption, term
+    assert r"\cref{" not in full  # no table or section to refer to
+    for mark in (r"\checkmark{}~yes", r"$\sim$~partial", r"$\times$~no such element",
+                 "n/s~not stated", r"$^\ddagger$~inferred by the audit"):  # fmt: skip
+        assert mark in caption, mark
+    codes = {str(v) for r in rows for v in nt._text_values(r)}
+    for code in codes - {"n/s"}:
+        assert f"{code}~{nt.TEXT_CODES[code]}" in caption, code
+    # a short key: the column definitions are in the text of the appendix
+    assert "Derived items:" not in caption and "Consent revoked:" not in caption
     header = next(ln for ln in full.splitlines() if ln.startswith("benchmark &"))
     assert r"\rotatebox{90}{deletion}" in header and "retraction" not in full
+
+
+@pytest.mark.paper
+def test_the_appendix_text_defines_the_columns_the_key_leaves_out() -> None:
+    text = " ".join((ROOT / "paper" / "sections" / "app_related.tex").read_text().split())
+    for term in (
+        "has derived items when its graded items aggregate several records",
+        "of a world's 48 items only the six definition items and the four recurring series",
+        "An implicit conflict is conflicting information without an explicit replacement",
+        "Consent is revoked when the user withdraws consent or asks to forget",
+        "counterfactual when it runs the same history with and without the change",
+        "without long-context and plain RAG baselines",
+        "Histories (worlds, users or trajectories) and questions are counted as printed",
+    ):
+        assert term in text, term
+
+
+def test_neighbour_rows_have_a_small_gap_every_five_rows() -> None:
+    full = nt.tab_neighbours_full(nt.load(PROPS))
+    body = full.split(r"\midrule", 1)[1].split(r"\textbf{\memshift{}}")[0].splitlines()
+    gaps = [i for i, ln in enumerate(body) if ln == r"\addlinespace[3pt]"]
+    rows = [ln for ln in body if r"\cite" in ln]
+    assert len(gaps) == (len(rows) - 1) // nt.GAP_EVERY
+    for g in gaps:  # each gap follows a full group of rows
+        assert sum(r"\cite" in ln for ln in body[:g]) % nt.GAP_EVERY == 0

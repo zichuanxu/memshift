@@ -1,5 +1,5 @@
-"""Offline tests for the A-Mem adapter (prereg/v2.md §3). No network, no GPU: the pure helpers, the
-driver-side bookkeeping (on a stand-in for the library object) and, when `agentic_memory` and
+"""Offline tests for the A-Mem adapter (E5 native systems). No network, no GPU: the pure helpers,
+the driver-side bookkeeping (on a stand-in for the library object) and, when `agentic_memory` and
 `chromadb` are importable (`pip install -r docker/native/amem.txt`), the adapter over the real
 library with a scripted LLM client and a hash embedder in place of our endpoint and the encoder."""
 

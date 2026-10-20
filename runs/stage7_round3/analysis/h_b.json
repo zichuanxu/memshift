@@ -1,6 +1,6 @@
 {
  "block": "H",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -2982,26 +2982,19 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "H3": {
-   "verdict": "not_judged",
-   "reason": "validity failed: cut off 12.6% > 10%",
    "tests": []
   },
   "H1": {
-   "verdict": "not_judged",
-   "reason": "no run of this arm given",
-   "tests": [],
-   "reading": null
+   "tests": []
   },
   "H2": {
-   "verdict": "not_judged",
-   "reason": "no run of this arm given",
    "tests": []
   }
  },
  "reported": {
-  "H_c_trigger": null
+  "sonnet_r0_below_70pct": null
  },
  "quantities": {
   "writers": {},
@@ -3015,16 +3008,16 @@
     "cut_off_share": 0.12570621468926554,
     "unreadable": 89,
     "unreadable_share": 0.12570621468926554,
-    "v3_P_D2_unreadable_at_most_20pct": true,
+    "unreadable_at_most_20pct": true,
     "tests": [
      {
       "key": "cut_off_share",
       "value": 0.12570621468926554,
-      "ok": false,
+      "meets_threshold": false,
       "threshold": "<= 10%"
      }
     ],
-    "valid": false
+    "within_limits": false
    },
    "worlds": [
     "w1000",
@@ -3093,18 +3086,16 @@
     }
    },
    "H3": {
-    "verdict": "not_judged",
-    "reason": "validity failed: cut off 12.6% > 10%",
     "tests": []
    }
   },
   "ignored_runs": []
  },
  "notes": {
-  "H1": "B x D with the authored D=1 cells (the registered main-study contrast); the D_m version is reported. Reading writer_property (est <= 10 pp, or the interval includes 0), execution_pays (est >= 20 pp and the interval above 0), else both.",
-  "H2": "r_0 = ContractValid of the changed definition item-times the source-epoch key invalidated in D0B1_source after S_src (the `r` of Eq. (1), whose main-study value is the registered 16.2%); holds when r_0 - 0.162 >= 20 pp (point estimate). The same quantity of Qwen3.5-9B on the same worlds, and the paired difference, are reported.",
-  "H": "validity (amended): at most 10% of the writer's distinct write requests stop at the output limit (`finish_reason` \"length\" in calls.jsonl: max_tokens or the context window), at most 2% unreadable. calls.jsonl records the finish reason, prompt and output tokens (thinking included) but not whether the reply parsed; the unreadable share is per distinct request from the response cache when given, else from the run summaries' `def_stats` (per cell write, so a request several cells send counts once per cell), and `basis` says which.",
-  "H3": "v3 P-D1 as v3 judged it: repair and mechanical repair, S_src and S_def, D1B1_source minus D0thinkB1_source on definition items, each >= 30 pp. Validity as the v4 text states it: at most 10% of the thinking writes cut off (completion tokens at the run's limit); v3 P-D2's 20%-unreadable rule is reported beside it."
+  "H1": "B x D with the authored D=1 cells (the main-study contrast); the D_m version is reported. Bounds: at most 10 pp or the interval includes 0; at least 20 pp with the interval above 0.",
+  "H2": "r_0 = ContractValid of the changed definition item-times the source-epoch key invalidated in D0B1_source after S_src (the `r` of Eq. (1), whose main-study value is 16.2%); r_0 - 0.162 >= 20 pp (point estimate). The same quantity of Qwen3.5-9B on the same worlds, and the paired difference, are reported.",
+  "H": "validity: at most 10% of the writer's distinct write requests stop at the output limit (`finish_reason` \"length\" in calls.jsonl: max_tokens or the context window), at most 2% unreadable (`within_limits`); H1 and H2 are computed only within these limits. calls.jsonl records the finish reason, prompt and output tokens (thinking included) but not whether the reply parsed; the unreadable share is per distinct request from the response cache when given, else from the run summaries' `def_stats` (per cell write, so a request several cells send counts once per cell), and `basis` says which.",
+  "H3": "repair and mechanical repair, S_src and S_def, D1B1_source minus D0thinkB1_source on definition items, each >= 30 pp; computed only when at most 10% of the thinking writes are cut off (completion tokens at the run's limit). The share of unreadable thinking writes against 20% is reported beside it."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

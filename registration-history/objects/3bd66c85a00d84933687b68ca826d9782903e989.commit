@@ -1,8 +1,0 @@
-tree e84cb2b37d3246002926fee293864da57cac3ee0
-parent 64ce7b310d109f0075870b2ee3482e6c0b8e1c23
-author zichuanxu <zichuanxu28@gmail.com> 1790782866 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790782866 +0900
-
-Control-cell analysis for the registered post-review controls (WS5): the new runs merged with the published ones under integrity checks (pre-shift hash assertions, equal probe sets and gold, anchor answers equal to the published anchor within a stated tolerance), every registered contrast by class and branch with the world-clustered bootstrap, the verdict of each prediction (holds, fails, not judged, with the reason), key-audit and scope = cited checks marked pass or fail, the quantities reported without a threshold; new stage kind ctl
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

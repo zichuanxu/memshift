@@ -1,8 +1,0 @@
-tree 277828045ae5df3dc670b4d3f301f261419e73d3
-parent 4d37c79b64124097052cfea1d6db58b532c4a24a
-author zichuanxu <zichuanxu28@gmail.com> 1790634639 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790634639 +0900
-
-Paper macros: E2 T1 per tier, pooled path 3, E3 vs oracle; test-set fidelity; sources map
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

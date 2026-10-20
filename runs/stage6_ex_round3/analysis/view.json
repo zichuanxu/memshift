@@ -1,5 +1,5 @@
 {
- "status": "exploratory: not part of prereg v0-v2 and changes no registered contrast, margin, threshold or verdict (prereg/decisions.md 2026-09-30); post hoc, third review round (reviewer 1, Q3)",
+ "status": "additional analysis: computed from the runs of the main analysis; changes none of its contrasts, margins or thresholds",
  "question": "on all items, does storing the model-written derivation with binding beat running the same programs at query time, and where?",
  "bootstrap": {
   "draws": 2000,

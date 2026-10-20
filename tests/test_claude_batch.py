@@ -1,6 +1,6 @@
 """Batch collection in `memshift.llm` and the Message Batches round trip in
-`memshift.claude_batch` (prereg v4b block Y): a collecting run sends nothing and caches nothing;
-batch results land in the cache with the online path's row, so a rerun is all cache hits."""
+`memshift.claude_batch`: a collecting run sends nothing and caches nothing; batch results land in
+the cache with the online path's row, so a rerun is all cache hits."""
 
 import json
 from pathlib import Path

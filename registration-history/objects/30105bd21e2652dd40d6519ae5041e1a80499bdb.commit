@@ -1,8 +1,0 @@
-tree cc1c1e5075164d675817cc3f7893efb9bae9f966
-parent 1501c63317870b4d97e5c8c66fb4e02a60b32da5
-author zichuanxu <zichuanxu28@gmail.com> 1790786492 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790786492 +0900
-
-Paper: abstract names the pattern of effects that holds across families
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

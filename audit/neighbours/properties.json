@@ -160,11 +160,6 @@
         "evidence": [],
         "note": "absence: grepped counterfactual, matched, ablat; no hit. 'with and without' occurs only in the Figure 4 caption (MiniGPT-5 with vs without retrieved context, a method ablation on the same dialogue). scope = one fixed conversation set; comparisons across context length, retrieval unit and top-k are over the same questions but do not isolate a change in the history."
       },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen (only a BLIP-2 title), hypothes (only FactScore hypothesis text), registered report: none apply. Single inference run per model at temperature 0 (App. C.2)."
-      },
       "extras": {
         "value": "The QA set has an adversarial category (questions meant to be answered as unanswerable; the long-context model falls to 2.1 F1 there) and a temporal-reasoning category, but no knowledge-update or retraction category. Dialogues are conditioned on a pre-generated event graph (later pruned by annotators), so the summarization task grades against a script-first event list.",
         "evidence": [
@@ -404,11 +399,6 @@
         "value": "no",
         "evidence": [],
         "note": "absence: grepped counterfactual, matched, ablat; no hit. 'with and without' occurs only in the Figure 13 prompt caption (with vs without Chain-of-Note). scope = each question has its own history; oracle-evidence vs LongMemEval_S vs LongMemEval_M contrasts vary only the amount of distractor history, not a change to the stored information."
-      },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, hypothes (only explanatory 'we hypothesize' sentences), registered report: none apply."
       },
       "extras": {
         "value": "Abstention is tested with 30 false-premise questions derived from other types. Knowledge-update retrieval is scored strictly (a retrieval that finds only the updated value counts as failed), and the manual study reports ChatGPT overwriting earlier facts as it compresses memory. Sessions carry timestamps and a time-aware indexing scheme is proposed; no detection-versus-repair split.",
@@ -651,11 +641,6 @@
         "value": "no",
         "evidence": [],
         "note": "absence: grepped counterfactual (only the MQuAKE edit-pair source), matched, paired, with vs without; scope = each FactConsolidation context contains both the old and the new fact, with no matched version without the update. 'Counterfactual' means rewritten facts, not a controlled branch. The zero-shot TTL baseline (App. H.2) and the overwrite-policy prompt ablation (App. K.2) are controlled contrasts, but they vary history or instructions, not the update."
-      },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, registered report: no hits; 'hypothes' has one hit (a 'core hypothesis' about zero-shot TTL in App. H.2) that is not a pre-registered plan."
       },
       "extras": {
         "value": "FactConsolidation gives agents an explicit recency rule (serial numbers, newest wins), so it tests whether updates are applied and propagated (single-hop versus multi-hop), not how an agent decides which source is newer. Multi-hop accuracy stays low, and a prompt-only overwrite policy does not fix it. The new sets are synthetic and built by automated pipelines, the rest are reformatted existing data.",
@@ -909,11 +894,6 @@
         ],
         "note": "Medium versus Long is a controlled contrast: same users, memory points and questions, with irrelevant dialogue inserted. It isolates context length and noise, not a change to source facts, and the branches are not byte-identical."
       },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, hypothes, registered report: no hits."
-      },
       "extras": {
         "value": "Operation-level split: evaluation is triggered after each session on extraction, updating and QA with separate gold (memory points, old-to-new update pairs, QA with evidence), which localises where errors arise; hallucination versus omission is reported per stage, with distractor memories for false-memory resistance. The authors attribute update omission (above 50% for most systems) to failed extraction of the pre-update memory.",
         "evidence": [
@@ -1126,11 +1106,6 @@
         "value": "no",
         "evidence": [],
         "note": "absence: grepped counterfactual, no hit; scope = one pass per task with no with/without-change pair of the same history. Nearest controlled contrast is the oracle-memory injection in App. C.3 / Table 8 (same tasks with gold prior outcomes injected), which ablates memory content rather than changing the input world."
-      },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, registered report, hypothes (only 'hypothesis class' in the math examples): no hit."
       },
       "extras": {
         "value": "Graded outcome is end-to-end task execution with environment feedback in a Memory-Agent-Environment loop, not QA recall; success decays with subtask depth (SR@k, Fig. 3) and is near zero for group travel. Oracle-memory injection (gold outcomes of prior subtasks plus LLM-distilled workflows) raises long-context success only slightly (Table 8: +0.016 shopping, +0.05 travel, +0.05 search, +0.16 math). Memory starts empty in every episode, so there is no cross-episode persistence, drift or revision.",
@@ -1366,11 +1341,6 @@
         "value": "no",
         "evidence": [],
         "note": "absence: grepped counterfactual, no hit; scope = one offline pass per trajectory, no same-history with/without-change pairs. Nearest controlled contrasts: needle-protocol ablation on BabyAI (raw needle turns vs method-constructed memory vs end-to-end, Table 3) and seeded synthetic environments parameterised by difficulty, action stochasticity and observation verbosity."
-      },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, registered report, hypothes: no hit."
       },
       "extras": {
         "value": "Offline per-query protocol: memory is built once from the full trajectory and each QA is answered independently with no cross-query state, justified as isolating memory quality from policy errors; QA accuracy tracks end-to-end success (Pearson 0.96 on TextWorld, 0.98 on Spider2 over six systems, Table 6). The needle ablation separates construction loss from retrieval loss. Self-stated limitation: in-episode memory only, no cross-task or lifelong memory.",
@@ -1649,11 +1619,6 @@
         ],
         "note": "absence: grepped counterfactual, paired, matched; scope = each version or history is an independent instance scored separately; chains inherit environments from the previous version but no with/without-change pair is analysed. The with vs without EvoMem comparison is a method ablation on identical tasks, not a with/without-change contrast. Borderline: Terminal-Bench-Evo versions are controlled variants of one objective, but no paired contrast is reported."
       },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, registered report: no hits. 'hypothes' appears only in Sec. 6.1 for a post hoc operationalization hypothesis explicitly called an 'observational mechanism analysis'."
-      },
       "extras": {
         "value": "Table 1 defines three properties (PE persistent environment evolution, IC implicit change, CE chain evaluation) and marks EvoArena as the only benchmark with all three. PersonaMem-Evo distractors are built to include earlier, outdated preference states, so a stale-state answer is a designed wrong option; the headline structural metric is chain accuracy (all questions of a preference chain correct). The paper proposes EvoMem (append-only patch history of non-additive memory updates with before/after content, rationale and evidence) as a method, and reports no separate detection-versus-repair split, orphan, or consent metric.",
         "evidence": [
@@ -1900,11 +1865,6 @@
           }
         ],
         "note": "absence: grepped counterfactual, paired, ablat, control; scope = the same history and memory are probed by three query framings (SR, PR, IPA), which controls the question type but no history without the new observation exists, so the change's effect is not isolated by a with/without contrast. The attention noise baseline (adjacent distractor session) controls position, not the change. Borderline: three-probe design is a controlled contrast of another kind."
-      },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, hypothes, registered report: no hits. The only 'fixed before' statement concerns the CUPMem state schema ('fixed before CUPMem evaluation', App. F.1), not a pre-registered analysis plan."
       },
       "extras": {
         "value": "Three probing dimensions separate detection (SR: explicit question about the old belief) from premise resistance (PR: false-premise query) and downstream application (IPA: task that needs the new state), and the paper reports that recognition does not imply application. Type II propagated invalidation is the nearest analogue of dependency-driven staleness, but dependencies are commonsense links, not gold record-level dependency sets. The query time is audited so that the new state still governs the query (temporal validity), and each instance has a single conflict, so there are no repeated updates, deletions or provenance chains.",
@@ -2159,11 +2119,6 @@
         ],
         "note": "Counterfactual (and Cascade) are question types answered from one narrated file: the counterfactual item asks how downstream events change if an earlier discovery occurred at a different time or not at all, as a hypothetical over the single case file. The generator recomputes the gold, but no system is ever given a matched with/without-change pair of inputs, and no byte-identical or otherwise controlled pair of histories is compared. The Oracle vs narrated-file contrast changes representation, not the change. The narrator-family test compares different cases (narrators rotate across seeds), not the same skeleton rendered twice."
       },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "absence: grepped preregist, pre-regist, frozen, hypothes, registered report, pre-regis; no hit. The paper mentions a fixed question matrix and snapshot-pinned models but no pre-registered hypotheses or thresholds."
-      },
       "extras": {
         "value": "On Cascade memory systems do best (Cascade Score 0.708 for Supermemory vs 0.361 for the best long-context model), yet each memory system ingests the whole finished case file once and answers all questions from that one static memory state, so there is no before/after comparison of the memory and no test of repairing a stale store. The invalidation is part of the input stream (later entries in the narrated case, Appx C), and in the Appx E.2 example the question stem restates it. Cascade items are 288 of 1,604. Even the Oracle given the dependency graph reaches only 54.6% Accuracy.",
         "evidence": [
@@ -2416,11 +2371,6 @@
           }
         ],
         "note": "Design is nested prefixes of one trajectory per user (five quarterly checkpoints): history length is controlled but the change is confounded with added history, and there is no variant of the same trajectory without the change. Retention (gold unchanged since C1) vs update (gold just changed) is a stratification of items within the same runs, not a matched with/without pair."
-      },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "absence: grepped preregist, pre-regist, frozen, hypothes, registered report, pre-regis; no hit."
       },
       "extras": {
         "value": "Retention and update are scored separately anchored at C1 (facts unchanged since C1 vs facts whose gold just changed); the paper finds append-only stores (RAG, HippoRAG2) and consolidating stores (A-Mem, SimpleMem, MemoryOS) trade the two off and no system does both. Over 93% of sampled failures are attributed to what memory delivered rather than the answer model, via an LLM classifier that never sees the prediction.",
@@ -2681,11 +2631,6 @@
         ],
         "note": "The only controlled contrast is history length: the same 6 tenure users at weeks 3/6/9 (as-of-date question sets), plus no-memory and full-history baselines. There is no matched with/without-change pair, no byte-identical or otherwise paired branch, and text is rendered by a stochastic LLM; the paper does not say whether earlier checkpoints are exact prefixes of the week-9 text."
       },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, hypothes, registered report, freeze: no hit. The paper instead says hybrid v2 was designed after seeing hybrid v1 fail on the same short-horizon corpus (benchmark-informed), and that the tenure users were generated after hybrid v2 was fixed."
-      },
       "extras": {
         "value": "Distinctive axes are per-fact validity intervals, volatility classes, sent/received trust with injection probes, and as-of-date question sets; the headline result is a ranking inversion with history length, tied to eviction of early content. Hybrid v2 was designed post hoc on the short corpus; the tenure users are a partial hold-out. It reports write-stage errors against the script fact checklist (an association with downstream misses, not a causal isolation), but has no detection-vs-repair split and no shift events to detect.",
         "evidence": [
@@ -2932,22 +2877,6 @@
           }
         ],
         "note": "Matched per-history, per-reader contrast: same history, reader fixed, only the writer (or embedding index, or repair source) differs (own-store vs inherited-store). The change is a pipeline component, not the history content: histories are not branched and no source-side shift is applied."
-      },
-      "prereg": {
-        "value": "yes",
-        "evidence": [
-          {
-            "quote": "we saved four planned tests and their five-point decision threshold in a signed Git tag",
-            "loc": "Sec. 1, p.2",
-            "pdf_page": 2
-          },
-          {
-            "quote": "the signed study plan served as an internal analysis lock rather than a full preregistration",
-            "loc": "Sec. 4.6, p.12",
-            "pdf_page": 12
-          }
-        ],
-        "note": "Frozen analysis plan, not a registered preregistration: hypothesis-lock-v1 fixed only four tests (H1, H2, H4a, H7a), the threshold, Holm correction and exclusion rules. The Test-4 diagnostic was unplanned, the planned bootstrap ran after the t tests, and the NOTES coverage gate was lowered from 90% to 60% in calibration (recorded in a deviations file)."
       },
       "extras": {
         "value": "What is switched: the model that reads (and, in the contrast, the model that wrote) a stored memory, in both directions of one cross-family pair, plus the embedder version and the repair source; the history is fixed and the stored memory is handed over as is. Outcome is retained accuracy after the swap (RPAS, accuracy gap) and cost to recover 90/95/99% of own-store accuracy, not survival of changed facts. It separates where information is lost (write, retrieve, read) and compares raw-retained vs store-only repair, but has no task of detecting that a change occurred and no shifted world or source.",
@@ -3221,22 +3150,6 @@
           }
         ],
         "note": "Controlled contrast of memory rendering vs mechanism on identical evidence streams and questions: (i) render term = render-matched control minus GraphRAG+abstain (same extracted atoms and timestamps, neither has supersession edges, different layout); (ii) mechanism term = RevisionLedger minus control (same layout, deprecation labels on vs off). So it is 'same layout, deprecation on/off' plus 'same atoms, different layout', not a with/without-revision pair of input histories: the revisions themselves are not manipulated and strata are different real items. Theory (Proposition 1) constructs two streams with identical surface and different deprecation, but that is a proof, not an experiment."
-      },
-      "prereg": {
-        "value": "no",
-        "evidence": [
-          {
-            "quote": "Status: retrodictive but falsifiable, not preregistered.",
-            "loc": "Appendix A (Proposition 5), p.21",
-            "pdf_page": 21
-          },
-          {
-            "quote": "the external replication and deployment-fallback control used predictions and interpretation rules fixed before judging",
-            "loc": "Appendix F (Robustness controls), p.26",
-            "pdf_page": 26
-          }
-        ],
-        "note": "No pre-registration of the study. Only two analyses (TempLAMA replication, deployment-fallback control) are said to have interpretation rules fixed before judging; one quantitative prediction (P4 C3) was committed in advance and falsified; Proposition 5 is explicitly post hoc."
       },
       "extras": {
         "value": "The paper is a methodological caution rather than a change benchmark: it compares memory architecture classes and shows that most of a structured ledger's gain over a flat baseline is presentation (render term +0.159, fine-grained mechanism residual +0.025, n.s., under DeepSeek-V3; reverted-revert stratum). The tested contrast is fine-grained revision ledger vs coarse invalidation vs no deprecation, with a query-sufficiency framing (snapshot, provenance, relation-type queries); retention of invalidated evidence, not typing, is what provenance queries need. Nearest-neighbour caveats for MemShift: the manipulated variable is the memory mechanism/render, not the world shift; stream text is real and LLM-labelled; scoring is LLM-judged; no source deletion, definition shift, writer switch or export/import.",
@@ -3520,11 +3433,6 @@
         ],
         "note": "Controlled matched contrast across memory backends (same case, harness, LLM, environment) and same-state branching of Execute vs Forget. There is no clean-vs-poisoned pair (no unpoisoned control run reported) and M0 is regenerated per backend rather than byte-identical. The word 'counterfactual' appears once, undefined (App. A.2: 'Checkpoints W1 -F2 and the counterfactual still require dynamic evaluation'). Each configuration-case pair is run once."
       },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped preregist, pre-regist, frozen, hypothes, registered report: no pre-registration or frozen analysis plan; 'frozen' occurs only for Hermes' frozen system-prompt snapshot and 'frozen implementations' (pinned software). Rates are called descriptive; case briefs are hash-locked before rendering ('design lock'), which is case construction, not an analysis plan."
-      },
       "extras": {
         "value": "Explicit resistance-vs-repair split: SRSR requires F1 (target semantics removed or neutralised in final backend state) AND F2 (every required benign memory still semantically represented), so wiping the store cannot pass; repair is judged on backend state, not on delete calls. The paper reports that E2E-ASR and SRSR dissociate across backends (Finding 3) and that benign-memory preservation, not removal, is the main repair bottleneck (F1 86.3% vs F2 62.5%).",
         "evidence": [
@@ -3791,11 +3699,6 @@
         ],
         "note": "absence: grepped counterfactual, paired, matched, ablat; no relevant hit; scope = one trajectory per episode with checkpoints at different turn boundaries; no matched with/without-deletion, with/without-update or byte-identical branch. Different requesters query the same memory, but the paper does not frame this as a matched pair."
       },
-      "prereg": {
-        "value": "not stated",
-        "evidence": [],
-        "note": "grepped: preregist, pre-regist, registered, frozen, hypothes; no hit."
-      },
       "extras": {
         "value": "Governance rather than change-robustness: forgetting is evaluated at the interface (behavioral non-recoverability of a value the user asked to delete), not physical erasure or effect on stored memory; queries come from many requesters with role- and relation-scoped permissions, plus soft attacks (indirect inference, cross-patient, label-existence, yes/no confirmation, split reconstruction, update-conflict). Headline finding: Long-Context often gives the best MGS at high token cost; retrieval and external memory systems still leak unauthorized or deleted information.",
         "evidence": [
@@ -3846,22 +3749,22 @@
     "src": "repo",
     "title": "MemShift (this work; reference layer HoldMem)",
     "arxiv": "not applicable (repo)",
-    "venue_status": "in preparation; arXiv-preprint layout; pre-registration v0/v1 (stage 1-3, observed) and v2 (stage 4, frozen; blocks R, C, M2, M3, N observed; blocks M1 and L in progress); post-review controls registered (v3)",
-    "readability": "full (repo files read directly)",
+    "venue_status": "preprint in preparation",
+    "readability": "full (repository files read directly)",
     "fields": {
       "data_origin": {
-        "value": "template-rendered synthetic worlds from a seeded deterministic generator (no LLM in world text in the observed runs); background traffic added; fidelity checker confirms every gold value is locatable. LLM-rendered worlds (gemma-4-12B rewrites of body text) are PLANNED in prereg v2 block L, not observed.",
+        "value": "template-rendered synthetic worlds from a seeded deterministic generator (no LLM in the world text of the main study); background traffic added; a fidelity checker confirms every gold value is locatable. In the rewritten worlds a model (gemma-4-12B-it) rewrites the message bodies of ten test worlds.",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "gold changes are sampled before any text exists and then rendered by deterministic templates into source objects",
-            "loc": "benchmark.tex, Worlds, l.10-12",
-            "line": null
+            "file": "src/memshift/gen/world.py",
+            "quote": "Gold changes are scripted first; every change is then rendered into one or more source objects\n(template rendering, no LLM)",
+            "loc": "src/memshift/gen/world.py, module docstring, l.3-4",
+            "line": 3
           },
           {
-            "file": "prereg/v2.md",
-            "quote": "世界文本是模板",
-            "loc": "prereg/v2.md l.3 (stage-4 motivation; LLM rendering is block L, l.71)",
+            "file": "src/memshift/gen/llm_render.py",
+            "quote": "the bodies of email,\nchat-message and note events are rewritten by a model as natural text",
+            "loc": "src/memshift/gen/llm_render.py, module docstring, l.3-4",
             "line": 3
           }
         ]
@@ -3870,58 +3773,58 @@
         "value": "before: gold changes are sampled first (script-first, following Spencer), then rendered to text; gold for definition items comes from deterministic evaluators over live source objects",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "gold changes are sampled before any text exists",
-            "loc": "benchmark.tex, Worlds, l.10-11",
-            "line": 10
+            "file": "src/memshift/gen/world.py",
+            "quote": "Gold changes are scripted first",
+            "loc": "src/memshift/gen/world.py, module docstring, l.3",
+            "line": 3
           }
         ]
       },
       "scale": {
-        "value": "60 seeded worlds generated so far: 10 development, 10 calibration, 20 test (seeds 1000-1019) and 20 replication worlds (seeds 1020-1039, prereg v2 block R, observed). Each world: one person, 12 months, six sources, 1,484-1,600 events, about 2.2M tokens; 48 knowledge items per world with two versions each; probes are point queries with an as-of time, 1-8 weeks after the fork (discriminative subset in E1). Reader evidence budget 4,096 tokens. Total query count is not a fixed benchmark constant in the files read.",
+        "value": "60 seeded worlds: 10 development, 10 calibration, 20 test (seeds 1000-1019) and 20 replication worlds (seeds 1020-1039). Each world: one person, 12 months, six sources, 1,484-1,600 events, about 2M tokens; 48 knowledge items per world with two versions each; probes are point queries with an as-of time, 1-8 weeks after the fork (discriminative subset in E1). Reader evidence budget 4,096 tokens. Total query count is not a fixed benchmark constant in the files read.",
         "evidence": [
           {
-            "file": "prereg/v1.md",
-            "quote": "世界：种子 1000–1019，N = 20。开发集（0–9）与校准集（900–909）与测试集不相交。",
-            "loc": "prereg/v1.md sec.1, l.7",
+            "file": "configs/params.yaml",
+            "quote": "the main study used 20 (seeds 1000-1019)",
+            "loc": "configs/params.yaml, test_worlds_start, l.14",
+            "line": 14
+          },
+          {
+            "file": "src/memshift/experiments/e4x.py",
+            "quote": "48 in the generator's worlds",
+            "loc": "src/memshift/experiments/e4x.py, module docstring, l.34",
+            "line": 34
+          },
+          {
+            "file": "configs/params.yaml",
+            "quote": "world_tokens_approx: 2_000_000",
+            "loc": "configs/params.yaml l.7",
             "line": 7
-          },
-          {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "A world has 48 knowledge items",
-            "loc": "benchmark.tex, Worlds, l.13-14",
-            "line": 13
-          },
-          {
-            "file": "paper/generated/numbers.tex",
-            "quote": "\\newcommand{\\WorldTokensM}{2.2}",
-            "loc": "paper/generated/numbers.tex l.1012",
-            "line": 1012
           }
         ],
-        "note": "Graded probes in the E1 test runs: 9,782 over 960 items in stage 2 and 9,780 over 960 items on the replication worlds (see n_questions)."
+        "note": "Graded probes in the E1 test runs: 9,782 over 960 items in the main study and 9,780 over 960 items on the replication worlds (see n_questions)."
       },
       "chg_new_updated_facts": {
         "value": "yes",
         "note": "S_src applies source revisions that change about 20% of the items",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "applies source revisions that",
-            "loc": "benchmark.tex, Shifts, l.19-20",
-            "line": 19
+            "file": "src/memshift/gen/shifts.py",
+            "quote": "S_src: source revisions that change ~20% of slots",
+            "loc": "src/memshift/gen/shifts.py, module docstring, l.3",
+            "line": 3
           }
         ]
       },
       "chg_retraction_deletion": {
         "value": "yes",
-        "note": "orphan branch deletes the source object behind half of the structured items; gold becomes abstain",
+        "note": "the deletion branch (orphan) deletes the source object behind half of the structured items; gold becomes abstain",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "an \\emph{orphan} branch deletes the source object behind half of",
-            "loc": "benchmark.tex, Shifts, l.20-21",
-            "line": 21
+            "file": "src/memshift/gen/shifts.py",
+            "quote": "delete the source object behind every structured inference-half\n    item (recurring series, task, contact card). Gold for those items becomes abstain",
+            "loc": "src/memshift/gen/shifts.py, apply_orphan, l.207-209",
+            "line": 207
           }
         ]
       },
@@ -3930,10 +3833,10 @@
         "note": "only as an E7 failure-mode stress test on 5 test worlds (two live sources assert different values, gold abstain); not a shift in the E1-E3 design",
         "evidence": [
           {
-            "file": "paper/sections/appendix.tex",
-            "quote": "unresolvable (two live sources assert different values)",
-            "loc": "appendix.tex, Failure Modes (E7), Conflicts",
-            "line": 236
+            "file": "src/memshift/experiments/e7.py",
+            "quote": "unresolvable source conflicts (gen.shifts.apply_conflict)",
+            "loc": "src/memshift/experiments/e7.py, module docstring, l.3",
+            "line": 3
           }
         ]
       },
@@ -3942,22 +3845,22 @@
         "note": "S_def moves half of the definitions to their second version while every source byte is unchanged",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "moves half of the definitions to their second version while\nleaving every source byte unchanged",
-            "loc": "benchmark.tex, Shifts, l.20-21",
-            "line": 20
+            "file": "src/memshift/gen/shifts.py",
+            "quote": "S_def: half of the kappa definitions move to v2; source bytes unchanged.",
+            "loc": "src/memshift/gen/shifts.py, module docstring, l.4",
+            "line": 4
           }
         ]
       },
       "chg_writer_model_change": {
         "value": "yes",
-        "note": "S_wr switches the writer model over the same stored state (E2: three tiers: same size, upgrade, downgrade); per-item writer agreement calibrated on disjoint worlds. Cross-family switches are PLANNED (prereg v2 block M1).",
+        "note": "S_wr switches the writer model over the same stored state (E2: three tiers: same size, upgrade, downgrade); per-item writer agreement calibrated on disjoint worlds. Switches to other model families are the stage m1 (runs/stage4_m1_e2).",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "switches the writer model",
-            "loc": "benchmark.tex, Shifts, l.22-23",
-            "line": 22
+            "file": "src/memshift/experiments/e2.py",
+            "quote": "writer-model switch S_wr",
+            "loc": "src/memshift/experiments/e2.py, module docstring, l.1",
+            "line": 1
           }
         ]
       },
@@ -3966,10 +3869,10 @@
         "note": "S_impl exports the layer to Portable Memory (.mem) and imports it elsewhere (E6, 20 test worlds); partial because the importer is a second implementation of the same data model written for this work, not a third-party system",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "exports the layer to Portable Memory",
-            "loc": "benchmark.tex, Shifts, l.23",
-            "line": 23
+            "file": "src/memshift/adapters/mem_export.py",
+            "quote": "Portable Memory (.mem) export of a HoldMem store and import into other implementations",
+            "loc": "src/memshift/adapters/mem_export.py, module docstring, l.1",
+            "line": 1
           }
         ]
       },
@@ -3978,10 +3881,10 @@
         "note": "S_cons revokes one scope of one agent; probes touching the scope have gold status blocked; run only in E7 (5 test worlds), reported as a failure mode",
         "evidence": [
           {
-            "file": "paper/sections/appendix.tex",
-            "quote": "revokes one scope of one agent; probes\nasked by that agent whose dependencies touch the scope have gold status",
-            "loc": "appendix.tex, Worlds and Generator, Shifts and consent, l.81-82",
-            "line": 81
+            "file": "src/memshift/gen/shifts.py",
+            "quote": "S_cons: one agent loses one scope.",
+            "loc": "src/memshift/gen/shifts.py, module docstring, l.5",
+            "line": 5
           }
         ]
       },
@@ -3990,10 +3893,10 @@
         "note": "every item is derived by a writer from in-scope records with up to six cited records; 6 of 48 items are definition-dependent predicates/sets (important contacts, overdue tasks, ...) and 4 are recurring series; the rest are attribute or latest-value items resolved over a record history",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "giving the writer the in-scope\nrecords and receiving a typed value, a one-sentence statement and up to six cited records with\nexact quotes",
-            "loc": "benchmark.tex, One layer, four cells, l.38-40",
-            "line": 38
+            "file": "src/memshift/holdmem/writer.py",
+            "quote": "the writer model theta_w turns in-scope source records\ninto one knowledge-item string s_k with cited object ids and quoted source text",
+            "loc": "src/memshift/holdmem/writer.py, module docstring, l.1-2",
+            "line": 1
           }
         ]
       },
@@ -4002,10 +3905,10 @@
         "note": "gold dependency objects per item; the oracle baseline hands the reader exactly these",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "an oracle that hands the reader the\ngold dependency objects",
-            "loc": "benchmark.tex, Probes and metrics, l.35-36",
-            "line": 35
+            "file": "src/memshift/adapters/baselines.py",
+            "quote": "the gold dependency objects of the probe (upper bound on evidence selection)",
+            "loc": "src/memshift/adapters/baselines.py, module docstring (oracle), l.8",
+            "line": 8
           }
         ]
       },
@@ -4013,27 +3916,27 @@
         "value": "deterministic evaluators only (dates/times as values, entities after standardisation, sets as sets; ContractValid = status and value both match; statuses answer/abstain/blocked); no LLM judge; world-level bootstrap and TOST for inference",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "Answers are scored without an LLM judge",
-            "loc": "benchmark.tex, Probes and metrics, l.28",
-            "line": 28
+            "file": "src/memshift/scoring/normalize.py",
+            "quote": "Typed answer matching: no LLM judge.",
+            "loc": "src/memshift/scoring/normalize.py, module docstring, l.1",
+            "line": 1
           }
         ]
       },
       "memory_systems": {
-        "value": "OBSERVED: six native memory systems (Mem0 in E5; A-Mem, MemOS, LightRAG, HippoRAG 2 and Cognee in prereg v2 block N; 15 short test worlds each, plus three repeat-ingestion worlds); the white-box reference layer HoldMem in six (D,B) cells plus a JSON-mismatch arm; three baselines (zero system, plain RAG, oracle); a second implementation for E6 export/import. Graphiti: ingestion cost only.",
+        "value": "six native memory systems (Mem0 in E5; A-Mem, MemOS, LightRAG, HippoRAG 2 and Cognee on the same short worlds; 15 short test worlds each, plus three repeat-ingestion worlds); the white-box reference layer HoldMem in six (D,B) cells plus a JSON-mismatch arm; three baselines (zero system, plain RAG, oracle); a second implementation for E6 export/import. Graphiti: ingestion cost only.",
         "evidence": [
           {
-            "file": "prereg/v2.md",
-            "quote": "A-Mem（官方实现，固定提交）、Letta（MemGPT 的维护版，`letta==0.33.6`）、MemOS（`MemoryOS==2.0.33`）、LightRAG（`lightrag-hku==1.5.7`）、HippoRAG 2（`hipporag==2.0.0a4`）",
-            "loc": "prereg/v2.md sec.3, l.35",
-            "line": 35
+            "file": "src/memshift/experiments/e5.py",
+            "quote": "native systems (Mem0, Graphiti, A-Mem, MemOS, LightRAG, HippoRAG 2, Cognee)",
+            "loc": "src/memshift/experiments/e5.py, module docstring, l.1",
+            "line": 1
           },
           {
-            "file": "paper/sections/appendix.tex",
-            "quote": "native ingestion; black-box $(D,B)$ inference",
-            "loc": "appendix.tex, Experimental Details, Table E5 row",
-            "line": 108
+            "file": "results/README.md",
+            "quote": "six native memory systems (Mem0, A-Mem, MemOS, LightRAG, HippoRAG 2, Cognee) and their cost",
+            "loc": "results/README.md, stage keys n and ncost, l.46",
+            "line": 46
           }
         ]
       },
@@ -4042,40 +3945,28 @@
         "note": "byte-identical branches of one world (S_src, S_def, orphan, S_wr, S_impl); four (D,B) cells built from the same cached writer outputs, reader-context hashes asserted equal before any intervention",
         "evidence": [
           {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "All branches\nof a world share their natural events byte for byte.",
-            "loc": "benchmark.tex, Shifts, l.23-24",
-            "line": 23
-          }
-        ]
-      },
-      "prereg": {
-        "value": "yes",
-        "note": "v0 and v1 committed before the first run and before the test set was generated; v2 (stage 4) frozen before any stage-4 run; deviations logged in prereg/decisions.md",
-        "evidence": [
-          {
-            "file": "paper/sections/benchmark.tex",
-            "quote": "Predictions, falsification thresholds, contrasts and\ngate rules were committed before the first run",
-            "loc": "benchmark.tex, Pre-registration and statistics, l.58-59",
-            "line": 58
+            "file": "src/memshift/gen/world.py",
+            "quote": "every branch of a world\nshares the same natural events byte for byte.",
+            "loc": "src/memshift/gen/world.py, module docstring, l.9-10",
+            "line": 9
           }
         ]
       },
       "extras": {
-        "value": "Explicit detection-versus-repair split (binding B versus determinism D; missed invalidation versus repair correctness), zero-system re-read baseline, and byte-identical shifts of the person's own definitions; membership tests T1-T4 for a shift-safe layer.",
+        "value": "Explicit detection-versus-repair split (binding B versus executability D; missed invalidation versus repair correctness), zero-system re-read baseline, and byte-identical shifts of the person's own definitions; diagnostic tests T1-T4 for a shift-safe layer.",
         "evidence": [
           {
-            "file": "paper/sections/abstract.tex",
-            "quote": "We hypothesise that keeping derived knowledge",
-            "loc": "abstract.tex l.3-4",
-            "line": 3
+            "file": "src/memshift/holdmem/system.py",
+            "quote": "HoldMem reference implementation: one data layer, four (D, B) cells.",
+            "loc": "src/memshift/holdmem/system.py, module docstring, l.1",
+            "line": 1
           }
         ]
       },
       "text_origin": {
         "value": "T",
         "derived_from": "data_origin",
-        "note": "template-rendered worlds in the main study; block L rewrites message bodies with gemma-4-12B on ten test worlds (digests and records stay templates)",
+        "note": "template-rendered worlds in the main study; in the rewritten worlds gemma-4-12B-it rewrites the message bodies of ten test worlds (digests and records stay templates)",
         "observed_extra": "L"
       },
       "gold_first": {
@@ -4091,19 +3982,19 @@
       "native_systems": {
         "value": "6",
         "derived_from": "memory_systems",
-        "note": "observed: Mem0 (E5) and, in prereg v2 block N, A-Mem, MemOS, LightRAG, HippoRAG 2 and Cognee (Cognee replaces Letta, see prereg/decisions.md); all on 15 short test worlds plus 3 repeat-ingestion worlds. White-box HoldMem cells, zero system, RAG and oracle are excluded."
+        "note": "Mem0 (E5) and A-Mem, MemOS, LightRAG, HippoRAG 2 and Cognee (Cognee in place of Letta); all on 15 short test worlds plus 3 repeat-ingestion worlds. White-box HoldMem cells, zero system, RAG and oracle are excluded."
       },
       "n_histories": {
         "value": "40",
         "derived_from": "scale",
-        "note": "test worlds; 48 items per world with two versions each; 20 pre-registered stage-2 test worlds (seeds 1000-1019) plus 20 replication worlds (seeds 1020-1039, prereg v2 block R, observed); 20 further worlds built (10 development, 10 calibration)"
+        "note": "test worlds; 48 items per world with two versions each; 20 test worlds of the main study (seeds 1000-1019) plus 20 replication worlds (seeds 1020-1039); 20 further worlds built (10 development, 10 calibration)"
       },
       "n_questions": {
         "value": "19,562",
         "derived_from": "scale",
         "unit": "graded probes (one knowledge item asked at one as-of time on one branch) over 1,920 knowledge items",
         "items": 1920,
-        "note": "Unit: the graded probe, the counterpart of a neighbour's question that every system is asked. Recounted from probes.jsonl and answers.jsonl of the five stage-2 E1 test runs (20 worlds, seeds 1000-1019; the raw JSONL is not in the repository): 14,400 probes carry gold (2,880 pre-fork = 48 items x 3 branches x 20 worlds; 11,520 post-fork); every system, oracle and baseline answers the same 9,782 distinct probes = the 2,880 pre-fork probes (asked at k=0) + the 6,902 post-fork probes with asked==true (the discriminative subset; 4,618 further post-fork gold probes are recorded for detection metrics and not answered). The 9,782 rest on 960 knowledge items (48 per world x 20 worlds). The replication worlds of block R (20 worlds, seeds 1020-1039) add 9,780 probes on a further 960 items by the same count (2,880 pre-fork + 2,340 src + 1,150 def + 3,410 orphan post-fork), 19,562 probes over 1,920 items in all. Reproducible from the committed runs/stage2_e1/analysis/e1_metrics.json (pre_intervention n_items 2,880 + ContractValid_post n_items 2,336 (src) + 1,116 (def) + 3,450 (orphan)) and runs/stage4_rep_e1/analysis/e1_metrics.json (2,880 + 2,340 + 1,150 + 3,410); tests/test_neighbour_table.py recomputes the sum.",
+        "note": "Unit: the graded probe, the counterpart of a neighbour's question that every system is asked. Recounted from probes.jsonl and answers.jsonl of the five E1 test runs of the main study (20 worlds, seeds 1000-1019; the raw JSONL is in the Hugging Face dataset): 14,400 probes carry gold (2,880 pre-fork = 48 items x 3 branches x 20 worlds; 11,520 post-fork); every system, oracle and baseline answers the same 9,782 distinct probes = the 2,880 pre-fork probes (asked at k=0) + the 6,902 post-fork probes with asked==true (the discriminative subset; 4,618 further post-fork gold probes are recorded for detection metrics and not answered). The 9,782 rest on 960 knowledge items (48 per world x 20 worlds). The replication worlds (20 worlds, seeds 1020-1039) add 9,780 probes on a further 960 items by the same count (2,880 pre-fork + 2,340 src + 1,150 def + 3,410 orphan post-fork), 19,562 probes over 1,920 items in all. Reproducible from the committed runs/stage2_e1/analysis/e1_metrics.json (pre_intervention n_items 2,880 + ContractValid_post n_items 2,336 (src) + 1,116 (def) + 3,450 (orphan)) and runs/stage4_rep_e1/analysis/e1_metrics.json (2,880 + 2,340 + 1,150 + 3,410); tests/test_neighbour_table.py recomputes the sum.",
         "evidence": [
           {
             "file": "runs/stage2_e1/analysis/e1_metrics.json",

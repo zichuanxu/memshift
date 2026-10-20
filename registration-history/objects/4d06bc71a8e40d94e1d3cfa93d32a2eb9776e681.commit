@@ -1,8 +1,0 @@
-tree be548d88f5d1a135570f0c63b7e09a64324225e7
-parent 20b2a35e9a896410776fecfc603589d692b16fe2
-author zichuanxu <zichuanxu28@gmail.com> 1790621609 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790621609 +0900
-
-Add E7 theta_e embedding (BAAI/bge-m3, pinned revision); decision recorded first
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

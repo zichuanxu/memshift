@@ -1,5 +1,5 @@
 {
- "explore_status": "exploratory: not part of prereg v0-v2 and changes no registered contrast, margin, threshold or verdict (prereg/decisions.md 2026-09-30)",
+ "explore_status": "additional analysis: computed from the runs of the main analysis; changes none of its contrasts, margins or thresholds",
  "explore_draws": 2000,
  "explore_seed": 996,
  "explore_account_writers": {

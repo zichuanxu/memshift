@@ -1,10 +1,9 @@
-"""Second-round exploratory analyses of the E1 family (prereg/decisions.md 2026-10-01; answers to a
-devil's-advocate re-review, issues I-1, I-6 and I-8). They change no registered contrast, margin,
-threshold or verdict, and every key starts with `explore_`. Inputs are staged analyses:
+"""Further analyses of the E1 family: out-of-sample baselines, transfer across horizons, the items
+a key missed and the zero system. Every key starts with `explore_`. Inputs are staged analyses:
 `role:STAGE_DIR`, each with analysis/e1_item_table.jsonl.
 
-explore_oos_baselines   The out-of-sample test of Eq. (1) (`ex_e1_cross.oos`) with the baseline
-                        a reviewer asked for: the pooled development cell mean, each cell's
+explore_oos_baselines   The out-of-sample test of Eq. (1) (`ex_e1_cross.oos`) with a baseline
+                        that has no class terms: the pooled development cell mean, each cell's
                         Update over all classes of the fit worlds, with no class terms and no
                         class-mix reweighting. Predictors, per cell and class set (definition,
                         other, all):
@@ -19,13 +18,13 @@ explore_oos_baselines   The out-of-sample test of Eq. (1) (`ex_e1_cross.oos`) wi
 explore_horizon_transfer  the same from the twelve-month main study to the three-month worlds:
                         the four source-epoch cells, predictors cell and pooled_cell_mean; errors
                         per branch, class and cell with world-bootstrap intervals
-explore_missed_items    what binding does to the items a key did not invalidate (I-6), per branch
+explore_missed_items    what binding does to the items a key did not invalidate, per branch
                         and class at D=0 and D=1: the accuracy of the changed items the cited
                         cluster key missed (B=1) against the Update of the B=0 cell on all changed
                         items and on the same missed items; the cited cell's Update against B=0
 explore_zero_system     Update and Stability of the zero system, plain RAG, the oracle context and
                         the HoldMem cells after the shift, per branch and class, and the paired
-                        differences of the zero system against HoldMem(1,1) and HoldMem(0,0) (I-8)
+                        differences of the zero system against HoldMem(1,1) and HoldMem(0,0)
 
 Usage: python -m memshift.analysis.ex_e1_more OUT dev:STAGE devorphan:STAGE main:STAGE rep:STAGE
            short:STAGE [gemma:STAGE llama:STAGE gptoss:STAGE]

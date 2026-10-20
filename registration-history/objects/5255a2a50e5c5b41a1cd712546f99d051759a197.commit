@@ -1,8 +1,0 @@
-tree 179ae35083a7ee25957dd7af734bf36bd9330708
-parent a2c3047b3ade3b8faa617b9c118e4a93d0218f42
-author zichuanxu <zichuanxu28@gmail.com> 1792192465 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792192465 +0900
-
-Paper: block X as an exploratory finding (author decision). The main text gains one sentence on Mem0 (query-time view on definition items, source-keyed invalidation on the other items after a deletion); appendix B states the X cells as findings with tab_mem0x; X1 stays one row of the round-3 table, "not judged", with no reason in the paper (decision log row). Anchor-count macros are no longer staged; the limitation bullets are tightened so the main text ends on page 9
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

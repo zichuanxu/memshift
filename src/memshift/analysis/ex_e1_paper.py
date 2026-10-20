@@ -1,9 +1,8 @@
-"""Paper numbers, tables and the figure of the exploratory E1-family analyses (WS1a, prereg/
-decisions.md 2026-09-30): the class-stratified contrasts, the Eq. (1) decomposition, the
-out-of-sample test, invalidation precision, per-definition spread, the post-shift JSON arm,
-Stability, the short worlds, replication accounting, cost and the noise floor. Every macro name
-starts with `Ex` (exploratory) and every source is a staged analysis named in
-results/sources.json:
+"""Paper numbers, tables and the figure of the further E1-family analyses: the class-stratified
+contrasts, the Eq. (1) decomposition, the out-of-sample test, invalidation precision,
+per-definition spread, the post-shift JSON arm, Stability, the short worlds, replication
+accounting, cost and the noise floor. Every macro name starts with `Ex` and every source is a
+staged analysis named in results/sources.json:
 
   e1 / rep_e1 / c / m2_gemma / m2_llama / m2_gptoss / dev_e1 / dev_orphan_e1 / short_e1
                      analysis/e1_metrics.json, with the `explore_*` blocks of
@@ -14,8 +13,7 @@ results/sources.json:
 A stage that is not staged renders as the MISSING marker; a quantity that is undefined by
 construction (the accuracy of the missed items when a key misses none) renders as a dash.
 
-tab_classsplit   main text: B, D and B x D on Update by item class, main study and R
-tab_decomp       appendix: Eq. (1) terms, the interaction three ways, out-of-sample errors
+tab_classsplit   appendix: B, D and B x D on Update by shift and item class, main study and R
 fig_classsplit   forest plot of the B effect at each D and B x D, by class and branch, main and R
 """
 
@@ -28,7 +26,7 @@ from typing import Any
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, camel, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, ci, pct, pp
-from memshift.analysis.paper_tables import _ci, _est, _num, _row
+from memshift.analysis.paper_tables import _ci, _num, _row, est_ci_cells
 
 UNDEFINED = "---"
 # macro tag, inputs key, arm of the D=1 cell, granularities the stage has
@@ -406,9 +404,6 @@ def _replication(inp: Mapping[str, Any], out: _Out) -> None:
     out.put("RepIdentities", value=n("n_identities"))
     out.put("RepNonIdentity", value=n("n_non_identity"))
     out.put("RepContrasts", value=n("n_contrasts"))
-    out.put("RepNonIdentityReplicated", value=n("", "verdicts_non_identity", "replicated"))
-    out.put("RepNonIdentitySame", value=n("", "verdicts_non_identity", "same direction"))
-    out.put("RepNonIdentityNot", value=n("", "verdicts_non_identity", "not replicated"))
     out.put("RepUpdateContrasts", value=n("n_update_contrasts"))
     out.put("RepDRepairContrasts", value=n("n_d_effect_on_repair"))
     out.put("RepIndependent", value=n("independent_update_estimates"))
@@ -420,7 +415,6 @@ def _replication(inp: Mapping[str, Any], out: _Out) -> None:
             ("rep_same_sign", "SameSign"),
             ("rep_excludes_zero", "ExcludesZero"),
             ("orig_excludes_zero", "MainExcludesZero"),
-            ("replicated", "Replicated"),
         ):
             out.put("RepClass", ct, kt, value=str(s[k]) if k in s else MISSING)
     holm = rep.get("holm_non_detection") or {}
@@ -512,7 +506,7 @@ def _cost_and_noise(inp: Mapping[str, Any], out: _Out) -> None:
 
 
 def numbers(inp: Mapping[str, Any]) -> dict[str, str]:
-    """Every `Ex` macro of the exploratory E1-family analyses, from `load`."""
+    """Every `Ex` macro of the further E1-family analyses, from `load`."""
     out = _Out()
     for block in (
         _class_split,
@@ -541,165 +535,91 @@ def _cell(e: dict[str, Any] | None) -> str:
     return _ci(e, sign=True)
 
 
-def _branch_cols() -> str:
-    return (
-        r"\multicolumn{2}{c}{$\Ssrc$} & \multicolumn{2}{c}{$\Sdef$} & \multicolumn{2}{c}{$\Sdel$}"
-    )
+CLASSSPLIT_CONTRASTS = (  # the columns of tab_classsplit, in the order of their headers
+    "B_effect_update_D0",
+    "B_effect_update_D1",
+    "D_effect_update_B0",
+    "D_effect_update_B1",
+    "BxD_interaction_update",
+)
+BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
+GREY = r"\color{gray}"
 
 
 def tab_classsplit(inp: Mapping[str, Any]) -> str:
-    """Main text: B effect at each D, D effect at each B and B x D on Update, for the definition
-    items and all the others, per branch: the main study (first line) and the replication (second
-    line); the share of changed item-times of each class first. Each contrast's name heads its pair
-    of lines, so the label column is narrow and the six interval columns fit a 5.5in text width."""
+    """Appendix: B effect at each D, D effect at each B and B x D on Update by shift and item
+    class (rows), the main study and below it, in grey, the replication; the class's share of the
+    changed item-times of the main study beside the class. Each estimate and its interval are two
+    aligned cells (`paper_tables.est_ci_cells`)."""
     main, rep = inp.get("main"), inp.get("rep")
-    rows_ = (
-        ("B_effect_update_D0", r"$B$ effect, $D{=}0$"),
-        ("B_effect_update_D1", r"$B$ effect, $D{=}1$"),
-        ("D_effect_update_B0", r"$D$ effect, $B{=}0$"),
-        ("D_effect_update_B1", r"$D$ effect, $B{=}1$"),
-        ("BxD_interaction_update", r"$B{\times}D$ interaction"),
-    )
-    n_main = _get(main, "n_worlds") or MISSING
     n_rep = _get(rep, "n_worlds") or MISSING
+    pairs = " ".join([r"r@{\,}l"] * len(CLASSSPLIT_CONTRASTS))
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The registered contrasts on Update by item class (source-epoch key, pp, "
-        r"95\% world-bootstrap intervals). $B$ effect: $B{=}1$ minus $B{=}0$ at the given $D$. "
-        r"$D$ effect: $D{=}1$ minus $D{=}0$ at the given $B$. $B{\times}D$: the $B$ effect at "
-        r"$D{=}1$ minus that at $D{=}0$. Definition: the six evaluated definition items "
-        r"of each world. Other: the other 42 (single-field and free-text) items. Share: "
-        r"the class's share of the changed item-times in the main study. First line of each "
-        rf"pair: the main study ({n_main} worlds), whose class split is exploratory. Second line, "
-        rf"in grey: the replication ({n_rep} fresh worlds), whose class rows are registered.}}",
+        r"\caption{The contrasts on Update by shift and item class, in the main study and in the "
+        rf"replication on {n_rep} fresh worlds (grey). Share: the class's share of the changed "
+        r"item-times in the main study.}",
         r"\label{tab:classsplit}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{2pt}",
-        r"\begin{tabular}{@{}l cc cc cc@{}}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{3.5pt}",
+        rf"\begin{{tabular}}{{@{{}}llrl {pairs}@{{}}}}",
         r"\toprule",
-        rf"& {_branch_cols()} \\",
-        r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}",
-        r"& definition & other & definition & other & definition & other \\",
+        r"& & & & \multicolumn{4}{c}{$B$ effect} & \multicolumn{4}{c}{$D$ effect} & & \\",
+        r"\cmidrule(lr){5-8}\cmidrule(lr){9-12}",
+        r"shift & class & share (\%) & & \multicolumn{2}{c}{$D{=}0$} & \multicolumn{2}{c}{$D{=}1$} "
+        r"& \multicolumn{2}{c}{$B{=}0$} & \multicolumn{2}{c}{$B{=}1$} "
+        r"& \multicolumn{2}{c}{$B{\times}D$} \\",
         r"\midrule",
     ]
-    cells = []
-    for b, _ in BRANCH_TAGS:
-        for cls in ("definition", "other"):
+    for i, (b, _) in enumerate(BRANCH_TAGS):
+        for k, cls in enumerate(("definition", "other")):
             share = _get(main, "explore_class_mix", b, "classes", cls, "share")
-            cells.append(_num(share, digits=0) + r"\%" if share is not None else MISSING)
-    lines += [_row("share", *cells), r"\midrule"]
-    for key, label in rows_:
-        lines.append(rf"\multicolumn{{7}}{{@{{}}l}}{{{label}}} \\")
-        for stage, name in (("main", r"\quad main"), ("rep", r"\quad\textcolor{gray}{repl.}")):
-            m = main if stage == "main" else rep
-            vals = []
-            for b, _ in BRANCH_TAGS:
-                for cls in ("definition", "other"):
-                    e = _get(m, "explore_class_split", "D1", b, "source", cls, key)
-                    cell = _cell(e)
-                    vals.append(cell if stage == "main" else rf"\textcolor{{gray}}{{{cell}}}")
-            lines.append(_row(name, *vals))
+            for stage, m in (("main", main), ("repl.", rep)):
+                style = GREY if m is rep else ""
+                vals = [
+                    est_ci_cells(
+                        _get(m, "explore_class_split", "D1", b, "source", cls, key),
+                        sign=True,
+                        style=style,
+                    )
+                    for key in CLASSSPLIT_CONTRASTS
+                ]
+                first = m is main
+                lines.append(
+                    _row(
+                        BRANCH_LABELS[b] if first and k == 0 else "",
+                        cls if first else "",
+                        (_num(share, digits=0) if share is not None else MISSING) if first else "",
+                        style + stage,
+                        *vals,
+                    )
+                )
+            if k == 0:
+                lines.append(r"\addlinespace[2pt]")
+        if i < len(BRANCH_TAGS) - 1:
+            lines.append(r"\midrule")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
-
-
-def tab_decomp(inp: Mapping[str, Any]) -> str:
-    """Appendix: (a) the Eq. (1) terms of the main study per branch and class for the source-epoch
-    and the cited-cluster key, and the B x D interaction as observed, as the paper states it and
-    as the identity gives it; (b) the out-of-sample test from the development worlds."""
-    main = inp.get("main")
-    cross = inp.get("cross")
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{(a) Equation~(1) accounting (exploratory; main study; percent for terms, pp for "
-        r"the interaction). $m_1$: missed invalidation of the key; $r_D$: accuracy of the "
-        r"invalidated (re-derived) items; $a_D$: Update at $B{=}0$, where every item is missed. "
-        r"With $a$ held fixed across $D$: $(m_0{-}m_1)(r_1{-}r_0)$; corrected: "
-        r"$(r_1{-}a_1){-}(r_0{-}a_0)$, equal to the "
-        r"observed interaction when the key misses nothing. (b) Mean absolute error in pp over the "
-        r"six cells (pooled: over the three branches' cells) of the prediction of each cell's "
-        r"Update on the test worlds from the development worlds, with the number of cells "
-        r"within 5\,pp: \emph{cell}: each cell's own "
-        r"fitted Update; \emph{structural}: Eq.~(1) with $r$ by $D$, $m$ by the key, $a$ the "
-        r"$B{=}0$ Update (write path) or the accuracy of the missed items; \emph{literal}: "
-        r"Eq.~(1) with one stale-value accuracy for every cell.}",
-        r"\label{tab:decomp}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
-        r"\begin{tabular}{@{}ll rrrrr rrrr@{}}",
-        r"\toprule",
-        r"& & $m_1$ & $r_0$ & $r_1$ & $a_0$ & $a_1$ & observed & $a$ fixed & corrected "
-        r"& $D\mid B{=}0$ \\",
-    ]
-    for g, title in (("source", "source-epoch key"), ("cited", "cited-cluster key")):
-        lines += [r"\midrule", rf"\multicolumn{{11}}{{@{{}}l}}{{\emph{{{title}}}}} \\"]
-        for b, bn in (("src", r"$\Ssrc$"), ("def", r"$\Sdef$"), ("orphan", r"$\Sdel$")):
-            for cls, cn in (("definition", "definition"), ("other", "other")):
-                node = _get(main, "explore_decomposition", "D1", b, cls)
-                lines.append(_terms_row_cells(bn if cls == "definition" else "", cn, node, g))
-    lines += [r"\bottomrule", r"\end{tabular}", r"\par\medskip", r"\setlength{\tabcolsep}{4pt}"]
-    lines += [
-        r"\begin{tabular}{@{}ll rrrr@{}}",
-        r"\toprule",
-        r"& & $\Ssrc$ & $\Sdef$ & $\Sdel$ & pooled \\",
-        r"\midrule",
-    ]
-    res = _get(cross, "explore_oos", "dev_to_main") or {}
-    for cls, cn in (("definition", "definition"), ("other", "other"), ("all", "all items")):
-        for k, (pkey, pn) in enumerate(
-            (("cell", "cell"), ("structural", "structural"), ("literal", "literal"))
-        ):
-            nodes = [_get(res, "branches", b, cls, pkey) for b in ("src", "def", "orphan")]
-            nodes.append(_get(res, "pooled_over_branches", cls, pkey))
-            lines.append(_row(cn if k == 0 else "", pn, *(_mae(n) for n in nodes)))
-        if cls != "all":
-            lines.append(r"\addlinespace[2pt]")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
-    return "\n".join(lines) + "\n"
-
-
-def _mae(node: dict[str, Any] | None) -> str:
-    """Mean absolute error in pp and the number of cells within 5 pp."""
-    if not node or not node.get("mean_abs_error") or "cells_within_5pp" not in node:
-        return MISSING
-    mae = _num(node["mean_abs_error"]["est"], digits=1)
-    return f"{mae} ({node['cells_within_5pp']}/{node.get('n_cells', 6)})"
-
-
-def _terms_row_cells(branch: str, cls: str, node: dict[str, Any] | None, g: str) -> str:
-    it = _get(node, "interaction", g) or {}
-
-    def cell(c: str, term: str) -> str:
-        e = _get(node, "cells", g, c, term)
-        if not e:
-            return MISSING
-        return UNDEFINED if e["est"] != e["est"] else _num(e["est"], digits=1)
-
-    def q(k: str, sign: bool = True) -> str:
-        e = it.get(k)
-        if not e:
-            return MISSING
-        return UNDEFINED if e["est"] != e["est"] else _est(e, sign=sign)
-
-    m1 = it.get("m1")
-    return _row(
-        branch, cls,
-        _num(m1["est"], digits=0) if m1 and m1["est"] == m1["est"] else MISSING,
-        cell("D0B1", "r"), cell("D1B1", "r"), cell("D0B0", "a"), cell("D1B0", "a"),
-        q("observed"), q("paper_formula"), q("corrected_formula"), q("D_effect_B0"),
-    )  # fmt: skip
 
 
 def tables(inp: Mapping[str, Any]) -> dict[str, str]:
-    return {"tab_classsplit.tex": tab_classsplit(inp), "tab_decomp.tex": tab_decomp(inp)}
+    return {"tab_classsplit.tex": tab_classsplit(inp)}
 
 
 # ---------------------------------------------------------------------------------- figure
+CLASSSPLIT_BAR_W = 0.13  # width of one bar, in item classes
+CLASSSPLIT_GAP = 0.045  # space between the bar pairs of two contrasts
+CLASSSPLIT_PITCH = 1.15  # distance between the two item classes of a panel
+
+
 def fig_classsplit(inp: Mapping[str, Any], out: Path) -> Path:
-    """Forest plot: per branch (panel) and item class, the B effect at D=0 and D=1 and B x D on
-    Update as interval bars (`figstyle.interval_bar`), main study (filled) and R (outlined), 95%
-    intervals. Each class header carries the class's
-    share of the branch's changed item-times (main study)."""
+    """Grouped bars per branch (panel) and item class (group): the B effect at D=0 (light blue)
+    and D=1 (blue) and B x D (pink) on Update, each as a pair of bars, the main study filled and
+    the replication outlined in the same colour, with 95% intervals as error bars
+    (`figstyle.ci_bar`). Under each class its share of the branch's changed item-times (main
+    study). The key sits above the panels."""
+    from matplotlib.patches import Patch
+
     from memshift.analysis import figstyle as fs
 
     plt = fs.plt()
@@ -714,59 +634,43 @@ def fig_classsplit(inp: Mapping[str, Any], out: Path) -> Path:
         ("def", r"redefinition $S_{\mathrm{def}}$"),
         ("orphan", r"deletion $S_{\mathrm{del}}$"),
     )
-    fig, axes = plt.subplots(1, 3, figsize=(fs.TEXT, 2.3), sharey=True, sharex=True)
-    # one header row per class (its name left of the axes, its share in each panel), then one row
-    # per contrast; the main study sits above the replication within a row
-    head: dict[str, float] = {}
-    ypos: dict[tuple[str, str], float] = {}
-    y = 0.0
-    for cls, _ in classes:
-        head[cls] = y
-        for key, _, _ in contrasts:
-            y -= 1.0
-            ypos[cls, key] = y
-        y -= 1.15
+    w, pair = CLASSSPLIT_BAR_W, 2 * CLASSSPLIT_BAR_W + CLASSSPLIT_GAP
+    fig, axes = plt.subplots(1, 3, figsize=(fs.TEXT, 2.3), sharey=True)
+    ends = [0.0]
     for ax, (branch, title) in zip(axes, panels, strict=True):
-        ax.axvline(0, color=fs.GREY, lw=0.8, zorder=1)
-        for (cls, key), yy in ypos.items():
-            colour = next(c for k, _, c in contrasts if k == key)
-            for stage, dy, filled in (("main", 0.2, True), ("rep", -0.2, False)):
-                e = _get(inp.get(stage), "explore_class_split", "D1", branch, "source", cls, key)
-                if not e or e["est"] != e["est"]:
-                    continue
-                fs.interval_bar(ax, yy + dy, 100 * e["est"], 100 * e["lo"], 100 * e["hi"], colour,
-                                filled=filled, size=4.0)  # fmt: skip
+        ax.axhline(0, color=fs.BLACK, lw=0.6, zorder=2.5)
+        for c, (cls, _) in enumerate(classes):
+            for k, (key, _, colour) in enumerate(contrasts):
+                for s, (stage, filled) in enumerate((("main", True), ("rep", False))):
+                    e = _get(inp.get(stage), "explore_class_split", "D1", branch, "source", cls,
+                             key)  # fmt: skip
+                    if not e or e["est"] != e["est"]:
+                        continue
+                    x = c * CLASSSPLIT_PITCH + (k - 1) * pair + (s - 0.5) * w
+                    fs.ci_bar(ax, x, 100 * e["est"], 100 * e["lo"], 100 * e["hi"], colour, w,
+                              filled=filled)  # fmt: skip
+                    ends += [100 * e["lo"], 100 * e["hi"]]
         share = _get(inp.get("main"), "explore_class_mix", branch, "classes")
-        for cls, _ in classes:
+        labels = []
+        for cls, name in classes:
             s = _get(share, cls, "share")
-            if s is None:
-                continue
-            # on a white box at the right edge, so that neither the zero line nor a gridline
-            # runs through the note
-            ax.text(0.985, head[cls], f"{100 * s:.0f}" + r"\% of changed item-times",
-                    fontsize=7.5, color=fs.BLACK, ha="right", va="center", zorder=5,
-                    transform=ax.get_yaxis_transform(),
-                    bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.6})  # fmt: skip
+            labels.append(name + ("" if s is None else "\n" + rf"({100 * s:.0f}\%)"))
+        ax.set_xticks([c * CLASSSPLIT_PITCH for c in range(len(classes))], labels)
+        ax.set_xlim(-0.6, CLASSSPLIT_PITCH + 0.6)
+        ax.tick_params(axis="x", length=0)
+        ax.spines["bottom"].set_visible(False)
         ax.set_title(title, pad=3)
-        ax.set_xlim(-14, 68)  # the deletion-branch B effects on the other items reach about 63 pp
-        ax.set_xticks([0, 25, 50])
-        ax.grid(axis="y", visible=False)
-        ax.grid(axis="x", visible=True)
-    rows = [(head[cls], rf"\textbf{{{label}}}") for cls, label in classes]
-    rows += [(ypos[cls, key], lab) for cls, _ in classes for key, lab, _ in contrasts]
-    axes[0].set_yticks([r for r, _ in rows], [lab for _, lab in rows])
-    axes[0].set_ylim(y + 0.55, 0.6)
-    for ax in axes:
-        ax.tick_params(axis="y", length=0)
-    fig.supxlabel("effect on Update (pp)", fontsize=9)
-    handles = [
-        fs.interval_handle(fs.GREY, True, "main study"),
-        fs.interval_handle(fs.GREY, False, "replication"),
+    axes[0].set_ylim(min(ends) - 2, max(ends) + 2)
+    axes[0].yaxis.set_major_locator(plt.MultipleLocator(20))
+    axes[0].set_ylabel("effect on Update (pp)")
+    handles = [Patch(facecolor=colour, edgecolor="none", label=label)
+               for _, label, colour in contrasts]  # fmt: skip
+    handles += [
+        Patch(facecolor=fs.GREY, edgecolor="none", label="main study"),
+        Patch(facecolor="white", edgecolor=fs.GREY, lw=fs.EDGE_PT, label="replication"),
     ]
-    # in the empty corner under the row labels, left of the first panel's tick labels
-    fig.legend(handles=handles, handler_map=fs.INTERVAL_HANDLERS, loc="lower left",
-               bbox_to_anchor=(0.0, 0.0), ncol=1, handletextpad=0.4, handlelength=1.6,
-               labelspacing=0.25, borderaxespad=0.1, fontsize=7.5)  # fmt: skip
+    fig.legend(handles=handles, loc="outside upper center", ncol=len(handles),
+               handlelength=1.2, columnspacing=1.6, fontsize=8)  # fmt: skip
     path = out / "fig_classsplit.pdf"
     fig.savefig(path)
     plt.close(fig)

@@ -1,8 +1,0 @@
-tree 1e274b136d171086dfaecb4b9e5c1ba9e15d2644
-parent 58e562f411ef8fd4fb2fe7b3456e56421c93e178
-author zichuanxu <zichuanxu28@gmail.com> 1790800441 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790800939 +0900
-
-Paper: main text condensed to twelve pages (abstract under 200 words, What we find in eight lines, sections 5.6 to 5.9 merged into short paragraphs, design-rule table with evidence type and writers); related work: consistency fixes for the read-set framing and the native-system count
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

@@ -1,8 +1,0 @@
-tree 700e9b68f00563ed2ccd8983f91ef3093f3e417c
-parent b450a073ef9e18be271e65005d996a93899002b5
-author zichuanxu <zichuanxu28@gmail.com> 1790742185 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790742185 +0900
-
-Paper revision after critical review (main text): lead with the findings that could fail (binding is worth what repair makes of it; product decomposition; path 2 as a leak check), concrete differentiation from end-answer memory benchmarks and knowledge-editing ripple benchmarks, D as executability (check + derivation) with the item-class split in the main text, predictions that failed reported in Results, native block framed as testing binding on the D=0 slice, rank-correlation subsection, T1-T4 as a certification protocol, Using-MemShift paragraph, main/robustness study naming, D_m cell, no caveat asides; Figure 1 redrawn; A-Mem resume logged
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

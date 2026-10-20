@@ -1,5 +1,5 @@
 {
- "status": "exploratory, post hoc: explains the registered U3 ratio and changes no registered contrast, margin, threshold or verdict",
+ "status": "additional analysis: explains the pooled upsert ratio U3; changes no contrast, margin or threshold of the main analysis",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [

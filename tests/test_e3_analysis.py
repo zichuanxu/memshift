@@ -1,4 +1,4 @@
-"""E3 analysis (T3 and the exploratory T3 without definition items) on synthetic answers."""
+"""E3 analysis (T3, and T3 without the definition items) on synthetic answers."""
 
 import json
 from pathlib import Path
@@ -37,7 +37,7 @@ def _analyse(tmp_path: Path, rows: list[dict]) -> dict:
     return per
 
 
-def test_t3_without_definition_items_changes_the_verdict_when_the_oracle_is_weak_there(tmp_path):
+def test_t3_without_definition_items_changes_the_outcome_when_the_oracle_is_weak_there(tmp_path):
     # the oracle is poor on definition items (30%); HoldMem computes them (100%) and is worse than
     # the oracle on the rest (80% against 90%); the zero system is poor on both
     per = _analyse(
@@ -59,7 +59,7 @@ def test_t3_without_definition_items_changes_the_verdict_when_the_oracle_is_weak
     assert zero["minus_oracle"]["est"] == pytest.approx(-0.15) and not zero["T3_pass"]
 
 
-def test_existing_fields_are_unchanged_by_the_exploratory_field(tmp_path):
+def test_existing_fields_are_unchanged_by_the_explore_field(tmp_path):
     per = _analyse(tmp_path, _answers({"oracle": (0.5, 0.9), "zero": (0.5, 0.9)}))
     z = per["zero"]
     assert z["minus_oracle"]["est"] == 0.0 and z["T3_pass"] is True

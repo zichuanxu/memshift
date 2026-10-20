@@ -1,5 +1,5 @@
 {
- "status": "exploratory: not part of prereg v0-v2 and changes no registered contrast, margin, threshold or verdict (prereg/decisions.md 2026-09-30)",
+ "status": "additional analysis: computed from the runs of the main analysis; changes none of its contrasts, margins or thresholds",
  "explore_oos": {
   "dev_to_main": {
    "branches": {
@@ -15619,12 +15619,12 @@
    "n_contrasts": 21,
    "n_identities": 6,
    "n_non_identity": 15,
-   "verdicts_all": {
+   "replication_all": {
     "replicated": 21,
     "same direction": 0,
     "not replicated": 0
    },
-   "verdicts_non_identity": {
+   "replication_non_identity": {
     "replicated": 15,
     "same direction": 0,
     "not replicated": 0
@@ -15653,7 +15653,7 @@
       "n_worlds": 20,
       "n_items": 575
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "def",
@@ -15675,7 +15675,7 @@
       "n_worlds": 20,
       "n_items": 575
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "def",
@@ -15697,7 +15697,7 @@
       "n_worlds": 20,
       "n_items": 575
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "def",
@@ -15719,7 +15719,7 @@
       "n_worlds": 20,
       "n_items": 1139
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "def",
@@ -15741,7 +15741,7 @@
       "n_worlds": 20,
       "n_items": 3805
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "def",
@@ -15763,7 +15763,7 @@
       "n_worlds": 20,
       "n_items": 1150
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "def",
@@ -15785,7 +15785,7 @@
       "n_worlds": 20,
       "n_items": 575
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "orphan",
@@ -15807,7 +15807,7 @@
       "n_worlds": 20,
       "n_items": 1739
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "orphan",
@@ -15829,7 +15829,7 @@
       "n_worlds": 20,
       "n_items": 1739
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "orphan",
@@ -15851,7 +15851,7 @@
       "n_worlds": 20,
       "n_items": 1739
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "orphan",
@@ -15873,7 +15873,7 @@
       "n_worlds": 20,
       "n_items": 3389
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "orphan",
@@ -15895,7 +15895,7 @@
       "n_worlds": 20,
       "n_items": 3818
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "orphan",
@@ -15917,7 +15917,7 @@
       "n_worlds": 20,
       "n_items": 3478
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "orphan",
@@ -15939,7 +15939,7 @@
       "n_worlds": 20,
       "n_items": 1739
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "src",
@@ -15961,7 +15961,7 @@
       "n_worlds": 20,
       "n_items": 1170
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "src",
@@ -15983,7 +15983,7 @@
       "n_worlds": 20,
       "n_items": 1170
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "src",
@@ -16005,7 +16005,7 @@
       "n_worlds": 20,
       "n_items": 1170
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "src",
@@ -16027,7 +16027,7 @@
       "n_worlds": 20,
       "n_items": 2330
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "src",
@@ -16049,7 +16049,7 @@
       "n_worlds": 20,
       "n_items": 3818
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "src",
@@ -16071,7 +16071,7 @@
       "n_worlds": 20,
       "n_items": 2340
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     },
     {
      "branch": "src",
@@ -16093,7 +16093,7 @@
       "n_worlds": 20,
       "n_items": 1170
      },
-     "verdict": "replicated"
+     "replication": "replicated"
     }
    ]
   },
@@ -16121,7 +16121,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16148,7 +16148,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16175,7 +16175,7 @@
       "n_worlds": 20,
       "n_items": 778
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16202,7 +16202,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16229,7 +16229,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16256,7 +16256,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16283,7 +16283,7 @@
       "n_worlds": 20,
       "n_items": 396
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16310,7 +16310,7 @@
       "n_worlds": 20,
       "n_items": 384
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16337,7 +16337,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16364,7 +16364,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16391,7 +16391,7 @@
       "n_worlds": 20,
       "n_items": 372
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16418,7 +16418,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16445,7 +16445,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16472,7 +16472,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16499,7 +16499,7 @@
       "n_worlds": 20,
       "n_items": 743
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16526,7 +16526,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16553,7 +16553,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16580,7 +16580,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16607,7 +16607,7 @@
       "n_worlds": 20,
       "n_items": 778
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": false
@@ -16634,7 +16634,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16661,7 +16661,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16688,7 +16688,7 @@
       "n_worlds": 20,
       "n_items": 389
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16715,7 +16715,7 @@
       "n_worlds": 20,
       "n_items": 252
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16742,7 +16742,7 @@
       "n_worlds": 20,
       "n_items": 246
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16769,7 +16769,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16796,7 +16796,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16823,7 +16823,7 @@
       "n_worlds": 20,
       "n_items": 372
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -16850,7 +16850,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16877,7 +16877,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16904,7 +16904,7 @@
       "n_worlds": 20,
       "n_items": 186
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16931,7 +16931,7 @@
       "n_worlds": 20,
       "n_items": 207
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16958,7 +16958,7 @@
       "n_worlds": 20,
       "n_items": 96
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -16985,7 +16985,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17012,7 +17012,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17039,7 +17039,7 @@
       "n_worlds": 20,
       "n_items": 622
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17066,7 +17066,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17093,7 +17093,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17120,7 +17120,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17147,7 +17147,7 @@
       "n_worlds": 20,
       "n_items": 432
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17174,7 +17174,7 @@
       "n_worlds": 20,
       "n_items": 308
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17201,7 +17201,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17228,7 +17228,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17255,7 +17255,7 @@
       "n_worlds": 20,
       "n_items": 2856
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17282,7 +17282,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -17309,7 +17309,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -17336,7 +17336,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -17363,7 +17363,7 @@
       "n_worlds": 20,
       "n_items": 2957
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -17390,7 +17390,7 @@
       "n_worlds": 20,
       "n_items": 1420
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -17417,7 +17417,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17444,7 +17444,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17471,7 +17471,7 @@
       "n_worlds": 20,
       "n_items": 622
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17498,7 +17498,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17525,7 +17525,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17552,7 +17552,7 @@
       "n_worlds": 20,
       "n_items": 311
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17579,7 +17579,7 @@
       "n_worlds": 20,
       "n_items": 249
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17606,7 +17606,7 @@
       "n_worlds": 20,
       "n_items": 202
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17633,7 +17633,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17660,7 +17660,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17687,7 +17687,7 @@
       "n_worlds": 20,
       "n_items": 2856
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17714,7 +17714,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -17741,7 +17741,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17768,7 +17768,7 @@
       "n_worlds": 20,
       "n_items": 1428
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17795,7 +17795,7 @@
       "n_worlds": 20,
       "n_items": 1098
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17822,7 +17822,7 @@
       "n_worlds": 20,
       "n_items": 764
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17849,7 +17849,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17876,7 +17876,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17903,7 +17903,7 @@
       "n_worlds": 20,
       "n_items": 672
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17930,7 +17930,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17957,7 +17957,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -17984,7 +17984,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18011,7 +18011,7 @@
       "n_worlds": 20,
       "n_items": 396
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18038,7 +18038,7 @@
       "n_worlds": 20,
       "n_items": 332
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18065,7 +18065,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": false
@@ -18092,7 +18092,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": false
@@ -18119,7 +18119,7 @@
       "n_worlds": 20,
       "n_items": 1668
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": false
@@ -18146,7 +18146,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": false
@@ -18173,7 +18173,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18200,7 +18200,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18227,7 +18227,7 @@
       "n_worlds": 20,
       "n_items": 1934
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18254,7 +18254,7 @@
       "n_worlds": 20,
       "n_items": 833
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18281,7 +18281,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": false
@@ -18308,7 +18308,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18335,7 +18335,7 @@
       "n_worlds": 20,
       "n_items": 672
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18362,7 +18362,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18389,7 +18389,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18416,7 +18416,7 @@
       "n_worlds": 20,
       "n_items": 336
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": true
@@ -18443,7 +18443,7 @@
       "n_worlds": 20,
       "n_items": 240
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18470,7 +18470,7 @@
       "n_worlds": 20,
       "n_items": 213
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": true
@@ -18497,7 +18497,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18524,7 +18524,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": true
@@ -18551,7 +18551,7 @@
       "n_worlds": 20,
       "n_items": 1668
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18578,7 +18578,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": true,
      "rep_excludes_zero": false
@@ -18605,7 +18605,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "not replicated",
+     "replication": "not replicated",
      "same_sign": false,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18632,7 +18632,7 @@
       "n_worlds": 20,
       "n_items": 834
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false
@@ -18659,7 +18659,7 @@
       "n_worlds": 20,
       "n_items": 633
      },
-     "verdict": "replicated",
+     "replication": "replicated",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": true
@@ -18686,7 +18686,7 @@
       "n_worlds": 20,
       "n_items": 384
      },
-     "verdict": "same direction",
+     "replication": "same direction",
      "same_sign": true,
      "orig_excludes_zero": false,
      "rep_excludes_zero": false

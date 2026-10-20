@@ -1,4 +1,4 @@
-"""Test-set generation record (prereg v1 §1): every branch of every test world is generated from
+"""Test-set generation record: every branch of every test world is generated from
 its seed, its event SHA256 goes into the manifest, and the fidelity checker (every gold fact is
 locatable in the text of its dependencies, `memshift.gen.fidelity`) runs on each branch.
 

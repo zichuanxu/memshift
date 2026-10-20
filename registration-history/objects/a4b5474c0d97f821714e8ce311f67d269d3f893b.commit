@@ -1,8 +1,0 @@
-tree c2271a58134494b4a7c6f7a849fda72ca258951e
-parent 9c4a40fde82ecb8de959c67d5bb8a52fb984a722
-author zichuanxu <zichuanxu28@gmail.com> 1790778206 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790778206 +0900
-
-Registration of the control cells added after review, before any of them ran: offline key audit, predictions with thresholds for the oracle and scope keys, refresh without invalidation, template presentation of D=0, retraction-aware model-written programs, the query-time view and a thinking writer; executed scope reduced before the first run to worlds 1000-1009 and the informative cells (predictions for the cells not run withdrawn); decision for a Qwen3.5-9B replica on GPU0 once block M ends
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

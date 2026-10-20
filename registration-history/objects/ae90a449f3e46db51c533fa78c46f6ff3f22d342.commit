@@ -1,8 +1,0 @@
-tree b7bd71adceb1ba3fb8d3f42feae8549d378bab25
-parent e609c251cf7c52ec06b890a54df3b560e14b2ddb
-author zichuanxu <zichuanxu28@gmail.com> 1790783978 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790783978 +0900
-
-Block M2, gpt-oss-20b as writer and reader: staged (all five jobs exit 0); checks (i)-(v) hold, so the pattern holds in 3 of 3 families; numbers and families table regenerated
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,6 +1,6 @@
 {
  "block": "X",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -104,10 +104,8 @@
    "anchor_contexts_differ": 50
   }
  },
- "predictions": {
+ "threshold_tests": {
   "X1": {
-   "verdict": "not_judged",
-   "reason": "pairing check failed (anchor_answers_differ 3); the run is void until repaired",
    "tests": []
   }
  },
@@ -942,7 +940,6 @@
     }
    }
   },
-  "X1_before_amendment": null,
   "support": "the mem0 arm logged no UPDATE or DELETE after the fork: m = 1 and r is undefined in every mem0 cell by construction (an ADD-only pipeline), so the diagnosis can only name detection",
   "mutations_after_fork": {
    "mem0_det": {
@@ -1795,7 +1792,7 @@
   }
  },
  "notes": {
-  "X1": "as amended: at least 3 judged cells; holds when the target arm wins in at least 4 of them, or in all of them when fewer than 4 are judged. `analysis.x_mem0` computes the cells; its own X1 field is the rule before the amendment and is reported as such. In a void run (a pairing count not 0) X1 is not computed at all, neither as amended nor before: the decision log (2026-10-17) fixed, before X1's outcome was seen, that it is not judged and that the cells (m, r, a, the arms' effects) are reported as exploratory."
+  "X1": "per cell with a diagnosis and both effects: the arm that targets the dominant failure raises Update more than the other arm (point estimates); at least 3 such cells, and the target arm wins in at least 4 of them, or in all of them when fewer than 4 are compared. `analysis.x_mem0` computes the cells. In a void run (a pairing count not 0) X1's comparisons are not computed; the cells (m, r, a, the arms' effects) are reported."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

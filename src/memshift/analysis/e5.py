@@ -1,9 +1,8 @@
-"""E5 analysis (plan §6 E5, docs/E5_PROTOCOL.md §3): the sufficient-statistic test on native
-systems.
+"""E5 analysis: the sufficient-statistic test on native systems.
 
 1. Labels: each native system's (D, B) from `analysis.e5_infer` on the inference half. B uses the
    orphan probe (validated, kappa_B = 1.0 on the white-box cells). D inference did not reach the
-   kappa bar (decisions.md), so D is described only; for the prediction D comes from the export
+   kappa bar, so D is described only; for the prediction D comes from the export
    structure (no typed value with located spans -> D = 0).
 2. Carryover on the measurement half (items outside the inference half): Update (changed items)
    and Stability (unchanged items) after S_src, S_def and the orphan branch, world bootstrap.
@@ -14,9 +13,9 @@ systems.
 S_wr for native systems: a native store has no writer-model key and no re-derivation path, so a
 writer switch changes no stored item (retention 1 by construction, as for B = 0); not measured.
 4. Ingestion failures under on_error="skip" are system behaviour and reported as a rate.
-5. Noise floor (plan §6 E5 (4)): a second, independent ingestion of some worlds; see noise_floor.
-6. T3 / T4 for native systems (decisions.md 2026-09-29, T3 reference); see membership.
-7. Discriminability (exploratory, not pre-registered): a native value inside the predicted interval
+5. Noise floor: a second, independent ingestion of some worlds; see noise_floor.
+6. T3 / T4 for native systems, with E3's criteria; see membership.
+7. Discriminability: a native value inside the predicted interval
    supports the label only if the other B label would have missed it. Each comparison with a
    predicted interval is therefore also placed against the 95% interval of the white-box cell of
    the OTHER B label with the same D (`other_cell`: on the same worlds, branch and items; the
@@ -26,7 +25,7 @@ writer switch changes no stored item (retention 1 by construction, as for B = 0)
    outside the other label's interval. One inside both intervals says nothing about B; one inside
    the other label's interval and outside the predicted one contradicts the label. Counts per
    system and over all systems are in `stage4["discriminability"]`.
-8. Null baselines (exploratory, decisions.md 2026-09-30; `ex_e5_null`, stored as
+8. Null baselines (`ex_e5_null`, stored as
    `explore_native_null`): which reference intervals (every white-box cell, the zero system, plain
    RAG, the oracle) contain each native estimate, the inside / discriminating counts over the
    label-circular (orphan) and the out-of-sample comparisons, the counts a label-free baseline gets
@@ -52,7 +51,7 @@ from memshift.textutil import approx_tokens
 
 Row = dict[str, Any]
 BRANCHES = ("src", "def", "orphan")
-# Stage 4 (prereg/v2.md §3): systems whose documented sync path binds each source object as one
+# Stage 4: systems whose documented sync path binds each source object as one
 # document are compared, when inferred B = 1, with the cited-cluster cell (object-level binding);
 # every other system with the source-epoch cell. Labels predicted from documentation before any
 # stage-4 run, (D, B):
@@ -93,16 +92,16 @@ def other_cell(system: str, d: int | None, b: int | None) -> str | None:
 
 
 def _inferred(lab: dict[str, Any]) -> tuple[int | None, int | None]:
-    """(D, B) of a native system. D = 1 needs an export with typed values and located spans
-    (E5_PROTOCOL §1), which no native system has (`analyse` passes structural = False), so D is 0
-    by export structure even when too few structured-repair samples make the rate unidentifiable."""
+    """(D, B) of a native system. D = 1 needs an export with typed values and located spans, which
+    no native system has (`analyse` passes structural = False), so D is 0 by export structure even
+    when too few structured-repair samples make the rate unidentifiable."""
     d = lab.get("D", {}).get("label")
     return (0 if d is None else d, lab["B"]["label"])
 
 
 def stage4_summary(res: dict[str, Any]) -> dict[str, Any]:
-    """Predictions N-1..N-4 of prereg/v2.md §3: N-1 over the stage-4 systems in `res`, N-2..N-4
-    over every native system in `res` (Mem0 included, decisions.md 2026-09-29)."""
+    """Predictions N-1..N-4: N-1 over the stage-4 systems in `res`, N-2..N-4 over every native
+    system in `res` (Mem0 included)."""
     systems = sorted(res["systems"])
     agree: dict[str, bool | None] = {}
     per_system = {}
@@ -253,7 +252,7 @@ def silent_failures(run_dirs: list[Path], results: list[Row]) -> dict[str, dict[
 
 
 def noise_floor(first: list[Row], second: list[Row], probes: list[Row]) -> dict[str, Any]:
-    """Two independent ingestions of the same worlds (plan §6 E5 (4), protocol §4). Native calls
+    """Two independent ingestions of the same worlds. Native calls
     bypass the request cache and reach the server at temperature 0, so the runs differ only through
     server-side batching. Per system and branch on the shared worlds: the share of probe answers
     whose status or value differs, and each run's Update / Stability on the measurement half with
@@ -307,7 +306,7 @@ def full_reread_tokens(world_ids: set[str], params: dict[str, Any] | None) -> di
 def membership(
     answers: list[Row], baselines: list[Row], params: dict[str, Any] | None
 ) -> dict[str, Any]:
-    """T3 and T4 on the native worlds (decisions.md 2026-09-29, T3 reference), with E3's criteria.
+    """T3 and T4 on the native worlds, with E3's criteria.
     T3: static ContractValid at t0 minus oracle context on the same items, clustered by world,
     passes if >= -eps. T4: reader tokens per query over one full re-read at t0, passes if <= c.
     Native runs answer t0 once (natural world); baseline runs answer it on the src branch."""
@@ -340,13 +339,13 @@ def membership(
     return out
 
 
-def exploratory(
+def white_box_reference(
     natives: dict[str, list[Row]], white: dict[str, list[Row]], rows: list[Row]
 ) -> dict[str, Any]:
-    """Not pre-registered (added after the E5 results): world-bootstrap intervals of the label
-    rates (orphan persistence P, repair precision R), the white-box cells' rates on the same worlds,
-    and every white-box cell's carryover on the native worlds, so a native system can be placed
-    between the cells instead of only against the one its binary label selects."""
+    """World-bootstrap intervals of the label rates (orphan persistence P, repair precision R), the
+    white-box cells' rates on the same worlds, and every white-box cell's carryover on the native
+    worlds, so a native system can be placed between the cells instead of only against the one its
+    binary label selects."""
     worlds = {a["world_id"] for a in natives["answers"]}
     rates = {
         s: {dim: world_bootstrap(v[dim]).to_json() for dim in ("B", "D")}
@@ -423,9 +422,9 @@ def analyse(
                     )
             per["branches"][branch] = entry
         res["systems"][s] = per
-    res["exploratory"] = exploratory(natives, white, rows)
-    # Exploratory (decisions.md 2026-09-30): null baselines, noise-inflated paired differences,
-    # label-circular against out-of-sample counts, chance coverage, B identified
+    res["white_box_reference"] = white_box_reference(natives, white, rows)
+    # Null baselines, noise-inflated paired differences, label-circular against out-of-sample
+    # counts, chance coverage, B identified
     from memshift.analysis import ex_e5_null
 
     res["explore_native_null"] = ex_e5_null.analyse(

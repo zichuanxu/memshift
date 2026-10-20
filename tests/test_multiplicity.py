@@ -1,4 +1,4 @@
-"""Exploratory multiplicity check (`analysis.multiplicity`): Holm-Bonferroni and Benjamini-Hochberg
+"""Multiplicity check (`analysis.multiplicity`): Holm-Bonferroni and Benjamini-Hochberg
 on hand-computed p-value vectors, the direction of the one-sided bootstrap p-value, and the whole
 pipeline on a tiny synthetic E1 item table (recomputed estimates equal the ones in the metrics).
 The committed stages are checked too when their item tables are there (they are not committed)."""
@@ -390,7 +390,7 @@ def test_analyse_writes_the_json_and_a_stage_manifest_and_keeps_stages_apart(tmp
     m = written["method"]
     assert m["bootstrap"] == {"draws": 2000, "seed": 996}
     assert m["holm"] == {"familywise_alpha": 0.05} and m["benjamini_hochberg"] == {"q": 0.05}
-    assert "exploratory" in written["status"]
+    assert written["status"] == multiplicity.STATUS
     manifest = json.loads((tmp_path / "out" / "manifest.json").read_text())
     assert manifest["experiment"] == "merged-multiplicity"
     assert [s["run_id"] for s in manifest["sources"]] == ["stage_a", "stage_b"]
@@ -432,7 +432,7 @@ COMMITTED_COUNTS = {"stage2_e1": (42, 36, 35, 36), "stage4_rep_e1": (42, 36, 36,
 
 def test_committed_multiplicity_is_consistent_with_its_own_p_values():
     res = json.loads(COMMITTED.read_text())
-    assert "exploratory" in res["status"]
+    assert res["status"] == multiplicity.STATUS
     assert list(res["stages"]) == list(COMMITTED_COUNTS)
     for name, stage in res["stages"].items():
         rows = stage["contrasts"]

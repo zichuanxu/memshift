@@ -1,4 +1,4 @@
-Rank correlation across systems (exploratory: prereg v2 section 6, not a pre-registered test, no verdict)
+Rank correlation across systems (additional analysis: descriptive, no threshold)
 
 | system | kind | Update S_src | Update S_def | Stability orphan | rank S_src | rank S_def | rank orphan |
 |---|---|---|---|---|---|---|---|

@@ -1,6 +1,6 @@
-"""Paper numbers and tables of the exploratory analyses requested by the third review round of the
-paper (prereg/decisions.md 2026-10-16; post hoc). They change no registered contrast, margin,
-threshold or verdict and call no model. The sources are named in results/sources.json:
+"""Paper numbers and tables of the store and reader split of Eq. (1), the changed item-times by
+cause, D_m after a deletion and the query-time view. They call no model. The sources are named in
+results/sources.json:
 
   ex_round3  runs/stage6_ex_round3/analysis/, five files that the round-3 analysis modules write
              from the raw runs of stages e1, c and ctl, the G-b, H-a and H-c runs and the seeded
@@ -17,7 +17,6 @@ threshold or verdict and call no model. The sources are named in results/sources
                                   stored D_m on every item class
                writers.json       `analysis.ex_round3_writers`: the axes of the writer figure
                                   (`round3_figures.fig_writers`); no macro reads it
-  e1         analysis/e1_metrics.json (the levels of tab_main)
 
 Macros (letters only; a stage that is not staged renders as the MISSING marker, a quantity over no
 item or not defined for the class as a dash):
@@ -37,11 +36,7 @@ item or not defined for the class as a dash):
   ExRThreeView<group><class><metric>...  the view against the stored D_m (B=1, B=0) and the zero
                                          system, per definition type, and the costs per query
 
-tab_main_store        main text: the terms r0, r1, a0, a1 of Eq. (1) and B x D by shift and item
-                      class, tab_main of `analysis.ex_round2` without the cited key's m1 (label
-                      tab:main; the paper inputs it in place of tab_main.tex)
 tab_store_reader      appendix: r_store, u, l and r, a_store and a by shift, class and cell
-tab_store_reader_bxd  appendix: B x D and its two parts with intervals, authored D=1 and D_m
 tab_dm_deletion       appendix: the deleted records by class, what D_m loses there, the programs'
                       output alone on deleted and live records
 tab_view              appendix: the query-time view against the stored D_m
@@ -57,11 +52,11 @@ from typing import Any
 
 from memshift.analysis import ex_round2 as r2
 from memshift.analysis import round3_paper as r3p
-from memshift.analysis.ex_e1_paper import UNDEFINED, _cell, _Out, fmt, point, tokens
+from memshift.analysis.ex_e1_paper import UNDEFINED, _Out, fmt, point, tokens
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, pct, pp
-from memshift.analysis.paper_tables import _num, _row, interval
+from memshift.analysis.paper_tables import PAIR, _num, _row, ci_pair_cells, est_ci_cells
 
 STAGE_KEY = "ex_round3"
 STAGE_DIR = "runs/stage6_ex_round3"
@@ -104,15 +99,15 @@ PRODUCERS = {
     ),
 }
 NOTE = (
-    "exploratory, post hoc (prereg/decisions.md 2026-10-16); computed from the raw runs of the "
-    "source stages and the seeded generator, no model call; the draft tables the store_reader and "
-    "view producers also write are not staged. dm_deletion.json, store_reader.json and view.json "
-    "are recomputed after stage4_c_e1 took the re-run e1_synth_s1016-1019_20261016T222156Z "
-    "(prereg/decisions.md 2026-10-17). natural.json reads stage2_e1 only and is the file staged on "
-    "2026-10-16: rerunning its producer now changes only its audit of natural-branch answers, "
-    "which finds the block N runs made after it. writers.json (the axes of the writer figure) "
-    "reads the 18 G-b program sets, whose Qwen3.5-9B, Claude Sonnet 5.5 and Claude Opus 5.5 sets "
-    "are re-runs from the response cache (prereg/decisions.md 2026-10-17), and the H-a and H-c runs"
+    "additional analyses, computed from the raw runs of the source stages and the seeded "
+    "generator, no model call; the draft tables the store_reader and view producers also write "
+    "are not staged. dm_deletion.json, store_reader.json and view.json are recomputed after "
+    "stage4_c_e1 took the re-run e1_synth_s1016-1019_20261016T222156Z. natural.json reads "
+    "stage2_e1 only and is the file staged on 2026-10-16: rerunning its producer now changes only "
+    "its audit of natural-branch answers, which finds the block N runs made after it. writers.json "
+    "(the axes of the writer figure) reads the 18 G-b program sets, whose Qwen3.5-9B, Claude "
+    "Sonnet 5.5 and Claude Opus 5.5 sets are re-runs from the response cache, and the H-a and H-c "
+    "runs"
 )
 SOURCE_KEYS = ("e1", "c", "ctl")  # the stages the four analyses read
 
@@ -204,10 +199,7 @@ VIEW_WRITE_CELLS = (("view", "View"), ("DmB1", "Dm"), ("DmB0", "DmBzero"))
 def load(root: Path, sources: Mapping[str, str]) -> dict[str, Any]:
     """The staged inputs (None where a stage or file is not there)."""
     src = dict(sources)
-    return {
-        "main": stage_json(root, src, "e1", "e1_metrics.json"),
-        **{key: stage_json(root, src, STAGE_KEY, name) for key, name in FILES.items()},
-    }
+    return {key: stage_json(root, src, STAGE_KEY, name) for key, name in FILES.items()}
 
 
 # ----------------------------------------------------------------------------------- formats
@@ -562,66 +554,6 @@ def _pc(e: Mapping[str, Any] | None, digits: int = 1) -> str:
     return UNDEFINED if e["est"] != e["est"] else _num(e["est"], digits=digits)
 
 
-def _pct_iv(e: Mapping[str, Any] | None, digits: int = 1) -> str:
-    """A share in percent with its interval, unsigned."""
-    if not e:
-        return MISSING
-    if e["est"] != e["est"]:
-        return UNDEFINED
-    lo, hi = _num(e["lo"], digits=digits), _num(e["hi"], digits=digits)
-    return interval(_num(e["est"], digits=digits), lo, hi)
-
-
-def tab_main_store(inp: Mapping[str, Any]) -> str:
-    """Main text: the Eq. (1) levels r0, r1, a0, a1 and B x D by shift and class (tab_main of
-    `ex_round2` without the cited key's m1). The store and reader parts of B x D are in
-    tab_store_reader_bxd, the cited key's m1 by class in the appendix text."""
-    main = inp.get("main")
-    n = _get(main, "n_worlds") or MISSING
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{With Qwen3.5-9B as reader, the interaction lies in the definition items, where "
-        r"the writer re-derives few changed values correctly and the authored derivation nearly "
-        r"all. "
-        rf"The terms of $B{{\times}}D$ on Update by shift and item class (main study, {n} worlds, "
-        r"source-epoch key, percent). Share: the class's share of the changed item-times. $r_D$: "
-        r"accuracy of the re-derived items at $D$ with binding. $a_D$: Update at $D$ without "
-        r"binding, where no item is re-derived. The key misses no change, so "
-        r"$B{\times}D=(r_1{-}a_1)-(r_0{-}a_0)$ (pp, 95\% world-bootstrap interval). "
-        r"Definition: the six definition items of each world. Other: the other 42 items.}",
-        r"\label{tab:main}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{5pt}",
-        r"\begin{tabular}{@{}ll r rrrr c@{}}",
-        r"\toprule",
-        r"& & share & $r_0$ & $r_1$ & $a_0$ & $a_1$ & $B{\times}D$ \\",
-        r"\midrule",
-    ]
-    for i, (b, _) in enumerate(BRANCH_TAGS):
-        for cls in ("definition", "other"):
-            node = _get(main, "explore_decomposition", "D1", b, cls)
-            share = _get(main, "explore_class_mix", b, "classes", cls, "share")
-            bxd = _get(
-                main, "explore_class_split", "D1", b, "source", cls, "BxD_interaction_update"
-            )
-            lines.append(
-                _row(
-                    BRANCH_LABELS[b] if cls == "definition" else "",
-                    cls,
-                    MISSING if share is None else _num(share, digits=0),
-                    r2._term(_get(node, "cells", "source", "D0B1", "r")),
-                    r2._term(_get(node, "cells", "source", "D1B1", "r")),
-                    r2._term(_get(node, "cells", "source", "D0B0", "a")),
-                    r2._term(_get(node, "cells", "source", "D1B0", "a")),
-                    _cell(bxd),
-                )
-            )
-        if i < len(BRANCH_TAGS) - 1:
-            lines.append(r"\addlinespace[2pt]")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
-    return "\n".join(lines) + "\n"
-
-
 SR_ROWS = (  # label, arm, B=1 cell, B=0 cell
     (r"$D{=}0$", "D1", "D0B1", "D0B0"),
     (r"$D{=}1$", "D1", "D1B1", "D1B0"),
@@ -635,26 +567,23 @@ def tab_store_reader(inp: Mapping[str, Any]) -> str:
     sr = _get(inp.get("sr"), "results")
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The stored value and the reader behind $r$ and $a$ of \cref{eq:decomp} (20 "
-        r"worlds, source-epoch key, percent, point estimates, exploratory). $n$: the changed "
-        r"item-times. $r_{\mathrm{store}}$: the share of re-derived item-times whose stored "
-        r"state (status and typed value) is the gold under the scorer's matcher. An item that is "
-        r"not served stores no value. $u$: ContractValid given a right store, also by gold "
-        r"status (answer, or abstain where the right state is no value). $l$: ContractValid "
-        r"given a wrong store. Thus $r=r_{\mathrm{store}}u+(1{-}r_{\mathrm{store}})l$. $u$ "
-        r"includes the retrieval of the statement. $a_{\mathrm{store}}$ and $a$: the same at "
-        r"$B{=}0$, where the store is the newest served item and $a$ is Update. JSON: the $D{=}1$ "
-        r"store served as JSON records, so the same stored state. $D_{\mathrm{m}}$: the "
-        r"model-written derivation.}",
+        r"\caption{The stored value and the reader behind $r$ and $a$ of \cref{eq:decomp}, in "
+        r"percent (point estimates). $n$: changed item-times. $r_{\mathrm{store}}$: the share of "
+        r"re-derived item-times whose stored state (status and typed value) is the gold. $u$, "
+        r"$l$: accuracy given a right or a wrong store, so "
+        r"$r=r_{\mathrm{store}}u+(1{-}r_{\mathrm{store}})l$. $u$ is also given by gold status: "
+        r"answer, or abstain where the right state is no value. $a_{\mathrm{store}}$, $a$: the "
+        r"same at $B{=}0$, where the store is the newest served item. JSON: the $D{=}1$ store "
+        r"served as JSON records.}",
         r"\label{tab:store-reader}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular}{@{}lll r rrrrrr rr@{}}",
         r"\toprule",
         r"& & & & \multicolumn{6}{c}{$B{=}1$: re-derived} & \multicolumn{2}{c}{$B{=}0$} \\",
         r"\cmidrule(lr){5-10}\cmidrule(l){11-12}",
-        r"& & & $n$ & $r_{\mathrm{store}}$ & $u$ & $u$, answer & $u$, abstain & $l$ & $r$ "
-        r"& $a_{\mathrm{store}}$ & $a$ \\",
+        r"shift & class & cell & $n$ & $r_{\mathrm{store}}$ & $u$ & $u$, answer & $u$, abstain "
+        r"& $l$ & $r$ & $a_{\mathrm{store}}$ & $a$ \\",
         r"\midrule",
     ]
     for i, (b, _) in enumerate(BRANCH_TAGS):
@@ -679,56 +608,15 @@ def tab_store_reader(inp: Mapping[str, Any]) -> str:
                     )
                 )
             if k == 0:
-                lines.append(r"\addlinespace[1pt]")
+                lines.append(r"\addlinespace[2pt]")
         if i < len(BRANCH_TAGS) - 1:
-            lines.append(r"\addlinespace[3pt]")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
-    return "\n".join(lines) + "\n"
-
-
-def tab_store_reader_bxd(inp: Mapping[str, Any]) -> str:
-    """Appendix: per shift and class the B x D interaction on Update and its store and reader
-    parts, with the authored D=1 and with D_m as the D=1 arm."""
-    sr = _get(inp.get("sr"), "results")
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{The $B{\times}D$ interaction on Update, $(r_1{-}a_1)-(r_0{-}a_0)$, split into "
-        r"a store part and a reader part (pp, 95\% world-bootstrap intervals, source-epoch key, "
-        r"which misses no change, 20 worlds, exploratory). The store part is the same contrast of "
-        r"the shares of item-times whose stored value is right ($r_{\mathrm{store}}$, "
-        r"$a_{\mathrm{store}}$ of \cref{tab:store-reader}). The reader part is the same contrast "
-        r"of $r-r_{\mathrm{store}}$ and $a-a_{\mathrm{store}}$. $D_{\mathrm{m}}$: the "
-        r"model-written derivation as the $D{=}1$ arm.}",
-        r"\label{tab:store-reader-bxd}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}lll ccc@{}}",
-        r"\toprule",
-        r"& & & $B{\times}D$ & store part & reader part \\",
-        r"\midrule",
-    ]
-    for i, (b, _) in enumerate(BRANCH_TAGS):
-        for k, (cls, _) in enumerate(CLASSES):
-            for j, (arm, label) in enumerate((("D1", r"$D{=}1$"), ("D1s", r"$D_{\mathrm{m}}$"))):
-                q = _get(sr, arm, b, cls, "interaction")
-                lines.append(
-                    _row(
-                        BRANCH_LABELS[b] if (k == 0 and j == 0) else "",
-                        cls if j == 0 else "",
-                        label,
-                        *(_cell(_get(q, key)) for key in ("interaction", "store", "reader")),
-                    )
-                )
-            if k < len(CLASSES) - 1:
-                lines.append(r"\addlinespace[1pt]")
-        if i < len(BRANCH_TAGS) - 1:
-            lines.append(r"\addlinespace[3pt]")
+            lines.append(r"\midrule")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
 
 
 DEL_TABLE_CLASSES = (
-    ("ok", "ContractValid"),
+    ("ok", "correct"),
     ("a", r"value stored ($a$)"),
     ("d", r"reader ($d$)"),
     ("c", r"failed ($c$)"),
@@ -742,72 +630,86 @@ DEL_TABLE_KINDS = (
 
 
 def tab_dm_deletion(inp: Mapping[str, Any]) -> str:
-    """Appendix: (a) the deleted records by class per cell; (b) what D_m loses against D=0 there,
-    by the class D_m falls in; (c) the programs' output alone on deleted and live records."""
+    """Appendix, two tables: the deleted records by class per cell beside what D_m loses against
+    D=0 there, by the class D_m falls in, in one grid (`tab:dm-deletion`); and the programs'
+    output alone on deleted and live records (`tab:dm-programs`)."""
     dm = inp.get("dm")
     node = _get(dm, "B1", "populations", *DELETED)
     acc = _get(node, "accounting_vs_D0")
     n = _get(node, "n_item_times")
-    worlds = _get(dm, "inputs", "worlds")
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{Why the model-written derivation $D_{\mathrm{m}}$ repairs worse than $D{=}0$ "
-        rf"after a deletion ($\Sdel$, {_count(worlds)} worlds, $B{{=}}1$, source-epoch "
-        r"key, exploratory). (a) The changed item-times whose record was deleted (gold "
-        rf"\texttt{{abstain}}, $n$: {_count(n)}), in percent. $a$: a value stored where gold is "
-        r"no value. $d$: the stored state is right but the reader's answer is wrong. $c$: the "
-        r"replacement failed, so nothing is served. $e$: not re-derived at the checkpoint. (b) "
-        r"The item-times $D{=}0$ answers right and $D_{\mathrm{m}}$ wrong, by the class "
-        r"$D_{\mathrm{m}}$ falls in: pp of all $n$ and share of the loss "
-        r"(95\% world-bootstrap intervals). The program's value: class $a$ where the stored value "
-        r"is not the writer's own. (c) The program's output alone on the re-derived item-times "
-        r"of deleted records and of live records that did not change. Wrong is a value for a "
-        r"deleted record, or a wrong value or none for a live one (percent, 95\% intervals).}",
-        r"\label{tab:dm-deletion}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}l rrrrr@{}}",
-        r"\toprule",
-        r"(a) & " + " & ".join(label for _, label in DEL_TABLE_CLASSES) + r" \\",
-        r"\midrule",
-    ]
-    for cell, label in (("D0", r"$D{=}0$"), ("D1", r"$D{=}1$"), ("Dm", r"$D_{\mathrm{m}}$")):
-        share = _get(node, "share", cell)
-        lines.append(_row(label, *(_pc(_get(share, k)) for k, _ in DEL_TABLE_CLASSES)))
     shares = _get(acc, "loss_share_of_total")
     loss = _get(acc, "loss_by_Dm_class")
     staged = acc is not None
-    lines += [
-        r"\bottomrule",
-        r"\end{tabular}",
-        r"\par\medskip",
-        r"\begin{tabular}{@{}l cc@{}}",
+    blank = ["", "", ""]
+    lines = [
+        r"\begin{table}[t]",
+        r"\caption{Why the writer's programs ($D_{\mathrm{m}}$) repair worse than $D{=}0$ "
+        rf"after a deletion: the {_count(n)} changed item-times whose record was deleted (gold "
+        r"\texttt{abstain}) by what the cell stored and how the reader answered, and what "
+        r"$D_{\mathrm{m}}$ loses against $D{=}0$ there. $a$: a value stored where gold is no "
+        r"value. $d$: the stored state is right but the reader's answer is wrong. $c$: the "
+        r"replacement failed, so nothing is served. $e$: not re-derived at the checkpoint. "
+        r"Loss: the item-times $D{=}0$ answers right and $D_{\mathrm{m}}$ wrong, by the class "
+        r"$D_{\mathrm{m}}$ falls in.}",
+        r"\label{tab:dm-deletion}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        rf"\begin{{tabular}}{{@{{}}l rrr {PAIR} {PAIR}@{{}}}}",
         r"\toprule",
-        r"(b) $D_{\mathrm{m}}$ against $D{=}0$ & pp & share of the loss (\%) \\",
+        r"& \multicolumn{3}{c}{item-times (\%)} & \multicolumn{4}{c}{$D_{\mathrm{m}}$ against "
+        r"$D{=}0$} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(l){5-8}",
+        r"class & $D{=}0$ & $D{=}1$ & $D_{\mathrm{m}}$ & \multicolumn{2}{c}{loss (pp)} "
+        r"& \multicolumn{2}{c}{share of the loss (\%)} \\",
         r"\midrule",
     ]
-    for k, label in DEL_TABLE_CLASSES[1:]:
-        lines.append(_row(label, _pct_iv(_get(loss, k)), _pct_iv(_get(shares, k))))
+    for k, label in DEL_TABLE_CLASSES:
+        levels = [_pc(_get(node, "share", cell, k)) for cell in ("D0", "D1", "Dm")]
+        if k == "ok":  # the loss is split by the class D_m falls in, not by its correct answers
+            lines.append(_row(label, *levels, _span(""), _span("")))
+            continue
+        lines.append(
+            _row(label, *levels, ci_pair_cells(_get(loss, k)), ci_pair_cells(_get(shares, k)))
+        )
         if k == "a":
             lines.append(
                 _row(
                     r"\quad the program's value",
-                    UNDEFINED if staged else MISSING,
-                    _pct_iv(_get(shares, "a_replacement")),
+                    *blank,
+                    _span(UNDEFINED if staged else MISSING),
+                    ci_pair_cells(_get(shares, "a_replacement")),
                 )
             )
     lines += [
-        r"\addlinespace[1pt]",
-        _row("lost", _pct_iv(_get(acc, "loss_total")), "100" if staged else MISSING),
-        _row("gained", _pct_iv(_get(acc, "gain_total")), UNDEFINED if staged else MISSING),
+        r"\addlinespace[2pt]",
+        _row(
+            "lost",
+            *blank,
+            ci_pair_cells(_get(acc, "loss_total")),
+            _alone("100") if staged else _span(MISSING),
+        ),
+        _row(
+            "gained",
+            *blank,
+            ci_pair_cells(_get(acc, "gain_total")),
+            _span(UNDEFINED if staged else MISSING),
+        ),
         r"\bottomrule",
         r"\end{tabular}",
-        r"\par\medskip",
-        r"\begin{tabular}{@{}l rc rc@{}}",
+        r"\end{table}",
+        "",
+        r"\begin{table}[t]",
+        r"\caption{The writer's programs alone after a deletion, on the re-derived item-times of "
+        r"deleted records and of live records that did not change. Wrong: a value for a deleted "
+        r"record, or a wrong value or none for a live one.}",
+        r"\label{tab:dm-programs}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        rf"\begin{{tabular}}{{@{{}}l r{PAIR} r{PAIR}@{{}}}}",
         r"\toprule",
-        r"& \multicolumn{2}{c}{deleted record} & \multicolumn{2}{c}{live record} \\",
-        r"\cmidrule(lr){2-3}\cmidrule(l){4-5}",
-        r"(c) program alone & $n$ & wrong & $n$ & wrong \\",
+        r"& \multicolumn{3}{c}{deleted record} & \multicolumn{3}{c}{live record} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(l){5-7}",
+        r"program & $n$ & \multicolumn{2}{c}{wrong (\%)} & $n$ & \multicolumn{2}{c}{wrong (\%)} \\",
         r"\midrule",
     ]
     by_kind = _get(dm, "B1", "program_by_kind")
@@ -815,10 +717,20 @@ def tab_dm_deletion(inp: Mapping[str, Any]) -> str:
         cells = []
         for group, _ in DEL_GROUPS:
             g = _get(by_kind, kind, group)
-            cells += [_count(_get(g, "n")), _pct_iv(_get(g, "wrong"))]
+            cells += [_count(_get(g, "n")), ci_pair_cells(_get(g, "wrong"))]
         lines.append(_row(label, *cells))
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
+
+
+def _span(text: str) -> str:
+    """One value across both cells of an estimate-and-interval column pair."""
+    return rf"\multicolumn{{2}}{{c}}{{{text}}}"
+
+
+def _alone(est: str) -> str:
+    """An estimate without an interval in an estimate-and-interval column pair."""
+    return f"{est} & "
 
 
 VIEW_TABLE_CELLS = ("view", "DmB1", "DmB0", "zero")
@@ -831,27 +743,27 @@ def tab_view(inp: Mapping[str, Any]) -> str:
     without binding, the zero system and three paired differences."""
     view = inp.get("view")
     worlds = _get(view, "sources", "worlds") or []
-    ncol = 3 + len(VIEW_TABLE_CELLS) + len(VIEW_TABLE_CONTRASTS)
+    ncol = 3 + len(VIEW_TABLE_CELLS) + 2 * len(VIEW_TABLE_CONTRASTS)
+    dm = r"$D_{\mathrm{m}}$"
+    pairs = " ".join([r"r@{\,}l"] * len(VIEW_TABLE_CONTRASTS))
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The query-time view against the stored model-written derivation on every item "
-        r"class (exploratory). Update (changed item-times) and Stability (unchanged item-times), "
-        rf"in percent, on the same probes of {len(worlds) or MISSING} test worlds. View: the zero "
-        r"system plus the writer's program run on the live records at the probe's time, with "
-        r"nothing stored. $D_{\mathrm{m}}$: \holdmem{} with the same programs, stored and bound by "
-        r"the source-epoch key. $B{=}0$: the same without binding. Zero: the zero system. "
-        r"Paired differences in pp with 95\% world-bootstrap "
-        r"intervals. $n$: paired item-times. Pooled: the item-times of $\Ssrc$, $\Sdef$ and "
-        r"$\Sdel$ together, clustered by world.}",
+        r"\caption{The query-time view against the cell with the stored programs on every item "
+        rf"class ({len(worlds) or MISSING} worlds, the same probes). View: no-store BM25 plus "
+        r"the writer's program run on the live records at the probe's time, with nothing stored. "
+        rf"{dm}: \holdmem{{}} with the same programs, stored with the source key. $B{{=}}0$: the "
+        r"same without a key. No-store: no-store BM25. $n$: paired item-times. Pooled: the three "
+        r"shifts together.}",
         r"\label{tab:view}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{2pt}",
-        r"\begin{tabular}{@{}ll r rrrr@{\quad}rrr@{}}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        rf"\begin{{tabular}}{{@{{}}ll r rrrr {pairs}@{{}}}}",
         r"\toprule",
-        r"& & & \multicolumn{4}{c}{percent} & \multicolumn{3}{c}{paired difference (pp)} \\",
-        r"\cmidrule(lr){4-7}\cmidrule(l){8-10}",
-        r"& & $n$ & view & $D_{\mathrm{m}}$ & $B{=}0$ & zero "
-        r"& view $-$ $D_{\mathrm{m}}$ & view $-$ zero & $D_{\mathrm{m}}$ $-$ zero \\",
+        r"& & & \multicolumn{4}{c}{level (\%)} & \multicolumn{6}{c}{paired difference (pp)} \\",
+        r"\cmidrule(lr){4-7}\cmidrule(l){8-13}",
+        rf"shift & class & $n$ & view & {dm} & $B{{=}}0$ & no-store "
+        rf"& \multicolumn{{2}}{{c}}{{view $-$ {dm}}} & \multicolumn{{2}}{{c}}{{view $-$ no-store}} "
+        rf"& \multicolumn{{2}}{{c}}{{{dm} $-$ no-store}} \\",
     ]
     for metric, title in (
         ("update", "Update (changed item-times)"),
@@ -869,7 +781,7 @@ def tab_view(inp: Mapping[str, Any]) -> str:
                         cls,
                         _count(n),
                         *(_pc(_get(lv, c), digits=0) for c in VIEW_TABLE_CELLS),
-                        *(_cell(_get(cn, c)) for c in VIEW_TABLE_CONTRASTS),
+                        *(est_ci_cells(_get(cn, c), sign=True) for c in VIEW_TABLE_CONTRASTS),
                     )
                 )
             if i < len(VIEW_GROUPS) - 1:
@@ -880,9 +792,7 @@ def tab_view(inp: Mapping[str, Any]) -> str:
 
 def tables(inp: Mapping[str, Any]) -> dict[str, str]:
     return {
-        "tab_main_store.tex": tab_main_store(inp),
         "tab_store_reader.tex": tab_store_reader(inp),
-        "tab_store_reader_bxd.tex": tab_store_reader_bxd(inp),
         "tab_dm_deletion.tex": tab_dm_deletion(inp),
         "tab_view.tex": tab_view(inp),
     }

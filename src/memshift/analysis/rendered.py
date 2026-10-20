@@ -1,8 +1,8 @@
-"""Block L (prereg/v2.md §5): the M2 checks on LLM-rendered worlds, and their paired difference
-from the same-seed template worlds.
+"""Block L: the M2 checks on LLM-rendered worlds, and their paired difference from the same-seed
+template worlds.
 
 (a) `families.family_checks` on the rendered E1 run, the same call block M2 makes: checks (i)-(v)
-    of prereg v2 §2 and the pattern verdict (ii)-(iv). The same call on the template test data,
+    of `families` and whether (ii)-(iv) are all true. The same call on the template test data,
     restricted to the rendered run's worlds, gives the reference.
 (b) For every contrast behind (ii)-(v), and each D effect on missed invalidation (path 2, every
     granularity and branch present in both), the difference rendered minus template. Both conditions
@@ -46,7 +46,7 @@ from memshift.scoring.stats import item_diffs, paired_diff, world_bootstrap
 Row = dict[str, Any]
 Vec = dict[str, dict[str, float]]  # world -> item -> value
 
-# family_checks estimate name -> (check of prereg v2 §2, branch, e1.contrasts key)
+# family_checks estimate name -> (check of `families`, branch, e1.contrasts key)
 FAMILY_CONTRASTS: dict[str, tuple[str | None, str, str]] = {
     "B_update_src": ("ii", "src", "B_effect_update_pooled_source"),
     "D_repair_src": ("iii", "src", "D_effect_repair_source"),
@@ -204,7 +204,7 @@ def _cv_vectors(rows: list[Row]) -> dict[tuple[str, str, str], Vec]:
 
 def cell_rows(rows_r: list[Row], rows_t: list[Row]) -> list[Row]:
     """ContractValid rendered minus template per (branch, cell, period), paired at the probe level
-    (descriptive: no verdict attaches to it)."""
+    (descriptive: no threshold attaches to it)."""
     vr, vt = _cv_vectors(rows_r), _cv_vectors(rows_t)
     rows = [
         paired_row(vr[key], vt[key], per_world=False, branch=key[0], system=key[1], period=key[2])
@@ -244,7 +244,7 @@ def compare_checks(fam_r: dict[str, Any], fam_t: dict[str, Any]) -> dict[str, An
     }
     return {
         "checks": checks,
-        "pattern_holds": {"rendered": fam_r["pattern_holds"], "template": fam_t["pattern_holds"]},
+        "ii_to_iv_true": {"rendered": fam_r["ii_to_iv_true"], "template": fam_t["ii_to_iv_true"]},
     }
 
 
@@ -381,7 +381,6 @@ def analyse(
     sum_r, sum_t = summarise(rows_r), summarise(rows_t)
     fam_r, fam_t = families.family_checks(sum_r, rows_r), families.family_checks(sum_t, rows_t)
     res = {
-        "prereg": "v2 section 5 (block L); checks (i)-(v) of section 2 (M2)",
         "worlds": worlds,
         "worlds_missing_in_template": [w for w in worlds if w not in template_worlds],
         "rendered": fam_r,
@@ -410,8 +409,8 @@ if __name__ == "__main__":
             {
                 "worlds": len(r["worlds"]),
                 "rendered_checks": r["rendered"]["checks"],
-                "rendered_pattern_holds": r["rendered"]["pattern_holds"],
-                "template_pattern_holds": r["template_same_seeds"]["pattern_holds"],
+                "rendered_ii_to_iv_true": r["rendered"]["ii_to_iv_true"],
+                "template_ii_to_iv_true": r["template_same_seeds"]["ii_to_iv_true"],
                 "diff_rendered_minus_template": {
                     p["name"]: round(p["diff"]["est"], 4) for p in r["paired"]
                 },

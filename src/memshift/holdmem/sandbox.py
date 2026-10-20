@@ -1,4 +1,4 @@
-"""Restricted interpreter for the model-written derivations of the D1s cell (prereg v2 §4).
+"""Restricted interpreter for the model-written derivations of the D1s cell.
 
 A program is Python source that defines `derive(records, as_of)`. It is parsed with `ast` and
 rejected unless every node is on a whitelist: no imports, no names starting with `__`, no
@@ -6,15 +6,17 @@ attributes starting with `_`, no frame or generator introspection attributes, no
 (`now`, `today`, `utcnow`: the only clock is `as_of`, so a program cannot depend on when it runs),
 no bare `except`, and no `open`, `eval`, `exec`, `compile`, `globals`, `locals`, `vars`, `getattr`,
 `setattr`, `delattr`, `input`, `breakpoint`. A single leading underscore is allowed on local
-names (`_` as a throwaway loop variable is harmless); the prereg rule is about double underscores.
+names (`_` as a throwaway loop variable is harmless); the rule is about double underscores.
 
 Execution happens in a separate interpreter (`python -S -P` on this very file, hash seed fixed)
 with a whitelisted `__builtins__` plus `datetime`, `timedelta` and `parse_ts`. (The builtins carry
 an `__import__` that resolves only `_strptime` and `time`, which the C code of `datetime.strptime`
 and `strftime` needs; a program cannot name it.) The child arms a
-2 s alarm around the program; the alarm exception derives from BaseException, so `except
-Exception` inside a program cannot swallow it. The parent additionally kills the child after a
-grace period, which covers a long uninterruptible C call. The address space of the child is capped
+timer of 2 s of its own CPU time around the program (CPU time, not wall time, so that a busy host
+cannot make a program time out that finishes on an idle one); the
+timer's exception derives from BaseException, so `except Exception` inside a program cannot
+swallow it. The parent additionally kills the child after a wall-clock grace period, which covers
+a long uninterruptible C call. The address space of the child is capped
 where the platform enforces it. Records travel as JSON on stdin, the answer comes back as JSON on
 stdout. Only the standard library is imported here because the file doubles as the child's script.
 
@@ -43,7 +45,7 @@ from pathlib import Path
 from typing import Any
 
 TIMEOUT_S = 2.0
-KILL_GRACE_S = 10.0  # process start, JSON decoding and calls that ignore the alarm
+KILL_GRACE_S = 60.0  # wall time: process start, JSON decoding, calls that ignore the timer, load
 MAX_CODE_CHARS = 20_000
 MEMORY_LIMIT_BYTES = 4 << 30
 
@@ -191,7 +193,7 @@ LOCATOR_FIELDS: dict[str, tuple[str, ...]] = {
 _TS_FORMATS = ("%Y-%m-%d %H:%M", "%Y-%m-%dT%H:%M", "%Y-%m-%d")
 _CALLABLE_IMPORTS = frozenset({"_strptime", "time"})  # see `_restricted_import`
 # `from datetime import datetime, timedelta` (any subset, no other alias) only binds names the
-# program already has; it becomes `pass` before the whitelist check (decisions.md 2026-09-29).
+# program already has; it becomes `pass` before the whitelist check.
 # Every other import statement stays disallowed syntax.
 PROVIDED_IMPORTS: dict[str, frozenset[str]] = {"datetime": frozenset({"datetime", "timedelta"})}
 
@@ -332,7 +334,7 @@ _SLOTS = threading.BoundedSemaphore(max(2, min(8, os.cpu_count() or 2)))
 
 # ---------------------------------------------------------------------------- child process
 class _Timeout(BaseException):
-    """Raised by the alarm; BaseException so that `except Exception` in a program passes it on."""
+    """Raised by the timer; BaseException so that `except Exception` in a program passes it on."""
 
 
 def _on_alarm(signum: int, frame: Any) -> None:
@@ -445,8 +447,8 @@ def _run(
     reads = _Reads()
     if prior_reads is not None:
         records = [_Tracked(r, reads) for r in records]
-    signal.signal(signal.SIGALRM, _on_alarm)
-    signal.setitimer(signal.ITIMER_REAL, timeout, 0.25)
+    signal.signal(signal.SIGPROF, _on_alarm)
+    signal.setitimer(signal.ITIMER_PROF, timeout, 0.25)
     try:
         exec(program, namespace)
         if prior_reads is None:
@@ -458,7 +460,7 @@ def _run(
     except Exception as exc:
         return {"ok": False, "error": f"{type(exc).__name__}: {exc}"[:200]}
     finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.setitimer(signal.ITIMER_PROF, 0)
     if prior_reads is not None:
         return _ra_answer(value, reads)
     if value is not None and not isinstance(value, (str, list)):

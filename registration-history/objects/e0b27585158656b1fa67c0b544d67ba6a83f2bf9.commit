@@ -1,8 +1,0 @@
-tree 465cbdce8dda2a79c47dd1865c875d4943f51c03
-parent 92985a8201db4cc40b80df38ed20bce204e026cf
-author zichuanxu <zichuanxu28@gmail.com> 1790684330 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790684330 +0900
-
-theta_r rerun on the main vLLM image (shim, separate reader cache): 13,720 answers on worlds 1000-1004; E7 restaged. Engine check on identical requests: contexts 100% identical, answers 99.1% identical, no cell moves more than 0.56 pp; all four pre-registered contrasts keep sign and size. Old 0.20.0 runs superseded; paper tables and numbers regenerated; STATUS, final report and review record updated
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,9 +1,0 @@
-tree 8cee85bfc7da5495d25094f39140365902a8fb94
-parent 67ab9a47a35f80c7a25ff3401c498465b90ce9b7
-parent e4ed2d01c7a9560433db83763dd84f484f543418
-author zichuanxu <zichuanxu28@gmail.com> 1790693643 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790693643 +0900
-
-Merge neighbour comparison table (prereg v2 §6) and Related Work passage
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

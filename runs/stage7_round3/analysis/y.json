@@ -1,6 +1,6 @@
 {
  "block": "Y",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -3777,50 +3777,42 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "Y1": {
-   "verdict": "holds",
-   "reason": "1 of 1 met",
    "tests": [
     {
      "key": "BxD_def_other_D1_reader",
      "value": 0.09941520467836257,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
-   ],
-   "reading": "the interaction is not confined to the six definitions; the 9B reader hides it on the other items"
+   ]
   },
   "Y2": {
-   "verdict": "holds",
-   "reason": "1 of 1 met",
    "tests": [
     {
      "key": "BxD_orphan_other_D1_reader",
      "value": 0.05277587388622344,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
    ]
   },
   "Y3": {
-   "verdict": "fails",
-   "reason": "0 of 2 met; not met: BxD_src_definition_D1_reader_minus_committed -0.0871, BxD_def_definition_D1_reader_minus_committed -0.1525",
    "tests": [
     {
      "key": "BxD_src_definition_D1_reader_minus_committed",
      "value": -0.08708708708708708,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "|est| <= 5 pp"
     },
     {
      "key": "BxD_def_definition_D1_reader_minus_committed",
      "value": -0.1524547803617571,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "|est| <= 5 pp"
     }
-   ],
-   "reading_if_holds": "the definition-item result does not depend on the reader"
+   ]
   }
  },
  "reported": {
@@ -7019,9 +7011,9 @@
     "claude-sonnet-5-5"
    ],
    "answers": 68474,
-   "answers_registered_cells": 58692,
+   "answers_arm_cells": 58692,
    "unreadable": 0,
-   "unreadable_registered_cells": 0,
+   "unreadable_arm_cells": 0,
    "reader_calls": 68474,
    "reader_calls_cached": 66046,
    "cut_off": 0,
@@ -7033,11 +7025,11 @@
     {
      "key": "unreadable_or_cut_off_share",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "<= 2%"
     }
    ],
-   "valid": true
+   "within_limits": true
   },
   "worlds": [
    "w1000",
@@ -35919,7 +35911,7 @@
   }
  },
  "notes": {
-  "Y": "validity: the reader's answers with status \"error\" (unreadable) and its calls with finish_reason \"length\" (cut off at the output limit) are counted separately over every answer it gave, json arm included (an answer both cut off and unreadable counts twice); at most 2% in all, else Y1-Y3 are not judged. The context anchor voids a prediction when a context differs in a cell it uses (Y1-Y3: D0B0 to D1B1_source); an answer whose context differs in another cell (a D_m program that failed in the committed run and ran in this one, or the reverse) did not read the committed store and is left out of every quantity, and `pairing.detail.context_differs` lists it.",
+  "Y": "validity: the reader's answers with status \"error\" (unreadable) and its calls with finish_reason \"length\" (cut off at the output limit) are counted separately over every answer it gave, json arm included (an answer both cut off and unreadable counts twice); at most 2% in all (`within_limits`). The context anchor voids a comparison when a context differs in a cell it uses (Y1-Y3: D0B0 to D1B1_source); an answer whose context differs in another cell (a D_m program that failed in the committed run and ran in this one, or the reverse) did not read the committed store and is left out of every quantity, and `pairing.detail.context_differs` lists it.",
   "Y1-Y3": "B x D with the authored D=1 cells, on the reader's own item-times (those of the committed cells when the pairing holds). Y1 (S_def) and Y2 (S_del), the 42 other items: lower bound > 0. Y3: the paired per-item difference of the double differences, Sonnet reader minus Qwen3.5-9B reader, over the item-times both answered; |point estimate| <= 5 pp after S_src and after S_def. The store/reader split is `ex_round3_store_reader`'s on the reader's answers: the stores are the committed ones, so its store part is the committed analysis's and the paired difference of B x D is a difference of reader parts."
  },
  "code": {

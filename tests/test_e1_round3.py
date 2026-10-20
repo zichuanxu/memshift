@@ -1,6 +1,6 @@
-"""The run-level writer flags of prereg v4 (round 3): the thinking writer's output limit
-(`--think-max-tokens`, block H-b), the definition-item writer (`--defwriter`, block H-a) and the
-program sets (`--program-model`, `--program-temperature`, `--program-sample`, block G-b). Each test
+"""The run-level writer flags of round 3: the thinking writer's output limit
+(`--think-max-tokens`), the definition-item writer (`--defwriter`) and the program sets
+(`--program-model`, `--program-temperature`, `--program-sample`). Each test
 replays cells on one small world with recording fake writers, which give the request bodies of
 every client. That the defaults change no existing request is pinned in test_e1_round3_pins.py."""
 
@@ -37,7 +37,7 @@ WEEKS = (1, 2)
 KAPPA_DESCRIPTIONS = {spec["description"] for spec in KAPPA_DEFS.values()}
 SONNET = "claude-sonnet-5-5"
 OPUS = "claude-opus-5-5"
-# what the API must never receive from the Claude clients (prereg/decisions.md, 2026-10-16)
+# what the API must never receive from the Claude clients (fixed Claude request settings)
 NOT_SENT = {"temperature", "top_p", "seed", "response_format", "chat_template_kwargs"}
 
 
@@ -334,7 +334,7 @@ def test_program_extra_body_and_when_a_separate_client_is_needed():
     for model in (SONNET, OPUS):
         with pytest.raises(ValueError, match="no temperature"):
             program_extra_body(model, 0.7, 0)
-    with pytest.raises(ValueError, match="no registered"):
+    with pytest.raises(ValueError, match="no program-writer settings"):
         program_extra_body("claude-other-1")
     assert not separate_program_client(qwen, qwen, 0.0, None)
     assert separate_program_client(SONNET, qwen, 0.0, None)

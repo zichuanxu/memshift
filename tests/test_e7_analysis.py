@@ -1,3 +1,9 @@
+import json
+import re
+from pathlib import Path
+
+import pytest
+
 from memshift.analysis.e7 import conflict_cons, readset
 
 
@@ -85,44 +91,100 @@ def test_swap_compares_same_worlds(tmp_path):
     assert set(res["src"]["systems"]) == {cfg.name for cfg in cells} | {"holdmem_json_arm"}
 
 
-def test_same_sign_verdict():
+def test_same_sign():
     from memshift.analysis.e7 import same_sign
 
     assert same_sign({"est": 0.1}, {"est": 0.02}) is True
     assert same_sign({"est": 0.1}, {"est": -0.02}) is False
     assert same_sign({"est": -0.1}, {"est": -0.3}) is True
     assert same_sign({"est": 0.1}, {"est": 0.0}) is False
-    assert same_sign({"est": 0.0}, {"est": 0.1}) is None  # predicted zero: no sign to keep
+    assert same_sign({"est": 0.0}, {"est": 0.1}) is None  # a zero estimate: no sign to keep
     assert same_sign(None, {"est": 0.1}) is None
 
 
-def test_audit_table_marks_and_excludes_extra_rows():
+def _audit_row(name, group, d, b, d_basis="code", b_basis="code"):
+    return {"short_name": name, "group": group, "D": d, "B": b, "D_basis": d_basis,
+            "B_basis": b_basis}  # fmt: skip
+
+
+def test_audit_table_places_each_system_and_excludes_extra_rows():
     from memshift.analysis.audit_table import table
 
     rows = [
-        {"short_name": "A_sys", "group": "vendor", "owner": "vendor", "D": "partial", "B": "0",
-         "T1": "pass", "T1_basis": "measured", "T2": "fail", "T2_basis": "inferred",
-         "T3": "pending E5", "T4": "undeterminable", "T4_basis": "by construction"},
-        {"short_name": "Extra", "group": "extra (starting audit)", "owner": "agent", "D": "0",
-         "B": "0", "T1": "pass", "T2": "pass", "T3": "pass", "T4": "pass"},
-    ]  # fmt: skip
+        _audit_row("A_sys", "vendor", "partial", "0", "inferred", "documented + inferred"),
+        _audit_row("Extra", "extra (starting audit)", "0", "0"),
+        _audit_row("Index", "personal data store", "N/A", "N/A", "documented", "documented"),
+        _audit_row("HoldMem (1,1)", "ours", "1", "1"),
+    ]
     tex = table(rows)
-    assert r"A\_sys & vendor & part. & 0 & \checkmark & $\times$$^\dagger$ & pend.~E5" in tex
-    assert "?$^\\ddagger$" in tex and "Extra" not in tex
+    assert r"A\_sys & partial & 0 &  & documentation, indirect evidence \\" in tex
+    assert "Extra" not in tex
+    assert r"Index & --- & --- &  & documentation \\" in tex  # stores no derived item
+    assert r"\holdmem{}(1,1) & 1 & 1 &  & code \\" in tex  # no space before the cell
+    # the native systems that the audit does not cover take their documented label
+    assert r"A-Mem \citep{xu2025amem} & 0 & 0 & \checkmark &" in tex
+    assert r"HippoRAG~2 \citep{gutierrez2025hipporag2} & 0 & 1 & \checkmark &" in tex
+    # the table places systems on the (D,B) grid: no test marks, versions or commits
+    assert "?" not in tex.split(r"\label{tab:audit}")[1]
+    assert not re.search(r"\d+\.\d+\.\d+|commit|mem0ai|lightrag-hku", tex)
 
 
-def test_audit_caption_explains_every_mark_and_how_its_labels_differ_from_native_labels():
+def test_audit_table_groups_rows_and_notes_a_label_that_differs():
+    from memshift.analysis.audit_table import GROUPS, table
+
+    rows = [
+        _audit_row("Mem0 (self-hosted)", "memory layer", "0", "0"),
+        _audit_row("Cognee", "memory layer", "partial", "0"),
+        _audit_row("zero system (ours)", "ours", "N/A", "N/A"),
+    ]
+    tex = table(rows)
+    titles = [rf"\emph{{{title}}}" for title, _ in GROUPS if title != "products"]
+    positions = [tex.index(t) for t in titles if t in tex]
+    assert positions == sorted(positions) and len(positions) == 2
+    # Mem0's audit placement equals its documented label; Cognee's does not
+    mem0 = next(ln for ln in tex.splitlines() if ln.startswith("Mem0"))
+    assert r"& 0 & 0 & \checkmark &" in mem0 and "$^{a}$" not in mem0
+    cognee = next(ln for ln in tex.splitlines() if ln.startswith("Cognee"))
+    assert r"& partial & 0$^{a}$ & \checkmark &" in cognee
+    assert r"\NatCogneeLabel{}" in tex and tex.count("$^{a}$") == 2  # the mark and its note
+    assert r"no-store BM25 & --- & --- &  & code \\" in tex
+
+
+def test_audit_caption_keys_every_mark_and_states_no_method():
     from memshift.analysis.audit_table import table
 
     caption = table([]).split(r"\label{tab:audit}")[0]
     for term in (
-        "Diagnostic tests",
-        "retention test, leaving test, utility floor (floor) and cost ceiling (cost)",
-        r"(so ?$^\dagger$ and ?$^\ddagger$ are undeterminable for that reason)",
-        "-- = not applicable (the system stores no derived item)",
-        r"counts an incomplete key as $B{=}0$",
-        "infers its label from measurement",
-        "(Cognee: (part., 0) here, (0,1) there)",
+        "on the $(D,B)$ grid",
+        r"\checkmark: run natively",
+        "---: the system stores no derived item",
+        "Basis: what the placement rests on",
     ):
         assert term in caption, term
-    assert "Membership" not in caption
+    assert caption.count(". ") <= 4  # one sentence and a short key
+    for gone in ("Membership", "verdict", "pass", "rubric", "version", "Owner"):
+        assert gone not in caption, gone
+
+
+def test_audit_basis_names_the_evidence_once_in_a_fixed_order():
+    from memshift.analysis.audit_table import basis
+
+    assert basis(_audit_row("x", "g", "0", "0", "inferred (low confidence)", "documented")) == (
+        "documentation, indirect evidence (low confidence)"
+    )
+    assert basis(_audit_row("x", "g", "0", "0", "code + paper", "paper + documented")) == (
+        "code, paper, documentation"
+    )
+
+
+@pytest.mark.paper
+def test_committed_audit_table_is_current():
+    from memshift.analysis.audit_table import table
+
+    root = Path(__file__).resolve().parents[1]
+    rows = json.loads((root / "audit" / "system_audit.json").read_text())
+    committed = (root / "paper" / "generated" / "audit_table.tex").read_text()
+    assert committed == "% generated by memshift.analysis.audit_table; do not edit\n" + table(rows)
+    labels = (r"\label{tab:audit}", r"\label{tab:native-labels}")
+    assert all(label in committed for label in labels)
+    assert committed.count(r"\checkmark &") == 6  # the six native systems

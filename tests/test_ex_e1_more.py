@@ -1,7 +1,7 @@
-"""Second-round exploratory E1 analyses (`analysis.ex_e1_more`): the out-of-sample baselines agree
-with the earlier test where they overlap, the pooled cell mean and the missed-item and zero-system
-contrasts are checked by hand on tables small enough to add up, and the committed stage analysis
-holds the numbers a reviewer recomputed."""
+"""Further E1 analyses (`analysis.ex_e1_more`): the out-of-sample baselines agree with the
+earlier test where they overlap, the pooled cell mean and the missed-item and zero-system contrasts
+are checked by hand on tables small enough to add up, and the committed stage analysis holds the
+numbers recomputed by hand."""
 
 import json
 from pathlib import Path

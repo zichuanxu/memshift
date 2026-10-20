@@ -1,6 +1,6 @@
 {
  "block": "V",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -4115,34 +4115,28 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "V1": {
-   "verdict": "holds",
-   "reason": "1 of 1 met",
    "tests": [
     {
      "key": "BxD_def_definition_Dm_two_way",
      "value": 0.327878265862762,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
    ],
-   "sets": 9,
-   "reading_if_both_hold": "design rules 2 and 4 apply to a definition the user states in their own words, given the memory's data model"
+   "sets": 9
   },
   "V2": {
-   "verdict": "holds",
-   "reason": "1 of 1 met",
    "tests": [
     {
      "key": "BxD_src_definition_Dm_two_way",
      "value": 0.22422422422422422,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
    ],
-   "sets": 9,
-   "reading_if_both_hold": "design rules 2 and 4 apply to a definition the user states in their own words, given the memory's data model"
+   "sets": 9
   }
  },
  "reported": {
@@ -5483,7 +5477,7 @@
   }
  },
  "notes": {
-  "V1-V2": "as G3: B x D at D_m on definition items, two-way bootstrap over worlds x the V program sets, lower bound > 0 (V1 S_def, V2 S_src); judged on all nine registered sets (Qwen3.5-9B at temperature 0.7, Claude Sonnet 5.5 and Claude Opus 5.5, samples 0-2), else not judged with the value on the sets given under `interim_on_sets_present`.",
+  "V1-V2": "as G3: B x D at D_m on definition items, two-way bootstrap over worlds x the V program sets, lower bound > 0 (V1 S_def, V2 S_src), on the nine sets of the design (Qwen3.5-9B at temperature 0.7, Claude Sonnet 5.5 and Claude Opus 5.5, samples 0-2); `sets` says how many are given.",
   "V": "reported per writer: V minus G-b on the sets of the same writer and sample index, in Update on the changed definition item-times of D1sB1_source (per branch and the three pooled) and in the agreement of the definition programs' t0 value with gold (as `e1_synth.program_stats`'s agree_t0), each paired per item, world bootstrap."
  },
  "code": {

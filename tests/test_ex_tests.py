@@ -1,4 +1,4 @@
-"""Exploratory T1 and T3 sensitivity (`analysis.ex_tests`): survival, recovery and the net change,
+"""T1 and T3 sensitivity (`analysis.ex_tests`): survival, recovery and the net change,
 the eps grid, T1 and T3 by item class, wired into `e2.analyse` and `e3.analyse`."""
 
 import json
@@ -43,7 +43,7 @@ def test_survival_recovery_and_net_change_of_one_cell():
     assert sr["stay_invalid"] == 10 and not sr["trivial"]
     assert sr["valid_before"]["est"] == pytest.approx(0.8)
     assert sr["valid_after"]["est"] == pytest.approx(0.8)
-    assert sr["survival"]["est"] == pytest.approx(70 / 80)  # the registered retention
+    assert sr["survival"]["est"] == pytest.approx(70 / 80)  # the T1 retention
     assert sr["recovery"]["est"] == pytest.approx(0.5)  # one of the two items wrong before
     assert sr["net"]["est"] == pytest.approx(0.0)  # a gain for every loss
     frozen = ex_tests.survival_recovery(_rows(frozen=True))
@@ -51,7 +51,7 @@ def test_survival_recovery_and_net_change_of_one_cell():
     assert frozen["net"]["est"] == 0.0 and frozen["net"]["lo"] == frozen["net"]["hi"] == 0.0
 
 
-def test_the_registered_retention_is_the_same_computation():
+def test_the_main_retention_is_the_same_computation():
     rows = _rows() + _rows(tier="upgrade", system="holdmem_D0B0", frozen=True)
     out = ex_tests.t1_sensitivity(rows, 0.03)
     sr = out["explore_survival_recovery"]["same:holdmem_D1B1_source"]
@@ -92,7 +92,7 @@ def test_eps_grid_gives_non_inferiority_and_equivalence_for_retention_and_net_ch
         assert v["retention_noninferior"] and v["retention_equivalent"]
         assert v["net_noninferior"] and not v["net_equivalent"]  # +40 pp is not "no change"
     assert g["net_90"]["est"] == pytest.approx(0.4)
-    # the verdicts follow the world-bootstrap interval and the same strict inequalities as TOST
+    # the outcomes follow the world-bootstrap interval and the same strict inequalities as TOST
     d = world_bootstrap({w: [0.0] * 5 + [-1.0] for w in WORLDS}, alpha=0.10)
     for e in (1, 2, 3, 5):
         assert tost(d, e / 100) == (-e / 100 < d.lo and d.hi < e / 100)
@@ -117,7 +117,7 @@ def test_t1_by_item_class_shows_where_a_margin_hides_a_loss():
     assert sum(c["n_valid_before"] for c in cls.values()) == 80
 
 
-def test_e2_analyse_stores_the_t1_fields_and_keeps_the_registered_t1(tmp_path: Path):
+def test_e2_analyse_stores_the_t1_fields_and_keeps_the_main_t1(tmp_path: Path):
     from tests.test_e2_analysis import _rows as e2_rows
 
     rows = e2_rows("same", 0) + e2_rows("upgrade", 5)
@@ -167,7 +167,7 @@ def test_t3_margin_per_class_contributions_and_oracle_ceiling():
     # the oracle's own accuracy per class
     assert by["oracle"]["definition"]["contract_valid"]["est"] == pytest.approx(0.3)
     assert "minus_oracle" not in by["oracle"]["rule"]
-    # the contributions add up to the pooled margin of the registered T3
+    # the contributions add up to the pooled margin of T3
     per_world_items = 8
     pooled = paired_diff(
         {w: cv["hold"][w] for w in cv["hold"]}, {w: cv["oracle"][w] for w in cv["oracle"]}
@@ -187,7 +187,7 @@ def test_t3_by_class_without_an_oracle_has_no_margin():
     assert "minus_oracle" not in by["zero"]["rule"]
 
 
-def test_e3_analyse_adds_the_class_margins_and_keeps_the_registered_t3(tmp_path):
+def test_e3_analyse_adds_the_class_margins_and_keeps_the_main_t3(tmp_path):
     per = analyse_e3(
         tmp_path, answers_e3({"oracle": (0.3, 0.9), "holdmem_D1B1_source": (1.0, 0.8)})
     )

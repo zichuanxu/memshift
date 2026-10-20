@@ -1,4 +1,4 @@
-"""HoldMem reference implementation (plan §5): one data layer, four (D, B) cells.
+"""HoldMem reference implementation: one data layer, four (D, B) cells.
 
 Store  item {item_id, kind, s_k, bind | null, det | null, status, history}.
 Write  writer -> s_k; D=1 checker -> fallback -> unverifiable; B=1 key (scope epochs, kappa version,
@@ -9,22 +9,22 @@ Read   BM25 over the s_k of valid items -> fixed template -> shared reader. Iden
        cells before any intervention (checked by hash assertion in the drivers).
 
 Pre-intervention snapshot: all cells are instantiated from the same writer outputs. The D=1
-checker runs and its verdict is recorded in the sidecar, but the fallback substitution is not
+checker runs and its outcome is recorded in the sidecar, but the fallback substitution is not
 applied to the shared snapshot, so every cell serves the same bytes. Every write after the fork
 runs the full D=1 path.
 
-Exploratory: `CellConfig(fallback=False)` keeps the D=1 checker but disables the programmatic
+Check only: `CellConfig(fallback=False)` keeps the D=1 checker but disables the programmatic
 fallback, so a checker failure always ends in `unverifiable` instead of substituted extraction.
 
-D1s (prereg v2 §4, `CellConfig(synth=True)`): the D=1 path without benchmark-authored logic. Every
+D1s (`CellConfig(synth=True)`): the D=1 path without benchmark-authored logic. Every
 item write sends one more writer request for a program (`holdmem.program`); a failed span check
 substitutes the program's output instead of `checker.fallback`, and definition items never reach
 the gold evaluator: the writer's value passes when it equals its own program's output, otherwise
 the program's output is served. A program that errors, times out or returns the wrong type makes
 the item `unverifiable`. Keys still come from the shared writer output only.
 
-Control cells (registered after the first review; every one writes from the same writer requests
-as an existing cell wherever its design allows, so the response cache serves them):
+Control cells (every one writes from the same writer requests as an existing cell wherever its
+design allows, so the response cache serves them):
   B1_gold     oracle key: the gold dependency objects (id, revision) of the slot and the definition
               version (`gen.gold`), not implementable. Invalidates exactly the items whose
               dependencies changed; its re-derivations are the requests of the source-epoch cell.
@@ -33,7 +33,7 @@ as an existing cell wherever its design allows, so the response cache serves the
               their cited clusters. Built from definitions and writer citations only.
   B0_refresh  B=0 that re-derives, at every checkpoint, exactly the items the source-epoch B=1 cell
               re-derives and appends the new items without invalidating the old ones.
-  B0_upsert   slot-keyed upsert (prereg v4 block U): the append-only B=0 cell with the same delta
+  B0_upsert   slot-keyed upsert: the append-only B=0 cell with the same delta
               derivations, so the same requests, except that a new item for a slot retires every
               older valid or unverifiable item of that slot (status `invalid`, history event
               `supersede`). No key is kept: a slot whose delta yields nothing keeps its old item.
@@ -41,7 +41,7 @@ as an existing cell wherever its design allows, so the response cache serves the
               the D=1 fallback template from the writer's own typed value and citations.
   D0think     D=0 whose definition items written after the shift come from the writer with
               thinking switched on (separate client, so separate cache keys). Its output limit is
-              `writer.THINK_MAX_TOKENS` unless `think_max_tokens` sets another (prereg v4 H-b).
+              `writer.THINK_MAX_TOKENS` unless `think_max_tokens` sets another.
   D0full      D=0, B=1 source-epoch whose definition items written after the shift are derived from
               every live record of their declared sources (no BM25 selection, no 6,000-token
               budget; above `writer.FULL_BUDGET` the largest source is cut to its newest records
@@ -49,11 +49,39 @@ as an existing cell wherever its design allows, so the response cache serves the
               Every other request, the pre-shift snapshot included, is D0B1_source's. Each such
               write records the records given and dropped, per source, and their tokens in the
               item's note.
+  D0typed     D=0, B=1 source-epoch whose definition items written after the shift are
+              derived from the typed records a D_m program reads (`writer.typed_records`: every
+              live record of the declared sources as columnar JSON, one table per source, without
+              the rendered text and the bodies of e-mail and chat messages; no budget, no
+              truncation), to separate the complete evidence D=1 reads from the execution. The
+              request is the writer request with the record block replaced by the typed block.
+              Every other request, the pre-shift snapshot included, is D0B1_source's. Each such
+              write records the records given per source, their characters and tokens, and the
+              outcome (readable, cut off) in the item's note. With a definition-item writer
+              those writes are its own, as in every cell.
   D1s ... _ra D1s whose programs are retraction-aware (`holdmem.program`): they declare the ids
               they read, may read nothing else, and receive the item's lineage (every id any earlier
               run declared) so that they can return no value once a record they read is gone.
+  D1sfb       D1s with execution feedback (`CellConfig(synth=True, feedback=True)`): the first
+              program is D1s's (the same request), and a program that fails on the records of a
+              write (no code, syntax, no `derive`, sandbox violation, exception, timeout, or a value
+              `validate_value` rejects) goes back to the writer with the interpreter's message, at
+              most `program.FEEDBACK_ROUNDS` times per write (`program.synthesise_feedback`). The
+              first program that runs without failure is used; if none does, the write ends as
+              D1s's on a failing program. A corrected program is kept for the item and its program
+              request (per cell, so per world and branch) and runs first at the item's later
+              writes, re-checked there; a definition change is a new program request and starts
+              from D1s's program again. Each write records what the loop did in the item's note
+              (`feedback`).
+  D1sx        D1s whose programs read fields extracted from prose
+              (`CellConfig(synth=True, extracted=True)`, `holdmem.extract`): every record revision
+              a program reads is rewritten as plain prose from its typed fields and the writer
+              extracts the fields back; the program runs on the store's metadata, the extracted
+              fields and the prose as `text`. Which records are live comes from the store, as
+              before. Every request of D1s (writer, program) is sent unchanged, the checker reads
+              the original records, and each program write records its input (`input_note`).
 
-Definition-item writer (prereg v4 block H-a, `HoldMem(def_writer=...)`, set for every cell of a
+Definition-item writer (`HoldMem(def_writer=...)`, set for every cell of a
 run): as in D0think, the pre-shift snapshot and every other item come from the main writer (same
 requests), and the definition items written after the shift (B=1 re-derivations, B=0 delta
 derivations, refreshes) come from a second client with the same request text and its own output
@@ -61,7 +89,7 @@ limit. A reply cut off by that limit is unreadable; each such write records the 
 completion tokens and whether it reached the limit in the item's note, and every cell counts these
 writes in `def_stats`. Keys keep the main writer's id.
 
-Program sets (prereg v4 block G-b, `HoldMem(program_writer=...)`): the D1s program requests of the
+Program sets (`HoldMem(program_writer=...)`): the D1s program requests of the
 definition items, before and after the shift, go to another client (another model, a sampling
 temperature, a sample index); every other request is the writer's.
 """
@@ -87,7 +115,14 @@ from memshift.holdmem.checker import (
     fallback,
     render_fallback_sk,
 )
-from memshift.holdmem.program import ProgramOutcome, program_check, synthesise, synthesise_ra
+from memshift.holdmem.extract import RecordExtractor
+from memshift.holdmem.program import (
+    ProgramOutcome,
+    program_check,
+    synthesise,
+    synthesise_feedback,
+    synthesise_ra,
+)
 from memshift.holdmem.writer import CUT_OFF, THINK_MAX_TOKENS, derive, render_sk
 from memshift.llm import LLMClient
 from memshift.probes import Probe
@@ -121,14 +156,17 @@ class CellConfig:
     B: int
     # source | cluster (read set) | cited | gold (oracle) | scope (ignored when B=0)
     granularity: str = "source"
-    fallback: bool = True  # exploratory: False keeps the D=1 checker but disables its fallback
+    fallback: bool = True  # False keeps the D=1 checker but disables its fallback (check only)
     synth: bool = False  # D1s: the replacement value is the writer's own program's output
     refresh: bool = False  # B0_refresh: B=0 that re-derives like source-epoch, never invalidates
     present: bool = False  # D0t: D=0 values, items written after the shift in the D=1 template
     think: bool = False  # D0think: definition items written after the shift by a thinking writer
     full: bool = False  # D0full: definition items after the shift from every in-scope record
+    typed: bool = False  # D0typed: definition items after the shift from the typed records
     ra: bool = False  # D1s with retraction-aware programs (declared reads, lineage)
     upsert: bool = False  # B0_upsert: a new delta item for a slot retires the slot's older items
+    feedback: bool = False  # D1sfb: failing D1s programs go back to the writer with the error
+    extracted: bool = False  # D1sx: the programs read fields extracted from prose
 
     def __post_init__(self) -> None:
         if self.granularity not in GRANULARITIES:
@@ -149,15 +187,27 @@ class CellConfig:
             raise ValueError("full=True is the D=0, B=1 source-epoch control (D0fullB1_source)")
         if self.full and (self.present or self.think):
             raise ValueError("full is a separate control from present and think")
+        if self.typed and (self.D, self.B, self.granularity) != (0, 1, "source"):
+            raise ValueError("typed=True is the D=0, B=1 source-epoch control (D0typedB1_source)")
+        if self.typed and (self.present or self.think or self.full):
+            raise ValueError("typed is a separate control from present, think and full")
         if self.ra and not self.synth:
             raise ValueError("ra=True is a variant of the D1s programs (synth=True)")
         if self.upsert and (self.B != 0 or self.refresh):
             raise ValueError("upsert=True is the append-only B=0 cell (no key, no refresh)")
+        if self.feedback and (not self.synth or self.ra):
+            raise ValueError("feedback=True is a variant of the D1s programs (synth=True, not _ra)")
+        if self.extracted and (not self.synth or self.ra):
+            raise ValueError("extracted=True is a variant of the D1s programs (not of _ra)")
+        if self.feedback and self.extracted:
+            raise ValueError("feedback and extracted are separate D1s variants")
 
     @property
     def name(self) -> str:
         tag = "s" if self.synth else "t" if self.present else "think" if self.think else ""
-        tag = tag or ("full" if self.full else "")
+        tag += "fb" if self.feedback else ""
+        tag += "x" if self.extracted else ""
+        tag = tag or ("full" if self.full else "typed" if self.typed else "")
         base = f"holdmem_D{self.D}{tag}B{self.B}"
         name = f"{base}_{self.granularity}" if self.B else base
         if self.refresh:
@@ -232,16 +282,21 @@ class HoldMem:
         def_max_tokens: int | None = None,
         program_writer: LLMClient | None = None,
         program_user_words: bool = False,
+        extractor: RecordExtractor | None = None,
     ):
         """`think_max_tokens`: the output limit of the D0think writer's requests. `def_writer`:
-        the definition-item writer of prereg v4 block H-a, which writes the definition items after
+        the definition-item writer, which writes the definition items after
         the shift (not in a D0think cell, whose thinking writer writes them), with the output limit
         `def_max_tokens` (default: the writer request's). `program_writer`: the client that answers
-        the D1s program requests of the definition items (prereg v4 block G-b; default: the
-        writer); the other items' programs stay the writer's. `program_user_words` (prereg v4b
-        block V): those requests state the definition in the user's words (`USER_WORDS`)."""
+        the D1s program requests of the definition items (default: the
+        writer); the other items' programs stay the writer's. `program_user_words`:
+        those requests state the definition in the user's words (`USER_WORDS`).
+        `extractor`: the extracted records the programs of a D1sx cell read."""
         if cfg.think and think_writer is None:
             raise ValueError("a D0think cell needs a think_writer (a client with thinking on)")
+        if cfg.extracted and extractor is None:
+            raise ValueError("a D1sx cell needs an extractor (holdmem.extract.RecordExtractor)")
+        self.extractor = extractor
         self.world = world
         self.log = log
         self.cfg = cfg
@@ -269,6 +324,8 @@ class HoldMem:
             "storage_bytes": 0,
         }
         self._epoch_cache: dict[tuple[str, datetime], dict[str, int]] = {}
+        # D1sfb: (slot id, program request key) -> reply of the corrected program kept for the item
+        self.kept_programs: dict[tuple[str, str], str] = {}
         self._lock = threading.Lock()
         self.workers = 48
 
@@ -338,7 +395,12 @@ class HoldMem:
             prog = synthesise_ra(llm, self.world, self.log, slot, t, lineage)
         else:
             words = self.program_user_words and bool(slot.kappa_id)
-            prog = synthesise(llm, self.world, self.log, slot, t, user_words=words)
+            if self.cfg.feedback:
+                kept = self.kept_programs
+                prog = synthesise_feedback(llm, self.world, self.log, slot, t, kept, words)
+            else:
+                view = self.extractor if self.cfg.extracted else None
+                prog = synthesise(llm, self.world, self.log, slot, t, user_words=words, view=view)
         self._add_cost(f"{phase}_tokens", prog.prompt_tokens + prog.completion_tokens)
         self._add_cost("verify_cpu_s", prog.run_s)
         return prog
@@ -352,6 +414,8 @@ class HoldMem:
         note = {"ok": det["program_ok"], "value": det["program_value"]}
         if "program_lineage" in det:  # retraction-aware programs
             note |= {"n_reads": det["program_n_reads"], "lineage_ok": det["program_lineage_ok"]}
+        if "program_input" in det:  # D1sx: what the extracted input held, and the program
+            note |= {"input": det["program_input"], "key": det["program_key"]}
         return {"program": note}
 
     def _write(
@@ -367,6 +431,8 @@ class HoldMem:
         think = self.cfg.think and apply_fallback and slot.kappa_id is not None
         # D0full: likewise, every in-scope record for the definition items written after the shift
         full = self.cfg.full and apply_fallback and slot.kappa_id is not None
+        # D0typed: likewise, the typed records a D_m program reads
+        typed = self.cfg.typed and apply_fallback and slot.kappa_id is not None
         # H-a: likewise, from the definition-item writer (another model, same request text)
         defw = (
             self.def_writer is not None
@@ -388,6 +454,7 @@ class HoldMem:
             full=full,
             max_tokens=max_tokens,
             reasoning=defw,
+            typed=typed,
         )
         self._add_cost(f"{phase}_tokens", out.prompt_tokens + out.completion_tokens)
         at_limit = out.finish_reason in CUT_OFF
@@ -412,6 +479,7 @@ class HoldMem:
         status = "valid"
         det: dict[str, Any] | None = None
         eval_value = out.value
+        prog: ProgramOutcome | None = None
         if self.cfg.D:
             prog = self._run_program(slot, t, phase, prior) if self.cfg.synth else None
             program_det = (
@@ -425,6 +493,8 @@ class HoldMem:
                     "program_lineage": prog.lineage,
                     "program_lineage_ok": prog.lineage_ok,
                 }
+            if prog is not None and self.extractor is not None and self.cfg.extracted:
+                program_det["program_input"] = self.extractor.input_note(self.log, slot, t)
             t0 = time.process_time()
             if prog is not None and slot.kappa_id:
                 cr = program_check(slot.vtype, out.ok, out.value, prog)  # never the gold evaluator
@@ -489,8 +559,17 @@ class HoldMem:
                     "at_limit": at_limit,
                 }
             }
-        if out.access is not None:
+        if out.access is not None and typed:
+            note["typed"] = {
+                **out.access,
+                "ok": out.ok,
+                "at_limit": at_limit,
+                "completion_tokens": out.completion_tokens,
+            }
+        elif out.access is not None:
             note["full"] = out.access
+        if prog is not None and prog.feedback is not None:
+            note["feedback"] = prog.feedback
         return Item(
             item_id="",
             slot_id=slot.slot_id,
@@ -542,7 +621,8 @@ class HoldMem:
 
     def build(self, t: datetime, apply_fallback: bool = False) -> None:
         """Cold build of every slot at t. By default this is the shared pre-intervention snapshot
-        (D=1 verdicts recorded, fallback not substituted); E3 builds with the full D=1 path."""
+        (D=1 checker outcomes recorded, fallback not substituted); E3 builds with the full D=1
+        path."""
         self.log.snapshot(t)
         items = self._pmap(
             lambda s: self._write(s, t, None, apply_fallback, "ingest"), self.world.slots

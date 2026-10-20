@@ -1,23 +1,20 @@
-"""Paper numbers and tables of the registered round-3 blocks (prereg/v4_round3.md blocks U, N, H,
-Q and G, and block X, which is void; prereg/v4b_round3_claude.md blocks Y and V). The verdicts are
-those of `analysis.round3_registered`, whose JSON results are staged in runs/stage7_round3/analysis/
-(named in results/sources.json as `round3`; the stage manifest lists the commands, the
-source runs and the response-cache snapshots; `python -m memshift.analysis.round3_paper` reruns
-them from the raw runs):
+"""Paper numbers and tables of the round-3 blocks U, N, H, Q and G, block X, and the Claude
+blocks Y and V. The quantities are those of the round-3 block analyses, whose JSON results are
+staged in runs/stage7_round3/analysis/ (named in results/sources.json as `round3`; the stage
+manifest lists the commands, the source runs and the response-cache snapshots; `python -m
+memshift.analysis.round3_paper` reruns them from the raw runs):
 
   u.json         block U on the main writer: the refresh and upsert cells (U1-U4), and U5 on the
                  upsert runs of the three M2 families (paired with the M2 stages)
-  u_delta.json   exploratory (`analysis.ex_round3_upsert`): where the upsert can act, i.e. whether
+  u_delta.json   `analysis.ex_round3_upsert`: where the upsert can act, i.e. whether
                  the B=0 delta derivation yielded a new item for the slot of each changed item-time
   n.json         block N, the natural-branch counterfactual (N1 and its unthresholded reports)
   y.json         block Y, Claude Sonnet 5.5 as reader of the committed stores (Y1-Y3, validity, the
                  store/reader split with that reader)
   h_<writer>.json  block H per definition-item writer (`H_WRITERS`; H-a: Claude Sonnet 5.5,
-                 h_sonnet.json; H-c: Claude Opus 5.5, h_opus.json, run because Sonnet's r_0 was
-                 below 70%), judged from that writer's runs and its response-cache snapshot (H1,
-                 H2, validity)
-  h_b.json       H-b, the thinking Qwen3.5-9B writer at a 32,768-token limit (H3; its registered
-                 validity rule decides whether H3 is judged)
+                 h_sonnet.json; H-c: Claude Opus 5.5, h_opus.json), from that writer's runs and
+                 its response-cache snapshot (H1, H2, validity)
+  h_b.json       H-b, the thinking Qwen3.5-9B writer at a 32,768-token limit (H3, validity)
   q.json         block Q, probes that do not name the definition version (Q1, Q2 and Q2's D_m)
   g_a.json       block G on the held-out-definition runs (G-a: G1, G2, two-way intervals over
                  worlds x the 18 definitions)
@@ -27,24 +24,17 @@ them from the raw runs):
                  intervals over worlds x the nine program sets), with the G-b sets of the same
                  writers and samples, which only its reported per-writer comparison (V minus G-b)
                  reads
-  x.json         block X, diagnosis and interventions on Mem0, one run per world. The run is void:
-                 its anchor answers differ from E5's committed ones, so X1 is not judged (and not
-                 computed, `round3_registered.x_predictions`); per decisions.md 2026-10-17 the
-                 cells (m, r, a per class and branch, the two arms' effects) are reported as
-                 exploratory. The anchor counts stay in this file: no macro or table states them
+  x.json         block X, diagnosis and interventions on Mem0, one run per world: the cells (m,
+                 r, a per class and branch, the two arms' effects)
 
-The committed reader's store/reader split is the exploratory one of `analysis.ex_round3` (stage
+The committed reader's store/reader split is the one of `analysis.ex_round3` (stage
 `ex_round3`); its store parts equal block Y's, because both read the same stores.
 
 Macros (letters only; a stage that is not staged renders as the MISSING marker, a quantity over no
 item-time or not evaluated as a dash):
-  RThree<pred>Verdict                   holds, fails, judged or not judged, for UOne, UThree, UFour,
-                                        UFive, NOne, YOne, YTwo, YThree, GThree (from g_b.json) and
-                                        HThree; UTwo (no threshold): reported. UThreeReading: the
-                                        reading U3 triggers
+  RThreeUTwo<branch>                    U2's ratio R of the refresh cell at D=0
   RThreeUFive<family>...                U5 per M2 family (Gemma, Llama, GptOss): the pooled upsert
-                                        ratio R, its item-times and its reading; UFiveSame: the
-                                        families with the main writer's U3 reading
+                                        ratio R and its item-times; UFiveFamilies: the families
   RThreeU<arm><branch><class>...        arm Dzero, Done, Dm: R of the refresh cell (ratio), its
                                         Update levels (B=0, refresh, B=1), the gain over B=0 and the
                                         binding effect it is a share of, item-times; ...Upsert...:
@@ -61,19 +51,17 @@ item-time or not evaluated as a dash):
   RThreeYSR<arm><branch><class>...      the store/reader split with the Claude reader; per cell its
                                         r, r_store, a, a_store; counts of right stores it lost
   RThreeY...                            validity counts, the context anchor
-  RThreeH<writer>...                    writer Sonnet or Opus: H1 (verdict, reading), H2
-                                        (verdict); B x D per branch, class and arm (Done, Dm); r_0,
+  RThreeH<writer>...                    writer Sonnet or Opus: B x D per branch, class and arm
+                                        (Done, Dm); r_0,
                                         Qwen3.5-9B's r_0 on the same worlds and the paired
                                         difference; validity counts; worlds; anchor answers compared
   RThreeQ...                            Q1's B effect at D=1 with unnamed and named probes and their
                                         paired difference; B x D per arm (Done, Dm) with each;
-                                        item-times, worlds, anchor answers compared (QOne, QTwo:
-                                        the verdicts)
+                                        item-times, worlds, anchor answers compared
   RThreeGA<branch><arm>...              G-a: B x D on definition items with the two-way interval
                                         (BxD) and the one-way world interval (BxDOneWay),
                                         item-times, definitions with item-times and those whose
-                                        own B x D is above 0; worlds and draws (GOne, GTwo: the
-                                        verdicts)
+                                        own B x D is above 0; worlds and draws
   RThreeGB<branch>...                   G-b: B x D at D_m on definition items with the two-way
                                         interval (BxD) and the one-way world interval, item-times
                                         and program sets; RThreeGB<writer><branch>BxD per writer
@@ -87,20 +75,21 @@ item-time or not evaluated as a dash):
                                         and program sets; RThreeV<writer>...: that writer's B x D
                                         per branch, and V minus G-b (Diff) with V's level in Update
                                         on changed definition items at D1sB1_source (per branch and
-                                        pooled) and in agreement with gold at t0 (VOne, VTwo: the
-                                        verdicts)
-  RThreeX<branch><class>...             X (void, exploratory): changed item-times; native Mem0's
-                                        m, r, a; the invalidation arm's m, r (Det); each arm's
-                                        effect on Update (DetEffect, RepEffect); worlds; store
-                                        mutations after the fork per arm (Native, Det); no anchor
-                                        count (XOne: the verdict, not judged)
+                                        pooled) and in agreement with gold at t0
+  RThreeX<branch><class>...             X: changed item-times; native Mem0's m, r, a; the
+                                        invalidation arm's m, r (Det); each arm's effect on Update
+                                        (DetEffect, RepEffect); worlds; store mutations after the
+                                        fork per arm (Native, Det)
 
-tab_round3   appendix: the judged predictions with their tests, values and verdicts or readings,
-             the levels behind U1-U3 and the natural-branch test
-tab_reader   appendix: B x D on Update by reader, class and shift, with the store and reader parts
+tab_refresh_upsert  appendix: Update of the refresh and upsert cells with the share R of
+             binding's effect each recovers
+tab_natural  appendix: the natural-branch test by shift and class
+tab_reader   appendix: B x D on Update and its store and reader parts by shift, class and arm, with
+             Claude Sonnet 5.5 as reader beside the committed reader (labels tab:store-reader-bxd
+             and tab:reader)
 tab_heldout  appendix: the 18 held-out definitions (`gen.kappa.heldout_draw`) with their own B x D
 tab_userwords  appendix: block V per program writer
-tab_mem0x    appendix: block X per branch and class (void, exploratory)
+tab_mem0x    appendix: block X per branch and class
 """
 
 from __future__ import annotations
@@ -112,12 +101,19 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from memshift.analysis.ex_e1_paper import UNDEFINED, _cell, fmt
+from memshift.analysis.ex_e1_paper import UNDEFINED, fmt
 from memshift.analysis.ex_round2 import BRANCH_LABELS
 from memshift.analysis.paper_data import BRANCH_TAGS, FAMILIES, MISSING, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, pct, pp
-from memshift.analysis.paper_tables import _num, _row, interval
+from memshift.analysis.paper_tables import (
+    PAIR,
+    _num,
+    _row,
+    ci_pair_cells,
+    est_ci_cells,
+    interval,
+)
 
 STAGE_KEY = "round3"
 STAGE_DIR = "runs/stage7_round3"
@@ -161,7 +157,7 @@ H_B_RUNS = tuple(
 @dataclass(frozen=True)
 class HWriter:
     """One definition-item writer of block H: its staged file, macro tag, model (the key of its
-    quantities in the block result), prediction-name suffix, runs and response-cache snapshot."""
+    quantities in the block result), comparison-name suffix, runs and response-cache snapshot."""
 
     key: str
     tag: str
@@ -176,7 +172,7 @@ H_WRITERS = (
         "h_sonnet",
         "Sonnet",
         "claude-sonnet-5-5",
-        "",  # round3_registered names Sonnet's predictions H1, H2 and another writer's H1_<model>
+        "",  # the block H result keys Sonnet's entries H1, H2 and another writer's H1_<model>
         tuple(
             f"runs/e1_ha_sonnet_s{s}_20261016T082038Z"
             for s in ("1000-1001", "1002-1003", "1004-1005", "1006-1007", "1008-1009")
@@ -198,9 +194,9 @@ H_WRITERS = (
         "runs/_snapshots/anthropic_claude-opus-5-5_20261016T1546Z.sqlite",
     ),
 )
-G_A_SEEDS = (4001, 4002, 4003)  # the sampler seeds of the three held-out draws (v4 §G-a)
+G_A_SEEDS = (4001, 4002, 4003)  # the sampler seeds of the three held-out draws (G-a)
 # G-a: per draw, its four runs on worlds 1000-1009 (stamps 20261017T......Z; re-runs from the
-# response cache, decisions.md 2026-10-17)
+# response cache)
 G_A_STAMPS = {
     4001: ("022248", "022419", "022549", "022719"),
     4002: ("022849", "023019", "023149", "023319"),
@@ -226,7 +222,7 @@ def _set_runs(kind: str, stamps: Mapping[tuple[str, int], Sequence[str]]) -> tup
 
 
 # G-b (G3): the 18 program sets of six writers, three samples each; the Qwen3.5-9B, Claude Sonnet
-# 5.5 and Claude Opus 5.5 sets are re-runs from the response cache (decisions.md 2026-10-17)
+# 5.5 and Claude Opus 5.5 sets are re-runs from the response cache
 G_B_STAMPS = {  # (writer, sample) -> the stamps (MMDDTHHMMSS) of its five runs
     ("gemma", 0): ("1016T214712", "1016T214842", "1016T215012", "1016T215242", "1016T215812"),
     ("gemma", 1): ("1016T215943", "1016T220113", "1016T220743", "1016T220913", "1016T221043"),
@@ -248,9 +244,8 @@ G_B_STAMPS = {  # (writer, sample) -> the stamps (MMDDTHHMMSS) of its five runs
     ("sonnet", 2): ("1017T002442", "1017T002612", "1017T002742", "1017T002912", "1017T003042"),
 }
 G_B_RUNS = _set_runs("gb", G_B_STAMPS)
-# Block V: the nine program sets from the user's words (re-runs from the response cache,
-# decisions.md 2026-10-17), then the G-b sets of the same writers and samples that its per-writer
-# comparison pairs with
+# Block V: the nine program sets from the user's words (re-runs from the response cache), then
+# the G-b sets of the same writers and samples that its per-writer comparison pairs with
 V_STAMPS = {  # (writer, sample) -> the stamps (MMDDTHHMMSS) of its five runs
     ("qwen", 0): ("1017T005443", "1017T005614", "1017T005744", "1017T005914", "1017T010044"),
     ("qwen", 1): ("1017T010214", "1017T010344", "1017T010514", "1017T010644", "1017T014617"),
@@ -379,7 +374,7 @@ def _compare(key: str) -> tuple[str, ...]:
 
 
 def _command(key: str) -> str:
-    module = "ex_round3_upsert" if key == "u_delta" else f"round3_registered {BLOCKS[key]}"
+    module = "ex_round3_upsert" if key == "u_delta" else f"round3_blocks {BLOCKS[key]}"
     compare = ["--compare", *_compare(key)] if _compare(key) else []
     cache = [f"--response-cache {CACHES[key]}"] if key in CACHES else []
     return " ".join(
@@ -396,21 +391,20 @@ def _command(key: str) -> str:
 
 PRODUCERS = {f"analysis/{name}": _command(key) for key, name in FILES.items()}
 NOTE = (
-    "registered (prereg/v4_round3.md blocks U, N, Q, H and G; prereg/v4b_round3_claude.md blocks "
-    "Y and V): verdicts of analysis.round3_registered on the raw runs listed in each command, no "
-    "model call. u.json: block U, the main writer's refresh and upsert cells and U5 on the three "
-    "M2 families (paired with the restaged stage4_m2 stages); h_sonnet.json, h_opus.json: the "
-    "Claude Sonnet 5.5 and Claude Opus 5.5 definition writers (H-a, H-c: H1, H2); h_b.json: the "
-    "thinking Qwen3.5-9B writer at a 32,768-token limit (H-b: H3, not judged by its registered "
-    "validity rule); g_a.json: block G on the G-a re-runs (G1, G2); g_b.json: block G on the 18 "
-    "G-b program sets (G3); v.json: block V on its nine program sets, with the G-b sets of the "
-    "same writers and samples for its per-writer comparison. The G-a, V and the Qwen3.5-9B, "
-    "Claude Sonnet 5.5 and Claude Opus 5.5 G-b runs are re-runs from the response cache, and "
-    "stage4_c_e1 and the stage4_m2 Llama-3.1-8B and gpt-oss-20b stages are restaged with re-runs "
-    "(prereg/decisions.md 2026-10-17). u_delta.json is exploratory (analysis.ex_round3_upsert): "
-    "where the upsert can act. x.json is block X (Mem0) on worlds 1000-1009: void, its anchor "
-    "answers differ from E5's, so X1 is not judged and its cells are exploratory "
-    "(prereg/decisions.md 2026-10-17)"
+    "the round-3 blocks U, N, Q, H, G, Y and V: estimates and threshold comparisons of "
+    "analysis.round3_blocks on the raw runs listed in each command, no model call. u.json: block "
+    "U, the main writer's refresh and upsert cells and U5 on the three M2 families (paired with "
+    "the restaged stage4_m2 stages); h_sonnet.json, h_opus.json: the Claude Sonnet 5.5 and "
+    "Claude Opus 5.5 definition writers (H-a, H-c: H1, H2); h_b.json: the thinking Qwen3.5-9B "
+    "writer at a 32,768-token limit (H-b: H3, not computed, as more than 10% of its writes are "
+    "cut off); g_a.json: block G on the G-a re-runs (G1, G2); g_b.json: block G on the 18 G-b "
+    "program sets (G3); v.json: block V on its nine program sets, with the G-b sets of the same "
+    "writers and samples for its per-writer comparison. The G-a, V and the Qwen3.5-9B, Claude "
+    "Sonnet 5.5 and Claude Opus 5.5 G-b runs are re-runs from the response cache, and "
+    "stage4_c_e1 and the stage4_m2 Llama-3.1-8B and gpt-oss-20b stages are restaged with re-runs. "
+    "u_delta.json is an additional analysis (analysis.ex_round3_upsert): where the upsert can act. "
+    "x.json is block X (Mem0) on worlds 1000-1009: void, its anchor answers differ from E5's, so "
+    "X1 is not computed and its cells are reported as they are"
 )
 CLASSES = (("definition", "Definition"), ("other", "Other"), ("all", "All"))
 U_ARMS = (("D0", "Dzero"), ("D1", "Done"), ("Dm", "Dm"))
@@ -424,41 +418,10 @@ SR_CELLS = (
 )
 SR_TERMS = (("r", "R"), ("r_store", "RStore"), ("a", "A"), ("a_store", "AStore"))
 SR_PARTS = (("interaction", "BxD"), ("store", "StorePart"), ("reader", "ReaderPart"))
-PREDICTIONS = (
-    ("u", "U1", "UOne"),
-    ("u", "U3", "UThree"),
-    ("u", "U4", "UFour"),
-    ("u", "U5", "UFive"),
-    ("n", "N1", "NOne"),
-    ("y", "Y1", "YOne"),
-    ("y", "Y2", "YTwo"),
-    ("y", "Y3", "YThree"),
-    ("q", "Q1", "QOne"),
-    ("q", "Q2", "QTwo"),
-    ("g_a", "G1", "GOne"),
-    ("g_a", "G2", "GTwo"),
-    ("g_b", "G3", "GThree"),  # G1 and G2 are judged in g_a.json, G3 in g_b.json
-    ("h_b", "H3", "HThree"),
-    ("v", "V1", "VOne"),
-    ("v", "V2", "VTwo"),
-    ("x", "X1", "XOne"),
-)
-VERDICT_WORDS = {
-    "holds": "holds",
-    "fails": "fails",
-    "judged": "judged",  # a reading, not a pass or fail (U3, H1)
-    "not_judged": "not judged",
-}
-READING_WORDS = {  # the readings of U3 and H1 as the paper words them
-    "executability": "executability",
-    "key_schedule": "key schedule",
-    "both": "both",
-    "writer_property": "writer property",
-    "execution_pays": "execution pays",
-}
 H_ARMS = (("D1", "Done"), ("Dm", "Dm"))
 DELTA_CLASSES = (("definition", "Definition"), ("other", "Other"))
 DELTA_PARTS = (("yielded", "Yielded"), ("none", "None"))
+MISSING_PAIR = rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"  # a pair of cells not staged
 X_ARMS = (("mem0_det", "Det"), ("mem0_rep", "Rep"))  # source-keyed invalidation, query-time view
 
 
@@ -504,13 +467,6 @@ def _count(x: Any) -> str:
     return MISSING if x is None else f"{int(x):,}"
 
 
-def _verdict(res: Mapping[str, Any] | None, name: str) -> str:
-    if res is None:
-        return MISSING
-    p = _get(res, "predictions", name)
-    return MISSING if p is None else VERDICT_WORDS[str(p["verdict"])]
-
-
 # ------------------------------------------------------------------------------------ macros
 def _u_numbers(u: Mapping[str, Any] | None, out: _Out) -> None:
     fam = _get(u, "quantities", "families", "main")
@@ -546,9 +502,6 @@ def _u_numbers(u: Mapping[str, Any] | None, out: _Out) -> None:
     for kind, kt in (("refresh", ""), ("upsert", "Upsert")):
         worlds = _get(fam, "worlds", kind)
         out.put("U", kt, "Worlds", value=MISSING if worlds is None else str(len(worlds)))
-    tests = _get(u, "predictions", "U1", "tests")
-    true = None if tests is None else sum(t["ok"] is True for t in tests)
-    out.put("UOneTrue", value=_count(true))
     out.put("UAnchorCompared", value=_count(_get(u, "pairing", "anchor_answers_compared")))
     # U3: the pooled ratio of the upsert cells (D=1, D_m; S_src, S_def; definition items)
     pooled = None if u is None else _get(fam, "pooled_definition_D1_Dm_src_def", "upsert") or {}
@@ -562,11 +515,6 @@ def _u_numbers(u: Mapping[str, Any] | None, out: _Out) -> None:
     out.put("UThreeGain", value=_est(pooled, "numerator", pp))
     out.put("UThreeBEffect", value=_est(pooled, "denominator", pp))
     out.put("UThreeItems", value=_count(None if pooled is None else pooled.get("n_items", 0)))
-    reading = _get(u, "predictions", "U3", "reading")
-    out.put(
-        "UThreeReading",
-        value=MISSING if u is None else READING_WORDS[reading] if reading else UNDEFINED,
-    )
     # U4: Update(D1B0_upsert) - Update(D1B0) after S_del, all items
     u4 = None if u is None else _get(fam, "U4") or {}
     out.put("UFourDiff", value=_est(u4, "difference", pp))
@@ -582,7 +530,7 @@ def _ratio_or_dash(e: Mapping[str, Any] | None) -> str:
 
 
 def _delta_numbers(d: Mapping[str, Any] | None, out: _Out) -> None:
-    """Exploratory (`ex_round3_upsert`): where the upsert can act, per arm, branch, class and
+    """`ex_round3_upsert`: where the upsert can act, per arm, branch, class and
     part (the delta yielded a new item for the slot since the fork, or not)."""
     arms = _get(d, "families", "main", "arms")
     for arm, at in U_ARMS:
@@ -631,14 +579,6 @@ def _h_numbers(inp: Mapping[str, Any], out: _Out) -> None:
         res = inp.get(h.key)
         q = _get(res, "quantities", "writers", h.model)
         tag = ("H", h.tag)
-        for pred, pt in (("H1", "One"), ("H2", "Two")):
-            out.put(*tag, pt, "Verdict", value=_verdict(res, pred + h.suffix))
-        reading = _get(res, "predictions", "H1" + h.suffix, "reading")
-        out.put(
-            *tag,
-            "OneReading",
-            value=MISSING if res is None else READING_WORDS[reading] if reading else UNDEFINED,
-        )
         for b, bt in BRANCH_TAGS:
             for cls, ct in CLASSES:
                 node = None if res is None else _get(q, "bxd", b, cls) or {}
@@ -648,8 +588,6 @@ def _h_numbers(inp: Mapping[str, Any], out: _Out) -> None:
         out.put(*tag, "RZero", value=_est(r0, "writer"))
         out.put(*tag, "RZeroQwen", value=_est(r0, "qwen_same_worlds"))
         out.put(*tag, "RZeroDiff", value=_est(r0, "paired_difference", pp))
-        reg = None if r0 is None else r0.get("registered_qwen")
-        out.put(*tag, "RZeroRegistered", value=MISSING if reg is None else pct(reg))
         out.put(*tag, "MissedZero", value=_est(r0, "writer_m0"))
         v = _get(q, "validity")
         out.put(*tag, "Writes", value=_count(_get(v, "calls", "distinct_write_requests")))
@@ -669,7 +607,7 @@ def _h_numbers(inp: Mapping[str, Any], out: _Out) -> None:
 def _q_numbers(q: Mapping[str, Any] | None, out: _Out) -> None:
     """Block Q (S_def, definition items): Q1's B effect at D=1 with probes that do not name the
     definition version and with the committed probes, their paired difference, and B x D with
-    each per arm (Q2 is judged at D=1; D_m is reported)."""
+    each per arm (D=1 and D_m)."""
     q1 = None if q is None else _get(q, "quantities", "Q1") or {}
     for key, kt in (
         ("B_effect_D1_unnamed", "BEffectUnnamed"),
@@ -744,9 +682,9 @@ def _gb_numbers(g: Mapping[str, Any] | None, out: _Out) -> None:
 
 
 def _think_numbers(h: Mapping[str, Any] | None, out: _Out) -> None:
-    """Block H-b (H3): the validity of the thinking Qwen3.5-9B writer at its token limit, which
-    decides whether H3 is judged: thinking writes, those cut off at the limit and their share,
-    the unreadable ones and their share."""
+    """Block H-b (H3): the validity of the thinking Qwen3.5-9B writer at its token limit:
+    thinking writes, those cut off at the limit and their share, the unreadable ones and their
+    share."""
     v = _get(h, "quantities", "think", "validity")
     limits = None if v is None else v.get("limits") or []
     out.put("HThinkLimit", value=MISSING if limits is None else ", ".join(f"{x:,}" for x in limits))
@@ -762,12 +700,10 @@ def _think_numbers(h: Mapping[str, Any] | None, out: _Out) -> None:
 
 def _u5_numbers(u: Mapping[str, Any] | None, out: _Out) -> None:
     """U5: per M2 family U3's pooled upsert ratio over D=1 and S_src, S_def on definition items,
-    its reading, and how many families give the main writer's U3 reading."""
+    and the number of families staged."""
     fam = _get(u, "quantities", "families")
-    u5 = _get(u, "predictions", "U5")
+    u5 = _get(u, "threshold_tests", "U5")
     per = None if u5 is None else u5.get("families") or {}
-    main = None if u5 is None else u5.get("main_reading")
-    same = 0
     for f in FAMILIES:
         pooled = None if u is None else _get(fam, f.model, "pooled_definition_D1_Dm_src_def")
         node = None if pooled is None else pooled.get("upsert") or {}
@@ -777,15 +713,6 @@ def _u5_numbers(u: Mapping[str, Any] | None, out: _Out) -> None:
         out.put(
             "UFive", f.tag, "Items", value=_count(None if node is None else node.get("n_items"))
         )
-        reading = None if per is None else _get(per, f.model, "reading")
-        out.put(
-            "UFive",
-            f.tag,
-            "Reading",
-            value=MISSING if per is None else READING_WORDS[reading] if reading else UNDEFINED,
-        )
-        same += bool(reading) and reading == main
-    out.put("UFiveSame", value=MISSING if per is None else str(same))
     out.put("UFiveFamilies", value=MISSING if per is None else str(len(per)))
 
 
@@ -819,10 +746,9 @@ def _v_numbers(v: Mapping[str, Any] | None, out: _Out) -> None:
 
 
 def _x_numbers(x: Mapping[str, Any] | None, out: _Out) -> None:
-    """Block X, void (every value exploratory): per branch and class the changed item-times,
-    native Mem0's m, r and a (it only adds, so m = 1 and r is undefined), the invalidation arm's
-    m and r, and each arm's effect on Update; the worlds and the store mutations after the fork.
-    The anchor counts that void the run stay in x.json: the paper does not state them."""
+    """Block X: per branch and class the changed item-times, native Mem0's m, r and a (it only
+    adds, so m = 1 and r is undefined), the invalidation arm's m and r, and each arm's effect on
+    Update; the worlds and the store mutations after the fork."""
     cells = _get(x, "quantities", "cells")
     for b, bt in BRANCH_TAGS:
         for cls, ct in CLASSES[:2]:
@@ -945,11 +871,8 @@ def _y_numbers(y: Mapping[str, Any] | None, out: _Out) -> None:
 def numbers(inp: Mapping[str, Any]) -> dict[str, str]:
     """Every macro of this block, from `load`."""
     out = _Out()
-    for key, name, tag in PREDICTIONS:
-        out.put(tag, "Verdict", value=_verdict(inp.get(key), name))
     u = inp.get("u")
     u2 = None if u is None else _get(u, "reported", "U2_R_refresh_D0_definition")
-    out.put("UTwoVerdict", value=MISSING if u is None else "reported")
     for b, bt in (("src", "Src"), ("def", "Def")):
         node = None if u is None else _get(u2, b) or {}
         r = None if node is None else node.get("R")
@@ -972,21 +895,10 @@ def numbers(inp: Mapping[str, Any]) -> dict[str, str]:
 
 
 # ------------------------------------------------------------------------------------ tables
-def _ratio_iv(e: Mapping[str, Any] | None) -> str:
-    if not e:
-        return UNDEFINED
-    return interval(ratio(e["est"]), ratio(e["lo"]), ratio(e["hi"]))
-
-
 def _pc(e: Mapping[str, Any] | None) -> str:
     if not e:
         return MISSING
     return UNDEFINED if e["est"] != e["est"] else _num(e["est"], digits=1)
-
-
-def _vmark(res: Mapping[str, Any] | None, name: str) -> str:
-    v = _verdict(res, name)
-    return {"holds": r"\pass{}", "fails": r"\fail{}"}.get(v, v)
 
 
 def _r0_iv(e: Mapping[str, Any] | None) -> str:
@@ -1004,39 +916,43 @@ def _refresh_cell(inp: Mapping[str, Any], arm: str, b: str, kind: str = "refresh
 
 def tab_refresh_upsert(inp: Mapping[str, Any]) -> str:
     """Appendix: Update of the refresh and upsert cells beside the append-only (B=0) and bound
-    (B=1) cells on changed definition item-times, with the share R of binding's effect each
-    recovers (the levels behind the registered refresh and upsert predictions)."""
+    (B=1) cells on changed definition item-times, per shift and D, with the share R of binding's
+    effect each recovers (the estimate alone where every world gave the same value)."""
     u = inp.get("u")
 
     def r_of(arm: str, b: str, kind: str = "refresh") -> str:
         if u is None:
-            return MISSING
+            return _span(MISSING)
         q = _refresh_cell(inp, arm, b, kind)
-        return _ratio_iv(None if q is None else q.get("R"))
+        r = None if q is None else q.get("R")
+        return ci_pair_cells(r, f=ratio) if r else _span(UNDEFINED)
 
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Refresh and upsert against binding (20 worlds, changed definition "
-        r"item-times, source-epoch key, Update in percent). $R$: the share of binding's effect "
-        r"on Update that a $B{=}0$ variant recovers, $(x-B_0)/(B_1-B_0)$, with its 95\% "
-        r"world-bootstrap interval, not evaluated (" + UNDEFINED + r") when $B_1-B_0<5$\,pp.}",
-        r"\label{tab:round3}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
-        r"\begin{tabular}{@{}ll rrrr cc@{}}",
+        r"\caption{Update of the refresh and upsert cells on changed definition item-times, "
+        r"beside the append-only ($B{=}0$) and the $B{=}1$ cell. $R$: the share of the effect "
+        r"of $B$ on Update that a $B{=}0$ variant recovers, $(x-B_0)/(B_1-B_0)$, not "
+        rf"evaluated ({UNDEFINED}) when $B_1-B_0<5$\,pp.}}",
+        r"\label{tab:refresh-upsert}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        rf"\begin{{tabular}}{{@{{}}ll rrrr {PAIR} {PAIR}@{{}}}}",
         r"\toprule",
-        r"& & $B{=}0$ & refresh & upsert & $B{=}1$ & $R$, refresh & $R$, upsert \\",
+        r"& & \multicolumn{4}{c}{Update (\%)} & \multicolumn{4}{c}{$R$} \\",
+        r"\cmidrule(lr){3-6}\cmidrule(l){7-10}",
+        r"shift & $D$ & $B{=}0$ & refresh & upsert & $B{=}1$ & \multicolumn{2}{c}{refresh} "
+        r"& \multicolumn{2}{c}{upsert} \\",
         r"\midrule",
     ]
-    arms = ((r"$D{=}0$", "D0"), (r"$D{=}1$", "D1"), (r"$D_{\mathrm{m}}$", "Dm"))
-    for i, (label, arm) in enumerate(arms):
-        for k, (b, _) in enumerate(BRANCH_TAGS):
+    arms = (("0", "D0"), ("1", "D1"), (r"$D_{\mathrm{m}}$", "Dm"))
+    for k, (b, _) in enumerate(BRANCH_TAGS):
+        for i, (label, arm) in enumerate(arms):
             lev = _get(_refresh_cell(inp, arm, b), "update")
             ups = _get(_refresh_cell(inp, arm, b, "upsert"), "update", "x")
             lines.append(
                 _row(
-                    label if k == 0 else "",
-                    BRANCH_LABELS[b],
+                    BRANCH_LABELS[b] if i == 0 else "",
+                    label,
                     *(_pc(_get(lev, key)) if u else MISSING for key in ("B0", "x")),
                     _pc(ups) if u else MISSING,
                     _pc(_get(lev, "B1")) if u else MISSING,
@@ -1044,33 +960,38 @@ def tab_refresh_upsert(inp: Mapping[str, Any]) -> str:
                     r_of(arm, b, "upsert"),
                 )
             )
-        if i < len(arms) - 1:
+        if k < len(BRANCH_TAGS) - 1:
             lines.append(r"\addlinespace[2pt]")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
 
 
+def _span(text: str) -> str:
+    """One value across both cells of an estimate-and-interval column pair."""
+    return rf"\multicolumn{{2}}{{c}}{{{text}}}"
+
+
 def tab_natural(inp: Mapping[str, Any]) -> str:
-    """Appendix: the natural-branch test by shift and class, B x D on the item-times the shift
-    changed, on the shifted branch and on the natural branch (same events up to the fork, no
-    shift), their paired difference and the share of these item-times that also moved without
-    the shift."""
+    """Appendix: the natural-branch test by shift and class: B x D on the item-times the shift
+    changed, taken on the natural branch (same events up to the fork, no shift), its paired
+    difference from the shifted branch and the share of these item-times that also moved without
+    the shift (the item-times and B x D on the shifted branch: the inline table `tab:cause`)."""
     n = inp.get("n")
     cf = _get(n, "quantities", "counterfactual")
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The interaction with and without the shift (20 worlds, source-epoch key). "
-        r"Shifted: $B{\times}D$ on the item-times the shift changed. Natural: $B{\times}D$ on "
-        r"the same item-times of the natural branch, which has the same events up to the fork "
-        r"and no shift. Difference: shifted minus natural, paired. Moved: share of these "
-        r"item-times whose value also changed on the natural branch. pp, 95\% world-bootstrap "
-        r"intervals. $\Sdef$ changes only definition items.}",
+        r"\caption{$B{\times}D$ on the changed item-times caused by the shift, taken on the "
+        r"unshifted branch, which has the same events up to the fork and no shift. Shifted $-$ "
+        r"unshifted: the paired difference from $B{\times}D$ on the same item-times with the "
+        r"shift (\cref{tab:cause}). Moved: the share of these item-times whose value also "
+        r"changed on the unshifted branch. $\Sdef$ changes only definition items.}",
         r"\label{tab:natural}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
-        r"\begin{tabular}{@{}ll r ccc r@{}}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        r"\begin{tabular}{@{}ll r@{\,}l r@{\,}l r@{}}",
         r"\toprule",
-        r"& & $n$ & shifted & natural & difference & moved (\%) \\",
+        r"shift & class & \multicolumn{2}{c}{unshifted} "
+        r"& \multicolumn{2}{c}{shifted $-$ unshifted} & moved (\%) \\",
         r"\midrule",
     ]
     moved = _get(n, "reported", "natural_also_changed")
@@ -1080,13 +1001,12 @@ def tab_natural(inp: Mapping[str, Any]) -> str:
             if n is not None and not (node or {}).get("item_times_in_branch"):
                 continue  # a class the shift changes on no item-time (S_def: the other items)
             if n is None:
-                vals = [MISSING] * 5
+                vals = [rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"] * 2 + [MISSING]
             else:
                 vals = [
-                    _count((node or {}).get("item_times_in_branch", 0)),
                     *(
-                        _cell(_get(node, key))
-                        for key in ("shifted_branch", "natural", "difference")
+                        est_ci_cells(_get(node, key), sign=True)
+                        for key in ("natural", "difference")
                     ),
                     _pc(_get(moved, b, cls)),
                 ]
@@ -1097,47 +1017,77 @@ def tab_natural(inp: Mapping[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+READER_ROWS = (  # the rows of each shift and class: label, arm, with the Claude reader
+    (r"$D{=}1$", "D1", False),
+    (r"$D{=}1$, Sonnet", "D1", True),
+    (r"$D_{\mathrm{m}}$", "D1s", False),
+)
+
+
 def tab_reader(inp: Mapping[str, Any]) -> str:
-    """Appendix: B x D on Update with the committed reader (Qwen3.5-9B) and with Claude Sonnet
-    5.5 on the same stores, by shift and class (authored D=1), with the store part (the same for
-    both readers) and each reader's part."""
+    """Appendix: B x D on Update and its store and reader parts by shift, class and arm (authored
+    D=1 and D_m, the committed reader Qwen3.5-9B), with Claude Sonnet 5.5 as reader of the same
+    authored D=1 stores beside it (definition and other items): its B x D, its reader part and
+    its B x D minus the committed reader's, paired; the store part is the same for both readers.
+    It sets the stores' split of `analysis.ex_round3` (the committed reader) and block Y's."""
     y, sr = inp.get("y"), _get(inp.get("sr"), "results")
     con = _get(y, "quantities", "contrasts")
     ysr = _get(y, "quantities", "store_reader", "results")
+    pairs = " ".join([r"r@{\,}l"] * 4)
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The $B{\times}D$ interaction on Update with two readers of the same stores "
-        r"(authored $D{=}1$, source-epoch key, 20 worlds, pp, 95\% world-bootstrap intervals). "
-        r"Qwen: Qwen3.5-9B, the main study's reader. Sonnet: Claude Sonnet 5.5 (registered). "
-        r"Difference: paired per item-time. Store: the part of $B{\times}D$ due to the stored "
-        r"value, the same for both readers. Reader: the rest (exploratory split).}",
-        r"\label{tab:reader}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
-        r"\begin{tabular}{@{}ll ccc c cc@{}}",
+        r"\caption{The $B{\times}D$ interaction on Update split into a store part and a reader "
+        r"part. Store part: the same contrast of the shares of item-times whose stored value is "
+        r"right ($r_{\mathrm{store}}$ and $a_{\mathrm{store}}$ of \cref{tab:store-reader}). "
+        r"Reader part: the rest. $D_{\mathrm{m}}$: the writer's programs as the $D{=}1$ arm. "
+        r"Sonnet: Claude Sonnet 5.5 as the reader of the same stores, which leaves the store part "
+        r"unchanged. Sonnet $-$ Qwen: its $B{\times}D$ minus that with Qwen3.5-9B, paired per "
+        r"item-time.}",
+        r"\label{tab:store-reader-bxd}\label{tab:reader}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        rf"\begin{{tabular}}{{@{{}}lll {pairs}@{{}}}}",
         r"\toprule",
-        r"& & \multicolumn{3}{c}{$B{\times}D$} & & \multicolumn{2}{c}{reader part} \\",
-        r"\cmidrule(lr){3-5}\cmidrule(l){7-8}",
-        r"& & Qwen & Sonnet & difference & store part & Qwen & Sonnet \\",
+        r"shift & class & arm & \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{2}{c}{store part} "
+        r"& \multicolumn{2}{c}{reader part} & \multicolumn{2}{c}{Sonnet $-$ Qwen} \\",
         r"\midrule",
     ]
+    empty = " &"
     for i, (b, _) in enumerate(BRANCH_TAGS):
-        for k, (cls, _) in enumerate(CLASSES[:2]):
-            node = _get(con, b, cls, "D1")
-            q = _get(sr, "D1", b, cls, "interaction")
-            s = _get(ysr, "D1", b, cls, "interaction")
-            vals = [
-                *(
-                    _cell(_get(node, key)) if y else MISSING
-                    for key in ("committed_reader", "reader", "difference")
-                ),
-                _cell(_get(s, "store")) if y else MISSING,
-                _cell(_get(q, "reader")) if sr else MISSING,
-                _cell(_get(s, "reader")) if y else MISSING,
-            ]
-            lines.append(_row(BRANCH_LABELS[b] if k == 0 else "", cls, *vals))
+        for k, (cls, _) in enumerate(CLASSES):
+            rows = [r for r in READER_ROWS if not (r[2] and cls == "all")]
+            for j, (label, arm, claude) in enumerate(rows):
+                if claude:
+                    node = _get(con, b, cls, arm)
+                    vals = [
+                        est_ci_cells(_get(node, "reader"), sign=True) if y else MISSING_PAIR,
+                        empty,
+                        est_ci_cells(_get(ysr, arm, b, cls, "interaction", "reader"), sign=True)
+                        if y
+                        else MISSING_PAIR,
+                        est_ci_cells(_get(node, "difference"), sign=True) if y else MISSING_PAIR,
+                    ]
+                else:
+                    q = _get(sr, arm, b, cls, "interaction")
+                    vals = [
+                        *(
+                            est_ci_cells(_get(q, key), sign=True) if sr else MISSING_PAIR
+                            for key in ("interaction", "store", "reader")
+                        ),
+                        empty,
+                    ]
+                lines.append(
+                    _row(
+                        BRANCH_LABELS[b] if (k == 0 and j == 0) else "",
+                        cls if j == 0 else "",
+                        label,
+                        *vals,
+                    )
+                )
+            if k < len(CLASSES) - 1:
+                lines.append(r"\addlinespace[2pt]")
         if i < len(BRANCH_TAGS) - 1:
-            lines.append(r"\addlinespace[2pt]")
+            lines.append(r"\midrule")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
 
@@ -1163,16 +1113,15 @@ def tab_heldout(inp: Mapping[str, Any]) -> str:
     held = _get(ga, "quantities", "heldout")
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The 18 held-out definitions, three draws of six fixed before any model call. "
-        r"Each definition admits the "
-        r"records of one source that pass a predicate in a window. Count: the people or projects "
-        r"with at least the threshold of admitted records. Members: the admitted tasks. Span: the "
-        r"earliest start to the latest end of the admitted meetings, in whole hours. v2 changes "
-        r"the window or the threshold. $B{\times}D$: the definition's own interaction on its "
-        r"changed item-times, authored $D{=}1$, Qwen3.5-9B, 10 worlds (pp, point estimates, "
-        r"exploratory). A per-item double difference lies between $-$200 and $+$200\,pp.}",
+        r"\caption{The 18 held-out definitions, in three draws of six fixed before any model "
+        r"call, with each definition's own $B{\times}D$ on its changed item-times with exact "
+        r"recomputation as $D{=}1$ (10 worlds, point estimates). Records: the source and the "
+        r"predicate the records pass. Count: the people or projects with at least the threshold "
+        r"of these records within the window. Members: the tasks. Span: the earliest start to "
+        r"the latest end of the meetings, in whole hours. v2 changes the window or the "
+        r"threshold. A per-item double difference lies between $-$200 and $+$200\,pp.}",
         r"\label{tab:heldout}",
-        r"\centering\scriptsize",
+        r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular}{@{}l l l l l rrr@{}}",
         r"\toprule",
@@ -1215,22 +1164,23 @@ def tab_userwords(inp: Mapping[str, Any]) -> str:
     names = {"Qwen": "Qwen3.5-9B", "Sonnet": "Claude Sonnet 5.5", "Opus": "Claude Opus 5.5"}
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Definitions in the user's own words per program writer, three program sets "
-        r"each, 20 worlds, definition items. $B{\times}D$: the interaction at "
-        r"$D_{\mathrm{m}}$ (pp, point estimates). Update: changed definition item-times at "
-        r"$D_{\mathrm{m}}$ with binding, the three shifts pooled. Agreement: the programs' values "
-        r"before the shift that equal gold. Words: the programs from the user's words. Difference: "
-        r"words minus the same writer's programs from the codified statement, same samples, paired "
-        r"per item (pp, 95\% world-bootstrap intervals).}",
+        r"\caption{Programs written from the definitions in the user's own words, per writer "
+        r"(three program sets each, definition items). $B{\times}D$: the interaction at "
+        r"$D_{\mathrm{m}}$ (point estimates). Update: on the changed definition item-times at "
+        r"$D_{\mathrm{m}}$ with a key ($B{=}1$), the three shifts pooled. Agreement: the "
+        r"programs' values before the shift that equal gold. Words: the programs from the user's "
+        r"words. Difference: words minus the same writer's programs from the codified statement, "
+        r"same samples, paired per item.}",
         r"\label{tab:userwords}",
-        r"\centering\scriptsize",
+        r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}l rrr rc rc@{}}",
+        r"\begin{tabular}{@{}l rrr r r@{\,}l r r@{\,}l@{}}",
         r"\toprule",
-        r"& \multicolumn{3}{c}{$B{\times}D$} & \multicolumn{2}{c}{Update (\%)} "
-        r"& \multicolumn{2}{c}{agreement (\%)} \\",
-        r"\cmidrule(lr){2-4}\cmidrule(lr){5-6}\cmidrule(l){7-8}",
-        r"writer & $\Ssrc$ & $\Sdef$ & $\Sdel$ & words & difference & words & difference \\",
+        r"& \multicolumn{3}{c}{$B{\times}D$ (pp)} & \multicolumn{3}{c}{Update} "
+        r"& \multicolumn{3}{c}{agreement} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(l){8-10}",
+        r"writer & $\Ssrc$ & $\Sdef$ & $\Sdel$ & words (\%) & \multicolumn{2}{c}{difference (pp)} "
+        r"& words (\%) & \multicolumn{2}{c}{difference (pp)} \\",
         r"\midrule",
     ]
     for model, wt in V_WRITERS:
@@ -1238,15 +1188,15 @@ def tab_userwords(inp: Mapping[str, Any]) -> str:
         upd = _get(node, "update_D1sB1_source", "pooled")
         agree = _get(node, "agreement_t0")
         if v is None:
-            vals = [MISSING] * 7
+            vals = [MISSING] * 4 + [MISSING_PAIR, MISSING, MISSING_PAIR]
         else:
             bxd = [_get(prog, b, "definition", "per_writer", model) for b, _ in BRANCH_TAGS]
             vals = [
                 *(_num(e["est"], sign=True) if e else UNDEFINED for e in bxd),
                 _pc(_get(upd, "V")),
-                _cell(_get(upd, "difference")),
+                est_ci_cells(_get(upd, "difference"), sign=True),
                 _pc(_get(agree, "V")),
-                _cell(_get(agree, "difference")),
+                est_ci_cells(_get(agree, "difference"), sign=True),
             ]
         lines.append(_row(names[wt], *vals))
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
@@ -1254,29 +1204,28 @@ def tab_userwords(inp: Mapping[str, Any]) -> str:
 
 
 def tab_mem0x(inp: Mapping[str, Any]) -> str:
-    """Appendix: block X per branch and class (every value exploratory; the caption does not
-    discuss the void run): native Mem0's m, r and a, the invalidation arm's m and r, and each
-    arm's effect on Update with its interval."""
+    """Appendix: block X per branch and class: native Mem0's m, r and a, the invalidation arm's m
+    and r, and each arm's effect on Update with its interval."""
     x = inp.get("x")
     cells = _get(x, "quantities", "cells")
+    sources = _get(x, "pairing", "detail", "prefix_sources")
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Interventions on Mem0 on ten three-month worlds, changed item-times. "
-        r"The cells are exploratory. $m$, $r$, $a$: the terms of "
-        r"$\mathrm{Update}=(1-m)\,r+m\,a$ (percent). Mem0 only adds memories, so it invalidates "
-        r"nothing ($m{=}1$) and $r$ is undefined. Invalidation: before a record's revision or "
-        r"deletion is ingested, the memories of its earlier revision are deleted. Query-time view: "
-        r"the evidence for a definition item starts with the value of the writer's program for the "
-        r"item, run on the live records. Other items are served as by Mem0. Effect: Update minus "
-        r"Mem0's, paired per item-time (pp, 95\% world-bootstrap intervals).}",
+        r"\caption{Two interventions on Mem0 on "
+        rf"{_count(None if sources is None else len(sources))} of its three-month worlds: the "
+        r"terms of $\mathrm{Update}=(1-m)\,r+m\,a$ on changed item-times (\%) and each "
+        r"intervention's effect on Update. Mem0 invalidates nothing ($m{=}1$), so its $r$ is "
+        rf"undefined ({UNDEFINED}). Effect: Update minus Mem0's, paired per item-time.}}",
         r"\label{tab:mem0x}",
-        r"\centering\scriptsize",
+        r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}ll r rrr rr c c@{}}",
+        rf"\begin{{tabular}}{{@{{}}ll r rrr rr {PAIR} {PAIR}@{{}}}}",
         r"\toprule",
-        r"& & & \multicolumn{3}{c}{Mem0} & \multicolumn{3}{c}{invalidation} & query-time view \\",
-        r"\cmidrule(lr){4-6}\cmidrule(lr){7-9}\cmidrule(l){10-10}",
-        r"& & $n$ & $m$ & $r$ & $a$ & $m$ & $r$ & effect & effect \\",
+        r"& & & \multicolumn{3}{c}{Mem0} & \multicolumn{4}{c}{invalidation} "
+        r"& \multicolumn{2}{c}{query-time view} \\",
+        r"\cmidrule(lr){4-6}\cmidrule(lr){7-10}\cmidrule(l){11-12}",
+        r"shift & class & $n$ & $m$ & $r$ & $a$ & $m$ & $r$ & \multicolumn{2}{c}{effect (pp)} "
+        r"& \multicolumn{2}{c}{effect (pp)} \\",
         r"\midrule",
     ]
     for i, (b, _) in enumerate(BRANCH_TAGS):
@@ -1284,13 +1233,13 @@ def tab_mem0x(inp: Mapping[str, Any]) -> str:
             cell = _get(cells, f"{b}/{cls}")
             native, det = _get(cell, "arms", "mem0"), _get(cell, "arms", "mem0_det")
             if x is None:
-                vals = [MISSING] * 8
+                vals = [MISSING] * 6 + [_span(MISSING)] * 2
             else:
                 vals = [
                     _count(_get(native, "n")),
                     *(_pc(_get(native, key)) for key in ("m", "r", "a")),
                     *(_pc(_get(det, key)) for key in ("m", "r")),
-                    *(_cell(_get(cell, "effects", arm)) for arm, _ in X_ARMS),
+                    *(ci_pair_cells(_get(cell, "effects", arm), sign=True) for arm, _ in X_ARMS),
                 ]
             lines.append(_row(BRANCH_LABELS[b] if k == 0 else "", cls, *vals))
         if i < len(BRANCH_TAGS) - 1:
@@ -1321,7 +1270,7 @@ def stage(root: Path, out: Path, draws: int | None = None) -> None:
     stage manifest (the commands of `PRODUCERS`, the source runs of `source_runs` and the SHA256
     of each response-cache snapshot). Paths are recorded relative to ROOT."""
     from memshift.analysis import ex_round3_upsert
-    from memshift.analysis import round3_registered as rr
+    from memshift.analysis import round3_blocks as rr
     from memshift.analysis.stage import write_stage_manifest
     from memshift.runinfo import file_sha256
 
@@ -1349,7 +1298,7 @@ def stage(root: Path, out: Path, draws: int | None = None) -> None:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
-    ap = argparse.ArgumentParser(description="Stage the registered round-3 results (docstring).")
+    ap = argparse.ArgumentParser(description="Stage the round-3 results (docstring).")
     ap.add_argument("--root", type=Path, default=Path("."))
     ap.add_argument("--out", type=Path, default=None, help=f"default: ROOT/{STAGE_DIR}")
     a = ap.parse_args(argv)

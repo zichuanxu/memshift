@@ -1,7 +1,6 @@
 """Paper numbers and table of the offline key audit (`analysis.key_audit`): the staged audit carries
-the values registered in prereg/decisions.md (2026-09-30, "WS2 offline audit"), an unstaged audit
-renders only MISSING markers, rates are rounded half up from the exact ratio, and the committed
-generated files are current."""
+the pinned values of the offline audit, an unstaged audit renders only MISSING markers, rates are
+rounded half up from the exact ratio, and the committed generated files are current."""
 
 import json
 import re
@@ -71,7 +70,7 @@ LOGGED_PER_WORLD = {
 LOGGED_COUNTS = {"Src": ("1,168", "2,672"), "Def": ("558", "3,282"), "Orphan": ("1,767", "2,073")}
 
 
-def test_staged_audit_reproduces_the_registered_values(staged):
+def test_staged_audit_reproduces_the_pinned_values(staged):
     m = ka.numbers(staged)
     assert MISSING not in m.values()
     for (b, k), values in LOGGED_FALSE.items():
@@ -126,7 +125,8 @@ def test_table_is_wellformed_and_shows_the_staged_values(staged):
     assert MISSING not in tex
     assert r"\label{tab:keyaudit}" in tex
     assert "99.7 & 98.6 & 99.7 & 100.0" in tex and "16.8 & 50.3 & 16.4 & 1.5" in tex
-    assert "1,168 / 2,672" in tex and "480 definition" in tex
+    # the changed and unchanged item-times of each shift are columns, on the shift's first line
+    assert r"$\Ssrc$ & 1,168 & 2,672 & source key" in tex and "480 definition" in tex
     assert tex.count("scope") >= 3  # one scope row per branch, definition items only
 
 
@@ -134,20 +134,24 @@ def test_table_gives_the_single_field_totals_the_text_quotes(staged):
     tex = ka.tab_keyaudit(staged)
     m = ka.numbers(staged)
     rows = [ln.removesuffix(r" \\").split(" & ") for ln in tex.splitlines() if " & " in ln]
-    src = next(r for r in rows if r[:2] == [r"$\Ssrc$", "source epoch"])
+    src = next(r for r in rows if r[0] == r"$\Ssrc$" and r[3] == "source key")
     oracle = rows[rows.index(src) + 1]
     # Section 5.3 quotes these two totals over the 20 worlds; they come from the same counts
-    assert src[8] == m["KeyAuditRederivSourceSrcRule"] == "2,930"
-    assert oracle[:2] == ["", "oracle"] and oracle[8] == m["KeyAuditRederivOracleSrcRule"] == "344"
-    assert all(len(r) == 10 for r in rows[2:])  # branch, key, four rates, three counts, share
+    assert src[10] == m["KeyAuditRederivSourceSrcRule"] == "2,930"
+    assert oracle[:4] == ["", "", "", "oracle"]
+    assert oracle[10] == m["KeyAuditRederivOracleSrcRule"] == "344"
+    # shift, its two counts, key, four rates, three counts, share
+    assert all(len(r) == 12 for r in rows[2:])
     # the header is split over lines: re-derivations, per world / in the worlds, then the columns
     assert r"\multicolumn{3}{c}{re-derivations}" in tex
+    assert r"\multicolumn{4}{c}{unchanged item-times}" in tex
+    assert r"\multicolumn{4}{c}{invalidated (\%)}" in tex
     assert r"\multicolumn{2}{c}{per world} & 20 worlds & share \\" in tex
     caption = tex.split(r"\label{tab:keyaudit}")[0]
     for term in (
-        "the oracle key (built from the gold dependencies)",
-        "single-field (field)",
-        "in total over the 20 worlds for single-field items",
+        "What each key invalidates",
+        "audited without a model",
+        "Re-derivations",
         "Def.\\ share",
     ):
         assert term in caption, term

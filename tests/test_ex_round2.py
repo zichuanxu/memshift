@@ -1,5 +1,4 @@
-"""Paper numbers and tables of the analyses requested by the second review round
-(`analysis.ex_round2`, prereg/decisions.md 2026-10-08): computed from committed run outputs and the
+"""Paper numbers and tables of `analysis.ex_round2`: computed from committed run outputs and the
 seeded generator, reproducing the staged values they build on, and the committed generated files."""
 
 import json
@@ -89,7 +88,7 @@ def test_attribution_on_drift_of_other_items_is_the_published_class_contrast():
 
 
 @pytest.mark.paper
-def test_thinking_writer_reproduces_the_registered_shares():
+def test_thinking_writer_reproduces_the_control_stage_shares():
     m = r2.numbers(INP)
     assert m["ExThinkAllAtLimit"] == committed("CtlThinkAtLimitAll")
     assert m["ExThinkAllUnreadable"] == committed("CtlThinkUnreadableAll")
@@ -100,7 +99,7 @@ def test_thinking_writer_reproduces_the_registered_shares():
     # every asked re-derivation of important contacts after S_src returned no value
     assert m["ExThinkImportantContactSrcNoValue"] == m["ExThinkImportantContactSrcRederived"]
     assert m["ExThinkImportantContactSrcCorrect"] == "0"
-    # the thinking gain on repair is the registered D_gain_rep (think minus plain, same items)
+    # the thinking gain on repair is the control stage's D_gain_rep (think minus plain, same items)
     assert m["ExThinkAllSrcRederived"] == m["ExThinkAllSrcPlainRederived"]
     gain = int(m["ExThinkAllSrcCorrect"]) - int(m["ExThinkAllSrcPlainCorrect"])
     n = int(m["ExThinkAllSrcRederived"])
@@ -108,12 +107,12 @@ def test_thinking_writer_reproduces_the_registered_shares():
 
 
 @pytest.mark.paper
-def test_writer_predictor_intervals_and_the_path3_rule_under_type_resampling():
+def test_writer_predictor_intervals_under_type_resampling():
     m = r2.numbers(INP)
     assert m["ETwoExWriterAgreePooledAurocTypeNinety"] == "0.832 [0.389, 0.934]"
     assert m["ETwoExWriterNoDefAgreePooledAurocNinety"] == "0.275 [0.175, 0.347]"
     assert m["ETwoExWriterNonDefPooledAurocNinety"].startswith("0.869 [")
-    assert m["ETwoExWriterPathThreeTypeVerdict"] == "triggered"  # slope 90% lower bound -0.53
+    assert not any("Verdict" in k for k in m)
     assert committed("ETwoExWriterAgreePooledSlopeType") == "1.01 [$-$0.53, 1.79]"
 
 
@@ -130,9 +129,7 @@ def test_leave_one_definition_out_range():
 
 # ------------------------------------------------------------------------------------ tables
 LABELS = {
-    "tab_main.tex": "tab:main",
     "tab_redef_only.tex": "tab:redef_only",
-    "tab_think_trunc.tex": "tab:think_trunc",
     "tab_classsplit_dm.tex": "tab:classsplit_dm",
     "tab_perdef.tex": "tab:perdef",
 }
@@ -155,26 +152,30 @@ def test_tables_have_no_missing_marker_when_everything_is_staged():
 
 
 @pytest.mark.paper
-def test_main_table_carries_the_values_of_the_decomposition_and_class_split():
-    tex = r2.tab_main(INP)
-    assert "$\\Ssrc$ & definition & 29 & 16.2 & 99.1 & 10.2 & 65.8 & " in tex
-    assert "$+$27.3\\,{\\scriptsize [$+$21.6,\\,$+$32.6]} & 23 \\\\" in tex
-    assert " & other & 83 & 68.1 & 67.5 & 10.0 & 10.9 & " in tex
-    decomp = (ROOT / "paper/generated/tab_decomp.tex").read_text()
-    for row in ("& 16.2 & 99.1 & 10.2 & 65.8 &", "& 6.7 & 99.7 & 7.5 & 61.8 &"):
-        assert row in decomp and row in tex
-    split = (ROOT / "paper/generated/tab_classsplit.tex").read_text()
-    for cell in re.findall(r"\$[+-]\$\d+\.\d\\,\{\\scriptsize \[[^]]*\]\}", tex):
-        assert cell in split, cell
+def test_the_levels_of_the_decomposition_are_the_account_macros():
+    levels = {  # r_0, r_1, a_0, a_1 of the source-epoch key in the main study
+        ("Src", "Definition"): ("16.2", "99.1", "10.2", "65.8"),
+        ("Src", "Other"): ("89.1", "90.7", "83.7", "85.9"),
+        ("Def", "Definition"): ("6.7", "99.7", "7.5", "61.8"),
+        ("Orphan", "Other"): ("68.1", "67.5", "10.0", "10.9"),
+    }
+    for (b, c), want in levels.items():
+        got = [committed(f"ExAcctMain{b}{c}{t}Est") for t in ("RZero", "ROne", "AZero", "AOne")]
+        assert [g.removesuffix("\\%") for g in got] == list(want), (b, c)
+        assert committed(f"ExAcctMain{b}{c}BxD") == committed(f"ExClsMain{b}{c}BxD")
+    assert committed("ExAcctMainSrcDefinitionBxD") == "$+$27.3\\,pp [$+$21.6, $+$32.6]"
 
 
 @pytest.mark.paper
-def test_dm_table_holds_the_registered_c3_values():
+def test_dm_table_holds_the_c3_values():
     tex = r2.tab_classsplit_dm(INP)
     for name in ("SynthCThreeSrc", "SynthCThreeDef", "SynthExCThreeOrphan"):
         est = committed(name + "Est").replace("\\,pp", "")
-        assert f"{est}\\,{{\\scriptsize [" in tex, name
-    assert tex.count("\\textcolor{gray}{authored}") == 12  # four contrasts, three classes
+        assert f"{est} & {{\\scriptsize [" in tex, name
+    # the authored derivation only on all items: its definition and other items are in the class
+    # split of the main study (one grey row per shift)
+    assert tex.count("\\color{gray}\\quad exact") == 3 and "\\cref{tab:classsplit}" in tex
+    assert "share" not in tex.split("\\label", 1)[1]  # the shares are in the class split too
 
 
 @pytest.mark.paper
@@ -183,8 +184,9 @@ def test_perdef_table_matches_the_per_definition_macros():
     for d in ("ImportantContact", "CloseFriend", "WorkingHours", "ActiveProject", "VipSender"):
         for b in ("Src", "Def", "Orphan"):
             est = committed(f"ExPerDefMain{b}{d}BxDEst").replace("\\,pp", "")
-            assert f"{est}\\,{{\\scriptsize [" in tex, (d, b)
+            assert f"{est} & " in tex, (d, b)  # its interval in the next cell, if it has width
     assert "$+$16.5 to $+$33.8" in tex
+    assert "0.0 & {\\scriptsize [0.0,\\,0.0]}" not in tex  # every world the same: no interval
 
 
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
@@ -197,10 +199,12 @@ def test_tables_compile_at_the_paper_width(tmp_path):
         "\n".join(
             [
                 r"\documentclass[10pt]{article}\usepackage[T1]{fontenc}",
-                r"\usepackage[textwidth=5.5in,textheight=9in]{geometry}",
+                r"\usepackage[textwidth=6.75in,textheight=9in]{geometry}",
+                r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
+                r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
-                r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
+                r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\cref}[1]{Table~1}",
                 r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",
             ]
         )
@@ -212,7 +216,7 @@ def test_tables_compile_at_the_paper_width(tmp_path):
         text=True,
     )
     assert done.returncode == 0, done.stdout[-1500:]
-    assert "Overfull \\hbox" not in done.stdout  # every table fits 5.5in
+    assert "Overfull \\hbox" not in done.stdout  # every table fits the 6.75in text block
 
 
 # ------------------------------------------------------------------------- generated files

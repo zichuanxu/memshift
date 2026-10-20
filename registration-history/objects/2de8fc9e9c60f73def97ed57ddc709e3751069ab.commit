@@ -1,8 +1,0 @@
-tree b9259f282694c47fbbeb46769fb325722c971a60
-parent bbd6152604326be95ed23e1bef345ddd25249c6f
-author zichuanxu <zichuanxu28@gmail.com> 1790697436 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790697436 +0900
-
-Stage-4 decision functions before any stage-4 analysis: M1-b (paired D1-D0 survival per switch), M3 sign verdict per contrast, N-1 over the stage-4 systems only, white-box comparison cell chosen by inferred D and B; decisions logged; stage-4 launch and build scripts in the release
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

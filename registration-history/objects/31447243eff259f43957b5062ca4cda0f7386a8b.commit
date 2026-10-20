@@ -1,8 +1,0 @@
-tree 019f9094baa32796afc018ceda95419cd189d308
-parent f88f64734c0897fd3bb1af593d529689f01a69d3
-author zichuanxu <zichuanxu28@gmail.com> 1790795345 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790795345 +0900
-
-Regenerate the paper numbers and tables: Llama M2 over all ten worlds, the second-round macros and five tables (writers, baselines, misses, zero system after the shift, JSON arm), account figure, field class and registered-claim wording in the generated tables
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

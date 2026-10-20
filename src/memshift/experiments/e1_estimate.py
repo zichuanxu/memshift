@@ -11,7 +11,7 @@ number of calls on a cold cache, and the distinct requests that no reference cel
 calls the cache of the reference cells cannot serve. Per cell and world:
 
   writer_new / program_new   distinct requests that no reference cell sends (the default
-                             reference: the six cells of `e1.CELLS`, the two D1s cells of block C)
+                             reference: the six cells of `e1.CELLS`, the two D1s cells of E1)
   think                      requests of the thinking writer (all new: their body differs)
   reader_upper               an upper bound on new reader calls: the asked probes after the fork
                              (a cell's contexts are identical to its reference's before the shift,

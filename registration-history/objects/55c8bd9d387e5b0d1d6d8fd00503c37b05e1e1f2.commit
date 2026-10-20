@@ -1,8 +1,0 @@
-tree 575ec81995824d372b4900c19d7e0a62f1700a57
-parent 6d749c58fd4e848ed557527117cd1bef4fc3a08a
-author zichuanxu <zichuanxu28@gmail.com> 1790736996 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790736996 +0900
-
-Decision 2026-09-30: GPU0 replica stopped after MemOS, port 8001 forwarded to the GPU1 server of the same revision (remaining native runs keep running), GPU0 resumes block M; STATUS compute rows for the 20:52 gemma restart and the 21:47 replica
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

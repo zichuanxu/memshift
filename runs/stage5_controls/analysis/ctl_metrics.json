@@ -1,5 +1,5 @@
 {
- "status": "exploratory: registered post-review controls (prereg/v3_controls.md), predictions registered before running; not part of the confirmatory analyses of prereg v1 and v2",
+ "status": "control cells against the HoldMem cells of the main study on the same worlds: per-item paired contrasts and their comparison with each control's thresholds",
  "worlds": [
   "w1000",
   "w1001",
@@ -7714,239 +7714,227 @@
    "n_items": 366
   }
  },
- "verdicts": {
+ "threshold_tests": {
   "G1": {
-   "status": "holds",
-   "reason": "6 of 6 met",
-   "hits": 6,
-   "total": 6,
-   "need": 6,
+   "n_met": 6,
+   "n_tests": 6,
+   "n_required": 6,
    "tests": [
     {
      "key": "G_upd_D0_src_all",
      "value": 0.00505902192242833,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D0_def_all",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D0_orphan_all",
      "value": 0.0194954128440367,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D1_src_all",
      "value": 0.008431703204047217,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D1_def_all",
      "value": 0.028169014084507043,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D1_orphan_all",
      "value": 0.08027522935779817,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     }
    ],
-   "strong": true
+   "pooled_lo_above_minus_4pp": true
   },
   "G2": {
-   "status": "holds",
-   "reason": "6 of 6 met",
-   "hits": 6,
-   "total": 6,
-   "need": 6,
+   "n_met": 6,
+   "n_tests": 6,
+   "n_required": 6,
    "tests": [
     {
      "key": "G_upd_D0_src_definition",
      "value": 0.01818181818181818,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D0_def_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D0_orphan_definition",
      "value": -0.006493506493506494,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D1_src_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D1_def_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "G_upd_D1_orphan_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     }
    ]
   },
   "G3": {
-   "status": "fails",
-   "reason": "2 of 6 met (need 5); not met: G_stab_D0_src_all -1.3 pp, G_stab_D0_orphan_all -0.4 pp, G_stab_D1_src_all -1.9 pp, G_stab_D1_orphan_all -1.3 pp",
-   "hits": 2,
-   "total": 6,
-   "need": 5,
+   "n_met": 2,
+   "n_tests": 6,
+   "n_required": 5,
    "tests": [
     {
      "key": "G_stab_D0_src_all",
      "value": -0.013490725126475547,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 0 pp",
      "unit": "pp"
     },
     {
      "key": "G_stab_D0_def_all",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0 pp",
      "unit": "pp"
     },
     {
      "key": "G_stab_D0_orphan_all",
      "value": -0.003605769230769231,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 0 pp",
      "unit": "pp"
     },
     {
      "key": "G_stab_D1_src_all",
      "value": -0.01854974704890388,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 0 pp",
      "unit": "pp"
     },
     {
      "key": "G_stab_D1_def_all",
      "value": 0.01056338028169014,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0 pp",
      "unit": "pp"
     },
     {
      "key": "G_stab_D1_orphan_all",
      "value": -0.013221153846153846,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 0 pp",
      "unit": "pp"
     }
    ]
   },
   "R1": {
-   "status": "holds",
-   "reason": "3 of 3 met",
-   "hits": 3,
-   "total": 3,
-   "need": 2,
+   "n_met": 3,
+   "n_tests": 3,
+   "n_required": 2,
    "tests": [
     {
      "key": "R_ref/R_gap_src_all",
      "value": 0.09949409780775717,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "refresh - B0 >= -1 pp and B1 - refresh >= -1 pp",
      "unit": "pp"
     },
     {
      "key": "R_ref/R_gap_def_all",
      "value": 0.2605633802816901,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "refresh - B0 >= -1 pp and B1 - refresh >= -1 pp",
      "unit": "pp"
     },
     {
      "key": "R_ref/R_gap_orphan_all",
      "value": 0.47477064220183485,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "refresh - B0 >= -1 pp and B1 - refresh >= -1 pp",
      "unit": "pp"
     }
    ]
   },
   "R2": {
-   "status": "holds",
-   "reason": "2 of 2 met",
-   "hits": 2,
-   "total": 2,
-   "need": 2,
+   "n_met": 2,
+   "n_tests": 2,
+   "n_required": 2,
    "tests": [
     {
      "key": "R_ratio_src_definition",
      "value": 1.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0.5",
      "unit": "ratio"
     },
     {
      "key": "R_ratio_def_definition",
      "value": 0.9866666666666667,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 0.5",
      "unit": "ratio"
     }
    ]
   },
   "T1": {
-   "status": "holds",
-   "reason": "3 of 3 met",
-   "hits": 3,
-   "total": 3,
-   "need": 3,
+   "n_met": 3,
+   "n_tests": 3,
+   "n_required": 3,
    "tests": [
     {
      "key": "T_upd_src_definition",
      "value": 0.006060606060606061,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "T_upd_def_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "T_upd_orphan_definition",
      "value": -0.006493506493506494,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     }
@@ -7954,85 +7942,75 @@
    "presentation_dominated": false
   },
   "T2": {
-   "status": "holds",
-   "reason": "2 of 2 met",
-   "hits": 2,
-   "total": 2,
-   "need": 2,
+   "n_met": 2,
+   "n_tests": 2,
+   "n_required": 2,
    "tests": [
     {
      "key": "T_ratio_src_definition",
      "value": 0.006993006993006993,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "<= 0.15",
      "unit": "ratio"
     },
     {
      "key": "T_ratio_def_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "<= 0.15",
      "unit": "ratio"
     }
    ]
   },
   "T3": {
-   "status": "fails",
-   "reason": "2 of 3 met (need 3); not met: T_upd_orphan_all -35.2 pp",
-   "hits": 2,
-   "total": 3,
-   "need": 3,
+   "n_met": 2,
+   "n_tests": 3,
+   "n_required": 3,
    "tests": [
     {
      "key": "T_upd_src_all",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "T_upd_def_all",
      "value": -0.0035211267605633804,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     },
     {
      "key": "T_upd_orphan_all",
      "value": -0.35206422018348627,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "|.| <= 3 pp",
      "unit": "pp"
     }
    ]
   },
   "M1": {
-   "status": "not judged",
-   "reason": "P-M3 (validity) is fails: 0 of 1 met (need 1); not met: program_ok_t0_ratio 0.60",
-   "hits": 0,
-   "total": 0,
-   "need": 0,
+   "n_met": 0,
+   "n_tests": 0,
+   "n_required": 0,
    "tests": []
   },
   "M2": {
-   "status": "not judged",
-   "reason": "P-M3 (validity) is fails: 0 of 1 met (need 1); not met: program_ok_t0_ratio 0.60",
-   "hits": 0,
-   "total": 0,
-   "need": 0,
+   "n_met": 0,
+   "n_tests": 0,
+   "n_required": 0,
    "tests": []
   },
   "M3": {
-   "status": "fails",
-   "reason": "0 of 1 met (need 1); not met: program_ok_t0_ratio 0.60",
-   "hits": 0,
-   "total": 1,
-   "need": 1,
+   "n_met": 0,
+   "n_tests": 1,
+   "n_required": 1,
    "tests": [
     {
      "key": "program_ok_t0_ratio",
      "value": 0.5957446808510638,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 0.8",
      "unit": "ratio"
     }
@@ -8055,246 +8033,230 @@
    }
   },
   "K1": {
-   "status": "holds",
-   "reason": "3 of 3 met",
-   "hits": 3,
-   "total": 3,
-   "need": 3,
+   "n_met": 3,
+   "n_tests": 3,
+   "n_required": 3,
    "tests": [
     {
      "key": "K_upd_src_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     },
     {
      "key": "K_upd_def_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     },
     {
      "key": "K_upd_orphan_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= -2 pp",
      "unit": "pp"
     }
    ]
   },
   "K2": {
-   "status": "fails",
-   "reason": "4 of 6 met (need 6); not met: K_cited_orphan_other +3.6 pp, scope_missed_orphan_all 3.2%",
-   "hits": 4,
-   "total": 6,
-   "need": 6,
+   "n_met": 4,
+   "n_tests": 6,
+   "n_required": 6,
    "tests": [
     {
      "key": "K_cited_src_other",
      "value": 0.004672897196261682,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 1 pp",
      "unit": "pp"
     },
     {
      "key": "K_cited_def_other",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 1 pp",
      "unit": "pp"
     },
     {
      "key": "K_cited_orphan_other",
      "value": 0.036211699164345405,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "|.| <= 1 pp",
      "unit": "pp"
     },
     {
      "key": "scope_missed_src_all",
      "value": 0.07419898819561555,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "> 5%",
      "unit": "share"
     },
     {
      "key": "scope_missed_def_all",
      "value": 0.09859154929577463,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "> 5%",
      "unit": "share"
     },
     {
      "key": "scope_missed_orphan_all",
      "value": 0.032110091743119296,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "> 5%",
      "unit": "share"
     }
    ]
   },
   "Z1": {
-   "status": "holds",
-   "reason": "3 of 3 met",
-   "hits": 3,
-   "total": 3,
-   "need": 3,
+   "n_met": 3,
+   "n_tests": 3,
+   "n_required": 3,
    "tests": [
     {
      "key": "Z_upd_src_definition",
      "value": 0.7090909090909091,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     },
     {
      "key": "Z_upd_def_definition",
      "value": 0.5920398009950248,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     },
     {
      "key": "Z_pool_definition (95% lower bound)",
      "value": 0.6124031007751938,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "> 20 pp",
      "unit": "pp"
     }
    ]
   },
   "Z1k": {
-   "status": "holds",
-   "reason": "2 of 2 met",
-   "hits": 2,
-   "total": 2,
-   "need": 2,
+   "n_met": 2,
+   "n_tests": 2,
+   "n_required": 2,
    "tests": [
     {
      "key": "Z0_upd_src_definition",
      "value": 0.6666666666666666,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     },
     {
      "key": "Z0_upd_def_definition",
      "value": 0.6666666666666666,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     }
    ]
   },
   "Z2": {
-   "status": "fails",
-   "reason": "4 of 8 met (need 8); not met: Z_upd_src_rule -20.0 pp, Z_upd_def_rule -13.7 pp, Z_stab_src_all -5.6 pp, Z_stab_def_all -6.0 pp",
-   "hits": 4,
-   "total": 8,
-   "need": 8,
+   "n_met": 4,
+   "n_tests": 8,
+   "n_required": 8,
    "tests": [
     {
      "key": "Z_upd_src_rule",
      "value": -0.2,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 0 pp",
      "unit": "pp"
     },
     {
      "key": "Z_upd_def_rule",
      "value": -0.136986301369863,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= 0 pp",
      "unit": "pp"
     },
     {
      "key": "Z_upd_src_free",
      "value": -0.06896551724137931,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "<= 3 pp",
      "unit": "pp"
     },
     {
      "key": "Z_upd_def_free",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "<= 3 pp",
      "unit": "pp"
     },
     {
      "key": "Z_upd_orphan_free",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "<= 3 pp",
      "unit": "pp"
     },
     {
      "key": "Z_upd_orphan_rule",
      "value": -0.4562146892655367,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "<= 0 pp",
      "unit": "pp"
     },
     {
      "key": "Z_stab_src_all",
      "value": -0.05564924114671164,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= -3 pp",
      "unit": "pp"
     },
     {
      "key": "Z_stab_def_all",
      "value": -0.05985915492957746,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": ">= -3 pp",
      "unit": "pp"
     }
    ]
   },
   "Z3": {
-   "status": "holds",
-   "reason": "2 of 2 met",
-   "hits": 2,
-   "total": 2,
-   "need": 2,
+   "n_met": 2,
+   "n_tests": 2,
+   "n_required": 2,
    "tests": [
     {
      "key": "Z_vs_D1s_src_definition",
      "value": 0.0,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 10 pp",
      "unit": "pp"
     },
     {
      "key": "Z_vs_D1s_def_definition",
      "value": -0.05970149253731343,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "|.| <= 10 pp",
      "unit": "pp"
     }
    ]
   },
   "D1": {
-   "status": "not judged",
-   "reason": "P-D2 (validity) is fails: 0 of 1 met (need 1); not met: think_unreadable_share 32.1%",
-   "hits": 0,
-   "total": 0,
-   "need": 0,
+   "n_met": 0,
+   "n_tests": 0,
+   "n_required": 0,
    "tests": []
   },
   "D2": {
-   "status": "fails",
-   "reason": "0 of 1 met (need 1); not met: think_unreadable_share 32.1%",
-   "hits": 0,
-   "total": 1,
-   "need": 1,
+   "n_met": 0,
+   "n_tests": 1,
+   "n_required": 1,
    "tests": [
     {
      "key": "think_unreadable_share",
      "value": 0.3206214689265537,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "<= 20%",
      "unit": "share"
     }
@@ -8302,42 +8264,39 @@
    "writes": 708
   },
   "F1": {
-   "status": "holds",
-   "reason": "4 of 4 met",
-   "hits": 4,
-   "total": 4,
-   "need": 4,
+   "n_met": 4,
+   "n_tests": 4,
+   "n_required": 4,
    "tests": [
     {
      "key": "F_rep_src_definition",
      "value": 0.7794871794871795,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     },
     {
      "key": "F_rep_def_definition",
      "value": 0.9356435643564357,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     },
     {
      "key": "F_repmech_src_definition",
      "value": 0.7203389830508474,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     },
     {
      "key": "F_repmech_def_definition",
      "value": 0.8559322033898306,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": ">= 30 pp",
      "unit": "pp"
     }
    ],
-   "reading": "execution",
    "regions": {
     "F_rep_src_definition": "execution",
     "F_rep_def_definition": "execution",
@@ -8347,11 +8306,11 @@
   }
  },
  "withdrawn": {
-  "R1": "D = 0 contrasts withdrawn (D0B0_refresh not run); judged on the three D = 1 contrasts",
-  "T1": "B = 0 contrasts withdrawn (D0tB0 not run); judged on the three B = 1 contrasts",
-  "T3": "B = 0 contrasts withdrawn (D0tB0 not run); judged on the three B = 1 contrasts",
-  "K1": "D = 0 contrasts withdrawn (D0B1_scope not run); judged on the three D = 1 contrasts",
-  "K2": "judged at D = 1 (D0B1_scope not run)",
+  "R1": "D = 0 contrasts withdrawn (D0B0_refresh not run); computed on the three D = 1 contrasts",
+  "T1": "B = 0 contrasts withdrawn (D0tB0 not run); computed on the three B = 1 contrasts",
+  "T3": "B = 0 contrasts withdrawn (D0tB0 not run); computed on the three B = 1 contrasts",
+  "K1": "D = 0 contrasts withdrawn (D0B1_scope not run); computed on the three D = 1 contrasts",
+  "K2": "computed at D = 1 (D0B1_scope not run)",
   "M1": "B = 0 counterpart (D1sB0_ra) not run, not reported",
   "D1": "B = 0 counterpart (D0thinkB0) not run, not reported"
  },
@@ -9747,16 +9706,16 @@
     "k.close_friend",
     "k.vip_sender"
    ],
-   "registered_truncated": [
+   "audit_truncated": [
     "k.close_friend",
     "k.vip_sender"
    ],
-   "as_registered": true
+   "same_as_audit": true
   }
  },
  "summary": {
-  "holds": 11,
-  "fails": 6,
-  "not judged": 3
+  "met_required": 11,
+  "below_required": 6,
+  "not_computed": 3
  }
 }

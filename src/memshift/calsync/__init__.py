@@ -1,4 +1,4 @@
-"""Calendar official sync semantics (plan §4.2 "同步语义", §2.5 H_S, §6 E4).
+"""Calendar official sync semantics (E4).
 
 The main results use ideal sync: every source event reaches the data layer once, at its own time.
 E4 replaces the calendar source with a simulated server that follows the official incremental

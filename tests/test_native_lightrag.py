@@ -1,7 +1,7 @@
-"""Offline tests for the LightRAG adapter (prereg v2 §3). The pure helpers (document ids and refs,
-revision replace / delete sequencing, reconcile, context parsing) run everywhere. The tests that
-drive the real library (`lightrag-hku`, see docker/native/lightrag.txt) replace only its models by
-deterministic fakes and its tokenizer by a character tokenizer, so they need no network and no
+"""Offline tests for the LightRAG adapter (E5 native systems). The pure helpers (document ids and
+refs, revision replace / delete sequencing, reconcile, context parsing) run everywhere. The tests
+that drive the real library (`lightrag-hku`, see docker/native/lightrag.txt) replace only its models
+by deterministic fakes and its tokenizer by a character tokenizer, so they need no network and no
 tiktoken encoding; they are skipped when the library is not importable."""
 
 import hashlib

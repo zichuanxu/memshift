@@ -1,4 +1,4 @@
-"""Native ingestion cost t_i (plan §9 rule 4, E5_PROTOCOL §4) from the stores of E5 measure runs.
+"""Native ingestion cost t_i from the stores of E5 measure runs.
 
 A store keeps its usage counters (`state.json`, saved after every ingest call, also when it fails),
 its ledger of ingested units and, under on_error="skip", its failures. Per system:

@@ -210,7 +210,7 @@ def test_analyse_merges_native_white_box_and_baseline_runs(tmp_path):
         _answers(_table({w: {"oracle": (10, None, None)} for w in worlds})),
     )
     res = rank_corr.analyse([nat], [wb], tmp_path / "out", [base], seeds=[1000, 1001, 1002])
-    assert res["status"].startswith("exploratory")
+    assert res["status"] == rank_corr.STATUS
     assert res["worlds"] == ["w1000", "w1001", "w1002"]
     by = {r["system"]: r for r in res["systems"]}
     assert set(by) == {*LEVELS, "oracle"}
@@ -227,7 +227,7 @@ def test_analyse_merges_native_white_box_and_baseline_runs(tmp_path):
     on_disk = json.loads((tmp_path / "out" / "analysis" / "rank_corr.json").read_text())
     assert on_disk["correlations"] == res["correlations"]
     text = (tmp_path / "out" / "analysis" / "rank_corr.md").read_text()
-    assert "exploratory" in text and "| mem0 | native | 70.0" in text and "Spearman rho" in text
+    assert rank_corr.STATUS in text and "| mem0 | native | 70.0" in text and "Spearman rho" in text
     # a narrower world set uses only those worlds
     two = rank_corr.analyse([nat], [wb], tmp_path / "out2", [base], seeds=[1000, 1001])
     assert two["worlds"] == ["w1000", "w1001"]

@@ -1,5 +1,5 @@
-"""Mem0 for block X of prereg/v4_round3.md: the E5 adapter with an event log, and the two
-registered interventions.
+"""Mem0 for the Mem0 interventions: the E5 adapter with an event log, and the two
+interventions.
 
 `LoggedMem0` (arm `mem0`) is `native.Mem0System` unchanged (same configuration, same two `add`
 calls per unit, same ledger) plus an event log. Every `Memory.add` is wrapped: its return value

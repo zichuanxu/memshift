@@ -1,5 +1,5 @@
 """Portable Memory (.mem) export of a HoldMem store and import into other implementations
-(plan §3.2 T2, §5.5, §6 E6), through the `portable-memory` reference SDK (0.3.0, format 1.1;
+(E6, the leaving test T2), through the `portable-memory` reference SDK (0.3.0, format 1.1;
 optional `native` extra, imported lazily).
 
 Standard records (both variants; what any compliant importer keeps)
@@ -111,7 +111,7 @@ def bundle_store(generator: str | None = None) -> Any:
 
 # ---------------------------------------------------------------------- export
 def derivation_record(hm: HoldMem, item: Item) -> dict[str, Any]:
-    """The derivation extension of one item (plan §5.5), JSON-ready."""
+    """The derivation extension of one item, JSON-ready."""
     slot = hm.world.slot(item.slot_id)
     kappa = hm.world.kappa_version(slot.kappa_id, item.written) if slot.kappa_id else None
     return {

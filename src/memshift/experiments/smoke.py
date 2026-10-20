@@ -1,8 +1,8 @@
-"""Stage 0.4 smoke run (plan §7): one world (3 months), HoldMem (1,1) ingest, 50 probes.
+"""Smoke run: one world (3 months), HoldMem (1,1) ingest, 50 probes.
 
 Measures t_i (per ingested event: writer tokens and wall-clock) and t_q (per probe: reader tokens
-and wall-clock), plus the D=1 checker verdict mix (plan §12: `unverifiable` > 20% triggers the
-fallback-heavy alternative). The zero system answers the same probes as a reference point.
+and wall-clock), plus the D=1 checker outcome mix (a share of `unverifiable` above 20% calls
+for the fallback-heavy alternative). The zero system answers the same probes as a reference point.
 """
 
 from __future__ import annotations
@@ -45,12 +45,12 @@ def _per_probe(ans: list[Answer], secs: float) -> dict[str, float]:
     }
 
 
-def _verdicts(hm: HoldMem) -> dict[str, int]:
-    """Checker verdicts over every write (initial derivations and repairs)."""
+def _check_outcomes(hm: HoldMem) -> dict[str, int]:
+    """Checker outcomes over every write (initial derivations and repairs)."""
     out: dict[str, int] = {}
     for item in hm.items.values():
-        verdict = (item.det or {}).get("check", "none")
-        out[verdict] = out.get(verdict, 0) + 1
+        outcome = (item.det or {}).get("check", "none")
+        out[outcome] = out.get(outcome, 0) + 1
     return out
 
 
@@ -67,7 +67,7 @@ def run(seed: int = 0, n_probes: int = 50, out: Path | None = None) -> Path:
     timer = Timer()
     hm.build(t_build)
     build_s = timer.lap()
-    build_verdicts = _verdicts(hm)
+    build_outcomes = _check_outcomes(hm)
     maint: list[dict[str, Any]] = []
     for t in checkpoints:
         events = len(log.between(hm.last_t or t_build, t))
@@ -107,7 +107,7 @@ def run(seed: int = 0, n_probes: int = 50, out: Path | None = None) -> Path:
             "seconds": round(build_s, 2),
             "tokens": hm.cost["ingest_tokens"],
             "writes": len(world.slots),
-            "d1_check_verdicts": build_verdicts,
+            "d1_check_outcomes": build_outcomes,
         },
         "maintenance": maint,
         "t_i": {
@@ -122,7 +122,7 @@ def run(seed: int = 0, n_probes: int = 50, out: Path | None = None) -> Path:
             "holdmem": _per_probe(hm_answers, hm_q_s),
             "zero": _per_probe(zero_answers, zero_q_s),
         },
-        "d1_final_check_verdicts": _verdicts(hm),
+        "d1_final_check_outcomes": _check_outcomes(hm),
         "cost": hm.cost,
         "llm_usage": llm.usage,
     }

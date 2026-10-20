@@ -1,4 +1,4 @@
-"""Serving-engine effect on identical reader requests (E7 theta_r, decisions.md 2026-09-29).
+"""Serving-engine effect on identical reader requests (E7 theta_r).
 
 The same theta_r cells were run twice with the same reader model and revision, once per vLLM image.
 Writer outputs come from the same request cache, so every probe's reader context should be

@@ -1,8 +1,0 @@
-tree 2ac7fc3ac6ea7e0d812c37e511f7558ebf84478f
-parent ccdb75dbb07e213a4abd069358f682b0defe2aaa
-author zichuanxu <zichuanxu28@gmail.com> 1790785431 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790785431 +0900
-
-Paper: length pass, sections 1 to 6 end on page 13 (introduction, theory, benchmark, results and discussion tightened; no claim dropped)
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

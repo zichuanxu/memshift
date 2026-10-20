@@ -1,4 +1,4 @@
-"""Exploratory test of the account across writers and item classes (`analysis.ex_account`): the cell
+"""The account across writers and item classes (`analysis.ex_account`): the cell
 terms are the staged Eq. (1) decomposition, the identity holds, the fit statistics are checked by
 hand on cells that add up, and the committed stage analysis is the one the paper reads."""
 
@@ -282,7 +282,7 @@ def test_the_numbers_a_reviewer_recomputed_are_the_staged_ones():
 
 
 @pytest.mark.skipif(not STAGE.exists(), reason="stage not staged")
-def test_staged_fit_has_the_registered_shape():
+def test_staged_fit_has_the_main_analysis_shape():
     res = json.loads(STAGE.read_text())
     assert res["explore_draws"] == 2000 and res["explore_seed"] == 996
     two = res["explore_account_fit"]["two_class"]

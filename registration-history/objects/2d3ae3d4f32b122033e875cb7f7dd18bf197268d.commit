@@ -1,8 +1,0 @@
-tree 30855da5444629b0be5553cd154afb78478fe655
-parent 3bd66c85a00d84933687b68ca826d9782903e989
-author zichuanxu <zichuanxu28@gmail.com> 1790782875 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790782875 +0900
-
-Paper generators for the control cells (WS5): Ctl macros for every contrast, verdict, count, check and reported quantity, tab_controls (main text, one row per registered prediction with its verdict, caption says registered before running) and tab_controls_full (appendix), results source group ctl (runs/stage5_controls); generated files in the state before staging, every cell MISSING
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

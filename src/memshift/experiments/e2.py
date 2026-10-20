@@ -1,8 +1,8 @@
-"""E2 (plan §6): writer-model switch S_wr and per-item agreement as a prediction of survival.
+"""E2: writer-model switch S_wr and per-item agreement as a prediction of survival.
 
-Tiers (all same lineage): same tier Qwen3.5-9B -> MiMo-V2.6-Distill-Qwen-9B; upgrade
-Qwen3.5-9B -> Qwen3.8-27B; downgrade = the reverse of the upgrade. Stage 4 (M1) adds cross-family
-switches from the main writer, given as `--tiers cross:<model>` and labelled `cross_<model slug>`.
+Tiers (all same lineage): same tier Qwen3.5-9B -> MiMo-V2.6-Distill-Qwen-9B; upgrade Qwen3.5-9B ->
+Qwen3.8-27B; downgrade = the reverse of the upgrade. Switches to other model families from the main
+writer are given as `--tiers cross:<model>` and labelled `cross_<model slug>`.
 
 Test items: the dev worlds' slots at t0 = t_f - 1 min, sources frozen (gold unchanged, so the
 same probes are asked before and after). Four cells (D x B, source-epoch binding) are built
@@ -12,7 +12,7 @@ Retention = P(ContractValid after | ContractValid before), per cell.
 Calibration items: disjoint worlds (their own seeds) at three as-of times; both writers derive
 each slot independently; an item agrees when both derivations are correct or both wrong
 (typed match against gold). Per item type the agreement rate is the predictor of per-item
-survival of D=0, B=1 items; we report the calibration slope and AUROC (plan §2.3).
+survival of D=0, B=1 items; we report the calibration slope and AUROC.
 
 `warm(model, ...)` precomputes every writer call of a model into the response cache, so that a
 model needing a coordination window (Qwen3.8-27B, TP=2) is served once, in one batch.
@@ -50,7 +50,7 @@ from memshift.scoring.normalize import values_match
 MIMO = "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B"
 BIG = "Qwen/Qwen3.8-27B"
 TIERS = {"same": (MAIN_MODEL, MIMO), "upgrade": (MAIN_MODEL, BIG), "downgrade": (BIG, MAIN_MODEL)}
-CROSS_PREFIX = "cross:"  # stage 4 M1 (prereg/v2.md §2): "cross:<model>" switches the main writer
+CROSS_PREFIX = "cross:"  # other model families: "cross:<model>" switches the main writer
 CELLS = [CellConfig(d, b, "source") for d in (0, 1) for b in (0, 1)]
 CAL_MONTHS = (3, 6, 9)
 

@@ -12,20 +12,6 @@
     "B_basis": "documented + inferred",
     "B_key_components": "none documented (per-response Sources only)",
     "B_reason": "No key: an LLM process rewrites memory in the background and deleting a source chat does not necessarily delete saved memories derived from it; writer model and per-item source are not documented.",
-    "T1": "undeterminable",
-    "T1_basis": "inferred",
-    "T1_reason": "Writer (dreaming) model is vendor-chosen and undocumented; no per-item theta_w; users cannot trigger re-derivation; S_wr cannot be applied or observed from outside.",
-    "T2": "fail",
-    "T2_basis": "documented",
-    "T2_reason": "No memory export: the data export covers chats and account data, memories do not transfer between accounts, no import exists; the only exit is asking the model to print memories as prose (-> .mem only through TransferTextAdapter, no derivation fields possible).",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "A controlled world cannot be ingested and no oracle comparison is possible from outside; vendor evals compare memory versions only.",
-    "T4": "undeterminable",
-    "T4_basis": "documented",
-    "T4_reason": "Serving cost is not exposed; the ~5x compute reduction is relative to the earlier dreaming system, not to a full re-read.",
-    "plan_expectation_s3_4": "D0 B0; T1 不可判定; T2 不通过（无导出）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "OAI-DREAM",
@@ -72,7 +58,7 @@
       {
         "id": "BG-CARDS",
         "kind": "record",
-        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12",
         "accessed": "2026-09-29",
         "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
       }
@@ -91,20 +77,6 @@
     "B_basis": "documented",
     "B_key_components": "none documented",
     "B_reason": "Claude updates entries during conversations (LLM-judged); when a conversation is deleted or expires, memory entries generated from it are not removed; no key.",
-    "T1": "undeterminable",
-    "T1_basis": "inferred",
-    "T1_reason": "Which model writes memory entries is undocumented; no per-entry theta_w; no user-triggered re-derivation.",
-    "T2": "fail",
-    "T2_basis": "documented",
-    "T2_reason": "Export = ask Claude to write its memories out verbatim and copy-paste (model-generated prose, completeness not guaranteed); consumer data export does not list memory; import is an experimental LLM re-extraction of pasted text. No derivation extension is possible. (Team/Enterprise exports include memory entries; format undocumented.)",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "Black box; no published comparison.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "Serving cost not exposed.",
-    "plan_expectation_s3_4": "D0 B0; T1 不可判定; T2 不通过（散文导出）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "ANT-IMPEXP",
@@ -151,7 +123,7 @@
       {
         "id": "BG-CARDS",
         "kind": "record",
-        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12",
         "accessed": "2026-09-29",
         "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
       }
@@ -170,20 +142,6 @@
     "B_basis": "inferred",
     "B_key_components": "none",
     "B_reason": "The model edits files through str_replace/delete/rename at its own judgment; nothing records a key or invalidates on change.",
-    "T1": "undeterminable",
-    "T1_basis": "inferred",
-    "T1_reason": "Model is selectable per request but files record no theta_w and nothing re-derives; runnable in principle, not in E2/E5.",
-    "T2": "undeterminable",
-    "T2_basis": "code",
-    "T2_reason": "Developer owns the complete files and Portable Memory's ClaudeAdapter ingests the directory into .mem episodes, but there are no derivation fields to carry and no import measurement.",
-    "T3": "undeterminable",
-    "T3_basis": "documented",
-    "T3_reason": "Published +39% is against a no-memory baseline, not an oracle.",
-    "T4": "undeterminable",
-    "T4_basis": "documented",
-    "T4_reason": "The 84% token reduction belongs to context editing, not the memory tool.",
-    "plan_expectation_s3_4": "（计划未单列）",
-    "deviation_from_plan": "新增行",
     "evidence": [
       {
         "id": "ANT-MEMTOOL",
@@ -221,20 +179,6 @@
     "B_basis": "documented + inferred",
     "B_key_components": "source-chat deletion only (documented), no revision/definition/model key",
     "B_reason": "To delete something Gemini remembered, the user deletes all chats containing it (short delay): deletion propagates from sources, but no key, no item list, no definition or model version is documented.",
-    "T1": "undeterminable",
-    "T1_basis": "inferred",
-    "T1_reason": "Memory works with all models in the picker; which model derives insights is undocumented; no re-derivation control.",
-    "T2": "fail",
-    "T2_basis": "documented",
-    "T2_reason": "No memory export: Takeout lists Gems and Gemini Apps activity, not memory or Instructions; import only by pasting a prompt dump or uploading a chat ZIP.",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "Black box.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "Serving cost not exposed.",
-    "plan_expectation_s3_4": "D0 B0; T1 不可判定; T2 不通过",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "GOO-MEM",
@@ -295,7 +239,7 @@
       {
         "id": "BG-CARDS",
         "kind": "record",
-        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12",
         "accessed": "2026-09-29",
         "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
       }
@@ -314,20 +258,6 @@
     "B_basis": "inferred",
     "B_key_components": "source object id (app-driven upsert/delete); no revision, definition or model key",
     "B_reason": "Freshness depends on the app re-donating (upsert by entity id), delete APIs, and system reindex after OS updates or data changes; no key invalidates items.",
-    "T1": "undeterminable",
-    "T1_basis": "inferred",
-    "T1_reason": "Neither users nor developers control the model; full reindex after OS updates is documented but not tied to a model version.",
-    "T2": "fail",
-    "T2_basis": "documented",
-    "T2_reason": "The index is local and available to the system alone; third-party apps can retrieve only their own content; no user export or import of the index or personal context exists (only the PCC request report).",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "Black box.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "Not published.",
-    "plan_expectation_s3_4": "D1（结构化实体）B0; T2 不通过（只进不出）",
-    "deviation_from_plan": "D 由 1 改为部分",
     "evidence": [
       {
         "id": "APL-240",
@@ -381,7 +311,7 @@
       {
         "id": "BG-CARDS",
         "kind": "record",
-        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12",
         "accessed": "2026-09-29",
         "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
       }
@@ -395,25 +325,11 @@
     "owner_note": "developer-run store scoped by user_id/agent_id/run_id",
     "D": "0",
     "D_basis": "code",
-    "D_reason": "The memory value is free text ('data') plus an MD5 hash; no source reference, span or typed value. E5: structured repair precision 1.00 (n=289), descriptive only (kappa_D below the bar); carryover inside the HoldMem (0,0) prediction on 5 of 6 pre-registered measures.",
+    "D_reason": "The memory value is free text ('data') plus an MD5 hash; no source reference, span or typed value. E5: structured repair precision 1.00 (n=289), reported descriptively (kappa_D below the threshold); carryover within the range of HoldMem (0,0) on 5 of 6 measures.",
     "B": "0",
     "B_basis": "code + documented",
     "B_key_components": "none (scope ids, attributed_to, timestamps only)",
-    "B_reason": "The v3 pipeline is ADD-only (one extraction call, inserts only; new facts stored alongside old ones); UPDATE/DELETE only through explicit API calls; supersede ('Dream') and decay are Platform-only. E5 orphan probe: persistence 0.549 [0.490, 0.609] -> B=0 by the 0.5 threshold, between the white-box B=0 (0.90) and B=1 (0.13-0.17) cells.",
-    "T1": "undeterminable",
-    "T1_basis": "by construction",
-    "T1_reason": "No per-item theta_w and no re-derivation path: a writer switch changes no stored memory, so retention 1 would mean nothing was updated, not equivalence (as for HoldMem (0,0)); S_wr was not run on Mem0.",
-    "T2": "undeterminable",
-    "T2_basis": "not tested",
-    "T2_reason": "OSS has no export ('Memory Export: Not available'); the only .mem route is get_all JSON -> Portable Memory Mem0Adapter (episodes only); E6 has no Mem0 arm. Prediction (not measured): the no-extension outcome of E6, since Mem0 has no binding that would read a derivation record.",
-    "T3": "fail",
-    "T3_basis": "measured (E5, 15 short worlds)",
-    "T3_reason": "Static ContractValid 0.660 vs oracle context 0.829 on the same 15 three-month worlds: -16.9 pp [-20.6, -13.2] (floor -3 pp); zero system -16.8, RAG -20.7 pp on the same worlds.",
-    "T4": "pass",
-    "T4_basis": "measured (E5, 15 short worlds)",
-    "T4_reason": "Reader tokens per query 1.14% of one full re-read at t0 (ceiling 50%); ingestion: 1.0 LLM call and 10.4k prompt tokens per event (not part of T4).",
-    "plan_expectation_s3_4": "D0 B0（v3 只 ADD）; T1/T3/T4 待 E5; T2 待 E6（有 .mem 适配器）",
-    "deviation_from_plan": "E5 reduced to 15 three-month worlds (decisions.md 2026-09-29); T2 not tested (E6 has no Mem0 arm)",
+    "B_reason": "The v3 pipeline is ADD-only (one extraction call, inserts only; new facts stored alongside old ones); UPDATE/DELETE only through explicit API calls; supersede ('Dream') and decay are Platform-only. E5 orphan probe: persistence 0.549 [0.490, 0.609] -> B=0 by the 0.5 threshold (the interval contains the threshold), between the white-box B=0 (0.90) and B=1 (0.13-0.17) cells.",
     "evidence": [
       {
         "id": "M0-CODE",
@@ -467,23 +383,23 @@
       {
         "id": "CODE-NATIVE",
         "kind": "code",
-        "pointer": "src/memshift/adapters/native.py module docstring L1-35 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/adapters/native.py module docstring",
         "accessed": "2026-09-29",
-        "note": "Mem0 2.2.1: one additive extraction LLM call per add (mem0/memory/main.py:881-1220); Mem0 keeps extracted facts plus only the last 10 raw messages, so E5 archives raw records separately (keep_raw=True); Graphiti 0.30.2 episode per record [Cited at the coordinator's pointer; cross-checked against mem0@94c3fe9]"
+        "note": "Mem0 2.2.1: one additive extraction LLM call per add (mem0/memory/main.py:881-1220); Mem0 keeps extracted facts plus only the last 10 raw messages, so E5 archives raw records separately (keep_raw=True); Graphiti 0.30.2 episode per record [cross-checked against mem0@94c3fe9]"
       },
       {
         "id": "CODE-MEMEXPORT",
         "kind": "code",
-        "pointer": "src/memshift/adapters/mem_export.py module docstring; export_holdmem L244; import_to_holdmem L444; import_to_mem0 L529 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/adapters/mem_export.py module docstring; export_holdmem; import_to_holdmem; import_to_mem0",
         "accessed": "2026-09-29",
         "note": "HoldMem -> .mem export with/without derivation extension (carriers: custom kind, episode ext, fact ext); import into a second HoldMem; Mem0 import only via add(infer=False) because the SDK has no .mem -> Mem0 adapter"
       },
       {
         "id": "CODE-E6",
         "kind": "code",
-        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/experiments/e6.py module docstring",
         "accessed": "2026-09-29",
-        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports it into a second HoldMem implementation and, optionally, into Mem0 through its raw add path (`_mem0_arms`); it has no Graphiti importer arm and no native-system exporter arm"
       },
       {
         "id": "PM-MEM0",
@@ -509,14 +425,14 @@
       {
         "id": "BG-CARDS",
         "kind": "record",
-        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12",
         "accessed": "2026-09-29",
         "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
       },
       {
         "id": "RUN-STAGE3-E5",
         "kind": "run",
-        "pointer": "runs/stage3_e5/analysis/e5_natives.json; runs/stage3_e5_cost/analysis/e5_cost.json; prereg/decisions.md 2026-09-29 (E5 reduction; T3 reference)",
+        "pointer": "runs/stage3_e5/analysis/e5_natives.json; runs/stage3_e5_cost/analysis/e5_cost.json",
         "accessed": "2026-09-29",
         "note": "Mem0 E5 on 15 short test worlds: labels, sufficient-statistic comparison, noise floor, T3/T4"
       }
@@ -535,20 +451,6 @@
     "B_basis": "code + paper + documented",
     "B_key_components": "valid_at/invalid_at/expired_at + episode UUIDs; no source revision, definition or model key",
     "B_reason": "Edges are invalidated only when an LLM judges that new information contradicts them; a revised episode is not re-derived (uuid reuse reprocesses stored content); deleting the creator episode removes its edges but does not restore edges it invalidated; ontology changes are not re-applied.",
-    "T1": "undeterminable",
-    "T1_basis": "not tested",
-    "T1_reason": "E5 not run on Graphiti (budget, plan 12: keep one native system). Measured ingestion cost on a three-month world: 6.1 LLM calls, 13.3k prompt and 1.2k completion tokens per event; ingestion stopped at the 33rd event when the model's output was still invalid JSON after retries.",
-    "T2": "undeterminable",
-    "T2_basis": "not tested",
-    "T2_reason": "E6 has no Graphiti importer arm.",
-    "T3": "undeterminable",
-    "T3_basis": "not tested",
-    "T3_reason": "E5 not run on Graphiti (budget, plan 12: keep one native system). Measured ingestion cost on a three-month world: 6.1 LLM calls, 13.3k prompt and 1.2k completion tokens per event; ingestion stopped at the 33rd event when the model's output was still invalid JSON after retries.",
-    "T4": "undeterminable",
-    "T4_basis": "not tested",
-    "T4_reason": "E5 not run on Graphiti (budget, plan 12: keep one native system). Measured ingestion cost on a three-month world: 6.1 LLM calls, 13.3k prompt and 1.2k completion tokens per event; ingestion stopped at the 33rd event when the model's output was still invalid JSON after retries.",
-    "plan_expectation_s3_4": "D 部分; B 时间有效性; T1/T3/T4 待 E5; T2 待 E6",
-    "deviation_from_plan": "T2 待 E6 的前提当前不成立",
     "evidence": [
       {
         "id": "GR-CODE",
@@ -574,16 +476,16 @@
       {
         "id": "CODE-NATIVE",
         "kind": "code",
-        "pointer": "src/memshift/adapters/native.py module docstring L1-35 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/adapters/native.py module docstring",
         "accessed": "2026-09-29",
-        "note": "Mem0 2.2.1: one additive extraction LLM call per add (mem0/memory/main.py:881-1220); Mem0 keeps extracted facts plus only the last 10 raw messages, so E5 archives raw records separately (keep_raw=True); Graphiti 0.30.2 episode per record [Cited at the coordinator's pointer; cross-checked against mem0@94c3fe9]"
+        "note": "Mem0 2.2.1: one additive extraction LLM call per add (mem0/memory/main.py:881-1220); Mem0 keeps extracted facts plus only the last 10 raw messages, so E5 archives raw records separately (keep_raw=True); Graphiti 0.30.2 episode per record [cross-checked against mem0@94c3fe9]"
       },
       {
         "id": "CODE-E6",
         "kind": "code",
-        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/experiments/e6.py module docstring",
         "accessed": "2026-09-29",
-        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports it into a second HoldMem implementation and, optionally, into Mem0 through its raw add path (`_mem0_arms`); it has no Graphiti importer arm and no native-system exporter arm"
       },
       {
         "id": "PM-SPEC-PROV",
@@ -616,7 +518,7 @@
       {
         "id": "RUN-STAGE3-E5COST",
         "kind": "run",
-        "pointer": "runs/stage3_e5_cost/analysis/e5_cost.json; prereg/decisions.md 2026-09-29 (E5 reduced per plan 12)",
+        "pointer": "runs/stage3_e5_cost/analysis/e5_cost.json",
         "accessed": "2026-09-29",
         "note": "Graphiti ingestion cost measured; E5 not run"
       }
@@ -635,20 +537,6 @@
     "B_basis": "code + documented",
     "B_key_components": "none (git history of edits, commit author = agent id)",
     "B_reason": "The agent or its reflection subagent rewrites stale entries in place at LLM judgment; git records edits but there is no key and no invalidation on source, definition or model change.",
-    "T1": "undeterminable",
-    "T1_basis": "code + inferred",
-    "T1_reason": "Model switchable (subagents inherit it) but not recorded on memory and nothing re-derives; not in E5.",
-    "T2": "undeterminable",
-    "T2_basis": "documented + code",
-    "T2_reason": "Own formats only: `letta memory export` copies the MemFS directory; .af is legacy V1, omits archival passages and block history, and no other framework imports it; no .mem adapter (the .mem spec maps Letta but ships none).",
-    "T3": "undeterminable",
-    "T3_basis": "documented",
-    "T3_reason": "Only a LoCoMo 74% vendor figure without a full-context floor.",
-    "T4": "undeterminable",
-    "T4_basis": "documented",
-    "T4_reason": "Sleep-time compute numbers concern reasoning compute, not serving vs full re-read.",
-    "plan_expectation_s3_4": "D0 B0; T1 待审计; T2 部分（自有格式）",
-    "deviation_from_plan": "T2 记为不可判定（自有格式存在，第三方格式路径不存在）",
     "evidence": [
       {
         "id": "LT-REPO",
@@ -721,20 +609,6 @@
     "B_basis": "code + documented",
     "B_key_components": "source (dataset_id, data_id, chunk_id, content hash), caller-triggered; no definition/prompt or model key",
     "B_reason": "Formally 0 but the strongest source binding among external engines: deleting a source cascades with ref-counting and caller-invoked update() re-derives only changed chunks; completed items are skipped on re-run whatever the LLM config, so model/prompt changes invalidate nothing.",
-    "T1": "undeterminable",
-    "T1_basis": "code",
-    "T1_reason": "Global LLM setting, not recorded; re-derivation needs manual forget(memory_only=True) + re-cognify (raw data retained, so runnable); not in E5.",
-    "T2": "undeterminable",
-    "T2_basis": "code + documented",
-    "T2_reason": "Most portable engine audited: COGX archive (facts with valid_at/invalid_at/provenance, raw nodes verbatim) plus importers from Mem0, Zep/Graphiti, Letta, LangMem; but no .mem path and no carryover measurement.",
-    "T3": "pass",
-    "T3_basis": "measured (native-system experiment, 15 short worlds)",
-    "T3_reason": "Margin over the gold-dependency context before the fork: -1.8 pp [-4.2, +0.7], within the floor (NatCogneeTThree).",
-    "T4": "pass",
-    "T4_basis": "measured (native-system experiment, 15 short worlds)",
-    "T4_reason": "Serving costs 0.82% of a full re-read (NatCogneeTFour).",
-    "plan_expectation_s3_4": "D 部分; B0; T1/T2 待审计",
-    "deviation_from_plan": "B 形式上为 0，但有源级级联（与计划一致，补充说明）",
     "evidence": [
       {
         "id": "CG-CODE",
@@ -786,20 +660,6 @@
     "B_basis": "code + documented",
     "B_key_components": "internal message-id range (batch-level); no key",
     "B_reason": "No key: heuristic dedup replacement and an LLM 'dreamer' deletes/replaces outdated conclusions; messages are immutable (sources cannot be revised); session deletion cascades only to explicit conclusions; model not stored.",
-    "T1": "undeterminable",
-    "T1_basis": "code + inferred",
-    "T1_reason": "Models set in operator config, not recorded, no re-derivation; messages retained so a full re-derive by re-ingest is possible; not in E5.",
-    "T2": "undeterminable",
-    "T2_basis": "code",
-    "T2_reason": "No export endpoint or format; list APIs return conclusions (without message ids) and messages; migrations re-ingest via the API; no .mem.",
-    "T3": "undeterminable",
-    "T3_basis": "documented",
-    "T3_reason": "Vendor reports accuracy above full context on LongMem-S/LoCoMo; different metric and world, not verified.",
-    "T4": "undeterminable",
-    "T4_basis": "documented",
-    "T4_reason": "Vendor reports ~11% of full-context tokens, which would clear c = 0.5 if it held here; not measured.",
-    "plan_expectation_s3_4": "D0 B0; T1/T2 待审计",
-    "deviation_from_plan": "D 记为部分（有内部源引用）",
     "evidence": [
       {
         "id": "HO-CODE",
@@ -844,20 +704,6 @@
     "B_basis": "inferred",
     "B_key_components": "version chain (isLatest, parentMemoryId) + forgetAfter; document id without revision; no definition or model key",
     "B_reason": "A newer contradicting memory supersedes the old one through an 'updates' relation (old kept, isLatest=false); expiry via forgetAfter; document update triggers full reprocessing but the effect on derived memories is undocumented.",
-    "T1": "undeterminable",
-    "T1_basis": "documented",
-    "T1_reason": "Cloud extraction uses proprietary models; self-hosted uses the configured model; neither recorded per memory.",
-    "T2": "undeterminable",
-    "T2_basis": "documented",
-    "T2_reason": "No export format (list APIs incl. version history; 'you can always export your data' without a documented mechanism); Mem0/Zep migration scripts only; no .mem.",
-    "T3": "undeterminable",
-    "T3_basis": "documented",
-    "T3_reason": "Vendor LongMemEval figures vs full context use a recall metric; not comparable.",
-    "T4": "undeterminable",
-    "T4_basis": "documented",
-    "T4_reason": "Vendor reports ~720 context tokens; not measured.",
-    "plan_expectation_s3_4": "D0 B0; T1/T2 待审计",
-    "deviation_from_plan": "B 记为仅时间有效性（版本链），D 记为部分",
     "evidence": [
       {
         "id": "SM-CODE",
@@ -902,20 +748,6 @@
     "B_basis": "code",
     "B_key_components": "none",
     "B_reason": "After each chat turn an LLM creates new facts and deletes related ones (update = delete + create); deleting a conversation cannot cascade (no link); no model field. The file index re-embeds changed files, but that is RAG, not derived memory.",
-    "T1": "undeterminable",
-    "T1_basis": "code",
-    "T1_reason": "Chat model user-switchable, not recorded; admin `manage_memories --force` can regenerate memories from conversation history, so a full re-derive is possible but unmeasured.",
-    "T2": "undeterminable",
-    "T2_basis": "code",
-    "T2_reason": "Memories readable via GET /api/memories (id, raw, created_at); only chats have an export (own JSON); no import; no .mem.",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "Not reported for memory.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "Not reported.",
-    "plan_expectation_s3_4": "D0 B0; T1/T2 待审计",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "KH-CODE",
@@ -953,20 +785,6 @@
     "B_basis": "paper",
     "B_key_components": "artifact links only; no revision, definition or model key",
     "B_reason": "Items expire by a TTL in logical operations refreshed on access (LRU-like); summaries outlive the chunks they compress; source edits, deletion requests and model changes are not handled.",
-    "T1": "undeterminable",
-    "T1_basis": "paper",
-    "T1_reason": "Two model stacks evaluated; the model is not recorded per item; no code.",
-    "T2": "undeterminable",
-    "T2_basis": "paper",
-    "T2_reason": "Export/portability not discussed; no code release.",
-    "T3": "undeterminable",
-    "T3_basis": "paper",
-    "T3_reason": "No full-context or oracle baseline (only vs semantic search and Graphiti).",
-    "T4": "undeterminable",
-    "T4_basis": "paper",
-    "T4_reason": "Cost compared with a secure in-memory baseline, not a full re-read.",
-    "plan_expectation_s3_4": "人; D 部分（KG）; B0",
-    "deviation_from_plan": "拥有者由人改为厂商",
     "evidence": [
       {
         "id": "OPAL",
@@ -978,7 +796,7 @@
       {
         "id": "BG-CARDS",
         "kind": "record",
-        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12",
         "accessed": "2026-09-29",
         "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
       }
@@ -997,25 +815,11 @@
     "B_basis": "code",
     "B_key_components": "n/a",
     "B_reason": "No derived items; the index is rebuilt from the sources as of the probe time.",
-    "T1": "pass",
-    "T1_basis": "by construction",
-    "T1_reason": "No writer model in the path; theta_e changes are a separate axis (E7).",
-    "T2": "pass",
-    "T2_basis": "by construction",
-    "T2_reason": "Nothing derived to lose: .mem resource/chunk kinds carry source text and receivers re-embed from text; not exercised by E6 (no RAG arm).",
-    "T3": "fail",
-    "T3_basis": "measured (E3, 20 test worlds)",
-    "T3_reason": "Static ContractValid minus oracle context: -14.3 / -22.1 / -17.5 pp at 1 / 3 / 12 months (floor -3 pp).",
-    "T4": "pass",
-    "T4_basis": "measured (E3, 20 test worlds)",
-    "T4_reason": "Serving cost per query 1.8% / 0.70% / 0.19% of one full re-read (ceiling 50%).",
-    "plan_expectation_s3_4": "T1 通过; T2 通过; T3 待 E3; T4 不通过（预期）",
-    "deviation_from_plan": "T4 的\"不通过\"预期与 prereg 预算不一致（推断）",
     "evidence": [
       {
         "id": "CODE-BASELINES",
         "kind": "code",
-        "pointer": "src/memshift/adapters/baselines.py @56876e3634ca9493d9511e67d98e935be81cb887 (ZeroSystem L56-72; Oracle L74-89; PlainRAG L164-)",
+        "pointer": "src/memshift/adapters/baselines.py (ZeroSystem; Oracle; PlainRAG)",
         "accessed": "2026-09-29",
         "note": "Zero system = granted sources + lexical index + fixed reader budget, no derived store; Plain RAG = chunk + embedding index over sources, no derived store"
       },
@@ -1029,23 +833,23 @@
       {
         "id": "CODE-NOEXPORT-OURS",
         "kind": "code",
-        "pointer": "grep over src/memshift @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "grep over src/memshift",
         "accessed": "2026-09-29",
         "note": "Zero system and Plain RAG have no .mem export path; E6 has no arm for them"
       },
       {
-        "id": "PREREG-V0",
-        "kind": "record",
-        "pointer": "prereg/v0.md §1 and E3 rule @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "CONFIG-PARAMS",
+        "kind": "code",
+        "pointer": "configs/params.yaml (epsilon_pp, cost_ceiling_c, reader_context_budget_tokens, world_tokens_approx)",
         "accessed": "2026-09-29",
-        "note": "T3 epsilon = 3 pp; T4 c = 0.5 x per-query full re-read; reader evidence budget 4,096 tokens for every system; world ~2.2M tokens"
+        "note": "T3 floor epsilon = 3 pp; T4 ceiling c = 0.5 of one per-query full re-read; reader evidence budget 4,096 tokens for every system; world about 2M tokens"
       },
       {
-        "id": "PLAN-S3",
-        "kind": "record",
-        "pointer": "docs/MEMSHIFT_RESEARCH_PLAN_ZH.md §2.2, §3.1-§3.4, §6 E2/E3/E5/E6 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "CODE-DEFS",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/system.py (the (D, B) cells); src/memshift/analysis/gate.py (T1, T3, T4); src/memshift/experiments/e6.py (T2)",
         "accessed": "2026-09-29",
-        "note": "Definitions of B, D, T1-T4; boundary table §3.3; expected 16-system table §3.4 (treated as hypotheses, not evidence)"
+        "note": "Definitions of executability D, binding B and the diagnostic tests T1-T4"
       },
       {
         "id": "RUN-STAGE2-E3",
@@ -1069,20 +873,6 @@
     "B_basis": "documented",
     "B_key_components": "n/a (ETags on resources, not on derived items)",
     "B_reason": "No derived items.",
-    "T1": "pass",
-    "T1_basis": "by construction",
-    "T1_reason": "No writer model and no derived items.",
-    "T2": "pass",
-    "T2_basis": "by construction",
-    "T2_reason": "No derived state to lose; resources are retrievable over HTTP. Caveat: no standardized bulk export/migration (LWS §15 Portability left blank), so leaving needs ad hoc tooling.",
-    "T3": "fail",
-    "T3_basis": "inferred",
-    "T3_reason": "A pod alone offers storage and access control but no query path for a reader; any serving layer on top turns it into the zero system or RAG.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "No serving path, so serving cost is undefined.",
-    "plan_expectation_s3_4": "T1 通过; T2 通过; T3 不通过",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "SOLID-PROTO",
@@ -1113,11 +903,11 @@
         "note": "ADI survey: Solid/DuckDB/pgvector/LOTUS alone do not take on semantic organisation"
       },
       {
-        "id": "PLAN-S3",
-        "kind": "record",
-        "pointer": "docs/MEMSHIFT_RESEARCH_PLAN_ZH.md §2.2, §3.1-§3.4, §6 E2/E3/E5/E6 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "CODE-DEFS",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/system.py (the (D, B) cells); src/memshift/analysis/gate.py (T1, T3, T4); src/memshift/experiments/e6.py (T2)",
         "accessed": "2026-09-29",
-        "note": "Definitions of B, D, T1-T4; boundary table §3.3; expected 16-system table §3.4 (treated as hypotheses, not evidence)"
+        "note": "Definitions of executability D, binding B and the diagnostic tests T1-T4"
       }
     ]
   },
@@ -1134,20 +924,6 @@
     "B_basis": "code + paper",
     "B_key_components": "none (session id on facts only)",
     "B_reason": "Phase 1 appends flat facts, never overwritten; Phase 2 regenerates the whole typed view whenever any new session arrives (full rebuild, no per-item key, no definition or model version).",
-    "T1": "undeterminable",
-    "T1_basis": "code",
-    "T1_reason": "Model is an environment constant, not recorded; a new model rebuilds the view from facts written by the old model on the next ingest, so re-derivation is only partial.",
-    "T2": "undeterminable",
-    "T2_basis": "code",
-    "T2_reason": "Plain Python files in a directory (copyable) but no exporter/importer, no provenance fields, no .mem.",
-    "T3": "undeterminable",
-    "T3_basis": "paper",
-    "T3_reason": "LOCOMO 78.8% vs full context 79.8% (judged accuracy, within 1 pp) and 99% on aggregate queries: suggestive of clearing a 3 pp floor, but a different metric, baseline and reader.",
-    "T4": "undeterminable",
-    "T4_basis": "paper",
-    "T4_reason": "Per-query cost below FC+REPL (1.2-2.3 vs 1.9-37.8 m$): suggestive, not our cost definition.",
-    "plan_expectation_s3_4": "人; D1 B0; T1 通过; T2 部分",
-    "deviation_from_plan": "D 由 1 改为部分；T1 由通过改为不可判定；T2 由部分改为不可判定",
     "evidence": [
       {
         "id": "UAC-PAPER",
@@ -1166,7 +942,7 @@
       {
         "id": "BG-CARDS",
         "kind": "record",
-        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS_ZH.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "docs/background/IDEA_PAIN_POINTS_AND_CARDS.md §1.1 I1, I2, I5, I8, I9; §1.2 L9, L12",
         "accessed": "2026-09-29",
         "note": "Earlier proxy-verified evidence cards (used only as corroboration; primary sources re-fetched for this audit)"
       }
@@ -1174,7 +950,7 @@
   },
   {
     "system": "Zero system (ours: sources + lexical index + fixed-budget re-read)",
-    "short_name": "零系统（ours）",
+    "short_name": "zero system (ours)",
     "group": "ours",
     "owner": "person",
     "owner_note": "",
@@ -1185,62 +961,48 @@
     "B_basis": "code",
     "B_key_components": "n/a",
     "B_reason": "No derived store; every probe re-reads the sources granted at probe time.",
-    "T1": "pass",
-    "T1_basis": "by construction",
-    "T1_reason": "No writer model in the path; E2 does not include the zero system, so this is not measured.",
-    "T2": "pass",
-    "T2_basis": "by construction",
-    "T2_reason": "No derived state: leaving means taking the sources, which the zero system re-reads; nothing to bind.",
-    "T3": "fail",
-    "T3_basis": "measured (E3, 20 test worlds)",
-    "T3_reason": "Static ContractValid minus oracle context: -3.6 / -18.1 / -13.6 pp at 1 / 3 / 12 months (floor -3 pp; the one-month shortfall is marginal).",
-    "T4": "pass",
-    "T4_basis": "measured (E3, 20 test worlds)",
-    "T4_reason": "Serving cost per query 1.8% / 0.64% / 0.18% of one full re-read (ceiling 50%).",
-    "plan_expectation_s3_4": "T1 通过; T2 通过; T3/T4 待 E3",
-    "deviation_from_plan": "T2 由通过改为待 E6（无导出路径与 E6 臂）",
     "evidence": [
       {
         "id": "CODE-BASELINES",
         "kind": "code",
-        "pointer": "src/memshift/adapters/baselines.py @56876e3634ca9493d9511e67d98e935be81cb887 (ZeroSystem L56-72; Oracle L74-89; PlainRAG L164-)",
+        "pointer": "src/memshift/adapters/baselines.py (ZeroSystem; Oracle; PlainRAG)",
         "accessed": "2026-09-29",
         "note": "Zero system = granted sources + lexical index + fixed reader budget, no derived store; Plain RAG = chunk + embedding index over sources, no derived store"
       },
       {
-        "id": "PREREG-V0",
-        "kind": "record",
-        "pointer": "prereg/v0.md §1 and E3 rule @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "CONFIG-PARAMS",
+        "kind": "code",
+        "pointer": "configs/params.yaml (epsilon_pp, cost_ceiling_c, reader_context_budget_tokens, world_tokens_approx)",
         "accessed": "2026-09-29",
-        "note": "T3 epsilon = 3 pp; T4 c = 0.5 x per-query full re-read; reader evidence budget 4,096 tokens for every system; world ~2.2M tokens"
+        "note": "T3 floor epsilon = 3 pp; T4 ceiling c = 0.5 of one per-query full re-read; reader evidence budget 4,096 tokens for every system; world about 2M tokens"
       },
       {
-        "id": "STATUS-S1",
-        "kind": "record",
-        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "RUN-STAGE1-E1",
+        "kind": "run",
+        "pointer": "runs/stage1_e1/analysis/e1_metrics.json",
         "accessed": "2026-09-29",
-        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+        "note": "E1 on the development worlds (seeds 0-9)"
       },
       {
         "id": "CODE-E6",
         "kind": "code",
-        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/experiments/e6.py module docstring",
         "accessed": "2026-09-29",
-        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports it into a second HoldMem implementation and, optionally, into Mem0 through its raw add path (`_mem0_arms`); it has no Graphiti importer arm and no native-system exporter arm"
       },
       {
         "id": "CODE-NOEXPORT-OURS",
         "kind": "code",
-        "pointer": "grep over src/memshift @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "grep over src/memshift",
         "accessed": "2026-09-29",
         "note": "Zero system and Plain RAG have no .mem export path; E6 has no arm for them"
       },
       {
-        "id": "PLAN-S3",
-        "kind": "record",
-        "pointer": "docs/MEMSHIFT_RESEARCH_PLAN_ZH.md §2.2, §3.1-§3.4, §6 E2/E3/E5/E6 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "CODE-DEFS",
+        "kind": "code",
+        "pointer": "src/memshift/holdmem/system.py (the (D, B) cells); src/memshift/analysis/gate.py (T1, T3, T4); src/memshift/experiments/e6.py (T2)",
         "accessed": "2026-09-29",
-        "note": "Definitions of B, D, T1-T4; boundary table §3.3; expected 16-system table §3.4 (treated as hypotheses, not evidence)"
+        "note": "Definitions of executability D, binding B and the diagnostic tests T1-T4"
       },
       {
         "id": "RUN-STAGE2-E3",
@@ -1264,69 +1026,55 @@
     "B_basis": "code",
     "B_key_components": "(scope epochs or cited-cluster epochs, kappa_version, theta_w)",
     "B_reason": "key_at compares the stored key with the current (scope epoch, kappa version, theta_w); any change -> invalid -> re-derive with the current writer.",
-    "T1": "pass",
-    "T1_basis": "measured (E2, 20 test worlds)",
-    "T1_reason": "TOST at +/-3 pp, 90% world-bootstrap intervals: same tier -1.36 pp [-1.86, -0.86], upgrade -0.37 pp [-0.87, 0.00], downgrade -0.36 pp [-0.85, 0.00]; all equivalent. Exploratory (not pre-registered): free-text attributes retain 0.851 at the same tier; the aggregate rests on items the D=1 fallback computes as gold does (decisions.md 2026-09-29).",
-    "T2": "pass",
-    "T2_basis": "measured (E6, 20 test worlds)",
-    "T2_reason": "Export to .mem (format 1.1) with the derivation extension, import by a second HoldMem implementation from the bundle alone: static, post-shift ContractValid and missed invalidation differences all 0.0 pp (90% intervals [0, 0]), ExportFidelity 1.000. Without the extension: missed invalidation +100 pp, post-shift -15.4 pp [-17.3, -13.6]. Importer shares our data model; no third-party importer measured.",
-    "T3": "pass",
-    "T3_basis": "measured (E3, 20 test worlds)",
-    "T3_reason": "Static ContractValid minus the same reader's oracle-context score: +0.7 / +1.3 / +12.2 pp at 1 / 3 / 12 months (floor -3 pp).",
-    "T4": "pass",
-    "T4_basis": "measured (E3, 20 test worlds)",
-    "T4_reason": "Serving cost per query 2.1% / 0.74% / 0.19% of one full re-read at 1 / 3 / 12 months (ceiling 50%).",
-    "plan_expectation_s3_4": "D1 B1; T1 待 E2; T2 待 E6; T3/T4 待 E3",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "CODE-HOLDMEM",
         "kind": "code",
-        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "pointer": "src/memshift/holdmem/system.py (CellConfig; key_at; set_writer; maintain)",
         "accessed": "2026-09-29",
         "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
       },
       {
         "id": "CODE-CHECKER",
         "kind": "code",
-        "pointer": "src/memshift/holdmem/checker.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/holdmem/checker.py module docstring",
         "accessed": "2026-09-29",
         "note": "D=1 checker: citations must name a live object at its current revision and quote text in it; typed surface match; definition-dependent values equal the kappa evaluator; rule fallback; else unverifiable"
       },
       {
         "id": "CODE-MEMEXPORT",
         "kind": "code",
-        "pointer": "src/memshift/adapters/mem_export.py module docstring; export_holdmem L244; import_to_holdmem L444; import_to_mem0 L529 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/adapters/mem_export.py module docstring; export_holdmem; import_to_holdmem; import_to_mem0",
         "accessed": "2026-09-29",
         "note": "HoldMem -> .mem export with/without derivation extension (carriers: custom kind, episode ext, fact ext); import into a second HoldMem; Mem0 import only via add(infer=False) because the SDK has no .mem -> Mem0 adapter"
       },
       {
         "id": "CODE-EXTSURV",
         "kind": "code",
-        "pointer": "src/memshift/adapters/mem_export.py ext_survival L377-420; tests/test_native_offline.py::test_ext_survival_by_carrier L405-429 @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/adapters/mem_export.py ext_survival; tests/test_native_offline.py::test_ext_survival_by_carrier",
         "accessed": "2026-09-29",
-        "note": "Observed round trip through portable-memory 0.3.0: custom record kind and episode `ext` survive; `ext` on fact records is dropped on import (test passes locally 2026-09-29) [Cited at the coordinator's pointer; re-run by the auditor: 2 tests passed]"
+        "note": "Observed round trip through portable-memory 0.3.0: custom record kind and episode `ext` survive; `ext` on fact records is dropped on import (tests/test_native_offline.py, 2 tests passed on 2026-09-29)"
       },
       {
         "id": "CODE-E6",
         "kind": "code",
-        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/experiments/e6.py module docstring",
         "accessed": "2026-09-29",
-        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports it into a second HoldMem implementation and, optionally, into Mem0 through its raw add path (`_mem0_arms`); it has no Graphiti importer arm and no native-system exporter arm"
       },
       {
-        "id": "STATUS-S1",
-        "kind": "record",
-        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "RUN-STAGE1-E1",
+        "kind": "run",
+        "pointer": "runs/stage1_e1/analysis/e1_metrics.json",
         "accessed": "2026-09-29",
-        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+        "note": "E1 on the development worlds (seeds 0-9)"
       },
       {
-        "id": "PREREG-V0",
-        "kind": "record",
-        "pointer": "prereg/v0.md §1 and E3 rule @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "CONFIG-PARAMS",
+        "kind": "code",
+        "pointer": "configs/params.yaml (epsilon_pp, cost_ceiling_c, reader_context_budget_tokens, world_tokens_approx)",
         "accessed": "2026-09-29",
-        "note": "T3 epsilon = 3 pp; T4 c = 0.5 x per-query full re-read; reader evidence budget 4,096 tokens for every system; world ~2.2M tokens"
+        "note": "T3 floor epsilon = 3 pp; T4 ceiling c = 0.5 of one per-query full re-read; reader evidence budget 4,096 tokens for every system; world about 2M tokens"
       },
       {
         "id": "RUN-STAGE2-E2",
@@ -1364,41 +1112,27 @@
     "B_basis": "code",
     "B_key_components": "(scope epochs, kappa_version, theta_w)",
     "B_reason": "Same key and invalidation as (1,1); repair is re-derivation without a checker.",
-    "T1": "undeterminable",
-    "T1_basis": "not tested",
-    "T1_reason": "T1 is pre-registered on HoldMem (1,1) only (prereg v1); retention after the switch is reported descriptively: 0.984 same, 0.996 upgrade, 0.970 downgrade.",
-    "T2": "undeterminable",
-    "T2_basis": "not tested",
-    "T2_reason": "E6 exports HoldMem (1,1) only.",
-    "T3": "undeterminable",
-    "T3_basis": "not tested",
-    "T3_reason": "E3 measures HoldMem (1,1) only; the pre-intervention snapshot is byte-identical across cells, later horizons are not.",
-    "T4": "undeterminable",
-    "T4_basis": "not tested",
-    "T4_reason": "E3 measures HoldMem (1,1) only; serving path is shared with (1,1).",
-    "plan_expectation_s3_4": "按格; T1 按 E1–E3; T2 按 E6",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "CODE-HOLDMEM",
         "kind": "code",
-        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "pointer": "src/memshift/holdmem/system.py (CellConfig; key_at; set_writer; maintain)",
         "accessed": "2026-09-29",
         "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
       },
       {
         "id": "CODE-E6",
         "kind": "code",
-        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/experiments/e6.py module docstring",
         "accessed": "2026-09-29",
-        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports it into a second HoldMem implementation and, optionally, into Mem0 through its raw add path (`_mem0_arms`); it has no Graphiti importer arm and no native-system exporter arm"
       },
       {
-        "id": "STATUS-S1",
-        "kind": "record",
-        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "RUN-STAGE1-E1",
+        "kind": "run",
+        "pointer": "runs/stage1_e1/analysis/e1_metrics.json",
         "accessed": "2026-09-29",
-        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+        "note": "E1 on the development worlds (seeds 0-9)"
       },
       {
         "id": "RUN-STAGE2-E2",
@@ -1429,41 +1163,27 @@
     "B_basis": "code",
     "B_key_components": "none (append-only)",
     "B_reason": "Append-only: new items derived from the delta; old items never invalidate.",
-    "T1": "undeterminable",
-    "T1_basis": "by construction",
-    "T1_reason": "B=0 never re-derives after a writer switch; retention 1.000 means nothing was updated, not equivalence (prereg v1 §4: reported separately, not in T1).",
-    "T2": "undeterminable",
-    "T2_basis": "not tested",
-    "T2_reason": "E6 exports HoldMem (1,1) only.",
-    "T3": "undeterminable",
-    "T3_basis": "not tested",
-    "T3_reason": "E3 measures HoldMem (1,1) only.",
-    "T4": "undeterminable",
-    "T4_basis": "not tested",
-    "T4_reason": "E3 measures HoldMem (1,1) only.",
-    "plan_expectation_s3_4": "按格",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "CODE-HOLDMEM",
         "kind": "code",
-        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "pointer": "src/memshift/holdmem/system.py (CellConfig; key_at; set_writer; maintain)",
         "accessed": "2026-09-29",
         "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
       },
       {
         "id": "CODE-E6",
         "kind": "code",
-        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/experiments/e6.py module docstring",
         "accessed": "2026-09-29",
-        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports it into a second HoldMem implementation and, optionally, into Mem0 through its raw add path (`_mem0_arms`); it has no Graphiti importer arm and no native-system exporter arm"
       },
       {
-        "id": "STATUS-S1",
-        "kind": "record",
-        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "RUN-STAGE1-E1",
+        "kind": "run",
+        "pointer": "runs/stage1_e1/analysis/e1_metrics.json",
         "accessed": "2026-09-29",
-        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+        "note": "E1 on the development worlds (seeds 0-9)"
       },
       {
         "id": "RUN-STAGE2-E2",
@@ -1494,41 +1214,27 @@
     "B_basis": "code",
     "B_key_components": "none (append-only)",
     "B_reason": "Append-only; the memory-layer-like cell.",
-    "T1": "undeterminable",
-    "T1_basis": "by construction",
-    "T1_reason": "B=0 never re-derives after a writer switch; retention 1.000 means nothing was updated, not equivalence (prereg v1 §4: reported separately, not in T1).",
-    "T2": "undeterminable",
-    "T2_basis": "not tested",
-    "T2_reason": "E6 exports HoldMem (1,1) only.",
-    "T3": "undeterminable",
-    "T3_basis": "not tested",
-    "T3_reason": "E3 measures HoldMem (1,1) only.",
-    "T4": "undeterminable",
-    "T4_basis": "not tested",
-    "T4_reason": "E3 measures HoldMem (1,1) only.",
-    "plan_expectation_s3_4": "按格",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "CODE-HOLDMEM",
         "kind": "code",
-        "pointer": "src/memshift/holdmem/system.py @56876e3634ca9493d9511e67d98e935be81cb887 (CellConfig L52-60; key_at L137-153; set_writer L257-259; maintain L261-314)",
+        "pointer": "src/memshift/holdmem/system.py (CellConfig; key_at; set_writer; maintain)",
         "accessed": "2026-09-29",
         "note": "HoldMem cells: B=1 key = (scope epochs, kappa_version, theta_w); key change -> invalid -> re-derive with current writer; B=0 append-only"
       },
       {
         "id": "CODE-E6",
         "kind": "code",
-        "pointer": "src/memshift/experiments/e6.py module docstring @56876e3634ca9493d9511e67d98e935be81cb887",
+        "pointer": "src/memshift/experiments/e6.py module docstring",
         "accessed": "2026-09-29",
-        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports only into a second HoldMem implementation; no Mem0/Graphiti importer arm and no native-system exporter arm is wired yet"
+        "note": "E6 driver exports HoldMem(1,1) with and without the extension and imports it into a second HoldMem implementation and, optionally, into Mem0 through its raw add path (`_mem0_arms`); it has no Graphiti importer arm and no native-system exporter arm"
       },
       {
-        "id": "STATUS-S1",
-        "kind": "record",
-        "pointer": "docs/STATUS.md 'Gate G0' and 'Stage 1 run log' @56876e3634ca9493d9511e67d98e935be81cb887",
+        "id": "RUN-STAGE1-E1",
+        "kind": "run",
+        "pointer": "runs/stage1_e1/analysis/e1_metrics.json",
         "accessed": "2026-09-29",
-        "note": "Only E1 dev runs (and a smoke run) exist; no E2, E3, E5 or E6 result yet; smoke numbers are explicitly not conclusions"
+        "note": "E1 on the development worlds (seeds 0-9)"
       },
       {
         "id": "RUN-STAGE2-E2",
@@ -1559,20 +1265,6 @@
     "B_basis": "documented",
     "B_key_components": "source document id (replace/delete cascade + re-consolidation); no definition or model key",
     "B_reason": "Formally 0, but re-retaining a document_id replaces the document and all its memories and deleting it deletes derived observations; writer model per item undocumented.",
-    "T1": "undeterminable",
-    "T1_basis": "documented",
-    "T1_reason": "Not documented; not measured.",
-    "T2": "undeterminable",
-    "T2_basis": "documented",
-    "T2_reason": "Complete own-format ZIP (export-bank/import-bank) between Hindsight instances, i.e. the same implementation; no .mem.",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "Not measured.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "Not measured.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "HS-DOCS",
@@ -1610,20 +1302,6 @@
     "B_basis": "documented",
     "B_key_components": "source directory via watches (periodic re-ingest); no model/definition key",
     "B_reason": "Formally 0: parents refresh when a child's text changes (directory granularity, batched at 10%); no model id.",
-    "T1": "undeterminable",
-    "T1_basis": "documented",
-    "T1_reason": "Not documented.",
-    "T2": "undeterminable",
-    "T2_basis": "documented",
-    "T2_reason": ".ovpack own export format; no .mem.",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "Not measured.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "Not measured.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "OV-DOCS",
@@ -1661,20 +1339,6 @@
     "B_basis": "code",
     "B_key_components": "version/history chain; no key",
     "B_reason": "LLM-decided updates with versioned history; no writer-model field found.",
-    "T1": "undeterminable",
-    "T1_basis": "code",
-    "T1_reason": "Not recorded; not measured.",
-    "T2": "undeterminable",
-    "T2_basis": "code",
-    "T2_reason": "MemCube dump/load own format; no .mem.",
-    "T3": "fail",
-    "T3_basis": "measured (native-system experiment, 15 short worlds)",
-    "T3_reason": "Below the floor (NatMemosTThree).",
-    "T4": "pass",
-    "T4_basis": "measured (native-system experiment, 15 short worlds)",
-    "T4_reason": "Within the cost ceiling (NatMemosTFour).",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "MOS-CODE",
@@ -1712,20 +1376,6 @@
     "B_basis": "code",
     "B_key_components": "document title (for incremental diff); no revision key",
     "B_reason": "Incremental update diffs by title and consumes only new inputs; a document revised under the same title is neither re-derived nor removed.",
-    "T1": "undeterminable",
-    "T1_basis": "inferred",
-    "T1_reason": "Not measured.",
-    "T2": "undeterminable",
-    "T2_basis": "code",
-    "T2_reason": "Parquet outputs, no importer.",
-    "T3": "undeterminable",
-    "T3_basis": "inferred",
-    "T3_reason": "Not measured.",
-    "T4": "undeterminable",
-    "T4_basis": "inferred",
-    "T4_reason": "Not measured.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "GRAG-CODE",
@@ -1763,20 +1413,6 @@
     "B_basis": "paper",
     "B_key_components": "derived-from dependency graph with cascade on retraction; no model/definition key",
     "B_reason": "Formally 0: typed cascading repair on retraction, but invalidation on source revision or writer-model change is not documented.",
-    "T1": "undeterminable",
-    "T1_basis": "paper",
-    "T1_reason": "Not documented.",
-    "T2": "undeterminable",
-    "T2_basis": "paper",
-    "T2_reason": "Not documented.",
-    "T3": "undeterminable",
-    "T3_basis": "paper",
-    "T3_reason": "Not comparable.",
-    "T4": "undeterminable",
-    "T4_basis": "paper",
-    "T4_reason": "Not comparable.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "MEMTX",
@@ -1814,20 +1450,6 @@
     "B_basis": "paper",
     "B_key_components": "source snippets (two-way provenance) + constraint re-evaluation; no writer-model key",
     "B_reason": "Formally 0 but closest external system to B=1: document deltas re-extract affected tuples, tuples losing all evidence are retracted, constraints are re-evaluated; extractor model not recorded.",
-    "T1": "undeterminable",
-    "T1_basis": "paper",
-    "T1_reason": "Not studied.",
-    "T2": "undeterminable",
-    "T2_basis": "paper",
-    "T2_reason": "Not studied.",
-    "T3": "undeterminable",
-    "T3_basis": "paper",
-    "T3_reason": "Not comparable.",
-    "T4": "undeterminable",
-    "T4_basis": "paper",
-    "T4_reason": "Not comparable.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "D2DB",
@@ -1865,20 +1487,6 @@
     "B_basis": "paper + inferred",
     "B_key_components": "none described",
     "B_reason": "Re-annotation on document or schema change is not addressed.",
-    "T1": "undeterminable",
-    "T1_basis": "paper",
-    "T1_reason": "Not studied.",
-    "T2": "undeterminable",
-    "T2_basis": "paper",
-    "T2_reason": "Not studied.",
-    "T3": "undeterminable",
-    "T3_basis": "paper",
-    "T3_reason": "Not comparable.",
-    "T4": "undeterminable",
-    "T4_basis": "paper",
-    "T4_reason": "Not comparable.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "ANNO",
@@ -1916,20 +1524,6 @@
     "B_basis": "paper",
     "B_key_components": "none (static corpus)",
     "B_reason": "Static corpus assumed; structures are reused across model upgrades, i.e. no model keying.",
-    "T1": "undeterminable",
-    "T1_basis": "paper",
-    "T1_reason": "Not studied.",
-    "T2": "undeterminable",
-    "T2_basis": "paper",
-    "T2_reason": "Not studied.",
-    "T3": "undeterminable",
-    "T3_basis": "paper",
-    "T3_reason": "Not comparable.",
-    "T4": "undeterminable",
-    "T4_basis": "paper",
-    "T4_reason": "Not comparable.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "ACC",
@@ -1967,20 +1561,6 @@
     "B_basis": "documented",
     "B_key_components": "n/a",
     "B_reason": "No derived items.",
-    "T1": "undeterminable",
-    "T1_basis": "documented",
-    "T1_reason": "Not a data layer by itself.",
-    "T2": "undeterminable",
-    "T2_basis": "documented",
-    "T2_reason": "Not a data layer by itself.",
-    "T3": "undeterminable",
-    "T3_basis": "documented",
-    "T3_reason": "Not a data layer by itself.",
-    "T4": "undeterminable",
-    "T4_basis": "documented",
-    "T4_reason": "Not a data layer by itself.",
-    "plan_expectation_s3_4": "（起点审计额外系统）",
-    "deviation_from_plan": "",
     "evidence": [
       {
         "id": "COMPONENTS",

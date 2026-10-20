@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Serve one stage-4 model (prereg/v2.md §2, configs/models.yaml `stage4_families`) with its pinned
+# Serve one model of the other families (configs/models.yaml `stage4_families`) with its pinned
 # revision, model cache and engine flags, through serve_model.sh (one GPU, vLLM 0.30.0 main image).
 # Usage: serve_stage4.sh MODEL GPU PORT
 set -euo pipefail

@@ -24,6 +24,9 @@ htmlcov/
 
 # Experiment data and outputs (regenerate from seeds; keep manifests in runs/README.md)
 worlds/
+results/numbers.tex
+results/tables/
+results/figures/
 runs/*/*
 !runs/README.md
 !runs/*/manifest.json
@@ -38,17 +41,6 @@ data/
 hf_cache/
 .cache/
 
-# Paper build artifacts
-paper/build/
-*.aux
-*.bbl
-*.blg
-*.fdb_latexmk
-*.fls
-*.synctex.gz
-*.out
-*.toc
-
 # OS / editors
 .DS_Store
 Thumbs.db
@@ -60,6 +52,8 @@ Thumbs.db
 cache/
 logs/
 .snapshots/
-paper/*.log
-paper/*.pdf
 runs/*/analysis/*_item_table.jsonl
+
+# Local tool folders (never committed)
+.omc/
+.claude/

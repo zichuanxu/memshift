@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use MemShift, please cite the paper below."
 type: software
-title: "MemShift"
+title: "MemShift: Noticing a Change Is Not Repairing It in LLM-Derived Personal Memory"
 abstract: >-
   MemShift measures whether what a memory derived about a person stays correct after the records,
   the person's definitions, the writer model or the memory product change. It applies controlled
@@ -14,7 +14,6 @@ keywords:
   - derived knowledge
   - invalidation
   - benchmark
-  - preregistration
 authors:
   - family-names: Xu
     given-names: Zichuan

@@ -1,4 +1,4 @@
-"""E5 native discriminability (exploratory): the native estimate against the interval of the
+"""E5 native discriminability: the native estimate against the interval of the
 white-box cell of the other B label, the rule that counts a comparison as discriminating, and the
 wiring into `e5.analyse` and `stage4_summary` on synthetic runs."""
 
@@ -126,7 +126,7 @@ def _synthetic_runs(
 def b0_label(monkeypatch):
     lab = {"B": {"label": 0, "rate": 0.9, "n": 30}, "D": {"label": None, "rate": 1.0, "n": 0}}
     monkeypatch.setattr(e5_infer, "infer", lambda *a, **k: {"mem0": lab})
-    monkeypatch.setattr(e5, "exploratory", lambda *a, **k: {})
+    monkeypatch.setattr(e5, "white_box_reference", lambda *a, **k: {})
 
 
 def test_analyse_places_the_native_value_against_the_other_labels_interval(tmp_path, b0_label):
@@ -179,7 +179,7 @@ def test_a_native_system_that_looks_like_the_other_label_does_not_discriminate(t
 def test_document_level_system_is_compared_at_cited_cluster_binding(tmp_path, monkeypatch):
     """A document-level system with B = 1 is predicted by the cited-cluster cell and its other
     label is HoldMem(0,0); with B = 0 the other label is the cited-cluster cell."""
-    monkeypatch.setattr(e5, "exploratory", lambda *a, **k: {})
+    monkeypatch.setattr(e5, "white_box_reference", lambda *a, **k: {})
     cells = ("holdmem_D0B0", "holdmem_D0B1_cited")  # (never updates, updates)
     for b, native_cv, want in (
         (1, {"changed": True, "unchanged": False}, ("holdmem_D0B1_cited", "holdmem_D0B0")),

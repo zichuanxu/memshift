@@ -1,4 +1,4 @@
-"""Offline tests for the Cognee adapter (plan §6 E5, prereg v2 §3). Pure helpers run on fixtures;
+"""Offline tests for the Cognee adapter (E5 native systems). Pure helpers run on fixtures;
 the batch logic runs on a subclass whose add / cognify / delete are fakes; whatever needs the
 `cognee` library is skipped when it is not importable, so `make check` passes without it."""
 

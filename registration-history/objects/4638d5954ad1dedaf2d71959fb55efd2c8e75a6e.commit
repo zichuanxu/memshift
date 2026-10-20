@@ -1,8 +1,0 @@
-tree 641aad73f90e44a1a7cf96c80558d0775a05ffd8
-parent c0039528180fd5aa992ed11ae22e230df8d326cf
-author zichuanxu <zichuanxu28@gmail.com> 1790716504 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790716504 +0900
-
-E5 --native-batch: documented bulk ingestion for HippoRAG 2 and LightRAG (documents in parallel) and concurrent MemOS extraction with adds in event order; batches of distinct objects within one probe interval; decision logged
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

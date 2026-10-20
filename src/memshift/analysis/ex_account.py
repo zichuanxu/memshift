@@ -1,6 +1,4 @@
-"""Exploratory test of the account across writers and item classes (prereg/decisions.md 2026-10-01;
-a second-round response to the devil's-advocate re-review, issue I-3). It changes no registered
-contrast, margin, threshold or verdict and every key starts with `explore_`.
+"""Test of the account across writers and item classes. Every key starts with `explore_`.
 
 The account says binding is worth what the writer's own re-derivation leaves open: with the key
 invalidating nearly everything, the B x D interaction on Update is (r1 - a1) - (r0 - a0), where r_D

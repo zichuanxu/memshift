@@ -1,8 +1,0 @@
-tree 1205dba376656e90b50782188ab9efa06f62a4f6
-parent 5199bda9e43fede8da5de6c8b18f24feeda31278
-author zichuanxu <zichuanxu28@gmail.com> 1790621084 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790621084 +0900
-
-E5 white-box validation on dev cells: kappa_B = 1.0, kappa_D = 0.5 (D descriptive for natives)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -242,7 +242,7 @@
    "equivalent": true
   }
  },
- "path3_quantitative_prediction_holds": {
+ "path3_within_threshold_by_tier": {
   "same": true
  },
  "path3": {
@@ -267,7 +267,7 @@
    "hi90": 0.8997790404040404,
    "hi95": 0.9243952768542932
   },
-  "triggered": false,
+  "within_threshold": true,
   "tier_caveats": []
  }
 }

@@ -1,0 +1,76 @@
+{
+ "status": "additional analysis: reads committed run outputs and the seeded generator only, adds no run and calls no model",
+ "rows": [
+  {
+   "where": "figure",
+   "group": "",
+   "label": "Leak check: executability's effect on missed invalidation, both keys",
+   "reason": "the keys do not depend on D, so D's effect on missed invalidation is 0",
+   "expected": 0.0,
+   "estimates": 6,
+   "row_found": true,
+   "all_estimates_fixed": true,
+   "fixed": true
+  },
+  {
+   "where": "figure",
+   "group": "",
+   "label": "Model-written derivations' effect on missed invalidation",
+   "reason": "C4: the source-epoch key does not depend on D_m",
+   "expected": 0.0,
+   "estimates": 2,
+   "row_found": true,
+   "all_estimates_fixed": true,
+   "fixed": true
+  },
+  {
+   "where": "table",
+   "group": "Other model families as writer and reader",
+   "label": "Leak check",
+   "reason": "as the main study's leak check, for each other family",
+   "expected": 0.0,
+   "estimates": 18,
+   "row_found": true,
+   "all_estimates_fixed": true,
+   "fixed": true
+  },
+  {
+   "where": "table",
+   "group": "Rewritten worlds",
+   "label": "Leak check (largest effect)",
+   "reason": "as the main study's leak check, on the rewritten worlds",
+   "expected": 0.0,
+   "estimates": 6,
+   "row_found": true,
+   "all_estimates_fixed": true,
+   "fixed": true
+  },
+  {
+   "where": "table",
+   "group": "Replication on fresh worlds",
+   "label": "Leak check (largest effect)",
+   "reason": "as the main study's leak check, on the fresh worlds",
+   "expected": 0.0,
+   "estimates": 6,
+   "row_found": true,
+   "all_estimates_fixed": true,
+   "fixed": true
+  },
+  {
+   "where": "table",
+   "group": "Sync and export",
+   "label": "Import without the keys, missed invalidation minus the original",
+   "reason": "without the keys nothing is invalidated, and the source-epoch key misses no change here",
+   "expected": 1.0,
+   "estimates": 1,
+   "row_found": true,
+   "all_estimates_fixed": true,
+   "fixed": true
+  }
+ ],
+ "n_fixed": 6,
+ "code": {
+  "commit": "fabdc90e7e29757c55ce339c18986bf125406797",
+  "dirty": true
+ }
+}

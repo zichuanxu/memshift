@@ -6,7 +6,7 @@
   "created_utc": "2026-09-30T21:31:14Z",
   "experiment": "merged-e2",
   "files_sha256": {
-    "analysis/e2_metrics.json": "88603cfa0c4d20ee71550ec191c17db94c82e867b6f88b96b7f50c9a344b1ee7"
+    "analysis/e2_metrics.json": "dd14ac5200b7104bb6cc71da7e9ed8e3da03d6ffd48334f81de603f2b424baeb"
   },
   "run_id": "stage4_m1_e2",
   "sources": [

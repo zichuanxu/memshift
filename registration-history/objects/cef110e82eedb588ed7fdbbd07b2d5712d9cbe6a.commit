@@ -1,8 +1,0 @@
-tree 359f368211711ba44b3919601068147110d83864
-parent 6ea744452d9c17892ac38da936b624b19d001f9d
-author zichuanxu <zichuanxu28@gmail.com> 1790705098 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790705098 +0900
-
-STATUS: measured native costs per event (all five below Mem0 in tokens, far under the 3x substitute rule); block-C scale-up relaunched at two worlds per container after thread-limit exits; void runs recorded
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,4 +1,4 @@
-"""The neighbour comparison table (prereg v2 section 6) and the counts the paper quotes from it,
+"""The neighbour comparison table of the appendix and the counts the paper quotes from it,
 generated from audit/neighbours/properties.json so that no cell is typed by hand.
 
 Rows are the fifteen nearest benchmarks of the audit plus the MemShift row (the object with
@@ -6,7 +6,7 @@ Rows are the fifteen nearest benchmarks of the audit plus the MemShift row (the 
 not stated) or a short string (world text, native systems, histories, questions). Three optional
 flags in a field control the marks; they are honoured on the MemShift row only:
 
-  planned        the whole cell is a plan of the pre-registered stage 4 (dagger)
+  planned        the whole cell is a plan that has not run yet (dagger)
   planned_extra  a string added on top of the observed value, shown as ``value (+extra dagger)``
   observed_extra a string added on top of the observed value once it has run, ``value (+extra)``
   inferred       the audit inferred the value; the paper does not state it (double dagger)
@@ -17,10 +17,9 @@ module; the marks disappear with the flags. The
 caption carries no legend for the dagger (a plan is not something the printed table explains).
 
 Usage: python -m memshift.analysis.neighbour_table audit/neighbours/properties.json \\
-           paper/generated/tab_neighbours.tex
-Writes the Section 2 table to the given path, the appendix table next to it as <stem>_full.tex and
-the counts as LaTeX macros (\\Nbr... over the neighbours, \\Ms... for the MemShift row) as
-neighbour_counts.tex in the same directory.
+           paper/generated
+Writes the table as tab_neighbours_full.tex and the counts as LaTeX macros (\\Nbr... over the
+neighbours, \\Ms... for the MemShift row) as neighbour_counts.tex in the given directory.
 """
 
 from __future__ import annotations
@@ -82,21 +81,14 @@ COLUMNS = {
     "branch": Column("counterfactual", "counterfactual", stem="Branch"),
     "native": Column("native_systems", "native systems", "text"),
     "judge": Column("llm_judge", "no LLM judge", "judge", stem="Judge"),
-    "prereg": Column("prereg", "frozen plan", stem="Prereg"),
     "histories": Column("n_histories", "histories", "text"),
     "questions": Column("n_questions", "questions", "text"),
 }
-# (group label, column keys); the Section 2 table and the appendix table
-MAIN = (
-    ("data", ("text", "gold_first", "gold_dep")),
-    ("changes tested", ("update", "invalid", "redef", "writer", "impl")),
-    ("protocol", ("branch", "judge", "prereg")),
-    ("scale", ("native", "histories", "questions")),
-)
+# (group label, column keys) of the table
 FULL = (
     ("data", ("text", "gold_first", "gold_dep", "derived")),
     ("changes tested", ("update", "invalid", "implicit", "redef", "writer", "impl", "consent")),
-    ("protocol", ("branch", "judge", "prereg")),
+    ("protocol", ("branch", "judge")),
     ("scale", ("native", "histories", "questions")),
 )
 # macro stem and vocabulary for every counted categorical column
@@ -181,51 +173,27 @@ def _marks(rows: list[dict[str, Any]], columns: list[Column]) -> tuple[bool, boo
     return planned, any(f.get("inferred") for f in fields)
 
 
-LEGEND_PARTS = (
-    r"\checkmark{}~yes, $\sim$~partial, $\times$~the described design has no such ",
-    r"element, n/s~not stated. World text: LEGEND. Counterfactual: the same history ",
-    r"with and without the change (\memshift{}: byte-identical branches). Frozen plan: ",
-    r"hypotheses and thresholds fixed before the runs (pre-registration or a signed ",
-    r"analysis plan). Native systems: off-the-shelf memory systems evaluated, as the ",
-    r"paper groups them. Long-context and plain RAG baselines, each paper's own ",
-    r"systems and oracles are not counted. Histories (worlds, users or trajectories) ",
-    r"and questions are as printed (MemoryArena: tasks, EvoArena: the PersonaMem-Evo ",
-    r"subset). For \memshift{} they are test worlds and UNIT.",
+# the key of the caption: the marks, the world-text codes and the unit of the MemShift row; the
+# columns are defined in the text of the appendix (paper/sections/app_related.tex)
+KEY = (
+    r"\checkmark{}~yes, $\sim$~partial, $\times$~no such element, n/s~not stated. World text: "
+    r"LEGEND. \memshift{}: test worlds and graded probes over ITEMS knowledge items."
 )
-# the columns only the appendix table has, and why the MemShift row is partial on derived items
-FULL_PARTS = (
-    r" Derived items: the graded items aggregate several records (counts, sets, sums, ",
-    r"multi-hop or temporal aggregation) rather than restate one stored fact. $\sim$ when ",
-    r"both kinds are graded, as in \memshift{}: every item is derived by a writer, but of a ",
-    r"world's 48 items only the six definition items and four recurring series aggregate ",
-    r"records. The rest are attribute or latest-value items. Implicit conflict: ",
-    r"conflicting information without an explicit replacement, which the system must ",
-    r"detect. Consent revoked: the user withdraws consent or asks to forget, and the memory ",
-    r"must stop using or delete the data.",
-)
+GAP_EVERY = 5  # neighbour rows between two small gaps
 
 
-def _caption(rows: list[dict[str, Any]], inferred: bool, full: bool) -> str:
+def _caption(rows: list[dict[str, Any]], inferred: bool) -> str:
     codes = {str(v) for r in rows for v in _text_values(r)}
     legend = ", ".join(f"{k}~{v}" for k, v in TEXT_CODES.items() if k in codes)
-    unit = str(rows[-1]["fields"]["n_questions"].get("unit", "knowledge items"))
-    parts: list[str]
-    if full:  # self-contained: the appendix table is the one the paper shows
-        head = (
-            r"\memshift{} against its nearest neighbours, all properties of the audit. Every "
-            r"cell is read from the neighbour's own paper (quotes in the released audit record). "
-        )
-        parts = [head, *LEGEND_PARTS, *FULL_PARTS]
-    else:
-        head = (
-            r"\memshift{} against its nearest neighbours; every cell is read from the "
-            r"neighbour's own paper (quotes in the released audit record, \cref{app:related}). "
-        )
-        parts = [head, *LEGEND_PARTS]
-    text = "".join(parts).replace("LEGEND", legend).replace("UNIT", unit)
+    items = rows[-1]["fields"]["n_questions"].get("items")
+    head = (
+        r"\memshift{} against its nearest neighbours on every property of the audit, each read "
+        r"from the neighbour's own paper. "
+    )
+    key = KEY.replace("LEGEND", legend).replace("ITEMS", f"{items:,}" if items else "the")
     if inferred:
-        text += " " + INFERRED_NOTE
-    return text
+        key = key.replace("n/s~not stated.", "n/s~not stated, " + INFERRED_NOTE)
+    return head + key
 
 
 def _author_named(short_name: str) -> bool:
@@ -233,12 +201,8 @@ def _author_named(short_name: str) -> bool:
     return short_name.endswith("et al.") or " & " in short_name
 
 
-def table(
-    rows: list[dict[str, Any]],
-    groups: tuple[tuple[str, tuple[str, ...]], ...],
-    label: str,
-    full: bool,
-) -> str:
+def table(rows: list[dict[str, Any]], groups: tuple[tuple[str, tuple[str, ...]], ...], label: str
+          ) -> str:  # fmt: skip
     """One LaTeX table over the given column groups."""
     columns = [COLUMNS[k] for _, keys in groups for k in keys]
     _planned, inferred = _marks(rows, columns)
@@ -248,8 +212,8 @@ def table(
         r"\begin{table}[t]",
         r"\centering",
         r"\footnotesize",
-        rf"\setlength{{\tabcolsep}}{{{'2pt' if full else '2.4pt'}}}",  # full: 18 columns in 5.5in
-        rf"\caption{{{_caption(rows, inferred, full)}}}",
+        r"\setlength{\tabcolsep}{2pt}",  # 17 columns
+        rf"\caption{{{_caption(rows, inferred)}}}",
         rf"\label{{{label}}}",
         rf"\begin{{tabular}}{{{spec}}}",
         r"\toprule",
@@ -262,7 +226,9 @@ def table(
         start = end + 1
     lines += ["& " + " & ".join(spans) + r" \\", "".join(rules), " & ".join(head) + r" \\"]
     lines.append(r"\midrule")
-    for r in rows:
+    for i, r in enumerate(rows):
+        if i and i % GAP_EVERY == 0 and not r.get("is_reference"):
+            lines.append(r"\addlinespace[3pt]")
         if r.get("is_reference"):
             lines.append(r"\midrule")
             name = r"\textbf{\memshift{}}"
@@ -275,12 +241,8 @@ def table(
     return "\n".join(lines) + "\n"
 
 
-def tab_neighbours(rows: list[dict[str, Any]]) -> str:
-    return table(rows, MAIN, "tab:neighbours", full=False)
-
-
 def tab_neighbours_full(rows: list[dict[str, Any]]) -> str:
-    return table(rows, FULL, "tab:neighbours-full", full=True)
+    return table(rows, FULL, "tab:neighbours-full")
 
 
 def _number(s: str) -> int | None:
@@ -339,14 +301,13 @@ def macros(rows: list[dict[str, Any]]) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("properties", type=Path, help="audit/neighbours/properties.json")
-    ap.add_argument("out", type=Path, help="paper/generated/tab_neighbours.tex")
+    ap.add_argument("out", type=Path, help="the output directory (paper/generated)")
     a = ap.parse_args()
     rows = load(a.properties)
-    a.out.parent.mkdir(parents=True, exist_ok=True)
+    a.out.mkdir(parents=True, exist_ok=True)
     outputs = {
-        a.out: tab_neighbours(rows),
-        a.out.with_name(a.out.stem + "_full.tex"): tab_neighbours_full(rows),
-        a.out.with_name("neighbour_counts.tex"): macros(rows),
+        a.out / "tab_neighbours_full.tex": tab_neighbours_full(rows),
+        a.out / "neighbour_counts.tex": macros(rows),
     }
     for path, text in outputs.items():
         path.write_text(HEAD + text)

@@ -1,6 +1,6 @@
-"""Offline tests for the native-system adapters and the Portable Memory export (plan §5.5, §6 E5,
-E6). No network, no GPU: native libraries are never contacted here; the .mem round trip needs
-the `portable-memory` package (`uv sync --extra native`) and is skipped without it."""
+"""Offline tests for the native-system adapters and the Portable Memory export (E5, E6). No
+network, no GPU: native libraries are never contacted here; the .mem round trip needs the
+`portable-memory` package (`uv sync --extra native`) and is skipped without it."""
 
 import asyncio
 import json

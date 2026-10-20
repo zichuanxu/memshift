@@ -1,8 +1,0 @@
-tree 76dc6b4287e9223cb2ec61ce04b678e79235ad22
-parent a8de66eeababc5393aaca597030f001adfa60a92
-author zichuanxu <zichuanxu28@gmail.com> 1790753769 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790753769 +0900
-
-Paper: benchmark section tightened (robustness-study block descriptions left to their results sections, standard report, adapter, scoring rules, seed disjointness and statistics references moved to the appendix)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -7,10 +7,10 @@
   "experiment": "merged-m2",
   "files_sha256": {
     "analysis/e1_item_table.jsonl": "20779369263abb20a8149f460a7322141d90bbb277fea9d1dec200501e5239d5",
-    "analysis/e1_metrics.json": "59af77dca974dae4fe4d7b3faf56f124bda8ba9d1628e28e7a9da0fb9e3aae4f",
-    "analysis/families.json": "ffd0075219cb3f40a444f9c2a60114084718045888cc9d0712ed54fc2699b612"
+    "analysis/e1_metrics.json": "80f9cffdf29e64a374187e9fa8c990ed6e18521f5386eeec26750f34dfdcab5a",
+    "analysis/families.json": "37f45553244b5aeb4ea88ca25624d472eb142835ce6b5c1bf3c1476d4f741449"
   },
-  "note": "registered block M2 (prereg/v2.md \u00a72) for gpt-oss-20b as writer and reader on worlds 1000-1009: the E1 analysis and checks (i)-(v) in families.json, computed from the raw runs, no model call; the runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache with the original parameters (their src t0 stores were not in the cache before), replacing the 20260930 runs (prereg/decisions.md 2026-10-17); the runs of worlds 1004-1005 and 1008-1009 are unchanged",
+  "note": "block M2 for gpt-oss-20b as writer and reader on worlds 1000-1009: the E1 analysis and checks (i)-(v) in families.json, computed from the raw runs, no model call; the runs of worlds 1000-1001, 1002-1003 and 1006-1007 are re-runs from the response cache with the original parameters (their src t0 stores were not in the cache before), replacing the 20260930 runs; the runs of worlds 1004-1005 and 1008-1009 are unchanged",
   "producers": {
     "analysis/e1_item_table.jsonl": "python -m memshift.analysis.stage m2 runs/stage4_m2_openai_gpt-oss-20b runs/m2_openai_gpt-oss-20b_s1000-1001_20261017T043342Z runs/m2_openai_gpt-oss-20b_s1002-1003_20261017T043512Z runs/m2_openai_gpt-oss-20b_s1004-1005_20260930T132344Z runs/m2_openai_gpt-oss-20b_s1006-1007_20261017T043642Z runs/m2_openai_gpt-oss-20b_s1008-1009_20260930T132348Z",
     "analysis/e1_metrics.json": "python -m memshift.analysis.stage m2 runs/stage4_m2_openai_gpt-oss-20b runs/m2_openai_gpt-oss-20b_s1000-1001_20261017T043342Z runs/m2_openai_gpt-oss-20b_s1002-1003_20261017T043512Z runs/m2_openai_gpt-oss-20b_s1004-1005_20260930T132344Z runs/m2_openai_gpt-oss-20b_s1006-1007_20261017T043642Z runs/m2_openai_gpt-oss-20b_s1008-1009_20260930T132348Z",

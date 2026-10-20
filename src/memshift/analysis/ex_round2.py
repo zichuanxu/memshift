@@ -1,7 +1,7 @@
-"""Paper numbers and tables of the exploratory analyses requested by the second review round of the
-paper (prereg/decisions.md 2026-10-08; post hoc). They change no registered contrast, margin,
-threshold or verdict. Every quantity comes from committed run outputs and the seeded world
-generator, with no model call; the stages are named in results/sources.json:
+"""Paper numbers and tables of the changed item-times by cause, the thinking writer per
+definition, the class split with D_m and B x D per definition. Every quantity comes from
+committed run outputs and the seeded world generator, with no model call; the stages are named in
+results/sources.json:
 
   e1    analysis/e1_metrics.json (the Eq. (1) terms, class split and per-definition contrasts of
         `analysis.ex_e1_classes`), analysis/e1_item_table.jsonl, the probes of the runs its
@@ -31,15 +31,11 @@ item as a dash):
   ExPerDefLooMain<branch>BxD<Min|Max>  the range of B x D on the definition class with one
                                     definition left out
   ETwoExWriter...Ninety             AUROC with 90% world and type intervals (the 95% intervals are
-                                    `analysis.ex_numbers`), and the path-3 rule under type
-                                    resampling
-The D_m class split and every level of tab_main already have macros (ExClsDm..., ExDecMain...,
+                                    `analysis.ex_numbers`)
+The D_m class split and the Eq. (1) levels already have macros (ExClsDm..., ExDecMain...,
 ExIntMain...MOneCited, ExClsMain...BxD, ExMixMain...Share; `analysis.ex_e1_paper`).
 
-tab_main           main text: the Eq. (1) levels r0, r1, a0, a1, B x D and the cited key's m1 by
-                   shift and class
-tab_redef_only     appendix: changed item-times by cause and the contrasts on each part
-tab_think_trunc    appendix: the thinking writer per definition (token limit, repair, no value)
+tab_redef_only     appendix: changed item-times by cause (the contrasts on each part: tab:cause)
 tab_classsplit_dm  appendix: the class split with D_m as the D=1 arm (block C)
 tab_perdef         appendix: B x D per definition, with the leave-one-definition-out range
 """
@@ -55,12 +51,12 @@ from typing import Any
 
 from memshift.analysis import ex_e1_classes as ex
 from memshift.analysis.e1 import Cond, Row, _diff
-from memshift.analysis.ex_e1_paper import UNDEFINED, _cell, _Out, fmt
+from memshift.analysis.ex_e1_paper import _Out, fmt
 from memshift.analysis.ex_numbers import stat_iv
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, pct, pp
-from memshift.analysis.paper_tables import _num, _row, interval
+from memshift.analysis.paper_tables import _num, _row, est_ci_cells
 
 THINK_CELL = "holdmem_D0thinkB1_source"
 PLAIN_CELL = "holdmem_D0B1_source"  # the same writer without thinking, same items
@@ -82,13 +78,7 @@ ATTR_CONTRASTS = (
     ("BxD_interaction_update", "BxD"),
 )
 BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
-CAUSE_LABELS = {
-    "src": {"shift": "the revision", "drift": "drift only"},
-    "def": {"shift": "the redefinition", "drift": "drift only"},
-    "orphan": {"shift": "the deletion", "drift": "drift only"},
-}
 Key = tuple[str, str, str, int]  # (world, branch, fact, k)
-PATH3_AUROC_BAR = 0.60  # prereg v1 path 3: slope 90% lower bound <= 0 or AUROC < 0.60 triggers
 
 
 # ------------------------------------------------------------------------------------ loading
@@ -426,8 +416,7 @@ def _perdef_numbers(main: Mapping[str, Any] | None, out: _Out) -> None:
 
 
 def _writer_numbers(e2: Mapping[str, Any] | None) -> dict[str, str]:
-    """AUROC with 90% intervals (world and type resampling) for the predictors the review quotes,
-    and the path-3 rule (slope 90% lower bound <= 0 or AUROC < 0.60) under type resampling."""
+    """AUROC with 90% intervals (world and type resampling) for the writer-switch predictors."""
     sets = _get(e2, "explore_writer_predictors", "sets") or {}
     out: dict[str, str] = {}
     for set_key, set_tag, preds in (
@@ -439,14 +428,6 @@ def _writer_numbers(e2: Mapping[str, Any] | None) -> dict[str, str]:
             base = f"ETwoExWriter{set_tag}{ptag}PooledAuroc"
             out[f"{base}Ninety"] = stat_iv(auc, "world", "90", 3)
             out[f"{base}TypeNinety"] = stat_iv(auc, "type", "90", 3)
-    agree = _get(sets, "all", "pooled", "predictors", "agree") or {}
-    lo = _get(agree, "slope", "type", "lo90")
-    auc = _get(agree, "auroc", "est")
-    if lo is None or auc is None:
-        out["ETwoExWriterPathThreeTypeVerdict"] = MISSING
-    else:
-        hit = lo <= 0 or auc < PATH3_AUROC_BAR
-        out["ETwoExWriterPathThreeTypeVerdict"] = "triggered" if hit else "not triggered"
     return out
 
 
@@ -467,118 +448,9 @@ def numbers(inp: Mapping[str, Any]) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------------- tables
-def _term(e: Mapping[str, Any] | None, digits: int = 1) -> str:
-    """A term in percent, unsigned (`ex_e1_paper._terms_row_cells`)."""
-    if not e:
-        return MISSING
-    return UNDEFINED if e["est"] != e["est"] else _num(e["est"], digits=digits)
-
-
-def _pct_cell(e: Mapping[str, Any] | None) -> str:
-    """A share in percent with its interval, unsigned (`paper_tables.interval`)."""
-    if not e:
-        return MISSING
-    if e["est"] != e["est"]:
-        return UNDEFINED
-    return interval(_num(e["est"]), _num(e["lo"]), _num(e["hi"]))
-
-
-def tab_main(inp: Mapping[str, Any]) -> str:
-    """Main text: per shift and item class, the Eq. (1) levels of the source-epoch key (r0, r1,
-    a0, a1), the B x D interaction with its interval, the class's share of the changed item-times
-    and the share of changes the cited-cluster key misses."""
-    main = inp.get("main")
-    n = _get(main, "n_worlds") or MISSING
-    lines = [
-        r"\begin{table}[t]",
-        rf"\caption{{The levels behind the $B{{\times}}D$ interaction on Update (main study, {n} "
-        r"worlds; source-epoch key; percent). Share: the class's share of the changed item-times. "
-        r"$r_D$: accuracy of the re-derived items at $D$ with binding; $a_D$: Update at $D$ "
-        r"without binding, where no item is re-derived. The key misses no change, so "
-        r"$B{\times}D=(r_1{-}a_1)-(r_0{-}a_0)$ (pp, 95\% world-bootstrap interval). $m_1$: "
-        r"share of the changes the cited-cluster key misses. \emph{Definition}: the six "
-        r"definition items of each world; \emph{other}: the other 42 items. The class split is "
-        r"exploratory.}",
-        r"\label{tab:main}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3.5pt}",
-        r"\begin{tabular}{@{}ll r rrrr c r@{}}",
-        r"\toprule",
-        r"& & share & $r_0$ & $r_1$ & $a_0$ & $a_1$ & $B{\times}D$ & $m_1$, cited \\",
-        r"\midrule",
-    ]
-    for i, (b, _) in enumerate(BRANCH_TAGS):
-        for cls in ("definition", "other"):
-            node = _get(main, "explore_decomposition", "D1", b, cls)
-            share = _get(main, "explore_class_mix", b, "classes", cls, "share")
-            bxd = _get(
-                main, "explore_class_split", "D1", b, "source", cls, "BxD_interaction_update"
-            )
-            m1 = _get(node, "interaction", "cited", "m1")
-            lines.append(
-                _row(
-                    BRANCH_LABELS[b] if cls == "definition" else "",
-                    cls,
-                    MISSING if share is None else _num(share, digits=0),
-                    _term(_get(node, "cells", "source", "D0B1", "r")),
-                    _term(_get(node, "cells", "source", "D1B1", "r")),
-                    _term(_get(node, "cells", "source", "D0B0", "a")),
-                    _term(_get(node, "cells", "source", "D1B0", "a")),
-                    _cell(bxd),
-                    _term(m1, digits=0),
-                )
-            )
-        if i < len(BRANCH_TAGS) - 1:
-            lines.append(r"\addlinespace[2pt]")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
-    return "\n".join(lines) + "\n"
-
-
-def _attr_rows(node: Mapping[str, Any], b: str) -> list[str]:
-    """Rows of the contrasts on each part of one branch: a class with no item-time is left out,
-    and so is `all` when one class holds every item-time of the part."""
-    rows: list[str] = []
-    first = True
-    for c, _ in CAUSES:
-        parts = _get(node, "contrasts", c) or {}
-        sizes = {
-            cls: _get(parts, cls, "BxD_interaction_update", "n_items") or 0
-            for cls, _ in ATTR_CLASSES
-        }
-        shown = [cls for cls in ("definition", "other") if sizes[cls]]
-        if len(shown) > 1:
-            shown.append("all")
-        for j, cls in enumerate(shown):
-            e = parts.get(cls) or {}
-            rows.append(
-                _row(
-                    BRANCH_LABELS[b] if first else "",
-                    CAUSE_LABELS[b][c] if j == 0 else "",
-                    cls,
-                    f"{sizes[cls]:,}",
-                    *(_cell(e.get(key)) for key, _ in ATTR_CONTRASTS),
-                )
-            )
-            first = False
-    if b == "def":
-        for kc, label in (("redefined", "new version"), ("kept", "same version")):
-            e = _get(node, "kappa", kc) or {}
-            n_items = _get(e, "BxD_interaction_update", "n_items")
-            rows.append(
-                _row(
-                    "",
-                    rf"\emph{{{label}}}",
-                    "definition",
-                    MISSING if n_items is None else f"{n_items:,}",
-                    *(_cell(e.get(key)) for key, _ in ATTR_CONTRASTS),
-                )
-            )
-    return rows
-
-
 def tab_redef_only(inp: Mapping[str, Any]) -> str:
-    """Appendix: (a) the item-times after each shift, the changed ones and the part the shift
-    itself changed; (b) B at D=0, B at D=1 and B x D on Update on each part, by class."""
+    """Appendix: the item-times after each shift, the changed ones and the part the shift itself
+    changed or drift alone changed (B x D on each part: the inline table `tab:cause`)."""
     attr = inp.get("attr") or {}
     br = attr.get("branches") or {}
     tg = _get(br, "src", "targets") or {}
@@ -590,28 +462,18 @@ def tab_redef_only(inp: Mapping[str, Any]) -> str:
     )
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Update after a shift counts every item-time whose gold value or status differs "
-        rf"from its value before the shift (main study, {attr.get('n_worlds', MISSING)} worlds, "
-        r"exploratory). It does so whether the shift changed the value or later events would have "
-        r"changed it anyway. By the shift: the gold differs from the gold the same world has at "
-        r"the same time without the shift (the generator's natural branch). Drift only: "
-        r"it does not. (a) Item-times after the shift (48 items, four checkpoints), those that "
-        r"changed, and the part the shift itself changed, with shares of all item-times. "
-        rf"$\Ssrc$ revises the sources of {target}. (b) $B$ effect at each $D$ and "
-        r"$B{\times}D$ on Update (source-epoch key, pp, 95\% world-bootstrap intervals) on "
-        r"each part. $n$: changed "
-        r"item-times. A redefinition changes only definition items. New or same "
-        r"version: after $\Sdef$, the definition item's version moved or not, whatever its "
-        r"value.}",
+        r"\caption{Item-times after each shift and those that changed, by cause (48 items at "
+        rf"four checkpoints in each of {attr.get('n_worlds', MISSING)} worlds). Shares are of "
+        rf"all item-times. $\Ssrc$ revises the sources of {target}.}}",
         r"\label{tab:redef_only}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular}{@{}l r rr rr rr@{}}",
         r"\toprule",
-        r"& item-times & \multicolumn{2}{c}{changed} & \multicolumn{2}{c}{by the shift} "
-        r"& \multicolumn{2}{c}{drift only} \\",
+        r"& & \multicolumn{2}{c}{changed} & \multicolumn{2}{c}{caused by the shift} "
+        r"& \multicolumn{2}{c}{also without the shift} \\",
         r"\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(l){7-8}",
-        r"& & $n$ & \% & $n$ & \% & $n$ & \% \\",
+        r"shift & item-times & $n$ & \% & $n$ & \% & $n$ & \% \\",
         r"\midrule",
     ]
     for b, _ in BRANCH_TAGS:
@@ -625,133 +487,59 @@ def tab_redef_only(inp: Mapping[str, Any]) -> str:
         ):
             cells += [_count(n_part), _share(n_part, n_all).replace(r"\%", "")]
         lines.append(_row(BRANCH_LABELS[b], *cells))
-    lines += [
-        r"\bottomrule",
-        r"\end{tabular}",
-        r"\par\medskip",
-        r"\begin{tabular}{@{}lll r ccc@{}}",
-        r"\toprule",
-        r"& changed by & class & $n$ & $B$ effect, $D{=}0$ & $B$ effect, $D{=}1$ "
-        r"& $B{\times}D$ \\",
-        r"\midrule",
-    ]
-    for i, (b, _) in enumerate(BRANCH_TAGS):
-        lines += _attr_rows(br.get(b) or {}, b) or [_row(BRANCH_LABELS[b], *[MISSING] * 6)]
-        if i < len(BRANCH_TAGS) - 1:
-            lines.append(r"\addlinespace[2pt]")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
 
 
-def tab_think_trunc(inp: Mapping[str, Any]) -> str:
-    """Appendix: per definition, the thinking writer's writes and the share at the token limit;
-    after S_src and S_def the repair correctness of its re-derivations, how many returned no value,
-    and the repair correctness of the plain D=0 writer on the same item-times."""
-    think = inp.get("think") or {}
-    pooled = _get(think, "writes", "all") or {}
-    differ = pooled.get("at_limit_xor_unreadable")
-    same = (
-        ", exactly the writes whose reply could not be read"
-        if differ == 0
-        else f", with {_count(differ)} writes at the limit or unreadable but not both"
-    )
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{The thinking writer ($D{=}0$, $B{=}1$, source-epoch key, "
-        rf"{pooled.get('n_worlds', MISSING)} worlds, exploratory) per definition. Writes: its "
-        r"definition writes after the shift, all branches. At limit: the share of them that used "
-        rf"the whole budget of {_count(pooled.get('limit_tokens'))} completion tokens "
-        rf"(percent{same}). Repair: "
-        r"ContractValid of its re-derivations that were asked (percent, 95\% world-bootstrap "
-        r"interval). No value: those re-derivations that returned no value, of all asked. Plain: "
-        r"the repair of the same writer without thinking on the same item-times (percent).}",
-        r"\label{tab:think_trunc}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
-        r"\begin{tabular}{@{}l rr crr crr@{}}",
-        r"\toprule",
-        r"& & & \multicolumn{3}{c}{$\Ssrc$} & \multicolumn{3}{c}{$\Sdef$} \\",
-        r"\cmidrule(lr){4-6}\cmidrule(l){7-9}",
-        r"definition & writes & at limit & repair & no value & plain & repair & no value "
-        r"& plain \\",
-        r"\midrule",
-    ]
-    for d, _, label in (*DEFINITIONS, ("all", "", "all six")):
-        if d == "all":
-            lines.append(r"\midrule")
-        w = _get(think, "writes", d) or {}
-        cells = [label, _count(w.get("writes")), _term(w.get("at_limit"))]
-        for b in ("src", "def"):
-            r = _get(think, "repair", "think", b, d) or {}
-            plain = _get(think, "repair", "plain", b, d) or {}
-            no_value = (
-                f"{r['no_value']}/{r['rederived']}"
-                if "no_value" in r and r["rederived"]
-                else MISSING
-            )
-            cells += [_pct_cell(r.get("repair")), no_value, _term(plain.get("repair"))]
-        lines.append(_row(*cells))
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
-    return "\n".join(lines) + "\n"
+DM_CONTRASTS = (  # the columns of tab_classsplit_dm (the D=1 arm is D_m)
+    "B_effect_update_D0",
+    "B_effect_update_D1",
+    "D_effect_update_B0",
+    "D_effect_update_B1",
+    "BxD_interaction_update",
+)
 
 
 def tab_classsplit_dm(inp: Mapping[str, Any]) -> str:
     """Appendix: B at each D, D_m at each B and B x D_m on Update with the model-written
-    derivation D_m as the D=1 arm (block C), per item class (definition, other, all) and branch;
-    under each contrast that involves the D=1 arm, in grey, the same contrast with the authored
-    derivation on the same worlds. On all items, B x D_m after S_src and S_def is the registered
-    C3. Rows are contrasts and columns branches (the six class-by-branch columns of tab_classsplit
-    do not fit 5.5in with the authored rows)."""
+    derivation D_m as the D=1 arm (block C), by shift and item class (definition, other, all);
+    under all items, in grey, the same contrasts with the authored derivation on the same worlds
+    (its definition and other items are the main rows of tab_classsplit)."""
     c = inp.get("c")
     n = _get(c, "n_worlds") or MISSING
-    rows_ = (
-        ("B_effect_update_D0", r"$B$ at $D{=}0$", False),
-        ("B_effect_update_D1", r"$B$ at $D_{\mathrm{m}}$", True),
-        ("D_effect_update_B0", r"$D_{\mathrm{m}}$ at $B{=}0$", True),
-        ("D_effect_update_B1", r"$D_{\mathrm{m}}$ at $B{=}1$", True),
-        ("BxD_interaction_update", r"$B{\times}D_{\mathrm{m}}$", True),
-    )
+    pairs = " ".join([r"r@{\,}l"] * len(DM_CONTRASTS))
+    dm = r"$D_{\mathrm{m}}$"
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The contrasts on Update by item class with the model-written derivation "
-        rf"$D_{{\mathrm{{m}}}}$ as the $D{{=}}1$ arm ({n} worlds, source-epoch key, "
-        r"pp, 95\% world-bootstrap intervals). $B$ at $D$: the effect of binding, $B{=}1$ minus "
-        r"$B{=}0$, at the given $D$. $D_{\mathrm{m}}$ at $B$: $D_{\mathrm{m}}$ minus $D{=}0$ at "
-        r"the given $B$. $B{\times}D_{\mathrm{m}}$: $B$ at $D_{\mathrm{m}}$ minus $B$ at $D{=}0$. "
-        r"In grey under each row: the same contrast with the authored derivation as the $D{=}1$ "
-        r"arm, on the same worlds ($B$ at $D{=}0$ involves neither). Definition: the six "
-        r"definition items of each world. Other: the other 42 items. Share: the class's "
-        r"share of the changed item-times. On all items, $B{\times}D_{\mathrm{m}}$ after $\Sdef$ "
-        r"is registered, and after $\Ssrc$ and $\Sdel$ it is exploratory. The class split is "
-        r"exploratory.}",
+        r"\caption{The contrasts on Update by shift and item class with the writer's programs "
+        rf"({dm}) as the $D{{=}}1$ arm ({n} worlds). {dm} effect: {dm} minus $D{{=}}0$ at the "
+        r"given $B$. Exact (grey): the same contrasts on all items with exact recomputation, "
+        r"whose definition and other items are in \cref{tab:classsplit}.}",
         r"\label{tab:classsplit_dm}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{6pt}",
-        r"\begin{tabular}{@{}l ccc@{}}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{3.5pt}",
+        rf"\begin{{tabular}}{{@{{}}ll {pairs}@{{}}}}",
         r"\toprule",
-        r"& $\Ssrc$ & $\Sdef$ & $\Sdel$ \\",
+        rf"& & \multicolumn{{4}}{{c}}{{$B$ effect}} & \multicolumn{{4}}{{c}}{{{dm} effect}} & & \\",
+        r"\cmidrule(lr){3-6}\cmidrule(lr){7-10}",
+        rf"shift & class & \multicolumn{{2}}{{c}}{{$D{{=}}0$}} & \multicolumn{{2}}{{c}}{{{dm}}} "
+        r"& \multicolumn{2}{c}{$B{=}0$} & \multicolumn{2}{c}{$B{=}1$} "
+        rf"& \multicolumn{{2}}{{c}}{{$B{{\times}}D_{{\mathrm{{m}}}}$}} \\",
+        r"\midrule",
     ]
-    for cls in ("definition", "other", "all"):
-        if cls == "all":
-            head = [r"\emph{all items}", "", "", ""]
-        else:
-            shares = [
-                _get(c, "explore_class_mix", b, "classes", cls, "share") for b, _ in BRANCH_TAGS
-            ]
-            head = [
-                rf"\emph{{{cls} items}}, share",
-                *(MISSING if x is None else _num(x, digits=0) + r"\%" for x in shares),
-            ]
-        lines += [r"\midrule", _row(*head)]
-        for key, label, with_authored in rows_:
-            for arm, name in (("D1s", label), ("D1", r"\quad\textcolor{gray}{authored}")):
-                if arm == "D1" and not with_authored:
-                    continue
-                vals = []
-                for b, _ in BRANCH_TAGS:
-                    cell = _cell(_get(c, "explore_class_split", arm, b, "source", cls, key))
-                    vals.append(cell if arm == "D1s" else rf"\textcolor{{gray}}{{{cell}}}")
-                lines.append(_row(name, *vals))
+    grey = r"\color{gray}"
+    for i, (b, _) in enumerate(BRANCH_TAGS):
+        for k, cls in enumerate(("definition", "other", "all")):
+            node = _get(c, "explore_class_split", "D1s", b, "source", cls)
+            vals = [est_ci_cells(_get(node, key), sign=True) for key in DM_CONTRASTS]
+            lines.append(_row(BRANCH_LABELS[b] if k == 0 else "", cls, *vals))
+        authored = _get(c, "explore_class_split", "D1", b, "source", "all")
+        vals = [
+            est_ci_cells(_get(authored, key), sign=True, style=grey) for key in DM_CONTRASTS[1:]
+        ]
+        lines.append(_row("", rf"{grey}\quad exact", "&", *vals))
+        if i < len(BRANCH_TAGS) - 1:
+            lines.append(r"\midrule")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
 
@@ -760,31 +548,29 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
     """Appendix: B x D on Update per definition (source-epoch key, main study), the definition class
     as a whole, and the range of the class value with one definition left out."""
     main = inp.get("main")
-    n = _get(main, "n_worlds") or MISSING
     res = _get(main, "explore_per_definition", "D1") or {}
     lines = [
         r"\begin{table}[t]",
-        rf"\caption{{$B{{\times}}D$ on Update per definition (main study, {n} worlds, "
-        r"source-epoch key, pp, 95\% world-bootstrap intervals, exploratory). $n$: the "
-        r"definition's changed item-times. All six: the definition class. Leave one out: the "
-        r"smallest and the largest $B{\times}D$ of the definition class with one definition "
-        r"removed. The intervals resample worlds, not definitions.}",
+        r"\caption{$B{\times}D$ on Update per definition. $n$: the definition's changed "
+        r"item-times. Leave one out: the smallest and the largest $B{\times}D$ of the definition "
+        r"class with one definition removed. The intervals resample worlds, not definitions.}",
         r"\label{tab:perdef}",
-        r"\centering\scriptsize",
-        r"\setlength{\tabcolsep}{3pt}",
-        r"\begin{tabular}{@{}l cr cr cr@{}}",
+        r"\centering\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        r"\begin{tabular}{@{}l r@{\,}lr r@{\,}lr r@{\,}lr@{}}",
         r"\toprule",
-        r"& \multicolumn{2}{c}{$\Ssrc$} & \multicolumn{2}{c}{$\Sdef$} "
-        r"& \multicolumn{2}{c}{$\Sdel$} \\",
-        r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}",
-        r"definition & $B{\times}D$ & $n$ & $B{\times}D$ & $n$ & $B{\times}D$ & $n$ \\",
+        r"& \multicolumn{3}{c}{$\Ssrc$} & \multicolumn{3}{c}{$\Sdef$} "
+        r"& \multicolumn{3}{c}{$\Sdel$} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(l){8-10}",
+        r"definition & \multicolumn{2}{c}{$B{\times}D$} & $n$ & \multicolumn{2}{c}{$B{\times}D$} "
+        r"& $n$ & \multicolumn{2}{c}{$B{\times}D$} & $n$ \\",
         r"\midrule",
     ]
     for d, _, label in DEFINITIONS:
         cells = [label]
         for b, _ in BRANCH_TAGS:
             e = _get(res, b, d, "type", "source", "BxD_interaction_update")
-            cells += [_cell(e), _count(e.get("n_items")) if e else MISSING]
+            cells += [est_ci_cells(e, sign=True), _count(e.get("n_items")) if e else MISSING]
         lines.append(_row(*cells))
     lines.append(r"\midrule")
     cells = ["all six"]
@@ -792,13 +578,13 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
         e = _get(
             main, "explore_class_split", "D1", b, "source", "definition", "BxD_interaction_update"
         )
-        cells += [_cell(e), _count(e.get("n_items")) if e else MISSING]
+        cells += [est_ci_cells(e, sign=True), _count(e.get("n_items")) if e else MISSING]
     lines.append(_row(*cells))
     cells = ["leave one out"]
     for b, _ in BRANCH_TAGS:
         loo = _loo_range(main, b)
         span = f"{_num(loo[0], sign=True)} to {_num(loo[-1], sign=True)}" if loo else MISSING
-        cells.append(rf"\multicolumn{{2}}{{c}}{{{span}}}")
+        cells.append(rf"\multicolumn{{3}}{{c}}{{{span}}}")
     lines.append(_row(*cells))
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
@@ -806,9 +592,7 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
 
 def tables(inp: Mapping[str, Any]) -> dict[str, str]:
     return {
-        "tab_main.tex": tab_main(inp),
         "tab_redef_only.tex": tab_redef_only(inp),
-        "tab_think_trunc.tex": tab_think_trunc(inp),
         "tab_classsplit_dm.tex": tab_classsplit_dm(inp),
         "tab_perdef.tex": tab_perdef(inp),
     }

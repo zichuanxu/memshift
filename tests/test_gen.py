@@ -23,7 +23,7 @@ def test_generation_is_deterministic():
 
 def test_world_scale_matches_plan(worlds):
     w = worlds["natural"]
-    assert 1300 <= len(w.events) <= 2600  # plan §4.2: 1,500-2,500 events (calibrated)
+    assert 1300 <= len(w.events) <= 2600  # 1,500-2,500 events per world (calibrated)
     assert {e.source for e in w.events} == {
         "email",
         "calendar",

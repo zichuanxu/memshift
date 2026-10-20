@@ -1,5 +1,5 @@
-"""MemOS (MemTensor, `MemoryOS==2.0.33`, arXiv 2507.03724) behind the MemShift interface (plan
-§4.5, prereg v2 §3), on the same `NativeSystem` driver as Mem0 and Graphiti. The library is
+"""MemOS (MemTensor, `MemoryOS==2.0.33`, arXiv 2507.03724) behind the MemShift interface (E5),
+on the same `NativeSystem` driver as Mem0 and Graphiti. The library is
 imported lazily and is not part of `uv sync --extra native`: MemoryOS requires `openai<2`, so it
 runs from its own pinned layer (`docker/native/memos.txt`).
 

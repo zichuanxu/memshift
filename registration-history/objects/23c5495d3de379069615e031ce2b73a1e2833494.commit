@@ -1,8 +1,0 @@
-tree 71c2d772e12bbebf7702bdc51744e89fca4f6a88
-parent 852b6ac8ce7105684511b3566a2fdce684e87ddf
-author zichuanxu <zichuanxu28@gmail.com> 1790640663 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790640663 +0900
-
-Paper: fallback disclosure (43/48) in limitations; D=1 survival exceeds checker pass rate (falsified prediction)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

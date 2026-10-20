@@ -1,8 +1,0 @@
-tree 246e8bfb79251faae2f31eea1c9e0b3461fa2c50
-parent b864c822730d99583e71bdcca9d98bbf4f8798eb
-author zichuanxu <zichuanxu28@gmail.com> 1790800933 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790800939 +0900
-
-Paper: hostile re-read fixes (abstract at 199 words, complete key qualified as the one writer output allows, M2 verdict stated as what it tests, stale R markers and count phrasing, class wording), page margin restored
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

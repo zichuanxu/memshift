@@ -1,4 +1,4 @@
-"""Probes that do not name the definition version (prereg v4 block Q, `--probe-unnamed-defs`)."""
+"""Probes that do not name the definition version (`--probe-unnamed-defs`)."""
 
 import json
 from datetime import timedelta

@@ -1,4 +1,4 @@
-"""E2 analysis (plan §2.3, §2.4 path 3, §6 E2).
+"""E2 analysis (writer switch): retention, calibration of survival on writer agreement, T1.
 
 Retention per (tier, cell) = P(valid_after | valid_before).
 Calibration (D=0, B=1, items valid before the switch): survival y = valid_after is regressed on
@@ -7,20 +7,23 @@ b is the calibration slope (b > 0: agreement predicts survival; b = 1: calibrate
 y uses the Mann-Whitney statistic with ties counted half. Intervals: world-level bootstrap.
 D=1 survival is compared with the new writer's checker pass rate on the calibration set.
 
-prereg v1 §5 (T1): per tier, delta = Retention(HoldMem(1,1), source epoch) - 1 with a 90% world
-bootstrap interval; equivalent when it lies inside +/- T1_MARGIN (TOST, alpha = 0.05).
+T1: per tier, delta = Retention(HoldMem(1,1), source epoch) - 1 with a 90% world bootstrap interval;
+equivalent when it lies inside +/- T1_MARGIN (TOST, alpha = 0.05).
 `explore_pooled_curve` is the pooled logistic fit of path 3 (intercept, slope and predicted survival
 on a grid of agreement rates, with a pointwise 90% world-bootstrap band) for the calibration figure.
-Exploratory: `explore_t1_cells` applies the T1 computation to every cell of the tier (per tier and
-system: delta, margin, equivalent), e.g. HoldMem(0,1) at source-epoch binding.
-prereg v1 §3 (path 3): the primary decision pools the D=0, B=1 items of all tiers present; each
-tier is also reported, and a tier whose slope estimate is <= 0 is listed as a caveat.
-Exploratory (decisions.md 2026-09-30; `ex_e2_predictors`, `ex_tests`): `explore_writer_predictors`
-scores the registered agreement rate against baselines (the writers' per-type accuracy, P(new
-correct | old correct), a definition-item indicator) with world and type-level intervals,
-`explore_writer_loto` and `explore_failures_by_type` give leave-one-type-out estimates and failure
-counts, and `explore_survival_recovery`, `explore_t1_eps` and `explore_t1_by_class` add survival,
-recovery, the net change, the verdict at several margins and T1 by item class.
+`explore_t1_cells` applies the T1 computation to every cell of the tier (per tier and system: delta,
+margin, equivalent), e.g. HoldMem(0,1) at source-epoch binding.
+Path 3 (`path3`): the pooled fit uses the D=0, B=1 items of all tiers present; each tier is also
+reported, and a tier whose slope estimate is <= 0 is listed as a caveat.
+From `ex_e2_predictors` and `ex_tests`: `explore_writer_predictors` scores the agreement rate
+against baselines (the writers' per-type accuracy, P(new correct | old correct), a definition-item
+indicator) with world and type-level intervals, `explore_writer_loto` and `explore_failures_by_type`
+give leave-one-type-out estimates and failure counts, and `explore_survival_recovery`,
+`explore_t1_eps` and `explore_t1_by_class` add survival, recovery, the net change, T1 at several
+margins and T1 by item class.
+`m1b_d_protects_switch`: per switch, survival of D=1 minus D=0 (`est_at_least_zero`: its point
+estimate is >= 0). `path3` and `path3_within_threshold_by_tier`: `within_threshold` when the slope's
+90% lower bound is above 0 and the AUROC is >= 0.60 (`analysis.gate`, path 3).
 """
 
 from __future__ import annotations
@@ -43,7 +46,7 @@ from memshift.scoring.stats import paired_diff, tost, world_bootstrap
 Row = dict[str, Any]
 Stat = Callable[[list[float], list[float]], float]
 
-T1_MARGIN = 0.03  # prereg v1 §5: epsilon of plan §4.6
+T1_MARGIN = 0.03  # T1 equivalence margin epsilon of delta
 T1_SYSTEM = "holdmem_D1B1_source"
 
 
@@ -187,7 +190,7 @@ def analyse(run_dir: Path) -> dict[str, Any]:
                 if r["system"] == system and r["valid_before"]:
                     by_w[r["world_id"]].append(float(r["valid_after"]))
             out["retention"][f"{tier}:{system}"] = world_bootstrap(by_w).to_json()
-            # Exploratory (decisions.md 2026-09-28): retention by item class, 90% intervals
+            # retention by item class, 90% intervals
             for cls, prefixes in ITEM_CLASSES.items():
                 by_c: dict[str, list[float]] = defaultdict(list)
                 for r in tr:
@@ -204,10 +207,9 @@ def analyse(run_dir: Path) -> dict[str, Any]:
             }
             if system == T1_SYSTEM:
                 out["t1"][tier] = t1
-            # Exploratory (not pre-registered): the same test for every cell of the tier (the
-            # pre-registered one included), so that the paper can say which of D and B a layer
-            # needs to satisfy T1. B = 0 cells keep retention 1 by construction and pass
-            # trivially (v1 §4: not "updated" but "unchanged").
+            # The same test for every cell of the tier (T1_SYSTEM included), so that the paper
+            # can say which of D and B a layer needs to satisfy T1. B = 0 cells keep retention 1
+            # by construction and pass trivially (not "updated" but "unchanged").
             out.setdefault("explore_t1_cells", {}).setdefault(tier, {})[system] = t1
         pts: dict[str, list[tuple[float, float]]] = defaultdict(list)
         for r in tr:
@@ -240,9 +242,8 @@ def analyse(run_dir: Path) -> dict[str, Any]:
                 "d1_b1_survival": sum(r["valid_after"] for r in d1) / max(1, len(d1)),
                 "agreement_by_type": _agreement(cal),
             }
-    # M1-b (prereg v2 §2): per switch, survival of D=1 minus D=0 at source-epoch binding, paired
-    # by item among items valid before the switch in both cells; holds when the estimate is >= 0
-    # (decisions.md 2026-09-29)
+    # M1-b: per switch, survival of D=1 minus D=0 at source-epoch binding, paired by item among
+    # items valid before the switch in both cells, and whether the estimate is >= 0
     for tier in sorted({r["tier"] for r in rows}):
         surv: dict[int, dict[str, dict[str, float]]] = {0: defaultdict(dict), 1: defaultdict(dict)}
         for r in rows:
@@ -251,26 +252,26 @@ def analyse(run_dir: Path) -> dict[str, Any]:
         est = paired_diff(surv[1], surv[0]).to_json()
         out.setdefault("m1b_d_protects_switch", {})[tier] = {
             "d1_minus_d0_survival": est,
-            "holds": bool(est["est"] >= 0) if est["n_items"] else None,
+            "est_at_least_zero": bool(est["est"] >= 0) if est["n_items"] else None,
         }
-    out["path3_quantitative_prediction_holds"] = {
+    out["path3_within_threshold_by_tier"] = {
         t: bool(c["slope"]["lo90"] > 0 and c["auroc"]["est"] >= 0.60)
         for t, c in out["calibration"].items()
         if not math.isnan(c["slope"]["est"])
     }
     tiers = sorted(out["calibration"])
     slope, auc = boot(pooled, slope_on_logit), boot(pooled, auroc)
-    # Exploratory (plot support, not a statistic): the pooled fit whose slope and AUROC path 3 uses
+    # Plot support, not a statistic: the pooled fit whose slope and AUROC path 3 uses
     out["explore_pooled_curve"] = calibration_curve(pooled)
     out["path3"] = {
         "tiers": tiers,
         "pooled_slope": slope,
         "pooled_auroc": auc,
-        "triggered": not (slope["lo90"] > 0 and auc["est"] >= 0.60),
+        "within_threshold": bool(slope["lo90"] > 0 and auc["est"] >= 0.60),
         "tier_caveats": [t for t in tiers if not out["calibration"][t]["slope"]["est"] > 0],
     }
-    # Exploratory (decisions.md 2026-09-30): writer-switch predictors with baselines and type-level
-    # intervals, T1 survival / recovery / net change, the eps grid and T1 by item class
+    # Writer-switch predictors with baselines and type-level intervals, T1 survival / recovery / net
+    # change, the eps grid and T1 by item class
     from memshift.analysis import ex_e2_predictors
 
     out.update(ex_e2_predictors.analyse(run_dir, rows))
@@ -285,5 +286,5 @@ if __name__ == "__main__":
     import sys
 
     res = analyse(Path(sys.argv[1]))
-    keys = ("t1", "path3", "path3_quantitative_prediction_holds")
+    keys = ("t1", "path3", "path3_within_threshold_by_tier")
     print(json.dumps({k: res[k] for k in keys}, indent=1, default=str))

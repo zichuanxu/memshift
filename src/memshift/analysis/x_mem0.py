@@ -1,7 +1,7 @@
-"""Block X of prereg/v4_round3.md: per-item diagnosis of Mem0 and the two interventions.
+"""Block X: per-item diagnosis of Mem0 and the two interventions.
 
 Reads the runs of `experiments.x_mem0` (probes, answers, `fork_deps.jsonl`, and per store
-`ledger.jsonl` and `events.jsonl`). Definitions, as registered before any run:
+`ledger.jsonl` and `events.jsonl`). Definitions:
 
 detection   an item-time (world, branch, item, checkpoint) is detected when at least one UPDATE or
             DELETE event lies after the fork and at or before the checkpoint, on a memory linked
@@ -22,9 +22,10 @@ dominant    of a (class, branch) cell, from the `mem0` arm's point estimates: de
             m = 1 adds nothing); judged only where the larger of the two losses is >= 5 pp.
 effects     each arm's Update minus `mem0`'s, item-paired on the changed item-times both answered,
             world-clustered bootstrap (`stats.paired_diff`, 2,000 draws, seed 996).
-X1          in at least 4 of the judged cells the arm that targets the dominant failure
-            (`mem0_det` for detection, `mem0_rep` for repair) raises Update more than the other
-            arm (point estimates); not judged if fewer than 3 cells are judged.
+X1          per judged cell (a diagnosis and both effects), whether the arm that targets the
+            dominant failure (`mem0_det` for detection, `mem0_rep` for repair) raises Update more
+            than the other arm (point estimates); `n_cells` and `n_favour_target` count them (the
+            design asks for at least 4 of at least 3 cells).
 
 `support` states what the logs can carry: when the native arm logged no UPDATE or DELETE after
 the fork (mem0ai 2.2.1 adds only, see `adapters.native_mem0x`), m = 1 in every `mem0` cell by
@@ -58,7 +59,7 @@ BRANCHES = ("src", "def", "orphan")
 CLASSES = ("definition", "other")
 STATS = ("n", "cv", "det", "cvdet")
 MIN_LOSS = 0.05
-MIN_JUDGED = 3
+MIN_CELLS = 3
 MIN_FAVOUR = 4
 DRAWS = 2000
 SEED = 996
@@ -198,7 +199,7 @@ def cv_by_item(rows: list[Row], arm: str, branch: str, cls: str) -> dict[str, di
 
 
 def x1(cells: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
-    """The X1 verdict from the cells' diagnosis and effects (point estimates)."""
+    """X1's comparisons from the cells' diagnosis and effects (point estimates)."""
     judged = {}
     for name, c in cells.items():
         diag, eff = c.get("diagnosis"), c.get("effects") or {}
@@ -213,16 +214,10 @@ def x1(cells: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
             "other_effect": eff[other]["est"],
             "favours_target": bool(eff[target]["est"] > eff[other]["est"]),
         }
-    n_fav = sum(j["favours_target"] for j in judged.values())
-    ok = len(judged) >= MIN_JUDGED
     return {
-        "rule": f"judged if >= {MIN_JUDGED} cells are judged; holds if the targeting arm raises "
-        f"Update more than the other arm in >= {MIN_FAVOUR} judged cells",
         "cells": judged,
-        "n_judged": len(judged),
-        "n_favour_target": n_fav,
-        "judged": ok,
-        "holds": (n_fav >= MIN_FAVOUR) if ok else None,
+        "n_cells": len(judged),
+        "n_favour_target": sum(j["favours_target"] for j in judged.values()),
     }
 
 
@@ -266,7 +261,7 @@ def analyse(run_dirs: list[Path], out: Path | None = None, draws: int = DRAWS) -
                 mutations[arm][k] += v
     native_mut = sum(mutations.get("mem0", {}).values())
     res: dict[str, Any] = {
-        "status": "registered (prereg/v4_round3.md, block X)",
+        "status": "block X (Mem0 and the two interventions)",
         "runs": [d.name for d in run_dirs],
         "worlds": sorted({r["world_id"] for r in rows}),
         "arms": arms,

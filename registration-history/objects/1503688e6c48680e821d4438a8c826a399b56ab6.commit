@@ -1,8 +1,0 @@
-tree c3e8f26570ee8149acc3707b0f33a33e1db84b4a
-parent 0f7060d69b01381d4fa92fcd480d10e07e2ec2a6
-author zichuanxu <zichuanxu28@gmail.com> 1790608896 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790608896 +0900
-
-run.sh: MEMSHIFT_RUNS keeps run outputs outside the compute host's git work tree
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

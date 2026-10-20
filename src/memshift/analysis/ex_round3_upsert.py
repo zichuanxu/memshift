@@ -1,11 +1,10 @@
-"""Where a slot-keyed upsert can act (block U of prereg/v4_round3.md; exploratory, post hoc; no
-model call). It changes no registered contrast, margin, threshold or verdict.
+"""Where a slot-keyed upsert can act (block U; no model call).
 
 The upsert cell (`holdmem.system`, B0_upsert) sends the requests of the append-only B=0 cell and,
 when the delta derivation yields a new item for a slot, retires the slot's older items. So its
 store differs from the B=0 store only on the slots for which the delta yielded a new item. Per D
 arm (D=0, D=1, D_m), branch and item class, on the changed item-times that the upsert cell and the
-committed B=0 and B=1 source-epoch cells all answered (those of `round3_registered.ratio_quantity`,
+committed B=0 and B=1 source-epoch cells all answered (those of `round3_blocks.ratio_quantity`,
 whose U3 ratio this explains), the item-times are split by whether the upsert cell holds an item of
 the slot written after the fork and no later than the checkpoint (`yielded`; the B=0 cell derives
 the same items from the same requests) or not (`none`). Per part: the item-times and their share,
@@ -18,7 +17,7 @@ upsert cell, branch and class, the supersede events after the fork (old items th
         --compare RUN_OR_STAGE [...] --out FILE.json
 
 --runs: the upsert runs of block U (refresh runs may be passed too; only the upsert cells are
-read). --compare: the committed runs or stages they pair with, as for `round3_registered U`.
+read). --compare: the committed runs or stages they pair with, as for `round3_blocks U`.
 """
 
 from __future__ import annotations
@@ -31,12 +30,12 @@ from pathlib import Path
 from typing import Any
 
 from memshift.analysis import ex_e1_classes as ex
-from memshift.analysis import round3_registered as rr
+from memshift.analysis import round3_blocks as rr
 from memshift.runinfo import code_state
 
 STATUS = (
-    "exploratory, post hoc: explains the registered U3 ratio and changes no registered contrast, "
-    "margin, threshold or verdict"
+    "additional analysis: explains the pooled upsert ratio U3; changes no contrast, margin or "
+    "threshold of the main analysis"
 )
 UNITS = rr.UNITS
 PARTS = ("yielded", "none")  # the delta yielded a new item for the slot since the fork, or not

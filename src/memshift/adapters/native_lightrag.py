@@ -1,4 +1,4 @@
-"""LightRAG (lightrag-hku 1.5.7, HKUDS) behind the native-system interface (prereg v2 §3, block N).
+"""LightRAG (lightrag-hku 1.5.7, HKUDS) behind the native-system interface (E5).
 
 Paths are relative to the installed `lightrag/` package; `docker/native/lightrag.txt` pins it.
 
@@ -29,7 +29,7 @@ Models. LLM = `openai_complete_if_cache` (llm/openai.py:305) on our endpoint: te
   file is fetched on first use; `TIKTOKEN_CACHE_DIR` points at `cache/tiktoken` so that it persists
   (and can be pre-seeded) with the other run caches. The library's INFO logging is silenced.
 
-Integration contract (decisions.md, 2026-09-29). The library has a per-document insert with an
+Integration contract. The library has a per-document insert with an
   explicit id and a delete by document id and no upsert: `apipeline_enqueue_documents` drops every
   id already in doc status and files a FAILED duplicate record (pipeline.py:1178, 1269-1295,
   1340-1412). So each source object is one document whose id is its `object_id` and whose
@@ -304,7 +304,7 @@ class _UsageTracker:
             self._usage.add(llm_calls=1, prompt_tokens=prompt, completion_tokens=completion)
 
 
-LLM_TIMEOUT_S = 1800  # library default 240 s (worker 2x); deployment setting (decisions.md)
+LLM_TIMEOUT_S = 1800  # library default 240 s (worker 2x); deployment setting
 EMBEDDING_TIMEOUT_S = 300  # library default 30 s
 
 

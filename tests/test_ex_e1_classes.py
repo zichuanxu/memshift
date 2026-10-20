@@ -1,4 +1,4 @@
-"""Exploratory class-stratified E1 analyses (`analysis.ex_e1_classes`): the bootstrap replays the
+"""Class-stratified E1 analyses (`analysis.ex_e1_classes`): the bootstrap replays the
 paper's estimator exactly, the classes are the ones of `e1.ITEM_CLASSES`, and every quantity of the
 Eq. (1) decomposition is checked by hand on a table small enough to add up."""
 
@@ -325,7 +325,7 @@ def pipeline(tmp_path_factory):
     return e1.analyse(d), d
 
 
-def test_pipeline_all_class_reproduces_the_registered_contrasts(pipeline):
+def test_pipeline_all_class_reproduces_the_main_contrasts(pipeline):
     res, _ = pipeline
     assert all(k in res for k in ("explore_class_split", "explore_decomposition"))
     for b in ("src", "orphan"):

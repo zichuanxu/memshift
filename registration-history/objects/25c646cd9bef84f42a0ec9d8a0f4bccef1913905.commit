@@ -1,9 +1,0 @@
-tree db2ce4e80431bfc15324f944c6182863d8a477b9
-parent 65f62c8e4ad91bc7240210700a151b8cd8bc7539
-parent 46c6398c57015b4a55b2513b4b82a1c42a941c69
-author zichuanxu <zichuanxu28@gmail.com> 1790724321 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790724321 +0900
-
-Merge exploratory multiplicity check: Holm and BH over the 42 predicted-non-zero E1 contrasts (stage 2: 35 of 36 excluding intervals survive Holm, 36 BH; block R: 36 and 36); MultEx macros; decision row
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

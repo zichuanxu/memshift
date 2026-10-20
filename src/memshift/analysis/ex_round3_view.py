@@ -1,10 +1,9 @@
-"""The query-time view against the stored model-written derivation on every item class (exploratory;
-post hoc, answers the third review round of the paper, reviewer 1, Q3: "how does stored D_m with
-binding compare with the query-time view on all items, given the same programs?"). It changes no
-registered contrast, margin, threshold or verdict and makes no model call.
+"""The query-time view against the stored model-written derivation on every item class: how does
+stored D_m with binding compare with the query-time view on all items, given the same programs? It
+makes no model call.
 
-The registered control P-Z3 (prereg/v3_controls.md, section 3.6) compares the view with the stored
-derivation on Update of definition items only. This module puts the same cells side by side on the
+The control Z3 of `controls` (contrast `Z_vs_D1s`) compares the view with the stored derivation on
+Update of definition items only. This module puts the same cells side by side on the
 other items too, on Stability, and against the stored derivation without binding:
 
   view     `zero_Dm`: the zero system (BM25 over the live records the agent may read) plus, for the
@@ -62,7 +61,7 @@ from memshift.analysis.paper_data import MISSING
 from memshift.analysis.paper_tables import _row
 from memshift.runinfo import file_sha256
 
-STATUS = ex.STATUS + "; post hoc, third review round (reviewer 1, Q3)"
+STATUS = ex.STATUS
 SOURCES_FILE = "results/sources.json"
 CTL_KEY, DM_KEY = "ctl", "c"  # results/sources.json keys: the control stage, block C
 CTL_TABLE = "analysis/ctl_item_table.jsonl"
@@ -449,12 +448,12 @@ def tab_view(res: Mapping[str, Any]) -> str:
     ncol = 3 + len(TABLE_CELLS) + len(TABLE_CONTRASTS)
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The query-time view against the stored model-written derivation (exploratory; "
-        r"post hoc). Update (changed item-times) and Stability (unchanged item-times), percent, of "
-        r"the view (the zero system plus the writer's program run on the live records at the "
+        r"\caption{The query-time view against the cell with the stored programs. Update "
+        r"(changed item-times) and Stability (unchanged item-times), percent, of "
+        r"the view (no-store BM25 plus the writer's program run on the live records at the "
         r"probe's time; nothing stored), $D_{\mathrm{m}}$ (\textsc{HoldMem} with the same "
-        r"model-written derivation stored and bound by the source-epoch key), the same without "
-        r"binding ($B{=}0$), and the zero system, on the same probes of worlds 1000--1009 "
+        r"programs stored with the source key), the same without a key "
+        r"($B{=}0$), and no-store BM25, on the same probes of worlds 1000--1009 "
         r"(10 worlds); paired differences in pp with 95\% world-bootstrap intervals. $n$: paired "
         r"item-times. Pooled: the item-times of $\Ssrc$, $\Sdef$ and $\Sdel$ together, clustered "
         r"by world.}",
@@ -465,8 +464,8 @@ def tab_view(res: Mapping[str, Any]) -> str:
         r"\toprule",
         r"& & & \multicolumn{4}{c}{percent} & \multicolumn{3}{c}{paired difference (pp)} \\",
         r"\cmidrule(lr){4-7}\cmidrule(l){8-10}",
-        r"& & $n$ & view & $D_{\mathrm{m}}$ & $B{=}0$ & zero "
-        r"& view $-$ $D_{\mathrm{m}}$ & view $-$ zero & $D_{\mathrm{m}}$ $-$ zero \\",
+        r"& & $n$ & view & $D_{\mathrm{m}}$ & $B{=}0$ & no-store "
+        r"& view $-$ $D_{\mathrm{m}}$ & view $-$ no-store & $D_{\mathrm{m}}$ $-$ no-store \\",
     ]
     for metric, title in PANELS:
         lines += [r"\midrule", rf"\multicolumn{{{ncol}}}{{@{{}}l}}{{\emph{{{title}}}}} \\"]

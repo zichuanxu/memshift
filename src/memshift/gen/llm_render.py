@@ -1,4 +1,4 @@
-"""LLM-rendered worlds (prereg v2 section 5, block L): free-text bodies written by a model.
+"""LLM-rendered worlds (the rewritten worlds): free-text bodies written by a model.
 
 The template renderer (gen/render.py) produces every `payload["text"]`. Here the bodies of email,
 chat-message and note events are rewritten by a model as natural text; headers and the structured
@@ -6,8 +6,8 @@ sources (contacts, calendar, tasks, settings) are untouched. Only `payload["text
 payload fields that gold, the kappa evaluators and the shift scripts read (body, sent, from_addr,
 conversation_with, ...) keep their template values, so gold is identical to the template world.
 The text is reassembled with render.py's header format around the new body. Delete events are not
-rendered, and neither is background traffic that carries no gold fact: the newsletter digests
-(prereg decision, block L). The generator marks them itself: `Builder._newsletters` (gen/world.py)
+rendered, and neither is background traffic that carries no gold fact: the newsletter digests.
+The generator marks them itself: `Builder._newsletters` (gen/world.py)
 is the only caller of `Builder.email(..., thread=...)`, with `thread=f"thread:digest-{topic}"`,
 which becomes `payload["cluster"]` (the sender is `digest@{topic}news.example`). Their template
 body and text are kept and they are counted per source as `skipped_background`.
@@ -44,7 +44,7 @@ gen/gold.py, from the object alone (no time sweep):
 Guards on each rendered body, all mechanical: (1) the reply is a JSON object with a non-empty
 "body" and was not cut off; (2) every anchor is present (exact, case-sensitive containment after
 horizontal whitespace is collapsed, the strictest reading of fidelity.check_world, which is what
-makes the fidelity rate 1.0 by construction; the prereg text says "verbatim"); (3) no number
+makes the fidelity rate 1.0 by construction; the design asks for verbatim anchors); (3) no number
 (digit run, compared by value so "03" equals "3"), month name or weekday name that the template
 body lacks; (4) no person name, company or city from gen/pools.py that the template body lacks
 (a few person names that are also common English words are ignored; no city name collides with

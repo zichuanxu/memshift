@@ -1,6 +1,6 @@
-"""Prereg v4b (round 3, Claude blocks): block V's user-words program requests
-(`--program-user-words`, `holdmem.program.USER_WORDS`) and block Y's Claude reader settings
-(`--reader claude-sonnet-5-5`, `CLAUDE_READER_BODY`). The defaults change no request."""
+"""Round 3, Claude runs: the user-words program requests (`--program-user-words`,
+`holdmem.program.USER_WORDS`) and the Claude reader settings (`--reader claude-sonnet-5-5`,
+`CLAUDE_READER_BODY`). The defaults change no request."""
 
 import json
 from datetime import timedelta
@@ -90,7 +90,7 @@ def test_reader_extra_body():
     assert reader_extra_body("claude-sonnet-5-5") == {"thinking": {"type": "between_tools"}}
     assert reader_extra_body("claude-sonnet-5-5") is not CLAUDE_READER_BODY["claude-sonnet-5-5"]
     assert reader_extra_body("Qwen/Qwen3.5-9B") is None
-    with pytest.raises(ValueError, match="no registered reader settings"):
+    with pytest.raises(ValueError, match="no reader settings"):
         reader_extra_body("claude-opus-5-5")
 
 

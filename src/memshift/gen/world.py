@@ -1,4 +1,4 @@
-"""Seeded, script-first world generator (plan §4.2).
+"""Seeded, script-first world generator.
 
 Gold changes are scripted first; every change is then rendered into one or more source objects
 (template rendering, no LLM), so each gold fact is locatable in text by construction and the

@@ -1,8 +1,7 @@
-"""How much of a world block L rewrites (prereg v2 section 5; decision log 2026-09-29, "block L
-(before the run)", which measured on one world that the newsletter digests are almost all of the
-body text and stay templates). This module counts it on the ten L test worlds, from the template
-worlds alone (no model, no rendered text): the generator is seeded, and the renderer's selection
-rule is `llm_render.is_background` and `llm_render.RENDER_SOURCES`.
+"""How much of a world block L (the LLM-rendered worlds) rewrites: the newsletter digests are
+almost all of the body text and stay templates. This module counts it on the ten L test worlds,
+from the template worlds alone (no model, no rendered text): the generator is seeded, and the
+renderer's selection rule is `llm_render.is_background` and `llm_render.RENDER_SOURCES`.
 
 Counting unit. Every count is in approximate tokens (`textutil.approx_tokens`: word pieces and
 punctuation, the function the paper's world statistics and the renderer's length budget use), of
@@ -26,10 +25,6 @@ run rendered, each with its own copy of the natural events) and pooled over them
   rewritten_share   rewritten tokens / world tokens (the share of the world's text block L
                     rewrites); `rewritten_text_share` counts the whole text of the rewritten
                     events (headers, which stay, included) for reference
-
-The earlier single-world figures in the decision log (seed 1000, natural branch: digests 99.7% of
-the body tokens, rewriting about 0.6%) are not reproduced by this count (99.1% and 0.9% on the same
-world); this count is the one the paper reports.
 
     python -m memshift.analysis.l_tokens --seeds 1000-1009 --branches src,def,orphan \\
         --out runs/stage4_l_tokens

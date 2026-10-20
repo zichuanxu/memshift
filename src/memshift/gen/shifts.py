@@ -1,4 +1,4 @@
-"""Shift scripts applied at the fork point t_f (plan §4.2 "shift 脚本").
+"""Shift scripts applied at the fork point t_f.
 
 S_src: source revisions that change ~20% of slots (updates, deletes, new objects entering scope).
 S_def: half of the kappa definitions move to v2; source bytes unchanged.
@@ -23,7 +23,7 @@ BRANCHES = ("natural", "src", "def", "cons", "conflict", "orphan")
 
 def inference_half(slot_id: str) -> bool:
     """E5: the fixed half of knowledge items used for black-box (D,B) inference; the other half
-    measures carryover (plan §6 E5 (2)). Deterministic, independent of the world."""
+    measures carryover. Deterministic, independent of the world."""
     return sum(slot_id.encode()) % 2 == 0
 
 

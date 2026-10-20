@@ -1,8 +1,0 @@
-tree 9dd928bfdfe63e9f3cbae34ffbdccd52d89f64a1
-parent a42ab9ae75508c2ea0aa5abe52c693a996039d9e
-author zichuanxu <zichuanxu28@gmail.com> 1792278345 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792278345 +0900
-
-Paper: license only in the datasheet, and correct (code MIT, data CC BY 4.0); none in the reproducibility statement
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

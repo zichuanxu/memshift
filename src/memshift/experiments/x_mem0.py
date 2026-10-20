@@ -1,4 +1,4 @@
-"""Block X of prereg/v4_round3.md: diagnosis and intervention on Mem0.
+"""Mem0 interventions: diagnosis and intervention on Mem0.
 
     python -m memshift.experiments.x_mem0 --seeds 1000 [--branches src,def,orphan]
         [--arms mem0,mem0_det,mem0_rep] [--prefix-policy auto|resume|rebuild] [--e5-run RUN]
@@ -515,7 +515,7 @@ def dry_run(
     """Counts and E5-priced costs of a full run, without any model call (see the module doc)."""
     params = world_params(MONTHS)
     all_prog: set[str] = set()
-    all_long: set[str] = set()  # what the 12-month D1s cells of the same seeds send (E1, block C)
+    all_long: set[str] = set()  # what the 12-month D1s cells of the same seeds send (E1)
     per_world: dict[str, Any] = {}
     total: dict[str, dict[str, float]] = {"resumed": {}, "rebuilt": {}}
     for seed in seeds:

@@ -1,8 +1,0 @@
-tree 83f2c33ad3939da7ac3700b0248f8ca15e3ccfb7
-parent 917193da2f7901690cf267cfaa870f6cca9961fa
-author zichuanxu <zichuanxu28@gmail.com> 1790602792 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790602792 +0900
-
-Paper: introduction and shift-safe definition with membership tests
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

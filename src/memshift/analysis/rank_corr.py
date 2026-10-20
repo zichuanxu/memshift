@@ -1,5 +1,5 @@
-"""Prereg v2 §6, exploratory (no pre-registered verdict): does the ranking of systems by "knowledge
-update" (Update after S_src) decide their ranking under the other shifts?
+"""Does the ranking of systems by "knowledge update" (Update after S_src) decide their ranking under
+the other shifts? A descriptive analysis with no threshold.
 
 Over every system measured on the short worlds (1000-1014): the native systems of the E5 runs, the
 short-world baselines (oracle, zero system, RAG) and the white-box HoldMem cells of the short-world
@@ -55,7 +55,7 @@ METRICS = {
 PAIRS = (("update_src", "update_def"), ("update_src", "stability_orphan"))
 BASELINES = frozenset({"oracle", "zero", "rag"})
 EXCLUDED = frozenset({"holdmem_json_arm"})
-STATUS = "exploratory: prereg v2 section 6, not a pre-registered test, no verdict"
+STATUS = "additional analysis: descriptive, no threshold"
 
 
 def average_ranks(values: Sequence[float]) -> list[float]:

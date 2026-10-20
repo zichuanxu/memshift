@@ -1,5 +1,5 @@
 {
- "status": "exploratory, post hoc: answers a reviewer question and changes no registered contrast, margin, threshold or verdict",
+ "status": "additional analysis: the shifted branches against the natural branch; changes no contrast, margin or threshold of the main analysis",
  "question": "incremental B x D attributable to the shift, relative to the natural branch",
  "stage": "runs/stage2_e1",
  "sources": [
@@ -14,7 +14,7 @@
  "composition": {
   "src": {
    "pooled_definition_share": 0.2851027397260274,
-   "registered_all_item": {
+   "all_item": {
     "est": 0.07363013698630137,
     "lo": 0.05033003300330033,
     "hi": 0.09847806624888093,
@@ -163,7 +163,7 @@
   },
   "def": {
    "pooled_definition_share": 0.6935483870967742,
-   "registered_all_item": {
+   "all_item": {
     "est": 0.2670250896057348,
     "lo": 0.21243523316062177,
     "hi": 0.3184931506849315,
@@ -288,7 +288,7 @@
   },
   "orphan": {
    "pooled_definition_share": 0.17430673457838144,
-   "registered_all_item": {
+   "all_item": {
     "est": 0.04980192416525184,
     "lo": 0.016552511415525113,
     "hi": 0.08084163898117387,

@@ -1,8 +1,0 @@
-tree 99077ce4e57dfe0d55f08994510ab050ce7ef008
-parent 25c646cd9bef84f42a0ec9d8a0f4bccef1913905
-author zichuanxu <zichuanxu28@gmail.com> 1790724413 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790724413 +0900
-
-Paper: report the exploratory Holm / BH check of the directional E1 contrasts (statistics paragraph, limitations appendix, stage-4 conventions); limitations now say verdicts are per family and per system without a correction across them; Holm 1979 and Benjamini-Hochberg 1995 cited
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

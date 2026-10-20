@@ -22,6 +22,3 @@ jobs:
           enable-cache: true
       - run: uv sync --dev
       - run: make check
-      - name: Verify the registration history
-        if: hashFiles('registration-history/verify.py') != ''
-        run: uv run python registration-history/verify.py

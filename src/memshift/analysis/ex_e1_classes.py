@@ -1,19 +1,19 @@
-"""Exploratory class-stratified analyses of the E1 family (prereg/decisions.md 2026-09-30; they add
-to every staged E1 analysis under `explore_*` keys and change no registered contrast or verdict).
+"""Class-stratified analyses of the E1 family, added to every staged E1 analysis under `explore_*`
+keys.
 
-They answer a five-seat review of the paper: the pre-registered D and B x D effects on Update are
-averaged over 48 items per world, six of which are definitions whose D=1 value is the gold
-evaluator. Every block below splits the same item table by item class, with the classes of
-`e1.ITEM_CLASSES` (definition items `k.`; structured fields `rule`; free text `norule`; `other` is
-structured plus free text) and the estimator of the paper: world-clustered paired bootstrap,
-2,000 draws, seed 996 (`scoring.stats`; `boot_index` replays its resampling, so the class `all`
-reproduces the registered contrasts to the last digit).
+The D and B x D effects on Update of `e1.contrasts` are averaged over 48 items per world, six of
+which are definitions whose D=1 value is the gold evaluator. Every block below splits the same
+item table by item class, with the classes of `e1.ITEM_CLASSES` (definition items `k.`; structured
+fields `rule`; free text `norule`; `other` is structured plus free text) and the estimator of the
+paper: world-clustered paired bootstrap, 2,000 draws, seed 996 (`scoring.stats`; `boot_index`
+replays its resampling, so the class `all` reproduces the contrasts of `e1.contrasts` to the last
+digit).
 
 explore_class_mix       per branch and class: changed item-times, share, unique world-items
 explore_class_split     per D=1 arm (`D1`: benchmark rules; `D1s`: model-written programs, block C),
                         branch, binding granularity and class: B effect on Update at D=0, D=1 and
                         pooled, D effect on Update at B=0 and B=1, B x D on Update, D effect on
-                        repair (as registered, and changed items only)
+                        repair (as `e1.contrasts` defines it, and on changed items only)
 explore_decomposition   Eq. (1), Update = (1 - m) r + m a over the changed item-times of each cell:
                         m missed invalidation, r accuracy of the invalidated (re-derived) items,
                         a accuracy of the items the key did not invalidate (at B=0 that is every
@@ -51,8 +51,8 @@ DRAWS = 2000
 SEED = 996
 ALPHA = 0.05
 STATUS = (
-    "exploratory: not part of prereg v0-v2 and changes no registered contrast, margin, threshold "
-    "or verdict (prereg/decisions.md 2026-09-30)"
+    "additional analysis: computed from the runs of the main analysis; changes none of its "
+    "contrasts, margins or thresholds"
 )
 BASE_CLASSES = ("definition", "rule", "norule")
 CLASS_SETS: dict[str, tuple[str, ...]] = {

@@ -1,5 +1,4 @@
 {
- "prereg": "v2 section 5 (block L); checks (i)-(v) of section 2 (M2)",
  "worlds": [
   "w1000",
   "w1001",
@@ -15,14 +14,14 @@
  "worlds_missing_in_template": [],
  "rendered": {
   "checks": {
-   "i_path2_not_triggered": true,
+   "i_D_missed_within_threshold": true,
    "ii_B_update_src": true,
    "iii_D_repair_src": true,
    "iii_D_repair_def": true,
    "iv_BxD_def": true,
    "v_zero_below_hm11_def": true
   },
-  "pattern_holds": true,
+  "ii_to_iv_true": true,
   "estimates": {
    "B_update_src": {
     "est": 0.09106239460370995,
@@ -77,14 +76,14 @@
  },
  "template_same_seeds": {
   "checks": {
-   "i_path2_not_triggered": true,
+   "i_D_missed_within_threshold": true,
    "ii_B_update_src": true,
    "iii_D_repair_src": true,
    "iii_D_repair_def": true,
    "iv_BxD_def": true,
    "v_zero_below_hm11_def": true
   },
-  "pattern_holds": true,
+  "ii_to_iv_true": true,
   "estimates": {
    "B_update_src": {
     "est": 0.07841483979763912,
@@ -139,7 +138,7 @@
  },
  "check_comparison": {
   "checks": {
-   "i_path2_not_triggered": {
+   "i_D_missed_within_threshold": {
     "rendered": true,
     "template": true,
     "agree": true
@@ -170,7 +169,7 @@
     "agree": true
    }
   },
-  "pattern_holds": {
+  "ii_to_iv_true": {
    "rendered": true,
    "template": true
   }

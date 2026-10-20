@@ -1,9 +1,9 @@
-"""The round-3 flags (prereg v4: `--think-max-tokens`, `--defwriter`, `--program-model`,
+"""The round-3 flags (`--think-max-tokens`, `--defwriter`, `--program-model`,
 `--program-temperature`, `--program-sample`, `--probe-unnamed-defs`) leave every existing request
 unchanged at their defaults. The writer, thinking-writer and program requests of the existing cells
 (as response-cache keys, which are SHA256 digests of the full request bodies), the items they write
-and the probe questions are pinned on two small worlds; the digests were taken on the code before
-the round-3 flags were added (commit 6742a41)."""
+and the probe questions are pinned on two small worlds; the digests are those of the code without
+the round-3 flags."""
 
 import pytest
 

@@ -3079,7 +3079,7 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": true
+   "est_at_least_zero": true
   },
   "cross_google_gemma-4-12B-it": {
    "d1_minus_d0_survival": {
@@ -3090,7 +3090,7 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": false
+   "est_at_least_zero": false
   },
   "cross_meta-llama_Llama-3.1-8B-Instruct": {
    "d1_minus_d0_survival": {
@@ -3101,7 +3101,7 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": true
+   "est_at_least_zero": true
   },
   "cross_mistralai_Ministral-3-14B-Instruct-2512-BF16": {
    "d1_minus_d0_survival": {
@@ -3112,7 +3112,7 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": true
+   "est_at_least_zero": true
   },
   "cross_openai_gpt-oss-20b": {
    "d1_minus_d0_survival": {
@@ -3123,7 +3123,7 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": false
+   "est_at_least_zero": false
   },
   "downgrade": {
    "d1_minus_d0_survival": {
@@ -3134,7 +3134,7 @@
     "n_worlds": 20,
     "n_items": 830
    },
-   "holds": true
+   "est_at_least_zero": true
   },
   "same": {
    "d1_minus_d0_survival": {
@@ -3145,7 +3145,7 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": true
+   "est_at_least_zero": true
   },
   "upgrade": {
    "d1_minus_d0_survival": {
@@ -3156,10 +3156,10 @@
     "n_worlds": 20,
     "n_items": 808
    },
-   "holds": true
+   "est_at_least_zero": true
   }
  },
- "path3_quantitative_prediction_holds": {
+ "path3_within_threshold_by_tier": {
   "cross_Qwen_Qwen3-8B": true,
   "cross_meta-llama_Llama-3.1-8B-Instruct": true,
   "cross_mistralai_Ministral-3-14B-Instruct-2512-BF16": true,
@@ -3531,7 +3531,7 @@
    "hi90": 0.8496183953421609,
    "hi95": 0.8536123074741674
   },
-  "triggered": false,
+  "within_threshold": true,
   "tier_caveats": [
    "cross_google_gemma-4-12B-it",
    "upgrade"

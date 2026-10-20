@@ -1,8 +1,0 @@
-tree b74989ae08ec513ea5162f598af82934c6782b94
-parent 25f17f5604f3706479d2c1571a2c9a72d751a047
-author zichuanxu <zichuanxu28@gmail.com> 1790618984 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790618984 +0900
-
-Gate A0 passed: stage-1 decisions (N=20, zero system not sufficient, sync semantics elevated)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

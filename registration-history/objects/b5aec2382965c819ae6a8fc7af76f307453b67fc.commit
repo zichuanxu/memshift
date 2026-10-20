@@ -1,8 +1,0 @@
-tree 33354b2d679ad9979c1c2e2c21e307a86b1bd318
-parent bff1e69f6a4b452d0e403d5ef2d755a24e2434e5
-author zichuanxu <zichuanxu28@gmail.com> 1790744244 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790744244 +0900
-
-Replication: as_predicted, the sign of an estimate against the pre-registered direction (positive for effects predicted non-zero, path 2 for the D effect on missed invalidation), separate from the replication verdict; tests, including the one contrast that replicates against the prediction
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

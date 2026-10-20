@@ -1,11 +1,11 @@
-"""E3 (plan §6): zero system, plain RAG and cost at horizons of 1, 3 and 12 months.
+"""E3: zero system, plain RAG and cost at horizons of 1, 3 and 12 months.
 
 Static ContractValid: at each horizon h (t_h = start + h months - 1 min, natural branch) every
 slot is probed against the zero system, plain RAG, HoldMem (1,1) (source-epoch binding, built cold
 at t_h with the full D=1 write path) and the oracle. Update / Stability after S_src and S_def for
 the same systems come from E1.
 
-Five-part cost per system over a horizon (plan §5.6), at q = 20 queries/day:
+Five-part cost per system over a horizon, at q = 20 queries/day:
   ingest     HoldMem: tokens of the first derivation of every slot; RAG: embedding tokens of
              every chunk of the live corpus; zero: 0.
   maintain   HoldMem: (# daily-batch invalidations under source-epoch keys, counted by replaying

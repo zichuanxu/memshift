@@ -1,5 +1,5 @@
-"""Black-box (D, B) inference (docs/E5_PROTOCOL.md §1-2, plan §6 E5), applied identically to the
-white-box HoldMem cells and to native systems; inputs are E1-format answers and probes.
+"""Black-box (D, B) inference, applied identically to the white-box HoldMem cells and to native
+systems; inputs are E1-format answers and probes.
 
 Only the inference half of the items (`gen.shifts.inference_half`) is used; carryover is measured
 on the other half.
@@ -14,11 +14,11 @@ on the other half.
 A label is `None` (unidentifiable) when its probe has fewer than MIN_N samples, or when the
 configuration keeps no raw text / source metadata (`identifiable=False`).
 
-White-box validation (§2): each HoldMem cell at source-epoch binding gets one label per dimension
-from its pooled development sample ("逐格...得到推断标签"); the primary confusion matrix is the
-(D, B) -> (D, B) table over the four cells and Cohen's kappa per dimension is computed over those
-four labels. A dimension with kappa < KAPPA_MIN is only described for native systems. As a
-supplement, every cell is also labelled per world (units = cell x world).
+White-box validation: each HoldMem cell at source-epoch binding gets one label per dimension from
+its pooled development sample; the primary confusion matrix is the (D, B) -> (D, B) table over the
+four cells and Cohen's kappa per dimension is computed over those four labels. A dimension with
+kappa < KAPPA_MIN is only described for native systems. As a supplement, every cell is also
+labelled per world (units = cell x world).
 """
 
 from __future__ import annotations

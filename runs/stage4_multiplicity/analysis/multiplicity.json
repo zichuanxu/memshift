@@ -1,8 +1,8 @@
 {
- "status": "exploratory: not part of prereg v1 or v2, no pre-registered verdict changes; the family is the contrasts predicted non-zero in v1 \u00a74 (replication.PREDICTED_NONZERO)",
+ "status": "additional analysis: Holm and Benjamini-Hochberg over the contrasts predicted non-zero (replication.PREDICTED_NONZERO)",
  "method": {
   "family": "contrasts of e1_metrics.json with a key starting with one of ['B_effect_detected_', 'B_effect_update_D1_', 'B_effect_update_pooled_', 'D_effect_repair_source', 'D_effect_repair_cited', 'D_effect_repair_mech_', 'BxD_interaction_update_'], all branches, one family per stage",
-  "predicted_sign": "+1 for every contrast in the family (prereg v1 \u00a74)",
+  "predicted_sign": "+1 for every contrast in the family",
   "p_value": "one-sided bootstrap over worlds, (1 + #{draws with mean <= 0}) / (1 + draws); the draws are those of the interval in e1_metrics.json",
   "bootstrap": {
    "draws": 2000,

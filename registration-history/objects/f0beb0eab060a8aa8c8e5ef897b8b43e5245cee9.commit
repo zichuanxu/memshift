@@ -1,8 +1,0 @@
-tree f679b2af75011b0b7199f23a867441f88be3f49e
-parent 3f96cc6cd7e4146556ded362631da5f44d25e71e
-author zichuanxu <zichuanxu28@gmail.com> 1790779447 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790779447 +0900
-
-Restage E2 (stage 2), E3 (stage 2 and replication) and E5 (Mem0) with the exploratory fields: existing fields unchanged, only explore_ keys added; numbers and the three appendix tables regenerated (writer predictors with baselines and type-level intervals, T1 net change and margins, T3 by item class, Mem0 against the zero system and RAG)
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

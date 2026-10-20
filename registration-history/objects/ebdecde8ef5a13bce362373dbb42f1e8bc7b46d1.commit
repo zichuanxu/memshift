@@ -1,8 +1,0 @@
-tree 6a5744a7ed650898dd4f7aad76afcd9cb89beb43
-parent c8409d4d791bd99e8ae6973514fedb55cc766dd1
-author zichuanxu <zichuanxu28@gmail.com> 1792225779 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792225779 +0900
-
-Release tooling: registration history adds v4b (02567d6); release README describes the final study (B and D, five shifts, six native systems, v0 to v4b); mypy-clean test_round3_figures
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

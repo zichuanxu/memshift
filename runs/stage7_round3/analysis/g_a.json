@@ -1,6 +1,6 @@
 {
  "block": "G",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -3717,50 +3717,41 @@
    }
   }
  },
- "predictions": {
+ "threshold_tests": {
   "G1": {
-   "verdict": "holds",
-   "reason": "2 of 2 met",
    "tests": [
     {
      "key": "BxD_def_definition_D1_two_way",
      "value": 0.3296500920810313,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     },
     {
      "key": "BxD_def_definition_Dm_two_way",
      "value": 0.27440147329650094,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
-   ],
-   "reading_if_fails": "the definition-item result is restricted to the six fixed definitions"
+   ]
   },
   "G2": {
-   "verdict": "holds",
-   "reason": "2 of 2 met",
    "tests": [
     {
      "key": "BxD_src_definition_D1_two_way",
      "value": 0.26679841897233203,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     },
     {
      "key": "BxD_src_definition_Dm_two_way",
      "value": 0.233201581027668,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
-   ],
-   "reading_if_fails": "the definition-item result is restricted to the six fixed definitions"
+   ]
   },
   "G3": {
-   "verdict": "not_judged",
-   "reason": "no program-set run given",
-   "tests": [],
-   "reading_if_fails": "the definition-item result is restricted to the main writer's programs"
+   "tests": []
   }
  },
  "reported": {
@@ -4899,7 +4890,7 @@
   "ignored_runs": []
  },
  "notes": {
-  "G1-G3": "\"Positive with the two-way interval above 0\": lower bound > 0. G1 and G2 need both arms (D=1 and D_m) and all three draws (18 definitions); G3 is judged on the program sets given (at least 2; the registered cut order can leave fewer than 18) and says how many. The share between writers is the eta squared of the per-set B x D (and the one-way random-effects share); the S_del interaction per writer pools its sets (world bootstrap)."
+  "G1-G3": "lower bound of the two-way interval > 0. G1 and G2 need both arms (D=1 and D_m) and all three draws (18 definitions); G3 is computed on the program sets given (at least 2; the cut order can leave fewer than 18) and says how many. The share between writers is the eta squared of the per-set B x D (and the one-way random-effects share); the S_del interaction per writer pools its sets (world bootstrap)."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

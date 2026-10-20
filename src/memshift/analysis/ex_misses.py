@@ -1,6 +1,4 @@
-"""Why the cited-cluster key misses changes (prereg/decisions.md 2026-10-01; a second-round response
-to the devil's-advocate re-review, issue I-7). It changes no registered contrast, margin, threshold
-or verdict and every key starts with `explore_`.
+"""Why the cited-cluster key misses changes. Every key starts with `explore_`.
 
 The cited-cluster key moves when an event touches a cluster that holds one of the records the writer
 cited. A model's citations cannot include a record that enters an item's scope after the derivation,

@@ -1,8 +1,0 @@
-tree 5e9a8a6d31b5c3447f3c05a5376aa27232782abc
-parent e1db869c078674bd59ace5988ce6824291d6a5ed
-author zichuanxu <zichuanxu28@gmail.com> 1790776523 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790776523 +0900
-
-Paper generators for the exploratory E1-family analyses (WS1a): Ex macros, the class-split table for the main text, the Eq. (1) and out-of-sample table for the appendix, and the class-split forest plot; decisions.md row; result sources for the development, orphan-development, short-world and cross-stage analyses
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

@@ -1,4 +1,4 @@
-"""E7 (plan §6): failure analysis.
+"""E7: failure analysis.
 
 conflict   unresolvable source conflicts (gen.shifts.apply_conflict): AbstainAccuracy of the
            HoldMem cells (source-epoch binding) and the zero system on the conflicting items one

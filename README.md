@@ -35,18 +35,27 @@ two properties:
 An accounting identity splits accuracy after a shift into what the key misses, what re-derivation
 repairs and what the memory serves without invalidating.
 
-Main results, with Qwen3.5-9B as writer and reader on 20 test worlds (95% world-bootstrap intervals):
+## Main results
 
-- After a source revision the writer re-derived only 16.2% [10.1, 21.8] of changed definition items
-  correctly, against 99.1% [98.0, 100.0] for the authored derivation. On these items binding was
-  worth +6.0 pp [+2.5, +9.6] with the writer's own re-derivation and +33.3 pp [+28.2, +38.0] with the
-  authored derivation, a binding-by-executability interaction of +27.3 pp [+21.6, +32.6].
-- Programs that the writer wrote from a one-sentence definition kept most of the interaction:
-  +25.3 pp [+18.8, +31.7] on accuracy over all changed items after a redefinition.
-- Keys built from the records a writer cites missed 14.9% [11.7, 17.9] of changes after a source
-  revision, mostly records that joined an item's dependencies after it was written.
-- Of the 73 registered predictions with a verdict, 55 held, 13 failed and 5 held for some shifts,
-  switches or systems but not others.
+With Qwen3.5-9B as writer and reader on the 20 test worlds of the main study, repair fails on the
+items computed by the person's definitions, and binding pays where the re-derivation is correct.
+Estimates on the changed item-times with 95% world-bootstrap intervals, source-epoch key:
+
+| Shift | Items | r_0 (%) | r_1 (%) | a_0 (%) | a_1 (%) | B×D (pp) |
+|---|---|---|---|---|---|---|
+| source revision | definition | 16.2 [10.1, 21.8] | 99.1 [98.0, 100.0] | 10.2 [5.8, 14.4] | 65.8 [60.9, 71.0] | +27.3 [+21.6, +32.6] |
+| source revision | other | 89.1 [85.8, 92.6] | 90.7 [87.6, 93.9] | 83.7 [80.2, 87.2] | 85.9 [82.2, 89.7] | -0.6 [-3.8, +2.5] |
+| redefinition | definition | 6.7 [3.1, 10.6] | 99.7 [99.2, 100.0] | 7.5 [4.2, 10.8] | 61.8 [56.5, 66.9] | +38.8 [+32.0, +44.8] |
+| redefinition | other | 73.1 [62.3, 84.8] | 73.1 [61.9, 84.9] | 70.8 [61.5, 80.9] | 71.3 [62.4, 81.6] | -0.6 [-4.0, +2.7] |
+| deletion | definition | 11.7 [8.1, 15.3] | 99.4 [98.4, 100.0] | 4.2 [2.2, 6.6] | 56.5 [51.3, 61.6] | +35.4 [+30.4, +40.0] |
+| deletion | other | 68.1 [63.4, 72.8] | 67.5 [62.1, 72.3] | 10.0 [7.8, 12.4] | 10.9 [8.3, 13.6] | -1.4 [-5.4, +2.3] |
+
+r_D is repair correctness with binding (the share of changed item-times re-derived correctly) and
+a_D is Update without binding (the share of changed item-times answered correctly), at D=0 (the
+writer re-derives) and D=1 (the authored derivation). The key missed no changed item-time, so the
+binding-by-executability interaction is B×D = (r_1 - a_1) - (r_0 - a_0). Definition items are the
+six items of each world computed by the person's definitions, other items the remaining 42.
+`scripts/readme_results.py` checks this table against the numbers that tier 1a below recomputes.
 
 ## Repository layout
 
@@ -60,16 +69,14 @@ src/memshift/
   calsync/        incremental-sync semantics of the sources
   experiments/    experiment drivers
   analysis/       analyses, staging of runs, generators of numbers, tables and figures
-configs/          model roles and fixed parameters, frozen with the registrations
-prereg/           registrations v0 to v4b and the decision log
-registration-history/   git objects that order the registrations before the runs, and a verifier
+configs/          model roles and fixed parameters
 runs/             per run: manifest.json, env.json, analysis/ (raw outputs are on Hugging Face)
 results/          sources.json: the staged analysis behind each group of reported numbers
 audit/            the system audit and the neighbour audit
 docker/           CPU run image and per-system images of the native memory systems
-scripts/          vLLM serving, container runner, native image builder
+scripts/          vLLM serving, container runner, native image builder, results-table check
 tests/            pytest suite
-docs/             COMPUTE.md, PREREGISTRATION_EN.md, E5_PROTOCOL.md
+docs/             COMPUTE.md: hardware, GPU-hours, model revisions
 ```
 
 ## Installation
@@ -90,8 +97,6 @@ with LaTeX, so it needs a TeX installation with the `newtx` fonts.
 ```bash
 make smoke                                                 # generate one world branch, check its SHA256
 uv run memshift gen --seed 1000 --branch src --out worlds  # one test world, source-revision branch
-uv run python registration-history/verify.py               # order of the registrations
-make check                                                 # ruff, mypy and pytest (about 45 minutes)
 ```
 
 Worlds regenerate byte for byte from their seeds. This checks a test world against the hash that a
@@ -111,6 +116,9 @@ for w in man["worlds"]:
 EOF
 ```
 
+`make check` runs ruff, mypy and the pytest suite (about 45 minutes on a laptop). Tests that read the
+paper sources carry the `paper` marker and skip without them.
+
 ## Reproducing the paper
 
 Reproduction has two tiers. Tier 1 recomputes every reported number on a CPU from the released
@@ -120,24 +128,38 @@ outputs. Tier 2 reruns the experiments from seeds on GPUs.
 
 Each `runs/stage*/` directory holds a merged analysis (`analysis/*.json`) and a manifest that lists
 its source runs with the SHA256 of their manifests. `results/sources.json` maps each group of
-numbers to its stage. These commands rebuild the numbers, tables and figures:
+numbers to its stage. `make results` runs these commands, which rebuild the numbers, tables and
+figures, and then checks the results table above:
 
 ```bash
 mkdir -p results/tables results/figures
 uv run python -m memshift.analysis.paper_numbers > results/numbers.tex
 uv run python -m memshift.analysis.paper_tables --out results/tables
-uv run python -m memshift.analysis.figures --out results/figures \
-    --counts results/tables/registered_counts.tex
+uv run python -m memshift.analysis.figures --out results/figures --tables results/tables
+uv run python -m memshift.analysis.paper_extras --out results/tables
+uv run python -m memshift.analysis.paper_round3b --analysis-dir runs/stage9_round3b/analysis \
+    --out results/tables
 uv run python -m memshift.analysis.audit_table > results/tables/audit_table.tex
 uv run python -m memshift.analysis.neighbour_table audit/neighbours/properties.json \
-    results/tables/tab_neighbours.tex
+    results/tables
 ```
 
-The `.tex` outputs are byte-identical to the files the paper was built from. Tables 13 and 38 and the
-`ExAttr*` and `ExThink*` macros also read 12 raw files (about 60 MB) from the Hugging Face dataset:
-`runs/stage2_e1/analysis/e1_item_table.jsonl`, `runs/stage5_controls/analysis/ctl_item_table.jsonl`,
-`probes.jsonl` of the five `runs/e1_test_s1*_20260928T*` runs and `items.jsonl` of the five
-`runs/e1_think_*` runs. Without them those cells print a visible placeholder.
+With the raw outputs of the Hugging Face dataset in `runs/`, every `.tex` output is byte-identical to
+the file the paper was built from, and the figures render the same (their PDF bytes differ in the
+creation date and in the names of the embedded font subsets). A few cells read raw files, and with
+the files of this repository alone they print a visible placeholder (`??`):
+
+- Table 8 (worked example): `probes.jsonl`, `answers.jsonl` and `items.jsonl` of
+  `runs/e1_test_s1000-1003_20260928T202242Z`.
+- Table 14 and the `ExAttr*` macros (changed item-times by cause, and `\ExAttrWorldSlots`, the
+  number of items per world that the abstract and the benchmark section print):
+  `runs/stage2_e1/analysis/e1_item_table.jsonl` and `probes.jsonl` of the five
+  `runs/e1_test_s1*_20260928T*` runs.
+- `\ClaudeTokensTotal` and `\ClaudeSpendUSD` (Claude tokens and cost): `calls.jsonl` of every run
+  whose manifest names a Claude model.
+
+`\GpuHoursNativeSystems` also counts the 18 Cognee runs, whose manifests are in the dataset
+(`runs/e5_cognee_*/manifest.json`). Without them it counts only the other native-system runs.
 
 ### Tier 1b: from the raw outputs (minutes per stage)
 
@@ -155,36 +177,58 @@ cmp /tmp/stage2_e1/analysis/e1_metrics.json runs/stage2_e1/analysis/e1_metrics.j
 The `experiment` field of a stage manifest (`merged-KIND`) names its kind.
 `memshift.analysis.stage` builds the kinds e1, m2, e2, e3, e4, e4x, e5, e5_infer, e5_cost, e6, e7,
 ctl and engine. The other stages are written by their own analysis modules (`e1_keys`, `ex_account`,
-`ex_e1_cross`, `ex_e1_more`, `ex_misses`, `ex_round3`, `l_tokens`, `multiplicity`, `round3_paper`),
-whose docstrings give the command.
+`ex_e1_cross`, `ex_e1_more`, `ex_misses`, `ex_round3`, `ex_round3_review`, `l_tokens`,
+`multiplicity`, `round3_paper`, and `round3b_typed`, `round3b_feedback` and `round3b_extract` for
+`stage9_round3b`), whose docstrings give the command.
 
 ### Map from the paper to the code
 
-Table and figure numbers refer to the preprint. Stage keys are the keys of `results/sources.json`.
-The table names the main stages of each result. Some generators also read further stages for
-comparison rows, and `results/sources.json` lists them all.
+Table and figure numbers refer to the preprint. Generators are modules of `memshift.analysis`,
+drivers of `memshift`. Stage keys are the keys of `results/sources.json`, and `results/README.md`
+gives the directory of each. The table names the main stages of each result, and
+`results/sources.json` lists every stage a generator reads. The driver flags are those the run
+manifests record (`params`), without seeds and run names. A cell list is the value of `--cells`.
+Most `experiments.e1` runs also have `--discriminative`, which the manifest records as
+`probes_after_fork`.
 
-| Paper | Generator | Stage keys (directories under `runs/`) | Tier 2 driver |
+| Paper | Generator | Stage keys | Tier 2 driver |
 |---|---|---|---|
-| Fig. 1 results panels, Table 1, Fig. 2 | `paper_numbers`, `paper_tables`, `figures` | `e1` (stage2_e1), `ex` (stage5_ex_e1), `ex_account`, `ex_round3` (stage6_ex_round3), `rep_e1` (stage4_rep_e1) | `experiments.e1` |
-| Figs. 3, 5, Tables 14, 16, 19, 23, 29, 36 | `paper_tables` (`round3_paper`), `figures` | `round3` (stage7_round3), `ex_round3` | `experiments.e1`, `experiments.x_mem0` |
-| Fig. 4, Tables 10, 11 (registered verdicts) | `figures`, `paper_tables` | `gate` (stage2_gate) and the stages of every registered test | as the tests |
-| Tables 12, 13, 15, 17, 18, 20, 26, 27, 30, 31, Figs. 6, 7 (main experiment by item class) | `paper_tables`, `figures` | `e1`, `ex`, `ex_account`, `ex_more`, `ex_misses`, `ex_round3`, `rep_e1` | `experiments.e1` |
-| Table 28 (offline key audit) | `paper_tables` | `keyaudit` (stage5_key_audit) | `analysis.e1_keys` (no model) |
-| Tables 21, 22 (model-written derivations) | `paper_tables` | `c` (stage4_c_e1) | `experiments.e1 --cells D1sB0,D1sB1_source,D1sB1_cited` |
-| Tables 24, 25, 38 (controls) | `paper_tables` | `ctl` (stage5_controls), `ex_round3` | `experiments.e1` |
-| Fig. 8 (writer switches) | `figures` | `e2` (stage2_e2) | `experiments.e2` |
-| Fig. 9 (horizons) | `figures` | `e3` (stage2_e3) | `experiments.e3` |
-| Table 32 (other model families) | `paper_tables` | `m1` (stage4_m1_e2), `m2_llama`, `m2_gemma`, `m2_gptoss`, `m3` | `experiments.e2` (new writer), `experiments.e1 --writer --reader` |
-| Table 33 (replication) | `paper_tables` | `rep_e1`, `rep_e2`, `rep_e3` and `e1`, `e2`, `e3` | `experiments.e1`, `e2`, `e3` |
-| Table 34 (rewritten worlds) | `paper_tables` | `l` (stage4_l_rendered), `ltokens` | `experiments.e1 --render` |
-| Fig. 10, Table 35 (native systems) | `figures`, `paper_tables` | `e5`, `e5wbshort`, `e5cost`, `n` (stage4_n_e5), `ncost` | `experiments.e5` |
-| Table 37 (deletion failures of programs) | `paper_tables` | `ex_round3` | none (analysis of committed outputs) |
-| Table 3 (neighbour audit), Table 5 (system audit) | `neighbour_table`, `audit_table` | `audit/neighbours/properties.json`, `audit/system_audit.json` | none |
+| Fig. 1, Table 4 (main experiment, the identity) | `paper_numbers` | `ex_account` (stage5_ex_account), `ex` (stage5_ex_e1), `ex_round3_review` (stage8_ex_round3_review), `e1` (stage2_e1) | `experiments.e1 --branches src,def,orphan` with D0B0,D1B0,D0B1_source,D1B1_source,D0B1_cited,D1B1_cited |
+| Table 3 (overview) | `paper_extras` | `e1`, `c` (stage4_c_e1), `n` (stage4_n_e5), `m2_llama`, `m2_gemma`, `m2_gptoss` | as the main experiment, model-written derivations, other model families and native systems |
+| Figs. 3, 5, 6, Tables 13, 21, 32, 37, 39 (main experiment by item class, JSON arm, account by writer, misses of the cited-cluster key against a forced re-derivation, zero system after the shift) | `paper_tables`, `figures` | `ex`, `ex_account`, `ex_more` (stage5_ex_more), `ex_misses` (stage5_ex_misses), `ex_round3_review`, `e1`, `rep_e1` (stage4_rep_e1) | as the main experiment |
+| Tables 14, 17 (changed item-times by cause, per definition) | `paper_tables` | `e1` | as the main experiment |
+| Tables 15, 27, 28, 34, 36, 38 (cause of the change, evidence coverage, typed-input sizes, refresh against binding, misses of the cited-cluster key, clock-only changes) | `paper_numbers` | `ex_round3_review` | none (`analysis.ex_round3_review` on the raw outputs) |
+| Tables 22, 23, 48, 49 (model-written derivations, by item class, after a deletion) | `paper_tables` | `c`, `ex_round3` (stage6_ex_round3) | `experiments.e1 --no-baselines --branches src,def,orphan` with D0B0,D1B0,D0B1_source,D1B1_source,D0B1_cited,D1B1_cited,D1sB0,D1sB1_source,D1sB1_cited |
+| Tables 19, 20, 31 (store and reader, query-time view) | `paper_tables` | `ex_round3`, `ctl` (stage5_controls) | as the main experiment, the model-written derivations and the controls |
+| Table 30 (controls) | `paper_tables` | `ctl` | `experiments.e1 --no-baselines` with D0B1_source,D0B1_gold,D1B1_gold,D1B1_scope,D1B0_refresh,D0tB1_source, with zero_Dm (query-time view) and with D0B1_source,D0fullB1_source (`--branches src,def`) |
+| Table 33 (offline key audit) | `paper_tables` | `keyaudit` (stage5_key_audit) | none (`analysis.e1_keys`, no model) |
+| Table 35 (refresh and upsert) | `paper_tables` | `round3` (stage7_round3) | `experiments.e1 --no-baselines` with D0B0,D0B0_refresh,D1B0_refresh,D1sB0_refresh and D0B0,D0B0_upsert,D1B0_upsert,D1sB0_upsert; for three other model families `--writer MODEL --reader MODEL --post-probes definition` with D0B0,D0B0_refresh,D1B0_refresh,D0B0_upsert,D1B0_upsert |
+| Table 16 (natural branch) | `paper_tables` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --branches natural` with D0B0,D0B1_source,D1B0,D1B1_source |
+| Table 18 (held-out definitions) | `paper_tables` | `round3` | `experiments.e1 --no-baselines --kappa-set heldout:SEED --post-probes definition` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
+| Table 19, Fig. 4 (Claude reader) | `paper_tables`, `figures` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --reader claude-sonnet-5-5` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
+| Table 26 (definitions in the user's own words) | `paper_tables` | `round3` | `experiments.e1 --no-baselines --program-user-words --program-model MODEL --program-temperature 0.7 --program-sample I` with D1sB0,D1sB1_source (temperature 0 and `--post-probes definition` for Claude) |
+| Fig. 2 (program sets from six writers, Claude writers) | `figures` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --program-model MODEL --program-temperature 0.7 --program-sample I` with D1sB0,D1sB1_source (`--post-probes definition` for the five writers other than Qwen3.5-9B, temperature 0 for Claude); `--defwriter MODEL --program-model MODEL` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
+| Table 29 (every record as typed fields) | `paper_round3b` | `round3b` (stage9_round3b) | `experiments.e1 --no-baselines --branches src,def` with D0B1_source,D1B1_source,D0typedB1_source; Claude Sonnet 5.5 as writer of the definition items with `--defwriter claude-sonnet-5-5` |
+| Table 24 (execution feedback) | `paper_round3b` | `round3b` | `experiments.e1 --no-baselines --branches src,def,orphan` with D0B0,D0B1_source,D1sB0,D1sB1_source,D1sfbB0,D1sfbB1_source |
+| Table 25 (extracted fields) | `paper_round3b` | `round3b` | `experiments.e1 --no-baselines --branches src,def` with D0B0,D0B1_source,D1sB0,D1sB1_source,D1sxB0,D1sxB1_source |
+| Fig. 8 (writer switch) | `figures` | `e2` (stage2_e2) | `experiments.e2 --tiers same,upgrade,downgrade` |
+| Fig. 7 (horizon) | `figures` | `e3` (stage2_e3) | `experiments.e3` |
+| Table 40 (diagnostic tests) | `figures` | `e1`, `e2`, `e3`, `rep_e2`, `rep_e3`, `m1`, `n`, `e6` (stage3_e6) | as those experiments |
+| Tables 41, 42 (switches to other writers, other model families) | `paper_tables` | `m1` (stage4_m1_e2), `m2_llama`, `m2_gemma`, `m2_gptoss`, `m3` (stage4_m3) | `experiments.e2 --tiers cross:MODEL` (new writer); `experiments.e1 --writer MODEL --reader MODEL`; `experiments.e1 --reader MODEL --branches src,def` |
+| Table 43 (replication) | `paper_tables` | `rep_e1`, `rep_e2`, `rep_e3` and `e1`, `e2`, `e3` | `experiments.e1`, `e2` and `e3` on worlds 1020-1039 |
+| Table 44 (rewritten worlds) | `paper_tables` | `l` (stage4_l_rendered), `ltokens` | `experiments.e1 --render google/gemma-4-12B-it` |
+| Fig. 9, Tables 45, 46 (native systems) | `figures`, `paper_tables` | `n`, `ncost`, `e5` (stage3_e5), `e5cost`, `e5wbshort` | `experiments.e5 --months 3 --systems SYSTEM`; the cells and baselines with `experiments.e1 --months 3` |
+| Table 47 (Mem0 interventions) | `paper_tables` | `round3` | `experiments.x_mem0` |
+| Table 8 (worked example) | `paper_extras` | raw outputs of `runs/e1_test_s1000-1003_20260928T202242Z` and the world generator | as the main experiment |
+| Table 10 (models) | `paper_extras` | `manifest.json` and `env.json` of every run under `runs/` | none |
+| Table 7 (neighbour audit), Table 9 (systems) | `neighbour_table`, `audit_table` | `audit/neighbours/properties.json`, `audit/system_audit.json` | none |
 
-Sync (`e4`, `e4x`), export (`e6`) and the failure-mode probes (`e7`) enter the paper through
-`paper_numbers` and are rerun with `experiments.e4`, `experiments.e4x`, `experiments.e6` and
-`experiments.e7`. Generators are modules of `memshift.analysis`, drivers of `memshift`.
+Sync (`e4`, `e4x`), export (`e6`), the failure-mode probes (`e7`) and the unnamed probes (`round3`)
+enter the paper as numbers of `paper_numbers`. They are rerun with `experiments.e4`,
+`experiments.e4x`, `experiments.e6`, `experiments.e7` and
+`experiments.e1 --no-baselines --probe-unnamed-defs --branches def`. The numbers in Tables 2, 5 and 12
+are macros of `paper_numbers`, `paper_round3b` and `neighbour_table`, and the compute facts
+(`setup_facts.tex`) come from `paper_extras`.
 
 ### Tier 2: rerun from seeds on GPUs
 
@@ -200,7 +244,6 @@ Sync (`e4`, `e4x`), export (`e6`) and the failure-mode probes (`e7`) enter the p
    MAX_LEN=8192 MEM_UTIL=0.12 scripts/serve_model.sh Qwen/Qwen3-Embedding-0.6B \
        97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3 1 8011 --runner pooling
    ```
-   <!-- UNVERIFIED: needs GPUs and the model weights -->
 
    `scripts/serve_stage4.sh MODEL GPU PORT` serves the other model families with their pinned
    revisions and engine flags.
@@ -219,17 +262,15 @@ Sync (`e4`, `e4x`), export (`e6`) and the failure-mode probes (`e7`) enter the p
        --branches src,def,orphan \
        --cells D0B0,D1B0,D0B1_source,D1B1_source,D0B1_cited,D1B1_cited --name e1_test
    ```
-   <!-- UNVERIFIED: needs the model servers -->
 
    The output goes to a new directory under `runs/`. Stage it and compare as in tier 1b.
    `scripts/run.sh` runs the same driver in a CPU container built from `docker/Dockerfile`
    (`RUN_MODULE=memshift.experiments.e1 MEMSHIFT_RUN_IMAGE=IMAGE scripts/run.sh ARGS`).
-   <!-- UNVERIFIED: needs Docker and the model servers -->
 
 Every run's `manifest.json` records its parameters, worlds, code commit and models, so any released
 run can be repeated with its own settings. A rerun sends every request again. Greedy decoding does not
 always return the same reply twice, so a rerun can differ slightly from the released outputs. The
-released runs used about 140 A100 GPU-hours ([docs/COMPUTE.md](docs/COMPUTE.md)).
+model servers held the GPUs for about 140 A100 GPU-hours in all ([docs/COMPUTE.md](docs/COMPUTE.md)).
 
 ## Evaluating your own memory system
 
@@ -255,13 +296,12 @@ Register the class in `NATIVE` in `src/memshift/experiments/e5.py` and run it on
 uv run python -m memshift.experiments.e5 --seeds 1000-1014 --months 3 --systems mysystem \
     --on-error skip
 ```
-<!-- UNVERIFIED: needs the model servers -->
 
 `python -m memshift.analysis.stage e5 OUT e5:RUN e1:RUN noise:RUN base:RUN` then infers the system's
 (D, B) label from its answers and compares its accuracy after each shift with the HoldMem cell of
-the same label and with plain RAG. For the HoldMem cells, `analysis/e1_item_table.jsonl` of each E1
-stage records per changed item whether it was invalidated and whether its repair was right. A memory
-that exposes its invalidations can be scored the same way.
+the same label and with plain RAG. For the HoldMem cells, `analysis/e1_item_table.jsonl` of each
+main-experiment stage records per changed item whether it was invalidated and whether its repair was
+right. A memory that exposes its invalidations can be scored the same way.
 
 ## Data
 
@@ -271,7 +311,8 @@ that exposes its invalidations can be scored the same way.
   tuned on them is not comparable.
 - **Run metadata** is in `runs/`: every run's `manifest.json` (code commit, worlds and their SHA256,
   parameters, output hashes) and `env.json` (serving image, model revisions), and the merged
-  analyses of the stages. `runs/README.md` lists the voided runs.
+  analyses of the stages. `runs/README.md` describes the run directories and lists the runs that no
+  merged analysis reads.
 - **Raw outputs** are in the Hugging Face dataset
   [`zichuanxu/memshift`](https://huggingface.co/datasets/zichuanxu/memshift): answers, probes,
   items and call logs of every run at the same paths as here, the response caches with the full
@@ -281,21 +322,6 @@ that exposes its invalidations can be scored the same way.
   database files are not released, and the run manifests here record their SHA256. The dataset card
   describes the files and the terms of each model that produced them.
 - **Audits.** `audit/` holds the system audit and the neighbour audit ([audit/README.md](audit/README.md)).
-
-## Preregistration
-
-The predictions, metrics, contrasts and decision rules of each experiment were registered before its
-runs. The paper reports every registered result, whether it held or failed.
-
-- `prereg/` holds the registrations v0 to v4b and the decision log of amendments. v0, v1, v2 and the
-  decision log are in Chinese, v3, v4 and v4b in English. They stay byte-identical to their
-  registration commits.
-- [docs/PREREGISTRATION_EN.md](docs/PREREGISTRATION_EN.md) is a non-normative English summary of every
-  registration and of the decision log.
-- `registration-history/` publishes the git objects that place each registration before the runs it
-  concerns. `uv run python registration-history/verify.py` recomputes every object hash, follows the
-  parent chain, finds each registration file in its commit and checks which run manifests descend
-  from each registration. The chain fixes the order of the commits, not their dates.
 
 ## License
 
@@ -317,3 +343,7 @@ runs. The paper reports every registered result, whether it held or failed.
 ```
 
 `CITATION.cff` holds the same reference for GitHub's citation button.
+
+## Contact
+
+Please open a GitHub issue for questions and bug reports.

@@ -1,16 +1,17 @@
-# Parameters fixed before any run (plan §4.6). Change only through prereg/decisions.md.
-epsilon_pp: 3            # utility floor T3
-cost_ceiling_c: 0.5      # T4, serving cost relative to full re-read
-query_load_per_day: 20   # E3
-world_months: 12
-world_tokens_approx: 2_000_000
-b0_semantics: append_only
-scope_granularity: [source_epoch, object_cluster_epoch]
-fork_point_month: 9
-probe_offsets: [1, 2, 4, 8]
-reader_context_budget_tokens: 4096
-dev_worlds: 10
-test_worlds_start: 40
-seeds_per_world: 2
-calendar_lag_minutes: [1, 5, 30]
-equivalence_margin: null  # set in prereg/v1.md after stage 1 variance
+# Fixed parameters of the benchmark design and of the diagnostic tests T1-T4. The code does not read
+# this file.
+epsilon_pp: 3            # utility floor T3: static ContractValid at most 3 pp below the oracle's
+cost_ceiling_c: 0.5      # cost ceiling T4: serving cost per query relative to one full re-read
+query_load_per_day: 20   # E3: queries per day in the cost model
+world_months: 12         # length of a world
+world_tokens_approx: 2_000_000  # approximate size of a world's source text in tokens
+b0_semantics: append_only  # B=0: items derived from the delta are added and old items stay valid
+scope_granularity: [source_epoch, object_cluster_epoch]  # the two keys of B=1
+fork_point_month: 9      # the shift branches fork 9 months after the world starts
+probe_offsets: [1, 2, 4, 8]  # probes at these weeks after the fork
+reader_context_budget_tokens: 4096  # evidence budget of the shared reader, the same for all
+dev_worlds: 10           # development worlds (seeds 0-9)
+test_worlds_start: 40    # starting number of test worlds; the main study used 20 (seeds 1000-1019)
+seeds_per_world: 2       # two ingestions per world (an ingest seed) measure the noise floor
+calendar_lag_minutes: [1, 5, 30]  # E4: read-after-write lags of the simulated calendar server
+equivalence_margin: null  # TOST margin of T1, set in memshift.analysis.e2 (T1_MARGIN, 3 pp)

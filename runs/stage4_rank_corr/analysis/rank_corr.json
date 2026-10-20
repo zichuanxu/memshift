@@ -1,5 +1,5 @@
 {
- "status": "exploratory: prereg v2 section 6, not a pre-registered test, no verdict",
+ "status": "additional analysis: descriptive, no threshold",
  "definitions": "Update / Stability as analysis.e5.carry_samples: measurement-half items, changed / unchanged, pooled per world; interval: world bootstrap",
  "worlds": [
   "w1000",

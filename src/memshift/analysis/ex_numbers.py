@@ -1,8 +1,8 @@
-"""Macros for the exploratory analyses of the review response (decisions.md 2026-09-30).
+"""Macros for the further analyses of E2, E3 and E5 (the `explore_*` fields of their stages).
 
 Writer-switch predictors and baselines (E2, block M1), T1 sensitivity (E2), T3 by item class (E3,
 block R) and the native null baselines (E5, block N). Every macro name carries `Ex`; a value a stage
-has not produced renders as MISSING, and a verdict over a whole set of systems only once the set is
+has not produced renders as MISSING, and a count over a whole set of systems only once the set is
 complete.
 
   <ETwo|MOne>ExWriter<set><predictor><scope><stat>
@@ -15,13 +15,13 @@ complete.
   <ETwo|MOne>ExSurvival|Recovery|Net|Gains|Losses<cell><tier>
       survival, recovery and net change per cell and tier
   <ETwo|MOne>ExTOne{Ret|NetEq|NetNi}Eps<e><cell><tier>, ExTOneClass...
-      T1 verdict at eps = e pp, and T1 by item class
+      T1 outcome (within or outside) at eps = e pp, and T1 by item class
   EThreeExTThree... / RepExTThree...
       T3 margin per item class, by horizon and system
   <EFiveExMem|Nat<tag>Ex>Null...
       native null baselines, counts, coverage, B identification
 
-A slope beyond +/-20 (the logistic fit separates; the registered code runs into its iteration
+A slope beyond +/-20 (the logistic fit separates; `e2.slope_on_logit` runs into its iteration
 limit) prints as `>20` or `<-20`.
 """
 
@@ -48,10 +48,10 @@ from memshift.analysis.paper_numbers import (
     CELL_NAMES,
     CLASS_NAMES,
     _count,
+    _flag,
     _Macros,
     _pass,
     _tex_text,
-    _verdict,
     ci,
     pct,
     pp,
@@ -222,7 +222,7 @@ def t1_numbers(
             for field, name in (("gains", "Gains"), ("losses", "Losses")):
                 out[f"{prefix}Ex{name}{cname}{tag}"] = str(sr[field]) if field in sr else MISSING
             out[f"{prefix}ExTrivial{cname}{tag}"] = (
-                _verdict(sr.get("trivial"), "yes", "no") if sr else MISSING
+                _flag(sr.get("trivial"), "yes", "no") if sr else MISSING
             )
             grid = _get(m, "explore_t1_eps", at, "by_eps_pp") or {}
             for e in EPS_PP:
@@ -264,7 +264,7 @@ def t1_numbers(
 
 
 def e2_numbers(m: dict[str, Any]) -> dict[str, str]:
-    """`ETwoEx...`: the exploratory E2 fields of the stage-2 analysis."""
+    """`ETwoEx...`: the `explore_*` E2 fields of the stage-2 analysis."""
     scopes: list[tuple[str | None, str]] = list(STAGE2_SCOPES)
     tiers = [(k, t) for k, t in STAGE2_SCOPES if k != "pooled"]
     out = _Macros()
@@ -343,8 +343,8 @@ def null_numbers(entry: dict[str, Any] | None, prefix: str) -> dict[str, str]:
     out[f"{prefix}NullBRate"] = (
         ci({"est": b["rate"], "lo": b["lo"], "hi": b["hi"]}) if b else MISSING
     )
-    out[f"{prefix}NullBStraddles"] = _verdict(b.get("straddles"), "yes", "no") if b else MISSING
-    out[f"{prefix}NullBIdentified"] = _verdict(b.get("identified"), "yes", "no") if b else MISSING
+    out[f"{prefix}NullBStraddles"] = _flag(b.get("straddles"), "yes", "no") if b else MISSING
+    out[f"{prefix}NullBIdentified"] = _flag(b.get("identified"), "yes", "no") if b else MISSING
     out[f"{prefix}NullPredicted"] = REFERENCE_LABELS.get(e.get("predicted_by") or "", MISSING)
     null_counts(out, f"{prefix}Null", e.get("counts"))
     for name, tag in BASELINE_TAGS:
@@ -418,7 +418,7 @@ def mem0_null_numbers(res: dict[str, Any] | None) -> dict[str, str]:
 
 # ------------------------------------------------------------------------------------------ build
 def build(root: Path, sources: dict[str, str], inp: dict[str, Any]) -> dict[str, str]:
-    """All exploratory macros. `inp` is `paper_data.load_stage4`."""
+    """All `Ex` macros of this module. `inp` is `paper_data.load_stage4`."""
     e2 = stage_json(root, sources, "e2", "e2_metrics.json") or {}
     e3 = stage_json(root, sources, "e3", "e3_metrics.json")
     parts: list[Callable[[], dict[str, str]]] = [
@@ -433,6 +433,6 @@ def build(root: Path, sources: dict[str, str], inp: dict[str, Any]) -> dict[str,
     for part in parts:
         macros = part()
         if dup := merged.keys() & macros.keys():
-            raise ValueError(f"exploratory macro defined twice: {sorted(dup)[:3]}")
+            raise ValueError(f"`Ex` macro defined twice: {sorted(dup)[:3]}")
         merged.update(macros)
     return merged

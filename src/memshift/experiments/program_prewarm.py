@@ -1,8 +1,8 @@
-"""Pre-warm a program set of prereg v4 block G-b (or v4b block V): send the definition items' D1s
-program requests that an E1 replay of the same worlds and branches sends to the program model, so
-that the replay later finds every one of them in the response cache. GPU1 holds one model at a time
-and the program writer and the reader cannot be served together: the program model is served for
-this command only, and the replay runs later with only the reader served.
+"""Pre-warm a program set (or the user-word programs): send the definition items' D1s program
+requests that an E1 replay of the same worlds and branches sends to the program model, so that the
+replay later finds every one of them in the response cache. When one GPU holds one model at a time,
+the program writer and the reader cannot be served together: the program model is served for this
+command only, and the replay runs later with only the reader served.
 
     python -m memshift.experiments.program_prewarm --program-model M --program-temperature T \\
         --program-sample I --seeds 1000-1019 --branches src,def,orphan [--program-user-words]
@@ -13,14 +13,14 @@ extra_body=e1.program_extra_body(M, T, I))`, so their bodies, and so their respo
 cache file, are the replay's. When the flags are e1's defaults (the writer, 0, no sample) the
 replay's writer client answers these requests with the same body.
 
-Which requests. A program request depends on the item and on the definition version in effect at
-the write time, nothing else (`holdmem.program.program_request`). In every D1s cell every item is
+Which requests. A program request depends on the item and on the definition version in effect at the
+write time, nothing else (`holdmem.program.program_request`). In every D1s cell every item is
 written at t0 (fork - 1 minute). In `D1sB1_source` the definition version is part of the key, so at
-a checkpoint (fork + `e1.OFFSETS_WEEKS` weeks) whose version differs from the one of the item's
-last write the item is re-derived and its program requested. The program requests of a replay with
-`D1sB1_source` (G-b and V replay `D1sB0,D1sB1_source`) are thus the requests of every definition
-item at t0 and at each checkpoint, deduplicated; `D1sB0` sends a subset of them. Equal requests are
-sent once.
+a checkpoint (fork + `e1.OFFSETS_WEEKS` weeks) whose version differs from the one of the item's last
+write the item is re-derived and its program requested. The program requests of a replay with
+`D1sB1_source` (program sets and user-word programs replay `D1sB0,D1sB1_source`) are thus the
+requests of every definition item at t0 and at each checkpoint, deduplicated; `D1sB0` sends a subset
+of them. Equal requests are sent once.
 
 The replay after a pre-warm does not contact the program model: `LLMClient` opens no connection
 when it is built, a cache hit sends nothing (`LLMClient.complete`), and the manifest and env.json

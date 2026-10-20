@@ -1,8 +1,0 @@
-tree d36d4c7d71743ec2e3ad0169dfab4f8cfe1840d9
-parent 4814fc815f777dfde91d153ba05e32ce49c92938
-author zichuanxu <zichuanxu28@gmail.com> 1790601841 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790601841 +0900
-
-STATUS: compute log (MiMo stopped after E2 warm, second Qwen replica)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

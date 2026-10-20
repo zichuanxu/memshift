@@ -1,8 +1,0 @@
-tree 614949421cd1171ee8be1dcd401911a288f5a19f
-parent 56a619c985dd00248793402c93ce156d063ce055
-author zichuanxu <zichuanxu28@gmail.com> 1790621397 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790621397 +0900
-
-E1: optional reader model (E7 theta_r reader swap over cached writer outputs)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

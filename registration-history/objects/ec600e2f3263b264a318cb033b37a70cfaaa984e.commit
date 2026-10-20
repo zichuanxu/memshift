@@ -1,8 +1,0 @@
-tree 8a65f8f04aa33fb137986fc0dc5d4a79f2d27ab2
-parent 525f7abaec3b662ca1c564bc10e64b5c3ce6315c
-author zichuanxu <zichuanxu28@gmail.com> 1790693441 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790693441 +0900
-
-Block N (prereg v2 §3): LightRAG native adapter (lightrag-hku 1.5.7): one document per source object keyed by object_id, a revision is delete then insert (the library drops re-inserted ids), deletes purge and rebuild entities and relations from surviving chunks as the library does; mix query mode (library default), one store per process, metering through the library's token tracker, tiktoken file cached under cache/tiktoken; pinned install file
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

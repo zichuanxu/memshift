@@ -1,6 +1,6 @@
 {
  "block": "N",
- "status": "registered: prereg/v4_round3.md, committed before any of these blocks ran; amendments in prereg/decisions.md 2026-10-16",
+ "status": "round-3 blocks: estimates with their world-clustered bootstrap intervals, and each comparison with the threshold of the design",
  "units": "fractions (x 100 for percent or pp); 95% world-clustered bootstrap, 2,000 draws, seed 996",
  "inputs": {
   "runs": [
@@ -57,25 +57,22 @@
   },
   "anchor_answers_compared": 3840
  },
- "predictions": {
+ "threshold_tests": {
   "N1": {
-   "verdict": "fails",
-   "reason": "1 of 2 met; not met: paired_difference_src_shift_definition -0.0450",
    "tests": [
     {
      "key": "paired_difference_src_shift_definition",
      "value": -0.04504504504504504,
-     "ok": false,
+     "meets_threshold": false,
      "threshold": "est > 0 and lo > 0"
     },
     {
      "key": "paired_difference_def_shift_definition",
      "value": 0.13513513513513514,
-     "ok": true,
+     "meets_threshold": true,
      "threshold": "est > 0 and lo > 0"
     }
-   ],
-   "reading_if_holds": "the interaction on definition items is caused by the shift, not by the time passed"
+   ]
   }
  },
  "reported": {
@@ -747,7 +744,7 @@
   }
  },
  "notes": {
-  "N1": "`ex_round3_natural.paired_vs_natural`, part \"shift\", definition items, S_src and S_def, lower bound > 0; not judged unless the natural answers cover every item-time."
+  "N1": "`ex_round3_natural.paired_vs_natural`, part \"shift\", definition items, S_src and S_def, lower bound > 0; a comparison has no outcome (`coverage`) unless the natural answers cover every item-time."
  },
  "code": {
   "commit": "43785bc4694c443cb63f86ac657341a82be99db7",

@@ -1,8 +1,8 @@
-"""Block C of prereg v2 §4: the construct check with writer-authored executable derivations (D1s).
+"""The construct check with writer-authored executable derivations (D1s): contrasts C1-C4.
 
 The D1s cell repairs like D=1, but its replacement values (and, for definition items, its check)
 come from a program the writer model writes, not from benchmark-authored rules or the gold
-evaluator. On the same item table as the E1 contrasts this module reports the pre-registered list:
+evaluator. On the same item table as the E1 contrasts this module reports the list C1-C4:
   C1  RepairCorrectness, D1s - D0 at B=1 source epoch (S_src and S_def), prediction > 0
   C2  D1 - D1s, and its share of the original D effect (D1 - D0): the part of the D effect that
       depends on benchmark-authored rules, prediction >= 0
@@ -12,9 +12,9 @@ plus program statistics per item type: executable rate, and agreement of the pro
 gold before the shift (t0). Contrasts on the cited-cluster cells are outside the list and carry the
 `explore_` prefix. Estimates are the world-clustered paired bootstrap of the other E1 contrasts.
 
-Exploratory (not on the list): C1 and C2 split by item class at source-epoch binding, with the
-classes of `e1.ITEM_CLASSES` (structured fields `rule`, evaluated definitions `definition`, free
-text `norule`) and the same repaired items as in the D-effect class split of the E1 contrasts:
+Not on the list: C1 and C2 split by item class at source-epoch binding, with the classes of
+`e1.ITEM_CLASSES` (structured fields `rule`, evaluated definitions `definition`, free text `norule`)
+and the same repaired items as in the D-effect class split of the E1 contrasts:
 `explore_C1_repair_D1s_minus_D0_source_<class>` and `explore_C2_repair_D1_minus_D1s_source_<class>`.
 """
 
@@ -80,7 +80,7 @@ def contrasts(rows: list[Row], branch: str) -> dict[str, Estimate]:
             out[f"{tag}C2_repair_D1_minus_D1s_{g}"] = paired_diff(cv_1, cv_s)
             if d0 in present:
                 out[f"{tag}C2_share_of_D_effect_{g}"] = _share(_diff(cv_1, cv_s), _diff(cv_1, cv_0))
-        if g == "source":  # exploratory class split of C1 and C2, over the items each cell repaired
+        if g == "source":  # class split of C1 and C2, over the items each cell repaired
             for cls, prefixes in ITEM_CLASSES.items():
                 rc = _repaired_in(prefixes)
                 cls_s = _vec(rows, d1s, branch, "cv", rc)

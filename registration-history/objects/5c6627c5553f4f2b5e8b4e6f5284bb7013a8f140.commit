@@ -1,8 +1,0 @@
-tree 8b13ca847b99f75b2a521b62f3c8a339301beb5b
-parent 58bb7e4a9458892e8dfaa4dd9dda2d6e4baea66b
-author zichuanxu <zichuanxu28@gmail.com> 1792147522 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1792147522 +0900
-
-E1 --post-probes definition: after the fork answer only the definition items of the discriminative draw (blocks judged on definition items); logged before any affected run
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

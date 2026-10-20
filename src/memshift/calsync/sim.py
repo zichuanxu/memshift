@@ -1,6 +1,6 @@
 """Source servers with official incremental-sync semantics and a compliant polling client
-(plan §4.2 "同步语义": sync-token paging, clear-and-rebuild after an invalid token, deletions in
-the incremental response, ETag `If-Match` conditional replacement, read-after-write lag L).
+(sync-token paging, clear-and-rebuild after an invalid token, deletions
+in the incremental response, ETag `If-Match` conditional replacement, read-after-write lag L).
 
 SyncProfile      the incremental-sync contract of one source's official API (PROFILES: one per
                  generator source; each profile documents the endpoint it models).

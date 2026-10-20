@@ -1,4 +1,4 @@
-"""Baselines that share the reader, template and 4k evidence budget with HoldMem (plan §4.5).
+"""Baselines that share the reader, template and 4k evidence budget with HoldMem.
 
 zero system  raw source objects + BM25 + on-demand re-read; no derived store, no embeddings.
 zero_Dm      the zero system plus a query-time executable view: the writer-authored program of the

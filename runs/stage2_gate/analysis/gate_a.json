@@ -8,7 +8,7 @@
    "n_worlds": 20,
    "n_items": 2336
   },
-  "triggered": false
+  "within_threshold": true
  },
  "path2": {
   "checks": {
@@ -21,7 +21,7 @@
      "n_worlds": 20,
      "n_items": 558
     },
-    "triggered": false
+    "within_threshold": true
    },
    "def:D_effect_missed_cited": {
     "estimate": {
@@ -32,7 +32,7 @@
      "n_worlds": 20,
      "n_items": 558
     },
-    "triggered": false
+    "within_threshold": true
    },
    "orphan:D_effect_missed_source": {
     "estimate": {
@@ -43,7 +43,7 @@
      "n_worlds": 20,
      "n_items": 1767
     },
-    "triggered": false
+    "within_threshold": true
    },
    "orphan:D_effect_missed_cited": {
     "estimate": {
@@ -54,7 +54,7 @@
      "n_worlds": 20,
      "n_items": 1767
     },
-    "triggered": false
+    "within_threshold": true
    },
    "src:D_effect_missed_source": {
     "estimate": {
@@ -65,7 +65,7 @@
      "n_worlds": 20,
      "n_items": 1168
     },
-    "triggered": false
+    "within_threshold": true
    },
    "src:D_effect_missed_cited": {
     "estimate": {
@@ -76,10 +76,10 @@
      "n_worlds": 20,
      "n_items": 1168
     },
-    "triggered": false
+    "within_threshold": true
    }
   },
-  "triggered": false
+  "within_threshold": true
  },
  "path3": {
   "pooled_slope": {
@@ -108,9 +108,8 @@
   "tier_caveats": [
    "upgrade"
   ],
-  "triggered": false
+  "within_threshold": true
  },
- "claim_level": "two-factor theory + quantitative prediction",
  "membership": {
   "T1": {
    "downgrade": {

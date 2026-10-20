@@ -1,8 +1,0 @@
-tree 3ebe540b40daa5ffdace107fa3ffd34604f5f49b
-parent 247e65d3d456f41c68fc3d2470dd945f9edc3608
-author zichuanxu <zichuanxu28@gmail.com> 1790629119 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790629119 +0900
-
-E5 sufficient-statistic analysis: native carryover vs matching white-box cell
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

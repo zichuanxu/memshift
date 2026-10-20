@@ -1,8 +1,0 @@
-tree 1660595765800084ee13de8d22d1a89541749c21
-parent 16d04aa768e41fc0b433007d5b9d5ba913df0268
-author zichuanxu <zichuanxu28@gmail.com> 1790692715 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790692715 +0900
-
-Neighbour table: header 'frozen plan' (the audit counts a signed analysis plan as one) and 'retraction', caption defines it; audit tables stripped of trailing whitespace
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

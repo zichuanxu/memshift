@@ -1,8 +1,0 @@
-tree 95be2eea3fb270d347dd016a30d93d1851866fd8
-parent e609c251cf7c52ec06b890a54df3b560e14b2ddb
-author zichuanxu <zichuanxu28@gmail.com> 1790784412 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790784412 +0900
-
-Paper: theory section rewritten as carryover, detection and repair (Eq. 1 as an accounting identity with the measured terms m, r, a; the interaction (r1-a1)-(r0-a0), exact for a key that misses nothing; the per-class account as the tested statement; falsification paths as registered with path 2 an implementation check; T1-T4 as diagnostic tests, shift-safe meaning passing them on these worlds); Figure 1 formula and caption restated
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

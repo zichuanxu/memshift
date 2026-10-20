@@ -1,4 +1,4 @@
-# LightRAG for the E5 / block-N native runs (prereg v2 §3): pip lines needed on top of
+# LightRAG for the E5 native runs: pip lines needed on top of
 # docker/requirements.lock. Everything the lock already pins is left out, so install both:
 #   pip install -r docker/requirements.lock -r docker/native/lightrag.txt
 # Resolved with: uv pip compile <(echo lightrag-hku==1.5.7) -c docker/requirements.lock \

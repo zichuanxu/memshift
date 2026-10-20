@@ -1,4 +1,4 @@
-"""Where a slot-keyed upsert can act (`analysis.ex_round3_upsert`, exploratory): the split of the
+"""Where a slot-keyed upsert can act (`analysis.ex_round3_upsert`): the split of the
 changed item-times by whether the delta yielded a new item for the slot, the parts' levels, their
 contributions to binding's effect and the answers the upsert moved, on small hand-built inputs
 (no model, no committed run)."""

@@ -1,8 +1,8 @@
 """The control-cell stage end to end on offline runs (fake writer, three-month world): a published
-run, and four new runs with the cells of the registration (an anchor in each, the oracle, scope,
-refresh and template cells, the retraction-aware programs, the query-time view and the thinking
-writer), and a fifth new run of the full-access control on two branches only (src and def, as the
-D0full runs of prereg v3 section 6). The integrity checks (hash assertion, probe sets, anchors) stop
+run, and four new runs with the control cells (an anchor in each, the oracle, scope, refresh and
+template cells, the retraction-aware programs, the query-time view and the thinking writer), and a
+fifth new run of the full-access control on two branches only (src and def, as the D0full runs
+have). The integrity checks (hash assertion, probe sets, anchors) stop
 the stage, the key audit and the scope = cited check are marked, a run of two branches is merged
 beside the runs of three, and the stage command writes the manifest."""
 
@@ -18,7 +18,6 @@ from memshift.analysis import controls as ctl
 from memshift.analysis import controls_data as cd
 from memshift.analysis import controls_paper as cp
 from memshift.analysis import stage
-from memshift.analysis.paper_data import MISSING
 from memshift.experiments.common import read_jsonl, world_params, write_jsonl
 from memshift.experiments.e1 import parse_cells
 from memshift.experiments.e1 import run as run_e1
@@ -32,8 +31,8 @@ ALL_CELLS = (
     "D0B0,D1B0,D0B1_source,D1B1_source,D1B1_cited,D1sB1_source,D0B1_gold,D1B1_gold,D1B1_scope,"
     "D1B0_refresh,D0tB1_source,D1sB1_source_ra,D0thinkB1_source,zero_Dm,D0fullB1_source"
 )
-# run -> the systems it keeps; a driver run writes every cell it was given, so the five runs of the
-# registration are cut from one offline run (the anchors are then the same rows, which is what the
+# run -> the systems it keeps; a driver run writes every cell it was given, so the five control
+# runs are cut from one offline run (the anchors are then the same rows, which is what the
 # corruption tests below start from; real replays are checked on the published runs)
 RUNS: dict[str, tuple[set[str], str, bool]] = {
     "base": (
@@ -220,19 +219,19 @@ def test_the_key_audit_is_the_real_one_and_agrees_with_the_cells(staged):
     assert scope["definition"]["run_rates"]["missed"] == 0.0  # the scope key misses nothing
 
 
-def test_contrasts_verdicts_and_reported_quantities_are_there(staged):
+def test_contrasts_thresholds_and_reported_quantities_are_there(staged):
     _, res = staged
     assert set(res["contrasts"]) == set(ctl.contrast_keys())
-    assert set(res["verdicts"]) == set(ctl.PREDICTIONS)
-    assert sum(res["summary"].values()) == len(ctl.PREDICTIONS)
-    # the fake writer and reader make every contrast exactly zero, so what is judged is judged
+    assert set(res["threshold_tests"]) == set(ctl.CONTROLS)
+    assert sum(res["summary"].values()) == len(ctl.CONTROLS)
+    # the fake writer and reader make every contrast exactly zero, so each comparison is computed
     assert res["contrasts"]["G_upd_D1_orphan_all"]["est"] == 0.0
-    assert res["verdicts"]["G1"]["status"] == ctl.HOLDS
+    assert ctl.outcome(res["threshold_tests"]["G1"]) == "met_required"
     assert res["reported"]["program_t0"]["all"]["ratio"]["est"] == 1.0  # both program kinds run
-    assert res["verdicts"]["M3"]["status"] == ctl.HOLDS
+    assert ctl.outcome(res["threshold_tests"]["M3"]) == "met_required"
     think = res["reported"]["think"]["all"]
     assert think["writes"] > 0 and think["unreadable"]["est"] == 0.0
-    assert res["verdicts"]["D2"]["status"] == ctl.HOLDS
+    assert ctl.outcome(res["threshold_tests"]["D2"]) == "met_required"
     assert "orphan" in res["reported"]["over_retraction"]
     assert res["reported"]["ra"]["orphan"]["all"]["runs"] > 0
 
@@ -240,11 +239,11 @@ def test_contrasts_verdicts_and_reported_quantities_are_there(staged):
 def test_the_paper_renders_the_staged_result(staged):
     _, res = staged
     macros = cp.numbers(res)
-    assert macros["CtlGoneVerdict"] == "holds" and macros["CtlChecksPassed"] == "5 of 5"
+    assert macros["CtlChecksPassed"] == "5 of 5"
     assert macros["CtlCheckAuditPass"] == "pass" and macros["CtlWorlds"] == "1"
-    assert all(v != MISSING for k, v in macros.items() if k.endswith("Verdict"))
+    assert not any(k.endswith("Verdict") for k in macros)
     tex = cp.tab_controls(res)
-    assert r"\pass\,5/5" in tex
+    assert r"\pass" not in tex and "oracle & Update, oracle" in tex
 
 
 def test_worlds_the_runs_do_not_have_are_listed(runs, tmp_path):
@@ -321,29 +320,29 @@ def test_the_full_access_cell_is_contrasted_with_the_published_d1_cell_on_src_an
     staged_full, staged
 ):
     _, res = staged_full
-    assert set(res["contrasts"]) == set(ctl.contrast_keys()) and "F1" in res["verdicts"]
+    assert set(res["contrasts"]) == set(ctl.contrast_keys()) and "F1" in res["threshold_tests"]
     for br in ("src", "def"):
         for key in (f"F_rep_{br}_definition", f"F_repmech_{br}_definition", f"F_gain_upd_{br}_all"):
             e = res["contrasts"][key]
             assert e["n_worlds"] == 1 and e["n_items"] > 0 and e["est"] == e["est"], key
     # the fake reader answers alike from both cells (no behavioural gap) while the stored value of
     # D = 1 is the checker's fallback and D0full's the fake writer's (a mechanical gap of 100 pp):
-    # two of the four tests are met, and the two readings disagree
+    # two of the four tests are met, and the regions of the two variants disagree
     for br in ("src", "def"):
         assert res["contrasts"][f"F_rep_{br}_definition"]["est"] == 0.0
         assert res["contrasts"][f"F_repmech_{br}_definition"]["est"] == 1.0
-    v = res["verdicts"]["F1"]
-    assert (v["status"], v["hits"], v["total"]) == (ctl.FAILS, 2, 4)
-    assert v["reading"] == "mixed" and v["regions"]["F_rep_src_definition"] == "access"
+    v = res["threshold_tests"]["F1"]
+    assert (ctl.outcome(v), v["n_met"], v["n_tests"]) == ("below_required", 2, 4)
+    assert v["regions"]["F_rep_src_definition"] == "access"
     assert v["regions"]["F_repmech_def_definition"] == "execution"
     assert set(res["cells"]["holdmem_D0fullB1_source"]) == {"src", "def"}
     assert set(res["cells"]["holdmem_D1B1_source"]) == set(BRANCHES)
-    # the run adds a cell and no change to the others: every other verdict is what it was without
-    before = staged[1]["verdicts"]
-    assert before["F1"]["status"] == ctl.NOT_JUDGED  # no D0full cell in the four runs
-    for pred in ctl.PREDICTIONS:
-        if pred != "F1":
-            assert res["verdicts"][pred] == before[pred], pred
+    # the run adds a cell and no change to the others: every other control is what it was without
+    before = staged[1]["threshold_tests"]
+    assert ctl.outcome(before["F1"]) == "not_computed"  # no D0full cell in the four runs
+    for name in ctl.CONTROLS:
+        if name != "F1":
+            assert res["threshold_tests"][name] == before[name], name
 
 
 def test_the_notes_of_the_full_access_run_are_counted_per_definition_and_source(staged_full):
@@ -362,7 +361,7 @@ def test_the_notes_of_the_full_access_run_are_counted_per_definition_and_source(
     cut = {f for f, n in full["definitions"].items() if n["all"]["truncated"]}
     assert full["truncated_definitions"] == sorted(cut)
     m = cp.numbers(staged_full[1])
-    assert m["CtlFoneVerdict"] == "fails" and m["CtlFoneReading"] == "mixed"
+    assert "CtlFoneVerdict" not in m and "CtlFoneReading" not in m
     assert m["CtlFullWritesAll"] == f"{full['all']['rederivations']:,}"
     assert m["CtlFRepSrcDefinition"].startswith("0.0\\,pp")
 
@@ -419,7 +418,7 @@ def test_stage_ctl_command_line_takes_the_full_access_runs_as_more_ctl_directori
     manifest = json.loads((out / "manifest.json").read_text())
     assert manifest["roles"]["ctl"] == [runs[n].name for n in FULL]
     res = json.loads((out / "analysis" / "ctl_metrics.json").read_text())
-    assert res["checks"]["passed"] == 5 and "F1" in res["verdicts"]
+    assert res["checks"]["passed"] == 5 and "F1" in res["threshold_tests"]
     assert res["reported"]["full"]["all"]["rederivations"] > 0
 
 
@@ -480,7 +479,7 @@ def test_a_changed_value_or_status_is_a_difference_too(runs, tmp_path):
     assert cell["by_field"]["value"] > 0 and cell["differ"] >= cell["by_field"]["value"]
 
 
-def test_the_rendered_context_is_reported_but_not_judged(runs, tmp_path):
+def test_the_rendered_context_is_reported_without_a_threshold(runs, tmp_path):
     ctl1 = copy_ctl(runs, tmp_path, "ctl1")
     rows = read_jsonl(ctl1 / "answers.jsonl")
     for r in rows:

@@ -1,6 +1,6 @@
-"""Exploratory analyses of the E1 family that need more than one stage (prereg/decisions.md
-2026-09-30; they change no registered verdict). Inputs are staged analyses: `role:STAGE_DIR`, with
-analysis/e1_metrics.json and, where an item table is needed, analysis/e1_item_table.jsonl.
+"""Analyses of the E1 family that need more than one stage. Inputs are staged analyses:
+`role:STAGE_DIR`, with analysis/e1_metrics.json and, where an item table is needed,
+analysis/e1_item_table.jsonl.
 
 explore_oos         Out-of-sample test of Eq. (1). The terms m, r, a of each cell and class are
                     fitted on one set of worlds (the ten development worlds; also the twenty test
@@ -391,14 +391,14 @@ def source_epoch_accounting(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> 
                 "identity_by_construction": identity,
                 "orig": r["orig"],
                 "rep": r["rep"],
-                "verdict": r["verdict"],
+                "replication": r["replication"],
             }
         )
     rest = [r for r in listed if not r["identity_by_construction"]]
 
     def tally(rs: Sequence[Mapping[str, Any]]) -> dict[str, int]:
         return {
-            v: sum(r["verdict"] == v for r in rs)
+            v: sum(r["replication"] == v for r in rs)
             for v in ("replicated", "same direction", "not replicated")
         }
 
@@ -406,8 +406,8 @@ def source_epoch_accounting(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> 
         "n_contrasts": len(listed),
         "n_identities": len(listed) - len(rest),
         "n_non_identity": len(rest),
-        "verdicts_all": tally(listed),
-        "verdicts_non_identity": tally(rest),
+        "replication_all": tally(listed),
+        "replication_non_identity": tally(rest),
         "n_d_effect_on_repair": sum(r["contrast"] in D_EFFECT_ON_REPAIR for r in rest),
         "n_update_contrasts": sum(r["contrast"] not in D_EFFECT_ON_REPAIR for r in rest),
         "independent_update_estimates": 2 * len({r["branch"] for r in rest}),
@@ -417,8 +417,9 @@ def source_epoch_accounting(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> 
 
 def class_replication(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> dict[str, Any]:
     """The class-stratified contrasts of the main study against R: R's estimate and interval for
-    the definition and the non-definition items, with the sign rule of `replication.effect_verdict`
-    (in the direction of the main study's estimate) and whether each interval excludes 0."""
+    the definition and the non-definition items, with the sign rule of
+    `replication.replication_class` (in the direction of the main study's estimate) and whether
+    each interval excludes 0."""
     out: dict[str, Any] = {"rows": [], "summary": {}}
     for arm in orig.get("explore_class_split") or {}:
         for b, grans in orig["explore_class_split"][arm].items():
@@ -447,7 +448,7 @@ def class_replication(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> dict[s
                                 "contrast": key,
                                 "orig": o,
                                 "rep": r,
-                                "verdict": replication.effect_verdict(o, r),
+                                "replication": replication.replication_class(o, r),
                                 "same_sign": (o["est"] >= 0) == (r["est"] >= 0),
                                 "orig_excludes_zero": o["lo"] > 0 or o["hi"] < 0,
                                 "rep_excludes_zero": r["lo"] > 0 or r["hi"] < 0,
@@ -461,7 +462,7 @@ def class_replication(orig: Mapping[str, Any], rep: Mapping[str, Any]) -> dict[s
             "rep_same_sign": sum(r["same_sign"] for r in rs),
             "rep_excludes_zero": sum(r["rep_excludes_zero"] for r in rs),
             "orig_excludes_zero": sum(r["orig_excludes_zero"] for r in rs),
-            "replicated": sum(r["verdict"] == "replicated" for r in rs),
+            "replicated": sum(r["replication"] == "replicated" for r in rs),
         }
     return out
 

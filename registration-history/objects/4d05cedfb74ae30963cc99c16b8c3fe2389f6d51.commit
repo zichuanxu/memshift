@@ -1,8 +1,0 @@
-tree b7020085c074625fcf1d4f16e635fddaa2234dd7
-parent d082708b149b63d54da4eaacb23583af4aa1b39d
-author zichuanxu <zichuanxu28@gmail.com> 1790756383 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790756383 +0900
-
-Paper: after the tightening pass, the main text keeps the model-family and native-system citations in the robustness-study paragraph, the statistics citations, disjoint seeds and the exploratory Holm result, the item-class estimates for E1 and block C, and the T3 result without definition items (main text still ends on p. 15)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

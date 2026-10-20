@@ -2,14 +2,13 @@
 they are compared with, merged into one item table, with the integrity checks that make the merge
 legitimate.
 
-The control cells are registered in prereg/v3_controls.md and were run on worlds 1000 to 1009 with
-`--discriminative --no-baselines`. Each run carries a cell that also exists in the published runs
-(the anchor), so the cache replay can be checked against the publication; cells that a run does not
-contain (the published ones) are taken from the published runs of the same worlds. A run covers the
-branches its manifest declares (`params.branches`): the control runs cover all three, the D0full
-runs (prereg v3 section 6) only src and def. Every check below compares a run with the published
-runs on the branches the run declares, and a declared branch without answers is a failure, so a run
-of fewer branches is neither padded nor excused:
+The control cells were run on worlds 1000 to 1009 with `--discriminative --no-baselines`. Each run
+carries a cell that also exists in the published runs (the anchor), so the cache replay can be
+checked against the publication; cells that a run does not contain (the published ones) are taken
+from the published runs of the same worlds. A run covers the branches its manifest declares
+(`params.branches`): the control runs cover all three, the D0full runs only src and def. Every check
+below compares a run with the published runs on the branches the run declares, and a declared branch
+without answers is a failure, so a run of fewer branches is neither padded nor excused:
 
   ctl:RUN   a new run of the control cells (raw JSONL, manifest.json, hash_check_*.json)
   base:RUN  a published run of the same worlds (raw JSONL); a stage directory (`runs/stage2_e1`)
@@ -50,10 +49,10 @@ from memshift.experiments.common import read_jsonl
 from memshift.runinfo import file_sha256
 
 Row = e1.Row
-CTL_SEEDS = tuple(range(1000, 1010))  # the registered scope (decisions.md 2026-09-30, WS2)
+CTL_SEEDS = tuple(range(1000, 1010))  # the worlds of the control runs
 ANCHOR_TOLERANCE = 0.01  # share of an anchor's answers that may differ from the published ones
 EXAMPLES = 5  # mismatches listed per check
-# published cells the analysis compares the new cells with (prereg/v3_controls.md section 2)
+# published cells the analysis compares the new cells with
 BASE_SYSTEMS = frozenset(
     {
         "holdmem_D0B0",
@@ -368,7 +367,7 @@ def build(
 ) -> Table:
     """Merge the new runs with the published runs into one item table, after the integrity checks.
 
-    `worlds` restricts every run to those worlds (default: the registered 1000 to 1009); the ones
+    `worlds` restricts every run to those worlds (default: `CTL_SEEDS`, 1000 to 1009); the ones
     a new run does not have are listed in `checks["worlds_missing"]`. Raises `ControlsCheckError`
     when a probe set, a gold value, a hash assertion or an anchor differs."""
     want = set(worlds or ctl_worlds())

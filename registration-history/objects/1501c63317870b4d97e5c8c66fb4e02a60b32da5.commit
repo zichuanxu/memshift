@@ -1,8 +1,0 @@
-tree 4a2848ae3b16883eb8124139412f8063be0882c4
-parent 2d0cbb87b0053a58dcbfff2f24642a60ab7bd44d
-author zichuanxu <zichuanxu28@gmail.com> 1790786442 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790786442 +0900
-
-Paper: keep the calibration-figure marker for the M1 switches in the appendix
-
-Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>

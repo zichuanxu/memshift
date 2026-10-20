@@ -1,4 +1,4 @@
-"""The axes of the writer figure (`analysis.ex_round3_writers`, exploratory): the programs'
+"""The axes of the writer figure (`analysis.ex_round3_writers`): the programs'
 agreement with gold at the fork on hand-built items, and the staged result."""
 
 import json
@@ -75,7 +75,7 @@ def test_analyse_without_runs_is_empty():
     res = ew.analyse([], [], [])
     assert res["program_sets"] == {"sets": {}}
     assert res["definition_writers"] == {"writers": {}}
-    assert res["status"].startswith("exploratory")
+    assert res["status"] == ew.STATUS
 
 
 @pytest.mark.skipif(not STAGED.exists(), reason="writers.json is not staged")

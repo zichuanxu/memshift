@@ -1,8 +1,0 @@
-tree 5ed3b58afb1a7814478b048d3de0a5633294c3c7
-parent 0afcfc9ef1de213bb24761a22005ac380b800e36
-author zichuanxu <zichuanxu28@gmail.com> 1790656564 +0900
-committer zichuanxu <zichuanxu28@gmail.com> 1790656564 +0900
-
-Reader swap: no Qwen template kwargs for Mistral models (Mistral tokenizer mode); E5 macro placeholders
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,4 +1,4 @@
-"""Held-out definitions (prereg v4_round3 §G-a): grammar, seeded draws with the gold-only rejection
+"""Held-out definitions: grammar, seeded draws with the gold-only rejection
 rule, and worlds that swap the six fixed definitions for a draw while keeping everything else."""
 
 from dataclasses import asdict
@@ -45,7 +45,7 @@ FIXED_1000 = {
                "c946ab67aa79e9b2"),
 }  # fmt: skip
 
-# the registered draws (listed in the decision log before any model call)
+# the three held-out draws (sampler seeds 4001 to 4003)
 DRAWS = {
     4001: (
         [
@@ -125,7 +125,7 @@ def test_grammar_is_disjoint_from_the_fixed_definitions():
 
 
 @pytest.mark.parametrize("seed", sorted(DRAWS))
-def test_registered_draws(seed):
+def test_heldout_draws(seed):
     ids, digest = DRAWS[seed]
     draw = heldout_draw(seed)
     assert [d.kappa_id for d in draw.defs] == ids

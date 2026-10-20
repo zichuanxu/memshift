@@ -1,4 +1,4 @@
-"""Run provenance (plan §8): every run writes `manifest.json` (world ids, seeds, model ids, image
+"""Run provenance: every run writes `manifest.json` (world ids, seeds, model ids, image
 ids, parameters, code commit, SHA256 of every output file) and `env.json` (host facts, serving
 images, model revisions).
 
