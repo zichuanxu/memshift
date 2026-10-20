@@ -142,8 +142,8 @@ def tab_replication(view: dict[str, Any]) -> str:
         r"\begin{table}[t]",
         r"\caption{Every contrast of the main experiment in the main study (main) and on the "
         rf"{n.get('rep') or MISSING} fresh test worlds of the replication (fresh). Detection: "
-        r"share of the changed item-times the cell invalidated. Value equals gold: share of the "
-        r"re-derived item-times whose value equals gold.}",
+        r"share of the changed item-times the cell invalidated since the fork. Value equals gold: "
+        r"share of the re-derived item-times whose value equals gold.}",
         r"\label{tab:replication}",
         r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{4pt}",

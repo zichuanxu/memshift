@@ -146,6 +146,33 @@ def test_system_missing_a_branch_is_tabled_but_not_correlated():
     assert rows_["oracle"]["update_src"]["est"] == 1.0
 
 
+def test_correlations_within_subsets():
+    spec = {**LEVELS, "zero": (5, 7, 1), "rag": (3, 3, 5), "oracle": (10, 10, 10)}
+    samples = rank_corr.measure(_table({w: spec for w in sorted(WORLDS)}), WORLDS)
+    sub = rank_corr.subsets(list(samples), {"mem0"})
+    # the oracle context is in no subset: it is not a no-store baseline
+    assert sub == {
+        "holdmem": ["holdmem_D0B0", "holdmem_D0B1_source", "holdmem_D1B0", "holdmem_D1B1_source"],
+        "native": ["mem0"],
+        "native_baselines": ["mem0", "rag", "zero"],
+    }
+    assert tuple(sub) == rank_corr.SUBSETS
+
+    def src_def(among: list[str]) -> dict:
+        return rank_corr.correlations(samples, among)["update_src_vs_update_def"]
+
+    # HoldMem cells: S_src ranks (D 1, C 2, B 3, A 4), S_def (D 1, A 2, B 3, C 4): sum d^2 = 8,
+    # rho = 1 - 6 * 8 / 60
+    assert src_def(sub["holdmem"])["rho"] == pytest.approx(0.2)
+    assert src_def(sub["holdmem"])["systems"] == sub["holdmem"]
+    # mem0, rag, zero: S_src ranks (3, 1, 2), S_def (2, 1, 3): sum d^2 = 2, rho = 1 - 6 * 2 / 24
+    assert src_def(sub["native_baselines"])["rho"] == pytest.approx(0.5)
+    assert src_def(sub["native_baselines"])["n_systems"] == 3
+    assert math.isnan(src_def(sub["native"])["rho"])  # one system has no ranking
+    # every system named: the same as the correlations over all systems
+    assert rank_corr.correlations(samples, list(samples)) == rank_corr.correlations(samples)
+
+
 def test_json_arm_is_excluded():
     spec = {**LEVELS, "holdmem_json_arm": (9, 9, 9)}
     samples = rank_corr.measure(_table({w: spec for w in sorted(WORLDS)}), WORLDS)
@@ -226,6 +253,10 @@ def test_analyse_merges_native_white_box_and_baseline_runs(tmp_path):
     assert res["correlations"]["update_src_vs_stability_orphan"]["rho"] == pytest.approx(-1.0)
     on_disk = json.loads((tmp_path / "out" / "analysis" / "rank_corr.json").read_text())
     assert on_disk["correlations"] == res["correlations"]
+    assert tuple(on_disk["subsets"]) == rank_corr.SUBSETS
+    holdmem = on_disk["subsets"]["holdmem"]["update_src_vs_update_def"]
+    assert holdmem["rho"] == pytest.approx(0.2) and holdmem["n_systems"] == 4
+    assert on_disk["subsets"]["native"]["update_src_vs_update_def"]["systems"] == ["mem0"]
     text = (tmp_path / "out" / "analysis" / "rank_corr.md").read_text()
     assert rank_corr.STATUS in text and "| mem0 | native | 70.0" in text and "Spearman rho" in text
     # a narrower world set uses only those worlds

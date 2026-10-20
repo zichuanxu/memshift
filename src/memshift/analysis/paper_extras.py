@@ -244,10 +244,12 @@ def tab_overview(inp: Mapping[str, Any]) -> str:
     lines = [
         r"\begin{table*}[t]",
         r"\caption{Update and Stability (\%) after a source revision, a redefinition and a "
-        r"deletion, and the interaction $B{\times}D$ on Update for other model families. A "
-        r"\holdmem{} cell uses the source key unless the citation key is named. "
-        rf"{DM}: the writer's programs. Bottom: each model as writer and reader, with the source "
-        r"key. Brackets: 95\% interval.}",
+        r"deletion, and $B{\times}D$ on Update for other model families. The key is the source "
+        rf"key unless the citation key is named. {DM}: the writer's programs. $n$ per main-study "
+        r"\holdmem{} cell: \ExDetMainSrcUpdateItems{}, \ExDetMainDefUpdateItems{} and "
+        r"\ExDetMainOrphanUpdateItems{} changed and \ExDetMainSrcStabilityItems{}, "
+        r"\ExDetMainDefStabilityItems{} and \ExDetMainOrphanStabilityItems{} unchanged items. "
+        r"Bottom: each model as writer and reader. Brackets: 95\% interval.}",
         r"\label{tab:overview}",
         r"\centering\footnotesize",
         r"\setlength{\tabcolsep}{5pt}",

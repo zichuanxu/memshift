@@ -959,10 +959,20 @@ def test_rank_macros_from_the_real_correlations():
     )
     out = pn.rank_numbers(m)
     assert out["RankExRhoSrcDef"] == "0.00 [0.00, 0.00]"  # identical worlds: a point interval
-    assert out["RankExRhoSrcOrphan"] == "-1.00 [-1.00, -1.00]"
+    assert out["RankExRhoSrcOrphan"] == "$-$1.00 [$-$1.00, $-$1.00]"  # a typeset minus
     assert out["RankExSrcDefSystems"] == "5" and out["RankExSrcDefWorlds"] == "3"
     assert out["RankExSystems"] == "5"
+    # the subsets: not in this result yet, so MISSING
+    assert out["RankExRhoSrcDefHoldMem"] == MISSING == out["RankExSrcDefNativeSystems"]
     assert pn.rank_numbers({}) == dict.fromkeys(out, MISSING)
+    among = rank_corr.subsets(list(samples), {"mem0"})
+    m["subsets"] = _roundtrip({k: rank_corr.correlations(samples, s) for k, s in among.items()})
+    out = pn.rank_numbers(m)
+    # HoldMem cells of LEVELS: S_src ranks (D 1, C 2, B 3, A 4), S_def (D 1, A 2, B 3, C 4)
+    assert out["RankExRhoSrcDefHoldMem"] == "0.20 [0.20, 0.20]"
+    assert out["RankExSrcDefHoldMemSystems"] == "4" and out["RankExSrcDefHoldMemWorlds"] == "3"
+    assert out["RankExRhoSrcDefNative"] == MISSING  # one native system: no correlation
+    assert out["RankExSrcDefNativeSystems"] == "1" == out["RankExSrcDefNativeBaseSystems"]
 
 
 # ------------------------------------------------------------------------------- multiplicity
@@ -1016,11 +1026,16 @@ def test_multiplicity_view_is_loaded_from_the_committed_stage():
 
 # ------------------------------------------------------------------------------ full inputs
 def _rank_result() -> Any:
-    samples = rank_corr.measure(rank_table({w: LEVELS for w in sorted(RANK_WORLDS)}), RANK_WORLDS)
+    # three native systems and two no-store baselines, so that every subset has a correlation
+    spec = {**LEVELS, "amem": (5, 7, 1), "lightrag": (3, 3, 5), "zero": (9, 9, 9), "rag": (1, 1, 1)}
+    native = {"mem0", "amem", "lightrag"}
+    samples = rank_corr.measure(rank_table({w: spec for w in sorted(RANK_WORLDS)}), RANK_WORLDS)
+    among = rank_corr.subsets(list(samples), native)
     return _roundtrip(
         {
-            "systems": rank_corr.system_rows(samples, {"mem0"}),
+            "systems": rank_corr.system_rows(samples, native),
             "correlations": rank_corr.correlations(samples),
+            "subsets": {k: rank_corr.correlations(samples, s) for k, s in among.items()},
         }
     )
 

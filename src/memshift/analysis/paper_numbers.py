@@ -1116,19 +1116,34 @@ def rend_numbers(m: dict[str, Any]) -> dict[str, str]:
     return out
 
 
+RANK_SUBSETS = (("holdmem", "HoldMem"), ("native", "Native"), ("native_baselines", "NativeBase"))
+
+
 def rank_numbers(m: dict[str, Any]) -> dict[str, str]:
     """Rank correlation: Spearman correlation between the ranking of the systems
-    by Update after S_src and their rankings by Update after S_def and by orphan Stability."""
+    by Update after S_src and their rankings by Update after S_def and by orphan Stability; and
+    the S_src-S_def correlation within the HoldMem cells, the native systems and the native systems
+    with no-store BM25 and plain RAG (`RankExRhoSrcDef<subset>`)."""
     out = _Macros()
+
+    def rho(x: float | None) -> str:
+        s = num(x, 2)
+        return "$-$" + s[1:] if s.startswith("-") else s  # a typeset minus, not a hyphen
+
+    def put(c: dict[str, Any] | None, name: str) -> None:
+        ok = c and c["rho"] == c["rho"]  # fewer than three systems give no correlation (NaN)
+        est = {"est": c["rho"], "lo": c["lo"], "hi": c["hi"]} if c and ok else None
+        out[f"RankExRho{name}"] = ci(est, rho)
+        out[f"RankEx{name}Systems"] = str(c["n_systems"]) if c else MISSING
+        out[f"RankEx{name}Worlds"] = str(c["n_worlds"]) if c else MISSING
+
     for key, name in (
         ("update_src_vs_update_def", "SrcDef"),
         ("update_src_vs_stability_orphan", "SrcOrphan"),
     ):
-        c = _get(m, "correlations", key)
-        est = {"est": c["rho"], "lo": c["lo"], "hi": c["hi"]} if c else None
-        out[f"RankExRho{name}"] = ci(est, lambda x: num(x, 2))
-        out[f"RankEx{name}Systems"] = str(c["n_systems"]) if c else MISSING
-        out[f"RankEx{name}Worlds"] = str(c["n_worlds"]) if c else MISSING
+        put(_get(m, "correlations", key), name)
+    for subset, tag in RANK_SUBSETS:
+        put(_get(m, "subsets", subset, "update_src_vs_update_def"), f"SrcDef{tag}")
     out["RankExSystems"] = str(len(m["systems"])) if m.get("systems") else MISSING
     return out
 
@@ -1219,6 +1234,7 @@ def build_macros(root: Path) -> dict[str, str]:
         ex_round2,
         ex_round3,
         ex_round3_review,
+        ex_round4_detection,
         key_audit,
         l_tokens,
     )
@@ -1234,6 +1250,8 @@ def build_macros(root: Path) -> dict[str, str]:
         ex_round3.numbers(ex_round3.load(root, sources)),  # store and reader, view, natural
         # the checks of what the design fixes, and further splits
         ex_round3_review.numbers(ex_round3_review.load(root, sources)),
+        # detection from the latest change, the key with Claude writers and the oracle key
+        ex_round4_detection.numbers(ex_round4_detection.load(root, sources)),
     ):
         if dup := macros.keys() & ex.keys():
             raise ValueError(f"`Ex` macro collides with an existing one: {sorted(dup)[:3]}")

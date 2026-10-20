@@ -159,10 +159,10 @@ def numbers(view: Mapping[str, Any] | None) -> dict[str, str]:
 
 # ------------------------------------------------------------------------------------- table
 CAPTION = (
-    r"What each key invalidates on the test worlds, audited without a model. No key missed a "
-    r"changed item-time (the largest share not invalidated is {missed}). Re-derivations: "
-    r"invalidations over the four checkpoints, one writer request each. Def.\ share: share of "
-    r"the {cp} definition item-times of a shift that were re-derived."
+    r"What each key invalidates on the test worlds, audited without a model. Counted since the "
+    r"fork, no key missed a changed item-time (the largest share not invalidated is {missed}). "
+    r"Re-derivations: invalidations over the four checkpoints, one writer request each. Def.\ "
+    r"share: share of the {cp} definition item-times of a shift that were re-derived."
 )
 KEY_LABELS = {"source": "source key", "gold": "oracle", "scope": "scope"}
 BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}

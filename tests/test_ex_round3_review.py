@@ -156,7 +156,7 @@ def test_shift_caused_contrasts_and_cited_misses():
     assert MACROS["ExRevCauseMainSrcShiftAllBxD"] == "$+$2.5\\,pp [$+$0.5, $+$4.4]"
     assert MACROS["ExRevCauseMainOrphanShiftAllBxDEst"] == "$-$0.1\\,pp"
     assert MACROS["ExRevCauseDmDefShiftAllBxD"] == "$+$32.4\\,pp [$+$23.4, $+$41.5]"
-    # the cited-cluster key misses no change a redefinition caused; its misses are drift
+    # counted since the fork, the citation key misses no change a redefinition caused
     assert MACROS["ExRevCitedDefShiftAllMissed"] == "0"
     assert MACROS["ExRevCitedDefShiftAllItems"] == "222"
     assert MACROS["ExRevCitedDefDriftAllMissShareEst"] == "34.5\\%"
@@ -169,6 +169,11 @@ def test_shift_caused_contrasts_and_cited_misses():
 
 
 # ------------------------------------------------------------------------------- clock
+def shown(value: str) -> str:
+    """`value` as the paper prints it: an estimate with a zero-width interval stands alone."""
+    return pn._macro("X", value).removeprefix("\\newcommand{\\X}{").removesuffix("}")
+
+
 @pytest.mark.paper
 def test_clock_reproduces_the_main_terms():
     for study, st in (("main", "Main"), ("rep", "Rep")):
@@ -177,8 +182,8 @@ def test_clock_reproduces_the_main_terms():
                 for cell, cellt in (("D0B1", "DzeroBone"), ("D1B1", "DoneBone")):
                     t = node("clock", study, "terms", b, cls, cell, "since_t0")
                     name = f"ExDec{st}{bt}{ct}{cellt}"
-                    assert fmt(t["m"]) == committed(f"{name}Missed"), name
-                    assert fmt(t["r"]) == committed(f"{name}Repair"), name
+                    assert shown(fmt(t["m"])) == committed(f"{name}Missed"), name
+                    assert shown(fmt(t["r"])) == committed(f"{name}Repair"), name
 
 
 def test_clock_only_changes_and_the_staleness_errors():

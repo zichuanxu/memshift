@@ -43,5 +43,6 @@
  "ex_round3": "runs/stage6_ex_round3",
  "round3": "runs/stage7_round3",
  "ex_round3_review": "runs/stage8_ex_round3_review",
- "round3b": "runs/stage9_round3b"
+ "round3b": "runs/stage9_round3b",
+ "ex_round4_detection": "runs/stage10_ex_round4_detection"
 }

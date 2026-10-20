@@ -14,6 +14,10 @@ its metrics; the short-world baselines were run on the src branch only, so they 
 but not in the correlations unless S_def and orphan runs of them are supplied. `holdmem_json_arm`
 (a serving-format ablation of one cell) is left out.
 
+The same correlations are also computed within three subsets (`SUBSETS`), each with its own world
+bootstrap: the white-box HoldMem cells, the native systems, and the native systems with no-store
+BM25 (`zero`) and plain RAG.
+
 Inputs are raw run directories, as `analysis.e5` takes them (fetch them from the compute host):
   --e5         native E5 runs (answers.jsonl, probes.jsonl)
   --e1         white-box E1 runs on the same short worlds (their t0 probes give the gold of every
@@ -32,7 +36,7 @@ import argparse
 import json
 import math
 from collections import defaultdict
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -54,7 +58,9 @@ METRICS = {
 }
 PAIRS = (("update_src", "update_def"), ("update_src", "stability_orphan"))
 BASELINES = frozenset({"oracle", "zero", "rag"})
+NO_STORE = frozenset({"zero", "rag"})  # no-store BM25 and plain RAG: the baselines with no store
 EXCLUDED = frozenset({"holdmem_json_arm"})
+SUBSETS = ("holdmem", "native", "native_baselines")
 STATUS = "additional analysis: descriptive, no threshold"
 
 
@@ -155,9 +161,26 @@ def _rho_stat(
     return stat
 
 
-def correlations(samples: Samples) -> dict[str, Any]:
-    systems = sorted(samples)
-    worlds = sorted({w for s in samples.values() for by in s.values() for w in by})
+def kind(system: str, native: set[str]) -> str:
+    return "native" if system in native else "baseline" if system in BASELINES else "white-box"
+
+
+def subsets(systems: Iterable[str], native: set[str]) -> dict[str, list[str]]:
+    """The systems of each subset in `SUBSETS`: the white-box HoldMem cells, the native systems,
+    and the native systems with no-store BM25 and plain RAG."""
+    names = sorted(systems)
+    return {
+        "holdmem": [s for s in names if kind(s, native) == "white-box"],
+        "native": [s for s in names if s in native],
+        "native_baselines": [s for s in names if s in native or s in NO_STORE],
+    }
+
+
+def correlations(samples: Samples, among: Sequence[str] | None = None) -> dict[str, Any]:
+    """The Spearman correlations of `PAIRS` over the systems `among` (default: every system), with
+    a world bootstrap over the worlds these systems were measured on."""
+    systems = sorted(samples if among is None else among)
+    worlds = sorted({w for s in systems for by in samples[s].values() for w in by})
     by_world = _encode(samples, systems, worlds)
     out: dict[str, Any] = {}
     for left, right in PAIRS:
@@ -188,8 +211,7 @@ def system_rows(samples: Samples, native: set[str]) -> list[Row]:
         ranks[m] = {s: len(names) + 1 - r for s, r in zip(names, asc, strict=True)}
     rows = []
     for s in sorted(samples):
-        kind = "native" if s in native else "baseline" if s in BASELINES else "white-box"
-        row: Row = {"system": s, "kind": kind}
+        row: Row = {"system": s, "kind": kind(s, native)}
         for m in METRICS:
             row[m] = values[m][s].to_json() if s in values[m] else None
             row[f"rank_{m}"] = ranks[m].get(s)
@@ -221,15 +243,19 @@ def table(res: dict[str, Any]) -> str:
             + " |"
         )
     lines += ["", "Ranks: 1 = highest, among the systems that have the metric.", ""]
-    for name, c in res["correlations"].items():
-        left, right = name.split("_vs_")
-        left_out = (
-            f"; left out (metric missing): {', '.join(c['left_out'])}" if c["left_out"] else ""
-        )
-        lines.append(
-            f"Spearman rho({left}, {right}) = {c['rho']:.2f} [{c['lo']:.2f}, {c['hi']:.2f}] over "
-            f"{c['n_systems']} systems, {c['n_worlds']} worlds{left_out}"
-        )
+    groups = [("all systems", res["correlations"])]
+    groups += [(f"subset {s}", c) for s, c in (res.get("subsets") or {}).items()]
+    for group, corr in groups:
+        for name, c in corr.items():
+            left, right = name.split("_vs_")
+            left_out = (
+                f"; left out (metric missing): {', '.join(c['left_out'])}" if c["left_out"] else ""
+            )
+            lines.append(
+                f"Spearman rho({left}, {right}), {group} = {c['rho']:.2f} "
+                f"[{c['lo']:.2f}, {c['hi']:.2f}] over {c['n_systems']} systems, "
+                f"{c['n_worlds']} worlds{left_out}"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -251,6 +277,9 @@ def analyse(
         "excluded_systems": sorted(EXCLUDED),
         "systems": system_rows(samples, native),
         "correlations": correlations(samples),
+        "subsets": {
+            name: correlations(samples, among) for name, among in subsets(samples, native).items()
+        },
     }
     (out / "analysis").mkdir(parents=True, exist_ok=True)
     (out / "analysis" / "rank_corr.json").write_text(json.dumps(res, indent=1))

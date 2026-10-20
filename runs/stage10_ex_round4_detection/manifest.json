@@ -1,0 +1,220 @@
+{
+  "analysis_code": {
+    "commit": "58567e9fd47404523dc1af8f9e001ba64c4d349f",
+    "dirty": false
+  },
+  "created_utc": "2026-10-20T14:07:42Z",
+  "experiment": "merged-ex_round4_detection",
+  "files_sha256": {
+    "analysis/event.json": "98bb5225e6fe256e997059d68ef3cccdb6f09ce431c82af7cd48e6b315e7f3a8",
+    "analysis/keys.json": "6c10aace2321dc146ad1c2341dfcc5895f6241731ba03a58874ce546420a83f6",
+    "analysis/writers.json": "464ed8da84fce758888d589a87a710031f0396d6b680f61b8c71eed4c80a606c"
+  },
+  "note": "additional analysis, computed from the raw runs of the main study and the replication, the item tables of the control stage and block C, and the block H runs; no model call",
+  "producers": {
+    "analysis/event.json": "python -m memshift.analysis.ex_round4_detection --part event",
+    "analysis/keys.json": "python -m memshift.analysis.ex_round4_detection --part keys",
+    "analysis/writers.json": "python -m memshift.analysis.ex_round4_detection --part writers"
+  },
+  "run_id": "stage10_ex_round4_detection",
+  "sources": [
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "c2d9112ae0a27377b9293e69becb1505bf2e07c4fc9be61abc8fcb00e50ad863",
+      "run_id": "stage2_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "56f05b126c99067fc42e912c6998d8b372b738403a2d8ffd53bee01f661add16",
+      "run_id": "stage4_rep_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-e1",
+      "manifest_sha256": "d32178ada1af98059192e463e33dd83af83047e8129c664ca24a168cbff1f8ea",
+      "run_id": "stage4_c_e1",
+      "worlds": []
+    },
+    {
+      "code": null,
+      "experiment": "merged-ctl",
+      "manifest_sha256": "916b18f1775fbd2bf1fa7fd18d7e73fbaec89cefd5c8463c0f0757a33c23b0ab",
+      "run_id": "stage5_controls",
+      "worlds": []
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "d652b0fbe0320b9ce9af7dbc7ed49a2f1a6307868791a7ee2ef16dab68f57d5e",
+      "run_id": "e1_ha_sonnet_s1000-1001_20261016T082038Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "94b48a2c99f754273bc4aece74d622b00f8d9c99a747c2dfc84e75db993b75dc",
+      "run_id": "e1_ha_sonnet_s1002-1003_20261016T082038Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "ccb6cd8685cd75427e249ee7578419c38c02c75f1e4fc9fe172ae20395c75d49",
+      "run_id": "e1_ha_sonnet_s1004-1005_20261016T082038Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "97853cb89f046e49a8e7adbcbd3ef23c77aa929d6f175f1080650e81abe37bba",
+      "run_id": "e1_ha_sonnet_s1006-1007_20261016T082038Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "f0f2e368ffd4bbaa4fc11704b9a533ba64e1d7cd",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "1480d3296f7d1f634e542e16e07b92f37661e5ac786620502334f19fdd48433b",
+      "run_id": "e1_ha_sonnet_s1008-1009_20261016T082038Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "2dc02530a6753b7823d331ce87edfe81ccd283176f506bd6739574cec3d1a20a",
+      "run_id": "e1_hc_opus_s1000-1001_20261016T115624Z",
+      "worlds": [
+        "w1000",
+        "w1000",
+        "w1000",
+        "w1001",
+        "w1001",
+        "w1001"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "b84106d44a915294217ef50691a2e1021ec2b16a3274eb1b1bd683ad9224d00a",
+      "run_id": "e1_hc_opus_s1002-1003_20261016T121055Z",
+      "worlds": [
+        "w1002",
+        "w1002",
+        "w1002",
+        "w1003",
+        "w1003",
+        "w1003"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "98616a17cecd2262c8eb0ffcefc91fd4b141cabb8b43feb35540c413312ee8c6",
+      "run_id": "e1_hc_opus_s1004-1005_20261016T123426Z",
+      "worlds": [
+        "w1004",
+        "w1004",
+        "w1004",
+        "w1005",
+        "w1005",
+        "w1005"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "90174fc3b900640fb12fed6f270d29378d5cee1112d4151579ff84e9314d15d9",
+      "run_id": "e1_hc_opus_s1006-1007_20261016T123857Z",
+      "worlds": [
+        "w1006",
+        "w1006",
+        "w1006",
+        "w1007",
+        "w1007",
+        "w1007"
+      ]
+    },
+    {
+      "code": {
+        "commit": "5c6627c5553f4f2b5e8b4e6f5284bb7013a8f140",
+        "dirty": false
+      },
+      "experiment": "E1",
+      "manifest_sha256": "8138cee0cff0aef1d092b72e3bb57e4e21e880ce92d48222f8f26444951ee90c",
+      "run_id": "e1_hc_opus_s1008-1009_20261016T124727Z",
+      "worlds": [
+        "w1008",
+        "w1008",
+        "w1008",
+        "w1009",
+        "w1009",
+        "w1009"
+      ]
+    }
+  ]
+}

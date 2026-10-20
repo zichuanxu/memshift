@@ -20,5 +20,11 @@ Rank correlation across systems (additional analysis: descriptive, no threshold)
 
 Ranks: 1 = highest, among the systems that have the metric.
 
-Spearman rho(update_src, update_def) = 0.96 [0.85, 0.98] over 15 systems, 15 worlds
-Spearman rho(update_src, stability_orphan) = 0.55 [0.43, 0.66] over 15 systems, 15 worlds
+Spearman rho(update_src, update_def), all systems = 0.96 [0.85, 0.98] over 15 systems, 15 worlds
+Spearman rho(update_src, stability_orphan), all systems = 0.55 [0.43, 0.66] over 15 systems, 15 worlds
+Spearman rho(update_src, update_def), subset holdmem = 0.94 [0.75, 1.00] over 6 systems, 15 worlds
+Spearman rho(update_src, stability_orphan), subset holdmem = 0.71 [0.46, 0.89] over 6 systems, 15 worlds
+Spearman rho(update_src, update_def), subset native = 0.52 [-0.09, 0.94] over 6 systems, 15 worlds
+Spearman rho(update_src, stability_orphan), subset native = -0.20 [-0.64, 0.63] over 6 systems, 15 worlds
+Spearman rho(update_src, update_def), subset native_baselines = 0.76 [0.24, 0.90] over 8 systems, 15 worlds
+Spearman rho(update_src, stability_orphan), subset native_baselines = -0.34 [-0.69, 0.16] over 8 systems, 15 worlds

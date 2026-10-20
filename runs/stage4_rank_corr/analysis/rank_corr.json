@@ -539,5 +539,113 @@
    ],
    "left_out": []
   }
+ },
+ "subsets": {
+  "holdmem": {
+   "update_src_vs_update_def": {
+    "rho": 0.942857142857143,
+    "lo": 0.753702346348183,
+    "hi": 1.0,
+    "n_worlds": 15,
+    "n_systems": 6,
+    "systems": [
+     "holdmem_D0B0",
+     "holdmem_D0B1_cited",
+     "holdmem_D0B1_source",
+     "holdmem_D1B0",
+     "holdmem_D1B1_cited",
+     "holdmem_D1B1_source"
+    ],
+    "left_out": []
+   },
+   "update_src_vs_stability_orphan": {
+    "rho": 0.7142857142857143,
+    "lo": 0.4638168285219587,
+    "hi": 0.8857142857142858,
+    "n_worlds": 15,
+    "n_systems": 6,
+    "systems": [
+     "holdmem_D0B0",
+     "holdmem_D0B1_cited",
+     "holdmem_D0B1_source",
+     "holdmem_D1B0",
+     "holdmem_D1B1_cited",
+     "holdmem_D1B1_source"
+    ],
+    "left_out": []
+   }
+  },
+  "native": {
+   "update_src_vs_update_def": {
+    "rho": 0.5161002296110789,
+    "lo": -0.08571428571428573,
+    "hi": 0.942857142857143,
+    "n_worlds": 15,
+    "n_systems": 6,
+    "systems": [
+     "amem",
+     "cognee",
+     "hipporag",
+     "lightrag",
+     "mem0",
+     "memos"
+    ],
+    "left_out": []
+   },
+   "update_src_vs_stability_orphan": {
+    "rho": -0.20291986247835694,
+    "lo": -0.6377481392176932,
+    "hi": 0.6323529411764706,
+    "n_worlds": 15,
+    "n_systems": 6,
+    "systems": [
+     "amem",
+     "cognee",
+     "hipporag",
+     "lightrag",
+     "mem0",
+     "memos"
+    ],
+    "left_out": []
+   }
+  },
+  "native_baselines": {
+   "update_src_vs_update_def": {
+    "rho": 0.7610943550173663,
+    "lo": 0.2380952380952381,
+    "hi": 0.9047619047619048,
+    "n_worlds": 15,
+    "n_systems": 8,
+    "systems": [
+     "amem",
+     "cognee",
+     "hipporag",
+     "lightrag",
+     "mem0",
+     "memos",
+     "rag",
+     "zero"
+    ],
+    "left_out": []
+   },
+   "update_src_vs_stability_orphan": {
+    "rho": -0.3353353533357125,
+    "lo": -0.6904761904761906,
+    "hi": 0.15569141404872364,
+    "n_worlds": 15,
+    "n_systems": 8,
+    "systems": [
+     "amem",
+     "cognee",
+     "hipporag",
+     "lightrag",
+     "mem0",
+     "memos",
+     "rag",
+     "zero"
+    ],
+    "left_out": []
+   }
+  }
  }
 }
