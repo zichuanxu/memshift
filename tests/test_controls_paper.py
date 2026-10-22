@@ -219,33 +219,33 @@ def test_compact_table_rows_are_the_control_arms_with_their_contrasts(staged):
     for arm, contrast in (  # the arm's name on the first row of its block, once
         ("oracle", "Update, oracle"),
         ("", "Stability, oracle"),
-        ("add-only", "Update, add-only"),
+        ("add-only", "Update, add-only $-$ $B{=}0$"),
+        ("", rf"{cp.SUB}$B{{=}}1$ $-$ add-only"),
         ("template", "Update, template"),
         ("scope", "Update, scope $-$ source"),
         ("", "Update, scope $-$ cited"),
-        ("view", "Update, view $-$ no-store BM25"),
-        ("", rf"{cp.SUB} single-field items"),
-        ("", "Stability, view $-$ no-store BM25"),
-        ("", "Update, view $-$ $D_"),
-        ("", "Accuracy at $t_0$"),
+        ("", rf"{cp.SUB} missed invalidation, scope cell"),
         ("full access", "Acc.\\ on re-derived, $D{=}1$ $-$ full-access"),
-        ("add-only", "(add-only"),  # the two ratios in a block of their own, last
-        ("template", "(template"),
     ):
         assert f"\n{arm} & {contrast}" in tex, (arm, contrast)
-    ratios = tex.split("\\midrule")[-1].split("\\bottomrule")[0]
-    assert ratios.count("ratio") == 0 and ratios.count(" \\\\") == 2
-    assert tex.index("\nfull access &") < tex.index("\nadd-only & (add-only")
+    body = tex.split("\\midrule")[1].split("\\bottomrule")[0]
+    assert body.count(" \\\\") == 12  # twelve contrasts, two item classes of three shifts each
+    # the view is in tab_view; the same add-only refresh on the worlds of block U is in
+    # tab_refresh_upsert, and the ratios follow from the two add-only rows
+    assert "\nview &" not in tex and "ratio" not in body
+    assert "\\cref{tab:view}" in tex and "\\Cref{tab:refresh-upsert}" in tex
+    assert "add-only refresh on \\RThreeUWorlds{} worlds" in tex
     # the two arms that could not be tested as designed are not in the table
     assert "deletion-aware" not in tex and "thinking" not in tex.lower()
     assert "P-" not in tex and "prereg" not in tex and "regist" not in tex
     assert "verdict" not in tex and "\\pass" not in tex and "\\fail" not in tex
     assert "\\textbf{" not in tex.replace(MISSING, "") and "n.j." not in tex
     assert "Implementation checks" not in tex
-    z1 = next(
-        line for line in tex.splitlines() if line.startswith("view & Update, view $-$ no-store")
-    )
-    assert "$+$80.0" in z1
+    # the view's contrast on the other items and before the shift are in the notes
+    notes = tex.split("\\mtnotes{", 1)[1]
+    for key in ("K_cited_{br}_other", "Z_upd_{br}_rule", "Z_upd_{br}_free"):
+        assert f"{cp._listed(staged, key)}\\,pp" in notes, key
+    assert MISSING not in notes
 
 
 def split_row(line: str) -> list[str]:
@@ -259,11 +259,10 @@ def cells_of(tex: str, start: str) -> list[str]:
 
 def test_compact_table_has_the_full_access_rows_for_src_and_def_only(staged):
     cells = cells_of(cp.tab_controls(staged), "full access &")
-    # arm, contrast, definition (3 branches), other items (3), all items (3)
-    assert len(cells) == 11 and cells[0] == "full access" and "full-access" in cells[1]
+    # arm, contrast, definition items (3 branches), all items (3)
+    assert len(cells) == 8 and cells[0] == "full access" and "full-access" in cells[1]
     assert cells[2:5] == ["$+$66.0", "$+$66.0", cp._not_run(last=False)]
-    assert cells[5:8] == [cp.NOT_TAKEN] * 3  # empty: the contrast is about definition items
-    assert cells[8:11] == ["$+$32.2", "$+$32.2", cp._not_run(last=True)]  # the last column
+    assert cells[5:8] == ["$+$32.2", "$+$32.2", cp._not_run(last=True)]  # the last column
     lines = cp.tab_controls(staged).splitlines()
     mech = split_row(
         lines[lines.index(next(x for x in lines if x.startswith("full access &"))) + 1]
@@ -271,7 +270,7 @@ def test_compact_table_has_the_full_access_rows_for_src_and_def_only(staged):
     assert mech[:2] == ["", rf"{cp.SUB} value equals gold"]  # the row after the full-access row
     assert mech[2:5] == ["$+$66.0", "$+$66.0", cp._not_run(last=False)]
     assert cp._not_run(last=False) == r"\mtna{}"  # a centred dash, defined in the notes
-    assert "$\\Ssrc$ and $\\Sdef$ only ({undef})" in cp.COMPACT_NOTE
+    assert "and $\\Sdef$ only ({undef})" in cp.COMPACT_NOTE
 
 
 def test_the_full_access_rows_are_missing_when_unstaged_or_without_the_cell():
@@ -292,9 +291,8 @@ def test_compact_table_shows_the_estimates_of_every_arm():
     res = ev(b.table())
     tex = cp.tab_controls(res)
     g = cells_of(tex, "oracle & Update, oracle")
-    assert len(g) == 11 and "\\fail" not in tex and "n.j." not in tex
-    z = cells_of(tex, "view & Update, view $-$ no-store")
-    assert len(z) == 11
+    assert len(g) == 8 and "\\fail" not in tex and "n.j." not in tex
+    assert MISSING not in g
 
 
 def test_check_macros_mark_each_check():
@@ -334,7 +332,8 @@ def test_tables_compile_and_fit_the_page(staged, tmp_path):
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
                 r"\newcommand{\pass}{\checkmark}\newcommand{\fail}{$\times$}"
-                r"\newcommand{\cref}[1]{Appendix~A}",
+                r"\newcommand{\cref}[1]{Appendix~A}\newcommand{\Cref}[1]{Table~1}",
+                r"\newcommand{\RThreeUWorlds}{20}",  # a macro of the refresh block, numbers.tex
                 r"\begin{document}\input{tab_controls.tex}",
                 r"\end{document}",
             ]
@@ -358,25 +357,36 @@ def test_compact_caption_defines_every_arm_and_term(staged):
     for text in (caption, notes):
         assert "prereg" not in text and "P-" not in text and "regist" not in text
     for term in (
-        "The full-access writer ran after $\\Ssrc$ and $\\Sdef$ only (---)",
+        "Full access: the full-access writer, run after $\\Ssrc$ and $\\Sdef$ only (---)",
         "The arms are those of \\cref{app:controls}",  # defined once, in the appendix
         "Source, cited: the source key and the citation key",
-        "Full access: the full-access writer",
         "Acc.\\ on re-derived: accuracy on re-derived items",
         "Value equals gold: the share of re-derived values that equal gold",
-        "The last two rows are ratios",
-        "$t_0$: before the shift",
+        "Before the shift, view $-$ no-store BM25 on accuracy was",
     ):
         assert term in notes, term
     assert "Deletion-aware" not in caption + notes and "Thinking" not in caption + notes
     assert "retraction" not in tex and "gold $-$" not in tex and "refresh $-$" not in tex
     t = cells_of(tex, "template & Update, template")
-    assert len(t) == 11  # arm, contrast and the nine cells
+    assert len(t) == 8  # arm, contrast and the six cells
 
 
-def test_a_negative_ratio_has_a_typeset_minus():
-    ratio = next(r for r in cp.ROWS if r.unit == "ratio")
-    assert cp._compact_cell(-0.01, ratio) == "$-$0.01"
+def test_the_notes_list_a_contrast_per_shift_with_a_typeset_minus():
+    view = {
+        "contrasts": {
+            f"Z_upd_{b}_rule": {"est": x}
+            for b, x in zip(("src", "def", "orphan"), (-0.2, 0.0, 0.137), strict=True)
+        }
+    }
+    assert cp._listed(view, "Z_upd_{br}_rule") == "$-$20.0, 0.0 and $+$13.7"
+    same = {
+        "contrasts": {
+            f"Z0_upd_{b}_{c}": {"est": 0.05}
+            for b in ("src", "def", "orphan")
+            for c in ("definition", "all")
+        }
+    }
+    assert cp._before(same) == "$+$5.0\\,pp on definition items and $+$5.0\\,pp on all items"
 
 
 # --------------------------------------------------------------------- sources and generated files

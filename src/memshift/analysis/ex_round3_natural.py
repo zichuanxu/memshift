@@ -3,7 +3,7 @@ branch (no model call). Two parts, written to one JSON file
 (`runs/stage6_ex_round3/natural.json` by default):
 
 composition  The all-item "by the shift" and "drift only" B x D of `analysis.ex_round2`
-             (tab:redef_only) are pooled means over item-times of two classes, definition items and
+             (tab:cause) are pooled means over item-times of two classes, definition items and
              the other 42 items, so each is the class-share-weighted sum of the class B x D. Per
              branch and part: the class shares, the class B x D, each class's contribution
              (share x class B x D, with its own world-bootstrap interval), the identity residual,

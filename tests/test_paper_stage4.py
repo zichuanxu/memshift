@@ -397,13 +397,19 @@ def test_replication_table_gives_both_estimates_with_their_intervals():
     assert rf"\begin{{mttabular}}{{@{{}}ll r@{{\,}}l {gap} r@{{\,}}l {gap} r@{{\,}}l@{{}}}}" in tab
     assert r"\mtgroup{8}{Source key}" in tab and r"\mtgroup{8}{Citation key}" in tab
     lines = [ln.removesuffix(r" \\").split(" & ") for ln in _first_body(tab).splitlines()]
-    rows = [c for c in lines if len(c) == 8 and c[1] in ("main", "fresh")]
-    assert len(rows) == 2 * 2 * len(pt.REP_ROWS)  # both keys, main and fresh per contrast
+    rows = [c for c in lines if len(c) == 8 and c[1] in ("main study", "replication")]
+    # the detection effects at D=0 and D=1 print alike (one row), and D's effect on missed
+    # invalidation prints 0.0 in every cell (a line of the notes): both keys, both studies
+    shown = [c[0] for c in rows if c[0]]
+    assert r"\mtin $B$ effect, detection (either $D$)" in shown
+    assert not any("missed" in lab or "{=}0$)" in lab for lab in shown)
+    assert len(rows) == 2 * 2 * (len(pt.REP_ROWS) - 2)  # both keys, both studies per contrast
+    assert "$D$'s effect on missed invalidation was 0.0 with both keys" in tab
     label = r"\mtin $B{\times}D$ interaction, Update"
-    for g in ("source", "cited"):
-        k = next(i for i, c in enumerate(rows) if c[0] == label and (g == "source" or i > 16))
+    for g, k in zip(("source", "cited"), [i for i, c in enumerate(rows) if c[0] == label],
+                    strict=True):  # fmt: skip
         main, fresh = rows[k], rows[k + 1]
-        assert (main[1], fresh[0], fresh[1]) == ("main", "", "fresh")
+        assert (main[1], fresh[0], fresh[1]) == ("main study", "", "replication")
         for j, b in zip((2, 4, 6), ("src", "def", "orphan"), strict=True):
             row = view["rows"][b, f"BxD_interaction_update_{g}"]
             # every estimate with its interval, in two cells
@@ -602,11 +608,11 @@ def test_m2_macros_estimates_and_family_count():
     tab = pt.tab_families(None, fams, {}, {"llama": 0.0})
     assert "families where" not in tab and r"\pass" not in tab
     assert pt.mt_ci_cells(fams["llama"]["estimates"]["BxD_def"], sign=True) in tab
-    largest = next(ln for ln in tab.splitlines() if ln.startswith("(i) "))
+    largest = next(ln for ln in tab.splitlines() if ln.startswith("$D$ effect on missed inv"))
     missing = rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"
-    # Llama alone, the two families not staged, and the empty column of the main reader
+    # Llama alone, the two families and Qwen3.5-9B on their worlds not staged: the row stays
     cells = re.split(r"\s*&\s*", largest.removesuffix(r" \\"))
-    assert cells[1:] == ["0.0", "", missing, missing, "", ""]
+    assert cells[1:] == ["0.0", "", missing, missing, missing]
 
 
 def test_m2_count_needs_all_three_families():
@@ -1218,8 +1224,9 @@ def test_rendered_table_wellformed(tmp_path):
     tex = pt.tab_rendered(_rendered(tmp_path))
     check_tex(tex)
     assert (
-        "(iii) $D$ effect on accuracy on re-derived items, $\\Sdef$" in tex
+        "\n$D$ effect on accuracy on re-derived items, $\\Sdef$ & " in tex
         and "\\label{tab:rendered}" in tex
+        and "(iii)" not in tex
     )
 
 
@@ -1305,7 +1312,7 @@ def test_calibration_figure_draws_with_and_without_the_curve(tmp_path):
     with_curve = figs.fig_calibration(ORIG["e2"], tmp_path).read_bytes()
     assert with_curve.startswith(b"%PDF") and b"/Subtype /Image" not in with_curve
     box = re.search(rb"/MediaBox \[\s*0 0 ([\d.]+) ([\d.]+)\s*\]", with_curve)
-    assert box and float(box.group(1)) == pytest.approx(72 * figs.fs.NARROW)  # one panel
+    assert box and float(box.group(1)) == pytest.approx(72 * figs.fs.TEXT)  # full width
     assert float(box.group(2)) == pytest.approx(figs.CALIBRATION_PT[1])
     bare = {k: v for k, v in ORIG["e2"].items() if k != "explore_pooled_curve"}
     (tmp_path / "bare").mkdir()
@@ -1381,6 +1388,8 @@ def test_zero_cost_figure_is_a_full_width_vector_pdf(tmp_path):
     box = re.search(rb"/MediaBox \[\s*0 0 ([\d.]+) ([\d.]+)\s*\]", data)
     assert box and float(box[1]) == pytest.approx(72 * figs.fs.TEXT)
     assert float(box[2]) == pytest.approx(figs.ZERO_PT[1])
+    (tmp_path / "empty").mkdir()  # without the stage: the two panels' titles only
+    assert figs.fig_zero_cost({}, tmp_path / "empty").read_bytes().startswith(b"%PDF")
 
 
 # ------------------------------------------------------------------------- sources and the paper
@@ -1413,7 +1422,7 @@ def test_committed_generated_files_are_current():
         ),
         "tab_construct.tex": pt.tab_construct(inp["c"]),
         "tab_families.tex": pt.tab_families(
-            inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, sources)
+            inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, sources), inp["rendered"]
         ),
         "tab_rendered.tex": pt.tab_rendered(inp["rendered"]),
     }
@@ -1472,7 +1481,8 @@ def test_stage4_captions_and_notes_define_their_rows_marks_and_cells():
         "Value equals gold: share of the re-derived item-times whose value equals gold",
     ):
         assert term in _notes(rep), term
-    assert "(main)" in rep.split(r"\label{tab:replication}")[0]
+    assert "in the main study and in the replication" in rep.split(r"\label{tab:replication}")[0]
+    assert "$D$'s effect on missed invalidation was 0.0" in _notes(rep)
     assert "behavioural" not in rep and "mechanistic" not in rep
     assert "the retention test in" not in rep and "Membership" not in rep
     tab = pt.tab_construct(inp["c"])
@@ -1482,26 +1492,38 @@ def test_stage4_captions_and_notes_define_their_rows_marks_and_cells():
     for term in (
         "$D_1$, $D_0$: the $D{=}1$ and $D{=}0$ cells",
         r"only exact recomputation gives: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$",
+        r"$D_{\mathrm{m}}$'s effect on missed invalidation was 0.0 after every shift",
+        "Groups: point estimates",
     ):
         assert term in _notes(tab), term
+    assert "on missed invalidation, $D_{" not in con.split(r"\mtnotes")[0]  # a line of the notes
     assert "benchmark-authored" not in tab
-    fam = pt.tab_families(inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, SOURCES))
+    fam = pt.tab_families(
+        inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, SOURCES), inp["rendered"]
+    )
     switches, families_ = fam.split("\n\n\\begin{table}")  # two tables
     assert r"\label{tab:switches}" in switches and r"\label{tab:families}" in families_
-    for term in ("slope (grey) is not usable", "(90\\% interval)"):
+    for term in ("slope (grey) is not usable", "(90\\% interval)", "AUROC: point estimates"):
         assert term in _notes(switches), term
     for term in (
-        "Row (i): the largest absolute $D$ effect on missed invalidation",
-        "In (b) the last column is the main reader on the same worlds",
+        "$D$'s effect on missed invalidation was 0.0 in every column",
+        "largest absolute value over both keys and the three shifts",
+        "Qwen3.5-9B: in (a) the main writer and reader, in (b) the main reader, on the same",
+        r"\holdmem{}(1,1) accuracy: point estimates",
     ):
         assert term in _notes(families_), term
-    for label in ("(ii) $B$ effect on Update", "(v) no-store BM25 $-$"):
+    for label in ("\n$B$ effect on Update, $\\Ssrc$, pooled over $D$ & ", "\nNo-store BM25 $-$"):
         assert label in families_, label
+    assert "(i)" not in families_ and "(ii)" not in families_
+    # Qwen3.5-9B as writer and reader on the families' worlds: the template worlds of block L
+    bxd = next(ln for ln in families_.splitlines() if ln.startswith("$B{\\times}D$ on Update"))
+    template = inp["rendered"]["template_same_seeds"]["estimates"]["BxD_def"]
+    assert bxd.removesuffix(r" \\").endswith(pt.mt_ci_cells(template, sign=True))
     text = _notes(fam) + fam.split(r"\label{tab:families}")[0]
     assert "same sign" not in fam and "keep the main reader's sign" not in text
     assert r"$\pm3$" not in text and "regist" not in text and "check" not in text
-    largest = next(ln for ln in fam.splitlines() if ln.startswith("(i) "))
-    assert MISSING not in largest  # every family's E1 analysis is staged
+    # every family's E1 analysis is staged, and D's effect on missed invalidation is 0.0 in all
+    assert not any(ln.startswith("$D$ effect on missed") for ln in fam.splitlines())
     upgrade = next(ln for ln in fam.splitlines() if ln.startswith("upgrade (27B)$^\\ast$"))
     assert r"\mtmuted{" in upgrade  # the unusable slope is grey
     gemma = next(ln for ln in fam.splitlines() if ln.startswith("gemma-4-12B$^\\ast$"))
@@ -1510,6 +1532,7 @@ def test_stage4_captions_and_notes_define_their_rows_marks_and_cells():
     assert switches.count(r"\mtgap") == 1
     assert switches.index("downgrade") < switches.index(r"\mtgap") < switches.index("Llama")
     ren = pt.tab_rendered(inp["rendered"])
-    first = next(ln for ln in ren.splitlines() if ln.startswith("(i) "))
-    assert first.removesuffix(r" \\").endswith(rf"\multicolumn{{2}}{{c@{{}}}}{{{pt.UNDEFINED}}}")
-    assert "has no paired difference" in _notes(ren)
+    assert "(i)" not in ren and not any(
+        ln.startswith("$D$ effect on missed") for ln in ren.splitlines()
+    )
+    assert "was 0.0 on both kinds of worlds" in _notes(ren)

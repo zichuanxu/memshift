@@ -17,7 +17,7 @@ TOKENIZER_JSON` reruns them all, about 30 minutes):
                  item-times changed by the shift, by drift only (the labels of `ex_round2`, via
                  `ex_round3_natural.label_item_times`) and both (pooled), per shift and class; and
                  the item-times the cited-cluster key did not invalidate (D1B1_cited) by the same
-                 split. The authored-D=1 parts are tab_redef_only's, the pooled values the class
+                 split. The authored-D=1 parts are those of tab:cause, the pooled values the class
                  split's
   clock.json     changes that come from the clock alone. Per changed item-time (gold differs from
                  t0), its last change is the latest interval between consecutive checkpoints (t0,
@@ -313,7 +313,7 @@ CITED_CELLS = ("holdmem_D0B1_cited", "holdmem_D1B1_cited")
 
 
 def arm_contrasts(tab: ex.Table, branch: str, cond: Cond, arm: str = "D1") -> dict[str, Est]:
-    """`ex_round2._contrasts` (the estimator of tab_redef_only) with the D=1 arm as a parameter:
+    """`ex_round2._contrasts` (the estimator of tab:cause) with the D=1 arm as a parameter:
     B effect at D=0 and D=1 and B x D on Update, source-epoch key."""
     u = {
         (d, b): tab.vec(ex.cell_system(arm, d, b, "source"), branch, "cv", cond)

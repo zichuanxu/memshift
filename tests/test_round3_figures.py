@@ -3,9 +3,11 @@ diagnostic-tests table): hand-built inputs for the logic, the staged analyses fo
 shows, and every figure drawn with full, partial and no inputs."""
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pytest
 
 from memshift.analysis import round3_figures as rf
@@ -81,16 +83,16 @@ def hand_writers() -> dict:
     }
 
 
-def test_writer_points_join_the_sets_x_and_y_and_merge_identical_sets():
+def test_writer_points_join_the_sets_x_and_y():
     d = rf.writer_points(hand_writers())
     assert [p["set"] for p in d["programs"]] == sorted(p["set"] for p in d["programs"])
     assert len(d["programs"]) == 5
     nox = next(p for p in d["programs"] if p["set"] == f"{LLAMA}#t0.7#s1")
     assert nox["x"] is None and nox["y"]["est"] == 0.02
-    opus = [g for g in d["groups"] if g["writer"] == OPUS]
-    assert len(opus) == 1 and opus[0]["n"] == 3 and len(opus[0]["sets"]) == 3
-    llama = [g for g in d["groups"] if g["writer"] == LLAMA]
-    assert len(llama) == 1 and llama[0]["n"] == 1 and llama[0]["x"]["est"] == 0.125
+    opus = [p for p in d["programs"] if p["writer"] == OPUS]  # identical sets, each kept
+    assert len(opus) == 3 and all(p["x"]["est"] == 1.0 and p["y"]["est"] == 0.39 for p in opus)
+    llama = next(p for p in d["programs"] if p["set"] == f"{LLAMA}#t0.7#s0")
+    assert llama["x"]["est"] == 0.125
     assert d["reference"] == {"est": 0.39, "lo": 0.32, "hi": 0.45}
 
 
@@ -109,18 +111,42 @@ def test_definition_writers_put_qwen_once_per_shift_on_the_same_worlds():
     assert d[4]["x"]["est"] == pytest.approx(1.45) and d[4]["y"]["est"] == pytest.approx(1.16)
 
 
-def test_coincide_merges_one_writers_sets_only():
-    a = {"set": "a", "writer": "w", "x": est(0.5), "y": est(0.2)}
-    b = {"set": "b", "writer": "w", "x": est(0.5002), "y": est(0.2)}
-    c = {"set": "c", "writer": "v", "x": est(0.5), "y": est(0.2)}
-    d = {"set": "d", "writer": "w", "x": est(0.6), "y": est(0.2)}
-    groups = rf.coincide([a, b, c, d, {"set": "e", "writer": "w", "x": None, "y": est(0.1)}])
-    assert [(g["writer"], g["n"]) for g in groups] == [("w", 2), ("v", 1), ("w", 1)]
+def test_sets_on_one_spot_sit_side_by_side_centred_on_it():
+    from memshift.analysis import figstyle as fs
+
+    pts = [p for p in rf.writer_points(hand_writers())["programs"] if p["x"]]
+    w_mm, h_mm = rf.WRITERS_PT[0] * fs.PT, rf.WRITERS_PT[1] * fs.PT
+    with fs.printed(rf.WRITERS_RC) as plt:
+        fig = plt.figure(figsize=(w_mm * fs.MM, h_mm * fs.MM))
+        p = rf._Plot(fig, rf.WRITERS_LEFT, rf.WRITERS_WA, rf.WRITERS_XA)
+        xs = rf._side_by_side(p, pts)
+        plt.close(fig)
+    opus = sorted(x for x, q in zip(xs, pts, strict=True) if q["writer"] == OPUS)
+    assert sum(opus) / 3 == pytest.approx(100.0)  # centred on their shared spot
+    steps = [b - a for a, b in zip(opus, opus[1:], strict=False)]
+    assert steps == pytest.approx([p.dx(rf.WRITERS_SLOT)] * 2)  # one square's pitch apart
+    llama = next(x for x, q in zip(xs, pts, strict=True) if q["writer"] == LLAMA)
+    assert llama == pytest.approx(12.5)  # a set alone stays at its value
+
+
+def test_nudges_part_the_marks_that_collide_and_leave_the_rest():
+    def mark(w: str, sh: str, x: float, y: float) -> dict:
+        h = rf.WRITERS_SQ_B / 2 + 0.1 if sh == "def" else rf.WRITERS_CIRC_B / 2 + 0.1
+        return {"key": (w, sh), "w": w, "cx": x, "cy": y, "h": h, "round": sh == "src",
+                "xlo": x - 3.0, "xhi": x + 3.1, "ylo": y - 2.9, "yhi": y + 3.2}  # fmt: skip
+
+    marks = [mark("a", "def", 10.0, 10.0), mark("b", "def", 10.4, 10.3), mark("c", "src", 40, 30)]
+    nud = rf._nudges(marks)
+    assert set(nud) == {("a", "def"), ("b", "def")}  # the far mark stays
+    assert all(max(abs(dx), abs(dy)) <= rf.WRITERS_NUDGE_MAX for dx, dy in nud.values())
+    (ax, ay), (bx, by) = nud["a", "def"], nud["b", "def"]
+    assert not rf._clash(marks[0], np.array([[ax, ay]]), marks[1], np.array([[bx, by]]))[0, 0]
+    assert rf._nudges(marks[2:]) == {}
 
 
 def test_writer_points_without_inputs_are_empty():
     d = rf.writer_points(EMPTY)
-    assert d == {"programs": [], "groups": [], "reference": None, "defwriters": []}
+    assert d == {"programs": [], "reference": None, "defwriters": []}
 
 
 def test_staged_writer_points_are_the_staged_values():
@@ -132,7 +158,7 @@ def test_staged_writer_points_are_the_staged_values():
         assert p["y"]["est"] == per_set[p["set"]]["est"]
     ref = INP["e1"]["explore_class_split"]["D1"]["def"]["source"]["definition"]
     assert d["reference"]["est"] == ref["BxD_interaction_update"]["est"]
-    assert sum(g["n"] for g in d["groups"]) == sum(p["x"] is not None for p in d["programs"])
+    assert all(p["x"] is not None for p in d["programs"])  # every staged set has its share
 
 
 def test_staged_definition_writers_agree_with_block_h():
@@ -252,13 +278,14 @@ def test_diagnostic_tests_list_the_four_tests_with_their_outcomes():
     labels = [t.label for t in tests]
     for prefix in ("Retention test", "Leaving test", "Utility floor", "Cost ceiling"):
         assert any(lab.startswith(prefix) for lab in labels), prefix
-    # every row is an outcome of the systems: how many units pass
+    # every row is an outcome of the systems: how many units pass, per system where several
     for t in tests:
-        assert t.outcome.startswith(("passes", "does not pass")), t.label
+        assert re.fullmatch(r"\d+/\d+(\\,\$\\cdot\$\\,\d+/\d+)*", t.outcome), t.label
     row = {t.label: t for t in tests if not t.fresh}  # the main study's rows
-    assert row[r"Retention test, \holdmem{}(1,1), three tiers (change)"].outcome == "passes 3~of~3"
-    five = row[r"Retention test, \holdmem{}(1,1), five other writers (change)"]
-    assert five.outcome.startswith("passes 2~of~5")
+    assert row[r"Retention test, \holdmem{}(1,1), three tiers"].outcome == "3/3"
+    five = row[r"Retention test, \holdmem{}(1,1), five other writers"]
+    assert five.outcome == "2/5" and len(five.passing) == 2  # the passing writers, named
+    assert row[r"Leaving test, \holdmem{}(1,1) with its keys"].outcome == "1/1"
 
 
 def test_the_fresh_world_rows_give_the_estimates_and_passes_of_the_replication():
@@ -270,15 +297,13 @@ def test_the_fresh_world_rows_give_the_estimates_and_passes_of_the_replication()
     hi = max(t["delta_90"]["est"] for t in t1)
     assert fresh["Retention test"].estimate == rf._pp_range([lo, hi])
     passes = sum(bool(t["equivalent"]) for t in t1)
-    assert fresh["Retention test"].outcome == f"passes {passes}~of~{len(t1)}"
+    assert fresh["Retention test"].outcome == f"{passes}/{len(t1)}"
     per = rf._per_horizon(INP["rep_e3"])
     cost = [x for s, _ in rf.HORIZON_SYSTEMS for x in per[s]]
     ratio = max(x["serve_ratio_to_full_reread"] for x in cost)
     assert fresh["Cost ceiling"].estimate == f"at most {100 * ratio:.1f}\\%"
-    assert fresh["Cost ceiling"].outcome == (
-        f"passes {sum(bool(x['T4_pass']) for x in cost)}~of~{len(cost)}"
-    )
-    assert fresh["Utility floor"].outcome == "passes: " + rf._floor_counts(per)
+    assert fresh["Cost ceiling"].outcome == f"{sum(bool(x['T4_pass']) for x in cost)}/{len(cost)}"
+    assert fresh["Utility floor"].outcome == rf._floor_counts(per)
     # the fresh rows repeat the main study's tests on the fresh worlds, with their thresholds
     main = {t.label: t for t in rf.diagnostic_tests(INP) if not t.fresh}
     for t in fresh.values():
@@ -294,55 +319,67 @@ def test_the_committed_diagnostic_tests_table_is_the_staged_one():
     committed = (ROOT / "paper/generated/tab_diagnostic_tests.tex").read_text()
     assert committed == tex, "regenerate: figures --only tab_diagnostic_tests"
     assert r"\label{tab:diagnostic-tests}" in tex and tex.count(r"\begin{table}") == 1
-    assert "Test & Systems or units & Threshold & Estimate & Outcome" in tex
-    for word in ("regist", "predict", "verdict", "holds", "exploratory", "same in"):
-        assert word not in tex, word
-    assert "passes 3~of~3" in tex and r"\mtgroup{5}{Fresh worlds of the replication}" in tex
-    assert "\\mtin Retention test & \\holdmem{}(1,1), three tiers (change)" in tex
+    assert "Test & Systems or units & Estimate & Passes & Estimate & Passes" in tex
+    assert r"\multicolumn{2}{c}{Main study} & \multicolumn{2}{c@{}}{Replication}" in tex
+    for word in ("regist", "predict", "verdict", r"\bholds", "exploratory", "same in", "fresh"):
+        assert not re.search(word, tex), word
+    assert "\nRetention test & \\holdmem{}(1,1), three tiers & " in tex
+    # the replication beside the main study, a dash where it did not run the test
+    leaving = next(ln for ln in tex.splitlines() if ln.startswith("Leaving test"))
+    assert leaving.endswith(r"& \mtna & \mtna \\")
+    notes = tex.split(r"\mtnotes{", 1)[1]
+    for term in ("Thresholds: retention test 90", "point estimates", "Passing: ",
+                 "---: not run in the replication"):  # fmt: skip
+        assert term in notes, term
+    caption = tex.split(r"\label{tab:diagnostic-tests}")[0]
+    assert "Estimate" not in caption and "Threshold" not in caption
 
 
-def test_the_outcome_counts_and_system_names_are_tied():
-    """A count is tied, and so is a system name of several words with its count."""
+def test_the_outcome_counts_follow_the_systems_named():
+    """A count per system, in the order the units name them; each name in one box."""
     per = {
         "holdmem_D1B1_source": [{"T3_pass": True}] * 3,
         "zero": [{"T3_pass": False}] * 3,
         "rag": [{"T3_pass": True}, {"T3_pass": False}],
     }
-    assert rf._floor_counts(per) == (
-        r"\holdmem{}(1,1) 3~of~3, no-store~BM25~0~of~3, plain~RAG~1~of~2"
+    assert rf._floor_counts(per) == r"3/3\,$\cdot$\,0/3\,$\cdot$\,1/2"
+    assert rf._floor_units(per) == (
+        r"\mbox{\holdmem{}(1,1)}~$\cdot$ \mbox{no-store BM25}~$\cdot$ \mbox{plain RAG}, "
+        "three horizons"
     )
-    assert rf._passes([True, False, True], ["A b", "C"]) == "passes 2~of~3 (A b, C)"
+    assert rf._floor_counts({**per, "zero": []}) == r"3/3\,$\cdot$\,1/2"
+    assert rf._passes([True, False, True]) == "2/3"
 
 
-def test_the_diagnostic_tests_table_groups_the_rows_by_test():
-    """Banners for the test worlds and the fresh worlds; a gap between tests, none between the
-    rows of one test, and a cost ceiling stays with the utility floor before it."""
+def test_the_diagnostic_tests_table_puts_the_replication_beside_the_main_study():
+    """One row per test and units, the replication's estimate and passes beside the main
+    study's (a dash where it did not run); a gap between tests, none between the rows of one
+    test, and a cost ceiling stays with the utility floor before it."""
     t = rf.DiagnosticTest
     tests = [
-        t("Retention test, a", "x", "1", "passes 1~of~1"),
-        t("Retention test, b", "x", "1", "passes 1~of~1"),
-        t("Leaving test, c", "x", "1", "passes"),
-        t("Utility floor, d", "x", "1", "passes 1~of~1"),
-        t("Cost ceiling, the same systems", "x", "1", "passes 1~of~1"),
-        t("Retention test, a", "x", "1", "passes 1~of~1", fresh=True),
-        t("Utility floor, d", "x", "1", "passes 1~of~1", fresh=True),
-        t("Cost ceiling, the same systems", "x", "1", "passes 1~of~1", fresh=True),
+        t("Retention test, a", "x", "1", "1/1"),
+        t("Retention test, b", "x", "2", "0/1", passing=("W",)),
+        t("Leaving test, c", "y", "3", "1/1"),
+        t("Utility floor, d", "z", "4", "1/1"),
+        t("Cost ceiling, the same systems", "w", "5", "1/1"),
+        t("Retention test, a", "x", "6", "1/1", fresh=True),
+        t("Utility floor, d", "z", "7", "0/1", fresh=True),
+        t("Cost ceiling, the same systems", "w", "8", "1/1", fresh=True),
     ]
     tex = rf.tab_diagnostic_tests(tests)
     check_memtab(tex)
-    body = tex.split(r"\midrule", 1)[1]
+    body = tex.split(r"\midrule", 1)[1].split(r"\bottomrule")[0].strip().splitlines()
     gap = r"\addlinespace[2pt]"
-    tests_of = [
-        (line.split(" & ")[0].removeprefix(r"\mtin ") if line != gap else "gap")
-        for line in body.splitlines()
-        if line.startswith((r"\mtin ", gap))
-    ]
-    assert tests_of == [
-        "Retention test", "Retention test", "gap", "Leaving test", "gap", "Utility floor",
-        "Cost ceiling", "Retention test", "gap", "Utility floor", "Cost ceiling",
+    assert [ln.split(" & ")[0] if ln != gap else "gap" for ln in body] == [
+        "Retention test", "", "gap", "Leaving test", "gap", "Utility floor", "Cost ceiling",
     ]  # fmt: skip
-    assert body.count(r"\mtgroup{5}{") == 2 and r"\mtgroup{5}{Test worlds}" in body
-    assert rf.tab_diagnostic_tests(tests[:5]).count(r"\mtgroup{5}{") == 1  # no fresh rows
+    assert body[0] == r"Retention test & a & 1 & 1/1 & 6 & 1/1 \\"
+    assert body[1] == r" & b & 2 & 0/1 & \mtna & \mtna \\"
+    assert body[5] == r"Utility floor & d & 4 & 1/1 & 7 & 0/1 \\"
+    notes = tex.split(r"\mtnotes{", 1)[1]
+    assert "Thresholds: retention test x, leaving test y, utility floor z, cost ceiling w." in notes
+    assert "Passing: W of the b." in notes
+    assert "mtgroup" not in tex
 
 
 # --------------------------------------------------------------------------------- drawing

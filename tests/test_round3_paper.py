@@ -587,22 +587,29 @@ def test_natural_branch_table_prints_only_classes_the_shift_changed():
     assert empty.count(" & other & ") == 3  # without data every row stays, as a MISSING marker
 
 
-def test_reader_table_sets_the_claude_reader_beside_the_split_of_the_committed_reader():
-    """One table for both readers of the same stores (it carries the label of either table): the
-    Claude reader's rows leave the store part empty, as it is the committed reader's."""
+def test_reader_table_sets_the_claude_reader_in_a_panel_below_the_committed_reader():
+    """One table for both readers of the same stores (it carries the label of either table): (a)
+    the committed reader's B x D with its store and reader parts, (b) the Claude reader's B x D,
+    its reader part and its difference from the committed reader, for both arms and every class,
+    with no empty cell (the store part is the same, so (b) does not repeat it)."""
     tex = r3p.tables(INP)["tab_reader.tex"]
     assert "\\label{tab:store-reader-bxd}\\label{tab:reader}" in tex
-    rows = [
-        re.split(r"\s*&\s*", line.removesuffix(r" \\"))
-        for line in tex.splitlines()
-        if "$D{=}1$, Sonnet &" in line
-    ]
-    assert len(rows) == 6  # definition and other items after each shift
-    for cells in rows:
-        assert len(cells) == 11 and cells[5] == cells[6] == ""  # no store part of its own
-        assert cells[9]  # its B x D minus the committed reader's
-    committed = [line for line in tex.splitlines() if " & $D{=}1$ & " in line]
-    assert len(committed) == 9 and all(line.endswith(r" &  & \\") for line in committed)
+    head, panel_b = tex.split("\\mtnotes{")[0].split("(b) Claude Sonnet 5.5 as reader")
+    assert "(a) Qwen3.5-9B as reader" in head and "Store part" in head
+    assert "Sonnet $-$ Qwen" in panel_b and "Store part" not in panel_b
+    for panel in (head, panel_b):
+        rows = [
+            re.split(r"\s*&\s*", line.removesuffix(r" \\"))
+            for line in panel.splitlines()
+            if re.search(r"& \$D(\{=\}1|_\{\\mathrm\{m\}\})\$ &", line)
+        ]
+        assert len(rows) == 3 * 3 * 2  # shift x class x arm
+        # no empty cell: an estimate in each column pair (an interval of zero width is not printed)
+        assert all(len(cells) == 9 and all(cells[i] for i in (3, 5, 7)) for cells in rows)
+    # the Sonnet x D_m values the text cites are in panel (b)
+    for name in ("RThreeYDefOtherDmBxD", "RThreeYOrphanOtherDmBxD"):
+        est = MACROS[name].split("\\,pp")[0]
+        assert f"$D_{{\\mathrm{{m}}}}$ & {est} & \\mtint{{[" in panel_b, name
 
 
 def test_tables_name_the_experiments_without_codes_or_record_files():

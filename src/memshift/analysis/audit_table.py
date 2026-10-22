@@ -7,7 +7,9 @@ of the starting audit stay in the audit record only) and the native systems that
 cover, grouped as products, memory libraries, research systems and data stores, and our baselines
 and cells. An audited system takes its audit placement; a native system that the audit does not
 cover takes the label the native-system experiment reads from its documentation and code
-(`analysis.e5.DOCUMENTED_LABELS`). A native system whose audit placement differs from that label
+(`analysis.e5.DOCUMENTED_LABELS`). Our HoldMem cells share one row, in the order of the overview
+table (D, then B), each at the D and B it names. A native system whose audit placement differs from
+that label
 gets a note with the label the experiment measured (the `\\Nat<tag>Label` macro). The basis column
 gives what a placement rests on (code, paper, documentation, indirect evidence) and, for a system
 run natively, the property of its code that sets its B label. The reasons and evidence of every
@@ -108,6 +110,7 @@ BASIS_WORDS = {
 }
 NOTE_MARK = r"$^{a}$"
 COLUMNS = 5
+HOLDMEM = r"\holdmem{}"
 
 
 def _tex(s: str) -> str:
@@ -196,6 +199,31 @@ def rows_of(audit: list[dict[str, Any]]) -> tuple[list[Row], list[str]]:
     return out, notes
 
 
+def _cell_label(name: str) -> tuple[str, str]:
+    """The (D, B) that a HoldMem cell's name states (`\\holdmem{}(1,0)` -> ("1", "0"))."""
+    d, b = name.removeprefix(HOLDMEM).strip("()").split(",")
+    return d.strip(), b.strip()
+
+
+def collapse_ours(group: list[Row]) -> list[Row]:
+    """Our baselines and cells: the baselines as they are, then the HoldMem cells in one row in
+    the order of the overview table (D, then B), whose D and B are the ones they name (an audit
+    placement that differs is an error)."""
+    cells = sorted((r for r in group if r.cells[0].startswith(HOLDMEM)), key=lambda r: r.cells[0])
+    for r in cells:
+        if _cell_label(r.cells[0]) != (r.cells[1], r.cells[2]):
+            raise ValueError(f"{r.cells[0]} is placed at ({r.cells[1]},{r.cells[2]})")
+    out = [r for r in group if r not in cells]
+    if cells:
+        bases = {r.cells[3:] for r in cells}
+        if len(bases) != 1:
+            raise ValueError("the HoldMem cells differ in their basis")
+        names = ", ".join(r.cells[0].removeprefix(HOLDMEM) for r in cells)
+        both = r"\multicolumn{2}{l}{as named}"
+        out.append(Row(cells[0].group, cells[0].sort, (HOLDMEM + names, both, *bases.pop())))
+    return out
+
+
 def table(audit: list[dict[str, Any]]) -> str:
     rows, notes = rows_of(audit)
     key = (
@@ -210,13 +238,16 @@ def table(audit: list[dict[str, Any]]) -> str:
         r"\label{tab:audit}\label{tab:native-labels}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        # the basis with a hanging indent, so a second line does not read as the next row's
-        r"\begin{mttabular}{@{}l l >{\raggedright\arraybackslash}p{1.6cm} c H{6.6cm}{1em}@{}}",
+        # B on one line ("temporal validity only"); the basis with a hanging indent, so a second
+        # line does not read as the next row's
+        r"\begin{mttabular}{@{}l l l c H{5.6cm}{1em}@{}}",
         r"\toprule",
         r"System & $D$ & $B$ & \begin{tabular}[b]{@{}c@{}}Run\\natively\end{tabular} & Basis \\",
     ]
     for title, _ in GROUPS:
         group = sorted((r for r in rows if r.group == title), key=lambda r: r.sort)
+        if title == GROUPS[-1][0]:
+            group = collapse_ours(group)
         if not group:
             continue
         lines += [r"\midrule", rf"\mtgroup{{{COLUMNS}}}{{{title}}}"]

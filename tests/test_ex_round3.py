@@ -233,16 +233,18 @@ def test_tables_set_each_value_in_a_box_of_its_column_widest_value():
     # dashes centred; at B=0 the JSON store is not defined, the last column at the table's edge
     assert store.count("\\multicolumn{1}{c@{}}{---}") == 6 and "\\mtna{}" in store
     view = r3.tab_view(INP)
-    assert view.count(">{\\mtpairwidths{") == 3  # one box width per column of paired differences
-    assert view.count("\\mtpair{") == 2 * 4 * 3 * 3  # metrics x groups x classes x differences
+    assert view.count(">{\\mtpairwidths{") == 2  # one box width per column of paired differences
+    assert view.count("\\mtpair{") == 2 * 4 * 3 * 2  # metrics x groups x classes x differences
+    assert "D_{\\mathrm{m}}$ $-$ no-store" not in view  # the difference of the two shown
+    assert view.count("$^{\\dagger}$") == 2  # the row on five item-times, and its note
+    assert "Levels: point estimates, rounded to whole percent." in view
     dm = r3.tab_dm_deletion(INP)
-    deletion, programs = dm.split("\\end{table}\n\n")
-    assert "the 1,365 changed item-times" in deletion.split("\\label")[0]  # the caption
-    assert "$a$: a value stored where gold is no value." in deletion.split("\\mtnotes{")[1]
-    # the programs' table keeps its one definition in the caption
-    assert "Wrong: a value for a deleted record" in programs.split("\\label")[0]
-    assert "\\mtnotes" not in programs
-    assert "@{}l N{000} r@{\\,}l @{\\hspace{14pt}} N{000} r@{\\,}l@{}" in programs
+    assert dm.count("\\begin{table}") == 1 and "tab:dm-programs" not in dm
+    assert "the 1,365 changed item-times" in dm.split("\\label")[0]  # the caption
+    notes = dm.split("\\mtnotes{")[1]
+    assert "Value stored: a value stored where gold is no value." in notes
+    assert "($a$)" not in dm and "$d$:" not in notes  # no letters: those name the miss classes
+    assert "100.0 & " in dm and "100 & " not in dm  # the whole loss at the column's precision
 
 
 @pytest.mark.paper  # the table style, paper/memtab-style.tex

@@ -12,14 +12,16 @@ from typing import Any
 
 import pytest
 
+from memshift.analysis import concept_figure as cf
 from memshift.analysis import ex_e1_paper as xp
 from memshift.analysis import ex_review_paper as rp
 from memshift.analysis import figstyle as fs
 from memshift.analysis import figures as figs
 from memshift.analysis import round3_figures as rf
+from memshift.analysis.e3 import COST_CEILING
 from memshift.analysis.ex_e1_cross import cost_model
 from memshift.analysis.paper_data import get, load_stage4, native_results
-from memshift.analysis.paper_numbers import pct, pp
+from memshift.analysis.paper_numbers import ci, pct, pp
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -29,7 +31,9 @@ NAT = native_results(load_stage4(ROOT, SOURCES))
 R3 = rf.load(ROOT, SOURCES)
 ACCT = rp.load(ROOT, SOURCES)
 E1 = xp.load(ROOT, SOURCES)
+CONCEPT = cf.load(ROOT, SOURCES)
 DRAW: dict[str, Callable[[Path], Path]] = {  # figure -> draws it from the staged data
+    "fig_concept": lambda out: cf.fig_concept(CONCEPT, out),
     "fig_calibration": lambda out: figs.fig_calibration(E2 or {}, out),
     "fig_zero_cost": lambda out: figs.fig_zero_cost(E3 or {}, out),
     "fig_native_systems": lambda out: figs.fig_native_systems(NAT, out),
@@ -48,6 +52,10 @@ CLS = {"definition": "Definition", "other": "Other"}
 def macros() -> dict[str, str]:
     text = (ROOT / "paper/generated/numbers.tex").read_text()
     return dict(re.findall(r"\\newcommand\{\\(\w+)\}\{(.*)\}\s*$", text, flags=re.M))
+
+
+def fmt_pp(e: dict[str, Any]) -> str:
+    return ci(e, pp)
 
 
 def values(macro: str) -> list[float]:
@@ -106,7 +114,7 @@ def test_every_figure_is_legible_vector_truetype_and_without_a_date(name, monkey
     assert data.startswith(b"%PDF") and b"/CreationDate" not in data
     assert b"/FontFile2" in data and b"/FontFile3" not in data  # TrueType embedded, no Type 1
     assert re.search(rb"/FontFile\s", data) is None
-    if name != "fig_writers":  # its exact-recomputation band is a gradient image
+    if name != "fig_concept":  # its icons are raster images
         assert b"/Subtype /Image" not in data
 
 
@@ -145,14 +153,24 @@ def test_calibration_plots_the_pooled_items_slope_and_auroc_of_the_text(monkeypa
     )
     assert f"{au['est']:.3f}" == mac["ETwoExWriterAgreePooledAurocEst"]
     d = drawn(monkeypatch, "fig_calibration", tmp_path)
-    circles = [p for p in d.fig.axes[0].patches if isinstance(p, Circle)]
-    assert len(circles) == len(bins)
-    for c, b in zip(circles, bins, strict=True):  # area = items, on the printed page
-        assert (2 * c.get_radius() / fs.PT) ** 2 == pytest.approx(figs.AREA_PER_ITEM * b["n"])
-    for b in bins:
+    # one point per bin at (mean agreement, survival) in (a), and again in (b) from 80%
+    pa = figs._CalPanel(*figs.CAL_A, 0.0, 0.0)
+    pb = figs._CalPanel(*figs.CAL_B, *figs.CAL_ZOOM)
+    want = sorted((p.px(b["agreement"]), p.py(b["survival"]))
+                  for p in (pa, pb) for b in bins if b["lo"] >= p.lo - 1e-9)  # fmt: skip
+    got = sorted(c.center for c in d.fig.axes[0].patches
+                 if isinstance(c, Circle) and c.get_radius() == figs.CAL_DOT_R)  # fmt: skip
+    assert len(got) == len(want) == len(bins) + sum(b["lo"] >= figs.CAL_ZOOM[0] for b in bins)
+    for (x, y), (wx, wy) in zip(got, want, strict=True):
+        assert (x, y) == pytest.approx((wx, wy))
+    for b in bins:  # the items per bin, in the strips
         assert f"{b['n']:,}" in d.texts
     for e in (sl, au):
-        assert f"{e['est']:.2f}" in d.texts and f"  [{e['lo90']:.2f}, {e['hi90']:.2f}]" in d.texts
+        assert f"{e['est']:.2f}" in d.texts and f"[{e['lo90']:.2f}, {e['hi90']:.2f}]" in d.texts
+    total = sum(b["n"] for b in bins)
+    top = sum(b["n"] for b in bins if b["lo"] >= figs.CAL_ZOOM[0])
+    assert f"{100 * top / total:.1f}% of the items" in d.texts
+    assert f"{top:,} of {total:,}" in d.texts
 
 
 # --------------------------------------------------------------------------- zero cost
@@ -171,6 +189,16 @@ def test_zero_cost_prints_the_gap_and_the_cost_ratio_of_the_text(monkeypatch, tm
     assert f"{-100 * gap['est']:.1f} pp" in d.texts
     assert f"[{-100 * gap['hi']:.1f}, {-100 * gap['lo']:.1f}]" in d.texts
     assert f"{ratio:.2f}\u00d7" in d.texts  # the generator's ratio is the cost model's
+    cost = figs.zero_costs(E3)
+    bars = cost["systems"]
+    assert list(bars) == list(figs.ZERO_COST_ROWS)  # oracle context has no cost
+    for c in bars.values():  # each bar: serving, then ingestion and maintenance, its total
+        assert c["serve"] + c["ingest"] + c["maintain"] == pytest.approx(c["total"])
+        assert f"{c['total']:,.0f}" in d.texts
+    assert bars[figs.HOLD]["total"] / bars["zero"]["total"] == pytest.approx(ratio)
+    assert cost["ceiling"] == pytest.approx(COST_CEILING * cost["reread"])
+    for v in (cost["ceiling"], cost["reread"]):
+        assert f"{v / 1e6:.2f}M" in d.texts
     data = d.path.read_bytes()
     box = re.search(rb"/MediaBox \[\s*0 0 ([\d.]+) ([\d.]+)\s*\]", data)
     assert box and float(box[1]) == pytest.approx(72 * fs.TEXT)
@@ -252,6 +280,8 @@ def test_native_groups_join_a_cells_systems_and_refuse_inconsistent_ones():
 # ---------------------------------------------------------------------------- writers
 @pytest.mark.paper
 def test_writers_plot_the_block_h_estimates_and_name_each_writer(monkeypatch, tmp_path):
+    from matplotlib.patches import Ellipse, Rectangle
+
     mac = macros()
     data = rf.writer_points(R3)
     defw = {(p["writer"], p["shift"]): p["y"] for p in data["defwriters"]}
@@ -259,21 +289,119 @@ def test_writers_plot_the_block_h_estimates_and_name_each_writer(monkeypatch, tm
         for b in ("def", "src"):
             got = [round(100 * defw[who, b][k], 1) for k in ("est", "lo", "hi")]
             assert got == values(mac[f"RThreeH{tag}{BRANCH[b]}DefinitionDoneBxD"]), (who, b)
-    assert len(data["programs"]) == int(mac["RThreeGBDefSets"])
-    assert len({p["writer"] for p in data["programs"]}) == int(mac["RThreeGBWriters"])
-    assert sum(g["n"] for g in data["groups"]) == len(data["programs"])
-    assert data["reference"] is not None
+    programs = data["programs"]
+    assert len(programs) == int(mac["RThreeGBDefSets"]) and all(p["x"] and p["y"] for p in programs)
+    assert len({p["writer"] for p in programs}) == int(mac["RThreeGBWriters"])
+    ref = data["reference"]
+    assert ref is not None and fmt_pp(ref) == mac["ExAcctMainDefDefinitionBxD"]
     assert set(defw) == {(w, b) for w in (rf.QWEN, rf.OPUS, rf.SONNET) for b in ("def", "src")}
     d = drawn(monkeypatch, "fig_writers", tmp_path)
-    sets = {g["writer"] for g in data["groups"]}
+    sets = {p["writer"] for p in programs}
     for who in sets | {w for w, _ in defw}:  # once in each panel that draws it
         label = fs.model_style(who)[0]
         assert d.texts.count(label) == (who in sets) + any(w == who for w, _ in defw), who
-    assert d.texts.count("exact recomputation") == 1
+    assert d.texts.count("exact recomputation, 95% interval") == 1
+    assert f"{100 * ref['est']:+.1f}" in d.texts
+    axa, axb = d.fig.axes[:2]
+    # (a): one square per program set, at its B x D
+    squares = [r for r in axa.patches if isinstance(r, Rectangle) and r.get_zorder() == 5.0]
+    assert sorted(r.get_y() + r.get_height() / 2 for r in squares) == pytest.approx(
+        sorted(100 * p["y"]["est"] for p in programs)
+    )
+    # (b): every mark within 3.0 pp of its values (a nudge stays small), every interval end
+    # exact
+    marks = {"def": [(r.get_x() + r.get_width() / 2, r.get_y() + r.get_height() / 2)
+                     for r in axb.patches if isinstance(r, Rectangle) and r.get_zorder() == 5.2],
+             "src": [e.center for e in axb.patches
+                     if isinstance(e, Ellipse) and e.get_zorder() > 5.25]}  # fmt: skip
+    ends = {round(v, 9) for line in axb.lines for v in (*line.get_xdata(), *line.get_ydata())}
+    for (_, shift), q in {(p["writer"], p["shift"]): p for p in data["defwriters"]}.items():
+        x, y = 100 * q["x"]["est"], 100 * q["y"]["est"]
+        near = min(marks[shift], key=lambda m: abs(m[0] - x) + abs(m[1] - y))
+        marks[shift].remove(near)
+        assert abs(near[0] - x) <= 3.05 and abs(near[1] - y) <= 3.05, (q, near)
+        assert {round(100 * q[a][k], 9) for a in ("x", "y") for k in ("lo", "hi")} <= ends
+    assert not marks["def"] and not marks["src"]
     if TIMES:  # the names keep clear of one another
         names = [bb for who in sets for bb in d.boxes[fs.model_style(who)[0]]]
         for i, a in enumerate(names):
             assert not any(a.overlaps(b) for b in names[i + 1 :])
+
+
+# ---------------------------------------------------------------------------- concept
+@pytest.mark.paper
+def test_concept_prints_the_cells_and_key_effects_of_the_text(monkeypatch, tmp_path):
+    from matplotlib.colors import to_hex
+    from matplotlib.patches import Rectangle
+
+    mac = macros()
+    data = cf.concept_cells(CONCEPT)
+    cells = data["cells"]
+    tag = {0: "zero", 1: "one"}
+    stem = "ExDetMainDefDefinition"
+    assert set(cells) == {(d, b) for d in (0, 1) for b in (0, 1)}
+    for (d, b), c in cells.items():
+        assert ci(c["U"]) == mac[f"{stem}D{tag[d]}B{tag[b]}Update"], (d, b)
+        if b:  # m and r of the key's cells, which give Update by Eq. (1)
+            assert pct(c["m"]) == mac[f"{stem}D{tag[d]}BoneMissed"].split(" [")[0]
+            assert pct(c["r"]) == mac[f"{stem}D{tag[d]}BoneRepair"].split(" [")[0]
+            assert (1 - c["m"]) * c["r"] + c["m"] * c["a"] == pytest.approx(c["U"]["est"])
+    for d in (0, 1):  # the key's effect: the difference of the two cells of its column
+        assert ci(data["key"][d], pp) == mac[f"ExClsMainDefDefinitionBD{tag[d]}"]
+        diff = cells[d, 1]["U"]["est"] - cells[d, 0]["U"]["est"]
+        assert data["key"][d]["est"] == pytest.approx(diff, abs=1e-12)
+    assert fmt_pp(data["bxd"]) == mac["ExAcctMainDefDefinitionBxD"]
+    assert data["bxd"]["est"] == pytest.approx(data["key"][1]["est"] - data["key"][0]["est"])
+    assert f"{data['items']:,}" == mac[f"{stem}Items"] and str(data["worlds"]) == mac["TestWorlds"]
+    d = drawn(monkeypatch, "fig_concept", tmp_path)
+    for c in cells.values():
+        assert cf._printed(pct(c["U"]["est"])) in d.texts
+    for d_ in (0, 1):
+        assert cf._printed(pp(data["key"][d_]["est"])) in d.texts
+    assert rf"$B{{\times}}D$ = {cf._printed(pp(data['bxd']['est']))}" in d.texts
+    assert any(t.endswith(f"({data['items']:,} item-times)") for t in d.texts)
+    # each bar holds every changed item, and its right share is the cell's Update
+    ax = d.fig.axes[0]
+    rects = [r for r in ax.patches if isinstance(r, Rectangle)]
+    right = {to_hex(cf.SLA["mark"]), to_hex(cf.EXA["mark"])}
+    shares = []
+    for frame in (r for r in rects if r.get_zorder() == 7):
+        x0, x1 = frame.get_x(), frame.get_x() + frame.get_width()
+        segs = [r for r in rects if r.get_zorder() == 6 and r.get_y() == frame.get_y()
+                and x0 - 1e-9 <= r.get_x() <= x1]  # fmt: skip
+        assert sum(r.get_width() for r in segs) == pytest.approx(frame.get_width())
+        shares.append(sum(r.get_width() for r in segs if to_hex(r.get_facecolor()) in right)
+                      / frame.get_width())  # fmt: skip
+    assert sorted(shares) == pytest.approx(sorted(c["U"]["est"] for c in cells.values()))
+
+
+@pytest.mark.paper
+def test_figure_one_is_the_generated_pdf():
+    src = (ROOT / "src/memshift/analysis/figures.py").read_text()
+    assert "concept_figure.fig_concept(concept_figure.load(a.root, sources), a.out)" in src
+    intro = (ROOT / "paper/sections/intro.tex").read_text()
+    assert r"\includegraphics{figures/fig_concept.pdf}" in intro
+    assert not (ROOT / "paper/figures/fig_concept.tex").exists()  # the TikZ drawing is gone
+    assert (ROOT / "paper/figures/fig_concept.pdf").read_bytes().startswith(b"%PDF")
+
+
+def test_concept_figure_draws_without_its_stages_or_icons(tmp_path):
+    outs = {}
+    for tag, inp in (("full", CONCEPT), ("plain", {**CONCEPT, "icons": None}),
+                     ("empty", {**cf.load(ROOT, {}), "icons": None})):  # fmt: skip
+        (tmp_path / tag).mkdir()
+        outs[tag] = cf.fig_concept(inp, tmp_path / tag).read_bytes()
+        assert outs[tag].startswith(b"%PDF")
+    assert (b"/Subtype /Image" in outs["full"]) == (ROOT / cf.ICONS).is_dir()
+    assert b"/Subtype /Image" not in outs["plain"] + outs["empty"]
+    assert outs["plain"] != outs["empty"]
+    assert cf.concept_cells({}) == {"cells": {}, "key": {0: None, 1: None}, "bxd": None,
+                                    "items": None, "worlds": None}  # fmt: skip
+    bad = copy.deepcopy(CONCEPT["event"])
+    cell = bad["main"]["terms"]["def"]["definition"]["source"]["cells"]["D0B1"]["latest_change"]
+    cell["U"]["est"] += 0.01  # Update no longer (1 - m) r + m a
+    with pytest.raises(ValueError, match="Update"):
+        cf.concept_cells({**CONCEPT, "event": bad})
 
 
 # ----------------------------------------------------------------------------- reader

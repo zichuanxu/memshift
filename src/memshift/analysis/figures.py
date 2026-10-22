@@ -3,10 +3,13 @@
 Sources are the analysis directories listed in results/sources.json, the same ones the
 paper's number macros are generated from.
 
+fig_concept        Figure 1 (`concept_figure`): one item and the five shifts, and the HoldMem
+                   cells after a redefinition, detection by repair (ex_round4_detection, e1)
 fig_calibration    E2: survival of the D=0, B=1 items after the switch per bin of writer agreement
-                   on the calibration set, pooled over the three tiers, with the pooled fit.
-fig_zero_cost      E3: ContractValid before any shift by horizon; tokens per query against one
-                   full re-read.
+                   on the calibration set, pooled over the three tiers, with the pooled fit, and
+                   agreement from 80% magnified.
+fig_zero_cost      E3: ContractValid before any shift by horizon; tokens per query as stacked
+                   bars, with the cost ceiling and one full re-read beyond an axis break.
 fig_native_systems Block N: every native system against the HoldMem cell with its inferred
                    label, per branch and metric (Update, Stability); systems that were not run
                    show as such.
@@ -66,23 +69,7 @@ def _spread(ys: list[float], gap: float) -> list[float]:
     return out
 
 
-def _rich(cv: fs.MmCanvas, x: float, y: float, segs: Sequence[tuple[str, ...]], size: float,
-          ha: str = "left") -> float:  # fmt: skip
-    """Inline segments (text, colour[, weight]) on one baseline, placed by their exact advance
-    widths (spaces kept); a segment with a dollar sign is math. (x, y): the anchor and the
-    vertical centre (mm). Returns the right end."""
-    weights = [s[2] if len(s) > 2 else "normal" for s in segs]
-    widths = [fs.advance(s[0], size, w) for s, w in zip(segs, weights, strict=True)]
-    x0 = x - (sum(widths) if ha == "right" else sum(widths) / 2 if ha == "center" else 0.0)
-    base = y - 0.33 * size * fs.PT
-    for s, weight, w in zip(segs, weights, widths, strict=True):
-        cv.text(x0, base, s[0], size=size, color=s[1], weight=weight, ha="left", va="baseline")
-        x0 += w
-    return x0
-
-
 CALIBRATION_BINS = (0.0, 0.5, 0.8, 0.9, 0.95, 1.0)  # agreement bins of the calibration figure
-AREA_PER_ITEM = 0.1  # marker area (pt^2) per item of a bin
 
 
 def calibration_counts(e2: dict[str, Any]) -> list[tuple[float, int, int]]:
@@ -123,127 +110,297 @@ def calibration_bins(e2: dict[str, Any]) -> list[dict[str, float]]:
     return out
 
 
-CALIBRATION_PT = (324, 194.4)  # printed size (pt): `figstyle.NARROW` wide
-CAL_FRAME = (12.6, 110.6, 9.2, 63.6)  # the plot frame (mm): left, right, bottom, top
+CALIBRATION_PT = (486, 182.8)  # printed size (pt): full width
+CAL_A = (13.0, 105.0)  # panel (a): left and right of the plot frame (mm)
+CAL_B = (119.0, 165.0)  # panel (b), the magnified range: left and right of its frame (mm)
+CAL_Y = (13.5, 57.5)  # bottom and top of both frames (mm)
+CAL_TOP = 1.04  # survival at the top of both frames: points at 100% clear the frame
+CAL_ZOOM = (0.80, 0.85)  # (b) magnifies agreement from 80% and survival from 85%: equal scales
+CAL_STRIP = (0.9, 3.6, 0.45)  # count strip: gap under the x axis, height, white gap between cells
+CAL_DOT_R = 1.0  # point radius (mm)
 CAL_REF = "#8E99A8"  # the diagonal of perfect calibration
-CAL_BIN_TINT = "#F3F5F8"  # every other agreement bin
-CAL_LARGE_BIN = 1000  # a bin with more items: count below-left of its marker, marker translucent
+CAL_WEDGE = fs.tint(fs.SPINE, 0.018)  # the barely visible fill between the zoom rays
+CAL_TICK, CAL_NOTE, CAL_SMALL = 7.0, 7.0, 6.5  # ticks and counts; notes; counts of narrow cells
+
+
+class _CalPanel:
+    """A plot frame of the calibration figure: agreement in [lo, 1] across x0..x1 (mm), survival
+    in [ylo, CAL_TOP] across `CAL_Y`."""
+
+    def __init__(self, x0: float, x1: float, lo: float, ylo: float) -> None:
+        self.x0, self.x1, self.lo, self.ylo = x0, x1, lo, ylo
+
+    def px(self, v: float) -> float:
+        return self.x0 + (v - self.lo) / (1 - self.lo) * (self.x1 - self.x0)
+
+    def py(self, v: float) -> float:
+        return CAL_Y[0] + (v - self.ylo) / (CAL_TOP - self.ylo) * (CAL_Y[1] - CAL_Y[0])
+
+
+def _cal_strip_tint(share: float, top: float) -> str:
+    """A strip cell's colour: the role-blue mark mixed with white, its share of the mark growing
+    with the square root of the bin's share of the items (relative to the largest bin)."""
+    return fs.tint(fs.ROLE_BLUE["mark"], 0.12 + 0.88 * math.sqrt(share / top))
 
 
 def fig_calibration(e2: dict[str, Any], out: Path) -> Path:
-    """Survival of a switch against writer agreement for the D=0, B=1 items pooled over the
-    tiers: the agreement bins as alternate shaded columns, each bin's survival at its mean
-    agreement (area = items, the number beside it), the pooled logistic fit with its 90% band in
-    the same blue, the dashed diagonal of perfect calibration, and the calibration slope and
-    AUROC with their 90% intervals."""
-    from matplotlib.patches import Circle, Polygon, Rectangle
+    """Survival of a switch against writer agreement for the D=0, pb=1 items pooled over the
+    tiers. (a) The whole range: each bin's survival at its mean agreement as a point, the pooled
+    logistic fit with its 90% band, the dashed diagonal of perfect calibration, and a card with
+    the calibration slope and AUROC and their 90% intervals; (b) agreement from 80% magnified at
+    equal scales, joined to its box in (a) by zoom rays, with each bin's survival printed and the
+    share of the items it holds. Under each axis a strip gives the items per bin, its tint
+    deepening with the bin's share of the items."""
+    from matplotlib.patches import Circle, FancyBboxPatch, Polygon, Rectangle
 
     blue = fs.ROLE_BLUE
-    x0, x1, y0, y1 = CAL_FRAME
-
-    def px(v: float) -> float:
-        return x0 + v * (x1 - x0)
-
-    def py(v: float) -> float:
-        return y0 + v * (y1 - y0)
-
+    y0, y1 = CAL_Y
+    zlo, zlo_y = CAL_ZOOM
+    s_gap, s_h, sep = CAL_STRIP
+    bins = calibration_bins(e2)
+    total = sum(b["n"] for b in bins)
     with fs.printed() as plt:
-        cv = fs.MmCanvas(plt, CALIBRATION_PT[0] * fs.PT, CALIBRATION_PT[1] * fs.PT, size=7.5)
+        cv = fs.MmCanvas(plt, CALIBRATION_PT[0] * fs.PT, CALIBRATION_PT[1] * fs.PT,
+                         size=fs.T_LABEL)  # fmt: skip
         ax = cv.ax
-        edges = CALIBRATION_BINS
-        for i, (lo, hi) in enumerate(zip(edges, edges[1:], strict=False)):
-            if i % 2 == 1:
-                ax.add_patch(Rectangle((px(lo), y0), px(hi) - px(lo), y1 - y0, fc=CAL_BIN_TINT,
-                                       ec="none", zorder=0.2))  # fmt: skip
+        pa, pb = _CalPanel(*CAL_A, 0.0, 0.0), _CalPanel(*CAL_B, zlo, zlo_y)
+        clip_a = Rectangle((pa.x0, y0), pa.x1 - pa.x0, y1 - y0, transform=ax.transData)
+        clip_b = Rectangle((pb.x0, y0), pb.x1 - pb.x0, y1 - y0, transform=ax.transData)
+        # frames, grids and ticks: (a) y on the left; (b) y on the right, clear of the zoom rays
         for v in (0.2, 0.4, 0.6, 0.8, 1.0):
-            ax.plot([x0, x1], [py(v)] * 2, color=fs.GRID, lw=0.5, zorder=0.5)
-        ax.plot([x0, x1], [y0, y0], color=fs.SPINE, lw=0.6, zorder=1)
-        ax.plot([x0, x0], [y0, y1], color=fs.SPINE, lw=0.6, zorder=1)
+            ax.plot([pa.x0, pa.x1], [pa.py(v)] * 2, color=fs.GRID, lw=0.5, zorder=0.5)
+        ax.plot([pa.x0, pa.x0], [y0, y1], color=fs.SPINE, lw=0.6, zorder=1)
+        ax.plot([pa.x0, pa.x1], [y0, y0], color=fs.SPINE, lw=0.6, zorder=1)
+        for v in (0.90, 0.95, 1.0):
+            ax.plot([pb.x0, pb.x1], [pb.py(v)] * 2, color=fs.GRID, lw=0.5, zorder=0.5)
+        ax.add_patch(Rectangle((pb.x0, y0), pb.x1 - pb.x0, y1 - y0, fc="none", ec=fs.SPINE, lw=0.6,
+                               zorder=1))  # fmt: skip
+        s_top, s_bot = y0 - s_gap, y0 - s_gap - s_h
         for v in (0.0, 0.2, 0.4, 0.6, 0.8, 1.0):
-            ax.plot([px(v)] * 2, [y0, y0 - 0.8], color=fs.SPINE, lw=0.6, zorder=1)
-            cv.text(px(v), y0 - 2.4, f"{100 * v:.0f}", size=7.2, color=fs.TICK)
-            ax.plot([x0, x0 - 0.8], [py(v)] * 2, color=fs.SPINE, lw=0.6, zorder=1)
-            cv.text(x0 - 1.5, py(v), f"{100 * v:.0f}", size=7.2, color=fs.TICK, ha="right")
-        cv.text((x0 + x1) / 2, 2.5, "writer agreement (%)", size=8.0, color=fs.INK)
-        cv.text(3.4, (y0 + y1) / 2, "survival after the switch (%)", size=8.0, color=fs.INK,
-                rotation=90)  # fmt: skip
-        cv.text(px(0.65), y1 - 1.9, "agreement bins", size=7.0, color=fs.MUTED, style="italic")
-        # perfect calibration, named along the line
-        ax.plot([px(0), px(1)], [py(0), py(1)], color=CAL_REF, lw=0.75, ls=(0, (3.2, 2.0)),
-                zorder=1.5)  # fmt: skip
-        ang = math.degrees(math.atan2(y1 - y0, x1 - x0))
-        cv.text(px(0.075), py(0.075) - 1.25, "perfect calibration", size=7.0, color=fs.MUTED,
-                rotation=ang, rotation_mode="anchor", ha="left", va="top",
+            ax.plot([pa.x0 - 0.8, pa.x0], [pa.py(v)] * 2, color=fs.SPINE, lw=0.6, zorder=1)
+            cv.text(pa.x0 - 1.4, pa.py(v), f"{100 * v:.0f}", size=CAL_TICK, color=fs.TICK,
+                    ha="right")  # fmt: skip
+            ax.plot([pa.px(v)] * 2, [s_bot, s_bot - 0.7], color=fs.SPINE, lw=0.6, zorder=1)
+            cv.text(pa.px(v), s_bot - 2.2, f"{100 * v:.0f}", size=CAL_TICK, color=fs.TICK)
+        for v in (0.85, 0.90, 0.95, 1.0):
+            ax.plot([pb.x1, pb.x1 + 0.8], [pb.py(v)] * 2, color=fs.SPINE, lw=0.6, zorder=1)
+            cv.text(pb.x1 + 1.4, pb.py(v), f"{100 * v:.0f}", size=CAL_TICK, color=fs.TICK,
+                    ha="left")  # fmt: skip
+        for v in (0.80, 0.85, 0.90, 0.95, 1.0):
+            ax.plot([pb.px(v)] * 2, [s_bot, s_bot - 0.7], color=fs.SPINE, lw=0.6, zorder=1)
+            cv.text(pb.px(v), s_bot - 2.2, f"{100 * v:.0f}", size=CAL_TICK, color=fs.TICK)
+        for p in (pa, pb):
+            cv.text((p.x0 + p.x1) / 2, 2.6, "writer agreement (%)", size=fs.T_LABEL)
+        cv.text(3.2, (y0 + y1) / 2, "survival after the switch (%)", size=fs.T_LABEL, rotation=90)
+        cv.label(pa.x0 - 0.2, cv.h - 0.9, "a", "Survival against writer agreement",
+                 size=fs.T_TITLE)  # fmt: skip
+        cv.label(pb.x0 - 0.2, cv.h - 0.9, "b", f"Agreement {100 * zlo:.0f}–100%, magnified",
+                 size=fs.T_TITLE)  # fmt: skip
+        # count strips: one cell per bin, its tint the bin's share of the items; a count that
+        # does not fit its cell of (a) sits just above the axis, on a leader to the cell
+        top_share = max((b["n"] for b in bins), default=1) / max(total, 1)
+        narrow: list[tuple[float, str]] = []
+        for p, x_lo in ((pa, 0.0), (pb, zlo)):
+            for b in bins:
+                if b["hi"] <= x_lo + 1e-9:
+                    continue
+                xa, xb = p.px(max(b["lo"], x_lo)) + sep / 2, p.px(b["hi"]) - sep / 2
+                share = b["n"] / total
+                deep = share / top_share > 0.5
+                ax.add_patch(Rectangle((xa, s_bot), xb - xa, s_h,
+                                       fc=_cal_strip_tint(share, top_share), ec="none",
+                                       zorder=1))  # fmt: skip
+                lab = f"{b['n']:,}"
+                if fs.advance(lab, CAL_TICK, "bold" if deep else "normal") + 1.2 > xb - xa:
+                    if p is pa:
+                        narrow.append(((xa + xb) / 2, lab))
+                else:
+                    cv.text((xa + xb) / 2, (s_top + s_bot) / 2 - 0.05, lab, size=CAL_TICK,
+                            color="white" if deep else blue["ink"],
+                            weight="bold" if deep else "normal")  # fmt: skip
+        right, y_lab = pa.x1, y0 + 2.1  # right to left from the frame's edge, 1 mm apart
+        for cx, lab in reversed(narrow):
+            w = fs.advance(lab, CAL_SMALL)
+            cv.text(right, y_lab, lab, size=CAL_SMALL, color=blue["ink"], ha="right")
+            ax.plot([right - w / 2, cx], [y_lab - 1.05, s_top], color=blue["ink"], lw=0.4,
+                    zorder=5, solid_capstyle="butt")  # fmt: skip
+            right -= w + 1.0
+        if bins:
+            cv.text(pa.x0 - 1.4, (s_top + s_bot) / 2, "items", size=CAL_NOTE, color=fs.MUTED,
+                    ha="right", style="italic")  # fmt: skip
+        # the zoom box in (a), and rays from its right corners to the corners of (b)
+        zx0, zx1, zy0, zy1 = pa.px(zlo), pa.px(1.0), pa.py(zlo_y), pa.py(CAL_TOP)
+        ax.add_patch(Rectangle((zx0, zy0), zx1 - zx0, zy1 - zy0, fc="none", ec=fs.SPINE, lw=0.6,
+                               zorder=4.5))  # fmt: skip
+        ax.add_patch(Polygon([(zx1, zy1), (pb.x0, y1), (pb.x0, y0), (zx1, zy0)], closed=True,
+                             fc=CAL_WEDGE, ec="none", zorder=0.2))  # fmt: skip
+        for (xa, ya), (xb, yb) in (((zx1, zy1), (pb.x0, y1)), ((zx1, zy0), (pb.x0, y0))):
+            ax.plot([xa, xb], [ya, yb], color=fs.SPINE, lw=0.5, zorder=1.1, solid_capstyle="butt")
+        # perfect calibration in both panels, named once in (a)
+        for p, clip in ((pa, clip_a), (pb, clip_b)):
+            (ln,) = ax.plot([p.px(p.lo), p.px(1)], [p.py(p.lo), p.py(1)], color=CAL_REF,
+                            lw=0.75, ls=(0, (3.2, 2.0)), zorder=1.5)  # fmt: skip
+            ln.set_clip_path(clip)
+        ang = math.degrees(math.atan2(pa.py(1) - pa.py(0), pa.px(1) - pa.px(0)))
+        cv.text(pa.px(0.11), pa.py(0.11) - 1.0, "perfect calibration", size=CAL_NOTE,
+                color=fs.MUTED, rotation=ang, rotation_mode="anchor", ha="left", va="top",
                 style="italic")  # fmt: skip
-        # the pooled logistic fit and its 90% band, named where it starts
+        # the pooled logistic fit and its 90% band in both panels, named where it starts
         curve = e2.get("explore_pooled_curve") or {}
         if curve.get("est") and not any(math.isnan(v) for v in curve["est"]):
             g, est, lo90, hi90 = curve["grid"], curve["est"], curve["lo90"], curve["hi90"]
-            band = [(px(x), py(v)) for x, v in zip(g, hi90, strict=True)]
-            band += [(px(x), py(v)) for x, v in zip(reversed(g), reversed(lo90), strict=True)]
-            ax.add_patch(Polygon(band, closed=True, fc=blue["soft"], ec="none", alpha=0.75,
-                                 zorder=2))  # fmt: skip
-            ax.plot([px(x) for x in g], [py(v) for v in est], color=blue["ink"], lw=1.1,
-                    zorder=3, solid_capstyle="round")  # fmt: skip
-            cv.text(px(g[0]) - 1.2, py(est[0]) + 1.25, "logistic fit", size=7.4,
+            for p, clip in ((pa, clip_a), (pb, clip_b)):
+                keep = [i for i, x in enumerate(g) if x >= p.lo - 1e-9]
+                band = [(p.px(g[i]), p.py(hi90[i])) for i in keep]
+                band += [(p.px(g[i]), p.py(lo90[i])) for i in reversed(keep)]
+                poly = Polygon(band, closed=True, fc=blue["soft"], ec="none", alpha=0.8, zorder=2)
+                ax.add_patch(poly)
+                poly.set_clip_path(clip)
+                (ln,) = ax.plot([p.px(g[i]) for i in keep], [p.py(est[i]) for i in keep],
+                                color=blue["ink"], lw=1.2, zorder=3,
+                                solid_capstyle="round")  # fmt: skip
+                ln.set_clip_path(clip)
+            cv.text(pa.px(g[0]) - 1.2, pa.py(est[0]) + 1.3, "logistic fit", size=7.5,
                     color=blue["ink"], ha="right")  # fmt: skip
-            cv.text(px(g[0]) - 1.2, py(est[0]) - 1.6, "90% band", size=7.0, color=blue["ink"],
-                    ha="right", style="italic")  # fmt: skip
-        # one marker per bin, area = items
-        placed = []
-        for b in calibration_bins(e2):
-            r = math.sqrt(AREA_PER_ITEM * b["n"]) * fs.PT / 2  # a scatter marker of that area
-            cx, cy = px(b["agreement"]), py(b["survival"])
-            ax.add_patch(Circle((cx, cy), r, fc=blue["mark"], ec=blue["ink"], lw=0.45, zorder=6,
-                                alpha=0.92 if b["n"] > CAL_LARGE_BIN else 1.0))  # fmt: skip
-            placed.append((b, cx, cy, r))
-        # the counts: above a marker on or above the diagonal, below one under it; a large bin's
-        # count below-left of its marker, clear of the top edge
-        for b, cx, cy, r in placed:
-            lab = f"{b['n']:,}"
-            if b["n"] > CAL_LARGE_BIN:
-                cv.text(cx + r, cy - r - 1.3, lab, size=7.2, color=blue["ink"], ha="right",
-                        va="top")  # fmt: skip
-            elif b["survival"] >= b["agreement"]:
-                cv.text(cx, cy + r + 0.6, lab, size=7.2, color=blue["ink"], va="bottom")
+            cv.text(pa.px(g[0]) - 1.2, pa.py(est[0]) - 1.6, "90% band", size=CAL_NOTE,
+                    color=blue["ink"], ha="right", style="italic")  # fmt: skip
+        # one point per bin at its mean agreement, in both panels
+        for p, x_lo in ((pa, 0.0), (pb, zlo)):
+            for b in bins:
+                if b["lo"] >= x_lo - 1e-9:
+                    ax.add_patch(Circle((p.px(b["agreement"]), p.py(b["survival"])), CAL_DOT_R,
+                                        fc=blue["mark"], ec="white", lw=0.6,
+                                        zorder=6))  # fmt: skip
+        # (b): each bin's survival at its point, above it near 100%, else below it; and the
+        # share of the items in the magnified range
+        top = [b for b in bins if b["lo"] >= zlo - 1e-9]
+        for b in top:
+            x, y = pb.px(b["agreement"]), pb.py(b["survival"])
+            lab = f"{100 * b['survival']:.1f}" if b["survival"] < 1 else "100"
+            ty = y + CAL_DOT_R + 1.5 if b["survival"] >= 0.99 else y - CAL_DOT_R - 1.6
+            if x + fs.advance(lab, CAL_NOTE) / 2 > pb.x1 - 0.5:  # inside the frame
+                cv.text(pb.x1 - 0.5, ty, lab, size=CAL_NOTE, color=blue["ink"], ha="right")
             else:
-                cv.text(cx, cy - r - 0.7, lab, size=7.2, color=blue["ink"], va="top")
-        # the pooled calibration slope and AUROC with their 90% intervals
+                cv.text(x, ty, lab, size=CAL_NOTE, color=blue["ink"])
+        if top:
+            n_top = sum(b["n"] for b in top)
+            cv.text(pb.x1 - 1.4, y0 + 5.0, f"{100 * n_top / total:.1f}% of the items", size=7.5,
+                    color=blue["ink"], ha="right")  # fmt: skip
+            cv.text(pb.x1 - 1.4, y0 + 2.0, f"{n_top:,} of {total:,}", size=CAL_NOTE,
+                    color=fs.MUTED, ha="right", style="italic")  # fmt: skip
+        # the pooled calibration slope and AUROC with their 90% intervals, on a card in the
+        # empty lower right of (a)
         p3 = e2.get("path3") or {}
         sl, au = p3.get("pooled_slope") or {}, p3.get("pooled_auroc") or {}
         if sl and au:
-            xr, y_top = x1 - 0.4, py(0.2) - 1.9  # below the 20% gridline, clear of the data
-            for k, (name, e) in enumerate((("calibration slope ", sl), ("AUROC ", au))):
-                _rich(cv, xr, y_top - 3.4 * k,
-                      [(name, fs.INK), (f"{e['est']:.2f}", blue["ink"], "bold"),
-                       (f"  [{e['lo90']:.2f}, {e['hi90']:.2f}]", fs.INK)],
-                      size=7.4, ha="right")  # fmt: skip
-            cv.text(xr, y_top - 6.6, "90% intervals", size=7.0, color=fs.MUTED, ha="right",
+            rows = [("calibration slope", sl), ("AUROC", au)]
+            lab_w = max(fs.advance(r[0], 7.5) for r in rows)
+            val_w = max(fs.advance(f"{r[1]['est']:.2f}", 8.5, "bold") for r in rows)
+            iv_w = max(fs.advance(f"[{r[1]['lo90']:.2f}, {r[1]['hi90']:.2f}]", 7.5) for r in rows)
+            pad, gap, row_h = 1.8, 1.6, 3.5
+            cw = pad + lab_w + gap + val_w + gap + iv_w + pad
+            ch = pad + 2.6 + 2 * row_h + pad - 0.6
+            cx0, cy0 = pa.x1 - 1.8 - cw, y0 + 4.7
+            ax.add_patch(FancyBboxPatch((cx0, cy0), cw, ch,
+                                        boxstyle="round,pad=0,rounding_size=1.4", fc=blue["fill"],
+                                        ec=blue["stroke"], lw=0.6, zorder=7))  # fmt: skip
+            xl, xv = cx0 + pad, cx0 + pad + lab_w + gap
+            xi = xv + val_w + gap
+            yh = cy0 + ch - pad - 0.9
+            cv.text(xi, yh, "90% interval", size=CAL_NOTE, color=fs.MUTED, ha="left",
                     style="italic")  # fmt: skip
+            for k, (name, e) in enumerate(rows):
+                y = yh - 3.2 - k * row_h
+                cv.text(xl, y, name, size=7.5, color=fs.INK, ha="left")
+                cv.text(xv, y, f"{e['est']:.2f}", size=8.5, color=blue["ink"], weight="bold",
+                        ha="left")  # fmt: skip
+                cv.text(xi, y, f"[{e['lo90']:.2f}, {e['hi90']:.2f}]", size=7.5, color=fs.TICK,
+                        ha="left")  # fmt: skip
         return fs.save_pdf(cv.fig, out / "fig_calibration.pdf")
 
 
 ZERO_PT = (486, 151.2)  # printed size of the zero-system figure (pt): full width
-ZERO_SYSTEMS = {  # system -> (label, colour, dash, marker); HoldMem(1,1) is the hero
-    "holdmem_D1B1_source": ("HOLDMEM(1,1)", fs.ROLE_BLUE["mark"], "-", "o"),
-    "oracle": ("oracle context", "#5E6875", (0, (1.0, 1.4)), "D"),
-    "zero": ("no-store BM25", "#262B33", "-", "s"),
-    "rag": ("plain RAG", "#8E99A8", (0, (3.4, 1.8)), "^"),
+HOLD = "holdmem_D1B1_source"  # the hero of the zero-system figure
+ZERO_SYSTEMS = {  # system -> (label, colour, dash, marker, light part of its cost bar)
+    HOLD: ("HOLDMEM(1,1)", fs.ROLE_BLUE["mark"], "-", "o", "#B3CBEA"),
+    "oracle": ("oracle context", "#5E6875", (0, (1.0, 1.4)), "D", None),
+    "zero": ("no-store BM25", "#262B33", "-", "s", "#B9BEC6"),
+    "rag": ("plain RAG", "#8E99A8", (0, (3.4, 1.8)), "^", "#D5DAE0"),
 }
-ZERO_A = (12.4, 81.0, 9.6, 47.4)  # panel (a) frame (mm): left, right, bottom, top
-ZERO_B = (110.5, 169.6)  # panel (b) left and right (mm); bottom and top as (a)
+ZERO_COST_ROWS = (HOLD, "zero", "rag")  # the cost bars, in the order of the line labels of (a)
+ZERO_NAME_INK = {"rag": "#6E7987"}  # a name darker than its pale line or bar
+ZERO_NAME_PT, ZERO_HERO_PT = 7.8, 8.4  # system names; the hero's small capitals stay >= 6.5 pt
+ZERO_Y = (9.6, 46.4)  # bottom and top of both plots (mm)
+ZERO_A = (11.6, 54.0)  # panel (a): left and right of the plot (mm)
+# panel (a): the horizons in evenly spaced slots 0, 1, ...; room before the first slot and after
+# the last, and the bracket of the gap that far past the last slot (in slots)
+ZERO_SLOT_LO, ZERO_SLOT_HI, ZERO_SLOT_BRACKET = 0.30, 0.42, 0.19
+ZERO_GAP_AT = 0.735  # accuracy at which the gap is printed, inside its bracket
+ZERO_B0 = 80.6  # panel (b): where its title and its row names start (mm)
+ZERO_BAR_H = 6.4  # bar height (mm)
+ZERO_STEP = 5000  # tick step of the bars' linear axis (tokens per query)
+ZERO_SEG = (0.62e6, 2.62e6)  # the far segment beyond the axis break (tokens per query)
+ZERO_SEG_W, ZERO_BREAK_W = 18.6, 3.4  # widths of the far segment and of the break (mm)
 ZERO_FAIL = "#ECEEF2"  # the region that fails the cost ceiling
-ZERO_GAP_AT = 0.735  # accuracy at which the 12-month gap is printed, inside its bracket
+
+
+def zero_accuracy(e3: dict[str, Any]) -> dict[str, list[tuple[int, dict[str, float]]]]:
+    """Per system of `ZERO_SYSTEMS` that reports it, ContractValid before any shift as (slot of
+    the horizon, estimate with its 95% interval), horizons ascending."""
+    horizons = e3.get("horizons") or {}
+    hs = sorted(int(h) for h in horizons)
+    out: dict[str, list[tuple[int, dict[str, float]]]] = {}
+    for s in ZERO_SYSTEMS:
+        pts = [(i, e) for i, h in enumerate(hs)
+               if (e := (horizons[str(h)].get(s) or {}).get("contract_valid"))]  # fmt: skip
+        if pts:
+            out[s] = pts
+    return out
+
+
+def zero_costs(e3: dict[str, Any]) -> dict[str, Any]:
+    """Tokens per query at the longest horizon, per system of `ZERO_COST_ROWS` with a cost:
+    serving, and ingestion and maintenance amortised over the queries (queries = serve tokens /
+    serve tokens per query), and their total; one full re-read and the cost ceiling."""
+    from memshift.analysis.e3 import COST_CEILING
+
+    horizons = e3.get("horizons") or {}
+    if not horizons:
+        return {"systems": {}, "reread": None, "ceiling": None}
+    last = horizons[str(max(int(h) for h in horizons))]
+    systems: dict[str, dict[str, float]] = {}
+    for s in ZERO_COST_ROWS:
+        c = last.get(s) or {}
+        if "cost_mean" not in c:
+            continue
+        serve = c["serve_tokens_per_query"]
+        queries = c["cost_mean"]["serve_tokens"] / max(serve, 1e-9)
+        parts = {p: c["cost_mean"][f"{p}_tokens"] / queries
+                 for p in ("serve", "ingest", "maintain")}  # fmt: skip
+        systems[s] = {"serve": serve, "ingest": parts["ingest"], "maintain": parts["maintain"],
+                      "total": sum(parts.values())}  # fmt: skip
+    reread = next((last[s]["full_reread_tokens_per_query"] for s in systems), None)
+    return {"systems": systems, "reread": reread,
+            "ceiling": None if reread is None else COST_CEILING * reread}  # fmt: skip
+
+
+def _system_segments(label: str) -> list[tuple[str, float]]:
+    """A system's name as (text, scale): `HOLDMEM(...)` in small capitals, as \\textsc{HoldMem}."""
+    if label.startswith("HOLDMEM"):
+        return [("H", 1.0), ("OLD", 0.78), ("M", 1.0), ("EM", 0.78), (label[7:], 1.0)]
+    return [(label, 1.0)]
+
+
+def _system_name_width(label: str, size: float, weight: str = "normal") -> float:
+    """The printed width (mm) of a system's name as `_system_name` sets it."""
+    return sum(fs.advance(s, size * k, weight) for s, k in _system_segments(label))
 
 
 def _system_name(cv: fs.MmCanvas, x: float, y: float, label: str, size: float, color: str, *,
                  weight: str = "normal") -> float:  # fmt: skip
     """A system's name with (x, y) its left end and vertical centre (mm); `HOLDMEM(...)` is set
     in small capitals, as \\textsc{HoldMem} in the paper. Returns the right end."""
-    if label.startswith("HOLDMEM"):
-        segs = [("H", 1.0), ("OLD", 0.78), ("M", 1.0), ("EM", 0.78), (label[7:], 1.0)]
-    else:
-        segs = [(label, 1.0)]
+    segs = _system_segments(label)
     widths = [fs.advance(s, size * k, weight) for s, k in segs]
     base = y - 0.33 * size * fs.PT
     for (s, k), w in zip(segs, widths, strict=True):
@@ -272,186 +429,200 @@ def _system_marker(ax: Any, x: float, y: float, kind: str, color: str, d: float,
     ax.add_patch(p)
 
 
+def _zero_name(cv: fs.MmCanvas, x: float, y: float, s: str) -> None:
+    """A system's name with its left end at x: the hero bold, larger and in its blue ink."""
+    label, colour, *_ = ZERO_SYSTEMS[s]
+    hero = s == HOLD
+    _system_name(cv, x, y, label, ZERO_HERO_PT if hero else ZERO_NAME_PT,
+                 fs.ROLE_BLUE["ink"] if hero else ZERO_NAME_INK.get(s, colour),
+                 weight="bold" if hero else "normal")  # fmt: skip
+
+
+def _zero_name_width(s: str) -> float:
+    hero = s == HOLD
+    return _system_name_width(ZERO_SYSTEMS[s][0], ZERO_HERO_PT if hero else ZERO_NAME_PT,
+                              "bold" if hero else "normal")  # fmt: skip
+
+
 def _zero_accuracy(cv: fs.MmCanvas, e3: dict[str, Any]) -> None:
-    """Panel (a): ContractValid before any shift by horizon (log scale), 95% bands, each line
-    named at its right end, and the 12-month gap of HoldMem(1,1) over no-store BM25 with its 95%
-    interval beside a bracket."""
+    """Panel (a): ContractValid before any shift by horizon (evenly spaced), 95% bands, each line
+    named at its right end, and the paired gap of HoldMem(1,1) over no-store BM25 at the longest
+    horizon with its 95% interval beside a bracket."""
     from matplotlib.patches import Polygon
 
     ax, blue = cv.ax, fs.ROLE_BLUE
-    x0, x1, y0, y1 = ZERO_A
+    x0, x1 = ZERO_A
+    y0, y1 = ZERO_Y
+    cv.label(0.4, cv.h - 0.5, "a", "Accuracy before any shift", size=fs.T_TITLE)
+    acc = zero_accuracy(e3)
+    if not acc:
+        return
     hs = sorted(int(h) for h in e3["horizons"])
-    x_lo, x_hi = hs[0] / 1.25, hs[-1] * 1.25
+    u_lo, u_hi = -ZERO_SLOT_LO, len(hs) - 1 + ZERO_SLOT_HI
 
-    def px(h: float) -> float:
-        span = math.log10(x_hi) - math.log10(x_lo)
-        return x0 + (math.log10(h) - math.log10(x_lo)) / span * (x1 - x0)
+    def px(u: float) -> float:
+        return x0 + (u - u_lo) / (u_hi - u_lo) * (x1 - x0)
 
-    lows: list[float] = []
-    highs: list[float] = []
-    for s in ZERO_SYSTEMS:
-        for h in hs:
-            e = e3["horizons"][str(h)].get(s, {}).get("contract_valid")
-            if e:
-                lows.append(e["lo"])
-                highs.append(e["hi"])
+    lows = [e["lo"] for pts in acc.values() for _, e in pts]
+    highs = [e["hi"] for pts in acc.values() for _, e in pts]
     lo, hi = math.floor(20 * min(lows)) / 20, math.ceil(20 * max(highs)) / 20  # 5-point steps
 
     def py(v: float) -> float:
         return y0 + (v - lo) / (hi - lo) * (y1 - y0)
 
-    cv.label(0.6, cv.h - 0.6, "a", "Accuracy before any shift", size=8.2)
     v = math.ceil(lo * 10) / 10
     while v <= hi + 1e-9:
-        ax.plot([x0, x1], [py(v)] * 2, color=fs.GRID, lw=0.5, zorder=0.5)
-        ax.plot([x0 - 0.8, x0], [py(v)] * 2, color=fs.SPINE, lw=0.6, zorder=1)
-        cv.text(x0 - 1.5, py(v), f"{100 * v:.0f}", size=7.2, color=fs.TICK, ha="right")
+        ax.plot([x0, x1], [py(v)] * 2, color=fs.BAR_GRID, lw=0.5, zorder=0.5)
+        ax.plot([x0 - 0.8, x0], [py(v)] * 2, color=fs.BAR_AXIS, lw=0.6, zorder=1)
+        cv.text(x0 - 1.5, py(v), f"{100 * v:.0f}", size=fs.T_TICK, color=fs.TICK, ha="right")
         v += 0.1
-    ax.plot([x0, x1], [y0, y0], color=fs.SPINE, lw=0.6, zorder=1)
-    ax.plot([x0, x0], [y0, y1], color=fs.SPINE, lw=0.6, zorder=1)
-    for h in hs:
-        ax.plot([px(h)] * 2, [y0, y0 - 0.8], color=fs.SPINE, lw=0.6, zorder=1)
-        cv.text(px(h), y0 - 2.4, str(h), size=7.2, color=fs.TICK)
-    cv.text((x0 + x1) / 2, 2.6, "horizon (months, log scale)", size=8.0)
-    cv.text(3.3, (y0 + y1) / 2, "accuracy (%)", size=8.0, rotation=90)
-    ends: list[tuple[str, float]] = []
-    last: dict[str, float] = {}
-    for s, (_, colour, dash, mk) in ZERO_SYSTEMS.items():
-        pts = [(h, e3["horizons"][str(h)][s]["contract_valid"]) for h in hs
-               if s in e3["horizons"][str(h)]]  # fmt: skip
-        if not pts:
+    ax.plot([x0, x0], [y0, y1], color=fs.BAR_AXIS, lw=0.6, zorder=1)
+    ax.plot([x0, x1], [y0, y0], color=fs.BAR_AXIS, lw=0.6, zorder=1)
+    for i, h in enumerate(hs):
+        ax.plot([px(i)] * 2, [y0, y0 - 0.8], color=fs.BAR_AXIS, lw=0.6, zorder=1)
+        cv.text(px(i), y0 - 2.6, str(h), size=fs.T_TICK, color=fs.TICK)
+    cv.text((x0 + x1) / 2, 2.4, "horizon (months)", size=fs.T_LABEL)
+    cv.text(2.9, (y0 + y1) / 2, "accuracy (%)", size=fs.T_LABEL, rotation=90)
+    # bands, lines and markers: the baselines first, the hero on top
+    ends: dict[str, float] = {}
+    for s in ("oracle", "zero", "rag", HOLD):
+        if s not in acc:
             continue
-        hero = s.startswith("holdmem")
-        band = [(px(h), py(e["hi"])) for h, e in pts]
-        band += [(px(h), py(e["lo"])) for h, e in reversed(pts)]
+        _, colour, dash, mk, _ = ZERO_SYSTEMS[s]
+        pts, hero = acc[s], s == HOLD
+        band = [(px(i), py(e["hi"])) for i, e in pts]
+        band += [(px(i), py(e["lo"])) for i, e in reversed(pts)]
         ax.add_patch(Polygon(band, closed=True, fc=blue["soft"] if hero else colour,
-                             alpha=0.8 if hero else 0.13, ec="none",
-                             zorder=2 if hero else 1.6))  # fmt: skip
-        ax.plot([px(h) for h, _ in pts], [py(e["est"]) for _, e in pts], color=colour,
-                lw=1.6 if hero else 1.0, ls=dash, zorder=4 if hero else 3,
+                             alpha=0.85 if hero else 0.13, ec="none",
+                             zorder=2.2 if hero else 1.6))  # fmt: skip
+        ax.plot([px(i) for i, _ in pts], [py(e["est"]) for _, e in pts], color=colour,
+                lw=1.9 if hero else 1.0, ls=dash, zorder=4 if hero else 3,
                 solid_capstyle="round", dash_capstyle="butt")  # fmt: skip
-        for h, e in pts:
-            _system_marker(ax, px(h), py(e["est"]), mk, colour, 1.75 if hero else 1.45,
+        for i, e in pts:
+            _system_marker(ax, px(i), py(e["est"]), mk, colour, 1.9 if hero else 1.45,
                            z=5 if hero else 4.5)  # fmt: skip
-        ends.append((s, py(pts[-1][1]["est"])))
-        last[s] = pts[-1][1]["est"]
-    for (s, _), y in zip(ends, _spread([y for _, y in ends], 3.1), strict=True):
-        label, colour, _, _ = ZERO_SYSTEMS[s]
-        hero = s.startswith("holdmem")
-        _system_name(cv, x1 + 1.4, y, label, 7.6, blue["ink"] if hero else colour,
-                     weight="bold" if hero else "normal")  # fmt: skip
+        ends[s] = pts[-1][1]["est"]
+    names = [s for s in (HOLD, "oracle", "zero", "rag") if s in ends]
+    for s, y in zip(names, _spread([py(ends[s]) for s in names], 3.3), strict=True):
+        _zero_name(cv, x1 + 1.2, y, s)
     # the gap at the longest horizon: HoldMem(1,1) over no-store BM25 (paired, 95% interval)
     gap = e3["horizons"][str(hs[-1])].get("zero_minus_holdmem")
-    hold, zero = last.get("holdmem_D1B1_source"), last.get("zero")
+    hold, zero = ends.get(HOLD), ends.get("zero")
     if _ok(gap) and hold is not None and zero is not None:
-        yh, yz = py(hold), py(zero)
-        xb = px(hs[-1] * 1.105)
-        cv.line([(xb - 0.9, yh), (xb, yh), (xb, yz), (xb - 0.9, yz)], color=blue["ink"], lw=0.7,
-                radius=0.3)  # fmt: skip
+        xb, yh, yz = px(len(hs) - 1 + ZERO_SLOT_BRACKET), py(hold), py(zero)
+        arm = xb - px(len(hs) - 1) - 1.4
+        cv.line([(xb - arm, yh), (xb, yh), (xb, yz), (xb - arm, yz)], color=blue["ink"], lw=1.0,
+                radius=0.35)  # fmt: skip
         ym = py(min(max(ZERO_GAP_AT, min(hold, zero)), max(hold, zero)))
-        cv.text(xb - 1.2, ym + 1.3, f"{-100 * gap['est']:.1f} pp", size=7.6, color=blue["ink"],
+        cv.text(xb - 1.3, ym + 1.35, f"{-100 * gap['est']:.1f} pp", size=8.2, color=blue["ink"],
                 weight="bold", ha="right")  # fmt: skip
-        cv.text(xb - 1.2, ym - 1.6, f"[{-100 * gap['hi']:.1f}, {-100 * gap['lo']:.1f}]",
-                size=7.0, color=blue["ink"], ha="right")  # fmt: skip
+        cv.text(xb - 1.3, ym - 1.75, f"[{-100 * gap['hi']:.1f}, {-100 * gap['lo']:.1f}]",
+                size=fs.T_NOTE, color=blue["ink"], ha="right")  # fmt: skip
 
 
 def _zero_cost(cv: fs.MmCanvas, e3: dict[str, Any]) -> None:
-    """Panel (b): tokens per query at the longest horizon (log scale), serving only (filled) and
-    with amortised ingestion and maintenance (hollow), against one full re-read and the region
-    that fails the cost ceiling; the ratio of HoldMem(1,1) to no-store BM25 with maintenance."""
+    """Panel (b): tokens per query at the longest horizon as stacked bars on a linear axis,
+    serving (dark) and amortised ingestion and maintenance (light, the same hue), with the total
+    above each bar's end and the ratio of HoldMem(1,1) to no-store BM25 as a bracket; beyond an
+    axis break, the cost ceiling, one full re-read and the region that fails the ceiling."""
     from matplotlib.patches import Rectangle
 
-    from memshift.analysis.e3 import COST_CEILING
-
     ax, blue = cv.ax, fs.ROLE_BLUE
-    x0, x1 = ZERO_B
-    y0, y1 = ZERO_A[2:]
-    hs = sorted(int(h) for h in e3["horizons"])
-    last = e3["horizons"][str(hs[-1])]
-    rows = [s for s in ZERO_SYSTEMS if "cost_mean" in last.get(s, {})]
+    y0, y1 = ZERO_Y
+    cv.label(ZERO_B0, cv.h - 0.5, "b", "Tokens per query at twelve months", size=fs.T_TITLE)
+    cost = zero_costs(e3)
+    rows = [s for s in ZERO_COST_ROWS if s in cost["systems"]]
     if not rows:
         return
-    reread = last[rows[0]]["full_reread_tokens_per_query"]
-    ceiling = COST_CEILING * reread
-    x_lo = min(last[s]["serve_tokens_per_query"] for s in rows) / 1.8
-    x_hi = 10 ** math.ceil(math.log10(reread * 1.5))
+    c = cost["systems"]
+    widths = [_zero_name_width(s) for s in rows]
+    b0 = ZERO_B0 + max(widths) + 1.8  # the bars' zero
+    f1 = cv.w - 0.6
+    f0 = f1 - ZERO_SEG_W
+    l1 = f0 - ZERO_BREAK_W
+    l_max = ZERO_STEP * math.ceil(float(max(c[s]["total"] for s in rows)) / ZERO_STEP) + 1000
 
     def px(v: float) -> float:
-        span = math.log10(x_hi) - math.log10(x_lo)
-        return x0 + (math.log10(v) - math.log10(x_lo)) / span * (x1 - x0)
+        return b0 + v / l_max * (l1 - b0)
 
-    cv.label(x0 - 7.0, cv.h - 0.6, "b", "Tokens per query at twelve months", size=8.2)
-    ax.add_patch(Rectangle((px(ceiling), y0), x1 - px(ceiling), y1 - y0, fc=ZERO_FAIL, ec="none",
-                           zorder=0.3))  # fmt: skip
-    ax.plot([px(ceiling)] * 2, [y0, y1], color="#B4BBC5", lw=0.6, ls=(0, (2.4, 1.6)), zorder=0.6)
-    ax.plot([px(reread)] * 2, [y0, y1], color=fs.INK, lw=0.8, zorder=1.2)
-    cv.text(px(ceiling) - 0.7, y1 - 0.6, "cost ceiling", size=7.0, color=fs.MUTED, ha="right",
-            va="top", rotation=90, style="italic",
-            bbox={"fc": "white", "ec": "none", "pad": 0.6})  # fmt: skip
-    cv.text(px(reread) + 1.0, y0 + 1.0, "full re-read", size=7.0, color=fs.INK, ha="left",
-            va="bottom", rotation=90)  # fmt: skip
-    cv.text((px(reread) + x1) / 2 + 0.4, y1 - 1.2, "fails", size=7.0, color=fs.MUTED, va="top",
+    def qx(v: float) -> float:
+        return f0 + (v - ZERO_SEG[0]) / (ZERO_SEG[1] - ZERO_SEG[0]) * (f1 - f0)
+
+    # the linear axis: grid, zero line, ticks
+    for v in range(0, l_max + 1, ZERO_STEP):
+        if v:
+            ax.plot([px(v)] * 2, [y0, y1], color=fs.BAR_GRID, lw=0.5, zorder=0.5)
+        ax.plot([px(v)] * 2, [y0, y0 - 0.8], color=fs.BAR_AXIS, lw=0.6, zorder=1)
+        cv.text(px(v), y0 - 2.6, "0" if not v else f"{v // 1000}k", size=fs.T_TICK,
+                color=fs.TICK)  # fmt: skip
+    ax.plot([b0, l1], [y0, y0], color=fs.BAR_AXIS, lw=0.6, zorder=1)
+    ax.plot([b0, b0], [y0, y1], color=fs.BAR_ZERO, lw=0.6, zorder=2.6)
+    cv.text((b0 + l1) / 2, 2.4, "tokens per query", size=fs.T_LABEL)
+    # the break: the axis stops, two slanted strokes, then the far segment
+    for dx in (-0.6, 0.6):
+        xc = (l1 + f0) / 2 + dx
+        ax.plot([xc - 0.6, xc + 0.6], [y0 - 1.0, y0 + 1.4], color=fs.TICK, lw=0.75, zorder=3,
+                solid_capstyle="butt")  # fmt: skip
+    # the far segment: the region that fails the cost ceiling, the ceiling and one full re-read
+    xc, xr = qx(cost["ceiling"]), qx(cost["reread"])
+    ax.plot([f0, f1], [y0, y0], color=fs.BAR_AXIS, lw=0.6, zorder=1)
+    ax.add_patch(Rectangle((xc, y0), f1 - xc, y1 - y0, fc=ZERO_FAIL, ec="none", zorder=0.3))
+    ax.plot([xc] * 2, [y0, y1], color=fs.MUTED, lw=0.8, ls=(0, (2.4, 1.5)), zorder=1.2)
+    ax.plot([xr] * 2, [y0, y1], color=fs.INK, lw=0.85, zorder=1.2)
+    for x, v in ((xc, cost["ceiling"]), (xr, cost["reread"])):
+        ax.plot([x] * 2, [y0, y0 - 0.8], color=fs.BAR_AXIS, lw=0.6, zorder=1)
+        cv.text(x, y0 - 2.6, f"{v / 1e6:.2f}M", size=fs.T_TICK, color=fs.TICK)
+    cv.text(xc + 0.8, y1 - 0.5, "cost ceiling", size=fs.T_NOTE, color=fs.MUTED, rotation=90,
+            ha="left", va="top", style="italic")  # fmt: skip
+    cv.text(xr + 0.8, y0 + 0.8, "full re-read", size=fs.T_NOTE, color=fs.INK, rotation=90,
+            ha="left", va="bottom")  # fmt: skip
+    cv.text((xc + 3.3 + xr) / 2, (y0 + y1) / 2, "fails", size=fs.T_NOTE, color=fs.MUTED,
             style="italic")  # fmt: skip
-    ax.plot([x0, x1], [y0, y0], color=fs.SPINE, lw=0.6, zorder=1)
-    for k in range(math.ceil(math.log10(x_lo)), round(math.log10(x_hi)) + 1):
-        ax.plot([px(10**k)] * 2, [y0, y1], color=fs.GRID, lw=0.5, zorder=0.5)
-        ax.plot([px(10**k)] * 2, [y0, y0 - 0.9], color=fs.SPINE, lw=0.6, zorder=1)
-        cv.text(px(10**k), y0 - 2.6, f"$10^{{{k}}}$", size=7.2, color=fs.TICK)
-    for k in range(math.floor(math.log10(x_lo)), round(math.log10(x_hi))):
-        for m in range(2, 10):
-            if x_lo <= (v := m * 10**k) <= x_hi:
-                ax.plot([px(v)] * 2, [y0, y0 - 0.5], color=fs.SPINE, lw=0.45, zorder=1)
-    cv.text((x0 + x1) / 2, 2.6, "tokens per query (log scale)", size=8.0)
-    ys = {s: y1 - 8.2 - 11.0 * k for k, s in enumerate(rows)}
-    vals: dict[str, tuple[float, float]] = {}
-    for s in rows:
-        _, colour, _, mk = ZERO_SYSTEMS[s]
-        hero = s.startswith("holdmem")
-        c = last[s]
-        serve = c["serve_tokens_per_query"]
-        queries = c["cost_mean"]["serve_tokens"] / max(serve, 1e-9)
-        parts = ("ingest_tokens", "maintain_tokens", "serve_tokens")
-        total = sum(c["cost_mean"][p] for p in parts) / queries
-        vals[s] = (serve, total)
-        ax.plot([px(serve), px(total)], [ys[s]] * 2, color=colour, lw=1.0 if hero else 0.8,
-                zorder=4, solid_capstyle="butt")  # fmt: skip
-        d = 2.0 if hero else 1.7
-        _system_marker(ax, px(total), ys[s], mk, colour, d, hollow=True, z=5)
-        _system_marker(ax, px(serve), ys[s], mk, colour, d, z=6)
-    for s in rows:  # each name right of its row's last marker
-        label, colour, _, _ = ZERO_SYSTEMS[s]
-        hero = s.startswith("holdmem")
-        _system_name(cv, px(vals[s][1]) + 2.4, ys[s], label, 7.6,
-                     blue["ink"] if hero else colour,
-                     weight="bold" if hero else "normal")  # fmt: skip
-    if "holdmem_D1B1_source" not in vals:
+    # the bars: serving (dark), then ingestion and maintenance (light, the same hue)
+    pitch = (y1 - y0) / len(rows)
+    ys = {s: y1 - pitch * (k + 0.5) for k, s in enumerate(rows)}
+    for s, w in zip(rows, widths, strict=True):
+        _, dark, _, _, light = ZERO_SYSTEMS[s]
+        hero, y = s == HOLD, ys[s]
+        xs, xt = px(c[s]["serve"]), px(c[s]["total"])
+        ax.add_patch(Rectangle((b0, y - ZERO_BAR_H / 2), xs - b0, ZERO_BAR_H, fc=dark, ec="none",
+                               zorder=3))  # fmt: skip
+        if xt > xs:
+            ax.add_patch(Rectangle((xs, y - ZERO_BAR_H / 2), xt - xs, ZERO_BAR_H, fc=light,
+                                   ec="none", zorder=3))  # fmt: skip
+        _zero_name(cv, b0 - 1.8 - w, y, s)
+        cv.text(xt, y + ZERO_BAR_H / 2 + 0.5, f"{c[s]['total']:,.0f}", size=fs.T_TICK + 0.3,
+                color=blue["ink"] if hero else fs.INK, weight="bold" if hero else "normal",
+                ha="right", va="bottom")  # fmt: skip
+    if HOLD not in c:
         return
-    # what the two markers are, on the hero's row
-    hs_, ht = vals["holdmem_D1B1_source"]
-    yh = ys["holdmem_D1B1_source"]
-    cv.text(px(hs_), yh + 2.3, "serving", size=7.0, color=fs.MUTED, style="italic", va="bottom")
-    cv.text(px(ht) - 1.0, yh + 2.3, "+ ingestion, maintenance", size=7.0, color=fs.MUTED,
-            style="italic", va="bottom", ha="left")  # fmt: skip
-    if "zero" not in vals:
+    # the two parts, named on the hero's bar
+    y = ys[HOLD]
+    cv.text((b0 + px(c[HOLD]["serve"])) / 2, y, "serving", size=fs.T_NOTE, color="white")
+    cv.text((px(c[HOLD]["serve"]) + px(c[HOLD]["total"])) / 2, y, "ingestion + maintenance",
+            size=fs.T_NOTE, color=blue["ink"])  # fmt: skip
+    if "zero" not in c:
         return
-    # the cost model's ratio: HoldMem(1,1) against no-store BM25, both with maintenance
-    zt, yz = vals["zero"][1], ys["zero"]
-    yb = (yh + yz) / 2 + 0.6
-    cv.line([(px(zt), yz + 1.4), (px(zt), yb)], color=blue["ink"], lw=0.5)
-    cv.line([(px(zt), yb), (px(ht), yb), (px(ht), yh - 1.3)], color=blue["ink"], lw=0.7,
-            radius=0.3)  # fmt: skip
-    _rich(cv, px(ht) + 1.2, yb, [(f"{ht / zt:.2f}×", blue["ink"], "bold"),
-                                 (" no-store BM25", blue["ink"])], size=7.2)  # fmt: skip
+    # the ratio of the totals: HoldMem(1,1) against no-store BM25
+    xh, xz = px(c[HOLD]["total"]), px(c["zero"]["total"])
+    yh, yz = ys[HOLD], ys["zero"]
+    xb = xh + 1.7
+    cv.line([(xh + 0.35, yh), (xb, yh), (xb, yz), (xb - 1.0, yz)], color=blue["ink"], lw=1.0,
+            radius=0.35)  # fmt: skip
+    ax.plot([xz + 0.6, xb - 1.0], [yz, yz], color=blue["ink"], lw=0.6, ls=(0, (1.0, 1.3)),
+            zorder=7, dash_capstyle="round")  # fmt: skip
+    cv.text(xb - 1.2, (yh + yz) / 2 - 0.1, f"{c[HOLD]['total'] / c['zero']['total']:.2f}×",
+            size=8.6, color=blue["ink"], weight="bold", ha="right")  # fmt: skip
 
 
 def fig_zero_cost(e3: dict[str, Any], out: Path) -> Path:
     """(a) ContractValid before any shift by horizon with 95% bands, each line named at its end,
     and the gap of HoldMem(1,1) over no-store BM25 at the longest horizon; (b) tokens per query
-    at the longest horizon, serving (filled) and serving with amortised ingestion and maintenance
-    (hollow), against one full re-read and the cost ceiling, with the cost ratio of HoldMem(1,1)
-    to no-store BM25."""
+    at the longest horizon as stacked bars, serving and amortised ingestion and maintenance, with
+    the cost ratio of HoldMem(1,1) to no-store BM25, and the cost ceiling and one full re-read
+    beyond an axis break."""
     with fs.printed() as plt:
-        cv = fs.MmCanvas(plt, ZERO_PT[0] * fs.PT, ZERO_PT[1] * fs.PT, size=7.5)
+        cv = fs.MmCanvas(plt, ZERO_PT[0] * fs.PT, ZERO_PT[1] * fs.PT, size=fs.T_LABEL)
         _zero_accuracy(cv, e3)
         _zero_cost(cv, e3)
         return fs.save_pdf(cv.fig, out / "fig_zero_cost.pdf")
@@ -752,6 +923,10 @@ def main() -> None:
     a = ap.parse_args()
     sources = json.loads((a.root / "results" / "sources.json").read_text())
     a.out.mkdir(parents=True, exist_ok=True)
+    if not a.only or "fig_concept" in a.only:  # Figure 1
+        from memshift.analysis import concept_figure
+
+        print(concept_figure.fig_concept(concept_figure.load(a.root, sources), a.out))
     jobs = [
         (fig_calibration, "e2", "e2_metrics.json"),
         (fig_zero_cost, "e3", "e3_metrics.json"),

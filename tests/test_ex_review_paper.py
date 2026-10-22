@@ -125,43 +125,47 @@ def test_tables_are_wellformed_with_data_and_without():
         assert MISSING not in tex, name
 
 
-def test_writers_table_has_every_writer_and_class_and_the_fit():
+def test_writers_table_has_every_writer_and_class():
     tex = rp.tab_writers(INP)
-    for label in ("Qwen3.5-9B", "Qwen3.5-9B, repl.", "gemma-4-12B", "Llama-3.1-8B", "gpt-oss-20b"):
-        assert label in tex
+    for label in ("Qwen3.5-9B", "gemma-4-12B", "Llama-3.1-8B", "gpt-oss-20b"):
+        assert f"\n{label} & definition & " in tex
+    # Qwen3.5-9B twice, the study on the second line of its stub
+    assert tex.count("\nQwen3.5-9B & definition & ") == 2
+    for study in ("main study", "replication"):
+        assert f"\n\\mtmuted{{{study}}} & other & " in tex
+    assert "repl." not in tex
     for cls in ("definition", "other", "\\mtin field", "\\mtin free text"):  # other, its kinds
         assert len(re.findall(rf"& {re.escape(cls)} & \d", tex)) == 5
-    assert "(b) Across the cells & $\\rho$, all & $\\rho$, definition" in tex
-    assert "Spearman's $\\rho$" in tex and "least-squares line" in tex
+    # the fit across the cells is in the text (the AcctFitTwo macros), not in a second panel
+    assert "(b)" not in tex and "Spearman" not in tex and "mttabular*" not in tex
+    assert tex.count("\\begin{mttabular}{") == 1 and "\\par\\medskip" not in tex
     # the leave-one-writer-out error comparison is not part of the table
     assert "leave-one-writer-out" not in tex and "class label" not in tex
     caption = tex.split(r"\label{tab:writers}")[0]
-    assert r"(a) repair correctness $r_D$ at $D$ (\%)" in caption
-    assert "(writer, class, shift) cells" in caption and "branch" not in caption
+    assert r"repair correctness $r_D$ at $D$ (\%) and $B{\times}D$ on Update (pp)" in caption
+    assert "branch" not in caption
     notes = tex.split("\\mtnotes{", 1)[1]
     assert "Field: single-field items. Free text: free-text items. Other: both." in notes
-    # two panels of one width: (b) is set at the width of (a)
-    assert tex.count("\\begin{mttabular}{") == 1 and "\\begin{mttabular*}{\\mtwidth}" in tex
+    assert "in the main study and in the replication, the other writers on ten" in notes
     assert "exploratory" not in tex
-    # a statistic and its interval in one cell, the boxes as wide as the widest of the panel
-    assert "\\mtpair{$-$0.21}{[$-$0.53,\\,0.31]}" in tex
-    assert "\\mtpairwidths{$-$0.21}{[$-$0.53,\\,0.31]}" in tex
     assert "rule" not in re.sub(r"\\(top|mid|bottom|cmid)rule", "", tex)
 
 
 def test_misses_and_zero_tables_show_their_rows():
     tex = rp.tab_misses(INP)
-    # every shift and class, each at both D, and n once per class
-    assert len(re.findall(r"\n(?:\$\\S\w+\$)? & (?:definition|other|all) & \d+ & 0 & ", tex)) == 9
-    assert len(re.findall(r"\n &  &  & 1 & ", tex)) == 9
+    # every shift and class (definition, other: the pooled rows are not cited), each at both D,
+    # and n once per class
+    assert len(re.findall(r"\n(?:\$\\S\w+\$)? & (?:definition|other) & \d+ & 0 & ", tex)) == 6
+    assert len(re.findall(r"\n &  &  & 1 & ", tex)) == 6 and "& all &" not in tex
     assert "{R}" not in tex and "R's" not in rp.tab_writers(INP)  # no block letter
     zero = rp.tab_zero_after(INP)
     assert "\\mtgroup{10}{Main study}\n" in zero and "\\mtgroup{10}{Replication}\n" in zero
-    # the main study's totals are in the main text's overview table, the replication's here
+    # both studies with their totals over all items, which the text quotes
     main, rep = zero.split("\\mtgroup{10}{Replication}")
-    assert "& all &" not in main and rep.count("& all &") == 3
+    assert main.count("& all &") == rep.count("& all &") == 3
     assert zero.count("\\mtin$\\S") == 6  # each shift's rows under its banner
-    assert "Table~\\ref{tab:overview}" in zero
+    assert "tab:overview" not in zero and "\\textsc{HoldMem}" not in zero
+    assert "\\holdmem{}(0,0) by item class" in zero
 
 
 def test_misses_table_holds_the_accuracies_of_the_missed_items():
@@ -236,7 +240,7 @@ def test_tables_compile(tmp_path):
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
                 memtab_preamble(tmp_path),
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
-                r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
+                r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\holdmem}{\textsc{HoldMem}}",
                 r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",
             ]
         )

@@ -37,8 +37,7 @@ item or not defined for the class as a dash):
                                          system, per definition type, and the costs per query
 
 tab_store_reader      appendix: r_store, u, l and r, a_store and a by shift, class and cell
-tab_dm_deletion       appendix: the deleted records by class, what D_m loses there, the programs'
-                      output alone on deleted and live records
+tab_dm_deletion       appendix: the deleted records by class and what D_m loses there
 tab_view              appendix: the query-time view against the stored D_m
 """
 
@@ -635,7 +634,9 @@ def tab_store_reader(inp: Mapping[str, Any]) -> str:
         r"given a right or a wrong store, so $r=r_{\mathrm{store}}u+(1{-}r_{\mathrm{store}})l$. "
         r"$u$ is also given by gold status: answer, or abstain where the right state is no value. "
         r"$a_{\mathrm{store}}$, $a$: the same at $B{=}0$, where the store is the newest served "
-        r"item. JSON: the $D{=}1$ store served as JSON records.}",
+        r"item. JSON: the $D{=}1$ store served as JSON records. ---: not defined, as every "
+        r"changed definition item-time has a value as its right state and the JSON store has no "
+        r"$B{=}0$ cell.}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
@@ -648,24 +649,19 @@ def _na(cell: str, edge: bool = False) -> str:
     return rf"\multicolumn{{1}}{{c@{{}}}}{{{UNDEFINED}}}" if edge else r"\mtna{}"
 
 
-DEL_TABLE_CLASSES = (
+DEL_TABLE_CLASSES = (  # by words, as the letters a to e are the miss classes of the misses figure
     ("ok", "correct"),
-    ("a", r"value stored ($a$)"),
-    ("d", r"reader ($d$)"),
-    ("c", r"failed ($c$)"),
-    ("e", r"not re-derived ($e$)"),
-)
-DEL_TABLE_KINDS = (
-    ("task_due", "task due date"),
-    ("contact_attr", "contact field"),
-    ("series", "recurring series"),
+    ("a", "value stored"),
+    ("d", "reader"),
+    ("c", "failed"),
+    ("e", "not re-derived"),
 )
 
 
 def tab_dm_deletion(inp: Mapping[str, Any]) -> str:
-    """Appendix, two tables: the deleted records by class per cell beside what D_m loses against
-    D=0 there, by the class D_m falls in, in one grid (`tab:dm-deletion`); and the programs'
-    output alone on deleted and live records (`tab:dm-programs`)."""
+    """Appendix: the deleted records by class per cell beside what D_m loses against D=0 there,
+    by the class D_m falls in, in one grid (`tab:dm-deletion`). The programs' output alone on
+    deleted and live records is stated in the text (macros ExRThreeDelProg...)."""
     dm = inp.get("dm")
     node = _get(dm, "B1", "populations", *DELETED)
     acc = _get(node, "accounting_vs_D0")
@@ -724,7 +720,7 @@ def tab_dm_deletion(inp: Mapping[str, Any]) -> str:
             "lost",
             *blank,
             mt_ci_pair_cells(_get(acc, "loss_total")),
-            _alone("100") if staged else _span(MISSING, "c@{}"),
+            _alone("100.0") if staged else _span(MISSING, "c@{}"),
         ),
         _row(
             "gained",
@@ -734,41 +730,11 @@ def tab_dm_deletion(inp: Mapping[str, Any]) -> str:
         ),
         r"\bottomrule",
         r"\end{mttabular}",
-        r"\mtnotes{$a$: a value stored where gold is no value. $d$: the stored state is right but "
-        r"the reader's answer is wrong. $c$: the replacement failed, so nothing is served. $e$: "
-        r"not re-derived at the checkpoint. Loss: the item-times $D{=}0$ answers right and "
-        r"$D_{\mathrm{m}}$ wrong, by the class $D_{\mathrm{m}}$ falls in.}",
-        r"\end{table}",
-        "",
-    ]
-    by_kind = _get(dm, "B1", "program_by_kind")
-    rows = []
-    for kind, label in DEL_TABLE_KINDS:
-        cells = [label]
-        for group, _ in DEL_GROUPS:
-            g = _get(by_kind, kind, group)
-            span = "c@{}" if group == DEL_GROUPS[-1][0] else "c"
-            cells += [_count(_get(g, "n")), mt_ci_pair_cells(_get(g, "wrong"), span=span)]
-        rows.append(cells)
-    deleted, live = (f"N{{{n_template([r[c] for r in rows])}}}" for c in (1, 3))
-    lines += [
-        r"\begin{table}[t]",
-        r"\caption{The writer's programs alone after a deletion, on the re-derived item-times of "
-        r"deleted records and of live records that did not change. Wrong: a value for a deleted "
-        r"record, or a wrong value or none for a live one.}",
-        r"\label{tab:dm-programs}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{mttabular}}{{@{{}}l {deleted} {PAIR} {GROUP_GAP} {live} {PAIR}@{{}}}}",
-        r"\toprule",
-        r"& \multicolumn{3}{c}{Deleted record} & \multicolumn{3}{c@{}}{Live record} \\",
-        r"\cmidrule(lr){2-4}\cmidrule(l){5-7}",
-        r"Program & \multicolumn{1}{c}{$n$} & \multicolumn{2}{c}{Wrong (\%)} "
-        r"& \multicolumn{1}{c}{$n$} & \multicolumn{2}{c@{}}{Wrong (\%)} \\",
-        r"\midrule",
-        *(_row(*r) for r in rows),
-        r"\bottomrule",
-        r"\end{mttabular}",
+        r"\mtnotes{Value stored: a value stored where gold is no value. Reader: the stored state "
+        r"is right but the reader's answer is wrong. Failed: the replacement failed, so nothing "
+        r"is served. Not re-derived: not re-derived at the checkpoint. Item-times: point "
+        r"estimates. Loss: the item-times $D{=}0$ answers right and $D_{\mathrm{m}}$ wrong, by the "
+        rf"class $D_{{\mathrm{{m}}}}$ falls in. {UNDEFINED}: not defined.}}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
@@ -786,13 +752,15 @@ def _alone(est: str) -> str:
 
 
 VIEW_TABLE_CELLS = ("view", "DmB1", "DmB0", "zero")
-VIEW_TABLE_CONTRASTS = ("view_minus_DmB1", "view_minus_zero", "DmB1_minus_zero")
+VIEW_TABLE_CONTRASTS = ("view_minus_DmB1", "view_minus_zero")  # D_m - no-store: their difference
 VIEW_GROUP_LABELS = {**BRANCH_LABELS, "pooled": "pooled"}
+VIEW_FEW = 10  # a row on fewer paired item-times is marked (its intervals span nearly everything)
 
 
 def tab_view(inp: Mapping[str, Any]) -> str:
     """Appendix: per metric (Update, Stability), group and class the view, the stored D_m with and
-    without binding, the zero system and three paired differences."""
+    without binding, the zero system (point estimates in whole percent) and two paired
+    differences; a row on fewer than `VIEW_FEW` item-times carries a dagger at its n."""
     view = inp.get("view")
     worlds = _get(view, "sources", "worlds") or []
     ncol = 3 + len(VIEW_TABLE_CELLS) + len(VIEW_TABLE_CONTRASTS)
@@ -814,6 +782,7 @@ def tab_view(inp: Mapping[str, Any]) -> str:
         for c in VIEW_TABLE_CONTRASTS
     )
     share = f"N{{{PCT_BOX}}}"  # a column of whole percentages
+    few: set[int] = set()
     lines = [
         r"\begin{table}[t]",
         r"\caption{The query-time view against the cell with the stored programs on every item "
@@ -821,15 +790,15 @@ def tab_view(inp: Mapping[str, Any]) -> str:
         r"\label{tab:view}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{mttabular*}}{{\linewidth}}{{@{{}}ll N{{{n_box}}} "
-        rf"{share * len(VIEW_TABLE_CELLS)} {pairs}@{{}}}}",
+        rf"\begin{{mttabular}}{{@{{}}ll N{{{n_box}}} @{{\hspace{{10pt}}}} "
+        rf"{share * len(VIEW_TABLE_CELLS)} @{{\hspace{{10pt}}}} {pairs}@{{}}}}",
         r"\toprule",
-        r"& & & \multicolumn{4}{c}{Level (\%)} & \multicolumn{3}{c@{}}{Paired difference (pp)} \\",
-        r"\cmidrule(lr){4-7}\cmidrule(l){8-10}",
+        r"& & & \multicolumn{4}{c}{Level (\%)} & \multicolumn{2}{c@{}}{Paired difference (pp)} \\",
+        r"\cmidrule(lr){4-7}\cmidrule(l){8-9}",
         rf"Shift & Class & \multicolumn{{1}}{{c}}{{$n$}} & \multicolumn{{1}}{{c}}{{View}} "
         rf"& \multicolumn{{1}}{{c}}{{{dm}}} & \multicolumn{{1}}{{c}}{{$B{{=}}0$}} "
-        rf"& \multicolumn{{1}}{{c}}{{No-store}} & View $-$ {dm} & View $-$ no-store "
-        rf"& \multicolumn{{1}}{{c@{{}}}}{{{dm} $-$ no-store}} \\",
+        rf"& \multicolumn{{1}}{{c}}{{No-store}} & View $-$ {dm} "
+        r"& \multicolumn{1}{c@{}}{View $-$ no-store} \\",
     ]
     for metric, title in metrics:
         lines += [r"\midrule", rf"\mtgroup{{{ncol}}}{{{title}}}"]
@@ -838,24 +807,34 @@ def tab_view(inp: Mapping[str, Any]) -> str:
                 lv = _get(view, "levels", g, cls, metric)
                 cn = _get(view, "contrasts", g, cls, metric)
                 n = _get(cn, "view_minus_DmB1", "n_items")
+                mark = ""
+                if isinstance(n, int) and n < VIEW_FEW:
+                    few.add(n)
+                    mark = r"\rlap{$^{\dagger}$}"
                 lines.append(
                     _row(
                         rf"\mtin {VIEW_GROUP_LABELS[g]}" if k == 0 else "",
                         cls,
-                        _count(n),
+                        _count(n) + mark,
                         *(_pc(_get(lv, c), digits=0) for c in VIEW_TABLE_CELLS),
                         *(mt_pair(_get(cn, c), sign=True) for c in VIEW_TABLE_CONTRASTS),
                     )
                 )
             if i < len(VIEW_GROUPS) - 1:
                 lines.append(r"\mtgap")
+    dagger = (
+        rf" $^{{\dagger}}$: only {' and '.join(_count(x) for x in sorted(few))} item-times."
+        if few
+        else ""
+    )
     lines += [
         r"\bottomrule",
-        r"\end{mttabular*}",
+        r"\end{mttabular}",
         r"\mtnotes{View: no-store BM25 plus the writer's program run on the live records at the "
         rf"probe's time, with nothing stored. {dm}: \holdmem{{}} with the same programs, stored "
         r"with the source key. $B{=}0$: the same without a key. No-store: no-store BM25. $n$: "
-        r"paired item-times. Pooled: the three shifts together.}",
+        r"paired item-times. Pooled: the three shifts together. Levels: point estimates, rounded "
+        rf"to whole percent.{dagger}}}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"

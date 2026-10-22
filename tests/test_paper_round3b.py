@@ -332,8 +332,13 @@ def test_extract_table_names_the_fields_in_words_and_the_rewrite_as_asked(
     full: dict[str, str],
 ) -> None:
     node = {"fields": {"appt_type": {"correct": 1.0}, "from_addr": {"correct": 0.661}}}
-    assert pr._fields(node, "calendar") == "appointment type 100.0, sender address 66.1"
-    assert pr._fields({"fields": {"title": {"correct": 0.5}}}, "notes") == "title 50.0"
+    assert pr._weakest(node) == "sender address 66.1"  # the field with the fewest right values
+    assert pr._weakest({"fields": {"city": {"correct": 1.0}, "name": {"correct": 1.0}}}) == (
+        "all 100.0"
+    )
+    pooled = {"fields": {"tasks.title": {"correct": 0.4}, "calendar.title": {"correct": 0.9}}}
+    assert pr._weakest(pooled) == "tasks title 40.0"  # over all sources, with its source
+    assert pr._weakest({}) == MISSING
     for code in ("appt_type", "duration_min", "from_addr", "from_name", "conversation_with"):
         assert pr.FIELD_LABELS[code] and "_" not in pr.FIELD_LABELS[code], code
     notes = full["tab_extract.tex"].split(r"\mtnotes{", 1)[1]  # the panels' descriptions
@@ -387,8 +392,10 @@ def test_takeaways_state_the_pattern_and_leave_the_numbers_to_the_table(
     feedback = full["tab_feedback.tex"]
     assert r"\multicolumn{1}{c}{Failed attempts} &" in feedback and "failed runs" not in feedback
     # panels follow one another under a single rule, the descriptions in the notes below them
+    # (the typed-input table has its two panels as row groups of one tabular)
     for name in LABELS:
-        assert r"\end{mttabular*}\nointerlineskip" in full[name], name
+        if name != "tab_typed.tex":
+            assert r"\end{mttabular*}\nointerlineskip" in full[name], name
         assert full[name].count(r"\toprule") == 1, name
         assert full[name].count(r"\mtnotes{") == 1, name
 
@@ -405,7 +412,9 @@ def test_files_start_with_the_command_and_carry_their_labels(
         assert MISSING not in full[name]
         # panels of one width (the paper's table style), each estimate and its interval in one
         # centred cell
-        assert full[name].count(r"\begin{mttabular*}{\linewidth}") == 2
+        assert full[name].count(r"\begin{mttabular*}{\linewidth}") == (
+            1 if name == "tab_typed.tex" else 2
+        )
         assert r"\mtpair{" in full[name] and "\\scriptsize" not in full[name]
     for text in (*full.values(), *placeholders.values()):
         if r"\begin{table}" in text:
@@ -460,18 +469,28 @@ def test_committed_typed_analysis() -> None:
 
 @pytest.mark.skipif(not (ANALYSIS / "f.json").exists(), reason="the execution-feedback analysis")
 def test_committed_feedback_failure_kinds() -> None:
-    """Panel (c) prints, per failure kind, the analysis's counts of the first attempts and of
-    every failed attempt with feedback (several kinds can share a count: one shared program that
-    fails the same way at every write)."""
+    """Panel (c) prints, per failure kind that occurred, the analysis's counts of the first
+    attempts and of every failed attempt with feedback (several kinds can share a count: one shared
+    program that fails the same way at every write); the kinds without a failed attempt are named
+    in the notes, and the runs with one and with two feedback rounds share a row."""
     f = json.loads((ANALYSIS / "f.json").read_text())
     table = pr.tab_feedback(f)
     post = [f["executability"][c]["post"]["both"] for c in ("definition", "other")]
+    notes = table.split(r"\mtnotes{", 1)[1]
     for kind in pr.FAILURE_KINDS:
         counts = [
             f"{node[k].get(kind, 0):,}"
             for node in post
             for k in ("first_attempt_kinds", "failed_run_kinds")
         ]
-        assert f"{pr.KIND_LABELS[kind]} & {' & '.join(counts)} \\\\" in table
+        row = f"{pr.KIND_LABELS[kind]} & {' & '.join(counts)} \\\\"
+        if set(counts) == {"0"}:
+            assert row not in table and pr.KIND_LABELS[kind] in notes, kind
+        else:
+            assert row in table, kind
+    rounds = [f"{n['rounds'].get('1', 0):,} / {n['rounds'].get('2', 0):,}" for n in post]
+    assert all(r in table for r in rounds) and "no feedback round &" not in table
+    # the definitions whose every run was valid share one row; the others keep their own
+    assert "\nworking hours & & " in table and "\nother five definitions & & 1,789 & " in table
     m = macros(pr.numbers({"f": f}))
     assert "?" not in "".join(v for k, v in m.items() if k.startswith("ExecFb"))

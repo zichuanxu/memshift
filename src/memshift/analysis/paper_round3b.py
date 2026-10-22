@@ -71,7 +71,7 @@ from memshift.analysis.paper_data import MISSING, read_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, ci, pct, pp
 from memshift.analysis.paper_tables import _num, _row
-from memshift.holdmem.extract import SOURCES, all_fields
+from memshift.holdmem.extract import SOURCES
 from memshift.holdmem.program import FAILURE_KINDS
 
 MODULE = "memshift.analysis.paper_round3b"
@@ -366,16 +366,17 @@ def _typed_takeaway(t: Mapping[str, Any] | None) -> str:
 
 # the widths of the \mtpair columns of the typed-input table, as templates of the widest estimate
 # and interval: r of the selection, typed and exact cells, typed minus selection, exact minus typed
-# (panels a and b), and the two writers of panel (c)
 TYPED_PAIRS = (
     *[("100.0", r"[00.0,\,100.0]")] * 3,
     ("$+$00.0", r"[$+$00.0,\,$+$100.0]"),
     ("$+$100.0", r"[$+$00.0,\,$+$100.0]"),
 )
-TYPED_C_PAIRS = (("100.0", r"[00.0,\,00.0]"),) * 2
+TYPED_GAP = r"@{\hspace{6pt}}"  # between n and the first column of r
 
 
-def tab_typed(t: Mapping[str, Any] | None, facts: Mapping[str, Any] | None) -> str:
+def tab_typed(t: Mapping[str, Any] | None) -> str:
+    """The typed-input table: per writer (panels a and b) r of the selection, typed and exact
+    cells per definition and pooled (the writes and request lengths are macros the text states)."""
     n = _count(_typed_worlds(t))
     arms = _get(t, "arms")
     pairs = "".join(_widths(*w) for w in TYPED_PAIRS)
@@ -385,7 +386,7 @@ def tab_typed(t: Mapping[str, Any] | None, facts: Mapping[str, Any] | None) -> s
         r"\label{tab:typed}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{2pt}",
-        rf"\begin{{mttabular*}}{{\linewidth}}{{l N{{000.0}} N{{000}} {pairs}@{{}}}}",
+        rf"\begin{{mttabular*}}{{\linewidth}}{{l N{{000.0}} N{{000}}{TYPED_GAP}{pairs}@{{}}}}",
         r"\toprule",
         r"& & & \multicolumn{3}{c}{$r$ (\%)} & \multicolumn{2}{c@{}}{Difference (pp)} \\",
         r"\cmidrule(lr){4-6}\cmidrule(l){7-8}",
@@ -395,45 +396,15 @@ def tab_typed(t: Mapping[str, Any] | None, facts: Mapping[str, Any] | None) -> s
     for i, (key, _, name) in enumerate(WRITERS):
         lines += [r"\midrule", rf"\mtgroup{{8}}{{({'ab'[i]}) {name}}}"]
         lines += _typed_rows(_get(arms, key), t)
-    lines += [r"\end{mttabular*}\nointerlineskip"]  # one rule between the panels
-    names = [name for _, _, name in WRITERS]
-    pairs = "".join(_widths(*w) for w in TYPED_C_PAIRS)
-    lines += [
-        rf"\begin{{mttabular*}}{{\linewidth}}{{l {pairs}@{{}}}}",
-        r"\midrule",
-        _row("(c)", *names[:-1], _head(names[-1], last=True)),
-        r"\midrule",
-    ]
-    valid = [_get(arms, key, "validity", "typed_writes") for key, _, _ in WRITERS]
-    lines.append(_row("typed writes", *(_single(_count(_get(v, "writes"))) for v in valid)))
-    lines.append(
-        _row(r"unreadable (\%)", *(_single(_plain(_get(v, "unreadable_share"))) for v in valid))
-    )
-    lines.append(
-        _row(
-            r"cut off at the output limit (\%)",
-            *(_single(_plain(_get(v, "at_limit_share"))) for v in valid),
-        )
-    )
-    t0 = [_get(arms, key, "t0", "definition", "correct") for key, _, _ in WRITERS]
-    lines.append(_row(r"typed derivation before the fork equals gold (\%)", *map(_pair, t0)))
-    tok = _get(facts, "c_prompt_tokens", "rederivations", "all")
-    span = " / ".join(_tokens(_get(tok, s)) for s, _ in TOKEN_STATS)
-    lines.append(
-        _row(
-            r"request length in Qwen3.5-9B tokens: median / 95th percentile / maximum",
-            rf"\multicolumn{{2}}{{c@{{}}}}{{{span}}}",
-        )
-    )
     lines += [
         r"\bottomrule",
         r"\end{mttabular*}",
-        rf"\mtnotes{{(a), (b) $r$ on the changed definition item-times after $\Ssrc$ and $\Sdef$ "
-        rf"({n} worlds) when the writer re-derives the item from its own selection ($D{{=}}0$) or "
-        r"from every live record of the definition's sources as typed fields, and with exact "
-        r"recomputation ($D{=}1$). Exact: exact recomputation. Complete: the share of item-times "
-        r"whose selection held every record the definition ranges over. In (b), Claude Sonnet "
-        r"5.5 writes the definition items. (c) The typed writes and requests.}",
+        rf"\mtnotes{{$r$ on the changed definition item-times after $\Ssrc$ and $\Sdef$ ({n} "
+        r"worlds) when the writer re-derives the item from its own selection ($D{=}0$) or from "
+        r"every live record of the definition's sources as typed fields, and with exact "
+        r"recomputation ($D{=}1$). Complete: the share of item-times whose selection held every "
+        r"record the definition ranges over (point estimates). In (b), Claude Sonnet 5.5 writes "
+        r"the definition items.}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
@@ -522,6 +493,39 @@ def _feedback_takeaway(f: Mapping[str, Any] | None) -> str:
     )
 
 
+NUMBER_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}
+
+
+def _all_valid(node: Any) -> bool:
+    """Every run of the node ended with a valid typed value, without feedback and with it."""
+    keys = ("first_attempt", "after_feedback")
+    return all(isinstance(_get(node, k), Mapping) for k in keys) and all(
+        _get(node, k, x) == 1.0 for k in keys for x in ("est", "lo", "hi")
+    )
+
+
+def _exec_rows(f: Mapping[str, Any] | None) -> list[tuple[str, Any]]:
+    """(label, node) of the valid-run rows: each definition with an invalid run, then the others
+    folded into one row (two or more definitions whose every run was valid), all six and the other
+    items. A folded row's node sums the runs and requests; its shares are 100.0 by construction."""
+    nodes = [(label, _exec_node(f, d)) for d, _, label in DEFINITIONS]
+    valid = [node for _, node in nodes if _all_valid(node)]
+    if len(valid) < 2:
+        rows = nodes
+    else:
+        one = {"est": 1.0, "lo": 1.0, "hi": 1.0}
+        folded = {
+            "n_runs": _sum(*(_get(n, "n_runs") for n in valid)),
+            "feedback_requests": _sum(*(_get(n, "feedback_requests") for n in valid)),
+            "first_attempt": one,
+            "after_feedback": one,
+        }
+        rows = [(label, node) for label, node in nodes if not _all_valid(node)]
+        rows.append((f"other {NUMBER_WORDS.get(len(valid), len(valid))} definitions", folded))
+    rows.append(("all six", _exec_node(f, "definition")))
+    return [*rows, ("other items", _exec_node(f, "other"))]
+
+
 def tab_feedback(f: Mapping[str, Any] | None) -> str:
     n = _count(_n_worlds(_get(f, "worlds")))
     lines = [
@@ -533,28 +537,7 @@ def tab_feedback(f: Mapping[str, Any] | None) -> str:
         r"\mtpairwidths{$+$00.0}{[$+$00.0,\,$+$00.0]}",  # the widths of every \mtpair cell below
         r"\begin{mttabular*}{\linewidth}{ll N{00,000} ccc@{}}",
         r"\toprule",
-        r"(a) & & \multicolumn{1}{c}{Runs} & Without feedback & With feedback "
-        r"& \multicolumn{1}{c@{}}{Requests} \\",
-        r"\midrule",
-    ]
-
-    def exec_row(label: str, node: Any) -> str:
-        return _row(
-            f"{label} &",  # the second column is empty
-            _count(_get(node, "n_runs")),
-            _pair(_get(node, "first_attempt")),
-            _pair(_get(node, "after_feedback")),
-            _boxed(_count(_get(node, "feedback_requests")), "000", "@{}"),
-        )
-
-    for d, _, label in DEFINITIONS:
-        lines.append(exec_row(label, _exec_node(f, d)))
-    lines.append(r"\addlinespace[2pt]")
-    lines.append(exec_row("all six", _exec_node(f, "definition")))
-    lines.append(exec_row("other items", _exec_node(f, "other")))
-    lines += [
-        r"\midrule",
-        r"(b) & & \multicolumn{1}{c}{$n$} & Without feedback & With feedback "
+        r"(a) & & \multicolumn{1}{c}{$n$} & Without feedback & With feedback "
         r"& \multicolumn{1}{c@{}}{Difference} \\",
         r"\midrule",
     ]
@@ -587,7 +570,37 @@ def tab_feedback(f: Mapping[str, Any] | None) -> str:
         for b, _ in F_BRANCHES:
             lines.append(contrast(first, BRANCH_LABELS[b], _get(f, "bxd", b, cls), bxd=True))
             first = ""
+    lines += [
+        r"\midrule",
+        r"(b) & & \multicolumn{1}{c}{Runs} & Without feedback (\%) & With feedback (\%) "
+        r"& \multicolumn{1}{c@{}}{Requests} \\",
+        r"\midrule",
+    ]
+    rows = _exec_rows(f)
+    for label, node in rows:
+        if label == "all six":
+            lines.append(r"\addlinespace[2pt]")
+        lines.append(
+            _row(
+                f"{label} &",  # the second column is empty
+                _count(_get(node, "n_runs")),
+                _pair(_get(node, "first_attempt")),
+                _pair(_get(node, "after_feedback")),
+                _boxed(_count(_get(node, "feedback_requests")), "000", "@{}"),
+            )
+        )
     lines += [r"\end{mttabular*}\nointerlineskip"]  # one rule between the panels
+    nodes = [_exec_node(f, "definition"), _exec_node(f, "other")]
+
+    def kind_counts(kind: str) -> list[int | None]:
+        return [
+            _counted(node, key, kind)
+            for node in nodes
+            for key in ("first_attempt_kinds", "failed_run_kinds")
+        ]
+
+    shown = [k for k in FAILURE_KINDS if any(kind_counts(k)) or None in kind_counts(k)]
+    unseen = [KIND_LABELS[k] for k in FAILURE_KINDS if k not in shown]
     lines += [
         r"\begin{mttabular*}{\linewidth}{l N{000}N{000} N{000}N{000}@{}}",
         r"\midrule",
@@ -600,34 +613,23 @@ def tab_feedback(f: Mapping[str, Any] | None) -> str:
         ),
         r"\midrule",
     ]
-    nodes = [_exec_node(f, "definition"), _exec_node(f, "other")]
-    for kind in FAILURE_KINDS:
-        cells = []
-        for node in nodes:
-            cells.append(_count(_counted(node, "first_attempt_kinds", kind)))
-            cells.append(_count(_counted(node, "failed_run_kinds", kind)))
-        lines.append(_row(KIND_LABELS[kind], *cells))
+    for kind in shown:
+        lines.append(_row(KIND_LABELS[kind], *map(_count, kind_counts(kind))))
     lines.append(r"\addlinespace[2pt]")
-    for r, _, label in ROUNDS:
-        cells = []
-        for k, node in enumerate(nodes):
-            edge = "@{}" if k == len(nodes) - 1 else ""
-            cells += [rf"\multicolumn{{2}}{{c{edge}}}{{{_count(_counted(node, 'rounds', r))}}}"]
-        lines.append(_row(f"runs with {label}", *cells))
-    total, with_data = _messages(f)
-    lines.append(
-        _row(
-            "feedback requests containing a record value",
-            rf"\multicolumn{{4}}{{c@{{}}}}{{{_count(with_data)} of {_count(total)}}}",
-        )
-    )
+    cells = []
+    for k, node in enumerate(nodes):
+        edge = "@{}" if k == len(nodes) - 1 else ""
+        counts = " / ".join(_count(_counted(node, "rounds", r)) for r, _, _ in ROUNDS[1:])
+        cells.append(rf"\multicolumn{{2}}{{c{edge}}}{{{counts}}}")
+    lines.append(_row("runs with one / two feedback rounds", *cells))
+    none = rf" Kinds without a failed attempt: {', '.join(unseen)}." if unseen and f else ""
     lines += [
         r"\bottomrule",
         r"\end{mttabular*}",
-        r"\mtnotes{(a) Runs after the fork that end with a valid typed value (\%), the runs and "
-        r"the feedback requests. (b) $r$, Update after a deletion and $B{\times}D$, without and "
-        r"with feedback. (c) Failure kinds and feedback rounds after the fork, as counts. The last "
-        r"row counts every write.}",
+        r"\mtnotes{(a) $r$, Update after a deletion and $B{\times}D$, without and with feedback. "
+        r"(b) Runs after the fork that end with a valid typed value, the runs and the feedback "
+        r"requests. (c) Failure kinds and feedback rounds after the fork, as counts. The other "
+        rf"runs had no feedback round.{none}}}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
@@ -663,17 +665,26 @@ def extract_numbers(w: Mapping[str, Any] | None) -> dict[str, str]:
     return out
 
 
-def _fields(node: Any, source: str) -> str:
-    """`name share, ...`: the share of extracted values without an error per field (the
-    analysis's fields, else the source's field names, in the order of the names, printed as
-    `FIELD_LABELS` words them)."""
+def _field_name(name: str) -> str:
+    """A field in words; a pooled field `source.field` with its source first."""
+    source, _, field = name.rpartition(".")
+    word = _tex(FIELD_LABELS.get(field, field))
+    return f"{SOURCE_LABELS.get(source, source)} {word}" if source else word
+
+
+def _weakest(node: Any) -> str:
+    """The field with the smallest share of values extracted without an error and that share
+    (the first in name order on a tie); `all` when every field of the source is at 100.0."""
     fields = _get(node, "fields")
-    names = (
-        sorted(fields) if isinstance(fields, Mapping) else sorted(n for n, _ in all_fields(source))
-    )
-    return ", ".join(
-        f"{_tex(FIELD_LABELS.get(x, x))} {_plain(_get(fields, x, 'correct'))}" for x in names
-    )
+    if not isinstance(fields, Mapping):
+        return MISSING
+    shares = {x: _get(fields, x, "correct") for x in sorted(fields)}
+    if any(v is None for v in shares.values()) or not shares:
+        return MISSING
+    if {_plain(v) for v in shares.values()} == {"100.0"}:
+        return "all 100.0"
+    name = min(shares, key=lambda x: shares[x])
+    return f"{_field_name(name)} {_plain(shares[name])}"
 
 
 def _extract_takeaway(q: Mapping[str, Any] | None) -> str:
@@ -691,10 +702,35 @@ def _extract_takeaway(q: Mapping[str, Any] | None) -> str:
     )
 
 
+def _differ(q: Mapping[str, Any] | None) -> str:
+    """The note on the definition item-times whose value differs between the two program inputs:
+    how many per B arm and shift, and the share of them whose write read a record with an
+    extraction error (once when it is the same everywhere)."""
+    nodes = [(label, _get(q, "attribution", pair, b)) for pair, _, label in PAIRS
+             for b, _ in W_BRANCHES]  # fmt: skip
+    if q is None or not all(isinstance(n, Mapping) for _, n in nodes):
+        return MISSING
+    shifts = " and ".join(BRANCH_LABELS[b] for b, _ in W_BRANCHES)
+    parts = []
+    for i, arm in enumerate(dict.fromkeys(label for label, _ in nodes)):
+        counts = " and ".join(
+            f"{_count(_get(n, 'differ'))} of {_count(_get(n, 'item_times'))}"
+            for label, n in nodes
+            if label == arm
+        )
+        where = f" definition item-times after {shifts}" if i == 0 else ""
+        parts.append(f"{counts}{where} at {arm}")
+    shares = [rf"{_plain(_get(n, 'share_with_error'))}\%" for _, n in nodes]
+    share = shares[0] if len(set(shares)) == 1 else ", ".join(shares) + ", respectively,"
+    return (
+        f"Values differed between the two inputs on {', and on '.join(parts)}. Of these, "
+        f"{share} had read a record with an extraction error."
+    )
+
+
 def tab_extract(w: Mapping[str, Any] | None) -> str:
     q = _get(w, "quantities")
     n = _count(_n_worlds(_get(q, "worlds")))
-    fields = r">{\raggedright\arraybackslash}p{0.47\linewidth}"
     correct = _widths("100.0", r"[00.0,\,00.0]")  # the records extracted without error
     lines = [
         r"\begin{table}[t]",
@@ -702,24 +738,23 @@ def tab_extract(w: Mapping[str, Any] | None) -> str:
         r"\label{tab:extract}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{mttabular*}}{{\linewidth}}{{l N{{00,000}} {correct} N{{00.0}} {fields}@{{}}}}",
+        rf"\begin{{mttabular*}}{{\linewidth}}{{l N{{00,000}} {correct} N{{00.0}} l@{{}}}}",
         r"\toprule",
-        r"(a) & \multicolumn{1}{c}{Records} & Without error & \multicolumn{1}{c}{Rewrite missed} "
-        r"& Fields without error \\",
+        r"(a) & \multicolumn{1}{c}{Records} & Without error (\%) "
+        r"& \multicolumn{1}{c}{Rewrite missed (\%)} & Weakest field (\%) \\",
         r"\midrule",
     ]
     for s, _ in SOURCE_TAGS:
         node = _get(q, "extraction", s)
-        fields_text = "" if s == "pooled" else _fields(node, s)
-        if s != SOURCE_TAGS[0][0]:
-            lines.append(r"\addlinespace[2pt]")  # the field lists wrap: a gap between sources
+        if s == "pooled":
+            lines.append(r"\addlinespace[2pt]")
         lines.append(
             _row(
                 SOURCE_LABELS[s],
                 _count(_get(node, "records")),
                 _pair(_get(node, "record_correct")),
                 _plain(_get(node, "rewrite", "missed_share")),
-                fields_text,
+                _weakest(node),
             )
         )
     lines += [r"\end{mttabular*}\nointerlineskip"]  # one rule between the panels
@@ -762,33 +797,12 @@ def tab_extract(w: Mapping[str, Any] | None) -> str:
         )
         first = ""
     lines += [
-        r"\midrule",
-        r"(c) & & \multicolumn{1}{c}{Item-times} & Values differ & With an error (\%) & \\",
-        r"\midrule",
-    ]
-    for pair, _, label in PAIRS:
-        first = label
-        for b, _ in W_BRANCHES:
-            node = _get(q, "attribution", pair, b)
-            share = _boxed(_plain(_get(node, "share_with_error")), "000.0")
-            lines.append(
-                _row(
-                    first,
-                    BRANCH_LABELS[b],
-                    _count(_get(node, "item_times")),
-                    _boxed(_count(_get(node, "differ")), "00"),
-                    f"{share} &",  # the last column is empty
-                )
-            )
-            first = ""
-    lines += [
         r"\bottomrule",
         r"\end{mttabular*}",
         r"\mtnotes{(a) Per source: the distinct record contents, the share extracted with every "
-        r"field right, the share of rewrites that miss a value, and per field the share of values "
-        r"extracted right (\%). (b) $B{\times}D$ and $r$ with programs on typed and on extracted "
-        r"fields. (c) The definition item-times whose value differs between the two inputs, and "
-        r"the share of those whose write read a record with an extraction error.}",
+        r"field right, the share of rewrites that miss a value, and the field with the fewest "
+        r"values extracted right. The last two columns are point estimates. (b) $B{\times}D$ and "
+        rf"$r$ with programs on typed and on extracted fields. {_differ(q)}}}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
@@ -825,7 +839,7 @@ def build(inp: Mapping[str, Any], blocks: Sequence[str]) -> dict[str, str]:
     top = head(blocks)
     return {
         "round3b_numbers.tex": top + numbers(inp),
-        "tab_typed.tex": top + tab_typed(inp.get("t"), inp.get("facts")),
+        "tab_typed.tex": top + tab_typed(inp.get("t")),
         "tab_feedback.tex": top + tab_feedback(inp.get("f")),
         "tab_extract.tex": top + tab_extract(inp.get("w")),
     }

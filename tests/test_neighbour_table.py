@@ -280,6 +280,7 @@ def test_the_notes_key_every_mark_and_code() -> None:
     codes = {str(v) for r in rows for v in nt._text_values(r)}
     for code in codes - {"n/s"}:
         assert f"{code}~{nt.TEXT_CODES[code]}" in notes, code
+    assert "(+L)~plus an experiment in which an LLM rewrote the message bodies" in notes
     # a short key: the column definitions are in the text of the appendix
     assert "Derived items:" not in notes and "Consent revoked:" not in notes
     header = next(ln for ln in full.splitlines() if ln.startswith("Benchmark &"))
@@ -301,6 +302,27 @@ def test_the_appendix_text_defines_the_columns_the_key_leaves_out() -> None:
         "Histories (worlds, users or trajectories) and questions are counted as printed",
     ):
         assert term in text, term
+
+
+def _header_words(header: str) -> str:
+    """A column header as words (a header on two rotated lines as one line)."""
+    return (
+        header.replace(r"\begin{tabular}{@{}l@{}}", "")
+        .replace(r"\end{tabular}", "")
+        .replace("\\\\", " ")
+    )
+
+
+@pytest.mark.paper
+def test_the_overview_table_names_the_properties_as_the_full_table_does() -> None:
+    """Table 2 in the main text (paper/sections/benchmark.tex) counts the neighbours on seven of
+    these properties, each under the name of its column here."""
+    text = (ROOT / "paper" / "sections" / "benchmark.tex").read_text()
+    stats = text[text.index(r"\label{tab:stats}") :]
+    for key in ("gold_first", "gold_dep", "redef", "writer", "impl", "branch", "judge"):
+        words = _header_words(nt.COLUMNS[key].header)
+        name = words[0].lower() + words[1:]
+        assert rf"\mtin {name} & \Nbr{nt.COLUMNS[key].stem}" in stats, name
 
 
 def test_neighbour_rows_have_a_small_gap_every_five_rows() -> None:

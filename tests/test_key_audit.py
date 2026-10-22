@@ -140,19 +140,29 @@ def test_table_gives_the_single_field_totals_the_text_quotes(staged):
     assert src[10] == m["KeyAuditRederivSourceSrcRule"] == "2,930"
     assert oracle[:4] == ["", "", "", "oracle"]
     assert oracle[10] == m["KeyAuditRederivOracleSrcRule"] == "344"
+    # every re-derivation count on that basis: summed over the worlds, all and definition items
+    assert src[8:10] == [m["KeyAuditRederivSourceSrcAll"], m["KeyAuditRederivSourceSrcDefinition"]]
+    assert src[8:10] == ["3,800", "470"] and oracle[8:10] == ["764", "377"]
     # shift, its two counts, key, four rates, three counts, share
     assert all(len(r) == 12 for r in rows[1:])
-    # two header rows: the spanners, then the columns with their unit or scope as a second line
-    assert r"\multicolumn{3}{c}{Re-derivations}" in tex
+    # two header rows: the spanners (the share under re-derivations), then the columns with their
+    # unit as a second line
+    assert r"\multicolumn{4}{c@{}}{Re-derivations} \\" in tex  # the worlds in the notes
     assert r"\multicolumn{4}{c}{Unchanged item-times invalidated}" in tex
     assert r"\multicolumn{1}{c}{\mthead{Free}{(\%)}}" in tex
-    assert r"\mthead{Def.}{per world}} & \multicolumn{1}{c}{\mthead{Field}{20 worlds}}" in tex
+    assert "per world" not in tex
+    assert r"\multicolumn{1}{c}{Def.} & \multicolumn{1}{c}{Field}" in tex
     assert tex.count(r"\mtna") == 3 * 5  # the scope key's dashes: five classes, three shifts
     caption, rest = tex.split(r"\label{tab:keyaudit}")
     for term in ("What each key invalidates", "audited without a model"):
         assert term in caption, term
     notes = rest.split(r"\end{mttabular}")[1]
-    for term in ("Re-derivations:", "Def.\\ share:", "---: the scope key"):
+    for term in (
+        "Re-derivations:",
+        "summed over the 20 worlds",
+        "Def.\\ share:",
+        "---: the scope key",
+    ):
         assert term in notes, term
     assert "item-checkpoint" not in tex and "item-time" in caption and "item-times" in notes
 

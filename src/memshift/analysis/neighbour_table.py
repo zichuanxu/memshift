@@ -54,6 +54,8 @@ TEXT_CODES = {
     "M": "mixture of these or of existing datasets",
 }
 INFERRED_NOTE = r"$^\ddagger$~inferred by the audit, not stated in the paper."
+# a world-text code added in parentheses on the MemShift row: what it adds to the observed code
+EXTRA_TEXT = {"L": "plus an experiment in which an LLM rewrote the message bodies"}
 
 
 @dataclass(frozen=True)
@@ -67,15 +69,16 @@ class Column:
     align: str = "c"  # r for a count, so its digits line up
 
 
+def _two_lines(first: str, second: str) -> str:
+    """A header on two rotated lines, so that the header row is no taller than the next one."""
+    return rf"\begin{{tabular}}{{@{{}}l@{{}}}}{first}\\{second}\end{{tabular}}"
+
+
+# the property names are those of the main text's overview table (paper/sections/benchmark.tex)
 COLUMNS = {
     "text": Column("text_origin", "World text", "text"),
-    "gold_first": Column("gold_first", "Gold before text", stem="GoldFirst"),
-    # the longest header on two rotated lines, so the header row is no taller than the next one
-    "gold_dep": Column(
-        "gold_dependency",
-        r"\begin{tabular}{@{}l@{}}Gold\\dependency sets\end{tabular}",
-        stem="GoldDep",
-    ),
+    "gold_first": Column("gold_first", _two_lines("Gold fixed", "before text"), stem="GoldFirst"),
+    "gold_dep": Column("gold_dependency", _two_lines("Gold", "dependency sets"), stem="GoldDep"),
     "derived": Column("derived_knowledge", "Derived items", stem="Derived"),
     "update": Column("chg_new_updated_facts", "Source revision", stem="Update"),
     "invalid": Column("chg_retraction_deletion", "Deletion", stem="Invalid"),
@@ -84,7 +87,7 @@ COLUMNS = {
     "writer": Column("chg_writer_model_change", "Writer switch", stem="Writer"),
     "impl": Column("chg_implementation_migration", "Export", stem="Impl"),
     "consent": Column("chg_consent_revocation", "Consent revoked", stem="Consent"),
-    "branch": Column("counterfactual", "Counterfactual", stem="Branch"),
+    "branch": Column("counterfactual", _two_lines("Counterfactual", "branches"), stem="Branch"),
     "native": Column("native_systems", "Native systems", "text", align="r"),
     "judge": Column("llm_judge", "No LLM judge", "judge", stem="Judge"),
     "histories": Column("n_histories", "Histories", "text", align="r"),
@@ -195,6 +198,10 @@ GAP_EVERY = 5  # neighbour rows between two small gaps
 def _key(rows: list[dict[str, Any]], inferred: bool) -> str:
     codes = {str(v) for r in rows for v in _text_values(r)}
     legend = ", ".join(f"{k}~{v}" for k, v in TEXT_CODES.items() if k in codes)
+    extras = sorted({str(v) for r in rows for v in _text_values(r)[1:]})
+    legend += "".join(
+        f", (+{x})~{EXTRA_TEXT.get(x, 'plus ' + TEXT_CODES.get(x, x))}" for x in extras
+    )
     items = rows[-1]["fields"]["n_questions"].get("items")
     key = KEY.replace("LEGEND", legend).replace("ITEMS", f"{items:,}" if items else "the")
     if inferred:

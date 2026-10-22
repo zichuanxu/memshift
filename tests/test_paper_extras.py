@@ -13,8 +13,9 @@ from typing import Any
 import pytest
 
 from memshift.analysis import paper_extras as pe
-from memshift.analysis.paper_data import MISSING
-from memshift.analysis.paper_tables import _num
+from memshift.analysis.paper_data import MISSING, stage_json
+from memshift.analysis.paper_data import get as _get
+from memshift.analysis.paper_tables import _num, mt_pair
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED = ROOT / "paper" / "generated"
@@ -64,16 +65,27 @@ def test_overview_levels_equal_the_macros(overview: dict[tuple[str, str, str, st
 
 
 @pytest.mark.paper
-def test_overview_interactions_equal_the_macros(
-    overview: dict[tuple[str, str, str, str], str],
-) -> None:
+def test_table_4b_prints_each_models_interaction_from_its_analysis() -> None:
+    """Panel (b) of the Results' Table 4 (hand-written) gives B x D on Update over all changed
+    items for each model as writer and reader: every macro it cites prints the estimate and
+    interval of that model's own analysis, and the main-study row is the interaction the text
+    quotes."""
     macros = _macros()
-    for b, bt in BRANCH_TAGS:
-        assert _signed(overview["families", "main", b, "BxD"]) == _signed(macros[f"EOneBxD{bt}"])
-    for key, tag in (("llama", "Llama"), ("gemma", "Gemma"), ("gptoss", "GptOss")):
-        for b, bt in BRANCH_TAGS[:2]:
-            got = _signed(overview["families", key, b, "BxD"])
-            assert got == _signed(macros[f"MTwo{tag}BxD{bt}"])
+    text = (ROOT / "paper" / "sections" / "results.tex").read_text()
+    label = text.index(r"\label{tab:main}")
+    panel = text[text.index("(b) Writer and reader", label) : text.index(r"\end{table*}", label)]
+    stages = {"Main": "e1", "Llama": "m2_llama", "Gem": "m2_gemma", "Gpt": "m2_gptoss"}
+    for tag, stage in stages.items():
+        d = stage_json(ROOT, SOURCES, stage, "e1_metrics.json")
+        for b, bt in BRANCH_TAGS:
+            name = f"ExCls{tag}{bt}AllBxD"
+            assert rf"\mtcipair\{name}" in panel, name
+            e = _get(d, "contrasts", b, "BxD_interaction_update_source")
+            assert _signed(mt_pair(e, sign=True)) == _signed(macros[name]), name
+            if tag == "Main":
+                assert _signed(macros[name]) == _signed(macros[f"EOneBxD{bt}"])
+    for worlds in ("TestWorlds", "MTwoLlamaWorlds", "MTwoGemmaWorlds", "MTwoGptOssWorlds"):
+        assert rf"\mtmuted{{(\{worlds}{{}} worlds)}}" in panel, worlds
 
 
 @pytest.mark.paper
@@ -95,9 +107,9 @@ def test_overview_native_levels_equal_the_native_analysis(
 @pytest.mark.paper
 def test_the_results_text_states_the_native_block_item_counts() -> None:
     """The Results' note on the overview's native block (moved there from the caption): the rows
-    are scored on the half of the items not used to infer a label, they share the worlds, the native
-    systems have fewer item-times than the cells after a deletion only, and the baselines on
-    Stability only."""
+    share the worlds, the native systems have fewer item-times than the cells after a deletion
+    only, and the baselines on Stability only. That the rows are scored on the half of the items
+    not used to infer a label is said once, in the block's banner."""
     n = pe.load(ROOT, SOURCES)["n"]
     for key, _ in pe.NATIVE_SYSTEMS:
         for comp, c in n["explore_native_null"]["systems"][key]["comparisons"].items():
@@ -107,7 +119,9 @@ def test_the_results_text_states_the_native_block_item_counts() -> None:
             for base in ("zero", "rag", "oracle"):
                 assert (refs[base]["n_items"] < cells) == comp.endswith(":Stability")
     text = " ".join((ROOT / "paper" / "sections" / "results.tex").read_text().split())
-    assert "scored on the half of the items not used to infer the systems' labels" in text
+    assert "scored on the half of the items" not in text
+    banner = "scored on the half of the items not used to infer the labels"
+    assert banner in pe.tab_overview(pe.load(ROOT, SOURCES)).split(r"\label{tab:overview}")[1]
     assert (
         "share the worlds but not all scored items: the native systems have fewer after a" in text
     )
@@ -123,36 +137,42 @@ def test_overview_caption_names_its_rows_in_plain_words() -> None:
         r"\begin{table*}[t]" + "\n" + r"\caption{Update and Stability (\%) after"
     )
     notes = text.split(r"\end{mttabular}")[1]  # the definitions, under the table
-    assert r"$D_{\mathrm{m}}$: the writer's programs." in notes
-    assert r"Brackets: 95\% interval." in notes
-    assert r"\mtgroup{7}{$B{\times}D$ on Update (pp), each model as writer and reader}" in text
+    assert (
+        r"\holdmem{}($D$,$B$): $D{=}1$ exact recomputation, $D_{\mathrm{m}}$ the writer's" in notes
+    )
+    assert "the source key unless the citation key is named" in notes
+    # levels only: the interactions of the model families are in Table 4(b), so no interval is left
+    assert "Brackets" not in notes and r"B{\times}D" not in text and r"\mtpair" not in text
     for gone in ("every evaluated memory", "model-written", "measurement half", "Native systems:"):
         assert gone not in caption + notes, gone
 
 
-def test_overview_families_block_has_its_own_banner_and_centred_intervals() -> None:
-    """The bottom block prints B x D, not a level: its banner states the quantity and unit, and
-    each estimate with its interval is one cell centred under its shift's two columns."""
-    lines = pe.tab_overview(pe.load(ROOT, SOURCES)).splitlines()
-    head = lines.index(r"\mtgroup{7}{$B{\times}D$ on Update (pp), each model as writer and reader}")
-    assert lines[head - 1] == r"\midrule"
-    rows = lines[head + 1 : head + 1 + 1 + len(pe.FAMILIES)]
-    labels = [r.split(r" \mtmuted")[0].removeprefix(r"\mtin ") for r in rows]
-    assert labels == ["Qwen3.5-9B", *(f.label for f in pe.FAMILIES)]
-    pair = re.compile(
-        r"\\multicolumn\{2\}\{c(@\{\})?\}\{\\mtpair\{(\$[+-]\$\d+\.\d|0\.0)\}\{\[.+\]\}\}"
+def test_overview_separates_cells_of_one_kind_and_the_baselines() -> None:
+    """Two row groups under banners. A small gap separates, in the main study, the source-key
+    cells, the citation-key cells, the cells with the writer's programs and the baselines, and in
+    the native block the cells, the baselines and the native systems. The native banner says on
+    which items its rows are scored."""
+    text = pe.tab_overview(pe.load(ROOT, SOURCES))
+    body = text.split(r"\midrule", 1)[1].split(r"\bottomrule")[0]
+    main, native = body.split(r"\midrule")
+
+    def parts(block: str) -> list[int]:
+        return [
+            sum(ln.startswith(r"\mtin") for ln in part.splitlines())
+            for part in block.split(r"\mtgap")
+        ]
+
+    assert parts(main) == [len(g) for g in pe.MAIN_GROUPS] == [4, 2, 2, 3]
+    assert parts(native) == [len(pe.NATIVE_CELLS), len(pe.BASELINES), len(pe.NATIVE_SYSTEMS)]
+    banner = native.strip().splitlines()[0]
+    assert banner.startswith(
+        r"\mtgroup{7}{Native systems: 15 three-month worlds, scored on the half"
     )
-    for row in rows:
-        cells = row.removesuffix(r" \\").split(" & ")
-        assert len(cells) == 4, row
-        assert re.search(r"\\mtmuted\{\(\d+ worlds\)\}$", cells[0]), cells[0]
-        for cell in cells[1:]:
-            assert pair.fullmatch(cell), cell
-        assert cells[3].startswith(r"\multicolumn{2}{c@{}}")
+    assert banner.endswith("of the items not used to infer the labels}")
 
 
 def test_overview_without_stages_prints_the_marker() -> None:
-    text = pe.tab_overview({"e1": None, "c": None, "n": None, "m2": {}})
+    text = pe.tab_overview({"e1": None, "c": None, "n": None})
     assert MISSING in text
     assert r"\label{tab:overview}" in text and text.count(r"\\") > 20
 
@@ -186,7 +206,7 @@ def _model_run(models: dict[str, str], served: dict[str, int], cells: list[str])
     return pe.Run("r", "E1", _t(0), _t(1), entries, servers, {"cells": cells})
 
 
-def test_model_table_lists_size_context_reasoning_and_roles() -> None:
+def test_model_table_lists_size_context_and_roles_and_notes_the_reasoning() -> None:
     qwen, emb, oss = "Qwen/Qwen3.5-9B", "Qwen/Qwen3-Embedding-0.6B", "openai/gpt-oss-20b"
     runs = [
         _model_run(
@@ -206,18 +226,23 @@ def test_model_table_lists_size_context_reasoning_and_roles() -> None:
         oss,
         emb,
     ]  # generative before embedders, each by its number of runs, then by name
-    assert r"& 9B & 32,768--65,536 &  & writer, reader, program writer \\" in rows[0]
-    assert r"& 20B & 16,384 & low & writer \\" in rows[2]
-    assert r"& 0.6B & 8,192 &  & embedder \\" in rows[3]
-    opus = "high for definition items, low for programs"
+    assert r"& 9B & 32,768--65,536 & writer, reader, program writer \\" in rows[0]
+    assert r"& 20B & 16,384 & writer \\" in rows[2]
+    assert r"& 0.6B & 8,192 & embedder \\" in rows[3]
     assert rows[1].endswith(
-        rf"& \mtna & 1,000,000 & {opus} & definition-item writer, program writer \\"
+        r"& \mtna & 1,000,000 & definition-item writer, program writer \\"
     )  # the context of Anthropic's models overview; no size stated (a centred dash)
     assert r"\citep{anthropic_models_overview}" in rows[1]
     assert r"\citep{qwen35_2026,hf_qwen3_5_9b}" in rows[0]
+    assert "Reasoning effort" not in text  # the few settings that are not off: in the notes
     notes = text.split(r"\end{mttabular}")[1]  # the serving setup, under the table
     assert "gpt-oss-20b in MXFP4" in notes  # weights that are not bfloat16
     assert r"\citep{kwon2023vllm}" in notes and "think adaptively" in notes
+    assert (
+        "Reasoning is off except in Claude Opus 5.5 (effort high for definition items, low for "
+        "programs) and gpt-oss-20b (effort low)."
+    ) in notes
+    assert "---: not disclosed." in notes  # the size of a Claude model
 
 
 def test_model_size_reads_the_repository_id() -> None:
@@ -334,6 +359,25 @@ def _raw_run(tmp: Path, gen: dict[str, Any], gold: Any = None) -> Path:
     ]
     (d / "items.jsonl").write_text("".join(json.dumps(r) + "\n" for r in items))
     return tmp
+
+
+def test_example_asks_first_and_marks_dependencies_apart_from_answers(gen: dict[str, Any]) -> None:
+    """The question, the same for both probes, is the first row, above the before/after header.
+    A bullet marks a record in the gold value's dependency set, so a check mark is only a correct
+    answer."""
+    lines = pe.example_world(gen, None).splitlines()
+    top = lines.index(r"\toprule")
+    assert lines[top + 1].startswith("question & ")
+    assert lines[top + 2] == r"\midrule" and "Before the fork, probe on" in lines[top + 3]
+    assert lines[top + 4] == r"\cmidrule(l){2-7}" and lines[top + 5].startswith("definition & ")
+    head = next(i for i, ln in enumerate(lines) if "& Gold v1 &" in ln)
+    records = lines[head + 2 : head + 2 + len(gen["records"])]
+    assert records[0].startswith("records & ")
+    deps = sum(
+        oid in {o for o, _ in p["deps"]} for oid, _, _ in gen["records"] for p in gen["probes"]
+    )
+    assert sum(ln.count(pe.DEP_MARK) for ln in records) == deps > 0
+    assert not any(r"\checkmark" in ln for ln in records)
 
 
 def test_example_reads_the_raw_outputs(tmp_path: Path, gen: dict[str, Any]) -> None:

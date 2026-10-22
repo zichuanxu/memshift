@@ -13,7 +13,9 @@ staged analysis named in results/sources.json:
 A stage that is not staged renders as the MISSING marker; a quantity that is undefined by
 construction (the accuracy of the missed items when a key misses none) renders as a dash.
 
-tab_classsplit   appendix: B, D and B x D on Update by shift and item class, main study and R
+tab_classsplit   appendix: B, D and B x D on Update by shift and item class, with exact
+                 recomputation and D_m (block C) as the D=1 arm in the main study and exact
+                 recomputation in R
 fig_classsplit   forest plot of the B effect at each D and B x D, by class and branch, main and R
 """
 
@@ -530,7 +532,7 @@ def numbers(inp: Mapping[str, Any]) -> dict[str, str]:
 # small muted type), \mtpair{est}{[lo,\,hi]} (an estimate and its interval in one cell, in boxes
 # set by \mtpairwidths) and the column N{template} (values right-aligned in a box as wide as the
 # template, the box centred under the header).
-MUTED = r"\color{mtmuted}"  # a row in the muted grey of the figures (the replication)
+MUTED = r"\color{mtmuted}"  # a cell in the muted grey of the figures
 PCT_BOX = "100"  # the N template of a column of whole percentages: no share prints wider
 GROUP_GAP = r"@{\hspace{14pt}}"  # between two column groups (shifts, studies, cells)
 _SIGNS = ("$+$", "$-$")
@@ -655,66 +657,70 @@ CLASSSPLIT_CONTRASTS = (  # the columns of tab_classsplit, in the order of their
     "BxD_interaction_update",
 )
 BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
+CLASSSPLIT_STUDIES = (  # the row blocks: banner, inputs key of its world count, and its D=1
+    # arms (label, inputs key, arm of the D=1 cell) in the rows of each shift and class
+    ("Main study: {n} test worlds", "main", (("exact", "main", "D1"), ("programs", "c", "D1s"))),
+    ("Replication: {n} fresh worlds", "rep", (("exact", "rep", "D1"),)),
+)
 
 
 def tab_classsplit(inp: Mapping[str, Any]) -> str:
     """Appendix: B effect at each D, D effect at each B and B x D on Update by shift and item
-    class (rows), the main study and below it, in muted grey, the replication; the class's share
-    of the changed item-times of the main study beside the class. Each estimate and its interval
-    are two aligned cells (`mt_ci_cells`)."""
-    main, rep = inp.get("main"), inp.get("rep")
-    n_rep = _get(rep, "n_worlds") or MISSING
-    pairs = " ".join([r"r@{\,}l"] * len(CLASSSPLIT_CONTRASTS))
+    class (definition, other, all), in two row blocks: the main study, with exact recomputation
+    and the writer's programs D_m (block C, the main study's worlds) as the D=1 arm in the rows
+    of each class, and the replication with exact recomputation. The arms share the columns, so
+    the effects of exact recomputation and of the programs can be read off one column. Each
+    estimate and its interval are two aligned cells (`mt_ci_cells`)."""
+    pairs = " ".join([r"r@{\,}l"] * 2)
+    ncols = 3 + 2 * len(CLASSSPLIT_CONTRASTS)
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The contrasts on Update by shift and item class, in the main study and in the "
-        rf"replication on {n_rep} fresh worlds (grey).}}",
+        r"\caption{The contrasts on Update (pp) by shift and item class, with exact "
+        r"recomputation and with the writer's programs as the $D{=}1$ arm.}",
         r"\label{tab:classsplit}",
         r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{3.8pt}",
-        rf"\begin{{mttabular}}{{@{{}}llrl {pairs}@{{}}}}",
+        r"\setlength{\tabcolsep}{3.2pt}",
+        rf"\begin{{mttabular}}{{@{{}}lll {pairs} {GROUP_GAP} {pairs} {GROUP_GAP} r@{{\,}}l@{{}}}}",
         r"\toprule",
-        r"& & \multicolumn{1}{r}{Share} & & \multicolumn{4}{c}{$B$ effect} "
-        r"& \multicolumn{4}{c}{$D$ effect} & & \\",
-        r"\cmidrule(lr){5-8}\cmidrule(lr){9-12}",
-        r"Shift & Class & \multicolumn{1}{r}{\mtsmall\color{mtmuted}(\%)} & "
-        r"& \multicolumn{2}{c}{$D{=}0$} & \multicolumn{2}{c}{$D{=}1$} "
+        r"& & & \multicolumn{4}{c}{$B$ effect} & \multicolumn{4}{c}{$D$ effect} & & \\",
+        r"\cmidrule(lr){4-7}\cmidrule(lr){8-11}",
+        r"Shift & Class & Arm & \multicolumn{2}{c}{$D{=}0$} & \multicolumn{2}{c}{$D{=}1$} "
         r"& \multicolumn{2}{c}{$B{=}0$} & \multicolumn{2}{c}{$B{=}1$} "
         r"& \multicolumn{2}{c@{}}{$B{\times}D$} \\",
-        r"\midrule",
     ]
-    for i, (b, _) in enumerate(BRANCH_TAGS):
-        for k, cls in enumerate(("definition", "other")):
-            share = _get(main, "explore_class_mix", b, "classes", cls, "share")
-            for stage, m in (("main", main), ("repl.", rep)):
-                style = MUTED if m is rep else ""
-                vals = [
-                    mt_ci_cells(
-                        _get(m, "explore_class_split", "D1", b, "source", cls, key),
-                        sign=True,
-                        style=style,
-                        span="c@{}" if key == CLASSSPLIT_CONTRASTS[-1] else "c",
+    for banner, n_key, arms in CLASSSPLIT_STUDIES:
+        n = _get(inp.get(n_key), "n_worlds") or MISSING
+        lines += [r"\midrule", rf"\mtgroup{{{ncols}}}{{{banner.format(n=n)}}}"]
+        for i, (b, _) in enumerate(BRANCH_TAGS):
+            for k, (cls, _) in enumerate(MAIN_CLASSES):
+                for j, (label, key, arm) in enumerate(arms):
+                    node = _get(inp.get(key), "explore_class_split", arm, b, "source", cls)
+                    vals = [
+                        mt_ci_cells(
+                            _get(node, c),
+                            sign=True,
+                            span="c@{}" if c == CLASSSPLIT_CONTRASTS[-1] else "c",
+                        )
+                        for c in CLASSSPLIT_CONTRASTS
+                    ]
+                    lines.append(
+                        _row(
+                            BRANCH_LABELS[b] if k == 0 and j == 0 else "",
+                            cls if j == 0 else "",
+                            label,
+                            *vals,
+                        )
                     )
-                    for key in CLASSSPLIT_CONTRASTS
-                ]
-                first = m is main
-                lines.append(
-                    _row(
-                        BRANCH_LABELS[b] if first and k == 0 else "",
-                        cls if first else "",
-                        (_num(share, digits=0) if share is not None else MISSING) if first else "",
-                        style + stage,
-                        *vals,
-                    )
-                )
-            if k == 0:
-                lines.append(r"\mtgap")
-        if i < len(BRANCH_TAGS) - 1:
-            lines.append(r"\midrule")
+                if k < len(MAIN_CLASSES) - 1 and len(arms) > 1:  # between classes of 2+ rows
+                    lines.append(r"\mtgap")
+            if i < len(BRANCH_TAGS) - 1:
+                lines.append(r"\midrule")
     lines += [
         r"\bottomrule",
         r"\end{mttabular}",
-        r"\mtnotes{Share: the class's share of the changed item-times in the main study.}",
+        r"\mtnotes{Exact: exact recomputation as the $D{=}1$ arm. Programs: the writer's programs "
+        r"($D_{\mathrm{m}}$) as the $D{=}1$ arm, so in their rows $D{=}1$ is $D_{\mathrm{m}}$. "
+        r"The $D{=}0$ cells of the main study serve both of its arms.}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"

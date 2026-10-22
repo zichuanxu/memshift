@@ -26,9 +26,9 @@ items only, so it has the classes All (the same items) and Definition):
   KeyAuditDefCheckpoints              definition item-checkpoints per branch
 
 tab_keyaudit        appendix table: the changed and unchanged item-times per branch, false
-                    invalidation by class, re-derivations per world, the single-field
-                    re-derivations summed over the worlds (quoted in the text) and the
-                    definition-item share, per branch and key
+                    invalidation by class, the re-derivations summed over the worlds (all,
+                    definition and single-field items; the text quotes the single-field ones) and
+                    the definition-item share, per branch and key
 """
 
 from __future__ import annotations
@@ -163,20 +163,19 @@ CAPTION = (
     r"fork, no key missed a changed item-time (the largest share not invalidated is {missed})."
 )
 NOTES = (
-    r"Re-derivations: invalidations over the four checkpoints, one writer request each. Def.\ "
-    r"share: share of the {cp} definition item-times of a shift that were re-derived. ---: the "
-    r"scope key is built for definition items only."
+    r"Re-derivations: invalidations over the four checkpoints, one writer request each, summed "
+    r"over the {worlds} worlds. Def.\ share: share of the {cp} definition item-times of a shift "
+    r"that were re-derived. ---: the scope key is built for definition items only."
 )
 KEY_LABELS = {"source": "source key", "gold": "oracle", "scope": "scope"}
 BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
 DASH = r"\mtna"  # a class the scope key does not audit
 # the value columns, each centred in a box as wide as its widest value: the item-times; false
-# invalidation by class; re-derivations per world (all, definition items) and summed over the
-# worlds (single-field items); the definition-item share
+# invalidation by class; re-derivations summed over the worlds (all, definition and single-field
+# items) and the definition-item share
 COLUMNS = (
     r"@{}l N{0,000}N{0,000} l N{100.0}@{\hspace{11pt}}N{100.0}@{\hspace{11pt}}N{100.0}"
-    r"@{\hspace{11pt}}N{100.0} @{\hspace{14pt}} N{000.0}N{00.0}N{0,000} @{\hspace{14pt}} "
-    r"N{00.0}@{}"
+    r"@{\hspace{11pt}}N{100.0} @{\hspace{14pt}} N{0,000}N{000}N{0,000}N{00.0}@{}"
 )
 
 
@@ -191,8 +190,8 @@ def _head(name: str, second: str, last: bool = False) -> str:
 
 def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
     """The audit per shift and key: the shift's changed and unchanged item-times (the same for
-    every key), false invalidation by class, re-derivations per world and, for single-field
-    items, summed over the worlds, and the share of definition item-times re-derived."""
+    every key), false invalidation by class, and the re-derivations summed over the worlds (the
+    basis of the counts the text quotes) with the share of definition item-times re-derived."""
     m = numbers(view)
     caption = CAPTION.format(missed=m["KeyAuditMissedMax"])
     pct = r"(\%)"
@@ -205,8 +204,8 @@ def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
         rf"\begin{{mttabular}}{{{COLUMNS}}}",
         r"\toprule",
         r"& \multicolumn{2}{c}{Item-times} & & \multicolumn{4}{c}{Unchanged item-times "
-        r"invalidated} & \multicolumn{3}{c}{Re-derivations} & \\",
-        r"\cmidrule(lr){2-3}\cmidrule(lr){5-8}\cmidrule(lr){9-11}",
+        r"invalidated} & \multicolumn{4}{c@{}}{Re-derivations} \\",
+        r"\cmidrule(lr){2-3}\cmidrule(lr){5-8}\cmidrule(l){9-12}",
         _row(
             "Shift",
             r"\multicolumn{1}{c}{Changed}",
@@ -216,9 +215,9 @@ def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
             _head("Def.", pct),
             _head("Field", pct),
             _head("Free", pct),
-            _head("All", "per world"),
-            _head("Def.", "per world"),
-            _head("Field", f"{m['KeyAuditWorlds']} worlds"),
+            r"\multicolumn{1}{c}{All}",
+            r"\multicolumn{1}{c}{Def.}",
+            r"\multicolumn{1}{c}{Field}",
             _head(r"Def.\ share", pct, last=True),
         ),
         r"\midrule",
@@ -227,11 +226,10 @@ def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
         for j, (k, kt) in enumerate(KEYS):
             if k == "scope":  # definition items only
                 fi = [DASH, m[f"KeyAuditFalse{kt}{bt}Definition"], DASH, DASH]
-                rd = [DASH, m[f"KeyAuditRederivWorld{kt}{bt}Definition"], DASH]
+                rd = [DASH, m[f"KeyAuditRederiv{kt}{bt}Definition"], DASH]
             else:
                 fi = [m[f"KeyAuditFalse{kt}{bt}{c}"] for _, c in CLASS_TAGS]
-                rd = [m[f"KeyAuditRederivWorld{kt}{bt}{c}"] for c in ("All", "Definition")]
-                rd.append(m[f"KeyAuditRederiv{kt}{bt}Rule"])  # summed over the worlds
+                rd = [m[f"KeyAuditRederiv{kt}{bt}{c}"] for c in ("All", "Definition", "Rule")]
             share = m[f"KeyAuditDefShare{kt}{bt}"]
             # the shift and its item-times once, on the shift's first line
             first = [BRANCH_LABELS[b], m[f"KeyAuditChanged{bt}"], m[f"KeyAuditUnchanged{bt}"]]
@@ -241,7 +239,7 @@ def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
     lines[-1] = r"\bottomrule"
     lines += [
         r"\end{mttabular}",
-        notes(NOTES.format(cp=m["KeyAuditDefCheckpointsSrc"])),
+        notes(NOTES.format(worlds=m["KeyAuditWorlds"], cp=m["KeyAuditDefCheckpointsSrc"])),
         r"\end{table}",
     ]
     return "\n".join(lines)

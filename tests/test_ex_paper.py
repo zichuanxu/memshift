@@ -339,46 +339,67 @@ def test_native_table_defines_its_counts_and_gives_the_baselines_after_src_and_d
     for term in (
         r"$k$ comparisons inside the 95\% interval of the \holdmem{} cell with the inferred label",
         r"$(D,B)$: \holdmem{} cell, c: citation key",
-        r"$j$ of them also outside that of the cell with the other $B$",
         "the share of deleted items still answered",
-        "no-store: no-store BM25, oracle: oracle context",
-        "Last row: sums",
+        "no-store: no-store BM25, RAG: plain RAG, oracle: oracle context",
+        r"$\Sdel$: the comparisons from which $B$ is inferred",
+        "Total: sums over the systems, each baseline counted once per system it is compared with",
         r"$^\circ$: after $\Sdel$, from which $B$ is inferred",
+        "Difference: native minus the",
     ):
         assert term in notes, term
     for word in ("circular", "out-of-sample", "discriminating", "inflated", "exploratory"):
         assert word not in tex, word
     assert "white-box" not in tex and "(d,b)" not in tex
     head = next(ln for ln in tex.splitlines() if ln.startswith("System & Label"))
-    assert head.count(r"\twoline{$\Ssrc$,}{$\Sdef$}") == 3  # the native estimate, BM25, RAG
+    assert r"\multicolumn{2}{c}{$\Ssrc$, $\Sdef$}" in head and "Observed" not in tex
     assert "zero" not in tex.split(r"\label{tab:native-null}")[1]  # named as in the paper
-    # with all six systems: per system and in the last row, the baselines out of sample
+    # with all six systems: per system the native counts k/n (S_src and S_def, S_del, all six),
+    # the two baselines once under each label group (the clones share one label) and the sums
     six = _six(e5_res)
-    tex = ex_tables.tab_native_null(six)
     ex = six["explore_native_null"]
-    mem = next(ln for ln in tex.splitlines() if ln.startswith("Mem0 &"))
-    total = next(ln for ln in tex.splitlines() if ln.startswith("total &"))
-    # P: estimate and interval; each count in the two cells of a column pair (k, j | n)
-    assert len(mem.split(" & ")) == 21 and len(total.split(" & ")) == 20
+    j = not ex_tables._all_discriminating(ex)
+    body = ex_tables.tab_native_null(six).split(r"\label{tab:native-diff}")[0]
+    mem = next(ln for ln in body.splitlines() if ln.startswith("Mem0 &"))
+    total = next(ln for ln in body.splitlines() if ln.startswith("total &"))
+    # P: estimate and interval; each count in the two cells of a column pair (k | /n)
+    assert mem.count("&") == total.count("&") == 11
 
-    def counts(e: dict[str, Any]) -> str:
-        """The seven counts of one row: the native comparisons, then the two baselines'."""
-        native = [ex_tables._pair(pd.get(e, "counts", part)) for part in ex_tables.PARTS]
-        base = [
-            ex_tables._pair(pd.get(e, "baseline_counts", name, "baseline", part))
-            for name in ("zero", "rag")
-            for part in ("all", "out_of_sample")
-        ]
-        return " & ".join(native + base)
+    def counts(e: dict[str, Any], name: str | None = None) -> str:
+        """The three counts of one row: a system's (or the sums'), or a baseline's, muted."""
+        path = ("counts",) if name is None else ("baseline_counts", name, "baseline")
+        return " & ".join(
+            ex_tables._pair(pd.get(e, *path, part), j, muted=name is not None)
+            for part in ex_tables.PARTS
+        )
 
     assert f" & {counts(ex['systems']['mem0'])} & " in mem
     assert total.startswith(
-        rf"total &  & \multicolumn{{2}}{{c}}{{}} & {ex['total']['b_identified']}/6 & "
-        + counts(ex["total"])
-        + " & "
+        rf"total &  & & & {ex['total']['b_identified']}/6 & " + counts(ex["total"]) + " & "
     )
-    assert ex_tables._pair({"inside_predicted": 5, "discriminating": 4, "comparisons": 6}) == (
-        "5, 4 & 6"
+    refs = [ln for ln in body.splitlines() if ln.startswith(r"\mtin\mtmuted{")]
+    assert [r.split(" & ")[0] for r in refs] == [
+        r"\mtin\mtmuted{no-store BM25}", r"\mtin\mtmuted{plain RAG}"
+    ] * 2  # fmt: skip
+    assert counts(ex["systems"]["mem0"], "rag") in refs[1]
+    assert counts(ex["total"], "zero") in refs[2]
+    # k/n where every comparison inside is also outside the other cell; k, j/n where one is not
+    assert ex_tables._pair(
+        {"inside_predicted": 5, "discriminating": 4, "comparisons": 6}, j=True
+    ) == ("5, 4 & /6")
+    assert (
+        ex_tables._pair({"inside_predicted": 2, "discriminating": 2, "comparisons": 4}) == "2 & /4"
+    )
+    assert ex_tables._pair({"comparisons": 4, "inside_predicted": 1}, muted=True) == (
+        r"\mtmuted{1} & \mtmuted{/4}"
+    )
+    some = next(
+        c
+        for c in (*ex["total"]["counts"].values(), *ex["systems"]["mem0"]["counts"].values())
+        if c["inside_predicted"]
+    )
+    some["discriminating"] = some["inside_predicted"] - 1
+    assert r"$j$ of them also outside that of the cell with the other $B$" in (
+        ex_tables.tab_native_null(six)
     )
 
 

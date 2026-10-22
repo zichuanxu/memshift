@@ -128,9 +128,7 @@ def test_leave_one_definition_out_range():
 
 
 # ------------------------------------------------------------------------------------ tables
-LABELS = {
-    "tab_redef_only.tex": "tab:redef_only",
-    "tab_classsplit_dm.tex": "tab:classsplit_dm",
+LABELS = {  # the class split with D_m is part of ex_e1_paper.tab_classsplit
     "tab_perdef.tex": "tab:perdef",
 }
 
@@ -167,20 +165,6 @@ def test_the_levels_of_the_decomposition_are_the_account_macros():
         assert [g.removesuffix("\\%") for g in got] == list(want), (b, c)
         assert committed(f"ExAcctMain{b}{c}BxD") == committed(f"ExClsMain{b}{c}BxD")
     assert committed("ExAcctMainSrcDefinitionBxD") == "$+$27.3\\,pp [$+$21.6, $+$32.6]"
-
-
-@pytest.mark.paper
-def test_dm_table_holds_the_c3_values():
-    tex = r2.tab_classsplit_dm(INP)
-    for name in ("SynthCThreeSrc", "SynthCThreeDef", "SynthExCThreeOrphan"):
-        est = committed(name + "Est").replace("\\,pp", "")
-        assert f"{est} & \\mtint{{[" in tex, name
-    # the authored derivation only on all items: its definition and other items are in the class
-    # split of the main study (one grey row per shift, its estimates in the muted grey)
-    assert tex.count("\\mtin\\mtmuted{exact}") == 3 and "\\cref{tab:classsplit}" in tex
-    exact = [line for line in tex.splitlines() if "\\mtmuted{exact}" in line]
-    assert all(line.count("\\mtmuted{") == 5 for line in exact)  # the label and four estimates
-    assert "share" not in tex.split("\\label", 1)[1]  # the shares are in the class split too
 
 
 @pytest.mark.paper

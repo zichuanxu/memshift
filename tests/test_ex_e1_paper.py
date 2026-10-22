@@ -237,14 +237,21 @@ def test_tables_are_wellformed_with_data_and_without():
     assert MISSING in xp.tab_classsplit(EMPTY) and MISSING not in xp.tab_classsplit(INP)
 
 
-def test_class_table_shows_both_studies_for_every_shift_and_class():
+def test_class_table_shows_every_arm_for_every_shift_and_class():
     tex = xp.tab_classsplit(INP)
-    for label in ("$B$ effect", "$D$ effect", "$B{\\times}D$", "{Share}", "(\\%)"):
+    for label in ("$B$ effect", "$D$ effect", "$B{\\times}D$", "Arm"):
         assert label in tex
-    # one replication row per shift and class, muted throughout (its intervals by \mtint)
-    assert tex.count("& \\color{mtmuted}repl. &") == 6
-    assert tex.count("& \\color{mtmuted}") == 6 * (1 + 5)  # the label and the five estimates
-    assert tex.count(" \\\\\n") == 2 + 12  # two header rows, then shift x class x study
+    assert "{Share}" not in tex  # the class mix is in the main table of results
+    # a block per study, the arms in the Arm column: per shift and class (definition, other,
+    # all) exact recomputation and the writer's programs in the main study, and exact
+    # recomputation in the replication
+    body = tex.split("\\mtgroup{13}{Main study: 20 test worlds}\n")[1].split("\\bottomrule")[0]
+    main, rep = body.split("\\mtgroup{13}{Replication: 20 fresh worlds}\n")
+    assert main.count(" & exact & ") == 9 and main.count(" & programs & ") == 9
+    assert rep.count(" & exact & ") == 9 and "programs" not in rep
+    assert "replication &" not in tex  # a study, not an arm
+    assert "\\color{mtmuted}" not in tex  # the studies are told apart by their banners
+    assert tex.count(" \\\\\n") == 2 + 27  # two header rows, then the rows of each study
     # estimate and interval as two aligned cells: signed, the interval small and muted, a thin
     # space after the comma
     assert "$-$0.6 & \\mtint{[$-$3.8,\\,$+$2.5]}" in tex and "\\scriptsize" not in tex
@@ -252,13 +259,41 @@ def test_class_table_shows_both_studies_for_every_shift_and_class():
     assert "\\%" not in tex.split("\\midrule", 1)[1]  # units in the header only
 
 
-def test_class_table_caption_names_both_studies_and_the_notes_the_share():
+def test_class_table_sets_exact_recomputation_and_the_programs_in_one_column():
+    """The D effect at B=1 of exact recomputation and of the writer's programs on definition
+    items after a source revision share a column, so the two can be read off one table."""
+    tex = xp.tab_classsplit(INP)
+    lines = tex.splitlines()
+    first = next(i for i, line in enumerate(lines) if line.startswith("$\\Ssrc$ & definition"))
+    rows = {line.split(" & ")[2]: line.split(" & ") for line in lines[first : first + 2]}
+    main = INP["main"]["explore_class_split"]["D1"]["src"]["source"]["definition"]
+    dm = INP["c"]["explore_class_split"]["D1s"]["src"]["source"]["definition"]
+    key = "D_effect_update_B1"
+    exact = xp._num(main[key]["est"], sign=True)
+    programs = xp._num(dm[key]["est"], sign=True)
+    assert rows["exact"][9] == exact and rows["programs"][9] == programs  # column B=1 of D
+
+
+@pytest.mark.paper
+def test_class_table_holds_the_c3_values():
+    """The programs' rows over all items are block C's B x D (macros SynthCThree...)."""
+    tex = xp.tab_classsplit(INP)
+    numbers = (ROOT / "paper/generated/numbers.tex").read_text()
+    for name in ("SynthCThreeSrc", "SynthCThreeDef", "SynthExCThreeOrphan"):
+        m = re.search(rf"\\newcommand{{\\{name}Est}}{{(.*)}}\n", numbers)
+        assert m, name
+        est = m.group(1).replace("\\,pp", "")
+        programs = [line for line in tex.splitlines() if " & programs & " in line]
+        assert any(f"{est} & \\mtint{{[" in line for line in programs), name
+
+
+def test_class_table_caption_and_notes_name_the_arms():
     tex = xp.tab_classsplit(INP)
     caption = tex.split("\\label{tab:classsplit}")[0]
-    for term in ("in the main study and in the replication on", "fresh worlds (grey)"):
-        assert term in caption, term
+    assert "with exact recomputation and with the writer's programs" in caption
     notes = tex.split("\\mtnotes{", 1)[1]
-    assert "Share: the class's share of the changed item-times in the main study" in notes
+    for term in ("Exact: exact recomputation as the $D{=}1$ arm", "Programs: the writer's"):
+        assert term in notes, term
     assert "regist" not in tex and "exploratory" not in tex
     # the contrasts are defined once, in the opening of the appendix of results
     assert "minus" not in caption + notes and "95\\%" not in caption + notes

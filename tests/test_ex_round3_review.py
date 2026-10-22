@@ -1,5 +1,5 @@
 """The analyses of `analysis.ex_round3_review`: read from the staged analyses, they reproduce the
-published values they build on (tab_redef_only, the class split, tab_refresh_upsert, the Eq. (1)
+published values they build on (tab:cause, the class split, tab_refresh_upsert, the Eq. (1)
 terms, block H's r_0, the full-access control), the pinned anchor values hold, and the committed
 numbers.tex carries every macro of the block."""
 
@@ -134,7 +134,7 @@ def test_binding_is_the_refresh_on_definition_items_and_removes_stale_items():
 
 # ---------------------------------------------------------------------- shift and drift
 @pytest.mark.paper
-def test_cause_reproduces_tab_redef_only_and_the_class_split():
+def test_cause_reproduces_the_cause_parts_and_the_class_split():
     for _, bt in BRANCHES:
         for pt in ("Shift", "Drift"):
             for _, ct in CLASSES:

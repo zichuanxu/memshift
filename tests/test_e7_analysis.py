@@ -120,7 +120,8 @@ def test_audit_table_places_each_system_and_excludes_extra_rows():
     assert r"A\_sys & partial & 0 &  & documentation, indirect evidence \\" in tex
     assert "Extra" not in tex
     assert r"Index & --- & --- &  & documentation \\" in tex  # stores no derived item
-    assert r"\holdmem{}(1,1) & 1 & 1 &  & code \\" in tex  # no space before the cell
+    # our cells in one row, at the D and B they name; no space before the cell
+    assert r"\mtin \holdmem{}(1,1) & \multicolumn{2}{l}{as named} &  & code \\" in tex
     # the native systems that the audit does not cover take their documented label
     assert r"A-Mem \citep{xu2025amem} & 0 & 0 & \checkmark &" in tex
     assert r"HippoRAG~2 \citep{gutierrez2025hipporag2} & 0 & 1 & \checkmark &" in tex
@@ -151,6 +152,26 @@ def test_audit_table_groups_rows_and_notes_a_label_that_differs():
     # the note follows the key under the table
     notes = tex.split(r"\end{mttabular}")[1]
     assert notes.startswith("\n" + r"\mtnotes{\checkmark: run natively") and "$^{a}$" in notes
+
+
+def test_audit_table_lists_our_cells_in_one_row_in_the_overview_order():
+    from memshift.analysis.audit_table import table
+
+    rows = [
+        _audit_row("Plain RAG", "baseline", "N/A", "N/A"),
+        _audit_row("zero system (ours)", "ours", "N/A", "N/A"),
+        *(_audit_row(f"HoldMem ({d},{b})", "ours", d, b) for d, b in ("11", "01", "10", "00")),
+    ]
+    lines = table(rows).splitlines()
+    group = lines[lines.index(r"\mtgroup{5}{Our baselines and cells}") + 1 :]
+    assert group[:3] == [
+        r"\mtin plain RAG \citep{lewis2020rag} & --- & --- &  & code \\",
+        r"\mtin no-store BM25 & --- & --- &  & code \\",
+        r"\mtin \holdmem{}(0,0), (0,1), (1,0), (1,1) & \multicolumn{2}{l}{as named} &  & code \\",
+    ]
+    assert group[3] == r"\bottomrule"
+    with pytest.raises(ValueError, match="is placed at"):
+        table([_audit_row("HoldMem (1,0)", "ours", "0", "1")])
 
 
 def test_audit_caption_keys_every_mark_and_states_no_method():

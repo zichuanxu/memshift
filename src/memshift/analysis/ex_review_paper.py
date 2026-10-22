@@ -36,13 +36,10 @@ from memshift.analysis.ex_e1_paper import (
     PCT_BOX,
     UNDEFINED,
     _Out,
-    ci_text,
     fmt,
     mt_ci_cells,
     mt_ci_pair_cells,
-    mt_pair,
     n_template,
-    pair_widths,
     point,
 )
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, stage_json
@@ -52,7 +49,7 @@ from memshift.analysis.paper_tables import PAIR, _num, _row
 
 WRITER_TAGS = (
     ("main", "Main", "Qwen3.5-9B"),
-    ("rep", "Rep", "Qwen3.5-9B, repl."),
+    ("rep", "Rep", "Qwen3.5-9B"),
     ("gemma", "Gem", "gemma-4-12B"),
     ("llama", "Llama", "Llama-3.1-8B"),
     ("gptoss", "Gpt", "gpt-oss-20b"),
@@ -441,13 +438,16 @@ WRITER_ROWS = (  # tab_writers: class, label (the other items, then their two ki
 )
 
 
+WRITER_STUDIES = {"main": "main study", "rep": "replication"}  # the second line of a stub
+
+
 def tab_writers(inp: Mapping[str, Any]) -> str:
-    """Appendix: (a) r0, r1 and B x D (source-epoch binding) by writer, item class and branch;
-    (b) the rank correlation and least-squares line of B x D on the repair gap across the cells of
-    the four fitted writers."""
+    """Appendix: r0, r1 and B x D (source-epoch binding) by writer, item class and branch (the rank
+    correlation and least-squares line of B x D on the repair gap across the cells of the four
+    fitted writers are in the text, from the `AcctFitTwo` macros). Qwen3.5-9B's two blocks name
+    their study on the stub's second line."""
     acct = inp.get("acct")
     cells = _get(acct, "explore_account_cells") or {}
-    fit = _get(acct, "explore_account_fit", "two_class") or {}
     shift = rf"N{{{PCT_BOX}}}N{{{PCT_BOX}}}{PAIR}"  # r0, r1 and B x D after one shift
     head = (
         r" & \multicolumn{1}{c}{$r_0$} & \multicolumn{1}{c}{$r_1$} "
@@ -456,10 +456,8 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
     edge = head.replace("{2}{c}", "{2}{c@{}}")  # the last shift, at the right edge
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The account by writer and item class: (a) repair correctness $r_D$ at $D$ "
-        r"(\%) and $B{\times}D$ on Update, (b) Spearman's $\rho$ and the least-squares line of "
-        r"$B{\times}D$ on $r_1{-}r_0$ across the (writer, class, shift) cells of "
-        r"the four fitted writers, with the replication held out.}",
+        r"\caption{The account by writer and item class: repair correctness $r_D$ at $D$ (\%) "
+        r"and $B{\times}D$ on Update (pp).}",
         r"\label{tab:writers}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
@@ -468,12 +466,13 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
         r"& & \multicolumn{4}{c}{$\Ssrc$} & \multicolumn{4}{c}{$\Sdef$} "
         r"& \multicolumn{4}{c@{}}{$\Sdel$} \\",
         r"\cmidrule(lr){3-6}\cmidrule(lr){7-10}\cmidrule(l){11-14}",
-        "(a) Writer & Class" + head * 2 + edge + r" \\",
+        "Writer & Class" + head * 2 + edge + r" \\",
         r"\midrule",
     ]
     for i, (w, _, label) in enumerate(WRITER_TAGS):
         if i:
             lines.append(r"\mtgap")
+        stub = [label, rf"\mtmuted{{{WRITER_STUDIES[w]}}}" if w in WRITER_STUDIES else ""]
         for k, (cls, cname) in enumerate(WRITER_ROWS):
             vals: list[str] = []
             for b, _ in BRANCH_TAGS:
@@ -483,29 +482,13 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
                     _r(_get(n, "r1")),
                     mt_ci_cells(_get(n, "BxD"), sign=True, span="c@{}" if b == "orphan" else "c"),
                 ]
-            lines.append(_row(label if k == 0 else "", cname, *vals))
-    lines += [r"\bottomrule", r"\end{mttabular}", r"\par\medskip"]
-    stats = (  # panel (b): each column's node and how its numbers print
-        (fit.get("spearman"), {"f": snum}),
-        (_get(fit, "spearman_by_class", "definition"), {"f": snum}),
-        (_get(fit, "spearman_by_class", "other"), {"f": snum}),
-        (fit.get("slope"), {"f": snum}),
-        (fit.get("intercept"), {"sign": True}),
-    )
+            lines.append(_row(stub[k] if k < len(stub) else "", cname, *vals))
     lines += [
-        # one box width for the pairs of every column: the widest estimate and interval of (b)
-        pair_widths([ci_text(e, **kw) for e, kw in stats]),
-        r"\begin{mttabular*}{\mtwidth}{l ccccc@{}}",
-        r"\toprule",
-        r"(b) Across the cells & $\rho$, all & $\rho$, definition & $\rho$, other & Slope "
-        r"& Intercept (pp) \\",
-        r"\midrule",
-        _row(r"$B{\times}D$ on $r_1{-}r_0$", *(mt_pair(e, **kw) for e, kw in stats)),
         r"\bottomrule",
-        r"\end{mttabular*}",
-        r"\mtnotes{Field: single-field items. Free text: free-text items. Other: both. Qwen3.5-9B "
-        r"ran on 20 worlds in the main study and in the replication (repl.), the other writers on "
-        r"ten.}",
+        r"\end{mttabular}",
+        r"\mtnotes{Field: single-field items. Free text: free-text items. Other: both. $r_0$, "
+        r"$r_1$: point estimates. Qwen3.5-9B ran on 20 worlds in the main study and in the "
+        r"replication, the other writers on ten.}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
@@ -521,15 +504,16 @@ FORCED_CELLS = ("cited", "forced", "B0")  # the cells of `tab_misses`, in its co
 
 
 def tab_misses(inp: Mapping[str, Any]) -> str:
-    """Appendix: Update on the changed item-times the cited-cluster key missed, per shift, class
-    and D: the cited-cluster cell (which served the stale item), the source-epoch cell (which
-    re-derived the same item-times with the same request) and the append-only cell, and the gain
-    of the forced re-derivation over the cited-cluster cell (`ex_round3_review`'s forced.json; the
-    accuracies of the missed items of `ex_e1_more` are the cited and B=0 columns at one decimal)."""
+    """Appendix: Update on the changed item-times the cited-cluster key missed, per shift, item
+    class (definition, other) and D: the cited-cluster cell (which served the stale item), the
+    source-epoch cell (which re-derived the same item-times with the same request) and the
+    append-only cell, and the gain of the forced re-derivation over the cited-cluster cell
+    (`ex_round3_review`'s forced.json; the accuracies of the missed items of `ex_e1_more` are the
+    cited and B=0 columns at one decimal)."""
     res = _get(inp.get("forced"), "results")
     body: list[list[str] | str] = []  # rows of cells, and the gaps between the shifts
     for i, (b, bt) in enumerate((("src", r"$\Ssrc$"), ("def", r"$\Sdef$"), ("orphan", r"$\Sdel$"))):
-        for k, cls in enumerate(("definition", "other", "all")):
+        for k, cls in enumerate(("definition", "other")):  # the pooled rows are not cited
             for j, d in enumerate(("D0", "D1")):
                 node = _get(res, d, b, cls)
                 update = _get(node, "update") or {}
@@ -571,16 +555,14 @@ def tab_misses(inp: Mapping[str, Any]) -> str:
 
 def tab_zero_after(inp: Mapping[str, Any]) -> str:
     """Appendix: the zero system against HoldMem(1,1) and HoldMem(0,0) on Update and Stability after
-    the shift, per branch and class: main study (the classes; its totals are in the main text) and
-    R (the classes and all items)."""
+    the shift, per branch and class (definition, other, all items), in the main study and R."""
     res = _get(inp.get("more"), "explore_zero_system") or {}
     share = f"N{{{PCT_BOX}}}"  # a column of whole percentages
     lines = [
         r"\begin{table}[t]",
-        r"\caption{Update and Stability of no-store BM25 (no-store), \textsc{HoldMem}(1,1) and "
-        r"\textsc{HoldMem}(0,0) by item class after each shift, and no-store BM25 minus "
-        r"\textsc{HoldMem}(1,1) on Update, paired. The totals of the main study are in "
-        r"Table~\ref{tab:overview}.}",
+        r"\caption{Update and Stability of no-store BM25 (no-store), \holdmem{}(1,1) and "
+        r"\holdmem{}(0,0) by item class after each shift, and no-store BM25 minus "
+        r"\holdmem{}(1,1) on Update, paired.}",
         r"\label{tab:zero-after}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
@@ -594,13 +576,10 @@ def tab_zero_after(inp: Mapping[str, Any]) -> str:
         r"& \multicolumn{1}{c}{No-store} & \multicolumn{1}{c}{(1,1)} "
         r"& \multicolumn{1}{c@{}}{(0,0)} \\",
     ]
-    for stage, title, classes in (
-        ("main", "Main study", ("definition", "other")),
-        ("rep", "Replication", ("definition", "other", "all")),
-    ):
+    for stage, title in (("main", "Main study"), ("rep", "Replication")):
         lines += [r"\midrule", rf"\mtgroup{{10}}{{{title}}}"]
         for b, bt in (("src", r"$\Ssrc$"), ("def", r"$\Sdef$"), ("orphan", r"$\Sdel$")):
-            for k, cls in enumerate(classes):
+            for k, cls in enumerate(("definition", "other", "all")):
                 n = _get(res, stage, b, cls)
                 up, st = _get(n, "update") or {}, _get(n, "stability") or {}
                 cells = [
@@ -617,7 +596,12 @@ def tab_zero_after(inp: Mapping[str, Any]) -> str:
                 lines.append(_row(rf"\mtin{bt}" if k == 0 else "", cls, *cells))
             if b != "orphan":
                 lines.append(r"\mtgap")
-    lines += [r"\bottomrule", r"\end{mttabular}", r"\end{table}"]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        r"\mtnotes{Update and Stability levels: point estimates.}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
@@ -672,7 +656,8 @@ def tab_json_arm(inp: Mapping[str, Any]) -> str:
         r"\bottomrule",
         r"\end{mttabular}",
         r"\mtnotes{Update on the changed item-times in percent, and the paired differences JSON "
-        r"$-$ $s_k$ in Update and in Stability on the unchanged item-times.}",
+        r"$-$ $s_k$ in Update and in Stability on the unchanged item-times. Update levels: point "
+        r"estimates.}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
