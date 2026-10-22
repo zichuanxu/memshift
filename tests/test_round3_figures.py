@@ -3,7 +3,6 @@ diagnostic-tests table): hand-built inputs for the logic, the staged analyses fo
 shows, and every figure drawn with full, partial and no inputs."""
 
 import json
-import shutil
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +10,7 @@ import pytest
 
 from memshift.analysis import round3_figures as rf
 from memshift.analysis.paper_data import stage_json
+from tests.memtab_check import check_memtab
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -118,16 +118,6 @@ def test_coincide_merges_one_writers_sets_only():
     assert [(g["writer"], g["n"]) for g in groups] == [("w", 2), ("v", 1), ("w", 1)]
 
 
-def test_neighbouring_writers_take_opposite_sides_for_their_labels():
-    def p(w: str, x: float, y: float) -> dict:
-        return {"writer": w, "x": est(x), "y": est(y)}
-
-    pts = [p("a", 0.43, 0.24), p("a", 0.53, 0.16), p("b", 0.45, 0.16), p("b", 0.54, 0.16),
-           p("q", 0.05, 0.39)]  # fmt: skip
-    assert rf._side("a", pts) == "above" and rf._side("b", pts) == "below"
-    assert rf._side("q", pts) is None  # no other writer within 5 pp of its x range
-
-
 def test_writer_points_without_inputs_are_empty():
     d = rf.writer_points(EMPTY)
     assert d == {"programs": [], "groups": [], "reference": None, "defwriters": []}
@@ -190,11 +180,14 @@ def test_reader_bars_are_the_store_part_and_both_readers_in_their_model_colours(
     from memshift.analysis import figstyle as fs
 
     bars = {key: fill for key, _, fill in rf.READER_BARS}
-    assert list(bars) == ["store", "qwen", "sonnet"]  # left to right within a shift
+    assert list(bars) == ["store", "qwen", "sonnet"]  # back to front within a shift
     r, g, b = (int(bars["store"][i : i + 2], 16) for i in (1, 3, 5))
-    assert r == g == b > 0x99  # the store part: light grey, the same for both readers
-    assert bars["qwen"] == fs.MODELS[rf.QWEN][1]
+    assert min(r, g, b) > 0xDD and max(r, g, b) - min(r, g, b) < 0x10  # a pale grey
+    r, g, b = (int(bars["qwen"][i : i + 2], 16) for i in (1, 3, 5))
+    assert max(r, g, b) < 0x70  # Qwen3.5-9B's near black, as a dark slate
     assert bars["sonnet"] == fs.MODELS["claude-sonnet-5-5"][1]
+    assert [k for k, *_ in rf.READERS] == ["qwen", "sonnet"]
+    assert [m for _, m, *_ in rf.READERS] == [rf.QWEN, "claude-sonnet-5-5"]
 
 
 def test_reader_rows_fall_back_to_the_committed_split_and_to_nothing():
@@ -229,12 +222,14 @@ def test_miss_causes_are_grey_when_coverable_and_warm_when_not():
     from memshift.analysis import figstyle as fs
 
     fills = {key: fill for key, _, fill, _ in rf.MISS_CAUSES}
+    covered = [covered for *_, covered in rf.MISS_CAUSES]
+    assert covered == sorted(covered, reverse=True)  # the coverable causes first
     for key, _, fill, covered in rf.MISS_CAUSES:
         r, g, b = (int(fill[i : i + 2], 16) for i in (1, 3, 5))
-        if covered:  # a write-time set could have contained the record: grey
-            assert r == g == b, key
+        if covered:  # a write-time set could have contained the record: a cool grey
+            assert r <= g <= b and b - r < 0x20, key
         else:  # it could not: warm, red above green above blue
-            assert r > g > b, key
+            assert r > g > b and r - b > 0x60, key
     assert fills["b_new"] == fs.VERMILION  # the strong colour on the dominant cause
     assert fills["c_left"] != fs.VERMILION
 
@@ -261,9 +256,9 @@ def test_diagnostic_tests_list_the_four_tests_with_their_outcomes():
     for t in tests:
         assert t.outcome.startswith(("passes", "does not pass")), t.label
     row = {t.label: t for t in tests if not t.fresh}  # the main study's rows
-    assert row[r"Retention test, \holdmem{}(1,1), three tiers (change)"].outcome == "passes 3 of 3"
+    assert row[r"Retention test, \holdmem{}(1,1), three tiers (change)"].outcome == "passes 3~of~3"
     five = row[r"Retention test, \holdmem{}(1,1), five other writers (change)"]
-    assert five.outcome.startswith("passes 2 of 5")
+    assert five.outcome.startswith("passes 2~of~5")
 
 
 def test_the_fresh_world_rows_give_the_estimates_and_passes_of_the_replication():
@@ -275,13 +270,13 @@ def test_the_fresh_world_rows_give_the_estimates_and_passes_of_the_replication()
     hi = max(t["delta_90"]["est"] for t in t1)
     assert fresh["Retention test"].estimate == rf._pp_range([lo, hi])
     passes = sum(bool(t["equivalent"]) for t in t1)
-    assert fresh["Retention test"].outcome == f"passes {passes} of {len(t1)}"
+    assert fresh["Retention test"].outcome == f"passes {passes}~of~{len(t1)}"
     per = rf._per_horizon(INP["rep_e3"])
     cost = [x for s, _ in rf.HORIZON_SYSTEMS for x in per[s]]
     ratio = max(x["serve_ratio_to_full_reread"] for x in cost)
     assert fresh["Cost ceiling"].estimate == f"at most {100 * ratio:.1f}\\%"
     assert fresh["Cost ceiling"].outcome == (
-        f"passes {sum(bool(x['T4_pass']) for x in cost)} of {len(cost)}"
+        f"passes {sum(bool(x['T4_pass']) for x in cost)}~of~{len(cost)}"
     )
     assert fresh["Utility floor"].outcome == "passes: " + rf._floor_counts(per)
     # the fresh rows repeat the main study's tests on the fresh worlds, with their thresholds
@@ -299,15 +294,58 @@ def test_the_committed_diagnostic_tests_table_is_the_staged_one():
     committed = (ROOT / "paper/generated/tab_diagnostic_tests.tex").read_text()
     assert committed == tex, "regenerate: figures --only tab_diagnostic_tests"
     assert r"\label{tab:diagnostic-tests}" in tex and tex.count(r"\begin{table}") == 1
-    assert "test & systems or units & threshold & estimate & outcome" in tex
+    assert "Test & Systems or units & Threshold & Estimate & Outcome" in tex
     for word in ("regist", "predict", "verdict", "holds", "exploratory", "same in"):
         assert word not in tex, word
-    assert "passes 3 of 3" in tex and r"\emph{fresh worlds of the replication}" in tex
-    assert "Retention test & \\holdmem{}(1,1), three tiers (change)" in tex
+    assert "passes 3~of~3" in tex and r"\mtgroup{5}{Fresh worlds of the replication}" in tex
+    assert "\\mtin Retention test & \\holdmem{}(1,1), three tiers (change)" in tex
+
+
+def test_the_outcome_counts_and_system_names_are_tied():
+    """A count is tied, and so is a system name of several words with its count."""
+    per = {
+        "holdmem_D1B1_source": [{"T3_pass": True}] * 3,
+        "zero": [{"T3_pass": False}] * 3,
+        "rag": [{"T3_pass": True}, {"T3_pass": False}],
+    }
+    assert rf._floor_counts(per) == (
+        r"\holdmem{}(1,1) 3~of~3, no-store~BM25~0~of~3, plain~RAG~1~of~2"
+    )
+    assert rf._passes([True, False, True], ["A b", "C"]) == "passes 2~of~3 (A b, C)"
+
+
+def test_the_diagnostic_tests_table_groups_the_rows_by_test():
+    """Banners for the test worlds and the fresh worlds; a gap between tests, none between the
+    rows of one test, and a cost ceiling stays with the utility floor before it."""
+    t = rf.DiagnosticTest
+    tests = [
+        t("Retention test, a", "x", "1", "passes 1~of~1"),
+        t("Retention test, b", "x", "1", "passes 1~of~1"),
+        t("Leaving test, c", "x", "1", "passes"),
+        t("Utility floor, d", "x", "1", "passes 1~of~1"),
+        t("Cost ceiling, the same systems", "x", "1", "passes 1~of~1"),
+        t("Retention test, a", "x", "1", "passes 1~of~1", fresh=True),
+        t("Utility floor, d", "x", "1", "passes 1~of~1", fresh=True),
+        t("Cost ceiling, the same systems", "x", "1", "passes 1~of~1", fresh=True),
+    ]
+    tex = rf.tab_diagnostic_tests(tests)
+    check_memtab(tex)
+    body = tex.split(r"\midrule", 1)[1]
+    gap = r"\addlinespace[2pt]"
+    tests_of = [
+        (line.split(" & ")[0].removeprefix(r"\mtin ") if line != gap else "gap")
+        for line in body.splitlines()
+        if line.startswith((r"\mtin ", gap))
+    ]
+    assert tests_of == [
+        "Retention test", "Retention test", "gap", "Leaving test", "gap", "Utility floor",
+        "Cost ceiling", "Retention test", "gap", "Utility floor", "Cost ceiling",
+    ]  # fmt: skip
+    assert body.count(r"\mtgroup{5}{") == 2 and r"\mtgroup{5}{Test worlds}" in body
+    assert rf.tab_diagnostic_tests(tests[:5]).count(r"\mtgroup{5}{") == 1  # no fresh rows
 
 
 # --------------------------------------------------------------------------------- drawing
-@pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
 @pytest.mark.parametrize("name", sorted(rf.FIGURES))
 def test_figures_draw_with_full_partial_and_no_inputs(name, tmp_path):
     fig = rf.FIGURES[name]
@@ -332,58 +370,3 @@ def test_the_figure_hook_draws_the_three_figures():
     for name in rf.FIGURES:
         assert (ROOT / "paper/figures" / f"{name}.pdf").read_bytes().startswith(b"%PDF")
     assert '"tab_diagnostic_tests" in a.only' in figures  # the diagnostic tests table, too
-
-
-# ------------------------------------------------------------------------------ the mark
-@pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
-def test_interval_bar_has_exact_ends_and_an_outlined_variant():
-    from memshift.analysis import figstyle as fs
-
-    plt = fs.plt()
-    fig, ax = plt.subplots()
-    fs.interval_bar(ax, 1.0, 5.0, 2.0, 8.0, fs.BLUE)
-    bar, stroke = ax.lines
-    assert list(bar.get_xdata()) == [2.0, 8.0] and list(bar.get_ydata()) == [1.0, 1.0]
-    assert bar.get_solid_capstyle() == "butt" and bar.get_linewidth() == fs.BAR_PT
-    assert 0.3 <= bar.get_alpha() <= 0.4
-    assert list(stroke.get_xdata()) == [5.0] and stroke.get_marker() == "|"
-    assert stroke.get_markersize() > fs.BAR_PT  # a little longer than the bar is thick
-    fig2, ax2 = plt.subplots()
-    fs.interval_bar(ax2, 0.0, None, -1.0, 3.0, fs.VERMILION, filled=False, vertical=True)
-    assert len(ax2.lines) == 4  # two long edges and two ends, no fill, no stroke
-    assert all(line.get_alpha() is None for line in ax2.lines)
-    edges = [line for line in ax2.lines if len(line.get_ydata()) == 2]
-    assert all(list(line.get_ydata()) == [-1.0, 3.0] for line in edges)
-    handle = fs.interval_handle(fs.BLUE, False, "fails")
-    leg = fig.legend(handles=[handle], handler_map=fs.INTERVAL_HANDLERS)
-    assert [t.get_text() for t in leg.get_texts()] == ["fails"]
-    plt.close(fig)
-    plt.close(fig2)
-
-
-@pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
-def test_ci_bar_draws_the_interval_white_only_where_it_crosses_a_dark_bar():
-    from matplotlib.colors import to_hex
-
-    from memshift.analysis import figstyle as fs
-
-    plt = fs.plt()
-    fig, ax = plt.subplots()
-    fs.ci_bar(ax, 0.0, 10.0, 6.0, 14.0, fs.BLACK, 0.3)  # a dark bar from 0 to 10
-    (bar,) = ax.patches
-    assert bar.get_height() == 10.0 and bar.get_width() == pytest.approx(0.3)
-    segs = {tuple(line.get_ydata()): to_hex(line.get_color()) for line in ax.lines
-            if line.get_marker() in ("None", None, "")}  # fmt: skip
-    assert segs == {(6.0, 10.0): "#ffffff", (10.0, 14.0): to_hex(fs.BLACK)}
-    caps = {line.get_ydata()[0]: to_hex(line.get_color()) for line in ax.lines
-            if line.get_marker() == "_"}  # fmt: skip
-    assert caps == {6.0: "#ffffff", 14.0: to_hex(fs.BLACK)}
-    fig2, ax2 = plt.subplots()
-    fs.ci_bar(ax2, 0.0, -2.0, -5.0, 3.0, fs.SKY, 0.3, filled=False)  # outlined, below zero
-    (bar,) = ax2.patches
-    assert to_hex(bar.get_facecolor()) == "#ffffff"
-    assert to_hex(bar.get_edgecolor()) == fs.SKY.lower()
-    assert all(to_hex(line.get_color()) == to_hex(fs.BLACK) for line in ax2.lines)
-    assert fs.ink(fs.SKY) == fs.ink(fs.PURPLE) == fs.ink(fs.VERMILION) == fs.BLACK
-    plt.close(fig)
-    plt.close(fig2)

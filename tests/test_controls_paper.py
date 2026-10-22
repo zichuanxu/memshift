@@ -18,7 +18,7 @@ from memshift.analysis import paper_tables
 from memshift.analysis.paper_data import MISSING, camel
 from memshift.analysis.paper_numbers import _macro, with_estimates
 from tests.test_controls import Builder, ev
-from tests.test_paper_stage4 import check_tex
+from tests.test_paper_stage4 import PAPER_PAGE, check_tex, table_style
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -224,7 +224,7 @@ def test_compact_table_rows_are_the_control_arms_with_their_contrasts(staged):
         ("scope", "Update, scope $-$ source"),
         ("", "Update, scope $-$ cited"),
         ("view", "Update, view $-$ no-store BM25"),
-        ("", "\\quad single-field items"),
+        ("", rf"{cp.SUB} single-field items"),
         ("", "Stability, view $-$ no-store BM25"),
         ("", "Update, view $-$ $D_"),
         ("", "Accuracy at $t_0$"),
@@ -233,7 +233,7 @@ def test_compact_table_rows_are_the_control_arms_with_their_contrasts(staged):
         ("template", "(template"),
     ):
         assert f"\n{arm} & {contrast}" in tex, (arm, contrast)
-    ratios = tex.split("\\midrule")[-1]
+    ratios = tex.split("\\midrule")[-1].split("\\bottomrule")[0]
     assert ratios.count("ratio") == 0 and ratios.count(" \\\\") == 2
     assert tex.index("\nfull access &") < tex.index("\nadd-only & (add-only")
     # the two arms that could not be tested as designed are not in the table
@@ -261,25 +261,26 @@ def test_compact_table_has_the_full_access_rows_for_src_and_def_only(staged):
     cells = cells_of(cp.tab_controls(staged), "full access &")
     # arm, contrast, definition (3 branches), other items (3), all items (3)
     assert len(cells) == 11 and cells[0] == "full access" and "full-access" in cells[1]
-    assert cells[2:5] == ["$+$66.0", "$+$66.0", cp.UNDEFINED]
+    assert cells[2:5] == ["$+$66.0", "$+$66.0", cp._not_run(last=False)]
     assert cells[5:8] == [cp.NOT_TAKEN] * 3  # empty: the contrast is about definition items
-    assert cells[8:11] == ["$+$32.2", "$+$32.2", cp.UNDEFINED]
+    assert cells[8:11] == ["$+$32.2", "$+$32.2", cp._not_run(last=True)]  # the last column
     lines = cp.tab_controls(staged).splitlines()
     mech = split_row(
         lines[lines.index(next(x for x in lines if x.startswith("full access &"))) + 1]
     )
-    assert mech[:2] == ["", r"\quad value equals gold"]  # the row after the full-access row
-    assert mech[2:5] == ["$+$66.0", "$+$66.0", cp.UNDEFINED]
-    assert "full access &" in cp.tab_controls(staged) and "$\\Ssrc$ and $\\Sdef$ only" in cp.CAPTION
+    assert mech[:2] == ["", rf"{cp.SUB} value equals gold"]  # the row after the full-access row
+    assert mech[2:5] == ["$+$66.0", "$+$66.0", cp._not_run(last=False)]
+    assert cp._not_run(last=False) == r"\mtna{}"  # a centred dash, defined in the notes
+    assert "$\\Ssrc$ and $\\Sdef$ only ({undef})" in cp.COMPACT_NOTE
 
 
 def test_the_full_access_rows_are_missing_when_unstaged_or_without_the_cell():
     cells = cells_of(cp.tab_controls(None), "full access &")
-    assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp.UNDEFINED
+    assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp._not_run(last=False)
     b = Builder()
     b.drop |= {"D0fullB1"}
     cells = cells_of(cp.tab_controls(ev(b.table())), "full access &")
-    assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp.UNDEFINED  # `---`: no orphan run
+    assert cells[2:4] == [MISSING, MISSING] and cells[4] == r"\mtna{}"  # `---`: no orphan run
     m = cp.numbers(ev(b.table()))
     assert m["CtlFRepSrcDefinition"] == MISSING and m["CtlFullTruncatedAll"] == MISSING
     assert m["CtlFullCloseFriendMessagesTruncatedSrc"] == MISSING
@@ -317,6 +318,7 @@ def test_check_macros_mark_each_check():
     assert m["CtlCheckAnchorWorst"].startswith("5.0\\%") and m["CtlChecksPassed"] == "3 of 5"
 
 
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile_and_fit_the_page(staged, tmp_path):
     for name, tex in cp.tables(staged).items():
@@ -325,8 +327,9 @@ def test_tables_compile_and_fit_the_page(staged, tmp_path):
         "\n".join(
             [
                 r"\documentclass[11pt]{article}\usepackage[T1]{fontenc}",
-                r"\usepackage[letterpaper,margin=1in]{geometry}",
-                r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
+                PAPER_PAGE,
+                r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs,array}",
+                table_style(tmp_path),
                 r"\usepackage[font=small,labelfont=bf,skip=5pt]{caption}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
@@ -349,9 +352,13 @@ def test_tables_compile_and_fit_the_page(staged, tmp_path):
 
 def test_compact_caption_defines_every_arm_and_term(staged):
     tex = cp.tab_controls(staged)
-    caption = tex.split("\\label{tab:controls}")[0]
-    assert "prereg" not in caption and "P-" not in caption and "regist" not in caption
+    caption, rest = tex.split("\\label{tab:controls}")
+    notes = rest.split(r"\end{mttabular}")[1]  # the definitions, under the table
+    assert r"$\Ssrc$, $\Sdef$ and $\Sdel$" in caption and "point estimates" in caption
+    for text in (caption, notes):
+        assert "prereg" not in text and "P-" not in text and "regist" not in text
     for term in (
+        "The full-access writer ran after $\\Ssrc$ and $\\Sdef$ only (---)",
         "The arms are those of \\cref{app:controls}",  # defined once, in the appendix
         "Source, cited: the source key and the citation key",
         "Full access: the full-access writer",
@@ -359,10 +366,9 @@ def test_compact_caption_defines_every_arm_and_term(staged):
         "Value equals gold: the share of re-derived values that equal gold",
         "The last two rows are ratios",
         "$t_0$: before the shift",
-        r"$\Ssrc$, $\Sdef$ and $\Sdel$",
     ):
-        assert term in caption, term
-    assert "Deletion-aware" not in caption and "Thinking" not in caption
+        assert term in notes, term
+    assert "Deletion-aware" not in caption + notes and "Thinking" not in caption + notes
     assert "retraction" not in tex and "gold $-$" not in tex and "refresh $-$" not in tex
     t = cells_of(tex, "template & Update, template")
     assert len(t) == 11  # arm, contrast and the nine cells

@@ -141,21 +141,20 @@ def test_table_gives_the_single_field_totals_the_text_quotes(staged):
     assert oracle[:4] == ["", "", "", "oracle"]
     assert oracle[10] == m["KeyAuditRederivOracleSrcRule"] == "344"
     # shift, its two counts, key, four rates, three counts, share
-    assert all(len(r) == 12 for r in rows[2:])
-    # the header is split over lines: re-derivations, per world / in the worlds, then the columns
-    assert r"\multicolumn{3}{c}{re-derivations}" in tex
-    assert r"\multicolumn{4}{c}{unchanged item-times}" in tex
-    assert r"\multicolumn{4}{c}{invalidated (\%)}" in tex
-    assert r"\multicolumn{2}{c}{per world} & 20 worlds & share \\" in tex
-    caption = tex.split(r"\label{tab:keyaudit}")[0]
-    for term in (
-        "What each key invalidates",
-        "audited without a model",
-        "Re-derivations",
-        "Def.\\ share",
-    ):
+    assert all(len(r) == 12 for r in rows[1:])
+    # two header rows: the spanners, then the columns with their unit or scope as a second line
+    assert r"\multicolumn{3}{c}{Re-derivations}" in tex
+    assert r"\multicolumn{4}{c}{Unchanged item-times invalidated}" in tex
+    assert r"\multicolumn{1}{c}{\mthead{Free}{(\%)}}" in tex
+    assert r"\mthead{Def.}{per world}} & \multicolumn{1}{c}{\mthead{Field}{20 worlds}}" in tex
+    assert tex.count(r"\mtna") == 3 * 5  # the scope key's dashes: five classes, three shifts
+    caption, rest = tex.split(r"\label{tab:keyaudit}")
+    for term in ("What each key invalidates", "audited without a model"):
         assert term in caption, term
-    assert "item-checkpoint" not in tex and "item-times" in caption
+    notes = rest.split(r"\end{mttabular}")[1]
+    for term in ("Re-derivations:", "Def.\\ share:", "---: the scope key"):
+        assert term in notes, term
+    assert "item-checkpoint" not in tex and "item-time" in caption and "item-times" in notes
 
 
 def test_stage_writer_records_command_seeds_and_code(tmp_path):

@@ -17,7 +17,7 @@ from memshift.analysis.ex_e1_paper import UNDEFINED
 from memshift.analysis.paper_data import FAMILIES, MISSING
 from memshift.gen import kappa
 from memshift.runinfo import file_sha256
-from tests.test_paper_stage4 import check_tex
+from tests.memtab_check import MEMTAB_PREAMBLE, check_memtab
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -563,8 +563,11 @@ def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
         assert set(r3p.tables(inp)) == set(LABELS)
         for name, tex in r3p.tables(inp).items():
-            check_tex(tex)
+            check_memtab(tex)
             assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
+            # the paper's table style: its type and rules, intervals as muted secondary text
+            assert "\\centering\\mtsetup" in tex and "\\begin{mttabular}" in tex, name
+            assert "\\scriptsize" not in tex and "\\addlinespace" not in tex, name
     for tex in r3p.tables(EMPTY).values():
         assert MISSING in tex
     for tex in r3p.tables(INP).values():
@@ -612,6 +615,7 @@ def test_tables_name_the_experiments_without_codes_or_record_files():
     assert all(f"\n{k} & " in draws for k in ("1", "2", "3"))  # draws by number, not seed
 
 
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile_at_the_paper_width(tmp_path):
     names = []
@@ -626,6 +630,7 @@ def test_tables_compile_at_the_paper_width(tmp_path):
                 r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
                 r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
+                MEMTAB_PREAMBLE,
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\pass}{\checkmark}"
                 r"\newcommand{\fail}{$\times$}\newcommand{\cref}[1]{Table~1}",

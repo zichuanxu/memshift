@@ -20,7 +20,7 @@ from memshift.experiments.e2 import tier_name
 from tests.ex_e5_fixture import build_runs
 from tests.test_ex_e2_predictors import _synthetic
 from tests.test_ex_tests import _cv
-from tests.test_paper_stage4 import check_tex
+from tests.test_paper_stage4 import PAPER_PAGE, check_tex, table_style
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -335,7 +335,7 @@ def test_native_table_lists_every_system_and_the_references_that_hold_the_value(
 
 def test_native_table_defines_its_counts_and_gives_the_baselines_after_src_and_def(e5_res):
     tex = ex_tables.tab_native_null(e5_res)
-    caption = " ".join(re.findall(r"\\caption\{(.*?)\}\n\\label", tex))  # both tables
+    notes = " ".join(re.findall(r"\\mtnotes\{(.*)\}\n", tex))  # both tables
     for term in (
         r"$k$ comparisons inside the 95\% interval of the \holdmem{} cell with the inferred label",
         r"$(D,B)$: \holdmem{} cell, c: citation key",
@@ -345,32 +345,44 @@ def test_native_table_defines_its_counts_and_gives_the_baselines_after_src_and_d
         "Last row: sums",
         r"$^\circ$: after $\Sdel$, from which $B$ is inferred",
     ):
-        assert term in caption, term
+        assert term in notes, term
     for word in ("circular", "out-of-sample", "discriminating", "inflated", "exploratory"):
         assert word not in tex, word
     assert "white-box" not in tex and "(d,b)" not in tex
-    head = next(ln for ln in tex.splitlines() if ln.startswith("system & label"))
-    assert head.count(r"$\Ssrc$, $\Sdef$") == 3  # the native estimate, no-store BM25, RAG
+    head = next(ln for ln in tex.splitlines() if ln.startswith("System & Label"))
+    assert head.count(r"\twoline{$\Ssrc$,}{$\Sdef$}") == 3  # the native estimate, BM25, RAG
     assert "zero" not in tex.split(r"\label{tab:native-null}")[1]  # named as in the paper
     # with all six systems: per system and in the last row, the baselines out of sample
     six = _six(e5_res)
     tex = ex_tables.tab_native_null(six)
     ex = six["explore_native_null"]
-    mem = next(ln for ln in tex.splitlines() if ln.startswith("Mem0 &")).split(" & ")
-    total = next(ln for ln in tex.splitlines() if ln.startswith("total &")).split(" & ")
-    assert len(mem) == len(total) == 14  # P: estimate and interval
-    for k, name in ((8, "zero"), (10, "rag")):
-        bc = ex["systems"]["mem0"]["baseline_counts"].get(name)
-        tbc = ex["total"]["baseline_counts"].get(name)
-        for j, part in ((0, "all"), (1, "out_of_sample")):
-            want = ex_tables._pair(bc["baseline"][part]) if bc else MISSING
-            assert mem[k + j] == want, (name, part)
-            if tbc:
-                assert total[k + j] == ex_tables._pair(tbc["baseline"][part]), (name, part)
-    assert total[5] == ex_tables._pair(ex["total"]["counts"]["all"])
-    assert total[4] == f"{ex['total']['b_identified']}/6"
+    mem = next(ln for ln in tex.splitlines() if ln.startswith("Mem0 &"))
+    total = next(ln for ln in tex.splitlines() if ln.startswith("total &"))
+    # P: estimate and interval; each count in the two cells of a column pair (k, j | n)
+    assert len(mem.split(" & ")) == 21 and len(total.split(" & ")) == 20
+
+    def counts(e: dict[str, Any]) -> str:
+        """The seven counts of one row: the native comparisons, then the two baselines'."""
+        native = [ex_tables._pair(pd.get(e, "counts", part)) for part in ex_tables.PARTS]
+        base = [
+            ex_tables._pair(pd.get(e, "baseline_counts", name, "baseline", part))
+            for name in ("zero", "rag")
+            for part in ("all", "out_of_sample")
+        ]
+        return " & ".join(native + base)
+
+    assert f" & {counts(ex['systems']['mem0'])} & " in mem
+    assert total.startswith(
+        rf"total &  & \multicolumn{{2}}{{c}}{{}} & {ex['total']['b_identified']}/6 & "
+        + counts(ex["total"])
+        + " & "
+    )
+    assert ex_tables._pair({"inside_predicted": 5, "discriminating": 4, "comparisons": 6}) == (
+        "5, 4 & 6"
+    )
 
 
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile(tmp_path, e5_res):
     tables = {
@@ -384,8 +396,9 @@ def test_tables_compile(tmp_path, e5_res):
         "\n".join(
             [
                 r"\documentclass[11pt]{article}",
-                r"\usepackage[letterpaper,margin=1in]{geometry}\usepackage[T1]{fontenc}",
+                PAPER_PAGE + r"\usepackage[T1]{fontenc}",
                 r"\usepackage{amsmath,newtxtext,newtxmath,booktabs,array,xcolor,caption}",
+                table_style(tmp_path),
                 r"\newcommand{\holdmem}{\textsc{HoldMem}}\newcommand{\pass}{\checkmark}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",

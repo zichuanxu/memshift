@@ -31,18 +31,24 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-from memshift.analysis.ex_e1_paper import UNDEFINED, _Out, fmt, point
+from memshift.analysis.ex_e1_paper import (
+    GROUP_GAP,
+    PCT_BOX,
+    UNDEFINED,
+    _Out,
+    ci_text,
+    fmt,
+    mt_ci_cells,
+    mt_ci_pair_cells,
+    mt_pair,
+    n_template,
+    pair_widths,
+    point,
+)
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, pct, pp
-from memshift.analysis.paper_tables import (
-    PAIR,
-    _num,
-    _row,
-    ci_pair_cells,
-    est_ci_cells,
-    spread_columns,
-)
+from memshift.analysis.paper_tables import PAIR, _num, _row
 
 WRITER_TAGS = (
     ("main", "Main", "Qwen3.5-9B"),
@@ -430,8 +436,8 @@ def _r(e: dict[str, Any] | None) -> str:
 WRITER_ROWS = (  # tab_writers: class, label (the other items, then their two kinds)
     ("definition", "definition"),
     ("other", "other"),
-    ("rule", r"\quad field"),
-    ("norule", r"\quad free text"),
+    ("rule", r"\mtin field"),
+    ("norule", r"\mtin free text"),
 )
 
 
@@ -442,26 +448,32 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
     acct = inp.get("acct")
     cells = _get(acct, "explore_account_cells") or {}
     fit = _get(acct, "explore_account_fit", "two_class") or {}
+    shift = rf"N{{{PCT_BOX}}}N{{{PCT_BOX}}}{PAIR}"  # r0, r1 and B x D after one shift
+    head = (
+        r" & \multicolumn{1}{c}{$r_0$} & \multicolumn{1}{c}{$r_1$} "
+        r"& \multicolumn{2}{c}{$B{\times}D$}"
+    )
+    edge = head.replace("{2}{c}", "{2}{c@{}}")  # the last shift, at the right edge
     lines = [
         r"\begin{table}[t]",
         r"\caption{The account by writer and item class: (a) repair correctness $r_D$ at $D$ "
         r"(\%) and $B{\times}D$ on Update, (b) Spearman's $\rho$ and the least-squares line of "
         r"$B{\times}D$ on $r_1{-}r_0$ across the (writer, class, shift) cells of "
-        r"the four fitted writers, with the replication held out. Field: single-field items. "
-        r"Free text: free-text items. Other: both. Qwen3.5-9B ran on 20 worlds in the main study "
-        r"and in the replication (repl.), the other writers on ten.}",
+        r"the four fitted writers, with the replication held out.}",
         r"\label{tab:writers}",
-        r"\centering\footnotesize",
-        r"\setlength{\tabcolsep}{3.5pt}",
-        rf"\begin{{tabular*}}{{\linewidth}}{{{spread_columns('l', 'l', *('r', 'r', 'P') * 3)}}}",
+        r"\centering\mtsetup",
+        r"\setlength{\tabcolsep}{4pt}",
+        rf"\begin{{mttabular}}{{@{{}}ll {f' {GROUP_GAP} '.join([shift] * 3)}@{{}}}}",
         r"\toprule",
         r"& & \multicolumn{4}{c}{$\Ssrc$} & \multicolumn{4}{c}{$\Sdef$} "
-        r"& \multicolumn{4}{c}{$\Sdel$} \\",
+        r"& \multicolumn{4}{c@{}}{$\Sdel$} \\",
         r"\cmidrule(lr){3-6}\cmidrule(lr){7-10}\cmidrule(l){11-14}",
-        "(a) writer & class" + r" & $r_0$ & $r_1$ & \multicolumn{2}{c}{$B{\times}D$}" * 3 + r" \\",
+        "(a) Writer & Class" + head * 2 + edge + r" \\",
+        r"\midrule",
     ]
-    for w, _, label in WRITER_TAGS:
-        lines.append(r"\midrule")
+    for i, (w, _, label) in enumerate(WRITER_TAGS):
+        if i:
+            lines.append(r"\mtgap")
         for k, (cls, cname) in enumerate(WRITER_ROWS):
             vals: list[str] = []
             for b, _ in BRANCH_TAGS:
@@ -469,27 +481,31 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
                 vals += [
                     _r(_get(n, "r0")),
                     _r(_get(n, "r1")),
-                    est_ci_cells(_get(n, "BxD"), sign=True),
+                    mt_ci_cells(_get(n, "BxD"), sign=True, span="c@{}" if b == "orphan" else "c"),
                 ]
             lines.append(_row(label if k == 0 else "", cname, *vals))
-    lines += [r"\bottomrule", r"\end{tabular*}", r"\par\medskip"]
+    lines += [r"\bottomrule", r"\end{mttabular}", r"\par\medskip"]
+    stats = (  # panel (b): each column's node and how its numbers print
+        (fit.get("spearman"), {"f": snum}),
+        (_get(fit, "spearman_by_class", "definition"), {"f": snum}),
+        (_get(fit, "spearman_by_class", "other"), {"f": snum}),
+        (fit.get("slope"), {"f": snum}),
+        (fit.get("intercept"), {"sign": True}),
+    )
     lines += [
-        rf"\begin{{tabular*}}{{\linewidth}}{{{spread_columns('l', *'PPPPP')}}}",
+        # one box width for the pairs of every column: the widest estimate and interval of (b)
+        pair_widths([ci_text(e, **kw) for e, kw in stats]),
+        r"\begin{mttabular*}{\mtwidth}{l ccccc@{}}",
         r"\toprule",
-        r"(b) across the cells & \multicolumn{2}{c}{$\rho$, all} "
-        r"& \multicolumn{2}{c}{$\rho$, definition} & \multicolumn{2}{c}{$\rho$, other} "
-        r"& \multicolumn{2}{c}{slope} & \multicolumn{2}{c}{intercept (pp)} \\",
+        r"(b) Across the cells & $\rho$, all & $\rho$, definition & $\rho$, other & Slope "
+        r"& Intercept (pp) \\",
         r"\midrule",
-        _row(
-            r"$B{\times}D$ on $r_1{-}r_0$",
-            est_ci_cells(fit.get("spearman"), f=snum),
-            est_ci_cells(_get(fit, "spearman_by_class", "definition"), f=snum),
-            est_ci_cells(_get(fit, "spearman_by_class", "other"), f=snum),
-            est_ci_cells(fit.get("slope"), f=snum),
-            est_ci_cells(fit.get("intercept"), sign=True),
-        ),
+        _row(r"$B{\times}D$ on $r_1{-}r_0$", *(mt_pair(e, **kw) for e, kw in stats)),
         r"\bottomrule",
-        r"\end{tabular*}",
+        r"\end{mttabular*}",
+        r"\mtnotes{Field: single-field items. Free text: free-text items. Other: both. Qwen3.5-9B "
+        r"ran on 20 worlds in the main study and in the replication (repl.), the other writers on "
+        r"ten.}",
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
@@ -511,38 +527,45 @@ def tab_misses(inp: Mapping[str, Any]) -> str:
     of the forced re-derivation over the cited-cluster cell (`ex_round3_review`'s forced.json; the
     accuracies of the missed items of `ex_e1_more` are the cited and B=0 columns at one decimal)."""
     res = _get(inp.get("forced"), "results")
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{Update on the changed item-times that the citation key did not "
-        r"invalidate. Cited: the citation-key cell, which served the stale item. Forced: the "
-        r"source-key cell, which re-derived the same item-times with the same request. "
-        r"$B{=}0$: the append-only cell. Gain: forced minus cited. $n$: missed item-times.}",
-        r"\label{tab:forced}\label{tab:misses}",
-        r"\centering\footnotesize",
-        r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{tabular}}{{@{{}}ll r c {PAIR} {PAIR} {PAIR} {PAIR}@{{}}}}",
-        r"\toprule",
-        r"& & & & \multicolumn{6}{c}{Update (\%)} & \multicolumn{2}{c}{} \\",
-        r"\cmidrule(lr){5-10}",
-        r"shift & class & $n$ & $D$ & \multicolumn{2}{c}{cited} & \multicolumn{2}{c}{forced} "
-        r"& \multicolumn{2}{c}{$B{=}0$} & \multicolumn{2}{c}{gain (pp)} \\",
-        r"\midrule",
-    ]
+    body: list[list[str] | str] = []  # rows of cells, and the gaps between the shifts
     for i, (b, bt) in enumerate((("src", r"$\Ssrc$"), ("def", r"$\Sdef$"), ("orphan", r"$\Sdel$"))):
         for k, cls in enumerate(("definition", "other", "all")):
             for j, d in enumerate(("D0", "D1")):
                 node = _get(res, d, b, cls)
                 update = _get(node, "update") or {}
                 cells = [
-                    *(ci_pair_cells(update.get(c)) for c in FORCED_CELLS),
-                    ci_pair_cells(_get(node, "forced_minus_cited"), sign=True),
+                    *(mt_ci_pair_cells(update.get(c)) for c in FORCED_CELLS),
+                    mt_ci_pair_cells(_get(node, "forced_minus_cited"), sign=True, span="c@{}"),
                 ]
                 n = count(_get(node, "n_items"))
                 lead = [bt if k == j == 0 else "", cls, n] if j == 0 else ["", "", ""]
-                lines.append(_row(*lead, d[1], *cells))
+                body.append([*lead, d[1], *cells])
         if i < 2:
-            lines.append(r"\addlinespace[2pt]")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+            body.append(r"\mtgap")
+    n_box = n_template([r[2] for r in body if isinstance(r, list)])
+    lines = [
+        r"\begin{table}[t]",
+        r"\caption{Update on the changed item-times that the citation key did not invalidate.}",
+        r"\label{tab:forced}\label{tab:misses}",
+        r"\centering\mtsetup",
+        r"\setlength{\tabcolsep}{4pt}",
+        rf"\begin{{mttabular}}{{@{{}}ll N{{{n_box}}} c {PAIR} {PAIR} {PAIR} {GROUP_GAP} "
+        rf"{PAIR}@{{}}}}",
+        r"\toprule",
+        r"& & & & \multicolumn{6}{c}{Update (\%)} & \multicolumn{2}{c@{}}{} \\",
+        r"\cmidrule(lr){5-10}",
+        r"Shift & Class & \multicolumn{1}{c}{$n$} & $D$ & \multicolumn{2}{c}{Cited} "
+        r"& \multicolumn{2}{c}{Forced} & \multicolumn{2}{c}{$B{=}0$} "
+        r"& \multicolumn{2}{c@{}}{Gain (pp)} \\",
+        r"\midrule",
+        *(r if isinstance(r, str) else _row(*r) for r in body),
+        r"\bottomrule",
+        r"\end{mttabular}",
+        r"\mtnotes{Cited: the citation-key cell, which served the stale item. Forced: the "
+        r"source-key cell, which re-derived the same item-times with the same request. "
+        r"$B{=}0$: the append-only cell. Gain: forced minus cited. $n$: missed item-times.}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
@@ -551,6 +574,7 @@ def tab_zero_after(inp: Mapping[str, Any]) -> str:
     the shift, per branch and class: main study (the classes; its totals are in the main text) and
     R (the classes and all items)."""
     res = _get(inp.get("more"), "explore_zero_system") or {}
+    share = f"N{{{PCT_BOX}}}"  # a column of whole percentages
     lines = [
         r"\begin{table}[t]",
         r"\caption{Update and Stability of no-store BM25 (no-store), \textsc{HoldMem}(1,1) and "
@@ -558,21 +582,23 @@ def tab_zero_after(inp: Mapping[str, Any]) -> str:
         r"\textsc{HoldMem}(1,1) on Update, paired. The totals of the main study are in "
         r"Table~\ref{tab:overview}.}",
         r"\label{tab:zero-after}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
         # one tabular for both stages: one column grid
-        rf"\begin{{tabular}}{{@{{}}ll rrr {PAIR} rrr@{{}}}}",
+        rf"\begin{{mttabular}}{{@{{}}ll {share * 3} {PAIR} {GROUP_GAP} {share * 3}@{{}}}}",
         r"\toprule",
-        r"& & \multicolumn{5}{c}{Update (\%)} & \multicolumn{3}{c}{Stability (\%)} \\",
+        r"& & \multicolumn{5}{c}{Update (\%)} & \multicolumn{3}{c@{}}{Stability (\%)} \\",
         r"\cmidrule(lr){3-7}\cmidrule(l){8-10}",
-        r"shift & class & no-store & (1,1) & (0,0) & \multicolumn{2}{c}{no-store $-$ (1,1) (pp)} "
-        r"& no-store & (1,1) & (0,0) \\",
+        r"Shift & Class & \multicolumn{1}{c}{No-store} & \multicolumn{1}{c}{(1,1)} "
+        r"& \multicolumn{1}{c}{(0,0)} & \multicolumn{2}{c}{No-store $-$ (1,1) (pp)} "
+        r"& \multicolumn{1}{c}{No-store} & \multicolumn{1}{c}{(1,1)} "
+        r"& \multicolumn{1}{c@{}}{(0,0)} \\",
     ]
     for stage, title, classes in (
-        ("main", "main study", ("definition", "other")),
-        ("rep", "replication", ("definition", "other", "all")),
+        ("main", "Main study", ("definition", "other")),
+        ("rep", "Replication", ("definition", "other", "all")),
     ):
-        lines += [r"\midrule", rf"\multicolumn{{10}}{{@{{}}l}}{{\emph{{{title}}}}} \\"]
+        lines += [r"\midrule", rf"\mtgroup{{10}}{{{title}}}"]
         for b, bt in (("src", r"$\Ssrc$"), ("def", r"$\Sdef$"), ("orphan", r"$\Sdel$")):
             for k, cls in enumerate(classes):
                 n = _get(res, stage, b, cls)
@@ -581,50 +607,50 @@ def tab_zero_after(inp: Mapping[str, Any]) -> str:
                     _share(up.get("zero")),
                     _share(up.get("holdmem_D1B1_source")),
                     _share(up.get("holdmem_D0B0")),
-                    ci_pair_cells(_get(n, "zero_minus", "holdmem_D1B1", "update"), sign=True),
+                    mt_ci_pair_cells(_get(n, "zero_minus", "holdmem_D1B1", "update"), sign=True),
                     _share(st.get("zero")),
                     _share(st.get("holdmem_D1B1_source")),
                     _share(st.get("holdmem_D0B0")),
                 ]
                 if not n:
-                    cells = [*[MISSING] * 3, ci_pair_cells(None), *[MISSING] * 3]
-                lines.append(_row(bt if k == 0 else "", cls, *cells))
+                    cells = [*[MISSING] * 3, mt_ci_pair_cells(None), *[MISSING] * 3]
+                lines.append(_row(rf"\mtin{bt}" if k == 0 else "", cls, *cells))
             if b != "orphan":
-                lines.append(r"\addlinespace[2pt]")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+                lines.append(r"\mtgap")
+    lines += [r"\bottomrule", r"\end{mttabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
 
 
 def tab_json_arm(inp: Mapping[str, Any]) -> str:
     """Appendix: the D=1 store served as JSON against the same store served as s_k statements, on
     the post-shift probes: main study and R side by side, per branch and class."""
-    stages = (("main", "main study"), ("rep", "replication"))
-    group = r"rr r@{\,}l r@{\,}l"
+    stages = ("main", "rep")
+    group = rf"N{{{PCT_BOX}}}N{{{PCT_BOX}}} r@{{\,}}l r@{{\,}}l"
+    head = (
+        r" & \multicolumn{1}{c}{$s_k$} & \multicolumn{1}{c}{JSON} & \multicolumn{2}{c}{Update} "
+        r"& \multicolumn{2}{c}{Stability}"
+    )
     lines = [
         r"\begin{table}[t]",
         r"\caption{The same $D{=}1$ store served as JSON records instead of statements ($s_k$), "
-        r"in the main study and the replication. Update on the changed item-times in percent, "
-        r"and the paired differences JSON $-$ $s_k$ in Update and in Stability on the unchanged "
-        r"item-times.}",
+        r"in the main study and the replication.}",
         r"\label{tab:json-arm}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{3.5pt}",
-        rf"\begin{{tabular}}{{@{{}}ll {group} {group}@{{}}}}",
+        rf"\begin{{mttabular}}{{@{{}}ll {group} {GROUP_GAP} {group}@{{}}}}",
         r"\toprule",
-        r"& & \multicolumn{6}{c}{main study} & \multicolumn{6}{c}{replication} \\",
+        r"& & \multicolumn{6}{c}{Main study} & \multicolumn{6}{c@{}}{Replication} \\",
         r"\cmidrule(lr){3-8}\cmidrule(l){9-14}",
         r"& & \multicolumn{2}{c}{Update (\%)} & \multicolumn{4}{c}{JSON $-$ $s_k$ (pp)} "
-        r"& \multicolumn{2}{c}{Update (\%)} & \multicolumn{4}{c}{JSON $-$ $s_k$ (pp)} \\",
+        r"& \multicolumn{2}{c}{Update (\%)} & \multicolumn{4}{c@{}}{JSON $-$ $s_k$ (pp)} \\",
         r"\cmidrule(lr){3-4}\cmidrule(lr){5-8}\cmidrule(lr){9-10}\cmidrule(l){11-14}",
-        "shift & class"
-        + r" & $s_k$ & JSON & \multicolumn{2}{c}{Update} & \multicolumn{2}{c}{Stability}" * 2
-        + r" \\",
+        "Shift & Class" + head + head.replace("{2}{c}{Stab", "{2}{c@{}}{Stab") + r" \\",
         r"\midrule",
     ]
     for b, bt in (("src", r"$\Ssrc$"), ("def", r"$\Sdef$"), ("orphan", r"$\Sdel$")):
         for k, (cls, cname) in enumerate(JSON_CLASSES):
             cells: list[str] = []
-            for stage, _ in stages:
+            for stage in stages:
                 j = _get(inp.get(stage), "explore_json_arm", b, cls)
                 if not j:
                     cells += [MISSING, MISSING, MISSING_PAIR, MISSING_PAIR]
@@ -632,13 +658,23 @@ def tab_json_arm(inp: Mapping[str, Any]) -> str:
                 cells += [
                     _share(_get(j, "update_sk")),
                     _share(_get(j, "update_json")),
-                    est_ci_cells(_get(j, "update_json_minus_sk"), sign=True),
-                    est_ci_cells(_get(j, "stability_json_minus_sk"), sign=True),
+                    mt_ci_cells(_get(j, "update_json_minus_sk"), sign=True),
+                    mt_ci_cells(
+                        _get(j, "stability_json_minus_sk"),
+                        sign=True,
+                        span="c@{}" if stage == "rep" else "c",
+                    ),
                 ]
             lines.append(_row(bt if k == 0 else "", cname, *cells))
         if b != "orphan":
-            lines.append(r"\addlinespace[3pt]")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+            lines.append(r"\mtgap")
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        r"\mtnotes{Update on the changed item-times in percent, and the paired differences JSON "
+        r"$-$ $s_k$ in Update and in Stability on the unchanged item-times.}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
@@ -659,9 +695,18 @@ WRITER_MODELS = {  # writer of the account -> model id (its colour in `figstyle.
     "llama": "meta-llama/Llama-3.1-8B-Instruct",
     "gptoss": "openai/gpt-oss-20b",
 }
+FITTED_WRITERS = ("main", "gemma", "llama", "gptoss")  # the replication R is Qwen3.5-9B's hue
 CLASS_MARKERS = {"definition": "o", "other": "^"}
-ACCOUNT_MS = 4.6  # marker size (points); a triangle is drawn a little larger to look the same
 ZOOM = ((-3.0, 12.0), (-3.0, 8.0))  # the inset's x and y range (pp): the crowded other items
+ACCOUNT_IN = (4.5, 3.0)  # printed size (in): `figstyle.NARROW` wide
+ACCOUNT_MS = 5.0  # marker size (pt); a triangle is drawn a little larger to look the same
+ACCOUNT_LABEL, ACCOUNT_TICK, ACCOUNT_KEY, ACCOUNT_NOTE = 8.0, 7.2, 7.2, 7.0  # pt at print
+ACCOUNT_MUTED = "#4A5059"  # the inset's tick labels
+ACCOUNT_GRID = "#ECEEF1"
+ACCOUNT_FIT, ACCOUNT_BAND = "#3A4250", "#DDE1E6"  # the fit (neutral slate: not a writer), band
+ACCOUNT_DIAG, ACCOUNT_ZERO = "#7D8794", "#8C95A1"  # the diagonal B x D = r1 - r0, the zero line
+ACCOUNT_ZOOM_FILL, ACCOUNT_ZOOM_EDGE = "#F2F4F7", "#9AA3AE"  # the framed region and its inset
+ACCOUNT_NEUTRAL = "#5E6875"  # the class glyphs of the key
 
 
 def _fit_cells(fit: Mapping[str, Any]) -> list[tuple[dict[str, Any], bool]]:
@@ -696,26 +741,6 @@ def _spread(ax: Any, xy: list[tuple[float, float]], size_pt: float) -> list[floa
     return dx
 
 
-def _account_marks(ax: Any, cells: list[tuple[dict[str, Any], bool]], spread: bool) -> None:
-    """One marker per cell: colour = writer, shape = item class, hollow = held out (R). With
-    `spread`, markers that would cover one another are drawn side by side."""
-    from matplotlib.transforms import ScaledTranslation
-
-    from memshift.analysis import figstyle as fs
-
-    xy = [(100 * c["gap"], 100 * c["BxD"]) for c, _ in cells]
-    dxs = _spread(ax, xy, ACCOUNT_MS * 0.8) if spread else [0.0] * len(xy)
-    for (c, held_out), (x, y), dx in zip(cells, xy, dxs, strict=True):
-        _, colour = fs.model_style(WRITER_MODELS.get(c["writer"], c["writer"]))
-        marker = CLASS_MARKERS.get(c["class"], "s")
-        tr = ax.transData + ScaledTranslation(dx / 72, 0, ax.figure.dpi_scale_trans)
-        # filled markers get a white rim, which keeps touching markers apart
-        ax.plot([x], [y], marker=marker, ms=ACCOUNT_MS * (1.12 if marker == "^" else 1.0),
-                mfc="white" if held_out else colour, mec=colour if held_out else "white",
-                mew=0.8 if held_out else 0.4, ls="none", zorder=4 if held_out else 3.5,
-                transform=tr)  # fmt: skip
-
-
 def _along(ax: Any, x0: float, y0: float, slope: float) -> float:
     """The angle (degrees) on the page of a line of `slope` through (x0, y0)."""
     import math
@@ -724,94 +749,151 @@ def _along(ax: Any, x0: float, y0: float, slope: float) -> float:
     return math.degrees(math.atan2(d - b, c - a))
 
 
+def _plain_num(x: float) -> str:
+    """As `snum`, in plain text with a typographic minus."""
+    v = round(x, 2)
+    return ("−" if v < 0 else "") + f"{abs(v):.2f}"
+
+
 def fig_account(inp: Mapping[str, Any], out: Path) -> Path:
     """B x D against the repair gap r1 - r0 of the same cell: one marker per writer (colour, the
     model colours), item class (shape: circle definition, triangle other) and branch, hollow for
-    the replication (held out); the fitted line (four fitted writers) with its 95% bootstrap band
-    and the diagonal B x D = r1 - r0, each labelled along the line; an inset zooms on the crowded
-    other items near the origin. The writers' key is one row above the axes."""
-    from matplotlib.patches import Patch, Rectangle
+    the replication (held out); the least-squares line over the fitted cells with its 95%
+    bootstrap band, labelled with its slope and Spearman rho, and the dotted diagonal B x D =
+    r1 - r0, each labelled along the line; an inset zooms on the crowded other items near the
+    origin, its region framed on the same pale ground. The key is two rows above the axes: the
+    writers, then the classes with their Spearman rho and the replication."""
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Rectangle
+    from matplotlib.transforms import ScaledTranslation
 
     from memshift.analysis import figstyle as fs
 
-    plt = fs.plt()
     fit = _get(inp.get("acct"), "explore_account_fit", "two_class") or {}
     cells = _fit_cells(fit)
-    fig, ax = plt.subplots(figsize=(fs.NARROW, 3.0))
-    ax.set_xlim(-4, 97)
-    ax.set_ylim(-5, 57)
-    ax.set_xlabel(r"$r_1-r_0$ of the cell (pp)")
-    ax.set_ylabel(r"$B{\times}D$ on Update (pp)")
-    ax.grid(axis="x", visible=True)
-    handles = []
-    for w in ("main", "gemma", "llama", "gptoss"):  # the fitted writers; R is Qwen3.5-9B's hue
-        label, colour = fs.model_style(WRITER_MODELS[w])
-        handles.append(Patch(facecolor=colour, edgecolor="none", label=label))
-    fig.legend(handles=handles, loc="outside upper center", ncol=len(handles), fontsize=8,
-               handlelength=0.9, handleheight=0.9, handletextpad=0.4,
-               columnspacing=1.4)  # fmt: skip
-    fig.canvas.draw()  # settle the layout: the labels along the lines need the page angles
+    line = fit.get("fit_line")
+    slope, intercept = _get(fit, "slope", "est"), _get(fit, "intercept", "est")
+    rho = _get(fit, "spearman", "est")
+    rho_cls = {c: _get(fit, "spearman_by_class", c, "est") for c in ("definition", "other")}
+    fitted = sum(not held_out for _, held_out in cells)
+    w_mm, h_mm = ACCOUNT_IN[0] * 25.4, ACCOUNT_IN[1] * 25.4
+    with fs.printed() as plt:
+        fig = plt.figure(figsize=(w_mm * fs.MM, h_mm * fs.MM))
+        ax_l, ax_b, ax_r, ax_t = 13.0, 8.4, 1.6, 11.2  # the axes box (mm), the key above it
+        ax = fig.add_axes((ax_l / w_mm, ax_b / h_mm, (w_mm - ax_l - ax_r) / w_mm,
+                           (h_mm - ax_b - ax_t) / h_mm))  # fmt: skip
+        fs.chart_axes(ax, size=ACCOUNT_TICK + 0.5)
+        ax.set_xlim(-4, 97)
+        ax.set_ylim(-5, 57)
+        ax.set_xticks([0, 20, 40, 60, 80])
+        ax.set_yticks([0, 10, 20, 30, 40, 50])
+        for v in ax.get_xticks():
+            ax.axvline(v, color=ACCOUNT_GRID, lw=0.5, zorder=0)
+        ax.set_xlabel(r"$r_1 - r_0$ of the cell (pp)", fontsize=ACCOUNT_LABEL, color=fs.INK,
+                      labelpad=2)  # fmt: skip
+        ax.set_ylabel(r"$B{\times}D$ on Update (pp)", fontsize=ACCOUNT_LABEL, color=fs.INK,
+                      labelpad=2)  # fmt: skip
+        fig.canvas.draw()  # settle the layout: the labels along the lines need the page angles
 
-    def lines(a: Any, lo: float, hi: float, labels: bool) -> None:
-        """The diagonal, the zero line and the fit with its band, on the main axes or the inset;
-        `labels` names the diagonal and the fit along them."""
-        a.plot([lo, hi], [lo, hi], ls=":", color=fs.GREY, lw=0.9, zorder=1)
-        a.axhline(0, color=fs.GREY, lw=0.6, zorder=1)
-        line = fit.get("fit_line")
-        slope, intercept = _get(fit, "slope", "est"), _get(fit, "intercept", "est")
-        if not line or slope is None or slope != slope:
-            return
-        grid = [100 * g for g in line["grid"]]
-        a.fill_between(grid, [100 * v for v in line["lo"]], [100 * v for v in line["hi"]],
-                       color=fs.LIGHT, lw=0, zorder=1.5)  # fmt: skip
-        a.plot(grid, [100 * intercept + slope * g for g in grid], color=fs.BLACK, lw=1.1,
-               zorder=2)  # fmt: skip
-        if not labels:
-            return
-        rho = _get(fit, "spearman", "est")
-        x = 50.0  # in the empty middle, below the band and right of the diagonal
-        text = "least-squares fit" + (
-            rf", slope {slope:.2f}, $\rho={rho:.2f}$" if rho is not None else ""
-        )
-        a.annotate(text, (x, 100 * intercept + slope * x), xytext=(0, -12),
-                   textcoords="offset points", rotation=_along(a, x, 0, slope),
-                   rotation_mode="anchor", ha="center", va="top", fontsize=8,
-                   color=fs.BLACK)  # fmt: skip
-        x = 40.0
-        a.annotate(r"$B{\times}D=r_1-r_0$", (x, x), xytext=(3, -4), textcoords="offset points",
-                   rotation=_along(a, x, x, 1.0), rotation_mode="anchor", ha="center",
-                   va="top", fontsize=8, color=fs.GREY)  # fmt: skip
+        def guides(a: Any, lo: float, hi: float, labels: bool) -> None:
+            """The diagonal, the zero line and the fit with its band, on the main axes or the
+            inset; `labels` names the fit and the diagonal along them."""
+            a.plot([lo, hi], [lo, hi], ls=(0, (1, 1.6)), color=ACCOUNT_DIAG, lw=0.9, zorder=1)
+            a.axhline(0, color=ACCOUNT_ZERO, lw=0.6, zorder=1)
+            if not line or slope is None or slope != slope or intercept is None:
+                return
+            grid = [100 * g for g in line["grid"]]
+            a.fill_between(grid, [100 * v for v in line["lo"]], [100 * v for v in line["hi"]],
+                           color=ACCOUNT_BAND, lw=0, zorder=1.5)  # fmt: skip
+            a.plot(grid, [100 * intercept + slope * g for g in grid], color=ACCOUNT_FIT, lw=1.1,
+                   zorder=2, solid_capstyle="butt")  # fmt: skip
+            if not labels:
+                return
+            x = 50.0  # the empty middle, below the band and right of the diagonal
+            text = f"least-squares fit over the {fitted} cells:  slope {slope:.2f}"
+            if rho is not None:
+                text += f",  $\\rho = {rho:.2f}$"
+            a.annotate(text, (x, 100 * intercept + slope * x), xytext=(0, -9.5),
+                       textcoords="offset points", rotation=_along(a, x, 0, slope),
+                       rotation_mode="anchor", ha="center", va="top", fontsize=ACCOUNT_NOTE,
+                       color=ACCOUNT_FIT)  # fmt: skip
+            x = 41.0
+            a.annotate(r"$B{\times}D = r_1 - r_0$", (x, x), xytext=(2.5, -3.5),
+                       textcoords="offset points", rotation=_along(a, x, x, 1.0),
+                       rotation_mode="anchor", ha="center", va="top",
+                       fontsize=ACCOUNT_NOTE + 0.5, color=ACCOUNT_DIAG)  # fmt: skip
 
-    lines(ax, -5.0, 100.0, labels=True)
-    _account_marks(ax, cells, spread=False)
-    if not cells:
-        ax.text(0.5, 0.5, "no cell staged", transform=ax.transAxes, ha="center", fontsize=8,
-                color=fs.GREY)  # fmt: skip
-    (zx0, zx1), (zy0, zy1) = ZOOM
-    if any(zx0 <= 100 * c["gap"] <= zx1 and zy0 <= 100 * c["BxD"] <= zy1 for c, _ in cells):
-        # the inset sits in the empty upper left, above the diagonal, on a white ground that
-        # also clears the gridlines from under its tick labels; a thin frame on the main axes
-        # marks the region it shows
-        ax.add_patch(Rectangle((0.02, 0.555), 0.295, 0.43, transform=ax.transAxes, fc="white",
-                               ec="none", zorder=4.9))  # fmt: skip
-        ins = ax.inset_axes((0.07, 0.62, 0.24, 0.36), zorder=5)
-        ins.set_xlim(zx0, zx1)
-        ins.set_ylim(zy0, zy1)
-        lines(ins, zx0, zx1, labels=False)
-        _account_marks(ins, cells, spread=True)
-        ins.set_xticks([0, 5, 10])
-        ins.set_yticks([0, 5])
-        ins.tick_params(labelsize=8, length=2, pad=1.5)
-        ins.grid(axis="x", visible=True)
-        for side in ("top", "right"):
-            ins.spines[side].set_visible(True)
-        for spine in ins.spines.values():
-            spine.set_linewidth(0.5)
-            spine.set_color(fs.GREY)
-        ins.set_facecolor("white")
-        ax.add_patch(Rectangle((zx0, zy0), zx1 - zx0, zy1 - zy0, fill=False, ec=fs.GREY,
-                               lw=0.5, zorder=5))  # fmt: skip
-    path = out / "fig_account.pdf"
-    fig.savefig(path)
-    plt.close(fig)
-    return path
+        def marks(a: Any, spread: bool) -> None:
+            """One marker per cell: colour = writer, shape = item class, hollow = held out (R).
+            With `spread`, markers that would cover one another are drawn side by side."""
+            xy = [(100 * c["gap"], 100 * c["BxD"]) for c, _ in cells]
+            dxs = _spread(a, xy, ACCOUNT_MS * 0.82) if spread else [0.0] * len(xy)
+            for (c, held_out), (x, y), dx in zip(cells, xy, dxs, strict=True):
+                _, colour = fs.model_style(WRITER_MODELS.get(c["writer"], c["writer"]))
+                marker = CLASS_MARKERS.get(c["class"], "s")
+                tr = a.transData + ScaledTranslation(dx / 72, 0, a.figure.dpi_scale_trans)
+                a.plot([x], [y], marker=marker, ms=ACCOUNT_MS * (1.14 if marker == "^" else 1.0),
+                       mfc="white" if held_out else colour, mec=colour if held_out else "white",
+                       mew=0.95 if held_out else 0.45, ls="none", zorder=4 if held_out else 3.5,
+                       transform=tr)  # fmt: skip
+
+        (zx0, zx1), (zy0, zy1) = ZOOM
+        zoomed = any(zx0 <= 100 * c["gap"] <= zx1 and zy0 <= 100 * c["BxD"] <= zy1
+                     for c, _ in cells)  # fmt: skip
+        if zoomed:  # the framed region near the origin and its inset share one pale ground
+            ax.add_patch(Rectangle((zx0, zy0), zx1 - zx0, zy1 - zy0, fc=ACCOUNT_ZOOM_FILL,
+                                   ec="none", zorder=0.5))  # fmt: skip
+        guides(ax, -5.0, 100.0, labels=True)
+        marks(ax, spread=False)
+        if not cells:
+            ax.text(0.5, 0.5, "no cell staged", transform=ax.transAxes, ha="center",
+                    fontsize=ACCOUNT_NOTE, color=fs.MUTED)  # fmt: skip
+        if zoomed:
+            ax.add_patch(Rectangle((zx0, zy0), zx1 - zx0, zy1 - zy0, fill=False,
+                                   ec=ACCOUNT_ZOOM_EDGE, lw=0.6, zorder=5))  # fmt: skip
+            # the inset in the empty upper left, above the diagonal; a white margin clears the
+            # grid from under its tick labels
+            ax.add_patch(Rectangle((0.015, 0.545), 0.305, 0.455, transform=ax.transAxes,
+                                   fc="white", ec="none", zorder=4.9))  # fmt: skip
+            ins = ax.inset_axes((0.075, 0.625, 0.235, 0.355), zorder=5)
+            ins.set_xlim(zx0, zx1)
+            ins.set_ylim(zy0, zy1)
+            ins.set_facecolor(ACCOUNT_ZOOM_FILL)
+            for v in (0, 5, 10):
+                ins.axvline(v, color="white", lw=0.6, zorder=0)
+            guides(ins, zx0, zx1, labels=False)
+            marks(ins, spread=True)
+            ins.set_xticks([0, 5, 10])
+            ins.set_yticks([0, 5])
+            ins.tick_params(labelsize=ACCOUNT_TICK - 0.2, length=1.8, width=0.5, pad=1.2,
+                            color=ACCOUNT_ZOOM_EDGE, labelcolor=ACCOUNT_MUTED)  # fmt: skip
+            for spine in ins.spines.values():
+                spine.set_visible(True)
+                spine.set_linewidth(0.6)
+                spine.set_color(ACCOUNT_ZOOM_EDGE)
+
+        # the key: the writers (hue), then the class (shape) and the replication (hollow)
+        def handle(marker: str, face: str, edge: str, mew: float, ms: float = ACCOUNT_MS) -> Any:
+            return Line2D([], [], marker=marker, ms=ms, mfc=face, mec=edge, mew=mew, ls="none")
+
+        row1 = []
+        for w in FITTED_WRITERS:
+            label, colour = fs.model_style(WRITER_MODELS[w])
+            row1.append((handle("o", colour, colour, 0.0, ACCOUNT_MS + 0.4), label))
+
+        def rho_of(cls: str) -> str:
+            r = rho_cls[cls]
+            return "" if r is None else f", $\\rho = {_plain_num(r)}$"
+
+        row2 = [
+            (handle("o", ACCOUNT_NEUTRAL, "white", 0.4), "definition items" + rho_of("definition")),
+            (handle("^", ACCOUNT_NEUTRAL, "white", 0.4, ACCOUNT_MS * 1.14),
+             "other items" + rho_of("other")),
+            (handle("o", "white", fs.BLACK, 0.95), "replication, not fitted"),
+        ]  # fmt: skip
+        common = {"frameon": False, "fontsize": ACCOUNT_KEY, "handlelength": 0.9,
+                  "handletextpad": 0.35, "borderaxespad": 0, "labelcolor": fs.INK}  # fmt: skip
+        for row, y, spacing in ((row1, 1 - 3.0 / h_mm, 1.5), (row2, 1 - 7.6 / h_mm, 1.3)):
+            fig.legend([h for h, _ in row], [t for _, t in row], loc="center", ncol=len(row),
+                       bbox_to_anchor=(0.53, y), columnspacing=spacing, **common)  # fmt: skip
+        return fs.save_pdf(fig, out / "fig_account.pdf")

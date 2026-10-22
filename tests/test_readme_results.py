@@ -22,12 +22,13 @@ def _readme_results() -> ModuleType:
 
 def _tab_main_cells() -> list[list[tuple[str, str | None]]]:
     """Per body row of tab:main in paper/sections/results.tex: (kind, macro) of each cell after the
-    shift and class, with kind pct (\\mspct), ci (\\ci) or dash (a --- spanning a cell pair)."""
+    shift and class, with kind pct (\\mspct), ci (\\mtcipair, an estimate and its interval) or dash
+    (\\mtna, a --- for a class the shift leaves unchanged)."""
     text = (ROOT / "paper" / "sections" / "results.tex").read_text()
     label = text.index(r"\label{tab:main}")
     table = text[text.rindex(r"\begin{table*}", 0, label) : text.index(r"\end{table*}", label)]
     body = table[table.index(r"\midrule") + len(r"\midrule") : table.index(r"\bottomrule")]
-    cell = re.compile(r"\\mspct\\([A-Za-z]+)|\\ci\\([A-Za-z]+)|\\multicolumn\{2\}\{c\}\{---\}")
+    cell = re.compile(r"\\mspct\\([A-Za-z]+)|\\mtcipair\\([A-Za-z]+)|\\mtna\b")
     rows = []
     for row in body.split(r"\\"):
         cells: list[tuple[str, str | None]] = []

@@ -448,6 +448,40 @@ def numbers(inp: Mapping[str, Any]) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------------- tables
+# The tables use the paper's table style (paper/memtab-style.tex): `mttabular` with notes under it
+# (`\mtnotes`), intervals as muted secondary text (`\mtint`) and `N{template}` columns that centre
+# a right-aligned value box under the header.
+def _mt(cells: str) -> str:
+    """Estimate-and-interval cells (`est_ci_cells`) with the interval set as secondary text
+    (`\\mtint`)."""
+    return cells.replace(r"{\scriptsize [", r"\mtint{[")
+
+
+def _muted(cells: str) -> str:
+    """Estimate-and-interval cells with the estimate in the muted grey (`\\mtmuted`); a value
+    spanning both cells stays as it is."""
+    if cells.startswith(r"\multicolumn"):
+        return cells
+    est, rest = cells.split(" &", 1)
+    return rf"\mtmuted{{{est}}} &{rest}"
+
+
+def _head(text: str, last: bool = False) -> str:
+    """A header over one centred cell of an `N` column (`c@{}` at the table's right edge)."""
+    return rf"\multicolumn{{1}}{{c{'@{}' if last else ''}}}{{{text}}}"
+
+
+# `\np{n}{%}`: a count and its share as one centred cell of two fixed-width boxes, so the pair sits
+# under the middle of its spanner (`\np[c]` centres the header symbols in the boxes)
+NP_MACRO = (
+    r"% n and % of one group as a pair in one centred cell, so the pair sits under the middle of "
+    r"its spanner",
+    r"\newcommand{\np}[3][r]{{\setbox0\hbox{0,000}\hbox to\wd0{\hfil#2\if#1c\hfil\fi}}"
+    r"\hspace{8pt}%",
+    r"  {\setbox0\hbox{00.0}\hbox to\wd0{\hfil#3\if#1c\hfil\fi}}}",
+)
+
+
 def tab_redef_only(inp: Mapping[str, Any]) -> str:
     """Appendix: the item-times after each shift, the changed ones and the part the shift itself
     changed or drift alone changed (B x D on each part: the inline table `tab:cause`)."""
@@ -463,17 +497,16 @@ def tab_redef_only(inp: Mapping[str, Any]) -> str:
     lines = [
         r"\begin{table}[t]",
         r"\caption{Item-times after each shift and those that changed, by cause (48 items at "
-        rf"four checkpoints in each of {attr.get('n_worlds', MISSING)} worlds). Shares are of "
-        rf"all item-times. $\Ssrc$ revises the sources of {target}.}}",
+        rf"four checkpoints in each of {attr.get('n_worlds', MISSING)} worlds).}}",
         r"\label{tab:redef_only}",
-        r"\centering\footnotesize",
-        r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}l r rr rr rr@{}}",
+        r"\centering\mtsetup",
+        r"\setlength{\tabcolsep}{7pt}",
+        *NP_MACRO,
+        r"\begin{mttabular}{@{}l N{0,000} c c c@{}}",
         r"\toprule",
-        r"& & \multicolumn{2}{c}{changed} & \multicolumn{2}{c}{caused by the shift} "
-        r"& \multicolumn{2}{c}{also without the shift} \\",
-        r"\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(l){7-8}",
-        r"shift & item-times & $n$ & \% & $n$ & \% & $n$ & \% \\",
+        r"& & Changed & Caused by the shift & \multicolumn{1}{c@{}}{Also without the shift} \\",
+        r"\cmidrule(lr){3-3}\cmidrule(lr){4-4}\cmidrule(l){5-5}",
+        _row("Shift", _head("Item-times"), *[r"\np[c]{$n$}{\%}"] * 3),
         r"\midrule",
     ]
     for b, _ in BRANCH_TAGS:
@@ -485,9 +518,15 @@ def tab_redef_only(inp: Mapping[str, Any]) -> str:
             node.get("changed"),
             *(sum(v.get(c, 0) for v in classes.values()) if classes else None for c, _ in CAUSES),
         ):
-            cells += [_count(n_part), _share(n_part, n_all).replace(r"\%", "")]
+            share = _share(n_part, n_all).replace(r"\%", "")
+            cells.append(rf"\np{{{_count(n_part)}}}{{{share}}}")
         lines.append(_row(BRANCH_LABELS[b], *cells))
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        rf"\mtnotes{{Shares are of all item-times. $\Ssrc$ revises the sources of {target}.}}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
@@ -507,40 +546,45 @@ def tab_classsplit_dm(inp: Mapping[str, Any]) -> str:
     (its definition and other items are the main rows of tab_classsplit)."""
     c = inp.get("c")
     n = _get(c, "n_worlds") or MISSING
-    pairs = " ".join([r"r@{\,}l"] * len(DM_CONTRASTS))
+    pair, gap = r"r@{\,}l", r"@{\hspace{14pt}}"  # 14 pt between the B, D_m and B x D_m groups
+    pairs = f"{pair} {pair} {gap} {pair} {pair} {gap} {pair}"  # the columns of DM_CONTRASTS
     dm = r"$D_{\mathrm{m}}$"
     lines = [
         r"\begin{table}[t]",
         r"\caption{The contrasts on Update by shift and item class with the writer's programs "
-        rf"({dm}) as the $D{{=}}1$ arm ({n} worlds). {dm} effect: {dm} minus $D{{=}}0$ at the "
-        r"given $B$. Exact (grey): the same contrasts on all items with exact recomputation, "
-        r"whose definition and other items are in \cref{tab:classsplit}.}",
+        rf"({dm}) as the $D{{=}}1$ arm ({n} worlds).}}",
         r"\label{tab:classsplit_dm}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{3.5pt}",
-        rf"\begin{{tabular}}{{@{{}}ll {pairs}@{{}}}}",
+        rf"\begin{{mttabular}}{{@{{}}ll {pairs}@{{}}}}",
         r"\toprule",
         rf"& & \multicolumn{{4}}{{c}}{{$B$ effect}} & \multicolumn{{4}}{{c}}{{{dm} effect}} & & \\",
         r"\cmidrule(lr){3-6}\cmidrule(lr){7-10}",
-        rf"shift & class & \multicolumn{{2}}{{c}}{{$D{{=}}0$}} & \multicolumn{{2}}{{c}}{{{dm}}} "
+        rf"Shift & Class & \multicolumn{{2}}{{c}}{{$D{{=}}0$}} & \multicolumn{{2}}{{c}}{{{dm}}} "
         r"& \multicolumn{2}{c}{$B{=}0$} & \multicolumn{2}{c}{$B{=}1$} "
-        rf"& \multicolumn{{2}}{{c}}{{$B{{\times}}D_{{\mathrm{{m}}}}$}} \\",
+        rf"& \multicolumn{{2}}{{c@{{}}}}{{$B{{\times}}D_{{\mathrm{{m}}}}$}} \\",
         r"\midrule",
     ]
-    grey = r"\color{gray}"
     for i, (b, _) in enumerate(BRANCH_TAGS):
         for k, cls in enumerate(("definition", "other", "all")):
             node = _get(c, "explore_class_split", "D1s", b, "source", cls)
-            vals = [est_ci_cells(_get(node, key), sign=True) for key in DM_CONTRASTS]
+            vals = [_mt(est_ci_cells(_get(node, key), sign=True)) for key in DM_CONTRASTS]
             lines.append(_row(BRANCH_LABELS[b] if k == 0 else "", cls, *vals))
         authored = _get(c, "explore_class_split", "D1", b, "source", "all")
         vals = [
-            est_ci_cells(_get(authored, key), sign=True, style=grey) for key in DM_CONTRASTS[1:]
+            _muted(_mt(est_ci_cells(_get(authored, key), sign=True))) for key in DM_CONTRASTS[1:]
         ]
-        lines.append(_row("", rf"{grey}\quad exact", "&", *vals))
+        lines.append(_row("", r"\mtin\mtmuted{exact}", "&", *vals))
         if i < len(BRANCH_TAGS) - 1:
             lines.append(r"\midrule")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        rf"\mtnotes{{{dm} effect: {dm} minus $D{{=}}0$ at the given $B$. Exact (grey): the same "
+        r"contrasts on all items with exact recomputation, whose definition and other items are "
+        r"in \cref{tab:classsplit}.}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
@@ -551,26 +595,26 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
     res = _get(main, "explore_per_definition", "D1") or {}
     lines = [
         r"\begin{table}[t]",
-        r"\caption{$B{\times}D$ on Update per definition. $n$: the definition's changed "
-        r"item-times. Leave one out: the smallest and the largest $B{\times}D$ of the definition "
-        r"class with one definition removed. The intervals resample worlds, not definitions.}",
+        r"\caption{$B{\times}D$ on Update per definition.}",
         r"\label{tab:perdef}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}l r@{\,}lr r@{\,}lr r@{\,}lr@{}}",
+        r"\begin{mttabular}{@{}l r@{\,}l N{000} @{\hspace{14pt}} r@{\,}l N{000} @{\hspace{14pt}} "
+        r"r@{\,}l N{000}@{}}",
         r"\toprule",
         r"& \multicolumn{3}{c}{$\Ssrc$} & \multicolumn{3}{c}{$\Sdef$} "
-        r"& \multicolumn{3}{c}{$\Sdel$} \\",
-        r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(l){8-10}",
-        r"definition & \multicolumn{2}{c}{$B{\times}D$} & $n$ & \multicolumn{2}{c}{$B{\times}D$} "
-        r"& $n$ & \multicolumn{2}{c}{$B{\times}D$} & $n$ \\",
+        r"& \multicolumn{3}{c@{}}{$\Sdel$} \\",
+        r"\cmidrule(r){2-4}\cmidrule(r){5-7}\cmidrule{8-10}",
+        r"Definition & \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{1}{c}{$n$} "
+        r"& \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{1}{c}{$n$} "
+        r"& \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{1}{c@{}}{$n$} \\",
         r"\midrule",
     ]
     for d, _, label in DEFINITIONS:
         cells = [label]
         for b, _ in BRANCH_TAGS:
             e = _get(res, b, d, "type", "source", "BxD_interaction_update")
-            cells += [est_ci_cells(e, sign=True), _count(e.get("n_items")) if e else MISSING]
+            cells += [_mt(est_ci_cells(e, sign=True)), _count(e.get("n_items")) if e else MISSING]
         lines.append(_row(*cells))
     lines.append(r"\midrule")
     cells = ["all six"]
@@ -578,15 +622,23 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
         e = _get(
             main, "explore_class_split", "D1", b, "source", "definition", "BxD_interaction_update"
         )
-        cells += [est_ci_cells(e, sign=True), _count(e.get("n_items")) if e else MISSING]
+        cells += [_mt(est_ci_cells(e, sign=True)), _count(e.get("n_items")) if e else MISSING]
     lines.append(_row(*cells))
     cells = ["leave one out"]
-    for b, _ in BRANCH_TAGS:
+    for i, (b, _) in enumerate(BRANCH_TAGS):
         loo = _loo_range(main, b)
         span = f"{_num(loo[0], sign=True)} to {_num(loo[-1], sign=True)}" if loo else MISSING
-        cells.append(rf"\multicolumn{{3}}{{c}}{{{span}}}")
+        edge = "@{}" if i == len(BRANCH_TAGS) - 1 else ""
+        cells.append(rf"\multicolumn{{3}}{{c{edge}}}{{{span}}}")
     lines.append(_row(*cells))
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        r"\mtnotes{$n$: the definition's changed item-times. Leave one out: the smallest and the "
+        r"largest $B{\times}D$ of the definition class with one definition removed. The intervals "
+        r"resample worlds, not definitions.}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 

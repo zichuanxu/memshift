@@ -15,7 +15,7 @@ from typing import Any
 from memshift.analysis.ex_numbers import REFERENCE_LABELS
 from memshift.analysis.paper_data import MISSING, NATIVES
 from memshift.analysis.paper_data import get as _get
-from memshift.analysis.paper_tables import PAIR, _num, _row, ci_pair_cells
+from memshift.analysis.paper_tables import PAIR, _num, _row, mt_ci_cells, mtint, notes
 
 
 # --------------------------------------------------------------------------------- native null
@@ -26,11 +26,12 @@ def _frac(counts: dict[str, Any] | None, key: str = "inside_predicted") -> str:
 
 
 def _pair(counts: dict[str, Any] | None) -> str:
-    """inside / discriminating of one set of comparisons as `i/n, d/n`."""
+    """inside, discriminating / comparisons of one set of comparisons as the two cells `i, d` and
+    `n` of a `COUNT` column pair (they meet at the slash); "--" or MISSING across both."""
     if not counts or not counts.get("comparisons"):
-        return "--" if counts is not None else MISSING
+        return _span("--" if counts is not None else MISSING)
     n = counts["comparisons"]
-    return f"{counts['inside_predicted']}, {counts['discriminating']}\\,/\\,{n}"
+    return f"{counts['inside_predicted']}, {counts['discriminating']} & {n}"
 
 
 def _lab(system: str, res: dict[str, Any]) -> str:
@@ -43,11 +44,13 @@ def _lab(system: str, res: dict[str, Any]) -> str:
 
 
 PARTS = ("all", "label_circular", "out_of_sample")
-# the header of the four comparisons after S_src and S_def on two lines, so the column is as wide
-# as its counts and the table fits a 5.5in text width
-OOS = r"\parbox[t]{21pt}{\centering $\Ssrc$, $\Sdef$}"
+COUNT = r"r@{\,/\,}l"  # a count `k, j / n` in two cells that meet at the slash
+# the header of the four comparisons after S_src and S_def on two lines (`\twoline`, defined in
+# the table), so the column is as wide as its counts
+OOS = r"\twoline{$\Ssrc$,}{$\Sdef$}"
 # the reference labels of `ex_numbers` with the no-store BM25 baseline named as in the paper
 TABLE_REFERENCES = {**REFERENCE_LABELS, "zero": "no-store"}
+BRANCH_NAMES = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
 
 
 def _coverage(x: float | None) -> str:
@@ -61,41 +64,46 @@ def _yes_no(flag: bool | None) -> str:
 def tab_native_null(res: dict[str, Any] | None) -> str:
     """Native systems against the null baselines, from `explore_native_null` (Mem0 from stage 3,
     all six systems once block N is staged), as two tables: the counts per system with their sums
-    (`tab:native-null`), and per system and comparison the references that contain the native
-    value and the paired differences (`tab:native-diff`; the native values are in the main
-    text's overview table)."""
+    (`tab:native-null`, the systems of one inferred label together), and per system and comparison
+    the references that contain the native value and the paired differences (`tab:native-diff`,
+    the shift printed once above its two measures; the native values are in the main text's
+    overview table)."""
     res = res or {}
     ex = res.get("explore_native_null") or {}
     systems = ex.get("systems") or {}
+    counts_head = ("All six", r"$\Sdel$", OOS, "All six", OOS, "All six", OOS)
     lines = [
         r"\begin{table}[t]",
         r"\caption{Native systems against the \holdmem{} cell with their inferred label "
-        r"(three-month worlds), with no-store BM25 and plain RAG on the same intervals. $P$: "
-        r"deletion persistence, the share of deleted items still answered. $B$ id.: its interval "
-        r"excludes 0.5. Counts $k$, $j$\,/\,$n$: $k$ comparisons inside the 95\% interval of the "
-        r"\holdmem{} cell with the inferred label, $j$ of them also outside that of the cell with "
-        r"the other $B$. Chance: share of the label cells containing the native estimate (label "
-        r"permuted). Last row: sums (chance: means).}",
+        r"(three-month worlds), with no-store BM25 and plain RAG on the same intervals.}",
         r"\label{tab:native-null}",
-        r"\centering\footnotesize",
-        r"\setlength{\tabcolsep}{3pt}",
-        rf"\begin{{tabular}}{{@{{}}l c {PAIR} c ccc cc cc cc@{{}}}}",
+        r"\centering\mtsetup",
+        r"\setlength{\tabcolsep}{2.85pt}",
+        r"\newcommand{\twoline}[2]{\begin{tabular}[b]{@{}c@{}}#1\\#2\end{tabular}}",
+        rf"\begin{{mttabular}}{{@{{}}l c {PAIR} c {' '.join([COUNT] * len(counts_head))} "
+        r"N{00} N{00}@{}}",
         r"\toprule",
-        r"& & \multicolumn{2}{c}{$P$ (\%)} & & \multicolumn{3}{c}{native} "
-        r"& \multicolumn{2}{c}{no-store BM25} & \multicolumn{2}{c}{plain RAG} "
-        r"& \multicolumn{2}{c}{chance (\%)} \\",
-        r"\cmidrule(lr){3-4}\cmidrule(lr){6-8}\cmidrule(lr){9-10}\cmidrule(lr){11-12}"
-        r"\cmidrule(l){13-14}",
-        rf"system & label & \multicolumn{{2}}{{c}}{{est.}} & $B$ id. & all six & $\Sdel$ & {OOS} "
-        rf"& all six & {OOS} & all six & {OOS} & labels & observed \\",
+        r"& & \multicolumn{2}{c}{$P$ (\%)} & & \multicolumn{6}{c}{Native} "
+        r"& \multicolumn{4}{c}{No-store BM25} & \multicolumn{4}{c}{Plain RAG} "
+        r"& \multicolumn{2}{c@{}}{Chance (\%)} \\",
+        r"\cmidrule(lr){3-4}\cmidrule(lr){6-11}\cmidrule(lr){12-15}\cmidrule(lr){16-19}"
+        r"\cmidrule(l){20-21}",
+        r"System & Label & \multicolumn{2}{c}{est.} & $B$ id. & "
+        + " & ".join(_span(h) for h in counts_head)
+        + r" & \multicolumn{1}{c}{Labels} & \multicolumn{1}{c@{}}{Observed} \\",
         r"\midrule",
     ]
+    previous = None
     for nat in NATIVES:
         e = systems.get(nat.key) or {}
         b = e.get("b_identified") or {}
         counts = e.get("counts") or {}
         bc = e.get("baseline_counts") or {}
         cov = e.get("chance_coverage") or {}
+        label = _lab(nat.key, res)
+        if previous is not None and label != previous:
+            lines.append(r"\mtgap")  # the next inferred label
+        previous = label
 
         def base(name: str, part: str, bc: dict[str, Any] = bc) -> str:
             return _pair(_get(bc, name, "baseline", part))
@@ -103,14 +111,14 @@ def tab_native_null(res: dict[str, Any] | None) -> str:
         lines.append(
             _row(
                 nat.label,
-                _lab(nat.key, res),
-                ci_pair_cells({"est": b["rate"], "lo": b["lo"], "hi": b["hi"]})
+                label,
+                mt_ci_cells({"est": b["rate"], "lo": b["lo"], "hi": b["hi"]})
                 if b
                 else _span(MISSING),
                 _yes_no(b.get("identified")) if b else MISSING,
-                *(_pair(counts.get(part)) if counts else MISSING for part in PARTS),
+                *(_pair(counts.get(part)) if counts else _span(MISSING) for part in PARTS),
                 *(
-                    base(name, part) if e else MISSING
+                    base(name, part) if e else _span(MISSING)
                     for name in ("zero", "rag")
                     for part in ("all", "out_of_sample")
                 ),
@@ -126,12 +134,11 @@ def tab_native_null(res: dict[str, Any] | None) -> str:
         _row(
             "total",
             "",
-            "",
-            "",  # P: the two cells of its estimate and interval
+            _span(""),  # P: the two cells of its estimate and interval
             f"{total['b_identified']}/{total['systems']}" if complete else MISSING,
-            *(_pair(_get(total, "counts", part)) if complete else MISSING for part in PARTS),
+            *(_pair(_get(total, "counts", part)) if complete else _span(MISSING) for part in PARTS),
             *(
-                _pair(_get(tbc, name, "baseline", part)) if complete else MISSING
+                _pair(_get(tbc, name, "baseline", part)) if complete else _span(MISSING)
                 for name in ("zero", "rag")
                 for part in ("all", "out_of_sample")
             ),
@@ -139,73 +146,88 @@ def tab_native_null(res: dict[str, Any] | None) -> str:
             _coverage(total.get("mean_observed_coverage")) if complete else MISSING,
         ),
         r"\bottomrule",
-        r"\end{tabular}",
+        r"\end{mttabular}",
+        notes(
+            r"$P$: deletion persistence, the share of deleted items still answered. $B$ id.: its "
+            r"interval excludes 0.5. Counts $k$, $j$\,/\,$n$: $k$ comparisons inside the 95\% "
+            r"interval of the \holdmem{} cell with the inferred label, $j$ of them also outside "
+            r"that of the cell with the other $B$. Chance: share of the label cells containing the "
+            r"native estimate (label permuted). Last row: sums (chance: means)."
+        ),
         r"\end{table}",
         "",
         r"\begin{table}[t]",
         r"\caption{Native values against their references per system and comparison "
-        r"(three-month worlds). Contained by: the references whose 95\% interval contains the "
-        r"native value ($(D,B)$: \holdmem{} cell, c: citation key, no-store: no-store BM25, "
-        r"oracle: oracle context). Differences, paired by item: native minus the \holdmem{} cell "
-        r"with the inferred label, with its interval and the interval widened by the variance "
-        r"between repeated ingestions, and native minus no-store BM25. $^\circ$: after "
-        r"$\Sdel$, from which $B$ is inferred.}",
+        r"(three-month worlds).}",
         r"\label{tab:native-diff}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{tabular}}{{@{{}}ll l {PAIR} l {PAIR}@{{}}}}",
+        rf"\begin{{mttabular}}{{@{{}}l l l l {PAIR} l @{{\hspace{{12pt}}}} {PAIR}@{{}}}}",
         r"\toprule",
-        r"& & & \multicolumn{3}{c}{native $-$ cell (pp)} & \multicolumn{2}{c}{native $-$ no-store "
-        r"(pp)} \\",
-        r"\cmidrule(lr){4-6}\cmidrule(l){7-8}",
-        r"system, cell & comparison & contained by & \multicolumn{2}{c}{95\% interval} & widened "
-        r"& \multicolumn{2}{c}{95\% interval} \\",
+        r"& \multicolumn{2}{c}{} & & \multicolumn{3}{c}{Native $-$ cell (pp)} "
+        r"& \multicolumn{2}{c@{}}{Native $-$ no-store (pp)} \\",
+        r"\cmidrule(lr){5-7}\cmidrule(l){8-9}",
+        r"System, cell & \multicolumn{2}{l}{Comparison} & Contained by "
+        r"& \multicolumn{2}{c}{95\% interval} & \multicolumn{1}{c}{Widened} "
+        r"& \multicolumn{2}{c@{}}{95\% interval} \\",
         r"\midrule",
     ]
     for i, nat in enumerate(NATIVES):
         e = systems.get(nat.key)
         if i:
-            lines.append(r"\addlinespace[2pt]")
+            lines.append(r"\mtgap")
         if not e:
-            lines.append(_row(nat.label, MISSING, MISSING, _span(MISSING), MISSING, _span(MISSING)))
+            comparison = rf"\multicolumn{{2}}{{l}}{{{MISSING}}}"
+            lines.append(
+                _row(nat.label, comparison, MISSING, _span(MISSING), MISSING, _span(MISSING))
+            )
             continue
         cell = e.get("predicted_by")
         stub = [nat.label, f"cell {TABLE_REFERENCES.get(cell or '', MISSING)}"]
+        shown = None  # the shift of the comparison above
         for j, (key, c) in enumerate((e.get("comparisons") or {}).items()):
             paired = (e.get("paired_difference") or {}).get(key) or {}
             p = paired.get(cell) if cell else None
             wide = (
-                rf"{{\scriptsize [{_num(p['lo_inflated'], sign=True)},\,"
-                rf"{_num(p['hi_inflated'], sign=True)}]}}"
+                mtint(_num(p["lo_inflated"], sign=True), _num(p["hi_inflated"], sign=True))
                 if p and "lo_inflated" in p
                 else MISSING
             )
             held = ", ".join(TABLE_REFERENCES.get(n, n) for n in c["contained_by"]) or "none"
             circ = r"$^\circ$" if c["label_circular"] else ""
             zero = paired.get("zero")
+            branch, metric = key.split(":")
             lines.append(
                 _row(
                     stub[j] if j < len(stub) else "",
-                    f"{_comparison_label(key)}{circ}",
+                    BRANCH_NAMES[branch] if branch != shown else "",
+                    f"{metric}{circ}",
                     held,
-                    ci_pair_cells(p, sign=True) if p else _span(MISSING),
+                    mt_ci_cells(p, sign=True) if p else _span(MISSING),
                     wide,
-                    ci_pair_cells(zero, sign=True) if zero else _span("--"),
+                    mt_ci_cells(zero, sign=True) if zero else _span("--"),
                 )
             )
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+            shown = branch
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        notes(
+            r"Contained by: the references whose 95\% interval contains the native value "
+            r"($(D,B)$: \holdmem{} cell, c: citation key, no-store: no-store BM25, oracle: oracle "
+            r"context). Differences, paired by item: native minus the \holdmem{} cell with the "
+            r"inferred label, with its interval and the interval widened by the variance between "
+            r"repeated ingestions, and native minus no-store BM25. $^\circ$: after $\Sdel$, from "
+            r"which $B$ is inferred."
+        ),
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
 def _span(text: str) -> str:
     """One value across both cells of an estimate-and-interval column pair."""
     return rf"\multicolumn{{2}}{{c}}{{{text}}}"
-
-
-def _comparison_label(key: str) -> str:
-    branch, metric = key.split(":")
-    name = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}[branch]
-    return f"{name} {metric}"
 
 
 def build(root: Path, sources: dict[str, str], inp: dict[str, Any]) -> dict[str, str]:

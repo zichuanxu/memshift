@@ -39,7 +39,7 @@ from memshift.analysis import controls
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, camel, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, ci, num, pct, pp
-from memshift.analysis.paper_tables import _minus, _num, _row
+from memshift.analysis.paper_tables import _minus, _num, _row, notes
 from memshift.gen.kappa import KAPPA_DEFS
 
 UNDEFINED = "---"
@@ -282,15 +282,17 @@ def numbers(view: Mapping[str, Any] | None) -> dict[str, str]:
 GROUPS = ("definition", "other", "all")
 DM = r"$D_{\mathrm{m}}$"
 NOT_TAKEN = ""  # a contrast the table does not take on that item class: an empty cell
+SUB = r"\mtin "  # a variant of the contrast above, indented under it
 CAPTION = (
     r"Contrasts of the control cells after $\Ssrc$, $\Sdef$ and $\Sdel$ ({n} worlds, point "
-    r"estimates). The full-access writer ran after $\Ssrc$ and $\Sdef$ only ({undef})."
+    r"estimates)."
 )
-COMPACT_NOTE = (
-    r" The arms are those of \cref{{app:controls}}. Source, cited: the source key and the "
-    r"citation key. Full access: the full-access writer. Acc.\ on re-derived: accuracy on "
-    r"re-derived items. Value equals gold: the share of re-derived values that equal gold. $t_0$: "
-    r"before the shift. The last two rows are ratios."
+COMPACT_NOTE = (  # the notes under the table
+    r"The full-access writer ran after $\Ssrc$ and $\Sdef$ only ({undef}). The arms are those of "
+    r"\cref{{app:controls}}. Source, cited: the source key and the citation key. Full access: the "
+    r"full-access writer. Acc.\ on re-derived: accuracy on re-derived items. Value equals gold: "
+    r"the share of re-derived values that equal gold. $t_0$: before the shift. The last two rows "
+    r"are ratios."
 )
 
 
@@ -308,15 +310,15 @@ SD = ("src", "def")
 ROWS = (  # the control arms, each with its contrasts; the ratios last, in a block of their own
     CompactRow("oracle", r"Update, oracle $-$ source, $D{=}0$",
                {"definition": "G_upd_D0_{br}_definition", "all": "G_upd_D0_{br}_all"}),
-    CompactRow("", r"\quad$D{=}1$",
+    CompactRow("", rf"{SUB}$D{{=}}1$",
                {"definition": "G_upd_D1_{br}_definition", "all": "G_upd_D1_{br}_all"}),
     CompactRow("", r"Stability, oracle $-$ source, $D{=}0$",
                {"definition": "G_stab_D0_{br}_definition", "all": "G_stab_D0_{br}_all"}),
-    CompactRow("", r"\quad$D{=}1$",
+    CompactRow("", rf"{SUB}$D{{=}}1$",
                {"definition": "G_stab_D1_{br}_definition", "all": "G_stab_D1_{br}_all"}),
     CompactRow("add-only", r"Update, add-only $-$ $B{=}0$ ($D{=}1$)",
                {"definition": "R_ref_{br}_definition", "all": "R_ref_{br}_all"}),
-    CompactRow("", r"\quad$B{=}1$ $-$ add-only",
+    CompactRow("", rf"{SUB}$B{{=}}1$ $-$ add-only",
                {"definition": "R_gap_{br}_definition", "all": "R_gap_{br}_all"}),
     CompactRow("template", r"Update, template $-$ $D{=}0$ ($B{=}1$)",
                {"definition": "T_upd_{br}_definition", "all": "T_upd_{br}_all"}),
@@ -325,14 +327,14 @@ ROWS = (  # the control arms, each with its contrasts; the ratios last, in a blo
     CompactRow("", r"Update, scope $-$ cited ($D{=}1$)",
                {"definition": "K_cited_{br}_definition", "other": "K_cited_{br}_other",
                 "all": "K_cited_{br}_all"}),
-    CompactRow("", r"\quad missed invalidation, scope cell (\%)",
+    CompactRow("", rf"{SUB} missed invalidation, scope cell (\%)",
                {"all": "scope_missed"}, "pct", "scope_missed"),
     CompactRow("view", r"Update, view $-$ no-store BM25",
                {"definition": "Z_upd_{br}_definition", "other": "Z_upd_{br}_other",
                 "all": "Z_upd_{br}_all"}),
-    CompactRow("", r"\quad single-field items",
+    CompactRow("", rf"{SUB} single-field items",
                {"other": "Z_upd_{br}_rule"}),
-    CompactRow("", r"\quad free-text items",
+    CompactRow("", rf"{SUB} free-text items",
                {"other": "Z_upd_{br}_free"}),
     CompactRow("", r"Stability, view $-$ no-store BM25",
                {"definition": "Z_stab_{br}_definition", "other": "Z_stab_{br}_other",
@@ -343,7 +345,7 @@ ROWS = (  # the control arms, each with its contrasts; the ratios last, in a blo
                {"definition": "Z0_upd_{br}_definition", "all": "Z0_upd_{br}_all"}),
     CompactRow("full access", r"Acc.\ on re-derived, $D{=}1$ $-$ full-access $D{=}0$",
                {"definition": "F_rep_{br}_definition", "all": "F_rep_{br}_all"}, run=SD),
-    CompactRow("", r"\quad value equals gold",
+    CompactRow("", rf"{SUB} value equals gold",
                {"definition": "F_repmech_{br}_definition", "all": "F_repmech_{br}_all"},
                run=SD),
     CompactRow("add-only", r"(add-only $-$ $B{=}0$)/($B{=}1$ $-$ $B{=}0$)",
@@ -369,9 +371,25 @@ def _compact_cell(x: float | None, row: CompactRow) -> str:
         return MISSING
     if row.unit == "ratio":
         return _minus(x)
-    if row.unit == "pct":
-        return _num(x, digits=0)
+    if row.unit == "pct":  # a whole percent, its units digit under those of the pp values
+        return _num(x, digits=0) + r"\phantom{.0}"
     return _num(x, sign=True)
+
+
+def _centred(text: str, cols: int = 1, last: bool = False) -> str:
+    """`text` centred across `cols` columns (closed with `@{}` in the table's last column)."""
+    return rf"\multicolumn{{{cols}}}{{c{'@{}' if last else ''}}}{{{text}}}"
+
+
+def _not_run(last: bool) -> str:
+    """The dash of a branch the arm did not run on, centred in its column."""
+    return _centred(UNDEFINED, last=True) if last else r"\mtna{}"
+
+
+GROUP_NAMES = {"definition": "Definition items", "other": "Other items", "all": "All items"}
+BRANCH_NAMES = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
+# three value columns per item class (one per shift), centred in boxes as wide as a signed pp value
+VALUES = " @{\\hspace{14pt}} ".join(["N{$+$00.0}" * len(BRANCH_TAGS)] * len(GROUPS))
 
 
 def tab_controls(view: Mapping[str, Any] | None) -> str:
@@ -380,40 +398,51 @@ def tab_controls(view: Mapping[str, Any] | None) -> str:
     a class the contrast does not take, a dash for a branch the arm did not run on; the two ratios
     in a block of their own below the pp differences."""
     n = _get(view, "n_worlds") or MISSING
+    columns = [(g, b) for g in GROUPS for b, _ in BRANCH_TAGS]
+    shifts = [
+        _centred(BRANCH_NAMES[b], last=i == len(columns) - 1) for i, (_, b) in enumerate(columns)
+    ]
     lines = [
         r"\begin{table}[t]",
-        r"\caption{" + (CAPTION + COMPACT_NOTE).format(n=n, undef=UNDEFINED) + "}",
+        r"\caption{" + CAPTION.format(n=n) + "}",
         r"\label{tab:controls}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{3.5pt}",
-        r"\begin{tabular}{@{}l l rrr rrr rrr@{}}",
+        rf"\begin{{mttabular}}{{@{{}}l l {VALUES}@{{}}}}",
         r"\toprule",
-        r"& & \multicolumn{3}{c}{definition items} & \multicolumn{3}{c}{other items} "
-        r"& \multicolumn{3}{c}{all items} \\",
+        "& & "
+        + " & ".join(
+            _centred(GROUP_NAMES[g], len(BRANCH_TAGS), last=g == GROUPS[-1]) for g in GROUPS
+        )
+        + r" \\",
         r"\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(l){9-11}",
-        r"arm & contrast (pp) & $\Ssrc$ & $\Sdef$ & $\Sdel$ & $\Ssrc$ & $\Sdef$ & $\Sdel$ "
-        r"& $\Ssrc$ & $\Sdef$ & $\Sdel$ \\",
+        _row("Arm", "Contrast (pp)", *shifts),
     ]
     blocks = (
         [row for row in ROWS if row.unit != "ratio"],
         [row for row in ROWS if row.unit == "ratio"],
     )
+    last = columns[-1]
     for block in blocks:
         lines.append(r"\midrule")
         for k, row in enumerate(block):
             if row.arm and k > 0:
-                lines.append(r"\addlinespace[2pt]")
+                lines.append(r"\mtgap")
             cells = [
                 NOT_TAKEN
                 if g not in row.cells
-                else UNDEFINED
+                else _not_run((g, b) == last)
                 if b not in row.run
                 else _compact_cell(_row_value(view, row, g, b), row)
-                for g in GROUPS
-                for b, _ in BRANCH_TAGS
+                for g, b in columns
             ]
             lines.append(_row(row.arm, row.label, *cells))
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        notes(COMPACT_NOTE.format(undef=UNDEFINED)),
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 

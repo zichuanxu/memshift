@@ -12,10 +12,9 @@ import pytest
 
 from memshift.analysis import ex_review_paper as rp
 from memshift.analysis import paper_numbers as pn
-from memshift.analysis.ex_e1_paper import UNDEFINED
+from memshift.analysis.ex_e1_paper import UNDEFINED, mt_ci_cells
 from memshift.analysis.paper_data import MISSING
-from memshift.analysis.paper_tables import est_ci_cells
-from tests.test_paper_stage4 import check_tex
+from tests.test_ex_e1_paper import check_mt_tex, memtab_preamble
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -118,7 +117,7 @@ def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
         assert set(rp.tables(inp)) == set(LABELS)
         for name, tex in rp.tables(inp).items():
-            check_tex(tex)
+            check_mt_tex(tex)
             assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
     for name, tex in rp.tables(EMPTY).items():
         assert MISSING in tex, name
@@ -130,18 +129,23 @@ def test_writers_table_has_every_writer_and_class_and_the_fit():
     tex = rp.tab_writers(INP)
     for label in ("Qwen3.5-9B", "Qwen3.5-9B, repl.", "gemma-4-12B", "Llama-3.1-8B", "gpt-oss-20b"):
         assert label in tex
-    for cls in ("definition", "other", "\\quad field", "\\quad free text"):  # other, its two kinds
+    for cls in ("definition", "other", "\\mtin field", "\\mtin free text"):  # other, its kinds
         assert len(re.findall(rf"& {re.escape(cls)} & \d", tex)) == 5
-    assert "(b) across the cells & \\multicolumn{2}{c}{$\\rho$, all}" in tex
+    assert "(b) Across the cells & $\\rho$, all & $\\rho$, definition" in tex
     assert "Spearman's $\\rho$" in tex and "least-squares line" in tex
     # the leave-one-writer-out error comparison is not part of the table
     assert "leave-one-writer-out" not in tex and "class label" not in tex
     caption = tex.split(r"\label{tab:writers}")[0]
     assert r"(a) repair correctness $r_D$ at $D$ (\%)" in caption
     assert "(writer, class, shift) cells" in caption and "branch" not in caption
-    # two panels of one width
-    assert tex.count("\\begin{tabular*}{\\linewidth}") == 2 and "exploratory" not in tex
-    assert "$-$0.21 & {\\scriptsize [$-$0.53,\\,0.31]}" in tex  # a statistic and its interval
+    notes = tex.split("\\mtnotes{", 1)[1]
+    assert "Field: single-field items. Free text: free-text items. Other: both." in notes
+    # two panels of one width: (b) is set at the width of (a)
+    assert tex.count("\\begin{mttabular}{") == 1 and "\\begin{mttabular*}{\\mtwidth}" in tex
+    assert "exploratory" not in tex
+    # a statistic and its interval in one cell, the boxes as wide as the widest of the panel
+    assert "\\mtpair{$-$0.21}{[$-$0.53,\\,0.31]}" in tex
+    assert "\\mtpairwidths{$-$0.21}{[$-$0.53,\\,0.31]}" in tex
     assert "rule" not in re.sub(r"\\(top|mid|bottom|cmid)rule", "", tex)
 
 
@@ -152,10 +156,11 @@ def test_misses_and_zero_tables_show_their_rows():
     assert len(re.findall(r"\n &  &  & 1 & ", tex)) == 9
     assert "{R}" not in tex and "R's" not in rp.tab_writers(INP)  # no block letter
     zero = rp.tab_zero_after(INP)
-    assert "\\emph{main study}} \\\\" in zero and "\\emph{replication}} \\\\" in zero
+    assert "\\mtgroup{10}{Main study}\n" in zero and "\\mtgroup{10}{Replication}\n" in zero
     # the main study's totals are in the main text's overview table, the replication's here
-    main, rep = zero.split("\\emph{replication}")
+    main, rep = zero.split("\\mtgroup{10}{Replication}")
     assert "& all &" not in main and rep.count("& all &") == 3
+    assert zero.count("\\mtin$\\S") == 6  # each shift's rows under its banner
     assert "Table~\\ref{tab:overview}" in zero
 
 
@@ -176,12 +181,15 @@ def test_misses_table_holds_the_accuracies_of_the_missed_items():
 def test_misses_zero_and_json_tables_are_one_grid_each():
     # one tabular per table, so the blocks share their column widths (main study and R)
     for tex in (rp.tab_misses(INP), rp.tab_zero_after(INP), rp.tab_json_arm(INP)):
-        assert tex.count("\\begin{tabular}") == 1
+        assert tex.count("\\begin{mttabular}") == 1
     assert "\\label{tab:forced}\\label{tab:misses}" in rp.tab_misses(INP)
 
 
-def test_misses_caption_defines_its_columns():
-    caption = rp.tab_misses(INP).split("\\label{tab:forced}")[0]
+def test_misses_notes_define_its_columns():
+    tex = rp.tab_misses(INP)
+    caption = tex.split("\\label{tab:forced}")[0]
+    assert "that the citation key did not invalidate" in caption
+    notes = tex.split("\\mtnotes{", 1)[1]
     for term in (
         "Cited: the citation-key cell, which served the stale item",
         "Forced: the source-key cell, which re-derived the same item-times",
@@ -189,18 +197,29 @@ def test_misses_caption_defines_its_columns():
         "Gain: forced minus cited",
         "$n$: missed item-times",
     ):
-        assert term in caption, term
+        assert term in notes and term not in caption, term
 
 
-def test_interval_format_is_signed_scriptsize_with_a_thin_space():
+def test_interval_format_is_signed_small_and_muted_with_a_thin_space():
     zero = rp.tab_zero_after(INP)
-    assert "\\tiny" not in zero and "{\\scriptsize [" in zero and ",\\," in zero
+    assert "\\scriptsize" not in zero and "\\mtint{[" in zero and ",\\," in zero
     # a statistic and its interval as two aligned cells, the minus typeset
-    assert est_ci_cells({"est": -0.214, "lo": -0.54, "hi": 0.3}, f=rp.snum) == (
-        r"$-$0.21 & {\scriptsize [$-$0.54,\,0.30]}"
+    assert mt_ci_cells({"est": -0.214, "lo": -0.54, "hi": 0.3}, f=rp.snum) == (
+        r"$-$0.21 & \mtint{[$-$0.54,\,0.30]}"
     )
 
 
+def test_percentage_columns_are_as_wide_as_a_whole_share():
+    """The whole percentages sit in boxes as wide as 100 and the counts n in a box as wide as the
+    largest count, so every value fits its box."""
+    misses = rp.tab_misses(INP)
+    n = [int(m) for m in re.findall(r"\n(?:\$\\S\w+\$)? & \w+ & (\d+) & 0 & ", misses)]
+    assert f"N{{{'0' * len(str(max(n)))}}} c" in misses
+    for tex in (rp.tab_writers(INP), rp.tab_zero_after(INP), rp.tab_json_arm(INP)):
+        assert "N{100}" in tex and not re.search(r"N\{(?!100\})", tex)
+
+
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile(tmp_path):
     names = []
@@ -215,6 +234,7 @@ def test_tables_compile(tmp_path):
                 r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
                 r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
+                memtab_preamble(tmp_path),
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
                 r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",
@@ -231,7 +251,6 @@ def test_tables_compile(tmp_path):
     assert not re.search(r"Overfull \\hbox \(([5-9]|\d{2,})\.", done.stdout)  # nothing sticks out
 
 
-@pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_figure_draws_with_and_without_data(tmp_path):
     full = rp.fig_account(INP, tmp_path)
     assert full.read_bytes().startswith(b"%PDF")
@@ -257,11 +276,11 @@ def test_figure_colours_each_writer_by_its_model_and_marks_the_class_by_shape():
 def test_spread_sets_apart_only_the_markers_that_cover_one_another():
     from memshift.analysis import figstyle as fs
 
-    plt = fs.plt()
-    fig, ax = plt.subplots(figsize=(3, 3))
-    ax.set_xlim(0, 100)
-    ax.set_ylim(0, 100)
-    dx = rp._spread(ax, [(50, 50), (50.1, 50), (10, 10)], 5.0)
+    with fs.printed() as plt:
+        fig, ax = plt.subplots(figsize=(3, 3))
+        ax.set_xlim(0, 100)
+        ax.set_ylim(0, 100)
+        dx = rp._spread(ax, [(50, 50), (50.1, 50), (10, 10)], 5.0)
     assert dx[2] == 0.0  # alone
     assert sorted(dx[:2]) == [-2.5, 2.5]  # side by side around their centre, in the order of x
     assert dx[0] < dx[1]

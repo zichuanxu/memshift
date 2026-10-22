@@ -14,7 +14,7 @@ from memshift.analysis import paper_numbers as pn
 from memshift.analysis.ex_e1_paper import UNDEFINED
 from memshift.analysis.paper_data import MISSING
 from memshift.runinfo import file_sha256
-from tests.test_paper_stage4 import check_tex
+from tests.test_ex_e1_paper import check_mt_tex, memtab_preamble
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -204,7 +204,7 @@ def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
         assert set(r3.tables(inp)) == set(LABELS)
         for name, tex in r3.tables(inp).items():
-            check_tex(tex)
+            check_mt_tex(tex)
             assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
     for name, tex in r3.tables(EMPTY).items():
         assert MISSING in tex, name
@@ -220,6 +220,32 @@ def _rows(tex: str) -> list[list[str]]:
     ]
 
 
+def test_tables_set_each_value_in_a_box_of_its_column_widest_value():
+    store = r3.tab_store_reader(INP)
+    sr = INP["sr"]["results"]["D1"]
+    shown = [(b, cls) for b, _ in r3.BRANCH_TAGS for cls in ("definition", "other")]
+    n = max(sr[b][cls]["counts"]["D1B1"]["n"] for b, cls in shown)
+    assert f"@{{}}lll N{{{re.sub(r'[0-9]', '0', r3._count(n))}}} " in store  # n: the largest count
+    # the shares hold 100.0 or not, as the data do
+    body = [r for r in _rows(store.split("\\midrule", 1)[1]) if len(r) == 12]
+    for col, box in zip(range(4, 12), re.findall(r"N\{([0-9.]+)\}", store), strict=True):
+        assert box == ("100.0" if "100.0" in [r[col] for r in body] else "00.0"), col
+    # dashes centred; at B=0 the JSON store is not defined, the last column at the table's edge
+    assert store.count("\\multicolumn{1}{c@{}}{---}") == 6 and "\\mtna{}" in store
+    view = r3.tab_view(INP)
+    assert view.count(">{\\mtpairwidths{") == 3  # one box width per column of paired differences
+    assert view.count("\\mtpair{") == 2 * 4 * 3 * 3  # metrics x groups x classes x differences
+    dm = r3.tab_dm_deletion(INP)
+    deletion, programs = dm.split("\\end{table}\n\n")
+    assert "the 1,365 changed item-times" in deletion.split("\\label")[0]  # the caption
+    assert "$a$: a value stored where gold is no value." in deletion.split("\\mtnotes{")[1]
+    # the programs' table keeps its one definition in the caption
+    assert "Wrong: a value for a deleted record" in programs.split("\\label")[0]
+    assert "\\mtnotes" not in programs
+    assert "@{}l N{000} r@{\\,}l @{\\hspace{14pt}} N{000} r@{\\,}l@{}" in programs
+
+
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile_at_the_paper_width(tmp_path):
     names = []
@@ -234,6 +260,7 @@ def test_tables_compile_at_the_paper_width(tmp_path):
                 r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
                 r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
+                memtab_preamble(tmp_path),
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\holdmem}{\textsc{HoldMem}}"
                 r"\newcommand{\cref}[1]{Table~1}",

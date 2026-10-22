@@ -89,7 +89,7 @@ def test_overview_native_levels_equal_the_native_analysis(
                 est = systems[key]["comparisons"][f"{b}:{m}"]["native"]["est"]
                 assert _num(est) == overview["native", key, b, m], (key, b, m)
     text = (GENERATED / "tab_native_null.tex").read_text()
-    assert r"\label{tab:native-diff}" in text and "native $-$ cell" in text
+    assert r"\label{tab:native-diff}" in text and "Native $-$ cell" in text
 
 
 @pytest.mark.paper
@@ -117,33 +117,38 @@ def test_the_results_text_states_the_native_block_item_counts() -> None:
 
 
 def test_overview_caption_names_its_rows_in_plain_words() -> None:
-    caption = pe.tab_overview(pe.load(ROOT, SOURCES)).split(r"\label{tab:overview}")[0]
+    text = pe.tab_overview(pe.load(ROOT, SOURCES))
+    caption = text.split(r"\label{tab:overview}")[0]
     assert caption.startswith(
         r"\begin{table*}[t]" + "\n" + r"\caption{Update and Stability (\%) after"
     )
-    assert r"$D_{\mathrm{m}}$: the writer's programs." in caption
-    assert r"Bottom: each model as writer and reader" in caption
+    notes = text.split(r"\end{mttabular}")[1]  # the definitions, under the table
+    assert r"$D_{\mathrm{m}}$: the writer's programs." in notes
+    assert r"Brackets: 95\% interval." in notes
+    assert r"\mtgroup{7}{$B{\times}D$ on Update (pp), each model as writer and reader}" in text
     for gone in ("every evaluated memory", "model-written", "measurement half", "Native systems:"):
-        assert gone not in caption, gone
+        assert gone not in caption + notes, gone
 
 
-def test_overview_families_block_has_its_own_header_and_aligned_intervals() -> None:
-    """The bottom block prints B x D, not a level: its own header line states the quantity and
-    unit, and each estimate sits in the Update column with its interval set left beside it."""
+def test_overview_families_block_has_its_own_banner_and_centred_intervals() -> None:
+    """The bottom block prints B x D, not a level: its banner states the quantity and unit, and
+    each estimate with its interval is one cell centred under its shift's two columns."""
     lines = pe.tab_overview(pe.load(ROOT, SOURCES)).splitlines()
-    bxd = r" & \multicolumn{2}{c}{$B{\times}D$ (pp)}"
-    head = lines.index("writer and reader" + bxd * 3 + r" \\")
-    assert lines[head - 1] == r"\midrule" and lines[head + 1].startswith(r"\cmidrule")
-    rows = lines[head + 2 : head + 2 + 1 + len(pe.FAMILIES)]
-    assert [r.split(" (")[0] for r in rows] == ["Qwen3.5-9B", *(f.label for f in pe.FAMILIES)]
-    interval = re.compile(r"\\multicolumn\{1\}\{@\{\}l(@\{\})?\}\{\{\\scriptsize \[.+\]\}\}")
+    head = lines.index(r"\mtgroup{7}{$B{\times}D$ on Update (pp), each model as writer and reader}")
+    assert lines[head - 1] == r"\midrule"
+    rows = lines[head + 1 : head + 1 + 1 + len(pe.FAMILIES)]
+    labels = [r.split(r" \mtmuted")[0].removeprefix(r"\mtin ") for r in rows]
+    assert labels == ["Qwen3.5-9B", *(f.label for f in pe.FAMILIES)]
+    pair = re.compile(
+        r"\\multicolumn\{2\}\{c(@\{\})?\}\{\\mtpair\{(\$[+-]\$\d+\.\d|0\.0)\}\{\[.+\]\}\}"
+    )
     for row in rows:
         cells = row.removesuffix(r" \\").split(" & ")
-        assert len(cells) == 7, row
-        for est, ci in zip(cells[1::2], cells[2::2], strict=True):
-            assert re.fullmatch(r"\$[+-]\$\d+\.\d|0\.0", est), est
-            assert interval.fullmatch(ci), ci
-        assert cells[6].startswith(r"\multicolumn{1}{@{}l@{}}")
+        assert len(cells) == 4, row
+        assert re.search(r"\\mtmuted\{\(\d+ worlds\)\}$", cells[0]), cells[0]
+        for cell in cells[1:]:
+            assert pair.fullmatch(cell), cell
+        assert cells[3].startswith(r"\multicolumn{2}{c@{}}")
 
 
 def test_overview_without_stages_prints_the_marker() -> None:
@@ -206,11 +211,13 @@ def test_model_table_lists_size_context_reasoning_and_roles() -> None:
     assert r"& 0.6B & 8,192 &  & embedder \\" in rows[3]
     opus = "high for definition items, low for programs"
     assert rows[1].endswith(
-        rf"& --- & 1,000,000 & {opus} & definition-item writer, program writer \\"
-    )  # the context of Anthropic's models overview
+        rf"& \mtna & 1,000,000 & {opus} & definition-item writer, program writer \\"
+    )  # the context of Anthropic's models overview; no size stated (a centred dash)
     assert r"\citep{anthropic_models_overview}" in rows[1]
     assert r"\citep{qwen35_2026,hf_qwen3_5_9b}" in rows[0]
-    assert "gpt-oss-20b in MXFP4" in text.split(r"\label")[0]  # weights that are not bfloat16
+    notes = text.split(r"\end{mttabular}")[1]  # the serving setup, under the table
+    assert "gpt-oss-20b in MXFP4" in notes  # weights that are not bfloat16
+    assert r"\citep{kwon2023vllm}" in notes and "think adaptively" in notes
 
 
 def test_model_size_reads_the_repository_id() -> None:
@@ -333,10 +340,14 @@ def test_example_reads_the_raw_outputs(tmp_path: Path, gen: dict[str, Any]) -> N
     raw = pe.example_raw(_raw_run(tmp_path, gen), gen)
     assert raw is not None
     text = pe.example_world(gen, raw)
-    assert r"A \& B \pass & abstains \fail & kept \\" in text
-    assert text.count(r"abstains \fail & invalidated, re-derived \\") == 2  # the two B = 1 cells
+    before, after = r"\multicolumn{2}{P{5.9cm}}", r"\multicolumn{2}{P{5.0cm}}"
+    did = r"\multicolumn{2}{P{\dimexpr2\exG+2\tabcolsep\relax}@{}}"
+    assert rf"{before}{{A \& B \pass}} & {after}{{abstains \fail}} & {did}{{kept}} \\" in text
+    # the two B = 1 cells
+    assert text.count(rf"{after}{{abstains \fail}} & {did}{{invalidated, re-derived}} \\") == 2
     assert "``Statement.''" in text and "Evidence" not in text  # the stored item's first sentence
-    assert "stored item & ``Statement.'' &  & " in text  # in the column before the fork
+    # in the column before the fork
+    assert rf"stored item & {before}{{``Statement.''}} & {after}{{}} & {did}{{}} \\" in text
     assert MISSING not in text
 
 

@@ -138,32 +138,36 @@ def test_audit_table_groups_rows_and_notes_a_label_that_differs():
         _audit_row("zero system (ours)", "ours", "N/A", "N/A"),
     ]
     tex = table(rows)
-    titles = [rf"\emph{{{title}}}" for title, _ in GROUPS if title != "products"]
+    titles = [rf"\mtgroup{{5}}{{{title}}}" for title, _ in GROUPS if title != "Products"]
     positions = [tex.index(t) for t in titles if t in tex]
     assert positions == sorted(positions) and len(positions) == 2
     # Mem0's audit placement equals its documented label; Cognee's does not
-    mem0 = next(ln for ln in tex.splitlines() if ln.startswith("Mem0"))
+    mem0 = next(ln for ln in tex.splitlines() if ln.startswith(r"\mtin Mem0"))
     assert r"& 0 & 0 & \checkmark &" in mem0 and "$^{a}$" not in mem0
-    cognee = next(ln for ln in tex.splitlines() if ln.startswith("Cognee"))
+    cognee = next(ln for ln in tex.splitlines() if ln.startswith(r"\mtin Cognee"))
     assert r"& partial & 0$^{a}$ & \checkmark &" in cognee
     assert r"\NatCogneeLabel{}" in tex and tex.count("$^{a}$") == 2  # the mark and its note
-    assert r"no-store BM25 & --- & --- &  & code \\" in tex
+    assert r"\mtin no-store BM25 & --- & --- &  & code \\" in tex
+    # the note follows the key under the table
+    notes = tex.split(r"\end{mttabular}")[1]
+    assert notes.startswith("\n" + r"\mtnotes{\checkmark: run natively") and "$^{a}$" in notes
 
 
 def test_audit_caption_keys_every_mark_and_states_no_method():
     from memshift.analysis.audit_table import table
 
-    caption = table([]).split(r"\label{tab:audit}")[0]
+    caption, rest = table([]).split(r"\label{tab:audit}")
+    assert "on the $(D,B)$ grid" in caption and caption.count(". ") == 0  # one sentence
+    notes = rest.split(r"\end{mttabular}")[1]  # the key under the table
     for term in (
-        "on the $(D,B)$ grid",
         r"\checkmark: run natively",
         "---: the system stores no derived item",
         "Basis: what the placement rests on",
     ):
-        assert term in caption, term
-    assert caption.count(". ") <= 4  # one sentence and a short key
+        assert term in notes, term
+    assert notes.count(". ") <= 3  # a short key
     for gone in ("Membership", "verdict", "pass", "rubric", "version", "Owner"):
-        assert gone not in caption, gone
+        assert gone not in caption + notes, gone
 
 
 def test_audit_basis_names_the_evidence_once_in_a_fixed_order():

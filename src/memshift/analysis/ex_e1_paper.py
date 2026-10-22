@@ -26,7 +26,7 @@ from typing import Any
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, camel, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, ci, pct, pp
-from memshift.analysis.paper_tables import _ci, _num, _row, est_ci_cells
+from memshift.analysis.paper_tables import _ci, _num, _row
 
 UNDEFINED = "---"
 # macro tag, inputs key, arm of the D=1 cell, granularities the stage has
@@ -525,6 +525,118 @@ def numbers(inp: Mapping[str, Any]) -> dict[str, str]:
     return dict(out)
 
 
+# ------------------------------------------------------------- cells of the shared table style
+# The tables below use the macros of paper/memtab-style.tex: \mtint{[lo,\,hi]} (an interval in
+# small muted type), \mtpair{est}{[lo,\,hi]} (an estimate and its interval in one cell, in boxes
+# set by \mtpairwidths) and the column N{template} (values right-aligned in a box as wide as the
+# template, the box centred under the header).
+MUTED = r"\color{mtmuted}"  # a row in the muted grey of the figures (the replication)
+PCT_BOX = "100"  # the N template of a column of whole percentages: no share prints wider
+GROUP_GAP = r"@{\hspace{14pt}}"  # between two column groups (shifts, studies, cells)
+_SIGNS = ("$+$", "$-$")
+_EM = {"+": 0.57, "~": 0.17, ".": 0.25, ",": 0.25, "[": 0.33, "]": 0.33}  # else 0.5 (a digit)
+
+
+def ci_text(
+    e: Mapping[str, Any] | None, sign: bool = False, f: Callable[[float], str] | None = None
+) -> tuple[str, str] | None:
+    """The printed estimate and interval `[lo,\\,hi]` of a node, the interval empty where its
+    printed ends equal the estimate (every world gave the same value); None when the node is not
+    there or its estimate is not a number."""
+    if not e or e.get("est") is None or e["est"] != e["est"]:
+        return None
+    num = f or (lambda x: _num(x, sign=sign))
+    est, lo, hi = (num(e[k]) for k in ("est", "lo", "hi"))
+    return est, "" if lo == est == hi else f"[{lo},\\,{hi}]"
+
+
+def _no_value(e: Mapping[str, Any] | None) -> str:
+    return MISSING if not e else UNDEFINED
+
+
+def mt_ci_cells(
+    e: Mapping[str, Any] | None,
+    sign: bool = False,
+    style: str = "",
+    f: Callable[[float], str] | None = None,
+    span: str = "c",
+) -> str:
+    """An estimate and its 95% interval as the two cells of a column pair `r@{\\,}l`, the interval
+    in \\mtint, the estimate alone where the printed ends equal it. `style` opens the estimate's
+    cell (the interval has its own colour); `f` prints each number (default: percent or pp with
+    one decimal, signed if `sign`). MISSING or UNDEFINED span both cells, in a column `span`."""
+    text = ci_text(e, sign, f)
+    if text is None:
+        return rf"\multicolumn{{2}}{{{span}}}{{{style}{_no_value(e)}}}"
+    est, iv = text
+    return f"{style}{est} &" + (f" \\mtint{{{iv}}}" if iv else "")
+
+
+def mt_ci_pair_cells(
+    e: Mapping[str, Any] | None,
+    sign: bool = False,
+    style: str = "",
+    f: Callable[[float], str] | None = None,
+    span: str = "c",
+) -> str:
+    """`mt_ci_cells` where an estimate alone keeps a space before the next cell."""
+    cells = mt_ci_cells(e, sign=sign, style=style, f=f, span=span)
+    return f"{cells} " if cells.endswith(" &") else cells
+
+
+def mt_pair(
+    e: Mapping[str, Any] | None, sign: bool = False, f: Callable[[float], str] | None = None
+) -> str:
+    """An estimate and its interval in one cell (\\mtpair), for a column of pairs centred under a
+    header wider than the pair; MISSING or UNDEFINED alone."""
+    text = ci_text(e, sign, f)
+    return _no_value(e) if text is None else rf"\mtpair{{{text[0]}}}{{{text[1]}}}"
+
+
+def _em(s: str) -> float:
+    """The printed width of a number or interval in em, near enough to find the widest of a
+    column: a digit half an em, a sign wider, a point or comma a quarter."""
+    s = s.replace("$+$", "+").replace("$-$", "+").replace("\\,", "~")
+    return sum(_EM.get(ch, 0.5) for ch in s)
+
+
+def _is_number(s: str) -> bool:
+    mag = s[3:] if s[:3] in _SIGNS else s
+    return bool(mag) and all(ch.isdigit() or ch in ".," for ch in mag)
+
+
+def _zeros(s: str, sign: str) -> str:
+    """A printed number as a template of its width: digits as 0 and a sign as `sign` (the two
+    signs are equally wide); a printed 100 (a whole share) stays as printed."""
+    signed = s[:3] in _SIGNS
+    mag = s[3:] if signed else s
+    if mag.split(".")[0] == "100":
+        return s
+    return (sign if signed else "") + "".join("0" if ch.isdigit() else ch for ch in mag)
+
+
+def n_template(cells: list[str]) -> str:
+    """The template of an N column: its widest printed value as `_zeros` (cells that are not a
+    number, such as MISSING, UNDEFINED or blank, do not count)."""
+    numbers = [c for c in cells if _is_number(c)]
+    return _zeros(max(numbers, key=_em), "$+$") if numbers else "0"
+
+
+def pair_widths(pairs: list[tuple[str, str] | None], template: bool = False) -> str:
+    """\\mtpairwidths for a column of `mt_pair` cells, from the `ci_text` of each: the widest
+    estimate and the widest interval as printed, or with `template` as `_zeros` (an estimate's
+    sign as +, an interval end's as -)."""
+    texts = [t for t in pairs if t is not None]
+    est = max((t[0] for t in texts), key=_em, default="")
+    iv = max((t[1] for t in texts), key=_em, default="")
+    if template:
+        est = _zeros(est, "$+$") if est else ""
+        if iv:
+            lo, hi = iv[1:-1].split(",\\,")
+            iv = f"[{_zeros(lo, '$-$')},\\,{_zeros(hi, '$-$')}]"
+    return rf"\mtpairwidths{{{est}}}{{{iv}}}"
+
+
 # ---------------------------------------------------------------------------------- tables
 def _cell(e: dict[str, Any] | None) -> str:
     """`est [lo, hi]` in pp, estimate and bounds signed (`paper_tables.interval`)."""
@@ -543,44 +655,45 @@ CLASSSPLIT_CONTRASTS = (  # the columns of tab_classsplit, in the order of their
     "BxD_interaction_update",
 )
 BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
-GREY = r"\color{gray}"
 
 
 def tab_classsplit(inp: Mapping[str, Any]) -> str:
     """Appendix: B effect at each D, D effect at each B and B x D on Update by shift and item
-    class (rows), the main study and below it, in grey, the replication; the class's share of the
-    changed item-times of the main study beside the class. Each estimate and its interval are two
-    aligned cells (`paper_tables.est_ci_cells`)."""
+    class (rows), the main study and below it, in muted grey, the replication; the class's share
+    of the changed item-times of the main study beside the class. Each estimate and its interval
+    are two aligned cells (`mt_ci_cells`)."""
     main, rep = inp.get("main"), inp.get("rep")
     n_rep = _get(rep, "n_worlds") or MISSING
     pairs = " ".join([r"r@{\,}l"] * len(CLASSSPLIT_CONTRASTS))
     lines = [
         r"\begin{table}[t]",
         r"\caption{The contrasts on Update by shift and item class, in the main study and in the "
-        rf"replication on {n_rep} fresh worlds (grey). Share: the class's share of the changed "
-        r"item-times in the main study.}",
+        rf"replication on {n_rep} fresh worlds (grey).}}",
         r"\label{tab:classsplit}",
-        r"\centering\footnotesize",
-        r"\setlength{\tabcolsep}{3.5pt}",
-        rf"\begin{{tabular}}{{@{{}}llrl {pairs}@{{}}}}",
+        r"\centering\mtsetup",
+        r"\setlength{\tabcolsep}{3.8pt}",
+        rf"\begin{{mttabular}}{{@{{}}llrl {pairs}@{{}}}}",
         r"\toprule",
-        r"& & & & \multicolumn{4}{c}{$B$ effect} & \multicolumn{4}{c}{$D$ effect} & & \\",
+        r"& & \multicolumn{1}{r}{Share} & & \multicolumn{4}{c}{$B$ effect} "
+        r"& \multicolumn{4}{c}{$D$ effect} & & \\",
         r"\cmidrule(lr){5-8}\cmidrule(lr){9-12}",
-        r"shift & class & share (\%) & & \multicolumn{2}{c}{$D{=}0$} & \multicolumn{2}{c}{$D{=}1$} "
+        r"Shift & Class & \multicolumn{1}{r}{\mtsmall\color{mtmuted}(\%)} & "
+        r"& \multicolumn{2}{c}{$D{=}0$} & \multicolumn{2}{c}{$D{=}1$} "
         r"& \multicolumn{2}{c}{$B{=}0$} & \multicolumn{2}{c}{$B{=}1$} "
-        r"& \multicolumn{2}{c}{$B{\times}D$} \\",
+        r"& \multicolumn{2}{c@{}}{$B{\times}D$} \\",
         r"\midrule",
     ]
     for i, (b, _) in enumerate(BRANCH_TAGS):
         for k, cls in enumerate(("definition", "other")):
             share = _get(main, "explore_class_mix", b, "classes", cls, "share")
             for stage, m in (("main", main), ("repl.", rep)):
-                style = GREY if m is rep else ""
+                style = MUTED if m is rep else ""
                 vals = [
-                    est_ci_cells(
+                    mt_ci_cells(
                         _get(m, "explore_class_split", "D1", b, "source", cls, key),
                         sign=True,
                         style=style,
+                        span="c@{}" if key == CLASSSPLIT_CONTRASTS[-1] else "c",
                     )
                     for key in CLASSSPLIT_CONTRASTS
                 ]
@@ -595,10 +708,15 @@ def tab_classsplit(inp: Mapping[str, Any]) -> str:
                     )
                 )
             if k == 0:
-                lines.append(r"\addlinespace[2pt]")
+                lines.append(r"\mtgap")
         if i < len(BRANCH_TAGS) - 1:
             lines.append(r"\midrule")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        r"\mtnotes{Share: the class's share of the changed item-times in the main study.}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
@@ -607,71 +725,105 @@ def tables(inp: Mapping[str, Any]) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------------- figure
-CLASSSPLIT_BAR_W = 0.13  # width of one bar, in item classes
-CLASSSPLIT_GAP = 0.045  # space between the bar pairs of two contrasts
-CLASSSPLIT_PITCH = 1.15  # distance between the two item classes of a panel
+CLASSSPLIT_PT = (486, 165.6)  # printed size (pt): full width
+CLASSSPLIT_STYLES = (  # contrast, key label, bar fill, dark ink (interval, value label)
+    ("B_effect_update_D0", r"$B$ effect, $D\!=\!0$", "#9AA3AF", "#3F4753"),  # re-derives: slate
+    ("B_effect_update_D1", r"$B$ effect, $D\!=\!1$", "#2B6CB8", "#14365F"),  # recomputes: blue
+    ("BxD_interaction_update", r"$B{\times}D$", "#962F6E", "#4F1838"),  # the result: purple
+)
+CLASSSPLIT_CLASSES = (("definition", "definition items"), ("other", "other items"))
+CLASSSPLIT_PANELS = (
+    ("src", r"source revision $S_{\mathrm{src}}$"),
+    ("def", r"redefinition $S_{\mathrm{def}}$"),
+    ("orphan", r"deletion $S_{\mathrm{del}}$"),
+)
+CLASSSPLIT_SLOT = 0.305  # distance between the three contrasts of one class (classes 1 apart)
+CLASSSPLIT_BAR_W = 0.19  # a main-study bar, in classes
+CLASSSPLIT_REP_DX = 0.135  # the replication's diamond, right of its bar's centre
+CLASSSPLIT_REP_MS, CLASSSPLIT_REP_LW = 4.1, 0.6  # its size and its interval line (pt)
+CLASSSPLIT_Y = (-7.5, 66.0)  # the value axis (pp), widened when an interval leaves it
+CLASSSPLIT_REP_INK, CLASSSPLIT_REP_FILL = "#4A5059", "#59606B"  # the replication's key glyph
+
+
+def _classsplit_node(inp: Mapping[str, Any], stage: str, branch: str, cls: str, key: str
+                     ) -> dict[str, Any] | None:  # fmt: skip
+    """A contrast of the class split (D=1, source key), or None when it is not staged."""
+    e = _get(inp.get(stage), "explore_class_split", "D1", branch, "source", cls, key)
+    return None if not e or e["est"] != e["est"] else dict(e)
 
 
 def fig_classsplit(inp: Mapping[str, Any], out: Path) -> Path:
-    """Grouped bars per branch (panel) and item class (group): the B effect at D=0 (light blue)
-    and D=1 (blue) and B x D (pink) on Update, each as a pair of bars, the main study filled and
-    the replication outlined in the same colour, with 95% intervals as error bars
-    (`figstyle.ci_bar`). Under each class its share of the branch's changed item-times (main
-    study). The key sits above the panels."""
-    from matplotlib.patches import Patch
-
+    """Per shift (panel) and item class (group), the B effect on Update at D=0 (slate) and D=1
+    (blue) and B x D (purple): the main study as bars from zero, the replication as a diamond
+    with its interval beside each bar, every interval a thin capped line in the mark's dark ink.
+    B x D on the definition items is printed over its bar; under each class its share of the
+    shift's changed item-times (main study). The key row sits above the panels."""
     from memshift.analysis import figstyle as fs
 
-    plt = fs.plt()
-    contrasts = (
-        ("B_effect_update_D0", r"$B$ effect, $D{=}0$", fs.SKY),
-        ("B_effect_update_D1", r"$B$ effect, $D{=}1$", fs.BLUE),
-        ("BxD_interaction_update", r"$B{\times}D$", fs.PURPLE),
-    )
-    classes = (("definition", "definition items"), ("other", "other items"))
-    panels = (
-        ("src", r"source revision $S_{\mathrm{src}}$"),
-        ("def", r"redefinition $S_{\mathrm{def}}$"),
-        ("orphan", r"deletion $S_{\mathrm{del}}$"),
-    )
-    w, pair = CLASSSPLIT_BAR_W, 2 * CLASSSPLIT_BAR_W + CLASSSPLIT_GAP
-    fig, axes = plt.subplots(1, 3, figsize=(fs.TEXT, 2.3), sharey=True)
-    ends = [0.0]
-    for ax, (branch, title) in zip(axes, panels, strict=True):
-        ax.axhline(0, color=fs.BLACK, lw=0.6, zorder=2.5)
-        for c, (cls, _) in enumerate(classes):
-            for k, (key, _, colour) in enumerate(contrasts):
-                for s, (stage, filled) in enumerate((("main", True), ("rep", False))):
-                    e = _get(inp.get(stage), "explore_class_split", "D1", branch, "source", cls,
-                             key)  # fmt: skip
-                    if not e or e["est"] != e["est"]:
-                        continue
-                    x = c * CLASSSPLIT_PITCH + (k - 1) * pair + (s - 0.5) * w
-                    fs.ci_bar(ax, x, 100 * e["est"], 100 * e["lo"], 100 * e["hi"], colour, w,
-                              filled=filled)  # fmt: skip
-                    ends += [100 * e["lo"], 100 * e["hi"]]
-        share = _get(inp.get("main"), "explore_class_mix", branch, "classes")
-        labels = []
-        for cls, name in classes:
-            s = _get(share, cls, "share")
-            labels.append(name + ("" if s is None else "\n" + rf"({100 * s:.0f}\%)"))
-        ax.set_xticks([c * CLASSSPLIT_PITCH for c in range(len(classes))], labels)
-        ax.set_xlim(-0.6, CLASSSPLIT_PITCH + 0.6)
-        ax.tick_params(axis="x", length=0)
-        ax.spines["bottom"].set_visible(False)
-        ax.set_title(title, pad=3)
-    axes[0].set_ylim(min(ends) - 2, max(ends) + 2)
-    axes[0].yaxis.set_major_locator(plt.MultipleLocator(20))
-    axes[0].set_ylabel("effect on Update (pp)")
-    handles = [Patch(facecolor=colour, edgecolor="none", label=label)
-               for _, label, colour in contrasts]  # fmt: skip
-    handles += [
-        Patch(facecolor=fs.GREY, edgecolor="none", label="main study"),
-        Patch(facecolor="white", edgecolor=fs.GREY, lw=fs.EDGE_PT, label="replication"),
-    ]
-    fig.legend(handles=handles, loc="outside upper center", ncol=len(handles),
-               handlelength=1.2, columnspacing=1.6, fontsize=8)  # fmt: skip
-    path = out / "fig_classsplit.pdf"
-    fig.savefig(path)
-    plt.close(fig)
-    return path
+    w_mm, h_mm = CLASSSPLIT_PT[0] * fs.PT, CLASSSPLIT_PT[1] * fs.PT
+    left, right, gutter, bottom, top = 11.4, 0.6, 3.6, 8.6, 10.4
+    pw = (w_mm - left - right - 2 * gutter) / 3
+    ph = h_mm - bottom - top
+    nodes = {(stage, b, cls, key): _classsplit_node(inp, stage, b, cls, key)
+             for stage in ("main", "rep") for b, _ in CLASSSPLIT_PANELS
+             for cls, _ in CLASSSPLIT_CLASSES for key, *_ in CLASSSPLIT_STYLES}  # fmt: skip
+    ends = [100 * e[k] for e in nodes.values() if e for k in ("lo", "hi")]
+    lo = min([CLASSSPLIT_Y[0], *(v - 1.5 for v in ends)])
+    hi = max([CLASSSPLIT_Y[1], *(v + 1.5 for v in ends)])
+    with fs.printed(fs.BAR_RC) as plt:
+        fig = plt.figure(figsize=(w_mm * fs.MM, h_mm * fs.MM))
+        axes = []
+        for i, (branch, title) in enumerate(CLASSSPLIT_PANELS):
+            x0 = left + i * (pw + gutter)
+            ax = fig.add_axes((x0 / w_mm, bottom / h_mm, pw / w_mm, ph / h_mm))
+            fs.bar_axes(ax)
+            ax.set_ylim(lo, hi)
+            ax.set_yticks([0, 20, 40, 60])
+            ax.set_xlim(-0.56, 1.56)
+            ax.set_title(title, fontsize=fs.T_TITLE, pad=3.2)
+            if i:
+                ax.tick_params(axis="y", labelleft=False)
+            axes.append(ax)
+            cap = fs.CAP_MM * fs.x_per_mm(ax, pw)
+            for c, (cls, _) in enumerate(CLASSSPLIT_CLASSES):
+                for k, (key, _, fill, ink) in enumerate(CLASSSPLIT_STYLES):
+                    xb = c + (k - 1) * CLASSSPLIT_SLOT - 0.03
+                    main, rep = nodes["main", branch, cls, key], nodes["rep", branch, cls, key]
+                    if main:
+                        fs.bar_from_zero(ax, xb, CLASSSPLIT_BAR_W, 100 * main["est"], fill)
+                        fs.interval_line(ax, xb, 100 * main["lo"], 100 * main["hi"], ink, cap)
+                    xr = xb + CLASSSPLIT_REP_DX
+                    if rep:
+                        fs.interval_line(ax, xr, 100 * rep["lo"], 100 * rep["hi"], ink, 0.7 * cap,
+                                         lw=CLASSSPLIT_REP_LW, z=4.2)  # fmt: skip
+                        ax.plot([xr], [100 * rep["est"]], marker="D", ms=CLASSSPLIT_REP_MS,
+                                mfc=fill, mec="white", mew=0.6, ls="none", zorder=5)  # fmt: skip
+                    if main and cls == "definition" and key == "BxD_interaction_update":
+                        # the result: B x D of the main study, over its bar and diamond
+                        y = 100 * max(main["hi"], rep["hi"] if rep else main["hi"]) + 1.4
+                        ax.text(xb + CLASSSPLIT_REP_DX / 2, y,
+                                f"{100 * main['est']:+.1f}".replace("-", "−"), ha="center",
+                                va="bottom", fontsize=fs.T_NOTE, color=ink)  # fmt: skip
+            share = _get(inp.get("main"), "explore_class_mix", branch, "classes")
+            ax.set_xticks([0, 1], [name for _, name in CLASSSPLIT_CLASSES])
+            for c, (cls, _) in enumerate(CLASSSPLIT_CLASSES):  # the class's share of the changes
+                if (s := _get(share, cls, "share")) is not None:
+                    ax.annotate(f"({100 * s:.0f}%)", (c, 0), xycoords=("data", "axes fraction"),
+                                xytext=(0, -12.0), textcoords="offset points", ha="center",
+                                va="top", fontsize=fs.T_NOTE, color=fs.QUIET)  # fmt: skip
+        axes[0].set_ylabel("effect on Update (pp)", fontsize=fs.T_LABEL, labelpad=2.0)
+        fig.canvas.draw()
+
+        def rep_glyph(ov: Any, x: float, y: float) -> None:
+            """The replication: a neutral diamond on its interval line."""
+            ov.plot([x + 1.5] * 2, [y - 1.35, y + 1.35], color=CLASSSPLIT_REP_INK,
+                    lw=CLASSSPLIT_REP_LW, solid_capstyle="butt")  # fmt: skip
+            ov.plot([x + 1.5], [y], marker="D", ms=CLASSSPLIT_REP_MS, mfc=CLASSSPLIT_REP_FILL,
+                    mec="white", mew=0.6, ls="none")  # fmt: skip
+
+        entries: list[tuple[fs.Glyph | None, str]] = [
+            (fs.key_swatch(fill), label) for _, label, fill, _ in CLASSSPLIT_STYLES
+        ]
+        entries += [(None, "bars: main study"), (rep_glyph, "replication")]
+        fs.key_row(fig, entries, h_mm - 2.9, w_mm, h_mm, breaks=(3,))
+        return fs.save_pdf(fig, out / "fig_classsplit.pdf")

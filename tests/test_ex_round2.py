@@ -13,7 +13,7 @@ from memshift.analysis import ex_round2 as r2
 from memshift.analysis import paper_numbers as pn
 from memshift.analysis.ex_e1_paper import UNDEFINED
 from memshift.analysis.paper_data import MISSING
-from tests.test_paper_stage4 import check_tex
+from tests.memtab_check import MEMTAB_PREAMBLE, check_memtab
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -139,8 +139,11 @@ def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
         assert set(r2.tables(inp)) == set(LABELS)
         for name, tex in r2.tables(inp).items():
-            check_tex(tex)
+            check_memtab(tex)
             assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
+            # the paper's table style: its type and rules, intervals as muted secondary text
+            assert "\\centering\\mtsetup" in tex and "\\begin{mttabular}" in tex, name
+            assert "\\scriptsize" not in tex and "\\mtnotes{" in tex, name
     for name, tex in r2.tables(EMPTY).items():
         assert MISSING in tex, name
 
@@ -171,10 +174,12 @@ def test_dm_table_holds_the_c3_values():
     tex = r2.tab_classsplit_dm(INP)
     for name in ("SynthCThreeSrc", "SynthCThreeDef", "SynthExCThreeOrphan"):
         est = committed(name + "Est").replace("\\,pp", "")
-        assert f"{est} & {{\\scriptsize [" in tex, name
+        assert f"{est} & \\mtint{{[" in tex, name
     # the authored derivation only on all items: its definition and other items are in the class
-    # split of the main study (one grey row per shift)
-    assert tex.count("\\color{gray}\\quad exact") == 3 and "\\cref{tab:classsplit}" in tex
+    # split of the main study (one grey row per shift, its estimates in the muted grey)
+    assert tex.count("\\mtin\\mtmuted{exact}") == 3 and "\\cref{tab:classsplit}" in tex
+    exact = [line for line in tex.splitlines() if "\\mtmuted{exact}" in line]
+    assert all(line.count("\\mtmuted{") == 5 for line in exact)  # the label and four estimates
     assert "share" not in tex.split("\\label", 1)[1]  # the shares are in the class split too
 
 
@@ -186,9 +191,10 @@ def test_perdef_table_matches_the_per_definition_macros():
             est = committed(f"ExPerDefMain{b}{d}BxDEst").replace("\\,pp", "")
             assert f"{est} & " in tex, (d, b)  # its interval in the next cell, if it has width
     assert "$+$16.5 to $+$33.8" in tex
-    assert "0.0 & {\\scriptsize [0.0,\\,0.0]}" not in tex  # every world the same: no interval
+    assert "0.0 & \\mtint{[0.0,\\,0.0]}" not in tex  # every world the same: no interval
 
 
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile_at_the_paper_width(tmp_path):
     names = []
@@ -203,6 +209,7 @@ def test_tables_compile_at_the_paper_width(tmp_path):
                 r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
                 r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
+                MEMTAB_PREAMBLE,
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\cref}[1]{Table~1}",
                 r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",

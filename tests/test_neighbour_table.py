@@ -53,9 +53,10 @@ def test_sixteen_rows_and_the_memshift_row_last() -> None:
 
 def test_every_row_has_one_cell_per_column() -> None:
     tex = nt.tab_neighbours_full(nt.load(PROPS))
-    spec = re.search(r"\\begin\{tabular\}\{@\{\}l ([c ]+)@\{\}\}", tex)
+    spec = re.search(r"\\begin\{mttabular\}\{@\{\}l ([cr ]+)@\{\}\}", tex)
     assert spec is not None
-    n_columns = spec.group(1).count("c")
+    n_columns = len(spec.group(1).replace(" ", ""))
+    assert spec.group(1).endswith(" rrr")  # the counts of the scale group right-aligned
     for ln in _data_rows(tex):
         assert ln.count(" & ") == n_columns  # name + n_columns cells
         assert ln.endswith(r" \\")
@@ -265,21 +266,26 @@ def test_latex_special_characters_are_escaped() -> None:
     assert not nt._author_named("Ground Truth First")
 
 
-def test_the_caption_keys_every_mark_and_code() -> None:
+def test_the_notes_key_every_mark_and_code() -> None:
     rows = nt.load(PROPS)
     full = nt.tab_neighbours_full(rows)
-    caption = full.split(r"\label{tab:neighbours-full}")[0]
+    caption, rest = full.split(r"\label{tab:neighbours-full}")
+    assert caption.endswith(r"\caption{" + nt.CAPTION + "}\n")  # one sentence; the key below
+    notes = rest.split(r"\end{mttabular}")[1]
+    assert notes.startswith("\n" + r"\mtnotes{")
     assert r"\cref{" not in full  # no table or section to refer to
     for mark in (r"\checkmark{}~yes", r"$\sim$~partial", r"$\times$~no such element",
                  "n/s~not stated", r"$^\ddagger$~inferred by the audit"):  # fmt: skip
-        assert mark in caption, mark
+        assert mark in notes, mark
     codes = {str(v) for r in rows for v in nt._text_values(r)}
     for code in codes - {"n/s"}:
-        assert f"{code}~{nt.TEXT_CODES[code]}" in caption, code
+        assert f"{code}~{nt.TEXT_CODES[code]}" in notes, code
     # a short key: the column definitions are in the text of the appendix
-    assert "Derived items:" not in caption and "Consent revoked:" not in caption
-    header = next(ln for ln in full.splitlines() if ln.startswith("benchmark &"))
-    assert r"\rotatebox{90}{deletion}" in header and "retraction" not in full
+    assert "Derived items:" not in notes and "Consent revoked:" not in notes
+    header = next(ln for ln in full.splitlines() if ln.startswith("Benchmark &"))
+    assert r"\rotatebox{90}{Deletion}" in header and "retraction" not in full
+    # the counts' headers centred over their right-aligned columns
+    assert header.endswith(r"\multicolumn{1}{c@{}}{\rotatebox{90}{Questions}} \\")
 
 
 @pytest.mark.paper
@@ -300,7 +306,7 @@ def test_the_appendix_text_defines_the_columns_the_key_leaves_out() -> None:
 def test_neighbour_rows_have_a_small_gap_every_five_rows() -> None:
     full = nt.tab_neighbours_full(nt.load(PROPS))
     body = full.split(r"\midrule", 1)[1].split(r"\textbf{\memshift{}}")[0].splitlines()
-    gaps = [i for i, ln in enumerate(body) if ln == r"\addlinespace[3pt]"]
+    gaps = [i for i, ln in enumerate(body) if ln == r"\mtgap"]
     rows = [ln for ln in body if r"\cite" in ln]
     assert len(gaps) == (len(rows) - 1) // nt.GAP_EVERY
     for g in gaps:  # each gap follows a full group of rows

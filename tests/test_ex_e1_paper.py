@@ -41,6 +41,20 @@ def _same(a: float, b: float) -> bool:
     return a == b or (math.isnan(a) and math.isnan(b))
 
 
+def check_mt_tex(tex: str) -> None:
+    """`check_tex` for a table in the shared table style (paper/memtab-style.tex): an mttabular
+    is a tabular and an N{template} column one column."""
+    plain = re.sub(r"\\(begin|end)\{mttabular(\*?)\}", r"\\\1{tabular\2}", tex)
+    check_tex(re.sub(r"N\{[^{}]*\}", "c", plain))
+
+
+def memtab_preamble(tmp_path: Path) -> str:
+    """Preamble lines that load the shared table style, copied next to the test document, after
+    the packages and the colour it builds on."""
+    shutil.copy(ROOT / "paper/memtab-style.tex", tmp_path)
+    return r"\usepackage{array}\definecolor{cgrey}{HTML}{6E6E6E}\input{memtab-style}"
+
+
 # ---------------------------------------------------------------- the committed stage analyses
 @pytest.mark.parametrize("key", ["main", "rep", "gem", "llama", "gpt", "dev"])
 def test_class_all_reproduces_the_main_contrasts_to_the_last_digit(key):
@@ -217,7 +231,7 @@ def test_formatters():
 def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
         for name, tex in xp.tables(inp).items():
-            check_tex(tex)
+            check_mt_tex(tex)
             assert tex.startswith("\\begin{table}") and f"\\label{{tab:{name[4:-4]}}}" in tex
     assert set(xp.tables(INP)) == {"tab_classsplit.tex"}
     assert MISSING in xp.tab_classsplit(EMPTY) and MISSING not in xp.tab_classsplit(INP)
@@ -225,29 +239,57 @@ def test_tables_are_wellformed_with_data_and_without():
 
 def test_class_table_shows_both_studies_for_every_shift_and_class():
     tex = xp.tab_classsplit(INP)
-    for label in ("$B$ effect", "$D$ effect", "$B{\\times}D$", "share (\\%)"):
+    for label in ("$B$ effect", "$D$ effect", "$B{\\times}D$", "{Share}", "(\\%)"):
         assert label in tex
-    assert tex.count("& \\color{gray}repl. &") == 6  # one replication row per shift and class
+    # one replication row per shift and class, muted throughout (its intervals by \mtint)
+    assert tex.count("& \\color{mtmuted}repl. &") == 6
+    assert tex.count("& \\color{mtmuted}") == 6 * (1 + 5)  # the label and the five estimates
     assert tex.count(" \\\\\n") == 2 + 12  # two header rows, then shift x class x study
-    # estimate and interval as two aligned cells: signed, scriptsize, a thin space after the comma
-    assert "$-$0.6 & {\\scriptsize [$-$3.8,\\,$+$2.5]}" in tex and "\\tiny" not in tex
+    # estimate and interval as two aligned cells: signed, the interval small and muted, a thin
+    # space after the comma
+    assert "$-$0.6 & \\mtint{[$-$3.8,\\,$+$2.5]}" in tex and "\\scriptsize" not in tex
     assert tex.count("r@{\\,}l") == 5  # one column pair per contrast
     assert "\\%" not in tex.split("\\midrule", 1)[1]  # units in the header only
 
 
-def test_class_table_caption_names_both_studies_and_the_share():
-    caption = xp.tab_classsplit(INP).split("\\label{tab:classsplit}")[0]
-    for term in (
-        "in the main study and in the replication on",
-        "fresh worlds (grey)",
-        "Share: the class's share of the changed item-times in the main study",
-    ):
+def test_class_table_caption_names_both_studies_and_the_notes_the_share():
+    tex = xp.tab_classsplit(INP)
+    caption = tex.split("\\label{tab:classsplit}")[0]
+    for term in ("in the main study and in the replication on", "fresh worlds (grey)"):
         assert term in caption, term
-    assert "regist" not in caption and "exploratory" not in caption
+    notes = tex.split("\\mtnotes{", 1)[1]
+    assert "Share: the class's share of the changed item-times in the main study" in notes
+    assert "regist" not in tex and "exploratory" not in tex
     # the contrasts are defined once, in the opening of the appendix of results
-    assert "minus" not in caption and "95\\%" not in caption
+    assert "minus" not in caption + notes and "95\\%" not in caption + notes
 
 
+def test_cells_of_the_shared_table_style():
+    e = {"est": -0.214, "lo": -0.54, "hi": 0.3}
+    assert xp.mt_ci_cells(e, f=rp.snum) == r"$-$0.21 & \mtint{[$-$0.54,\,0.30]}"
+    assert xp.mt_ci_cells({"est": 0.0, "lo": 0.0, "hi": 0.0}) == "0.0 &"  # every world the same
+    assert xp.mt_ci_pair_cells({"est": 0.0, "lo": 0.0, "hi": 0.0}) == "0.0 & "
+    assert xp.mt_ci_cells(None, span="c@{}") == rf"\multicolumn{{2}}{{c@{{}}}}{{{MISSING}}}"
+    assert xp.mt_ci_cells({"est": float("nan")}).endswith(f"{{{xp.UNDEFINED}}}")
+    assert xp.mt_ci_cells(e, sign=True, style=xp.MUTED).startswith(r"\color{mtmuted}$-$21.4 &")
+    assert xp.mt_pair(e, f=rp.snum) == r"\mtpair{$-$0.21}{[$-$0.54,\,0.30]}"
+    assert xp.mt_pair(None) == MISSING and xp.mt_pair({"est": float("nan")}) == xp.UNDEFINED
+    # an N column is as wide as its widest value; a printed 100 stays, blanks and dashes don't count
+    assert xp.n_template(["333", "1,459", "", MISSING]) == "0,000"
+    assert xp.n_template(["99.7", "100.0", xp.UNDEFINED]) == "100.0"
+    assert xp.n_template(["15.0", "0.4"]) == "00.0" and xp.n_template([]) == "0"
+    # the boxes of a column of pairs: its widest estimate and interval, as printed or as zeros
+    pairs = [("0.75", "[0.68,\\,0.84]"), ("$-$0.21", "[$-$0.53,\\,0.31]"), None]
+    pairs.append(("$+$3.2", "[$+$0.6,\\,$+$5.0]"))  # longer to type, narrower in print
+    assert xp.pair_widths(pairs) == r"\mtpairwidths{$-$0.21}{[$-$0.53,\,0.31]}"
+    signed = [("$-$22.2", "[$+$28.3,\\,$+$16.0]"), ("$+$60.0", "[0.0,\\,$+$100.0]")]
+    assert xp.pair_widths(signed, template=True) == r"\mtpairwidths{$+$00.0}{[$-$00.0,\,$-$00.0]}"
+    full = [("$-$20.0", "[$-$100.0,\\,$+$100.0]")]
+    assert xp.pair_widths(full, template=True) == r"\mtpairwidths{$+$00.0}{[$-$100.0,\,$+$100.0]}"
+    assert xp.pair_widths([None]) == r"\mtpairwidths{}{}"
+
+
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile(tmp_path):
     for name, tex in xp.tables(INP).items():
@@ -260,6 +302,7 @@ def test_tables_compile(tmp_path):
                 r"\makeatletter\renewcommand{\footnotesize}"  # 9 pt, as preprint.sty
                 r"{\@setfontsize\footnotesize\@ixpt\@xpt}\makeatother",
                 r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs}",
+                memtab_preamble(tmp_path),
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
                 r"\begin{document}\input{tab_classsplit.tex}\end{document}",
@@ -276,7 +319,6 @@ def test_tables_compile(tmp_path):
     assert not re.search(r"Overfull \\hbox \(([5-9]|\d{2,})\.", done.stdout)  # nothing sticks out
 
 
-@pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_figure_draws_with_and_without_data(tmp_path):
     full = xp.fig_classsplit(INP, tmp_path)
     assert full.read_bytes().startswith(b"%PDF")

@@ -40,7 +40,7 @@ from typing import Any
 
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, stage_json
 from memshift.analysis.paper_numbers import _macro
-from memshift.analysis.paper_tables import _row
+from memshift.analysis.paper_tables import _row, notes
 
 KEYS = (("source", "Source"), ("gold", "Oracle"), ("scope", "Scope"))
 CLASS_TAGS = (
@@ -160,17 +160,33 @@ def numbers(view: Mapping[str, Any] | None) -> dict[str, str]:
 # ------------------------------------------------------------------------------------- table
 CAPTION = (
     r"What each key invalidates on the test worlds, audited without a model. Counted since the "
-    r"fork, no key missed a changed item-time (the largest share not invalidated is {missed}). "
+    r"fork, no key missed a changed item-time (the largest share not invalidated is {missed})."
+)
+NOTES = (
     r"Re-derivations: invalidations over the four checkpoints, one writer request each. Def.\ "
-    r"share: share of the {cp} definition item-times of a shift that were re-derived."
+    r"share: share of the {cp} definition item-times of a shift that were re-derived. ---: the "
+    r"scope key is built for definition items only."
 )
 KEY_LABELS = {"source": "source key", "gold": "oracle", "scope": "scope"}
 BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
-DASH = "---"
+DASH = r"\mtna"  # a class the scope key does not audit
+# the value columns, each centred in a box as wide as its widest value: the item-times; false
+# invalidation by class; re-derivations per world (all, definition items) and summed over the
+# worlds (single-field items); the definition-item share
+COLUMNS = (
+    r"@{}l N{0,000}N{0,000} l N{100.0}@{\hspace{11pt}}N{100.0}@{\hspace{11pt}}N{100.0}"
+    r"@{\hspace{11pt}}N{100.0} @{\hspace{14pt}} N{000.0}N{00.0}N{0,000} @{\hspace{14pt}} "
+    r"N{00.0}@{}"
+)
 
 
 def _bare(value: str) -> str:
     return value.replace("\\%", "")
+
+
+def _head(name: str, second: str, last: bool = False) -> str:
+    """A two-line leaf header over a value column (the second line muted)."""
+    return rf"\multicolumn{{1}}{{c{'@{}' if last else ''}}}{{\mthead{{{name}}}{{{second}}}}}"
 
 
 def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
@@ -178,34 +194,32 @@ def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
     every key), false invalidation by class, re-derivations per world and, for single-field
     items, summed over the worlds, and the share of definition item-times re-derived."""
     m = numbers(view)
-    caption = CAPTION.format(cp=m["KeyAuditDefCheckpointsSrc"], missed=m["KeyAuditMissedMax"])
+    caption = CAPTION.format(missed=m["KeyAuditMissedMax"])
+    pct = r"(\%)"
     lines = [
         r"\begin{table}[t]",
         rf"\caption{{{caption}}}",
         r"\label{tab:keyaudit}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}l rr l rrrr rr r r@{}}",
+        rf"\begin{{mttabular}}{{{COLUMNS}}}",
         r"\toprule",
-        r"& \multicolumn{2}{c}{item-times} & & \multicolumn{4}{c}{unchanged item-times} & "
-        r"\multicolumn{3}{c}{re-derivations} & def. \\",
-        r"\cmidrule(lr){2-3}\cmidrule(lr){9-11}",
-        r"& & & & \multicolumn{4}{c}{invalidated (\%)} "
-        rf"& \multicolumn{{2}}{{c}}{{per world}} & {m['KeyAuditWorlds']} worlds & share \\",
-        r"\cmidrule(lr){5-8}\cmidrule(lr){9-10}\cmidrule(lr){11-11}",
+        r"& \multicolumn{2}{c}{Item-times} & & \multicolumn{4}{c}{Unchanged item-times "
+        r"invalidated} & \multicolumn{3}{c}{Re-derivations} & \\",
+        r"\cmidrule(lr){2-3}\cmidrule(lr){5-8}\cmidrule(lr){9-11}",
         _row(
-            "shift",
-            "changed",
-            "unchanged",
-            "key",
-            "all",
-            "def.",
-            "field",
-            "free",
-            "all",
-            "def.",
-            "field",
-            r"(\%)",
+            "Shift",
+            r"\multicolumn{1}{c}{Changed}",
+            r"\multicolumn{1}{c}{Unchanged}",
+            "Key",
+            _head("All", pct),
+            _head("Def.", pct),
+            _head("Field", pct),
+            _head("Free", pct),
+            _head("All", "per world"),
+            _head("Def.", "per world"),
+            _head("Field", f"{m['KeyAuditWorlds']} worlds"),
+            _head(r"Def.\ share", pct, last=True),
         ),
         r"\midrule",
     ]
@@ -223,9 +237,13 @@ def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
             first = [BRANCH_LABELS[b], m[f"KeyAuditChanged{bt}"], m[f"KeyAuditUnchanged{bt}"]]
             lead = first if j == 0 else ["", "", ""]
             lines.append(_row(*lead, KEY_LABELS[k], *map(_bare, fi), *rd, _bare(share)))
-        lines.append(r"\addlinespace[2pt]")
+        lines.append(r"\mtgap")
     lines[-1] = r"\bottomrule"
-    lines += [r"\end{tabular}", r"\end{table}"]
+    lines += [
+        r"\end{mttabular}",
+        notes(NOTES.format(cp=m["KeyAuditDefCheckpointsSrc"])),
+        r"\end{table}",
+    ]
     return "\n".join(lines)
 
 

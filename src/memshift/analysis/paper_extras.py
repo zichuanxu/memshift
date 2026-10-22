@@ -44,7 +44,7 @@ from typing import Any
 from memshift.analysis.paper_data import DIGIT_WORDS, FAMILIES, MISSING, read_json, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro
-from memshift.analysis.paper_tables import _row, est_ci_cells
+from memshift.analysis.paper_tables import PAIR_WIDTHS, _row, mt_pair, notes
 from memshift.claude_batch import BATCH_PRICE
 from memshift.experiments.e1 import CLAUDE_PROGRAM_BODY, DEFWRITER_BODY
 from memshift.llm import default_extra_body
@@ -190,8 +190,8 @@ def _native_refs(n: Mapping[str, Any] | None) -> dict[str, Any]:
 
 def overview_values(inp: Mapping[str, Any]) -> dict[tuple[str, str, str, str], str]:
     """Every cell of the overview table: (block, system, branch, metric) -> printed value. Blocks:
-    "main" and "native" (Update, Stability in percent), "families" (B x D in pp and its interval,
-    the two cells of `est_ci_cells`)."""
+    "main" and "native" (Update, Stability in percent), "families" (B x D in pp and its interval
+    in one cell, `mt_pair`)."""
     out: dict[tuple[str, str, str, str], str] = {}
     for stage, system, _ in MAIN_ROWS:
         for b, _ in BRANCHES:
@@ -212,7 +212,7 @@ def overview_values(inp: Mapping[str, Any]) -> dict[tuple[str, str, str, str], s
     stages = {"main": inp.get("e1"), **{f.key: (inp.get("m2") or {}).get(f.key) for f in FAMILIES}}
     for key, d in stages.items():
         for b, _ in BRANCHES:
-            out["families", key, b, "BxD"] = est_ci_cells(_get(d, "contrasts", b, BXD), sign=True)
+            out["families", key, b, "BxD"] = mt_pair(_get(d, "contrasts", b, BXD), sign=True)
     return out
 
 
@@ -221,66 +221,91 @@ def _worlds(d: Mapping[str, Any] | None) -> str:
     return MISSING if n is None else str(n)
 
 
-def _beside(cells: str, last: bool) -> str:
-    """The two cells of `est_ci_cells` in a pair of right-aligned level columns: the estimate in the
-    first, the interval set left in the second (a missing value spans both)."""
-    est, sep, ci = cells.partition(" & ")
-    end = "@{}" if last else ""
-    return rf"{est} & \multicolumn{{1}}{{@{{}}l{end}}}{{{ci}}}" if sep else cells
+def _sentence(s: str) -> str:
+    """`s` with its first letter in upper case (a header in sentence case)."""
+    return s[:1].upper() + s[1:]
+
+
+def _indent(label: str) -> str:
+    """A row label indented under its group banner."""
+    return r"\mtin" + ("" if label.startswith("\\") else " ") + label
 
 
 def tab_overview(inp: Mapping[str, Any]) -> str:
+    """The overview in three row groups under one header: the main study's cells and baselines,
+    the native systems with the cells and baselines they are compared with, and B x D for each
+    model as writer and reader, each estimate centred with its interval under its shift."""
     v = overview_values(inp)
     n_native = _get(inp.get("n"), "membership", "worlds")
     native_worlds = MISSING if not n_native else str(len(n_native))
+    last = len(BRANCHES) - 1
 
     def level_row(block: str, system: str, label: str) -> str:
-        return _row(label, *(v[block, system, b, m] for b, _ in BRANCHES for m in METRICS))
+        values = (v[block, system, b, m] for b, _ in BRANCHES for m in METRICS)
+        return _row(_indent(label), *values)
 
-    def block(title: str) -> str:
-        return rf"\multicolumn{{7}}{{@{{}}l}}{{\emph{{{title}}}}} \\"
+    def end(i: int, spec: str) -> str:
+        return spec + "@{}" if i == last else spec
 
-    rules = r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}"
+    gap = r" @{\hspace{24pt}} "  # between the shifts' Update-Stability pairs
     lines = [
         r"\begin{table*}[t]",
         r"\caption{Update and Stability (\%) after a source revision, a redefinition and a "
-        r"deletion, and $B{\times}D$ on Update for other model families. The key is the source "
-        rf"key unless the citation key is named. {DM}: the writer's programs. $n$ per main-study "
-        r"\holdmem{} cell: \ExDetMainSrcUpdateItems{}, \ExDetMainDefUpdateItems{} and "
-        r"\ExDetMainOrphanUpdateItems{} changed and \ExDetMainSrcStabilityItems{}, "
-        r"\ExDetMainDefStabilityItems{} and \ExDetMainOrphanStabilityItems{} unchanged items. "
-        r"Bottom: each model as writer and reader. Brackets: 95\% interval.}",
+        r"deletion, and $B{\times}D$ on Update for other model families.}",
         r"\label{tab:overview}",
-        r"\centering\footnotesize",
-        r"\setlength{\tabcolsep}{5pt}",
-        r"\begin{tabular}{@{}l rr rr rr@{}}",
+        r"\centering\mtsetup",
+        r"\setlength{\tabcolsep}{6pt}",
+        PAIR_WIDTHS,
+        r"\begin{mttabular}{@{}l " + gap.join(["N{00.0}N{00.0}"] * len(BRANCHES)) + "@{}}",
         r"\toprule",
-        "& " + " & ".join(rf"\multicolumn{{2}}{{c}}{{{name}}}" for _, name in BRANCHES) + r" \\",
-        rules,
-        _row("memory", *(["Update", "Stability"] * len(BRANCHES))),
-        r"\midrule",
-        block(
-            f"main study: {_worlds(inp.get('e1'))} twelve-month test worlds, "
-            "Qwen3.5-9B as writer and reader"
+        "& "
+        + " & ".join(
+            rf"\multicolumn{{2}}{{{end(i, 'c')}}}{{{_sentence(name)}}}"
+            for i, (_, name) in enumerate(BRANCHES)
+        )
+        + r" \\",
+        r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}",
+        _row(
+            "Memory",
+            *(
+                rf"\multicolumn{{1}}{{{end(i, 'c') if m == METRICS[-1] else 'c'}}}{{{m}}}"
+                for i in range(len(BRANCHES))
+                for m in METRICS
+            ),
         ),
+        r"\midrule",
+        rf"\mtgroup{{7}}{{Main study: {_worlds(inp.get('e1'))} twelve-month test worlds, "
+        "Qwen3.5-9B as writer and reader}",
     ]
     lines += [level_row("main", system, label) for _, system, label in MAIN_ROWS]
-    lines += [r"\midrule", block(f"native systems: {native_worlds} three-month worlds")]
+    lines += [r"\midrule", rf"\mtgroup{{7}}{{Native systems: {native_worlds} three-month worlds}}"]
     lines += [level_row("native", system, label) for system, label in NATIVE_REFS]
     lines.append(r"\addlinespace[2pt]")
     lines += [level_row("native", system, label) for system, label in NATIVE_SYSTEMS]
-    # the families' block has its own header line: B x D in pp, its interval beside it
-    bxd = r"\multicolumn{2}{c}{$B{\times}D$ (pp)}"
-    lines += [r"\midrule", _row("writer and reader", *[bxd] * len(BRANCHES)), rules]
+    lines += [
+        r"\midrule",
+        r"\mtgroup{7}{$B{\times}D$ on Update (pp), each model as writer and reader}",
+    ]
     fams = [("main", "Qwen3.5-9B", inp.get("e1"))]
     fams += [(f.key, f.label, (inp.get("m2") or {}).get(f.key)) for f in FAMILIES]
     for key, label, d in fams:
         cells = [
-            _beside(v["families", key, b, "BxD"], last=i == len(BRANCHES) - 1)
+            rf"\multicolumn{{2}}{{{end(i, 'c')}}}{{{v['families', key, b, 'BxD']}}}"
             for i, (b, _) in enumerate(BRANCHES)
         ]
-        lines.append(_row(f"{label} ({_worlds(d)} worlds)", *cells))
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table*}"]
+        lines.append(_row(_indent(rf"{label} \mtmuted{{({_worlds(d)} worlds)}}"), *cells))
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        notes(
+            rf"The key is the source key unless the citation key is named. {DM}: the writer's "
+            r"programs. $n$ per main-study \holdmem{} cell: \ExDetMainSrcUpdateItems{}, "
+            r"\ExDetMainDefUpdateItems{} and \ExDetMainOrphanUpdateItems{} changed and "
+            r"\ExDetMainSrcStabilityItems{}, \ExDetMainDefStabilityItems{} and "
+            r"\ExDetMainOrphanStabilityItems{} unchanged items. Brackets: 95\% interval."
+        ),
+        r"\end{table*}",
+    ]
     return "\n".join(lines) + "\n"
 
 
@@ -475,28 +500,45 @@ def _day(ts: str, year: bool = False) -> str:
 def example_world(
     gen: Mapping[str, Any], raw: Mapping[str, Any] | None, ex: Example = EXAMPLE
 ) -> str:
-    """The worked example in three blocks of one full-width table: the probe and the definition
-    in effect before and after the shift; the records by the fields that decide the gold value
-    (no record ids) and whether each is in the gold value's dependency set under each version; the
-    gold value, the stored item (written before the fork, so in that column) and each cell's
-    answers with what the cell did at the checkpoint."""
+    """The worked example in three blocks of one full-width table on one column grid: the probe
+    and the definition in effect before and after the shift; the records by the fields that decide
+    the gold value (no record ids) and whether each is in the gold value's dependency set under
+    each version; the gold value, the stored item (written before the fork, so in that column) and
+    each cell's answers with what the cell did at the checkpoint. The records block splits each
+    of the other blocks' three columns into two, so its columns start where theirs do."""
     pre, post = gen["probes"]
     defs = gen["definitions"]
-    label, before, after = "2.0cm", "5.9cm", "5.0cm"
-    did = rf"\dimexpr\linewidth-{label}-{before}-{after}-6\tabcolsep\relax"
-    wide = rf"\dimexpr\linewidth-{label}-{before}-4\tabcolsep\relax"  # after + did
-    full = rf"\dimexpr\linewidth-{label}-2\tabcolsep\relax"  # before + after + did
-    grid = (
-        rf"@{{}}>{{\raggedright\arraybackslash}}p{{{label}}}"
-        rf">{{\raggedright\arraybackslash}}p{{{before}}}"
-        rf">{{\raggedright\arraybackslash}}p{{{after}}}"
-        rf">{{\raggedright\arraybackslash}}p{{{did}}}@{{}}"
-    )
+    # widths (cm): the stub; the two record columns under "before the fork" and the two under
+    # "after"; the two Gold columns share what is left of the line (`\exG` each)
+    stub, before, after = 2.0, (2.3, 3.6), (1.6, 3.4)
+    cm = "{:.1f}cm".format
+    b_w, a_w = cm(sum(before)), cm(sum(after))
 
-    def span(text: str, width: str = wide, cols: int = 2) -> str:
-        """`text` across the last `cols` columns (to the right edge)."""
-        spec = rf">{{\raggedright\arraybackslash}}p{{{width}}}@{{}}"
-        return rf"\multicolumn{{{cols}}}{{{spec}}}{{{text}}}"
+    def split(widths: tuple[float, float]) -> str:
+        """Two record columns that, with the space between them, are as wide as one block."""
+        return rf"P{{{cm(widths[0])}}}P{{\dimexpr{cm(widths[1])}-2\tabcolsep\relax}}"
+
+    grid = rf"@{{}}P{{{cm(stub)}}} {split(before)} {split(after)} C{{\exG}}C{{\exG}}@{{}}"
+
+    def block(text: str, width: str, cols: int = 2, last: bool = False) -> str:
+        """`text` across `cols` grid columns, a paragraph `width` wide."""
+        return rf"\multicolumn{{{cols}}}{{P{{{width}}}{'@{}' if last else ''}}}{{{text}}}"
+
+    def first(text: str) -> str:  # before the fork
+        return block(text, b_w)
+
+    def second(text: str) -> str:  # after the shift
+        return block(text, a_w)
+
+    def did(text: str) -> str:  # what the memory did
+        return block(text, r"\dimexpr2\exG+2\tabcolsep\relax", last=True)
+
+    def rest(text: str) -> str:  # after the shift, to the right edge
+        width = rf"\dimexpr\linewidth-{cm(stub)}-{b_w}-4\tabcolsep\relax"
+        return block(text, width, 4, last=True)
+
+    def full(text: str) -> str:  # every column after the stub
+        return block(text, rf"\dimexpr\linewidth-{cm(stub)}-2\tabcolsep\relax", 6, last=True)
 
     def definition(p: Mapping[str, Any]) -> str:
         v = str(p["kappa_version"])
@@ -529,42 +571,62 @@ def example_world(
     for cell, name in ex.cells:
         a = answers.get(cell) or [None, None]
         done = _did(events.get(cell)) if raw else MISSING
-        cells.append(_row(name, _answer(a[0]), _answer(a[1], bold=True), done))
+        cells.append(_row(name, first(_answer(a[0])), second(_answer(a[1], bold=True)), did(done)))
     stored = rf"``{_statement(raw['stored'])}''" if raw else MISSING
+    after_shift = _sentence(f"{weeks} after the redefinition")
     lines = [
         r"\begin{table*}[t]",
         rf"\caption{{A worked example: the definition item of the user's "
         rf"{_tex(_slot_words(ex.slot))} in one released test world, before the fork and {weeks} "
-        r"after a redefinition, in the main experiment with Qwen3.5-9B as writer and reader. "
-        r"Gold v1, v2: \checkmark{} when the record is in the dependency set of the gold value "
-        r"under that version. \pass{}~or~\fail{}: status and value match gold or not. Bold: the "
-        r"changed gold value and the answer that matches it.}",
+        r"after a redefinition, in the main experiment with Qwen3.5-9B as writer and reader.}",
         r"\label{tab:example}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{tabular}}{{{grid}}}",
+        f"% one grid for the three blocks: stub {cm(stub)} | before the fork {b_w} | after {a_w} | "
+        "what the memory did;",
+        "% the records block splits each of the three into two columns, so its columns start "
+        "where the blocks' do",
+        r"\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}",
+        r"\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}",
+        rf"\def\exG{{\dimexpr(\linewidth-{cm(stub + sum(before) + sum(after))}-8\tabcolsep)/2"
+        r"\relax}",
+        rf"\begin{{mttabular}}{{{grid}}}",
         r"\toprule",
-        _row("", head(pre, "before the fork"), span(head(post, f"{weeks} after the redefinition"))),
+        _row("", first(head(pre, "Before the fork")), rest(head(post, after_shift))),
         r"\midrule",
-        _row("question", span(_tex(gen["question"]), full, 3)),
-        _row("definition", definition(pre), span(definition(post))),
-        r"\end{tabular}\par\nointerlineskip",
-        rf"\begin{{tabular*}}{{\linewidth}}{{@{{}}p{{{label}}}l@{{\extracolsep{{\fill}}}}llrcc@{{}}}}",
+        _row("question", full(_tex(gen["question"]))),
+        _row("definition", first(definition(pre)), rest(definition(post))),
         r"\midrule",
-        _row("", "project", "task", "status", "last updated", "gold v1", "gold v2"),
-        r"\cmidrule{1-7}",
+        _row(
+            "",
+            "Project",
+            "Task",
+            "Status",
+            "Last updated",
+            "Gold v1",
+            r"\multicolumn{1}{c@{}}{Gold v2}",
+        ),
+        r"\cmidrule(l){2-7}",
         *records,
-        r"\end{tabular*}\par\nointerlineskip",
-        rf"\begin{{tabular}}{{{grid}}}",
         r"\midrule",
-        _row("", "before the fork", "after the redefinition", "what the memory did"),
-        r"\cmidrule{1-4}",
-        _row("gold", _gold(pre), rf"\textbf{{{_gold(post)}}}", ""),
-        _row("stored item", stored, "", ""),  # written before the fork
+        _row(
+            "",
+            first("Before the fork"),
+            second("After the redefinition"),
+            did("What the memory did"),
+        ),
+        r"\cmidrule(l){2-7}",
+        _row("gold", first(_gold(pre)), second(rf"\textbf{{{_gold(post)}}}"), did("")),
+        _row("stored item", first(stored), second(""), did("")),  # written before the fork
         r"\addlinespace[2pt]",
         *cells,
         r"\bottomrule",
-        r"\end{tabular}",
+        r"\end{mttabular}",
+        notes(
+            r"Gold v1, v2: \checkmark{} when the record is in the dependency set of the gold "
+            r"value under that version. \pass{}~or~\fail{}: status and value match gold or not. "
+            r"Bold: the changed gold value and the answer that matches it."
+        ),
         r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
@@ -844,32 +906,36 @@ def tab_models(runs: list[Run]) -> str:
     def row(model: str) -> str:
         cites = MODEL_CITES.get(model)
         name = rf"\mbox{{{_tex(MODEL_NAMES.get(model, model))}}}"
+        size = model_size(model)
         return _row(
             name + (rf" \citep{{{','.join(cites)}}}" if cites else ""),
-            model_size(model),
+            r"\mtna" if size == "---" else size,  # a size no source states, centred
             _span(context[model]),
             reasoning(model, roles[model]),
             ", ".join(sorted(roles[model], key=_role_rank)),
         )
 
     weights = ", ".join(f"{_tex(m.split('/')[-1])} in {w}" for m, w in WEIGHTS.items())
-    hang = r">{\raggedright\arraybackslash\hangindent=1em}"
     lines = [
         r"\begin{table}[t]",
         r"\caption{Models, with the context each was served with (tokens) and its roles in the "
-        r"runs. Open-weight models run under vLLM \citep{kwon2023vllm} in bfloat16 "
-        rf"({weights}) at temperature~0 with JSON-schema decoding. Reasoning is off where no "
-        r"effort is given, and the Claude models think adaptively.}",
+        r"runs.}",
         r"\label{tab:models}\label{tab:family-models}\label{tab:model-revisions}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{tabular}}{{@{{}}{hang}p{{6.0cm}} l r {hang}p{{2.3cm}} {hang}p{{4.3cm}}@{{}}}}",
+        # names, efforts and roles with a hanging indent; size and context right-aligned
+        r"\begin{mttabular}{@{}H{6.0cm}{1em} r r H{3.25cm}{1em} H{4.1cm}{1em}@{}}",
         r"\toprule",
-        _row("model", "size", "context", "reasoning effort", "roles"),
+        _row("Model", "Size", "Context", "Reasoning effort", "Roles"),
         r"\midrule",
         *(row(m) for m in sorted(roles, key=order)),
         r"\bottomrule",
-        r"\end{tabular}",
+        r"\end{mttabular}",
+        notes(
+            rf"Open-weight models run under vLLM \citep{{kwon2023vllm}} in bfloat16 ({weights}) "
+            r"at temperature~0 with JSON-schema decoding. Reasoning is off where no effort is "
+            r"given, and the Claude models think adaptively."
+        ),
         r"\end{table}",
     ]
     return "\n".join(lines) + "\n"

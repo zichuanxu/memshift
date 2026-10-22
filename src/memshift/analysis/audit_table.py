@@ -92,12 +92,12 @@ CITES = {
 # (title, audit groups) of the row groups; the native systems the audit does not cover are memory
 # libraries
 GROUPS = (
-    ("products", ("vendor", "vendor (developer-side)", "platform")),
-    ("memory libraries", ("memory layer",)),
-    ("research systems and data stores", ("paper system", "personal data store")),
-    ("our baselines and cells", ("baseline", "ours")),
+    ("Products", ("vendor", "vendor (developer-side)", "platform")),
+    ("Memory libraries", ("memory layer",)),
+    ("Research systems and data stores", ("paper system", "personal data store")),
+    ("Our baselines and cells", ("baseline", "ours")),
 )
-NATIVE_GROUP = "memory libraries"
+NATIVE_GROUP = "Memory libraries"
 # the name a row prints where it differs from the audit's short name
 NAMES = {"Plain RAG": "plain RAG", "zero system (ours)": "no-store BM25"}
 BASIS_WORDS = {
@@ -198,31 +198,35 @@ def rows_of(audit: list[dict[str, Any]]) -> tuple[list[Row], list[str]]:
 
 def table(audit: list[dict[str, Any]]) -> str:
     rows, notes = rows_of(audit)
+    key = (
+        r"\checkmark: run natively in the native-system experiment. ---: the system stores no"
+        r" derived item. Basis: what the placement rests on, and for a system we run, the property"
+        r" of its code that sets $B$."
+    )
     lines = [
         r"\begin{table}[t]",
         r"\caption{Memory systems on the $(D,B)$ grid: the audited systems, the further systems"
-        r" that we run natively, and our cells."
-        r" \checkmark: run natively in the native-system experiment. ---: the system stores no"
-        r" derived item. Basis: what the placement rests on, and for a system we run, the property"
-        r" of its code that sets $B$.}",
+        r" that we run natively, and our cells.}",
         r"\label{tab:audit}\label{tab:native-labels}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{tabular}{@{}l l >{\raggedright\arraybackslash}p{1.6cm} c"
-        r" >{\raggedright\arraybackslash}p{6.9cm}@{}}",
+        # the basis with a hanging indent, so a second line does not read as the next row's
+        r"\begin{mttabular}{@{}l l >{\raggedright\arraybackslash}p{1.6cm} c H{6.6cm}{1em}@{}}",
         r"\toprule",
-        r"system & $D$ & $B$ & \begin{tabular}[b]{@{}c@{}}run\\natively\end{tabular} & basis \\",
+        r"System & $D$ & $B$ & \begin{tabular}[b]{@{}c@{}}Run\\natively\end{tabular} & Basis \\",
     ]
     for title, _ in GROUPS:
         group = sorted((r for r in rows if r.group == title), key=lambda r: r.sort)
         if not group:
             continue
-        lines += [r"\midrule", rf"\multicolumn{{{COLUMNS}}}{{@{{}}l}}{{\emph{{{title}}}}} \\"]
-        lines += [" & ".join(r.cells) + r" \\" for r in group]
-    lines += [r"\bottomrule", r"\end{tabular}"]
-    if notes:
-        lines += [r"\par\smallskip", r"\parbox{\linewidth}{\footnotesize " + " ".join(notes) + "}"]
-    lines.append(r"\end{table}")
+        lines += [r"\midrule", rf"\mtgroup{{{COLUMNS}}}{{{title}}}"]
+        lines += [r"\mtin " + " & ".join(r.cells) + r" \\" for r in group]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        r"\mtnotes{" + " ".join([key, *notes]) + "}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 

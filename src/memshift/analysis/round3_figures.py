@@ -4,11 +4,11 @@ analyses named in results/sources.json; nothing here calls a model or reads a ra
 fig_writers     Section 4.2: (a) per program set (round3 g_b.json), B x D at D_m on definition
                 items after S_def against how often the set's programs computed the right value at
                 the fork, before any shift (ex_round3 writers.json), with the authored
-                derivation's B x D on the same items as reference (main study); (b, c) per
+                derivation's B x D on the same items as reference (main study); (b) per
                 definition-item writer (Qwen3.5-9B, Claude Sonnet 5.5, Claude Opus 5.5) B x D with
-                the authored derivation against r_0, both on the same worlds, after S_def (b) and
-                S_src (c) (writers.json)
-fig_reader      appendix: grouped bars of the store part of B x D on Update and of B x D with each
+                the authored derivation against r_0, both on the same worlds, after S_def and
+                S_src, the two marks of a writer joined (writers.json)
+fig_reader      appendix: bullet bars, the store part of B x D on Update behind B x D with each
                 reader of the same stores (y.json and the committed reader's split, ex_round3
                 store_reader.json)
 fig_misses      appendix: why the cited-cluster key misses changed item-times, by shift and item
@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -159,118 +159,6 @@ def writer_points(inp: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _pt(fig: Any) -> float:
-    """Display pixels per typographic point."""
-    return float(fig.dpi) / 72.0
-
-
-def _bbox(x0: float, y0: float, x1: float, y1: float) -> Any:
-    from matplotlib.transforms import Bbox
-
-    return Bbox.from_extents(x0, y0, x1, y1)
-
-
-@dataclass
-class _Labeller:
-    """Direct labels placed where they cover no marker, interval or other label: each label tries
-    candidate offsets (points) around its anchor in order and takes the first that fits inside the
-    axes."""
-
-    ax: Any
-    renderer: Any
-    obstacles: list[Any] = field(default_factory=list)
-
-    def block(self, bbox: Any) -> None:
-        self.obstacles.append(bbox)
-
-    def block_marker(
-        self, x: float, y: float, size_pt: float, dx_pt: float = 0.0, dy_pt: float = 0.0
-    ) -> None:
-        from matplotlib.transforms import Bbox
-
-        px, py = self.ax.transData.transform((x, y))
-        px, py = px + dx_pt * _pt(self.ax.figure), py + dy_pt * _pt(self.ax.figure)
-        r = size_pt * _pt(self.ax.figure) / 2 + 1
-        self.obstacles.append(Bbox.from_extents(px - r, py - r, px + r, py + r))
-
-    def block_segment(
-        self,
-        x0: float,
-        y0: float,
-        x1: float,
-        y1: float,
-        width_pt: float,
-        dx_pt: float = 0.0,
-        dy_pt: float = 0.0,
-    ) -> None:
-        from matplotlib.transforms import Bbox
-
-        (ax0, ay0), (ax1, ay1) = self.ax.transData.transform([(x0, y0), (x1, y1)])
-        ax0, ax1 = ax0 + dx_pt * _pt(self.ax.figure), ax1 + dx_pt * _pt(self.ax.figure)
-        ay0, ay1 = ay0 + dy_pt * _pt(self.ax.figure), ay1 + dy_pt * _pt(self.ax.figure)
-        r = width_pt * _pt(self.ax.figure) / 2 + 0.5
-        self.obstacles.append(
-            Bbox.from_extents(min(ax0, ax1) - r, min(ay0, ay1) - r, max(ax0, ax1) + r,
-                              max(ay0, ay1) + r)
-        )  # fmt: skip
-
-    def place(
-        self,
-        text: str,
-        xy: tuple[float, float],
-        candidates: Sequence[tuple[float, float, str, str]],
-        fallback: bool = True,
-        **kw: Any,
-    ) -> Any:
-        """The first candidate that fits; else the first candidate, or nothing (None) when
-        `fallback` is False."""
-        frame = self.ax.get_window_extent(self.renderer)
-        first = None
-        for dx, dy, ha, va in candidates:
-            t = self.ax.annotate(text, xy, xytext=(dx, dy), textcoords="offset points", ha=ha,
-                                 va=va, annotation_clip=False, **kw)  # fmt: skip
-            t.set_in_layout(False)
-            bb = t.get_window_extent(self.renderer).expanded(1.04, 1.12)
-            inside = (
-                bb.x0 >= frame.x0 and bb.x1 <= frame.x1 and bb.y0 >= frame.y0
-                and bb.y1 <= frame.y1
-            )  # fmt: skip
-            if inside and not any(bb.overlaps(o) for o in self.obstacles):
-                self.obstacles.append(bb)
-                if first is not None:
-                    first.remove()
-                return t
-            if first is None:
-                first = t
-            else:
-                t.remove()
-        assert first is not None
-        if not fallback:
-            first.remove()
-            return None
-        self.obstacles.append(first.get_window_extent(self.renderer))
-        return first
-
-
-def _around(half_w: float, half_h: float, gap: float = 3.0) -> list[tuple[float, float, str, str]]:
-    """Candidate label offsets (points) around a box of half-size (half_w, half_h): right, left,
-    above, below, then the corners and further out."""
-    out = []
-    for k in (1.0, 2.2, 3.6):
-        w, h, g = half_w, half_h, gap * k
-        out += [
-            (w + g, 0, "left", "center"),
-            (-w - g, 0, "right", "center"),
-            (0, h + g, "center", "bottom"),
-            (0, -h - g, "center", "top"),
-            (w + g, h + g, "left", "bottom"),
-            (-w - g, h + g, "right", "bottom"),
-            (w + g, -h - g, "left", "top"),
-            (-w - g, -h - g, "right", "top"),
-        ]
-    return out
-
-
 def _dodge(
     ax: Any, pts: Sequence[Mapping[str, Any]], size_pt: float, diagonal: bool = False
 ) -> list[tuple[float, float]]:
@@ -280,7 +168,7 @@ def _dodge(
     axes) they step as far down as across, so that both their horizontal and their vertical
     intervals stay apart: the first member up and left, the last down and right."""
     pos = [ax.transData.transform((100 * p["x"]["est"], 100 * p["y"]["est"])) for p in pts]
-    scale = _pt(ax.figure)
+    scale = float(ax.figure.dpi) / 72.0
     parent = list(range(len(pts)))
 
     def root(i: int) -> int:
@@ -302,168 +190,350 @@ def _dodge(
     return out
 
 
-WRITER_MS = 4.6  # marker size (points) of the writer figure
 DODGE = 1.3  # spacing of side-by-side markers, in marker widths: a thin white gap between them
 
+WRITERS_IN = (486 / 72, 118.8 / 72)  # printed size (in): full width
+WRITERS_NAME_PT = 7.5  # the writers' direct labels (pt)
+WRITERS_MUTED = "#5A626D"  # tick labels and the shifts' key
+WRITERS_CARD, WRITERS_ZERO = "#F2F4F7", "#8A929C"  # a panel's card, the zero line
+WRITERS_MS, WRITERS_HALO = 5.4, 0.9  # marker size and its white edge (pt)
+WRITERS_BAR, WRITERS_BAR_ALPHA = 2.3, 0.34  # a soft interval bar: width (pt), opacity
+WRITERS_RC = {**fs.BAR_RC, "text.color": fs.INK}
+OPUS, SONNET = "claude-opus-5-5", "claude-sonnet-5-5"
+GEMMA, GPT = "google/gemma-4-12B-it", "openai/gpt-oss-20b"
+LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
+WRITERS_KEY = (("def", "s", "redefinition", False), ("src", "o", "source revision", True))
 
-def _writer_marks(ax: Any, pts: Sequence[Mapping[str, Any]], lab: _Labeller, xerr: bool) -> None:
-    """Markers (colour = writer, shape = shift) with their y (and x) intervals, markers of
-    different writers on one spot set apart by writer (side by side, or along the diagonal when
-    the x intervals are drawn too); each mark blocks the direct labels."""
+
+def _name_ink(writer: str) -> str:
+    """The text colour of a writer's name: its mark colour, darkened just enough to read as text."""
+    from matplotlib.colors import to_rgb
+
+    c = fs.model_style(writer)[1]
+    r, g, b = to_rgb(c)
+    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    return fs.mix(c, "#000000", 0.0 if lum < 0.25 else 0.22 if lum < 0.45 else 0.32)
+
+
+@dataclass
+class _Mark:
+    """A drawn writer mark: its marker, its interval bars (y, then x), its point and its offset
+    (points) from the dodge."""
+
+    marker: Any
+    intervals: list[Any]
+    point: Mapping[str, Any]
+    offset: tuple[float, float]
+
+
+def _writer_card(ax: Any, ylabels: bool = True) -> Any:
+    """A quiet panel on a pale rounded card: white grid lines at 0/20/40 pp, the zero line darker,
+    no spines or tick marks, muted tick labels. Returns the zero line."""
+    from matplotlib.patches import FancyBboxPatch
+
+    w_mm, h_mm = WRITERS_IN[0] * 25.4, WRITERS_IN[1] * 25.4
+    for s in ax.spines.values():
+        s.set_visible(False)
+    ax.set_facecolor("none")
+    pos = ax.get_position()
+    card = FancyBboxPatch((pos.x0, pos.y0), pos.width, pos.height,
+                          boxstyle=f"round,pad=0,rounding_size={1.1 / w_mm}",
+                          mutation_aspect=w_mm / h_mm, transform=ax.figure.transFigure,
+                          facecolor=WRITERS_CARD, edgecolor="none", zorder=-10)  # fmt: skip
+    ax.figure.patches.append(card)
+    ax.tick_params(axis="x", length=0, labelsize=fs.T_TICK, labelcolor=WRITERS_MUTED, pad=2.6)
+    ax.tick_params(axis="y", length=0, labelsize=fs.T_TICK, labelcolor=WRITERS_MUTED, pad=2.6,
+                   labelleft=ylabels)  # fmt: skip
+    ax.grid(axis="y", color="white", lw=0.9, zorder=0)
+    ax.set_axisbelow(True)
+    ax.set_ylim(-9, 53)
+    ax.set_yticks([0, 20, 40])
+    return ax.axhline(0, color=WRITERS_ZERO, lw=0.7, zorder=1)
+
+
+def _writer_title(ax: Any, text: str, letter: str) -> None:
+    ax.set_title(rf"$\bf{{({letter})}}$ {text}", loc="left", fontsize=fs.T_TITLE, pad=4.0,
+                 color=fs.INK)  # fmt: skip
+
+
+def _soft_bar(ax: Any, xs: list[float], ys: list[float], c: str, tr: Any) -> Any:
+    """A 95% interval as a soft pill in the writer's colour whose rounded ends stop exactly at
+    the interval's ends (the line is shortened by the cap radius)."""
+    import numpy as np
+
+    rad = WRITERS_BAR / 2 * ax.figure.dpi / 72  # cap radius in pixels
+    (ax0, ay0), (ax1, ay1) = ax.transData.transform([(xs[0], ys[0]), (xs[1], ys[1])])
+    length = np.hypot(ax1 - ax0, ay1 - ay0)
+    cap = "butt"
+    if length > 2 * rad:
+        f = rad / length
+        p0 = (ax0 + f * (ax1 - ax0), ay0 + f * (ay1 - ay0))
+        p1 = (ax1 - f * (ax1 - ax0), ay1 - f * (ay1 - ay0))
+        (xs[0], ys[0]), (xs[1], ys[1]) = ax.transData.inverted().transform([p0, p1])
+        cap = "round"
+    (ln,) = ax.plot(xs, ys, color=c, lw=WRITERS_BAR, alpha=WRITERS_BAR_ALPHA, zorder=3,
+                    transform=tr, solid_capstyle=cap)  # fmt: skip
+    return ln
+
+
+def _writer_marks(ax: Any, pts: Sequence[Mapping[str, Any]], xerr: bool,
+                  hollow: Sequence[str] = ()) -> dict[str, list[_Mark]]:  # fmt: skip
+    """Soft interval bars, then markers with a white halo (colour = writer, shape = shift, open
+    for a shift in `hollow`); writers on one spot dodged apart (`_dodge`). Returns per writer its
+    marks in the order of `pts`."""
     from matplotlib.transforms import ScaledTranslation
 
     fig = ax.figure
-    for p, (dx, dy) in zip(pts, _dodge(ax, pts, WRITER_MS, diagonal=xerr), strict=True):
-        _, colour = fs.model_style(p["writer"])
+    drawn: dict[str, list[_Mark]] = {}
+    for p, (dx, dy) in zip(pts, _dodge(ax, pts, WRITERS_MS, diagonal=xerr), strict=True):
+        c = fs.model_style(p["writer"])[1]
         tr = ax.transData + ScaledTranslation(dx / 72, dy / 72, fig.dpi_scale_trans)
         x, y = 100 * p["x"]["est"], 100 * p["y"]["est"]
-        bars = [([x, x], [100 * p["y"]["lo"], 100 * p["y"]["hi"]])]
+        segs = [([x, x], [100 * p["y"]["lo"], 100 * p["y"]["hi"]])]
         if xerr:
-            bars.append(([100 * p["x"]["lo"], 100 * p["x"]["hi"]], [y, y]))
-        for xs, ys in bars:
-            ax.plot(xs, ys, color=colour, lw=0.85, alpha=0.8, zorder=3, transform=tr,
-                    solid_capstyle="butt")  # fmt: skip
-            lab.block_segment(xs[0], ys[0], xs[1], ys[1], 0.85, dx, dy)
-        ax.plot([x], [y], marker=fs.SHIFTS[p["shift"]][1], ms=WRITER_MS, mfc=colour,
-                mec="white", mew=0.5, ls="none", zorder=4, transform=tr)  # fmt: skip
-        lab.block_marker(x, y, WRITER_MS + 1, dx, dy)
+            segs.append(([100 * p["x"]["lo"], 100 * p["x"]["hi"]], [y, y]))
+        bars = [_soft_bar(ax, xs, ys, c, tr) for xs, ys in segs]
+        open_ = p["shift"] in hollow
+        shape = fs.SHIFTS[p["shift"]][1]
+        (mk,) = ax.plot([x], [y], marker=shape, ms=WRITERS_MS, mfc="white" if open_ else c,
+                        mec=c if open_ else "white", mew=1.25 if open_ else WRITERS_HALO,
+                        ls="none", zorder=4, transform=tr)  # fmt: skip
+        if open_:  # the white halo outside the coloured ring
+            ax.plot([x], [y], marker=shape, ms=WRITERS_MS + 2 * 1.25, mfc="none", mec="white",
+                    mew=WRITERS_HALO, ls="none", zorder=3.9, transform=tr)  # fmt: skip
+        drawn.setdefault(p["writer"], []).append(_Mark(mk, bars, p, (dx, dy)))
+    return drawn
 
 
-def _side(writer: str, pts: Sequence[Mapping[str, Any]], near: float = 5.0) -> str | None:
-    """Where a writer's label goes when another writer's markers share its x range: above if its
-    markers lie higher on average, else below (so two neighbours' labels never meet); None when
-    no other writer is near."""
-    mine = [p for p in pts if p["writer"] == writer]
-    lo = min(100 * p["x"]["est"] for p in mine) - near
-    hi = max(100 * p["x"]["est"] for p in mine) + near
-    others = [p for p in pts if p["writer"] != writer and lo <= 100 * p["x"]["est"] <= hi]
-    if not others:
-        return None
-    mean_mine = sum(p["y"]["est"] for p in mine) / len(mine)
-    return "above" if mean_mine > sum(p["y"]["est"] for p in others) / len(others) else "below"
+def _box(artists: Sequence[Any]) -> Any:
+    """The display-space union of artists; interval bars count with their painted width."""
+    from matplotlib.transforms import Bbox
+
+    fig = artists[0].figure
+    r = fig.canvas.get_renderer()
+    out = []
+    for a in artists:
+        bb = a.get_window_extent(r)
+        if not a.get_marker() or a.get_marker() == "None":
+            bb = bb.padded(WRITERS_BAR / 2 * fig.dpi / 72)
+        out.append(bb)
+    return Bbox.union(out)
 
 
-def _writer_names(ax: Any, pts: Sequence[Mapping[str, Any]], lab: _Labeller) -> None:
-    """One direct label per writer next to its own markers: beyond the end of its intervals on
-    the side `_side` gives when another writer is near, else next to the box around its markers."""
-    for writer in dict.fromkeys(p["writer"] for p in pts):
-        mine = [p for p in pts if p["writer"] == writer]
-        xs = [100 * p["x"]["est"] for p in mine]
-        ys = [100 * p["y"]["est"] for p in mine]
-        (x0, y0), (x1, y1) = ax.transData.transform([(min(xs), min(ys)), (max(xs), max(ys))])
-        hw = (x1 - x0) / 2 / _pt(ax.figure) + WRITER_MS * 0.8
-        hh = (y1 - y0) / 2 / _pt(ax.figure) + WRITER_MS / 2
-        label, colour = fs.model_style(writer)
-        cx = (min(xs) + max(xs)) / 2
-        side = _side(writer, pts)
-        placed = None
-        # first beside the markers on that side, then beyond the intervals; then the other side
-        # (three writers can share an x range, so the side `_side` gives may be taken)
-        sides = [side == "above", side != "above"] if side else []
-        for up in sides:
-            if placed is not None:
-                break
-            va, sign = ("bottom", 1.0) if up else ("top", -1.0)
-            near = [
-                (dx, sign * (hh + 3.0), ha, va)
-                for dx, ha in ((-hw - 3.0, "right"), (hw + 3.0, "left"), (0.0, "center"))
-            ]
-            placed = lab.place(label, (cx, (min(ys) + max(ys)) / 2), near, fallback=False,
-                               fontsize=8, color=colour)  # fmt: skip
-            edge = (max if up else min)(100 * p["y"]["hi" if up else "lo"] for p in mine)
-            beyond = [
-                (dx, sign * g, ha, va)
-                for g in (2.0, 5.0, 9.0)
-                for dx, ha in ((0.0, "center"), (-hw, "left"), (hw, "right"))
-            ]
-            if placed is None:
-                placed = lab.place(label, (cx, edge), beyond, fallback=False, fontsize=8,
-                                   color=colour)  # fmt: skip
-        if placed is None:
-            lab.place(label, (cx, (min(ys) + max(ys)) / 2), _around(hw, hh), fontsize=8,
-                      color=colour)  # fmt: skip
+def _put(ax: Any, text: str, anchor: Any, side: str, gap: float, color: str) -> Any:
+    """A direct label beside a display-space box, `gap` points away on `side`."""
+    fig = ax.figure
+    g = gap * fig.dpi / 72
+    x0, y0, x1, y1 = anchor.x0, anchor.y0, anchor.x1, anchor.y1
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+    px, py, ha, va = {
+        "left": (x0 - g, cy, "right", "center_baseline"),
+        "right": (x1 + g, cy, "left", "center_baseline"),
+        "above": (cx, y1 + g, "center", "bottom"),
+        "below": (cx, y0 - g, "center", "top"),
+        "above-left": (x0 - g, y1 + g * 0.3, "right", "bottom"),
+        "below-left": (x0 - g, y0 - g * 0.3, "right", "top"),
+        "above-right": (x1, y1 + g, "right", "bottom"),
+        "below-start": (x0, y0 - g, "left", "top"),
+    }[side]
+    return ax.annotate(text, (px / fig.bbox.width, py / fig.bbox.height),
+                       xycoords="figure fraction", ha=ha, va=va, fontsize=WRITERS_NAME_PT,
+                       color=color, annotation_clip=False, zorder=6)  # fmt: skip
 
 
-WRITERS_H = 1.65  # height of the writer figure (in), full width
-R0_LABEL = r"$r_0$: repair correctness at $D{=}0$ (\%)"
+def _name_label(ax: Any, writer: str, anchor: Any, side: str, gap: float) -> Any:
+    return _put(ax, fs.model_style(writer)[0], anchor, side, gap, _name_ink(writer))
 
 
-def _panel_title(ax: Any, letter: str, text: str) -> None:
-    """The panel letter in bold, then what the panel shows, at the top left."""
-    ax.set_title(rf"\textbf{{({letter})}} {text}", loc="left", fontsize=9, pad=4)
+def _exact_band(ax: Any, ref: Mapping[str, float], start_x: float) -> None:
+    """Exact recomputation's 95% interval as a soft vertical gradient (densest at the estimate)
+    with hairline edges at the interval's ends, and its estimate as a blue dashed line from
+    `start_x` on."""
+    import numpy as np
+    from matplotlib.colors import to_rgb
+
+    blue = fs.ROLE_BLUE
+    lo, est, hi = (100 * ref[k] for k in ("lo", "est", "hi"))
+    x0, x1 = ax.get_xlim()
+    ys = np.linspace(lo, hi, 256)
+    w = np.where(ys <= est, (ys - lo) / (est - lo), (hi - ys) / (hi - est))
+    alpha = 0.07 + 0.20 * w**1.6
+    # an opaque blend over the card, so the grid line at 40 pp does not show through the band
+    rgb = (1 - alpha[:, None]) * np.array(to_rgb(WRITERS_CARD)) + alpha[:, None] * np.array(
+        to_rgb(blue["mark"]))  # fmt: skip
+    rgba = np.ones((256, 2, 4))
+    rgba[..., :3] = rgb[:, None, :]
+    ax.imshow(rgba, extent=(x0, x1, lo, hi), origin="lower", aspect="auto",
+              interpolation="bilinear", zorder=0.4)  # fmt: skip
+    ax.set_xlim(x0, x1)
+    for v in (lo, hi):
+        ax.axhline(v, color=blue["stroke"], lw=0.4, alpha=0.20, zorder=0.6)
+    ax.plot([start_x, x1], [est, est], color=blue["mark"], lw=1.1, ls=(0, (4.2, 2.0)), zorder=1.2,
+            solid_capstyle="butt", dash_capstyle="butt")  # fmt: skip
+
+
+def _program_sets(fig: Any, axa: Any, data: Mapping[str, Any]) -> None:
+    """Panel (a): the program sets after a redefinition, against how often their programs are
+    right before the shift, over exact recomputation's band; each writer named once."""
+    from matplotlib.transforms import Bbox
+
+    _writer_card(axa)
+    axa.set_xlim(-7, 106)
+    axa.set_xticks([0, 25, 50, 75, 100])
+    axa.set_ylabel(r"$B{\times}D$, definition items (pp)", fontsize=fs.T_LABEL, labelpad=3.0)
+    axa.set_xlabel("programs right before the shift (%)", fontsize=fs.T_LABEL, labelpad=2.0)
+    _writer_title(axa, "program sets: redefinition", "a")
+    ref = data["reference"]
+    fig.canvas.draw()
+    r = fig.canvas.get_renderer()
+    if ref:  # the hero's name on its own line at the left, the dashed line after it
+        t_exact = axa.text(-5.0, 100 * ref["est"], "exact recomputation", ha="left",
+                           va="center_baseline", fontsize=WRITERS_NAME_PT,
+                           color=fs.ROLE_BLUE["ink"], fontstyle="italic", zorder=6)  # fmt: skip
+        fig.canvas.draw()
+        end = axa.transData.inverted().transform(
+            (t_exact.get_window_extent(r).x1 + 2.2 * fig.dpi / 72, 0))[0]  # fmt: skip
+        _exact_band(axa, ref, end)
+        fig.canvas.draw()
+    da = _writer_marks(axa, [{**g, "shift": "def"} for g in data["groups"]], False)
+    fig.canvas.draw()
+    if not da:
+        axa.text(0.5, 0.5, "no program set staged", transform=axa.transAxes, ha="center",
+                 fontsize=WRITERS_NAME_PT, color=WRITERS_MUTED)  # fmt: skip
+        return
+
+    def markers(who: str, keep: Any = None) -> list[Any]:
+        return [m.marker for m in da.get(who, []) if keep is None or keep(m.point)]
+
+    # the Claude writers: their names side by side above the band, right-aligned over their
+    # shared spots, in the dodge's left-to-right order (Opus, then Sonnet)
+    top = 100 * ref["hi"] if ref else max(100 * m.point["y"]["hi"] for ms in da.values()
+                                          for m in ms)  # fmt: skip
+    band_top = axa.transData.transform((0, top))[1]
+    right = axa.transData.transform((104.6, 0))[0]
+    x_end = Bbox.from_extents(right, band_top, right, band_top)
+    if SONNET in da:
+        t_son = _put(axa, fs.model_style(SONNET)[0], x_end, "above-right", 1.4,
+                     _name_ink(SONNET))  # fmt: skip
+        fig.canvas.draw()
+        sx0 = t_son.get_window_extent(r).x0 - 5.0 * fig.dpi / 72
+        x_end = Bbox.from_extents(sx0, band_top, sx0, band_top)
+    if OPUS in da:
+        _put(axa, fs.model_style(OPUS)[0], x_end, "above-right", 1.4, _name_ink(OPUS))
+    # Qwen left of its first set; gemma below its sets under 75 %; gpt-oss right of its
+    # right-most set; Llama under the zero line, from its sets above 5 %
+    if QWEN in da:
+        first = min(da[QWEN], key=lambda m: m.point["x"]["est"])
+        _name_label(axa, QWEN, _box([first.marker]), "left", 2.6)
+    if g_left := [m for m in da.get(GEMMA, []) if m.point["x"]["est"] < 0.75]:
+        _name_label(axa, GEMMA, _box([m.marker for m in g_left] +
+                                     [m.intervals[0] for m in g_left]), "below", 1.6)  # fmt: skip
+    if GPT in da:
+        right = max(da[GPT], key=lambda m: m.point["x"]["est"])
+        _name_label(axa, GPT, _box([right.marker]), "right", 2.8)
+    if ll := markers(LLAMA, lambda p: p["x"]["est"] > 0.05) or markers(LLAMA):
+        anc = _box(ll)
+        zero_y = axa.transData.transform((0, 0))[1]
+        _put(axa, fs.model_style(LLAMA)[0], Bbox.from_extents(anc.x0, zero_y, anc.x1, zero_y),
+             "below-start", 2.2, _name_ink(LLAMA))  # fmt: skip
+    for who in sorted(set(da) - {QWEN, OPUS, SONNET, GEMMA, GPT, LLAMA}):  # any other writer
+        right = max(da[who], key=lambda m: m.point["x"]["est"])
+        _name_label(axa, who, _box([right.marker]), "right", 2.8)
+
+
+def _shift_key(fig: Any, ax: Any, x_data: float, y_data: float) -> None:
+    """A small inline key for the two shifts: a neutral filled square and a neutral open circle,
+    each followed by its name."""
+    from matplotlib.lines import Line2D
+
+    r = fig.canvas.get_renderer()
+    x, y = ax.transData.transform((x_data, y_data))
+    px = fig.dpi / 72
+    for _, m, label, open_ in WRITERS_KEY:
+        fig.add_artist(Line2D([x / fig.bbox.width], [y / fig.bbox.height],
+                              transform=fig.transFigure, marker=m, ms=WRITERS_MS - 0.6,
+                              ls="none", mfc="white" if open_ else WRITERS_MUTED,
+                              mec=WRITERS_MUTED, mew=1.1 if open_ else 0.0,
+                              zorder=6))  # fmt: skip
+        t = fig.text((x + 4.6 * px) / fig.bbox.width, y / fig.bbox.height, label, ha="left",
+                     va="center_baseline", fontsize=fs.T_TICK, color=WRITERS_MUTED,
+                     zorder=6)  # fmt: skip
+        fig.canvas.draw()
+        x = t.get_window_extent(r).x1 + 9.0 * px
+
+
+def _shift_links(ax: Any, drawn: Mapping[str, Sequence[_Mark]]) -> None:
+    """Per writer a thin line in its colour from its redefinition mark to its source-revision
+    mark, between the drawn (dodged) marker centres, under the marks."""
+    from matplotlib.lines import Line2D
+
+    fig = ax.figure
+    for who, marks in drawn.items():
+        ends = {}
+        for m in marks:
+            cx, cy = ax.transData.transform((100 * m.point["x"]["est"], 100 * m.point["y"]["est"]))
+            dx, dy = m.offset
+            ends[m.point["shift"]] = (cx + dx * fig.dpi / 72, cy + dy * fig.dpi / 72)
+        if "def" not in ends or "src" not in ends:
+            continue
+        (x0, y0), (x1, y1) = ends["def"], ends["src"]
+        ax.add_artist(Line2D([x0 / fig.bbox.width, x1 / fig.bbox.width],
+                             [y0 / fig.bbox.height, y1 / fig.bbox.height],
+                             transform=fig.transFigure, color=fs.model_style(who)[1], lw=1.0,
+                             alpha=0.9, zorder=3.5, solid_capstyle="round"))  # fmt: skip
 
 
 def fig_writers(inp: Mapping[str, Any], out: Path) -> Path:
-    """(a) G-b program sets after S_def, (b, c) definition-item writers after S_def and S_src:
-    see the module docstring. Each panel's title names its shift in words (the main text uses no
-    S_* symbols), and the marker shape repeats it (`figstyle.SHIFTS`); identical sets of one writer
-    draw as one marker, and marks of different writers on one spot are set apart by writer (the
-    caption says both). (b) and (c) share their x axis, whose title is centred under the two."""
-    plt = fs.plt()
+    """(a) G-b program sets after S_def; (b) the definition-item writers after both shifts, each
+    writer's redefinition mark (filled square) joined to its source-revision mark (open circle):
+    see the module docstring. Hue is the writer, marker shape the shift; intervals are soft bars
+    in the writer's colour; identical sets of one writer draw as one marker, and marks of
+    different writers on one spot are set apart (the caption says both). Each writer is named
+    once per panel, in its own colour."""
+    from matplotlib.transforms import Bbox
+
     data = writer_points(inp)
-    fig, (axa, axb, axc) = plt.subplots(
-        1, 3, figsize=(fs.TEXT, WRITERS_H), sharey=True,
-        gridspec_kw={"width_ratios": [1.75, 1, 1]},
-    )  # fmt: skip
-    for ax in (axa, axb, axc):
-        ax.axhline(0, color=fs.GREY, lw=0.6, zorder=1)
-        ax.set_ylim(-8, 55)  # room above the authored derivation's band for its name and a writer's
-        ax.set_yticks([0, 20, 40])
-        ax.grid(True, axis="y")
-        ax.grid(False, axis="x")
-    axa.set_xlim(-4, 104)
-    axa.set_xticks([0, 25, 50, 75, 100])
-    for ax in (axb, axc):
-        ax.set_xlim(-3, 63)
-        ax.set_xticks([0, 20, 40, 60])
-        ax.set_xlabel(r"$r_0$ (\%)")  # holds the row's height; replaced below
-    axa.set_ylabel(r"$B{\times}D$, definition items (pp)")
-    axa.set_xlabel(r"programs right before the shift (\%)")
-    _panel_title(axa, "a", "program sets: redefinition")
-    _panel_title(axb, "b", "writers: redefinition")
-    _panel_title(axc, "c", "writers: source revision")
-    ref = data["reference"]
-    if ref:
-        axa.axhspan(100 * ref["lo"], 100 * ref["hi"], color=fs.LIGHT, alpha=0.55, lw=0, zorder=0.5)
-        axa.axhline(100 * ref["est"], color=fs.GREY, lw=0.9, ls=(0, (4, 2)), zorder=1)
-    fig.canvas.draw()  # settle the layout: label placement works in display space
-    fig.set_layout_engine("none")  # and keep it, so the shared x title can span (b) and (c)
-    renderer = fig.canvas.get_renderer()
-    # one x title for (b) and (c), centred under both, at the height of (a)'s
-    top = axb.transAxes.inverted().transform((0, axb.xaxis.label.get_window_extent(renderer).y1))
-    bb, bc = axb.get_position(), axc.get_position()
-    axb.set_xlabel(R0_LABEL)
-    axb.xaxis.set_label_coords(((bb.x0 + bc.x1) / 2 - bb.x0) / bb.width, top[1])
-    axc.set_xlabel("")
-    labs = {ax: _Labeller(ax, renderer) for ax in (axa, axb, axc)}
-    for ax, lab in labs.items():  # no label across the zero line
-        lab.block_segment(ax.get_xlim()[0], 0, ax.get_xlim()[1], 0, 1.0)
+    w_mm, h_mm = WRITERS_IN[0] * 25.4, WRITERS_IN[1] * 25.4
+    left, right, top, bottom, gap = 11.6, 1.0, 4.6, 8.6, 6.6  # mm
+    widths = (1.8, 1.0)
+    unit = (w_mm - left - right - gap) / sum(widths)
+    ph = h_mm - top - bottom
+    with fs.printed(WRITERS_RC) as plt:
+        fig = plt.figure(figsize=(w_mm * fs.MM, h_mm * fs.MM), dpi=300)
+        axa = fig.add_axes((left / w_mm, bottom / h_mm, widths[0] * unit / w_mm, ph / h_mm))
+        x_b = left + (widths[0] * unit + gap)
+        axb = fig.add_axes((x_b / w_mm, bottom / h_mm, widths[1] * unit / w_mm, ph / h_mm))
+        _program_sets(fig, axa, data)
+        _writer_card(axb, ylabels=False)
+        axb.set_xlim(-3, 63)
+        axb.set_xticks([0, 20, 40, 60])
+        _writer_title(axb, "writers: both shifts", "b")
+        fig.canvas.draw()
+        db = _writer_marks(axb, data["defwriters"], True, hollow=("src",))
+        fig.canvas.draw()
+        _shift_links(axb, db)
 
-    # (a) program sets, shape of S_def; the authored derivation's B x D as reference
-    lab_a = labs[axa]
-    if ref:
-        lab_a.block_segment(-4, 100 * ref["est"], 104, 100 * ref["est"], 1.2)
-        # no writer's name inside the band: names go above or below it
-        lab_a.block(axa.transData.transform_bbox(_bbox(-4, 100 * ref["lo"], 104, 100 * ref["hi"])))
-        t = axa.text(1, 100 * ref["hi"] + 1.0, "exact recomputation", fontsize=8,
-                     color=fs.GREY, ha="left", va="bottom")  # fmt: skip
-        lab_a.block(t.get_window_extent(renderer).expanded(1.05, 1.2))
-    groups = [{**g, "shift": "def"} for g in data["groups"]]
-    _writer_marks(axa, groups, lab_a, xerr=False)
-    _writer_names(axa, groups, lab_a)
-    if not groups:
-        axa.text(0.5, 0.5, "no program set staged", transform=axa.transAxes, ha="center",
-                 fontsize=8, color=fs.GREY)  # fmt: skip
+        def at(who: str, shift: str) -> _Mark | None:
+            return next((m for m in db.get(who, []) if m.point["shift"] == shift), None)
 
-    # (b, c) definition-item writers, one shift per panel: intervals on both axes
-    for ax, b in ((axb, "def"), (axc, "src")):
-        pts = [p for p in data["defwriters"] if p["shift"] == b]
-        _writer_marks(ax, pts, labs[ax], xerr=True)
-        _writer_names(ax, pts, labs[ax])
-    path = out / "fig_writers.pdf"
-    fig.savefig(path)
-    plt.close(fig)
-    return path
+        # Qwen right of its redefinition mark (top left, alone); Opus above its source-revision
+        # mark's vertical bar; Sonnet left of that mark's horizontal bar, below it
+        if q := at(QWEN, "def"):
+            qb, mb = _box([q.intervals[1]]), _box([q.marker])
+            _name_label(axb, QWEN, Bbox.from_extents(qb.x0, mb.y0, qb.x1, mb.y1), "right", 2.4)
+        if o := at(OPUS, "src"):
+            _name_label(axb, OPUS, _box([o.intervals[0]]), "above", 1.2)
+        if s := at(SONNET, "src"):
+            _name_label(axb, SONNET, _box([s.intervals[1]]), "below-left", 1.8)
+        _shift_key(fig, axb, 1.0, -4.6)  # under the zero line, where (b) has no data
+        # the x title of (b), centred under it on (a)'s x-title baseline
+        r = fig.canvas.get_renderer()
+        xl = axa.xaxis.label.get_window_extent(r)
+        bb = axb.get_window_extent(r)
+        fig.text((bb.x0 + bb.x1) / 2 / fig.bbox.width, xl.y0 / fig.bbox.height,
+                 r"$r_0$: repair correctness at $D\!=\!0$ (%)", ha="center", va="bottom",
+                 fontsize=fs.T_LABEL)  # fmt: skip
+        return fs.save_pdf(fig, out / "fig_writers.pdf")
 
 
 # ==================================================================================== reader
@@ -493,70 +563,115 @@ def reader_rows(inp: Mapping[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
-# the bars of each shift of the reader figure, left to right: key, label, fill (the store part
-# light grey, each reader in its model colour)
+READER_PT = (486, 158.4)  # printed size (pt): full width
+READER_STORE = {"fill": "#E3E6EA", "top": "#8C95A1", "ink": "#6B7380"}  # a wide pale grey bar
+READERS = (  # key, model, x offset (shifts), bar fill, dark ink (interval, reader part)
+    ("qwen", QWEN, -0.14, "#4A5260", "#0E1116"),  # Qwen3.5-9B's near black as a dark slate
+    ("sonnet", "claude-sonnet-5-5", 0.14, fs.model_style("claude-sonnet-5-5")[1], "#6E2E00"),
+)
+# the bars of each shift, back to front: key, label, fill
 READER_BARS = (
-    ("store", "store part (both readers)", "#C8C8C8"),
-    ("qwen", f"{fs.model_style(QWEN)[0]} reader", fs.model_style(QWEN)[1]),
-    ("sonnet", f"{fs.model_style('claude-sonnet-5-5')[0]} reader",
-     fs.model_style("claude-sonnet-5-5")[1]),
-)  # fmt: skip
-READER_BAR_W = 0.26  # width of one bar, in shifts
+    ("store", "store part (both readers)", READER_STORE["fill"]),
+    *((key, f"{fs.model_style(model)[0]} reader", fill) for key, model, _, fill, _ in READERS),
+)
+READER_STORE_W, READER_W = 0.66, 0.235  # bar widths, in shifts
+READER_GAP_CELL = ("other", "def")  # the cell whose reader parts are printed (the text cites them)
 
 
 def fig_reader(inp: Mapping[str, Any], out: Path) -> Path:
-    """Grouped bars per item class (panel) and shift (group): the store part of B x D on Update
-    (light grey, the same for both readers) and B x D with each reader of the same stores (in the
-    reader's model colour), each with its 95% interval as an error bar. What a reader adds or loses
-    is the gap between the grey bar and its own. The panels share one pp axis."""
-    from matplotlib.patches import Patch
+    """Bullet bars per item class (panel) and shift (group): the store part of B x D on Update as
+    a wide pale bar (the same for both readers, its interval in the slit between the readers)
+    and B x D with each reader of the same stores as a narrower bar in front of it, in the
+    reader's colour, each with its 95% interval. What a reader adds or loses is the gap between
+    the pale bar and its own; in the cell the text cites, a bracket gives that reader part. The
+    panels share one pp axis."""
+    from matplotlib.ticker import MultipleLocator
 
-    plt = fs.plt()
     rows = reader_rows(inp)
-    vals = [100 * r[k][e] for r in rows for k, *_ in READER_BARS if r[k] for e in ("lo", "hi")]
-    lo, hi = min([0.0, *vals]), max([10.0, *vals])
-    fig, axes = plt.subplots(1, 2, figsize=(fs.TEXT, 2.2), sharey=True)
-    for ax, (cls, title) in zip(axes, CLASS_NAMES, strict=True):
-        ax.axhline(0, color=fs.BLACK, lw=0.6, zorder=2.5)
-        for i, (b, _) in enumerate(SHIFT_ROWS):
-            r = next((r for r in rows if r["cls"] == cls and r["branch"] == b), None)
-            if r is None:
+    w_mm, h_mm = READER_PT[0] * fs.PT, READER_PT[1] * fs.PT
+    left, right, gutter, bottom, top = 11.4, 0.6, 4.4, 5.8, 10.4
+    pw = (w_mm - left - right - gutter) / 2
+    ph = h_mm - bottom - top
+    vals = [100 * r[k][e] for r in rows for k in ("store", "qwen", "sonnet") if r[k]
+            for e in ("lo", "hi")]  # fmt: skip
+    lo, hi = min([0.0, *vals]) - 1.5, max([10.0, *vals]) + 1.5
+    store = READER_STORE
+    with fs.printed(fs.BAR_RC) as plt:
+        fig = plt.figure(figsize=(w_mm * fs.MM, h_mm * fs.MM))
+        axes = []
+        for p, (cls, title) in enumerate(CLASS_NAMES):
+            ax = fig.add_axes(((left + p * (pw + gutter)) / w_mm, bottom / h_mm, pw / w_mm,
+                               ph / h_mm))  # fmt: skip
+            fs.bar_axes(ax)
+            ax.set_ylim(lo, hi)
+            ax.yaxis.set_major_locator(MultipleLocator(10))
+            ax.set_xlim(-0.52, len(SHIFT_ROWS) - 0.48)
+            ax.set_xticks(range(len(SHIFT_ROWS)), [t for _, t in SHIFT_ROWS])
+            ax.set_title(title, fontsize=fs.T_TITLE, pad=3.2)
+            if p:
+                ax.tick_params(axis="y", labelleft=False)
+            axes.append(ax)
+            cap = fs.CAP_MM * fs.x_per_mm(ax, pw)
+            for i, (b, _) in enumerate(SHIFT_ROWS):
+                r = next((r for r in rows if r["cls"] == cls and r["branch"] == b), None)
+                if r is None:
+                    continue
+                if s := r["store"]:
+                    fs.bar_from_zero(ax, i, READER_STORE_W, 100 * s["est"], store["fill"], z=1.2)
+                    ax.plot([i - READER_STORE_W / 2, i + READER_STORE_W / 2], [100 * s["est"]] * 2,
+                            color=store["top"], lw=0.9, solid_capstyle="butt",
+                            zorder=1.4)  # fmt: skip
+                    # its interval sits in the slit between the readers, behind them
+                    fs.interval_line(ax, i, 100 * s["lo"], 100 * s["hi"], store["ink"], 0.7 * cap,
+                                     z=1.6)  # fmt: skip
+                for key, _, dx, fill, ink in READERS:
+                    if e := r[key]:
+                        fs.bar_from_zero(ax, i + dx, READER_W, 100 * e["est"], fill, z=2.0)
+                        fs.interval_line(ax, i + dx, 100 * e["lo"], 100 * e["hi"], ink, cap)
+        axes[0].set_ylabel(r"$B{\times}D$ on Update (pp)", fontsize=fs.T_LABEL, labelpad=2.0)
+        # each reader's part in the cell the text cites: a bracket over the uncovered part of
+        # the store bar, from the store part to the reader, and its value
+        ax = axes[[c for c, _ in CLASS_NAMES].index(READER_GAP_CELL[0])]
+        i = [b for b, _ in SHIFT_ROWS].index(READER_GAP_CELL[1])
+        cell = next((r for r in rows if (r["cls"], r["branch"]) == READER_GAP_CELL), None)
+        for key, _, dx, _, ink in READERS:
+            if not cell or not cell["store"] or not cell[key]:
                 continue
-            for k, (key, _, fill) in enumerate(READER_BARS):
-                if e := r[key]:
-                    fs.ci_bar(ax, i + (k - 1) * READER_BAR_W, 100 * e["est"], 100 * e["lo"],
-                              100 * e["hi"], fill, READER_BAR_W)  # fmt: skip
-        ax.set_title(title, pad=3)
-        ax.set_xticks(range(len(SHIFT_ROWS)), [t for _, t in SHIFT_ROWS])
-        ax.set_xlim(-0.6, len(SHIFT_ROWS) - 0.4)
-        ax.tick_params(axis="x", length=0)
-        ax.spines["bottom"].set_visible(False)
-    axes[0].set_ylim(lo - 1.5, hi + 1.5)
-    axes[0].yaxis.set_major_locator(plt.MultipleLocator(10))
-    axes[0].set_ylabel(r"$B{\times}D$ on Update (pp)")
-    handles = [Patch(facecolor=fill, edgecolor="none", label=label)
-               for _, label, fill in READER_BARS]  # fmt: skip
-    fig.legend(handles=handles, loc="outside upper center", ncol=3, columnspacing=2.2,
-               handlelength=1.2, fontsize=8)  # fmt: skip
-    path = out / "fig_reader.pdf"
-    fig.savefig(path)
-    plt.close(fig)
-    return path
+            part = round(100 * (cell[key]["est"] - cell["store"]["est"]), 1)
+            side = 1 if dx > 0 else -1
+            ys, yr = 100 * cell["store"]["est"], 100 * cell[key]["est"]
+            xb, tick = i + side * (READER_STORE_W / 2 + 0.035), 0.03
+            ax.plot([xb - side * tick, xb, xb, xb - side * tick], [ys, ys, yr, yr], color=ink,
+                    lw=0.7, solid_joinstyle="miter", solid_capstyle="butt", zorder=3)  # fmt: skip
+            ax.annotate(f"{part:+.1f}".replace("-", "−"), (xb, (ys + yr) / 2),
+                        xytext=(side * 2.2, 0), textcoords="offset points",
+                        ha="left" if side > 0 else "right", va="center", fontsize=fs.T_NOTE,
+                        color=ink)  # fmt: skip
+        fig.canvas.draw()
+        entries: list[tuple[fs.Glyph | None, str]] = [
+            (fs.key_swatch(store["fill"], store["top"]), READER_BARS[0][1])
+        ]
+        entries += [(fs.key_swatch(fill), label) for _, label, fill in READER_BARS[1:]]
+        fs.key_row(fig, entries, h_mm - 2.9, w_mm, h_mm)
+        return fs.save_pdf(fig, out / "fig_reader.pdf")
 
 
 # ==================================================================================== misses
-# key -> (label, fill, a write-time key could have covered it): greys for the causes a write-time
-# set could have contained, warm colours for the two it cannot, the strong one on the dominant
-# cause (b new)
+# key -> (label, fill, a write-time key could have covered it), the coverable causes first: cool
+# greys for the causes a write-time set could have contained, warm colours for the two it cannot,
+# the strong one on the dominant cause (b new)
 MISS_CAUSES = (
-    ("a", r"$a$: an uncited record changed", "#8C8C8C", True),
-    ("b_old", r"$b$ old: existing record entered scope", "#C8C8C8", True),
+    ("a", r"$a$: an uncited record changed", "#8C95A1", True),
+    ("b_old", r"$b$ old: existing record entered scope", "#CDD2D9", True),
+    ("c_rest", r"$c$: other", "#E9EBEE", True),
     ("b_new", r"$b$ new: a record created after the derivation", fs.VERMILION, False),
     ("c_left", r"$c$: records left window or scope", "#F0A877", False),
-    ("c_rest", r"$c$: other", "#E8E8E8", True),
 )
 MISS_STAGES = (("main", "main study"), ("rep", "replication"))
-MISS_COL_PT = 14.0  # right edge of the column of counts, in points right of the bars' end
+MISS_IN = (486 / 72, 140.4 / 72)  # printed size (in): full width
+MISS_TICK = "#3F4650"  # tick labels
+MISS_TEXT = 7.5  # counts, row labels and the key (pt)
+MISS_WARM_INK = fs.mix(fs.VERMILION, "#000000", 0.22)  # the uncoverable share and its header
 
 
 def miss_rows(inp: Mapping[str, Any]) -> list[dict[str, Any]]:
@@ -594,62 +709,128 @@ def miss_rows(inp: Mapping[str, Any]) -> list[dict[str, Any]]:
 
 def fig_misses(inp: Mapping[str, Any], out: Path) -> Path:
     """100% stacked bars of the missed changed item-times by cause, per shift and class (rows),
-    main study and replication (panels), with the number missed in a column right of the bars
-    under the header $n$."""
-    from matplotlib.patches import Patch
+    main study and replication (panels); right of each panel two columns, the number missed
+    ($n$) and the share no write-time set can contain (%, bold, under the two warm swatches);
+    the key is one row per colour group, the group named in the row-label column."""
+    from matplotlib.patches import Rectangle
 
-    plt = fs.plt()
     rows = miss_rows(inp)
-    causes = [
-        c for c in MISS_CAUSES if c[0] != "c_rest" or any(r["shares"]["c_rest"] for r in rows)
-    ]
-    fig, axes = plt.subplots(1, 2, figsize=(fs.TEXT, 1.95), sharey=True)
+    labels = {k: lab for k, lab, _, _ in MISS_CAUSES}
+    fills = {k: fill for k, _, fill, _ in MISS_CAUSES}
+    coverable = [k for k, _, _, covered in MISS_CAUSES if covered]
+    uncoverable = [k for k, _, _, covered in MISS_CAUSES if not covered]
+    causes = [k for k in (*coverable, *uncoverable)
+              if k != "c_rest" or any(r["shares"]["c_rest"] for r in rows)]  # fmt: skip
+    warm, warm_light = (fills[k] for k in uncoverable)
+    w_mm, h_mm = MISS_IN[0] * 25.4, MISS_IN[1] * 25.4
+    left, bottom, title_h, key_h = 35.0, 8.6, 4.6, 8.4  # mm
+    col_n, col_s, gutter, right = 7.0, 15.0, 3.2, 0.4  # the n and share columns, right of the bars
+    pw = (w_mm - left - 2 * col_s - gutter - right) / 2
+    ph = h_mm - bottom - title_h - key_h
+    x_panels = (left, left + pw + col_s + gutter)
     ypos: dict[tuple[str, str], float] = {}
     y = 0.0
     for b, _ in SHIFT_ROWS:
         for cls, _ in CLASS_NAMES:
             ypos[b, cls] = y
             y -= 1.0
-        y -= 0.45
-    for ax, (stage, title) in zip(axes, MISS_STAGES, strict=True):
-        count = {"xycoords": ("axes fraction", "data"), "textcoords": "offset points",
-                 "ha": "right", "fontsize": 8, "color": fs.BLACK}  # fmt: skip
-        for r in (r for r in rows if r["stage"] == stage):
-            yy, left = ypos[r["branch"], r["cls"]], 0.0
-            for key, _, colour, _ in causes:
-                w = 100 * r["shares"][key]
-                if w > 0:
-                    ax.barh([yy], [w], left=[left], height=0.72, color=colour,
-                            edgecolor="white", lw=0.4, zorder=2)  # fmt: skip
-                left += w
-            # the number missed, right-aligned in a column right of the bars
-            ax.annotate(f"{r['missed']}", (1.0, yy), xytext=(MISS_COL_PT, 0), va="center",
-                        **count)  # fmt: skip
-        ax.set_title(title, pad=3)
-        if any(r["stage"] == stage for r in rows):  # the column's header, in the title row
-            ax.annotate("$n$", (1.0, 1.0), xytext=(MISS_COL_PT, 3), va="baseline",
-                        **{**count, "xycoords": "axes fraction"})  # fmt: skip
-        ax.set_xlim(0, 100)
-        ax.set_xticks([0, 25, 50, 75, 100])
-        ax.grid(True, axis="x")
-        ax.grid(False, axis="y")
-        ax.tick_params(axis="y", length=0)
-        ax.spines["left"].set_visible(False)
-    ticks = [(ypos[b, cls], cname.split()[0]) for b, _ in SHIFT_ROWS for cls, cname in CLASS_NAMES]
-    axes[0].set_yticks([t for t, _ in ticks], [lab for _, lab in ticks])
-    for b, bt in SHIFT_ROWS:  # the shift once per pair of rows, left of the class names
-        mid = (ypos[b, "definition"] + ypos[b, "other"]) / 2
-        axes[0].text(-0.3, mid, bt, transform=axes[0].get_yaxis_transform(), ha="right",
-                     va="center", fontsize=9)  # fmt: skip
-    axes[0].set_ylim(min(ypos.values()) - 0.6, 0.6)
-    fig.supxlabel(r"share of the missed changed item-times (\%)", fontsize=9)
-    handles = [Patch(facecolor=c, edgecolor="none", label=lab) for _, lab, c, _ in causes]
-    fig.legend(handles=handles, loc="outside upper center", ncol=2, columnspacing=1.4,
-               handlelength=1.2, fontsize=8)  # fmt: skip
-    path = out / "fig_misses.pdf"
-    fig.savefig(path)
-    plt.close(fig)
-    return path
+        y -= 0.5
+
+    def fx(mm: float) -> float:  # figure fraction of a horizontal position in mm
+        return mm / w_mm
+
+    def fy(mm: float) -> float:
+        return mm / h_mm
+
+    with fs.printed(fs.BAR_RC) as plt:
+        fig = plt.figure(figsize=(w_mm * fs.MM, h_mm * fs.MM), dpi=300)
+        axes = [fig.add_axes((x / w_mm, bottom / h_mm, pw / w_mm, ph / h_mm)) for x in x_panels]
+        to_fig = fig.transFigure.inverted().transform
+        for ax, x0, (stage, stitle) in zip(axes, x_panels, MISS_STAGES, strict=True):
+            for s in ("top", "right", "left"):
+                ax.spines[s].set_visible(False)
+            ax.spines["bottom"].set_color(fs.SPINE)
+            ax.spines["bottom"].set_linewidth(0.6)
+            ax.spines["left"].set_color(fs.SPINE)
+            ax.spines["left"].set_linewidth(0.6)
+            ax.tick_params(length=2.2, width=0.6, color=fs.SPINE, labelsize=fs.T_TICK,
+                           labelcolor=MISS_TICK, pad=1.6)  # fmt: skip
+            ax.grid(axis="x", color=fs.GRID, lw=0.5, zorder=0)
+            ax.set_axisbelow(True)
+            ax.tick_params(axis="y", length=0, labelleft=False)
+            ax.set_xlim(0, 100)
+            ax.set_ylim(min(ypos.values()) - 0.62, 0.62)
+            ax.set_xticks([0, 25, 50, 75, 100])
+            mine = [r for r in rows if r["stage"] == stage]
+            for r in mine:
+                yy, lft = ypos[r["branch"], r["cls"]], 0.0
+                for k in causes:
+                    w = 100 * r["shares"][k]
+                    if w > 0:
+                        ax.barh([yy], [w], left=[lft], height=0.7, color=fills[k],
+                                edgecolor="white", lw=0.5, zorder=2)  # fmt: skip
+                    lft += w
+                # n, then the share no write-time set can contain (the claim), as two columns
+                yfig = to_fig(ax.transData.transform((0, yy)))[1]
+                fig.text(fx(x0 + pw + col_n), yfig, f"{r['missed']}", ha="right", va="center",
+                         fontsize=MISS_TEXT, color=fs.MUTED)  # fmt: skip
+                fig.text(fx(x0 + pw + col_s - 0.6), yfig, f"{100 * r['uncoverable']:.0f}",
+                         ha="right", va="center", fontsize=MISS_TEXT, color=MISS_WARM_INK,
+                         weight="bold")  # fmt: skip
+            ax_top = bottom + ph
+            fig.text(fx(x0), fy(ax_top + 1.3), stitle, ha="left", va="bottom",
+                     fontsize=fs.T_TITLE, color=fs.INK)  # fmt: skip
+            if mine:  # the columns' headers on the title line: n, and the two warm swatches + %
+                fig.text(fx(x0 + pw + col_n), fy(ax_top + 1.3), "$n$", ha="right", va="bottom",
+                         fontsize=MISS_TEXT, color=fs.MUTED)  # fmt: skip
+                sw, sh = 1.7, 1.9  # mm
+                sx = x0 + pw + col_s - 0.6 - 3.3 - 2 * sw
+                for j, c in enumerate((warm, warm_light)):
+                    fig.add_artist(Rectangle((fx(sx + j * sw), fy(ax_top + 1.55)), fx(sw), fy(sh),
+                                             transform=fig.transFigure, fc=c, ec="white",
+                                             lw=0.4))  # fmt: skip
+                fig.text(fx(x0 + pw + col_s - 0.6), fy(ax_top + 1.3), "%", ha="right",
+                         va="bottom", fontsize=MISS_TEXT, color=MISS_WARM_INK,
+                         weight="bold")  # fmt: skip
+        # row labels: the shift once per pair of rows, the item class per row
+        for b, btitle in SHIFT_ROWS:
+            for cls, cname in CLASS_NAMES:
+                yfig = to_fig(axes[0].transData.transform((0, ypos[b, cls])))[1]
+                fig.text(fx(left - 1.6), yfig, cname.split()[0], ha="right", va="center",
+                         fontsize=MISS_TEXT, color=fs.MUTED)  # fmt: skip
+            mid = (ypos[b, "definition"] + ypos[b, "other"]) / 2
+            yfig = to_fig(axes[0].transData.transform((0, mid)))[1]
+            fig.text(fx(0.6), yfig, btitle, ha="left", va="center", fontsize=fs.T_LABEL,
+                     color=fs.INK)  # fmt: skip
+        fig.text(fx((x_panels[0] + x_panels[1] + pw) / 2), fy(0.6),
+                 "share of the missed changed item-times (%)", ha="center", va="bottom",
+                 fontsize=fs.T_LABEL)  # fmt: skip
+        # the key: one row per colour group, the group named on the left in the row-label column
+        groups = [(heading, keys) for heading, keys in
+                  (("a write-time set could contain", [k for k in causes if k in coverable]),
+                   ("no write-time set can contain", [k for k in causes if k in uncoverable]))
+                  if keys]  # fmt: skip
+        fig.canvas.draw()
+        rend = fig.canvas.get_renderer()
+        col_w = 0.0
+        for _, keys in groups:  # the first column is as wide as its widest entry
+            t = fig.text(0, 0, labels[keys[0]], fontsize=MISS_TEXT)
+            col_w = max(col_w, t.get_window_extent(rend).width / fig.dpi * 25.4)
+            t.remove()
+        sw = 2.6  # swatch width, mm
+        for (heading, keys), ym in zip(groups, (h_mm - 2.3, h_mm - 5.9), strict=False):
+            fig.text(fx(left - 1.6), fy(ym), heading, ha="right", va="center",
+                     fontsize=MISS_TEXT, style="italic",
+                     color=MISS_WARM_INK if keys[0] in uncoverable else fs.MUTED)  # fmt: skip
+            x = left
+            for k in keys:
+                fig.add_artist(Rectangle((fx(x), fy(ym - 0.95)), fx(sw), fy(1.9),
+                                         transform=fig.transFigure, fc=fills[k],
+                                         ec="none"))  # fmt: skip
+                fig.text(fx(x + sw + 1.2), fy(ym), labels[k], ha="left", va="center",
+                         fontsize=MISS_TEXT, color=fs.INK)  # fmt: skip
+                x += sw + 1.2 + col_w + 5.0
+        return fs.save_pdf(fig, out / "fig_misses.pdf")
 
 
 # ========================================================================== diagnostic tests
@@ -690,9 +871,14 @@ def _ests(pairs: Iterable[tuple[Any, bool | None]]) -> tuple[list[float], list[b
     return xs, oks
 
 
+def _of(passed: int, n: int) -> str:
+    """How many of n units pass, tied ("3~of~3") so that it never breaks across lines."""
+    return f"{passed}~of~{n}"
+
+
 def _passes(oks: Sequence[bool], names: Sequence[str] = ()) -> str:
     """The outcome cell of a diagnostic test: how many units pass, and which where named."""
-    return f"passes {sum(oks)} of {len(oks)}" + (f" ({', '.join(names)})" if names else "")
+    return f"passes {_of(sum(oks), len(oks))}" + (f" ({', '.join(names)})" if names else "")
 
 
 def _test(label: str, threshold: str, xs: Sequence[float], oks: Sequence[bool], outcome: str
@@ -720,9 +906,12 @@ def _per_horizon(e3: Any) -> dict[str, list[dict[str, Any]]]:
 
 
 def _floor_counts(per: Mapping[str, Sequence[Mapping[str, Any]]]) -> str:
-    """How many horizons pass the utility floor, per system."""
-    return ", ".join(f"{lab} {sum(bool(x['T3_pass']) for x in per[s])} of {len(per[s])}"
-                     for s, lab in HORIZON_SYSTEMS if per[s])  # fmt: skip
+    """How many horizons pass the utility floor, per system; a name of several words is tied
+    together with its count ("no-store~BM25~0~of~3"), so it does not break across lines."""
+    return ", ".join(
+        lab.replace(" ", "~") + ("~" if " " in lab else " ")
+        + _of(sum(bool(x["T3_pass"]) for x in per[s]), len(per[s]))
+        for s, lab in HORIZON_SYSTEMS if per[s])  # fmt: skip
 
 
 def _diagnostic_tests(inp: Mapping[str, Any]) -> list[DiagnosticTest]:
@@ -815,7 +1004,9 @@ def diagnostic_tests(inp: Mapping[str, Any]) -> list[DiagnosticTest]:
 def tab_diagnostic_tests(tests: Sequence[DiagnosticTest]) -> str:
     """The table of the four diagnostic tests (paper/generated/tab_diagnostic_tests.tex): one row
     per test and set of systems, with its threshold, its estimate(s) and how many units pass, the
-    test worlds above the fresh worlds of the replication."""
+    test worlds above the fresh worlds of the replication (each under an italic banner, in the
+    paper's table style). A 2 pt gap separates the tests; a cost ceiling stays with the utility
+    floor before it, whose systems it refers to ("the same systems")."""
     lines = [
         "% generated by memshift.analysis.figures --only tab_diagnostic_tests; do not edit",
         r"\begin{table}[t]",
@@ -825,22 +1016,26 @@ def tab_diagnostic_tests(tests: Sequence[DiagnosticTest]) -> str:
         r"over the utility floor in pp, and the serving cost as a share of a full re-read. A "
         r"range spans the units (tiers, writers, horizons or systems).}",
         r"\label{tab:diagnostic-tests}",
-        r"\centering\footnotesize",
+        r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
         r"\newcolumntype{Y}[1]{>{\raggedright\arraybackslash}p{#1}}",
-        r"\begin{tabular}{@{}l Y{4.5cm} l l Y{4.5cm}@{}}",
+        r"\begin{mttabular*}{\linewidth}{l Y{4.5cm} l l Y{4.2cm}@{}}",
         r"\toprule",
-        r"test & systems or units & threshold & estimate & outcome \\",
+        r"Test & Systems or units & Threshold & Estimate & Outcome \\",
     ]
-    for fresh, title in ((False, "test worlds"), (True, "fresh worlds of the replication")):
+    for fresh, title in ((False, "Test worlds"), (True, "Fresh worlds of the replication")):
         rows = [t for t in tests if t.fresh == fresh]
         if not rows:
             continue
-        lines += [r"\midrule", rf"\multicolumn{{5}}{{@{{}}l}}{{\emph{{{title}}}}} \\"]
+        lines += [r"\midrule", rf"\mtgroup{{5}}{{{title}}}"]
+        before = None
         for t in rows:
             test, units = t.label.split(", ", 1)
-            lines.append(rf"{test} & {units} & {t.threshold} & {t.estimate} & {t.outcome} \\")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+            if before is not None and test not in (before, "Cost ceiling"):
+                lines.append(r"\addlinespace[2pt]")
+            before = test
+            lines.append(rf"\mtin {test} & {units} & {t.threshold} & {t.estimate} & {t.outcome} \\")
+    lines += [r"\bottomrule", r"\end{mttabular*}", r"\end{table}"]
     return "\n".join(lines) + "\n"
 
 

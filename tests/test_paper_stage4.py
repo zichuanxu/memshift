@@ -346,7 +346,7 @@ def test_a_flipped_effect_shows_in_the_fresh_estimate():
     assert out["RepBEffectUpdatePooledSourceSrc"] == pn.ci(flipped, pn.pp)
     assert out["RepPathOneEstimate"] == pn.ci(flipped, pn.pp)  # binding's effect pooled over D
     tab = pt.tab_replication(view)
-    assert pt.ci_pair_cells(flipped, sign=True) in tab and r"\fail" not in tab
+    assert pt.mt_ci_cells(flipped, sign=True) in tab and r"\fail" not in tab
 
 
 def test_pooled_forty_worlds_macros_and_partial_stage():
@@ -393,11 +393,13 @@ def test_replication_table_gives_both_estimates_with_their_intervals():
     view = paper_data.replication_view(ORIG, REP_PARTIAL)
     tab = pt.tab_replication(view)
     assert "agrees" not in tab and "as pred." not in tab and "repl." not in tab
-    assert r"\begin{tabular}{@{}ll r@{\,}l r@{\,}l r@{\,}l@{}}" in tab
+    gap = r"@{\hspace{14pt}}"  # between the shifts' column pairs
+    assert rf"\begin{{mttabular}}{{@{{}}ll r@{{\,}}l {gap} r@{{\,}}l {gap} r@{{\,}}l@{{}}}}" in tab
+    assert r"\mtgroup{8}{Source key}" in tab and r"\mtgroup{8}{Citation key}" in tab
     lines = [ln.removesuffix(r" \\").split(" & ") for ln in _first_body(tab).splitlines()]
     rows = [c for c in lines if len(c) == 8 and c[1] in ("main", "fresh")]
     assert len(rows) == 2 * 2 * len(pt.REP_ROWS)  # both keys, main and fresh per contrast
-    label = r"\quad $B{\times}D$ interaction, Update"
+    label = r"\mtin $B{\times}D$ interaction, Update"
     for g in ("source", "cited"):
         k = next(i for i, c in enumerate(rows) if c[0] == label and (g == "source" or i > 16))
         main, fresh = rows[k], rows[k + 1]
@@ -405,8 +407,8 @@ def test_replication_table_gives_both_estimates_with_their_intervals():
         for j, b in zip((2, 4, 6), ("src", "def", "orphan"), strict=True):
             row = view["rows"][b, f"BxD_interaction_update_{g}"]
             # every estimate with its interval, in two cells
-            assert " & ".join(main[j : j + 2]) == pt.ci_pair_cells(row["orig"], sign=True)
-            assert " & ".join(fresh[j : j + 2]) == pt.ci_pair_cells(row["rep"], sign=True)
+            assert " & ".join(main[j : j + 2]) == pt.mt_ci_cells(row["orig"], sign=True)
+            assert " & ".join(fresh[j : j + 2]) == pt.mt_ci_cells(row["rep"], sign=True)
 
 
 def test_replication_table_without_marks_and_partial_stage():
@@ -471,8 +473,10 @@ def test_construct_table_and_missing():
     # the contrasts with their intervals after each shift, without marks
     assert r"\pass" not in tab and r"\fail" not in tab and "pred." not in tab
     c3 = next(line for line in tab.splitlines() if line.startswith("$B{\\times}D$ on Update"))
-    # label, an empty count, then an estimate and its interval per shift (two aligned cells)
-    assert len(c3.split(" & ")) == 8 and c3.split(" & ")[3].startswith(r"{\scriptsize [")
+    # label, an empty count, then per shift an estimate and its interval in one centred cell
+    cells = re.split(r"\s*&\s*", c3.removesuffix(r" \\"))
+    assert len(cells) == 5 and cells[1] == ""
+    assert all(re.fullmatch(r"\\mtpair\{.+\}\{\[.+\]\}", c) for c in cells[2:]), cells
     caption = tab.split(r"\label{tab:construct}")[0]
     assert "regist" not in caption and "exploratory" not in caption
     assert "block" not in caption and not re.search(r"\bC[1-4]\b", tab)  # no block or IDs
@@ -480,7 +484,7 @@ def test_construct_table_and_missing():
     # the share is an em dash where C1 is not positive (orphan: D_m falls below D=0)
     share = next(line for line in tab.splitlines() if line.startswith("share of the $D$ effect"))
     assert share.count("---") == 1
-    assert share.split(" & ")[-1].startswith(r"\multicolumn{2}{c}{---}")  # across the pair
+    assert share.split(" & ")[-1].startswith(r"\multicolumn{1}{c@{}}{---}")  # centred
     assert "182.9" not in tab and "35.7" in share
     assert C_E1["contrasts"]["orphan"]["C1_repair_D1s_minus_D0_source"]["est"] < 0
     # the D1s cell is displayed as D_m; no display string spells it D1s
@@ -500,7 +504,7 @@ def test_construct_table_and_missing():
     assert MISSING in empty and r"\pass" not in _first_body(empty)
     bad = copy.deepcopy(C_E1)
     bad["contrasts"]["def"]["C1_repair_D1s_minus_D0_source"].update(est=0.01, lo=-0.01)
-    assert r"$+$1.0 & {\scriptsize [$-$1.0," in pt.tab_construct(bad)
+    assert r"\mtpair{$+$1.0}{[$-$1.0," in pt.tab_construct(bad)
     c1 = bad["contrasts"]["def"]["C1_repair_D1s_minus_D0_source"]
     assert pn.synth_numbers(bad)["SynthCOneDef"] == pn.ci(c1, pn.pp)
 
@@ -559,7 +563,7 @@ def test_m1_macros_per_switch_and_pooled(tmp_path):
     assert r"\pass" not in tab and r"\fail" not in tab and "triggered" not in tab
     down = next(ln for ln in tab.splitlines() if ln.startswith("downgrade"))
     surv = m["m1b_d_protects_switch"]["downgrade"]["d1_minus_d0_survival"]
-    assert pt.ci_pair_cells(surv, sign=True) in down  # the survival difference, interval
+    assert pt.mt_ci_cells(surv, sign=True) in down  # the survival difference, interval
 
 
 def test_m1_partial_stage_counts_only_when_all_eight_are_staged(tmp_path):
@@ -597,10 +601,12 @@ def test_m2_macros_estimates_and_family_count():
     assert out["MTwoLlamaWorlds"] == "20"
     tab = pt.tab_families(None, fams, {}, {"llama": 0.0})
     assert "families where" not in tab and r"\pass" not in tab
-    assert pt.ci_pair_cells(fams["llama"]["estimates"]["BxD_def"], sign=True) in tab
+    assert pt.mt_ci_cells(fams["llama"]["estimates"]["BxD_def"], sign=True) in tab
     largest = next(ln for ln in tab.splitlines() if ln.startswith("(i) "))
     missing = rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"
-    assert largest.split(" & ")[1:] == ["0.0", "", missing, missing, r"\multicolumn{2}{c}{} \\"]
+    # Llama alone, the two families not staged, and the empty column of the main reader
+    cells = re.split(r"\s*&\s*", largest.removesuffix(r" \\"))
+    assert cells[1:] == ["0.0", "", missing, missing, "", ""]
 
 
 def test_m2_count_needs_all_three_families():
@@ -681,20 +687,20 @@ def test_m3_flipped_sign_and_the_reader_table():
     tab = pt.tab_families(None, {f.key: None for f in FAMILIES}, {"llama": THETA_R})
     missed = THETA_R["src"]["contrasts"]["D_effect_missed_source"]["swap"]
     assert "6/6" not in tab and "triggered" not in tab
-    assert pt.ci_pair_cells(missed, sign=True).split(" & ")[0] in tab  # 0.0: no interval
+    assert pt.mt_ci_cells(missed, sign=True).split(" & ")[0] in tab  # 0.0: no interval
     # one row per quantity: the swapped reader of each family, then the main reader
-    readers = tab.split("(b) as reader only", 1)[1].splitlines()
+    readers = tab.split("(b) As reader only", 1)[1].splitlines()
     assert readers[0].split(" & ")[1:] == [
         *(rf"\multicolumn{{2}}{{c}}{{{f.label}}}" for f in FAMILIES),
-        r"\multicolumn{2}{c}{Qwen3.5-9B} \\",
+        r"\multicolumn{2}{c@{}}{Qwen3.5-9B} \\",
     ]
     missing = rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"
     for label, key, b in pt.READER_ROWS:
         c = THETA_R[b]["contrasts"][key]
         line = next(ln for ln in readers if ln.startswith(label + " &")).removesuffix(r" \\")
         swap, rest = line.split(" & ", 1)[1].split(f" & {missing} & {missing} & ")
-        assert swap == pt.ci_pair_cells(c["swap"], sign=True), label  # Llama, then not staged
-        assert rest == pt.ci_pair_cells(c["main"], sign=True), label  # the main reader last
+        assert swap == pt.mt_ci_cells(c["swap"], sign=True), label  # Llama, then not staged
+        assert rest == pt.mt_ci_cells(c["main"], sign=True), label  # the main reader last
     labels = [lab for lab, _, _ in pt.READER_ROWS]
     for quantity in ("$B$ effect on Update", "$D$ effect on accuracy on re-derived items"):
         assert {f"{quantity}, $\\Ssrc$", f"{quantity}, $\\Sdef$"} <= set(labels), quantity
@@ -935,7 +941,7 @@ def test_rendered_macros_checks_differences_and_descriptives(tmp_path):
     assert "surface forms" not in tab  # the rendering descriptives are in the text (macros)
     assert "first attempt" not in tab and "Probes identical" not in tab and ": yes" not in tab
     assert r"\pass" not in tab and r"\fail" not in tab and "block" not in tab
-    assert pt.ci_pair_cells(m["rendered"]["estimates"]["D_repair_src"], sign=True) in tab
+    assert pt.mt_ci_cells(m["rendered"]["estimates"]["D_repair_src"], sign=True) in tab
 
 
 def test_rendered_without_render_reports_leaves_the_descriptives_missing(tmp_path):
@@ -1115,14 +1121,36 @@ def _group(s: str, i: int) -> tuple[str, int]:
     raise ValueError(s[i : i + 40])
 
 
+# For the tables' compile tests: the paper's text width (paper/preprint.sty: a 6.75 in text block
+# on US letter) and its table style (paper/memtab-style.tex), which needs booktabs, array and
+# xcolor and the grey of the figures
+PAPER_PAGE = r"\usepackage[letterpaper,hmargin=0.875in,vmargin=1in]{geometry}"
+
+
+def table_style(tmp_path: Path) -> str:
+    """The preamble line that loads the table style in a compile test run in `tmp_path` (after
+    booktabs, array and xcolor); the style file is copied there."""
+    shutil.copy(ROOT / "paper" / "memtab-style.tex", tmp_path)
+    return r"\definecolor{cgrey}{HTML}{6E6E6E}\input{memtab-style}"
+
+
+# column types with arguments: p{width}; the table style's (paper/memtab-style.tex) N{template}
+# and H{width}{indent}; P{width} and C{width} as a table defines them with \newcolumntype
+COLUMN_ARGS = {"p": 1, "N": 1, "P": 1, "C": 1, "H": 2}
+ENVIRONMENTS = ("tabular", "tabular*", "mttabular", "mttabular*")
+
+
 def _columns(spec: str) -> int:
-    """The columns of a tabular spec: l, c, r and p{...}; @{...} and >{...} are not columns."""
+    """The columns of a tabular spec: l, c, r and the types of `COLUMN_ARGS`; @{...}, >{...} and
+    <{...} are not columns."""
     count, i = 0, 0
     while i < len(spec):
         c = spec[i]
-        if c in "@>p" and spec[i + 1 : i + 2] == "{":
-            _, i = _group(spec, i + 1)
-            count += c == "p"
+        if spec[i + 1 : i + 2] == "{" and (c in "@><" or c in COLUMN_ARGS):
+            i += 1
+            for _ in range(COLUMN_ARGS.get(c, 1)):
+                _, i = _group(spec, i)
+            count += c in COLUMN_ARGS
             continue
         count += c in "lcr"
         i += 1
@@ -1130,14 +1158,15 @@ def _columns(spec: str) -> int:
 
 
 def _tabulars(tex: str) -> list[tuple[int, list[str]]]:
-    """(column count, body lines) of every tabular and tabular* in `tex`."""
+    """(column count, body lines) of every tabular, tabular* and table-style mttabular(*) in
+    `tex`."""
     out = []
-    for m in re.finditer(r"\\begin\{tabular(\*?)\}", tex):
+    for m in re.finditer(r"\\begin\{((?:mt)?tabular\*?)\}(\[[a-z]\])?", tex):
         i = m.end()
-        if m.group(1):
+        if m.group(1).endswith("*"):
             _, i = _group(tex, i)  # the width of a tabular*
         spec, i = _group(tex, i)
-        end = tex.index(f"\\end{{tabular{m.group(1)}}}", i)
+        end = tex.index(f"\\end{{{m.group(1)}}}", i)
         out.append((_columns(spec), tex[i:end].strip("\n").splitlines()))
     return out
 
@@ -1145,8 +1174,8 @@ def _tabulars(tex: str) -> list[tuple[int, list[str]]]:
 def check_tex(tex: str) -> None:
     """Environments balance, and every table row has as many cells as its tabular has columns."""
     assert tex.count("\\begin{table}") == tex.count("\\end{table}") >= 1
-    begins = tex.count("\\begin{tabular}") + tex.count("\\begin{tabular*}")
-    assert begins == tex.count("\\end{tabular}") + tex.count("\\end{tabular*}") >= 1
+    begins = sum(tex.count(f"\\begin{{{env}}}") for env in ENVIRONMENTS)
+    assert begins == sum(tex.count(f"\\end{{{env}}}") for env in ENVIRONMENTS) >= 1
     assert tex.count("{") == tex.count("}")
     tabulars = _tabulars(tex)
     assert tabulars
@@ -1204,6 +1233,7 @@ def test_tables_and_macros_are_deterministic(tmp_path):
     )
 
 
+@pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile(tmp_path):
     tables = _all_tables() | {"rendered": pt.tab_rendered(_rendered(tmp_path))}
@@ -1218,8 +1248,9 @@ def test_tables_compile(tmp_path):
         "\n".join(
             [
                 r"\documentclass[11pt]{article}",
-                r"\usepackage[letterpaper,margin=1in]{geometry}\usepackage[T1]{fontenc}",
+                PAPER_PAGE + r"\usepackage[T1]{fontenc}",
                 r"\usepackage{amsmath,newtxtext,newtxmath,booktabs,array,xcolor,caption}",
+                table_style(tmp_path),
                 r"\newcommand{\holdmem}{\textsc{HoldMem}}\newcommand{\pass}{\checkmark}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
@@ -1260,7 +1291,6 @@ def test_native_panels_for_all_systems_and_for_missing_ones():
     assert [p["system"] for p in figs.native_panels({"systems": {"letta": {}}})][-1] == "letta"
 
 
-@pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
 def test_native_systems_figure_is_a_vector_pdf_with_and_without_systems(tmp_path):
     for name, res in (("all", ALL_SIX), ("none", None)):
         out = tmp_path / name
@@ -1271,12 +1301,12 @@ def test_native_systems_figure_is_a_vector_pdf_with_and_without_systems(tmp_path
         assert figs.fig_native_systems(res, out).read_bytes()[:5] == b"%PDF-"
 
 
-@pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
 def test_calibration_figure_draws_with_and_without_the_curve(tmp_path):
     with_curve = figs.fig_calibration(ORIG["e2"], tmp_path).read_bytes()
     assert with_curve.startswith(b"%PDF") and b"/Subtype /Image" not in with_curve
     box = re.search(rb"/MediaBox \[\s*0 0 ([\d.]+) ([\d.]+)\s*\]", with_curve)
     assert box and float(box.group(1)) == pytest.approx(72 * figs.fs.NARROW)  # one panel
+    assert float(box.group(2)) == pytest.approx(figs.CALIBRATION_PT[1])
     bare = {k: v for k, v in ORIG["e2"].items() if k != "explore_pooled_curve"}
     (tmp_path / "bare").mkdir()
     without = figs.fig_calibration(bare, tmp_path / "bare").read_bytes()
@@ -1331,45 +1361,26 @@ def test_calibration_bins_hold_every_item_and_none_is_empty():
 
 def test_native_cells_take_the_colour_of_their_binding_arm():
     fs = figs.fs
-    assert figs._cell_style("holdmem_D0B0") == (r"\textsc{HoldMem}(0,0)", fs.ARMS["none"][1])
-    label, colour = figs._cell_style("holdmem_D0B1_cited")
-    assert label.endswith("(0,1), citation key") and colour == fs.ARMS["cited"][1]
-    assert figs._cell_style("holdmem_D0B1_source")[1] == fs.ARMS["source"][1]
-    assert figs._cell_style(None)[1] == fs.GREY
+    none = figs.native_cell_style("holdmem_D0B0")
+    cited = figs.native_cell_style("holdmem_D0B1_cited")
+    source = figs.native_cell_style("holdmem_D0B1_source")
+    assert none and cited and source and figs.native_cell_style(None) is None
+    assert none["rail"] == fs.ORANGE and none["band"] == fs.tint(fs.ORANGE, 0.8)  # B=0 amber
+    assert cited["rail"] == fs.SKY and source["rail"] == fs.BLUE  # B=1: the key's blues
+    assert "".join(s for s, _ in cited["segments"]).endswith("(0,1), citation key")
+    assert "".join(s for s, _ in none["segments"]) == "HOLDMEM(0,0)"
     panels = figs.native_panels(ALL_SIX)
     assert [p["cell"] for p in panels[:2]] == ["holdmem_D0B0", "holdmem_D0B0"]
+    assert [(c, len(ks)) for c, ks in figs.native_groups(panels)][0] == ("holdmem_D0B0", 3)
 
 
-def test_native_bars_start_at_zero_with_their_interval_as_error_bar():
-    from matplotlib.colors import to_rgba
-
-    fs = figs.fs
-    plt = fs.plt()
-    fig, ax = plt.subplots()
-    e = {"est": 0.6, "lo": 0.45, "hi": 0.7}
-    figs._native_bar(ax, 2.0, e, "white", fs.DARK)  # outlined: one dark error bar
-    figs._native_bar(ax, 1.0, e, fs.DARK, fs.DARK)  # dark: a white copy clipped to the bar
-    assert [(b.get_x(), b.get_width()) for b in ax.patches] == [(0, pytest.approx(0.6))] * 2
-    assert [c.get_segments()[0][:, 0].tolist() for c in ax.collections] == [[0.45, 0.7]] * 3
-    assert [tuple(c.get_colors()[0]) for c in ax.collections] == [
-        to_rgba(fs.BLACK),
-        to_rgba(fs.BLACK),
-        to_rgba("white"),
-    ]
-    clips = [c.get_clip_box().bounds for c in ax.collections]
-    assert clips[:2] == [ax.bbox.bounds] * 2
-    assert clips[2] == pytest.approx(ax.patches[1].get_window_extent().bounds)
-    plt.close(fig)
-
-
-@pytest.mark.skipif(shutil.which("latex") is None, reason="no LaTeX for the figure text")
 def test_zero_cost_figure_is_a_full_width_vector_pdf(tmp_path):
     path = figs.fig_zero_cost(ORIG["e3"], tmp_path)
     data = path.read_bytes()
     assert data.startswith(b"%PDF") and b"/Subtype /Image" not in data
     box = re.search(rb"/MediaBox \[\s*0 0 ([\d.]+) ([\d.]+)\s*\]", data)
     assert box and float(box[1]) == pytest.approx(72 * figs.fs.TEXT)
-    assert float(box[2]) == pytest.approx(72 * figs.ZERO_H)
+    assert float(box[2]) == pytest.approx(figs.ZERO_PT[1])
 
 
 # ------------------------------------------------------------------------- sources and the paper
@@ -1418,9 +1429,6 @@ def test_interval_format_is_signed_scriptsize_with_a_thin_space():
     assert pt._ci({"est": -0.005, "lo": -0.02, "hi": 0.0}, sign=True) == (
         r"$-$0.5\,{\scriptsize [$-$2.0,\,0.0]}"
     )
-    assert pt._slope_cells({"est": -3.52, "lo90": -99.29, "hi90": -0.96}, unusable=True) == (
-        r"\textcolor{gray}{$-$3.52} & \textcolor{gray}{\scriptsize [$-$99.29,\,$-$0.96]}"
-    )
     # an interval whose ends equal the estimate as printed: the estimate alone
     assert pt.ci_pair_cells({"est": 0.0, "lo": 0.0, "hi": 0.0}, sign=True) == "0.0 & "
     assert pt.ci_pair_cells({"est": 1.0, "lo": 0.9996, "hi": 1.0}) == "100.0 & "
@@ -1434,46 +1442,74 @@ def test_interval_format_is_signed_scriptsize_with_a_thin_space():
     )
 
 
-def test_stage4_captions_define_their_rows_marks_and_cells():
+def test_table_style_interval_formats():
+    r"""The tables in the paper's table style set an interval as secondary text (`\mtint`),
+    beside its estimate in a column pair or with it in one cell (`\mtpair`), and the estimate
+    alone where the printed ends equal it, as the formats above do."""
+    e = {"est": 0.092, "lo": 0.067, "hi": 0.119}
+    assert pt.mt_ci_cells(e, sign=True) == r"$+$9.2 & \mtint{[$+$6.7,\,$+$11.9]}"
+    assert pt.mt_pair(e, sign=True) == r"\mtpair{$+$9.2}{[$+$6.7,\,$+$11.9]}"
+    alone = {"est": 0.0, "lo": 0.0, "hi": 0.0}
+    assert pt.mt_ci_cells(alone, sign=True) == "0.0 & " and pt.mt_pair(alone) == r"\mtpair{0.0}{}"
+    assert pt.mt_ci_cells(None) == rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"
+    assert pt.mt_pair({"est": float("nan"), "lo": 0.0, "hi": 0.0}) == pt.UNDEFINED
+    assert pt._slope_cells({"est": -3.52, "lo90": -99.29, "hi90": -0.96}, unusable=True) == (
+        r"\mtmuted{$-$3.52} & \mtint{[$-$99.29,\,$-$0.96]}"
+    )
+    assert pt.centred(pt.UNDEFINED, last=True, cols=2) == r"\multicolumn{2}{c@{}}{---}"
+
+
+def _notes(tex: str) -> str:
+    """The notes under the tables of `tex`."""
+    return " ".join(re.findall(r"\\mtnotes\{(.*)\}\n", tex))
+
+
+def test_stage4_captions_and_notes_define_their_rows_marks_and_cells():
     inp = paper_data.load_stage4(ROOT, SOURCES)
     rep = pt.tab_replication(paper_data.replication_view(inp["orig"], inp["rep"]))
-    caption = rep.split(r"\label{tab:replication}")[0]
     for term in (
         "Detection: share",
         "Value equals gold: share of the re-derived item-times whose value equals gold",
     ):
-        assert term in caption, term
+        assert term in _notes(rep), term
+    assert "(main)" in rep.split(r"\label{tab:replication}")[0]
     assert "behavioural" not in rep and "mechanistic" not in rep
     assert "the retention test in" not in rep and "Membership" not in rep
-    con = pt.tab_construct(inp["c"]).split(r"\label{tab:construct}")[0]
+    tab = pt.tab_construct(inp["c"])
+    con = tab.split(r"\label{tab:construct}")[0]
+    for term in ("against exact recomputation", "$t_0$, before any shift"):
+        assert term in con, term
     for term in (
         "$D_1$, $D_0$: the $D{=}1$ and $D{=}0$ cells",
-        "against exact recomputation",
-        "$t_0$, before any shift",
         r"only exact recomputation gives: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$",
     ):
-        assert term in con, term
-    assert "benchmark-authored" not in con
+        assert term in _notes(tab), term
+    assert "benchmark-authored" not in tab
     fam = pt.tab_families(inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, SOURCES))
     switches, families_ = fam.split("\n\n\\begin{table}")  # two tables
     assert r"\label{tab:switches}" in switches and r"\label{tab:families}" in families_
-    caption = fam.split(r"\label{tab:families}")[0]
+    for term in ("slope (grey) is not usable", "(90\\% interval)"):
+        assert term in _notes(switches), term
     for term in (
         "Row (i): the largest absolute $D$ effect on missed invalidation",
-        "slope (grey) is not usable",
-        "(90\\% interval)",
         "In (b) the last column is the main reader on the same worlds",
     ):
-        assert term in caption, term
+        assert term in _notes(families_), term
     for label in ("(ii) $B$ effect on Update", "(v) no-store BM25 $-$"):
         assert label in families_, label
-    assert "same sign" not in fam and "keep the main reader's sign" not in caption
-    assert r"$\pm3$" not in caption and "regist" not in caption and "check" not in caption
+    text = _notes(fam) + fam.split(r"\label{tab:families}")[0]
+    assert "same sign" not in fam and "keep the main reader's sign" not in text
+    assert r"$\pm3$" not in text and "regist" not in text and "check" not in text
     largest = next(ln for ln in fam.splitlines() if ln.startswith("(i) "))
     assert MISSING not in largest  # every family's E1 analysis is staged
     upgrade = next(ln for ln in fam.splitlines() if ln.startswith("upgrade (27B)$^\\ast$"))
-    assert r"\textcolor{gray}{" in upgrade  # the unusable slope is grey
+    assert r"\mtmuted{" in upgrade  # the unusable slope is grey
+    gemma = next(ln for ln in fam.splitlines() if ln.startswith("gemma-4-12B$^\\ast$"))
+    assert r" & \mtna & " in gemma  # no item failed: no AUROC
+    # the main study's three tiers, then the five other writers
+    assert switches.count(r"\mtgap") == 1
+    assert switches.index("downgrade") < switches.index(r"\mtgap") < switches.index("Llama")
     ren = pt.tab_rendered(inp["rendered"])
     first = next(ln for ln in ren.splitlines() if ln.startswith("(i) "))
-    assert first.removesuffix(r" \\").endswith(rf"\multicolumn{{2}}{{c}}{{{pt.UNDEFINED}}}")
-    assert "has no paired difference" in ren.split(r"\label{tab:rendered}")[0]
+    assert first.removesuffix(r" \\").endswith(rf"\multicolumn{{2}}{{c@{{}}}}{{{pt.UNDEFINED}}}")
+    assert "has no paired difference" in _notes(ren)

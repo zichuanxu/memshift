@@ -64,32 +64,38 @@ class Column:
     header: str
     kind: str = "cat"  # cat (symbol) | judge (symbol from the judge class) | text (string)
     stem: str = ""  # macro stem for the counts (categorical columns only)
+    align: str = "c"  # r for a count, so its digits line up
 
 
 COLUMNS = {
-    "text": Column("text_origin", "world text", "text"),
-    "gold_first": Column("gold_first", "gold before text", stem="GoldFirst"),
-    "gold_dep": Column("gold_dependency", "gold dependency sets", stem="GoldDep"),
-    "derived": Column("derived_knowledge", "derived items", stem="Derived"),
-    "update": Column("chg_new_updated_facts", "source revision", stem="Update"),
-    "invalid": Column("chg_retraction_deletion", "deletion", stem="Invalid"),
-    "implicit": Column("chg_implicit_conflict", "implicit conflict", stem="Implicit"),
-    "redef": Column("chg_definition_change", "redefinition", stem="Redef"),
-    "writer": Column("chg_writer_model_change", "writer switch", stem="Writer"),
-    "impl": Column("chg_implementation_migration", "export", stem="Impl"),
-    "consent": Column("chg_consent_revocation", "consent revoked", stem="Consent"),
-    "branch": Column("counterfactual", "counterfactual", stem="Branch"),
-    "native": Column("native_systems", "native systems", "text"),
-    "judge": Column("llm_judge", "no LLM judge", "judge", stem="Judge"),
-    "histories": Column("n_histories", "histories", "text"),
-    "questions": Column("n_questions", "questions", "text"),
+    "text": Column("text_origin", "World text", "text"),
+    "gold_first": Column("gold_first", "Gold before text", stem="GoldFirst"),
+    # the longest header on two rotated lines, so the header row is no taller than the next one
+    "gold_dep": Column(
+        "gold_dependency",
+        r"\begin{tabular}{@{}l@{}}Gold\\dependency sets\end{tabular}",
+        stem="GoldDep",
+    ),
+    "derived": Column("derived_knowledge", "Derived items", stem="Derived"),
+    "update": Column("chg_new_updated_facts", "Source revision", stem="Update"),
+    "invalid": Column("chg_retraction_deletion", "Deletion", stem="Invalid"),
+    "implicit": Column("chg_implicit_conflict", "Implicit conflict", stem="Implicit"),
+    "redef": Column("chg_definition_change", "Redefinition", stem="Redef"),
+    "writer": Column("chg_writer_model_change", "Writer switch", stem="Writer"),
+    "impl": Column("chg_implementation_migration", "Export", stem="Impl"),
+    "consent": Column("chg_consent_revocation", "Consent revoked", stem="Consent"),
+    "branch": Column("counterfactual", "Counterfactual", stem="Branch"),
+    "native": Column("native_systems", "Native systems", "text", align="r"),
+    "judge": Column("llm_judge", "No LLM judge", "judge", stem="Judge"),
+    "histories": Column("n_histories", "Histories", "text", align="r"),
+    "questions": Column("n_questions", "Questions", "text", align="r"),
 }
 # (group label, column keys) of the table
 FULL = (
-    ("data", ("text", "gold_first", "gold_dep", "derived")),
-    ("changes tested", ("update", "invalid", "implicit", "redef", "writer", "impl", "consent")),
-    ("protocol", ("branch", "judge")),
-    ("scale", ("native", "histories", "questions")),
+    ("Data", ("text", "gold_first", "gold_dep", "derived")),
+    ("Changes tested", ("update", "invalid", "implicit", "redef", "writer", "impl", "consent")),
+    ("Protocol", ("branch", "judge")),
+    ("Scale", ("native", "histories", "questions")),
 )
 # macro stem and vocabulary for every counted categorical column
 VALUE_KEY = {
@@ -173,27 +179,27 @@ def _marks(rows: list[dict[str, Any]], columns: list[Column]) -> tuple[bool, boo
     return planned, any(f.get("inferred") for f in fields)
 
 
-# the key of the caption: the marks, the world-text codes and the unit of the MemShift row; the
-# columns are defined in the text of the appendix (paper/sections/app_related.tex)
+# the key in the notes under the table: the marks, the world-text codes and the unit of the
+# MemShift row; the columns are defined in the text of the appendix (paper/sections/app_related.tex)
 KEY = (
     r"\checkmark{}~yes, $\sim$~partial, $\times$~no such element, n/s~not stated. World text: "
     r"LEGEND. \memshift{}: test worlds and graded probes over ITEMS knowledge items."
 )
+CAPTION = (
+    r"\memshift{} against its nearest neighbours on every property of the audit, each read from "
+    r"the neighbour's own paper."
+)
 GAP_EVERY = 5  # neighbour rows between two small gaps
 
 
-def _caption(rows: list[dict[str, Any]], inferred: bool) -> str:
+def _key(rows: list[dict[str, Any]], inferred: bool) -> str:
     codes = {str(v) for r in rows for v in _text_values(r)}
     legend = ", ".join(f"{k}~{v}" for k, v in TEXT_CODES.items() if k in codes)
     items = rows[-1]["fields"]["n_questions"].get("items")
-    head = (
-        r"\memshift{} against its nearest neighbours on every property of the audit, each read "
-        r"from the neighbour's own paper. "
-    )
     key = KEY.replace("LEGEND", legend).replace("ITEMS", f"{items:,}" if items else "the")
     if inferred:
         key = key.replace("n/s~not stated.", "n/s~not stated, " + INFERRED_NOTE)
-    return head + key
+    return key
 
 
 def _author_named(short_name: str) -> bool:
@@ -206,29 +212,38 @@ def table(rows: list[dict[str, Any]], groups: tuple[tuple[str, tuple[str, ...]],
     """One LaTeX table over the given column groups."""
     columns = [COLUMNS[k] for _, keys in groups for k in keys]
     _planned, inferred = _marks(rows, columns)
-    spec = "@{}l " + " ".join("c" * len(keys) for _, keys in groups) + "@{}"
-    head = ["benchmark"] + [rf"\rotatebox{{90}}{{{c.header}}}" for c in columns]
+    spec = "@{}l " + " ".join("".join(COLUMNS[k].align for k in keys) for _, keys in groups) + "@{}"
+
+    def header(i: int, c: Column) -> str:
+        """A rotated header, centred over a column that is not centred (and the last one)."""
+        rotated = rf"\rotatebox{{90}}{{{c.header}}}"
+        last = i == len(columns) - 1
+        if c.align == "c" and not last:
+            return rotated
+        return rf"\multicolumn{{1}}{{c{'@{}' if last else ''}}}{{{rotated}}}"
+
+    head = ["Benchmark"] + [header(i, c) for i, c in enumerate(columns)]
     lines = [
         r"\begin{table}[t]",
-        r"\centering",
-        r"\footnotesize",
-        r"\setlength{\tabcolsep}{2pt}",  # 17 columns
-        rf"\caption{{{_caption(rows, inferred)}}}",
+        rf"\caption{{{CAPTION}}}",
         rf"\label{{{label}}}",
-        rf"\begin{{tabular}}{{{spec}}}",
+        r"\centering\mtsetup",
+        r"\setlength{\tabcolsep}{3pt}",  # 17 columns
+        rf"\begin{{mttabular}}{{{spec}}}",
         r"\toprule",
     ]
     start, spans, rules = 2, [], []
-    for name, keys in groups:
+    for j, (name, keys) in enumerate(groups):
         end = start + len(keys) - 1
-        spans.append(rf"\multicolumn{{{len(keys)}}}{{c}}{{{name}}}")
-        rules.append(rf"\cmidrule(lr){{{start}-{end}}}")
+        last = j == len(groups) - 1
+        spans.append(rf"\multicolumn{{{len(keys)}}}{{c{'@{}' if last else ''}}}{{{name}}}")
+        rules.append(rf"\cmidrule({'l' if last else 'lr'}){{{start}-{end}}}")
         start = end + 1
     lines += ["& " + " & ".join(spans) + r" \\", "".join(rules), " & ".join(head) + r" \\"]
     lines.append(r"\midrule")
     for i, r in enumerate(rows):
         if i and i % GAP_EVERY == 0 and not r.get("is_reference"):
-            lines.append(r"\addlinespace[3pt]")
+            lines.append(r"\mtgap")
         if r.get("is_reference"):
             lines.append(r"\midrule")
             name = r"\textbf{\memshift{}}"
@@ -237,7 +252,12 @@ def table(rows: list[dict[str, Any]], groups: tuple[tuple[str, tuple[str, ...]],
         else:
             name = rf"{_tex(r['short_name'])}~\citep{{{r['key']}}}"
         lines.append(" & ".join([name] + [cell(r, c) for c in columns]) + r" \\")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    lines += [
+        r"\bottomrule",
+        r"\end{mttabular}",
+        rf"\mtnotes{{{_key(rows, inferred)}}}",
+        r"\end{table}",
+    ]
     return "\n".join(lines) + "\n"
 
 
