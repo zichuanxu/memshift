@@ -1174,9 +1174,9 @@ def tab_heldout(inp: Mapping[str, Any]) -> str:
     held = _get(ga, "quantities", "heldout")
     lines = [
         r"\begin{table}[t]",
-        r"\caption{The 18 held-out definitions, in three draws of six fixed before any model "
-        r"call, with each definition's own $B{\times}D$ on its changed item-times with exact "
-        r"recomputation as $D{=}1$ (10 worlds, point estimates).}",
+        r"\caption{The 18 held-out definitions, in three draws of six, with each definition's "
+        r"own $B{\times}D$ on its changed item-times with exact recomputation as $D{=}1$ "
+        r"(10 worlds, point estimates).}",
         r"\label{tab:heldout}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
