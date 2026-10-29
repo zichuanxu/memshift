@@ -1,24 +1,26 @@
-"""Check the results table of the README against the numbers the paper is built from.
+"""Check the results tables of the README against the numbers the paper is built from.
 
-The table under "Main results" in the README is the paper's main table (Table 4, `tab:main` in
-paper/sections/results.tex), cell for cell: per shift and item class, the class's share of the
+The first table under "Main results" in the README is panel (b) of the paper's main table (Table 4,
+`tab:families-main` in paper/sections/results.tex), cell for cell: the main contrasts with each of
+four open-weight models as writer and reader, each with its 95% world-bootstrap interval. The
+second is panel (a) (`tab:main`), cell for cell: per shift and item class, the class's share of the
 changed items, repair correctness with a key (r_0, r_1) and Update without a key (a_0, a_1) at D=0
 and D=1, and the interaction B x D on the changed items caused by the shift and on all changed
 items, each with its 95% world-bootstrap interval. Every cell is a LaTeX macro of
 `memshift.analysis.paper_numbers` (`rows()` names the macro of each cell, as Table 4 does), except
 the dash that Table 4 prints where a redefinition changes no other item. This script rebuilds the
 table from those macros and compares it with the README, so no number in the table is typed by
-hand. It also checks the number in the README's text below the table (TEXT): the largest share of a
-class's changed items that the source key missed.
+hand. It also checks the number in the README's text (TEXT): the largest share of a class's changed
+items that the source key missed.
 
 The macros are read from `paper/generated/numbers.tex` when it exists, else from
 `results/numbers.tex` (written by `make results`). The README is `docs/release/README.md` when it
 exists (the source of the released README), else `README.md`.
 
 Usage: python scripts/readme_results.py [--numbers FILE] [--readme FILE] [--write]
-Exit code 0 when the README holds the table and the text the macros give, 1 otherwise (the expected
-table and the README's, or the missing sentence, are printed). `--write` replaces the README's table
-with the expected one; it does not rewrite the text.
+Exit code 0 when the README holds the tables and the text the macros give, 1 otherwise (the
+expected table and the README's, or the missing sentence, are printed). `--write` replaces the
+README's tables with the expected ones; it does not rewrite the text.
 """
 
 from __future__ import annotations
@@ -47,6 +49,28 @@ COLUMNS = (
 DASHED = {("Def", "Other", "B×D, caused by the shift (pp)")}
 DASH = "—"
 HEADER = "| Shift | Items | " + " | ".join(h for h, _, _ in COLUMNS) + " |"
+# Panel (b): the models as columns, each with its macro prefix, and the contrasts as rows, each with
+# its macro pattern. Qwen3.5-9B, the main model, takes its macros from other analyses (the third
+# field of CONTRASTS).
+MODELS = (
+    ("Llama-3.1-8B", "Llama"),
+    ("gemma-4-12B", "Gem"),
+    ("gpt-oss-20b", "Gpt"),
+    ("Qwen3.5-9B", ""),
+)
+CONTRASTS = (
+    ("B effect on Update, source revision", "ExCls{m}SrcAllBPooled", "RendTemplateBUpdateSrc"),
+    ("D effect on accuracy, source revision", "ExCls{m}SrcAllDRepair", "RendTemplateDRepairSrc"),
+    ("D effect on accuracy, redefinition", "ExCls{m}DefAllDRepair", "RendTemplateDRepairDef"),
+    ("B×D on Update, source revision", "ExCls{m}SrcAllBxD", "RendTemplateBxDSrc"),
+    ("B×D on Update, redefinition", "ExCls{m}DefAllBxD", "RendTemplateBxDDef"),
+    ("B×D on Update, deletion †", "ExCls{m}OrphanAllBxD", "ExClsMainOrphanAllBxD"),
+    ("No-store BM25 − HoldMem(1,1), redefinition", "MTwo{m}ZeroMinusHoldDef",
+     "RendTemplateZeroMinusHoldDef"),
+)  # fmt: skip
+# the model-family analyses name the models differently from ExCls* (MTwo* uses full names)
+MTWO = {"Llama": "Llama", "Gem": "Gemma", "Gpt": "GptOss"}
+MODEL_HEADER = "| Contrast (pp) | " + " | ".join(name for name, _ in MODELS) + " |"
 MACRO = re.compile(r"^\\newcommand\{\\([A-Za-z]+)\}\{(.*)\}\s*$")
 CELL = re.compile(r"[+-]?\d+\.\d \[[+-]?\d+\.\d, [+-]?\d+\.\d\]")
 PCT = re.compile(r"\d+\.\d")
@@ -68,6 +92,22 @@ def rows() -> list[tuple[str, str, list[Cell]]]:
                 else:
                     cells.append((kind, pattern.format(s=skey, c=ckey)))
             out.append((sname, cname, cells))
+    return out
+
+
+def model_rows() -> list[tuple[str, list[str]]]:
+    """(contrast, macro per model) for each row of Table 4b, in its order."""
+    out = []
+    for label, pattern, main in CONTRASTS:
+        names = []
+        for _, key in MODELS:
+            if not key:
+                names.append(main)
+            elif pattern.startswith("MTwo"):
+                names.append(pattern.format(m=MTWO[key]))
+            else:
+                names.append(pattern.format(m=key))
+        out.append((label, names))
     return out
 
 
@@ -118,6 +158,17 @@ def table(values: dict[str, str]) -> list[str]:
     return lines
 
 
+def model_table(values: dict[str, str]) -> list[str]:
+    """The README table of Table 4b, one line per row, from the macros."""
+    lines = [MODEL_HEADER, "|" + "---|" * (1 + len(MODELS))]
+    missing = [n for _, names in model_rows() for n in names if n not in values]
+    if missing:
+        raise ValueError(f"macros not defined: {', '.join(missing)}")
+    for label, names in model_rows():
+        lines.append(f"| {label} | " + " | ".join(cell(values[n]) for n in names) + " |")
+    return lines
+
+
 def sentences(values: dict[str, str]) -> list[str]:
     """The sentences of TEXT with their numbers from the macros."""
     missing = [name for name, _ in TEXT if name not in values]
@@ -126,11 +177,11 @@ def sentences(values: dict[str, str]) -> list[str]:
     return [template.format(pct(values[name])) for name, template in TEXT]
 
 
-def readme_table(lines: list[str]) -> tuple[int, int]:
-    """Start and end (exclusive) of the table that begins with HEADER in the README lines."""
-    if HEADER not in lines:
-        raise ValueError(f"no table with the header {HEADER!r}")
-    start = lines.index(HEADER)
+def readme_table(lines: list[str], header: str = HEADER) -> tuple[int, int]:
+    """Start and end (exclusive) of the table that begins with `header` in the README lines."""
+    if header not in lines:
+        raise ValueError(f"no table with the header {header!r}")
+    start = lines.index(header)
     end = start
     while end < len(lines) and lines[end].startswith("|"):
         end += 1
@@ -150,25 +201,26 @@ def main(argv: list[str] | None = None) -> int:
     numbers = a.numbers or _default("paper/generated/numbers.tex", "results/numbers.tex")
     readme = a.readme or _default("docs/release/README.md", "README.md")
     values = macros(numbers)
-    expected = table(values)
     lines = readme.read_text().split("\n")
     text = " ".join(" ".join(lines).split())
     absent = [s for s in sentences(values) if s not in text]
     for s in absent:
         print(f"{readme}: no sentence {s!r}", file=sys.stderr)
-    start, end = readme_table(lines)
-    if lines[start:end] == expected:
-        print(f"{readme}: results table matches {numbers}")
-        return 1 if absent else 0
-    if a.write:
-        lines[start:end] = expected
-        readme.write_text("\n".join(lines))
-        print(f"{readme}: results table written from {numbers}")
-        return 1 if absent else 0
-    print(f"{readme}: results table differs from {numbers}", file=sys.stderr)
-    print("expected:\n" + "\n".join(expected), file=sys.stderr)
-    print("README:\n" + "\n".join(lines[start:end]), file=sys.stderr)
-    return 1
+    differ = False
+    for header, expected in ((MODEL_HEADER, model_table(values)), (HEADER, table(values))):
+        start, end = readme_table(lines, header)
+        if lines[start:end] == expected:
+            print(f"{readme}: results table {header!r} matches {numbers}")
+        elif a.write:
+            lines[start:end] = expected
+            readme.write_text("\n".join(lines))
+            print(f"{readme}: results table {header!r} written from {numbers}")
+        else:
+            differ = True
+            print(f"{readme}: results table {header!r} differs from {numbers}", file=sys.stderr)
+            print("expected:\n" + "\n".join(expected), file=sys.stderr)
+            print("README:\n" + "\n".join(lines[start:end]), file=sys.stderr)
+    return 1 if differ or absent else 0
 
 
 if __name__ == "__main__":
