@@ -54,6 +54,6 @@ def plain_tabulars(tex: str) -> str:
     return "".join(out) + tex[last:]
 
 
-def check_memtab(tex: str) -> None:
-    """`check_tex` on a table in the paper's table style."""
-    check_tex(plain_tabulars(tex))
+def check_memtab(tex: str, panel: bool = False) -> None:
+    """`check_tex` on a table in the paper's table style (`panel`: without a float of its own)."""
+    check_tex(plain_tabulars(tex), panel)

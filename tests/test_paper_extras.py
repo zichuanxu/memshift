@@ -66,15 +66,17 @@ def test_overview_levels_equal_the_macros(overview: dict[tuple[str, str, str, st
 
 @pytest.mark.paper
 def test_table_4b_prints_each_models_interaction_from_its_analysis() -> None:
-    """Panel (b) of the Results' Table 4 (hand-written) gives B x D on Update over all changed
-    items for each model as writer and reader: every macro it cites prints the estimate and
-    interval of that model's own analysis, and the main-study row is the interaction the text
-    quotes."""
+    """Panel (b) of the Results' Table 4 (hand-written) gives the main contrasts for each model as
+    writer and reader: every B x D on Update over all changed items that it cites prints the
+    estimate and interval of that model's own analysis. Qwen3.5-9B is on the families' worlds
+    (the template worlds of the rewritten-world analysis), and after a deletion on the main
+    study, the interaction the text quotes. The notes' one world count holds for every family and
+    for the template worlds."""
     macros = _macros()
     text = (ROOT / "paper" / "sections" / "results.tex").read_text()
     label = text.index(r"\label{tab:main}")
-    panel = text[text.index("(b) Writer and reader", label) : text.index(r"\end{table*}", label)]
-    stages = {"Main": "e1", "Llama": "m2_llama", "Gem": "m2_gemma", "Gpt": "m2_gptoss"}
+    panel = text[text.index("(b) Contrast (pp)", label) : text.index(r"\end{table*}", label)]
+    stages = {"Llama": "m2_llama", "Gem": "m2_gemma", "Gpt": "m2_gptoss"}
     for tag, stage in stages.items():
         d = stage_json(ROOT, SOURCES, stage, "e1_metrics.json")
         for b, bt in BRANCH_TAGS:
@@ -82,10 +84,21 @@ def test_table_4b_prints_each_models_interaction_from_its_analysis() -> None:
             assert rf"\mtcipair\{name}" in panel, name
             e = _get(d, "contrasts", b, "BxD_interaction_update_source")
             assert _signed(mt_pair(e, sign=True)) == _signed(macros[name]), name
-            if tag == "Main":
-                assert _signed(macros[name]) == _signed(macros[f"EOneBxD{bt}"])
-    for worlds in ("TestWorlds", "MTwoLlamaWorlds", "MTwoGemmaWorlds", "MTwoGptOssWorlds"):
-        assert rf"\mtmuted{{(\{worlds}{{}} worlds)}}" in panel, worlds
+    template = _get(stage_json(ROOT, SOURCES, "l", "rendered.json"), "template_same_seeds")
+    for key, name in (("BxD_src", "RendTemplateBxDSrc"), ("BxD_def", "RendTemplateBxDDef")):
+        assert rf"\mtcipair\{name}" in panel, name
+        e = _get(template, "estimates", key)
+        assert _signed(mt_pair(e, sign=True)) == _signed(macros[name]), name
+    name = "ExClsMainOrphanAllBxD"
+    assert rf"\mtcipair\{name}" in panel, name
+    main = stage_json(ROOT, SOURCES, "e1", "e1_metrics.json")
+    e = _get(main, "contrasts", "orphan", "BxD_interaction_update_source")
+    assert _signed(mt_pair(e, sign=True)) == _signed(macros[name])
+    assert _signed(macros[name]) == _signed(macros["EOneBxDOrphan"])
+    worlds = {macros[f"MTwo{tag}Worlds"] for tag in ("Llama", "Gemma", "GptOss")}
+    assert worlds == {str(template["n_worlds"])}
+    for worlds_macro in ("MTwoLlamaWorlds", "TestWorlds"):
+        assert rf"\{worlds_macro}{{}}" in panel, worlds_macro
 
 
 @pytest.mark.paper
@@ -107,9 +120,10 @@ def test_overview_native_levels_equal_the_native_analysis(
 @pytest.mark.paper
 def test_the_results_text_states_the_native_block_item_counts() -> None:
     """The Results' note on the overview's native block (moved there from the caption): the rows
-    share the worlds, the native systems have fewer item-times than the cells after a deletion
-    only, and the baselines on Stability only. That the rows are scored on the half of the items
-    not used to infer a label is said once, in the block's banner."""
+    share the worlds but not all scored items, as the data show (the native systems have fewer
+    item-times than the cells after a deletion only, and the baselines on Stability only). That
+    the rows are scored on the half of the items not used to infer a label is said once, in the
+    block's banner."""
     n = pe.load(ROOT, SOURCES)["n"]
     for key, _ in pe.NATIVE_SYSTEMS:
         for comp, c in n["explore_native_null"]["systems"][key]["comparisons"].items():
@@ -122,10 +136,7 @@ def test_the_results_text_states_the_native_block_item_counts() -> None:
     assert "scored on the half of the items" not in text
     banner = "scored on the half of the items not used to infer the labels"
     assert banner in pe.tab_overview(pe.load(ROOT, SOURCES)).split(r"\label{tab:overview}")[1]
-    assert (
-        "share the worlds but not all scored items: the native systems have fewer after a" in text
-    )
-    assert "baselines fewer on Stability" in text
+    assert "In its native block the rows share the worlds but not all scored items." in text
     caption = pe.tab_overview(pe.load(ROOT, SOURCES)).split(r"\label{tab:overview}")[0]
     assert "share the worlds" not in caption
 
@@ -193,10 +204,9 @@ def test_committed_overview_and_model_table_are_current() -> None:
     for gone in ("open weights", "API", "claude-opus-5-5", "claude-sonnet-5-5"):
         assert gone not in text, gone
     # one identifier per model and no revision, serving version or API header date
-    shown = text.replace(r"\label{tab:model-revisions}", "")
     for gone in ("c202236235762e1c871ad0ccb60c8ee5ba337b9a", "0.30.0", "2023-06-01", "revision"):
-        assert gone not in shown, gone
-    for label in ("tab:models", "tab:family-models", "tab:model-revisions"):
+        assert gone not in text, gone
+    for label in ("tab:models", "tab:family-models"):
         assert rf"\label{{{label}}}" in text
 
 

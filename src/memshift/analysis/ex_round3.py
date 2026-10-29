@@ -606,7 +606,7 @@ def tab_store_reader(inp: Mapping[str, Any]) -> str:
     rows = [r for r in body if isinstance(r, list)]
     box = [f"N{{{n_template([r[c] for r in rows])}}}" for c in range(3, 12)]  # n, B=1, B=0
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{The stored value and the reader behind $r$ and $a$ of \cref{eq:decomp}, in "
         r"percent (point estimates).}",
         r"\label{tab:store-reader}",
@@ -637,7 +637,7 @@ def tab_store_reader(inp: Mapping[str, Any]) -> str:
         r"item. JSON: the $D{=}1$ store served as JSON records. ---: not defined, as every "
         r"changed definition item-time has a value as its right state and the JSON store has no "
         r"$B{=}0$ cell.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -676,7 +676,7 @@ def tab_dm_deletion(inp: Mapping[str, Any]) -> str:
     }
     box = [f"N{{{n_template([v[c] for v in levels.values()])}}}" for c in range(3)]
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{Why the writer's programs ($D_{\mathrm{m}}$) repair worse than $D{=}0$ "
         rf"after a deletion: the {_count(n)} changed item-times whose record was deleted (gold "
         r"\texttt{abstain}) by what the cell stored and how the reader answered, and what "
@@ -735,7 +735,7 @@ def tab_dm_deletion(inp: Mapping[str, Any]) -> str:
         r"is served. Not re-derived: not re-derived at the checkpoint. Item-times: point "
         r"estimates. Loss: the item-times $D{=}0$ answers right and $D_{\mathrm{m}}$ wrong, by the "
         rf"class $D_{{\mathrm{{m}}}}$ falls in. {UNDEFINED}: not defined.}}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -760,19 +760,21 @@ VIEW_FEW = 10  # a row on fewer paired item-times is marked (its intervals span 
 def tab_view(inp: Mapping[str, Any]) -> str:
     """Appendix: per metric (Update, Stability), group and class the view, the stored D_m with and
     without binding, the zero system (point estimates in whole percent) and two paired
-    differences; a row on fewer than `VIEW_FEW` item-times carries a dagger at its n."""
+    differences; a row on fewer than `VIEW_FEW` item-times carries a dagger at its n. Update is
+    given per shift and pooled, Stability pooled over the three shifts only."""
     view = inp.get("view")
     worlds = _get(view, "sources", "worlds") or []
     ncol = 3 + len(VIEW_TABLE_CELLS) + len(VIEW_TABLE_CONTRASTS)
     dm = r"$D_{\mathrm{m}}$"
-    metrics = (
-        ("update", "Update (changed item-times)"),
-        ("stability", "Stability (unchanged item-times)"),
+    pooled = tuple(x for x in VIEW_GROUPS if x[0] == "pooled")
+    metrics = (  # metric, group title, the groups shown
+        ("update", "Update (changed item-times)", VIEW_GROUPS),
+        ("stability", "Stability (unchanged item-times)", pooled),
     )
     every = [  # the contrasts of every row
         _get(view, "contrasts", g, cls, metric)
-        for metric, _ in metrics
-        for g, _ in VIEW_GROUPS
+        for metric, _, groups in metrics
+        for g, _ in groups
         for cls, _ in CLASSES
     ]
     n_box = n_template([_count(_get(cn, "view_minus_DmB1", "n_items")) for cn in every])
@@ -784,7 +786,7 @@ def tab_view(inp: Mapping[str, Any]) -> str:
     share = f"N{{{PCT_BOX}}}"  # a column of whole percentages
     few: set[int] = set()
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{The query-time view against the cell with the stored programs on every item "
         rf"class ({len(worlds) or MISSING} worlds, the same probes).}}",
         r"\label{tab:view}",
@@ -800,9 +802,9 @@ def tab_view(inp: Mapping[str, Any]) -> str:
         rf"& \multicolumn{{1}}{{c}}{{No-store}} & View $-$ {dm} "
         r"& \multicolumn{1}{c@{}}{View $-$ no-store} \\",
     ]
-    for metric, title in metrics:
+    for metric, title, groups in metrics:
         lines += [r"\midrule", rf"\mtgroup{{{ncol}}}{{{title}}}"]
-        for i, (g, _) in enumerate(VIEW_GROUPS):
+        for i, (g, _) in enumerate(groups):
             for k, (cls, _) in enumerate(CLASSES):
                 lv = _get(view, "levels", g, cls, metric)
                 cn = _get(view, "contrasts", g, cls, metric)
@@ -820,7 +822,7 @@ def tab_view(inp: Mapping[str, Any]) -> str:
                         *(mt_pair(_get(cn, c), sign=True) for c in VIEW_TABLE_CONTRASTS),
                     )
                 )
-            if i < len(VIEW_GROUPS) - 1:
+            if i < len(groups) - 1:
                 lines.append(r"\mtgap")
     dagger = (
         rf" $^{{\dagger}}$: only {' and '.join(_count(x) for x in sorted(few))} item-times."
@@ -835,7 +837,7 @@ def tab_view(inp: Mapping[str, Any]) -> str:
         r"with the source key. $B{=}0$: the same without a key. No-store: no-store BM25. $n$: "
         r"paired item-times. Pooled: the three shifts together. Levels: point estimates, rounded "
         rf"to whole percent.{dagger}}}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 

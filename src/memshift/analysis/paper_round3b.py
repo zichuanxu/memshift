@@ -9,9 +9,10 @@ Inputs, in --analysis-dir (a missing file renders as the MISSING marker):
   t_facts.json  memshift.analysis.round3b_typed --facts --tokenizer ...   (request lengths)
   f.json        memshift.analysis.round3b_feedback   (execution feedback)
   w.json        memshift.analysis.round3b_extract   (extracted fields)
-Outputs, in --out: round3b_numbers.tex (macros), tab_typed.tex, tab_feedback.tex, tab_extract.tex.
+Outputs, in --out: round3b_numbers.tex (macros), tab_typed.tex, tab_programs.tex (panels (a) and
+(b) of the programs table, without a float: execution feedback and extracted fields).
 A block left out of --blocks gets the same macro names defined as the MISSING marker and a table
-of the same layout and label with MISSING cells, so the paper builds either way.
+of the same layout with MISSING cells, so the paper builds either way.
 
 Macros (letters only; X = estimate with its 95% interval in the format of paper_numbers, XEst = the
 estimate alone; percent and pp with one decimal):
@@ -77,7 +78,7 @@ from memshift.holdmem.program import FAILURE_KINDS
 MODULE = "memshift.analysis.paper_round3b"
 BLOCKS = {"t": "t.json", "f": "f.json", "w": "w.json"}
 FACTS = "t_facts.json"
-FILES = ("round3b_numbers.tex", "tab_typed.tex", "tab_feedback.tex", "tab_extract.tex")
+FILES = ("round3b_numbers.tex", "tab_typed.tex", "tab_programs.tex")
 
 WRITERS = (  # (arm in t.json, macro tag, printed name)
     ("Qwen/Qwen3.5-9B", "Qwen", "Qwen3.5-9B"),
@@ -99,42 +100,18 @@ F_R_BRANCHES = F_BRANCHES[:2]  # r: after S_src and S_def, not pooled
 CLASSES = (("definition", "DefItems", "definition items"), ("other", "OtherItems", "other items"))
 DEL_CELLS = (("B0", "Bzero", "$B{=}0$"), ("B1_source", "Bone", "$B{=}1$"))
 LEVELS = (("dm",), ("feedback",), ("difference",))  # without feedback, with it, the difference
+F_BXD = (("Dm",), ("Dm_feedback",), ("paired", "difference"))  # B x D: the same, in f.json
 ROUNDS = (
     ("0", "Zero", "no feedback round"),
     ("1", "One", "one feedback round"),
     ("2", "Two", "two feedback rounds"),
 )
-KIND_LABELS = {
-    "no_code": "no code in the reply",
-    "syntax": "syntax error",
-    "no_derive": "no function to call",
-    "sandbox": "rejected by the sandbox",
-    "timeout": "timeout",
-    "exception": "exception",
-    "type": "value of the wrong type",
-}
-
 W_BRANCHES = (("src", "Src"), ("def", "Def"))
+W_BXD = (("typed",), ("extracted",), ("difference",))  # typed fields, extracted, the difference
+W_R = (("D1s",), ("D1sx",), ("difference",))  # r: the same
 SOURCE_TAGS = (*((s, s.capitalize()) for s in SOURCES), ("pooled", "AllSources"))
-SOURCE_LABELS = {
-    "contacts": "contacts",
-    "calendar": "calendar",
-    "tasks": "tasks",
-    "email": "e-mail",
-    "messages": "chat messages",
-    "notes": "notes",
-    "pooled": "all sources",
-}
-FIELD_LABELS = {  # the record fields in plain words; the others print as they are named
-    "appt_type": "appointment type",
-    "duration_min": "duration",
-    "from_addr": "sender address",
-    "from_name": "sender name",
-    "conversation_with": "conversation partner",
-}
 PAIRS = (("B0", "Bzero", "$B{=}0$"), ("B1", "Bone", "$B{=}1$"))
 BRANCH_LABELS = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
-DM = r"$D_{\mathrm{m}}$"
 
 Est = Mapping[str, Any] | None
 Fmt = Callable[[float | None], str]
@@ -222,22 +199,6 @@ def _pair(e: Est, sign: bool = False) -> str:
     return rf"\mtpair{{{est}}}{{{iv}}}"
 
 
-def _single(text: str) -> str:
-    """A value without interval in a column of `\\mtpair` cells, aligned with the estimates."""
-    return rf"\mtpair{{{text}}}{{}}"
-
-
-def _boxed(text: str, template: str, edge: str = "") -> str:
-    """A value in a box as wide as `template`, centred in a column of another type (`edge`:
-    `@{}` at the table's right edge)."""
-    return rf"\multicolumn{{1}}{{N{{{template}}}{edge}}}{{{text}}}"
-
-
-def _head(text: str, last: bool = False) -> str:
-    """A header over one centred cell of an `N` or `\\mtpair` column (`c@{}` at the right edge)."""
-    return rf"\multicolumn{{1}}{{c{'@{}' if last else ''}}}{{{text}}}"
-
-
 def _widths(est: str, iv: str) -> str:
     """The column type of a column of `\\mtpair` cells with the given widest estimate and
     interval."""
@@ -255,10 +216,6 @@ def _plain(x: Any) -> str:
 
 def _share_cell(num: Any, den: Any) -> str:
     return MISSING if num is None or not den else _num(num / den)
-
-
-def _tex(name: str) -> str:
-    return name.replace("_", r"\_")
 
 
 # ================================================================================ typed input
@@ -381,7 +338,7 @@ def tab_typed(t: Mapping[str, Any] | None) -> str:
     arms = _get(t, "arms")
     pairs = "".join(_widths(*w) for w in TYPED_PAIRS)
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         rf"\caption{{{_typed_takeaway(t)}}}",
         r"\label{tab:typed}",
         r"\centering\mtsetup",
@@ -405,7 +362,7 @@ def tab_typed(t: Mapping[str, Any] | None) -> str:
         r"recomputation ($D{=}1$). Complete: the share of item-times whose selection held every "
         r"record the definition ranges over (point estimates). In (b), Claude Sonnet 5.5 writes "
         r"the definition items.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -480,161 +437,6 @@ def feedback_numbers(f: Mapping[str, Any] | None) -> dict[str, str]:
     return out
 
 
-def _feedback_takeaway(f: Mapping[str, Any] | None) -> str:
-    """The caption's first sentence, the pattern the table shows (the plain description without
-    the analysis)."""
-    both = _exec_node(f, "definition")
-    diffs = [_get(f, "r", b, "definition", "pooled", "difference") for b, _ in F_R_BRANCHES]
-    if not isinstance(both, Mapping) or not all(isinstance(d, Mapping) for d in diffs):
-        return rf"The writer's programs ({DM}) without and with execution feedback"
-    return (
-        rf"Execution feedback lets more of the writer's programs ({DM}) end with a valid typed "
-        r"value but repairs no more definition items"
-    )
-
-
-NUMBER_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}
-
-
-def _all_valid(node: Any) -> bool:
-    """Every run of the node ended with a valid typed value, without feedback and with it."""
-    keys = ("first_attempt", "after_feedback")
-    return all(isinstance(_get(node, k), Mapping) for k in keys) and all(
-        _get(node, k, x) == 1.0 for k in keys for x in ("est", "lo", "hi")
-    )
-
-
-def _exec_rows(f: Mapping[str, Any] | None) -> list[tuple[str, Any]]:
-    """(label, node) of the valid-run rows: each definition with an invalid run, then the others
-    folded into one row (two or more definitions whose every run was valid), all six and the other
-    items. A folded row's node sums the runs and requests; its shares are 100.0 by construction."""
-    nodes = [(label, _exec_node(f, d)) for d, _, label in DEFINITIONS]
-    valid = [node for _, node in nodes if _all_valid(node)]
-    if len(valid) < 2:
-        rows = nodes
-    else:
-        one = {"est": 1.0, "lo": 1.0, "hi": 1.0}
-        folded = {
-            "n_runs": _sum(*(_get(n, "n_runs") for n in valid)),
-            "feedback_requests": _sum(*(_get(n, "feedback_requests") for n in valid)),
-            "first_attempt": one,
-            "after_feedback": one,
-        }
-        rows = [(label, node) for label, node in nodes if not _all_valid(node)]
-        rows.append((f"other {NUMBER_WORDS.get(len(valid), len(valid))} definitions", folded))
-    rows.append(("all six", _exec_node(f, "definition")))
-    return [*rows, ("other items", _exec_node(f, "other"))]
-
-
-def tab_feedback(f: Mapping[str, Any] | None) -> str:
-    n = _count(_n_worlds(_get(f, "worlds")))
-    lines = [
-        r"\begin{table}[t]",
-        rf"\caption{{{_feedback_takeaway(f)} ({n} worlds).}}",
-        r"\label{tab:feedback}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        r"\mtpairwidths{$+$00.0}{[$+$00.0,\,$+$00.0]}",  # the widths of every \mtpair cell below
-        r"\begin{mttabular*}{\linewidth}{ll N{00,000} ccc@{}}",
-        r"\toprule",
-        r"(a) & & \multicolumn{1}{c}{$n$} & Without feedback & With feedback "
-        r"& \multicolumn{1}{c@{}}{Difference} \\",
-        r"\midrule",
-    ]
-
-    def contrast(label: str, sub: str, node: Any, bxd: bool = False) -> str:
-        """Without feedback, with feedback, their paired difference (B x D: signed levels)."""
-        keys = (("Dm",), ("Dm_feedback",), ("paired", "difference")) if bxd else LEVELS
-        without, with_, diff = (_get(node, *k) for k in keys)
-        return _row(
-            label,
-            sub,
-            _n(diff),
-            _pair(without, sign=bxd),
-            _pair(with_, sign=bxd),
-            _pair(diff, sign=True),
-        )
-
-    first = r"$r$ (\%), definition items"
-    for b in ("src", "def"):
-        lines.append(contrast(first, BRANCH_LABELS[b], _get(f, "r", b, "definition", "pooled")))
-        first = ""
-    lines.append(r"\addlinespace[2pt]")
-    first = r"Update after $\Sdel$ (\%), definition items"
-    for cell, _, label in DEL_CELLS:
-        lines.append(contrast(first, label, _get(f, "deletion", "update", "definition", cell)))
-        first = ""
-    for cls, _, label in CLASSES:
-        lines.append(r"\addlinespace[2pt]")
-        first = rf"$B{{\times}}D$ on Update (pp), {label}"
-        for b, _ in F_BRANCHES:
-            lines.append(contrast(first, BRANCH_LABELS[b], _get(f, "bxd", b, cls), bxd=True))
-            first = ""
-    lines += [
-        r"\midrule",
-        r"(b) & & \multicolumn{1}{c}{Runs} & Without feedback (\%) & With feedback (\%) "
-        r"& \multicolumn{1}{c@{}}{Requests} \\",
-        r"\midrule",
-    ]
-    rows = _exec_rows(f)
-    for label, node in rows:
-        if label == "all six":
-            lines.append(r"\addlinespace[2pt]")
-        lines.append(
-            _row(
-                f"{label} &",  # the second column is empty
-                _count(_get(node, "n_runs")),
-                _pair(_get(node, "first_attempt")),
-                _pair(_get(node, "after_feedback")),
-                _boxed(_count(_get(node, "feedback_requests")), "000", "@{}"),
-            )
-        )
-    lines += [r"\end{mttabular*}\nointerlineskip"]  # one rule between the panels
-    nodes = [_exec_node(f, "definition"), _exec_node(f, "other")]
-
-    def kind_counts(kind: str) -> list[int | None]:
-        return [
-            _counted(node, key, kind)
-            for node in nodes
-            for key in ("first_attempt_kinds", "failed_run_kinds")
-        ]
-
-    shown = [k for k in FAILURE_KINDS if any(kind_counts(k)) or None in kind_counts(k)]
-    unseen = [KIND_LABELS[k] for k in FAILURE_KINDS if k not in shown]
-    lines += [
-        r"\begin{mttabular*}{\linewidth}{l N{000}N{000} N{000}N{000}@{}}",
-        r"\midrule",
-        r"& \multicolumn{2}{c}{Definition items} & \multicolumn{2}{c@{}}{Other items} \\",
-        r"\cmidrule(lr){2-3}\cmidrule(l){4-5}",
-        _row(
-            "(c)",
-            *(_head(h) for h in ("First attempts", "Failed attempts", "First attempts")),
-            _head("Failed attempts", last=True),
-        ),
-        r"\midrule",
-    ]
-    for kind in shown:
-        lines.append(_row(KIND_LABELS[kind], *map(_count, kind_counts(kind))))
-    lines.append(r"\addlinespace[2pt]")
-    cells = []
-    for k, node in enumerate(nodes):
-        edge = "@{}" if k == len(nodes) - 1 else ""
-        counts = " / ".join(_count(_counted(node, "rounds", r)) for r, _, _ in ROUNDS[1:])
-        cells.append(rf"\multicolumn{{2}}{{c{edge}}}{{{counts}}}")
-    lines.append(_row("runs with one / two feedback rounds", *cells))
-    none = rf" Kinds without a failed attempt: {', '.join(unseen)}." if unseen and f else ""
-    lines += [
-        r"\bottomrule",
-        r"\end{mttabular*}",
-        r"\mtnotes{(a) $r$, Update after a deletion and $B{\times}D$, without and with feedback. "
-        r"(b) Runs after the fork that end with a valid typed value, the runs and the feedback "
-        r"requests. (c) Failure kinds and feedback rounds after the fork, as counts. The other "
-        rf"runs had no feedback round.{none}}}",
-        r"\end{table}",
-    ]
-    return "\n".join(lines) + "\n"
-
-
 # =========================================================================== extracted fields
 def extract_numbers(w: Mapping[str, Any] | None) -> dict[str, str]:
     out = _Out("FieldEx")
@@ -665,43 +467,6 @@ def extract_numbers(w: Mapping[str, Any] | None) -> dict[str, str]:
     return out
 
 
-def _field_name(name: str) -> str:
-    """A field in words; a pooled field `source.field` with its source first."""
-    source, _, field = name.rpartition(".")
-    word = _tex(FIELD_LABELS.get(field, field))
-    return f"{SOURCE_LABELS.get(source, source)} {word}" if source else word
-
-
-def _weakest(node: Any) -> str:
-    """The field with the smallest share of values extracted without an error and that share
-    (the first in name order on a tie); `all` when every field of the source is at 100.0."""
-    fields = _get(node, "fields")
-    if not isinstance(fields, Mapping):
-        return MISSING
-    shares = {x: _get(fields, x, "correct") for x in sorted(fields)}
-    if any(v is None for v in shares.values()) or not shares:
-        return MISSING
-    if {_plain(v) for v in shares.values()} == {"100.0"}:
-        return "all 100.0"
-    name = min(shares, key=lambda x: shares[x])
-    return f"{_field_name(name)} {_plain(shares[name])}"
-
-
-def _extract_takeaway(q: Mapping[str, Any] | None) -> str:
-    """The caption's first sentence, the pattern the table shows (the plain description without
-    the analysis)."""
-    nodes = [_get(q, "bxd", b, "definition") for b, _ in W_BRANCHES]
-    if not all(isinstance(x, Mapping) for x in nodes):
-        return (
-            rf"The writer's programs ({DM}) reading fields that the writer extracted from prose "
-            r"instead of the generator's typed fields"
-        )
-    return (
-        rf"On fields that the writer extracted from prose, the writer's programs ({DM}) keep "
-        r"$B{\times}D$ on Update positive on the definition items"
-    )
-
-
 def _differ(q: Mapping[str, Any] | None) -> str:
     """The note on the definition item-times whose value differs between the two program inputs:
     how many per B arm and shift, and the share of them whose write read a record with an
@@ -728,82 +493,78 @@ def _differ(q: Mapping[str, Any] | None) -> str:
     )
 
 
-def tab_extract(w: Mapping[str, Any] | None) -> str:
+def tab_programs(f: Mapping[str, Any] | None, w: Mapping[str, Any] | None) -> str:
+    """Panels (a) and (b) of the programs table, one tabular with its notes and without a float
+    (the float, its caption, panel (c) and the labels are in the appendix source): the same
+    programs paired, (a) without and with execution feedback, (b) on the generator's typed fields
+    and on the fields the writer extracted from prose. Each with B x D on Update and r on the
+    definition items, and (a) the share of program runs for definition items after the fork that
+    end with a valid typed value."""
     q = _get(w, "quantities")
-    n = _count(_n_worlds(_get(q, "worlds")))
-    correct = _widths("100.0", r"[00.0,\,00.0]")  # the records extracted without error
     lines = [
-        r"\begin{table}[t]",
-        rf"\caption{{{_extract_takeaway(q)} ({n} worlds).}}",
-        r"\label{tab:extract}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{mttabular*}}{{\linewidth}}{{l N{{00,000}} {correct} N{{00.0}} l@{{}}}}",
+        r"\mtpairwidths{$+$00.0}{[$+$00.0,\,$+$00.0]}",  # the widths of every \mtpair cell below
+        r"\begin{mttabular}{@{}ll N{0,000} ccc@{}}",
         r"\toprule",
-        r"(a) & \multicolumn{1}{c}{Records} & Without error (\%) "
-        r"& \multicolumn{1}{c}{Rewrite missed (\%)} & Weakest field (\%) \\",
+        r"(a) & & \multicolumn{1}{c}{$n$} & Without feedback & With feedback "
+        r"& \multicolumn{1}{c@{}}{Difference} \\",
         r"\midrule",
     ]
-    for s, _ in SOURCE_TAGS:
-        node = _get(q, "extraction", s)
-        if s == "pooled":
-            lines.append(r"\addlinespace[2pt]")
-        lines.append(
-            _row(
-                SOURCE_LABELS[s],
-                _count(_get(node, "records")),
-                _pair(_get(node, "record_correct")),
-                _plain(_get(node, "rewrite", "missed_share")),
-                _weakest(node),
-            )
+
+    def paired(label: str, sub: str, node: Any, keys: Sequence[Sequence[str]], bxd: bool) -> str:
+        """The base programs, the variant and their paired difference, at the three paths `keys`
+        of `node` (B x D: signed levels)."""
+        base, variant, diff = (_get(node, *k) for k in keys)
+        return _row(
+            label, sub, _n(diff), _pair(base, sign=bxd), _pair(variant, sign=bxd), _pair(diff, True)
         )
-    lines += [r"\end{mttabular*}\nointerlineskip"]  # one rule between the panels
+
+    first = r"$B{\times}D$ on Update (pp), definition items"
+    for b, _ in F_BRANCHES:
+        node = _get(f, "bxd", b, "definition")
+        lines.append(paired(first, BRANCH_LABELS[b], node, F_BXD, bxd=True))
+        first = ""
+    lines.append(r"\addlinespace[2pt]")
+    first = r"$r$ (\%), definition items"
+    for b, _ in F_R_BRANCHES:
+        node = _get(f, "r", b, "definition", "pooled")
+        lines.append(paired(first, BRANCH_LABELS[b], node, LEVELS, bxd=False))
+        first = ""
+    lines.append(r"\addlinespace[2pt]")
+    runs = _exec_node(f, "definition")
+    lines.append(
+        _row(
+            r"valid runs (\%), definition items",
+            "",
+            _count(_get(runs, "n_runs")),
+            _pair(_get(runs, "first_attempt")),
+            _pair(_get(runs, "after_feedback")),
+            "",
+        )
+    )
     lines += [
-        r"\mtpairwidths{$+$00.0}{[$+$00.0,\,$+$00.0]}",  # the widths of every \mtpair cell below
-        r"\begin{mttabular*}{\linewidth}{ll N{0,000} ccc@{}}",
         r"\midrule",
         r"(b) & & \multicolumn{1}{c}{$n$} & Typed fields & Extracted fields "
         r"& \multicolumn{1}{c@{}}{Difference} \\",
         r"\midrule",
     ]
-    for cls, _, label in CLASSES:
-        first = rf"$B{{\times}}D$ on Update (pp), {label}"
-        for b, _ in W_BRANCHES:
-            node = _get(q, "bxd", b, cls)
-            lines.append(
-                _row(
-                    first,
-                    BRANCH_LABELS[b],
-                    _n(_get(node, "difference")),
-                    _pair(_get(node, "typed"), sign=True),
-                    _pair(_get(node, "extracted"), sign=True),
-                    _pair(_get(node, "difference"), sign=True),
-                )
-            )
-            first = ""
-        lines.append(r"\addlinespace[2pt]")
+    first = r"$B{\times}D$ on Update (pp), definition items"
+    for b, _ in W_BRANCHES:
+        node = _get(q, "bxd", b, "definition")
+        lines.append(paired(first, BRANCH_LABELS[b], node, W_BXD, bxd=True))
+        first = ""
+    lines.append(r"\addlinespace[2pt]")
     first = r"$r$ (\%), definition items"
     for b, _ in W_BRANCHES:
         node = _get(q, "r", b, "pooled")
-        lines.append(
-            _row(
-                first,
-                BRANCH_LABELS[b],
-                _n(_get(node, "difference")),
-                _pair(_get(node, "D1s")),
-                _pair(_get(node, "D1sx")),
-                _pair(_get(node, "difference"), sign=True),
-            )
-        )
+        lines.append(paired(first, BRANCH_LABELS[b], node, W_R, bxd=False))
         first = ""
     lines += [
         r"\bottomrule",
-        r"\end{mttabular*}",
-        r"\mtnotes{(a) Per source: the distinct record contents, the share extracted with every "
-        r"field right, the share of rewrites that miss a value, and the field with the fewest "
-        r"values extracted right. The last two columns are point estimates. (b) $B{\times}D$ and "
-        rf"$r$ with programs on typed and on extracted fields. {_differ(q)}}}",
-        r"\end{table}",
+        r"\end{mttabular}",
+        r"\mtnotes{(a) $B{\times}D$ and $r$ ($n$: changed item-times), and the program runs "
+        r"after the fork that end with a valid typed value ($n$: runs), without and with "
+        r"feedback. (b) $B{\times}D$ and $r$ with programs on typed and on extracted fields. "
+        rf"{_differ(q)}}}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -840,8 +601,7 @@ def build(inp: Mapping[str, Any], blocks: Sequence[str]) -> dict[str, str]:
     return {
         "round3b_numbers.tex": top + numbers(inp),
         "tab_typed.tex": top + tab_typed(inp.get("t")),
-        "tab_feedback.tex": top + tab_feedback(inp.get("f")),
-        "tab_extract.tex": top + tab_extract(inp.get("w")),
+        "tab_programs.tex": top + tab_programs(inp.get("f"), inp.get("w")),
     }
 
 

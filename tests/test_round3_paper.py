@@ -18,6 +18,7 @@ from memshift.analysis.paper_data import FAMILIES, MISSING
 from memshift.gen import kappa
 from memshift.runinfo import file_sha256
 from tests.memtab_check import MEMTAB_PREAMBLE, check_memtab
+from tests.paper_sources import paper_text
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -550,23 +551,27 @@ def test_no_stage_staged_renders_only_missing_markers():
 
 # ------------------------------------------------------------------------------------ tables
 LABELS = {
-    "tab_refresh_upsert.tex": "tab:refresh-upsert",
-    "tab_natural.tex": "tab:natural",
     "tab_reader.tex": "tab:reader",
-    "tab_heldout.tex": "tab:heldout",
-    "tab_userwords.tex": "tab:userwords",
     "tab_mem0x.tex": "tab:mem0x",
 }
+# panels of a table whose float, caption and labels are in the appendix source: the held-out
+# definitions (b) of the per-definition table, the user's words (c) of the programs table
+PANELS = ("tab_heldout.tex", "tab_userwords.tex")
 
 
 def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
-        assert set(r3p.tables(inp)) == set(LABELS)
+        assert set(r3p.tables(inp)) == set(LABELS) | set(PANELS)
         for name, tex in r3p.tables(inp).items():
-            check_memtab(tex)
-            assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
+            check_memtab(tex, panel=name in PANELS)
+            if name in PANELS:
+                assert tex.startswith("\\begin{mttabular}") and "\\label" not in tex, name
+                assert "\\caption" not in tex and "table*" not in tex, name
+            else:
+                assert tex.startswith("\\begin{table*}") and f"\\label{{{LABELS[name]}}}" in tex
+                assert "\\centering\\mtsetup" in tex, name
             # the paper's table style: its type and rules, intervals as muted secondary text
-            assert "\\centering\\mtsetup" in tex and "\\begin{mttabular}" in tex, name
+            assert "\\begin{mttabular}" in tex, name
             assert "\\scriptsize" not in tex and "\\addlinespace" not in tex, name
     for tex in r3p.tables(EMPTY).values():
         assert MISSING in tex
@@ -574,42 +579,31 @@ def test_tables_are_wellformed_with_data_and_without():
         assert MISSING not in tex
 
 
-def test_natural_branch_table_prints_only_classes_the_shift_changed():
-    """S_def changes no other item, so the natural-branch table prints no row of dashes for it
-    (the caption says so)."""
-    tex = r3p.tables(INP)["tab_natural.tex"]
-    panel = tex.split("\\midrule", 1)[1]
-    other_def = INP["n"]["quantities"]["counterfactual"]["def"]["shift"]["other"]
-    assert other_def["item_times_in_branch"] == 0
-    assert panel.count(" & other & ") == 2 and panel.count(" & definition & ") == 3
-    assert "changes only definition items" in tex
-    empty = r3p.tables(EMPTY)["tab_natural.tex"].split("\\midrule", 1)[1]
-    assert empty.count(" & other & ") == 3  # without data every row stays, as a MISSING marker
-
-
-def test_reader_table_sets_the_claude_reader_in_a_panel_below_the_committed_reader():
-    """One table for both readers of the same stores (it carries the label of either table): (a)
-    the committed reader's B x D with its store and reader parts, (b) the Claude reader's B x D,
-    its reader part and its difference from the committed reader, for both arms and every class,
-    with no empty cell (the store part is the same, so (b) does not repeat it)."""
+def test_reader_table_sets_both_readers_of_the_same_stores_in_one_block():
+    """One table for both readers of the same stores (it carries the label of either table), one
+    block of shift x class x arm: the store part, the committed reader's reader part, and the
+    Claude reader's reader part, B x D and difference from the committed reader, with no empty
+    cell. The committed reader's B x D is the class split's (store part plus reader part), so the
+    table does not repeat it."""
     tex = r3p.tables(INP)["tab_reader.tex"]
     assert "\\label{tab:store-reader-bxd}\\label{tab:reader}" in tex
-    head, panel_b = tex.split("\\mtnotes{")[0].split("(b) Claude Sonnet 5.5 as reader")
-    assert "(a) Qwen3.5-9B as reader" in head and "Store part" in head
-    assert "Sonnet $-$ Qwen" in panel_b and "Store part" not in panel_b
-    for panel in (head, panel_b):
-        rows = [
-            re.split(r"\s*&\s*", line.removesuffix(r" \\"))
-            for line in panel.splitlines()
-            if re.search(r"& \$D(\{=\}1|_\{\\mathrm\{m\}\})\$ &", line)
-        ]
-        assert len(rows) == 3 * 3 * 2  # shift x class x arm
-        # no empty cell: an estimate in each column pair (an interval of zero width is not printed)
-        assert all(len(cells) == 9 and all(cells[i] for i in (3, 5, 7)) for cells in rows)
-    # the Sonnet x D_m values the text cites are in panel (b)
+    body = tex.split("\\mtnotes{")[0]
+    assert "(a)" not in body and "(b)" not in body and body.count("Reader part") == 2
+    head = body.split("\\toprule", 1)[1].split("\\midrule", 1)[0]  # the header rows
+    assert "Store part" in head and "Sonnet $-$ Qwen" in head and head.count("$B{\\times}D$") == 1
+    rows = [
+        re.split(r"\s*&\s*", line.removesuffix(r" \\"))
+        for line in body.splitlines()
+        if re.search(r"& \$D(\{=\}1|_\{\\mathrm\{m\}\})\$ &", line)
+    ]
+    assert len(rows) == 3 * 3 * 2  # shift x class x arm
+    # no empty cell: an estimate in each column pair (an interval of zero width is not printed)
+    assert all(len(cells) == 13 and all(cells[i] for i in (3, 5, 7, 9, 11)) for cells in rows)
+    assert "store part plus its reader part (\\cref{tab:classsplit})" in tex
+    # the Sonnet x D_m values the text cites are the Claude reader's B x D
     for name in ("RThreeYDefOtherDmBxD", "RThreeYOrphanOtherDmBxD"):
         est = MACROS[name].split("\\,pp")[0]
-        assert f"$D_{{\\mathrm{{m}}}}$ & {est} & \\mtint{{[" in panel_b, name
+        assert any(c[2] == "$D_{\\mathrm{m}}$" and c[9] == est for c in rows), name
 
 
 def test_tables_name_the_experiments_without_codes_or_record_files():
@@ -641,7 +635,7 @@ def test_tables_compile_at_the_paper_width(tmp_path):
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\pass}{\checkmark}"
                 r"\newcommand{\fail}{$\times$}\newcommand{\cref}[1]{Table~1}",
-                r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",
+                r"\begin{document}" + "".join(map(_set, names)) + r"\end{document}",
             ]
         )
     )
@@ -653,6 +647,17 @@ def test_tables_compile_at_the_paper_width(tmp_path):
     )
     assert done.returncode == 0, done.stdout[-1500:]
     assert "Overfull \\hbox" not in done.stdout  # every table fits the 6.75in text block
+
+
+def _set(name: str) -> str:
+    """The input of a generated table in a test document; a panel inside a float set as the
+    appendix source sets it."""
+    if name not in PANELS:
+        return rf"\input{{{name}}}"
+    return (
+        r"\begin{table*}[t]\centering\mtsetup\setlength{\tabcolsep}{4pt}"
+        rf"\input{{{name}}}\end{{table*}}"
+    )
 
 
 # ------------------------------------------------------------------------- generated files
@@ -668,22 +673,14 @@ def test_committed_generated_files_are_current():
 
 @pytest.mark.paper
 def test_the_text_reports_the_blocks_with_defined_macros():
-    sections = ROOT / "paper/sections"
-    text = "\n".join(p.read_text() for p in sorted(sections.glob("*.tex")))
+    text = paper_text()
     used = set(re.findall(r"\\(RThree[A-Za-z]+)", text))
     assert used, "the text cites no round-3 macro"
     defined = set(MACROS) | {f"{k}Est" for k, v in MACROS.items() if " [" in v}
     assert used <= defined, sorted(used - defined)[:5]
     main = (ROOT / "paper/main.tex").read_text()
     assert "NatPending" not in text + main  # the placeholder is gone
-    for name in (
-        "tab_refresh_upsert",
-        "tab_natural",
-        "tab_reader",
-        "tab_heldout",
-        "tab_userwords",
-        "tab_mem0x",
-    ):
+    for name in ("tab_reader", "tab_heldout", "tab_userwords", "tab_mem0x"):
         assert f"\\input{{generated/{name}}}" in text, name
     # U3, U4, H-a and H-c are reported
     for name in ("RThreeUThreeR", "RThreeUFourDiff", "RThreeHSonnetRZero"):

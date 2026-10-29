@@ -4,10 +4,7 @@ with compact number formats. Sources: results/sources.json.
 Robustness stages (a stage that has not run renders as MISSING):
 tab_replication the main study against the replication worlds, per contrast, with both estimates
                 and their 95% intervals (block R)
-tab_construct   the contrasts of the model-written derivations and program statistics (block C)
-tab_families    writer switches, other families as writer and reader, reader swaps (M1-M3)
-tab_rendered    the five contrasts of the other families on LLM-rendered worlds against the
-                template worlds (block L)
+tab_families    writer switches, reader swaps (M1, M3)
 The printed captions and labels name the blocks in words (the paper's names).
 Usage: python -m memshift.analysis.paper_tables [--root .] [--out paper/generated]
        [--only tab_replication.tex ...]   (write only the named files; every table is computed)
@@ -22,18 +19,12 @@ from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import Any
 
-from memshift.analysis.gate import path2
 from memshift.analysis.paper_data import (
     FAMILIES,
-    ITEM_TYPES,
     MISSING,
     TIERS,
-    TYPE_GROUPS,
-    in_group,
     load_stage4,
-    pooled_rate,
     replication_view,
-    stage_json,
     tier_key,
 )
 from memshift.analysis.paper_data import get as _get
@@ -207,6 +198,8 @@ STUDIES = (("main study", "orig"), ("replication", "rep"))  # row label, field o
 DETECTION = ("B_effect_detected_D0", "B_effect_detected_D1")  # one row where they print alike
 MISSED = "D_effect_missed"  # a line of the notes where it prints 0.0 everywhere
 ZERO_ALONE = "0.0 & "  # `mt_ci_cells` of an estimate of 0.0 with an interval of zero width
+# the source key's contrasts that the class split (tab:classsplit) gives for both studies
+IN_CLASSSPLIT = ("B_effect_update_D1", "BxD_interaction_update")
 
 
 def _rep_cells(rows: Mapping[Any, Any], key: str, g: str) -> list[list[str]]:
@@ -226,7 +219,8 @@ def tab_replication(view: dict[str, Any]) -> str:
     compares, each estimate with its 95% interval (the estimate alone where every world gave the
     same value). The detection effects at D=0 and D=1 share one row where they print alike (the
     keys do not depend on D), and D's effect on missed invalidation is a line of the notes where it
-    prints 0.0 in every cell."""
+    prints 0.0 in every cell. The source key's B effect on Update at D=1 and its B x D are left to
+    the class split (`IN_CLASSSPLIT`), which the notes name."""
     rows = view.get("rows") or {}
     n = view.get("n_worlds") or {}
     keys = (("source", "Source key"), ("cited", "Citation key"))
@@ -250,7 +244,7 @@ def tab_replication(view: dict[str, Any]) -> str:
     )
     gap = r"@{\hspace{14pt}}"  # between the shifts' column pairs
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{Every contrast of the main experiment in the main study and in the "
         rf"replication ({each}).}}",
         r"\label{tab:replication}",
@@ -263,7 +257,8 @@ def tab_replication(view: dict[str, Any]) -> str:
     ]
     for g, title in keys:
         lines += [r"\midrule", rf"\mtgroup{{8}}{{{title}}}"]
-        for i, (key, label) in enumerate(shown):
+        rows_g = [(k, lab) for k, lab in shown if not (g == "source" and k in IN_CLASSSPLIT)]
+        for i, (key, label) in enumerate(rows_g):
             if i:  # the main-study and replication rows of a contrast as a pair
                 lines.append(r"\addlinespace[2pt]")
             for (study, _), cells in zip(STUDIES, _rep_cells(rows, key, g), strict=True):
@@ -285,24 +280,12 @@ def tab_replication(view: dict[str, Any]) -> str:
             r"Detection: share of the changed item-times the cell invalidated since the fork. "
             r"Value equals gold: share of the re-derived item-times whose value equals gold."
             + missed
+            + r" Source key, $B$ effect on Update ($D{=}1$) and $B{\times}D$: "
+            r"\cref{tab:classsplit}."
         ),
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
-
-
-SHARE = "C2_share_of_D_effect_source"
-C1 = "C1_repair_D1s_minus_D0_source"
-C4 = "C4_D1s_effect_missed_source"  # a line of the notes where it prints 0.0 after every shift
-DM = r"$D_{\mathrm{m}}$"  # the D1s cell as displayed: D = 1 with a model-written derivation
-C_ROWS = (  # label, contrast key: repair gain, authored share, interaction, detection
-    (r"accuracy on re-derived items: $D_{\mathrm{m}}-D_0$", C1),
-    (r"accuracy on re-derived items: $D_1-D_{\mathrm{m}}$", "C2_repair_D1_minus_D1s_source"),
-    (r"share of the $D$ effect only exact recomputation gives (\%)", SHARE),
-    (rf"$B{{\times}}D$ on Update, {DM}", "C3_BxD_interaction_update_D1s_source"),
-    (rf"$D$ on missed invalidation, {DM}", C4),
-)
-NO_SHARE = "---"  # the share of the D effect is meaningless where C1 is not positive
 
 
 def spread_columns(*cols: str) -> str:
@@ -318,90 +301,6 @@ def spread_columns(*cols: str) -> str:
         else:
             out.append(c + ("@{}" if last else ""))
     return "".join(out)
-
-
-def tab_construct(c: dict[str, Any] | None) -> str:
-    """Block C: the contrasts of the D1s cell, displayed as D_m, after each shift, and the
-    executability of the writer's programs and their agreement with gold at t0. The share of the D
-    effect (C2) is an em dash where C1 is not positive: when D_m falls below D=0 the share is not a
-    share (the orphan branch gives 183%)."""
-    c = c or {}
-    con = c.get("contrasts") or {}
-    branches = ("src", "def", "orphan")
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{The writer's programs against exact recomputation: (a) the contrasts after "
-        r"each shift, (b) the programs at $t_0$, before any shift "
-        rf"({c.get('n_worlds') or MISSING} worlds).}}",
-        r"\label{tab:construct}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{5pt}",
-        PAIR_WIDTHS,
-        r"\begin{mttabular}{@{}l N{000} ccc@{}}",
-        r"\toprule",
-        r"(a) Contrast (pp) & & $\Ssrc$ & $\Sdef$ & \multicolumn{1}{c@{}}{$\Sdel$} \\",
-        r"\midrule",
-    ]
-
-    def one(text: str, last: bool) -> str:
-        """An estimate-and-interval cell; a marker or a dash centred in its column."""
-        return text if text.startswith(r"\mtpair") else centred(text, last)
-
-    def cell(branch: str, key: str) -> str:
-        last = branch == branches[-1]
-        c1 = _get(con, branch, C1)
-        if key == SHARE and c1 and not c1["est"] > 0:
-            return centred(NO_SHARE, last)
-        return one(mt_pair(_get(con, branch, key), sign=key != SHARE), last)
-
-    zero_missed = all(cell(branch, C4) == r"\mtpair{0.0}{}" for branch in branches)
-    for label, key in C_ROWS:
-        if not (zero_missed and key == C4):
-            lines.append(_row(f"{label} &", *(cell(branch, key) for branch in branches)))
-    stats = _get(c, "synth_programs", "src", "holdmem_D1sB1_source") or {}
-    pct = r"(\%)"
-    lines += [
-        r"\midrule",
-        r"(b) Program at $t_0$ & \multicolumn{1}{c}{Items} "
-        rf"& \mthead{{Executable}}{{{pct}}} & \mthead{{Agrees with gold}}{{{pct}}} "
-        rf"& \multicolumn{{1}}{{c@{{}}}}{{\mthead{{Agrees, if executable}}{{{pct}}}}} \\",
-        r"\midrule",
-    ]
-    all_ = stats.get("all")
-    keys = ("exec_t0", "agree_t0", "agree_t0_given_exec")
-    lines.append(
-        _row(
-            "all item types",
-            str(all_["n"]) if all_ else MISSING,
-            *(one(mt_pair((all_ or {}).get(k)), k == keys[-1]) for k in keys),
-        )
-    )
-    for _tag, label, prefixes in TYPE_GROUPS:
-        types = [t for t in ITEM_TYPES if in_group(t, prefixes) and t in stats]
-        cells = [rf"\mtin {label}", str(sum(stats[t]["n"] for t in types)) if types else MISSING]
-        for key in keys:
-            r = pooled_rate(stats, types, key)
-            cells.append(rf"\mtpair{{{_num(r)}}}{{}}" if r is not None else MISSING)
-        lines.append(_row(*cells))
-    lines += [
-        r"\bottomrule",
-        r"\end{mttabular}",
-        notes(
-            rf"{DM}: $D{{=}}1$ with the writer's programs. $D_1$, $D_0$: the $D{{=}}1$ and "
-            r"$D{=}0$ cells. Share of the $D$ effect only exact recomputation gives: "
-            r"$(D_1-D_{\mathrm{m}})/(D_1-D_0)$ on the accuracy on re-derived items, not defined "
-            rf"({NO_SHARE}) where {DM} does not raise it over $D_0$. "
-            + (
-                rf"{DM}'s effect on missed invalidation was 0.0 after every shift. "
-                if zero_missed
-                else ""
-            )
-            + r"(b): shares of the items. Groups: point estimates, each the item-weighted mean of "
-            r"its item types."
-        ),
-        r"\end{table}",
-    ]
-    return "\n".join(lines) + "\n"
 
 
 def _slope_cells(s: dict[str, Any] | None, unusable: bool = False) -> str:
@@ -423,21 +322,6 @@ def _auroc(au: float | None) -> str:
     return r"\mtna" if math.isnan(au) else f"{au:.2f}"
 
 
-FAMILY_ROWS = (  # label, estimate in families.json (None: the largest D effect on missed)
-    (r"$D$ effect on missed invalidation, largest $|\cdot|$", None),
-    (r"$B$ effect on Update, $\Ssrc$, pooled over $D$", "B_update_src"),
-    (r"$D$ effect on accuracy on re-derived items, $\Ssrc$", "D_repair_src"),
-    (r"$D$ effect on accuracy on re-derived items, $\Sdef$", "D_repair_def"),
-    (r"$B{\times}D$ on Update, $\Sdef$", "BxD_def"),
-    (r"No-store BM25 $-$ \holdmem{}(1,1), accuracy, $\Sdef$", "zero_minus_hm11_def"),
-)
-# a line of the notes in place of the rows of D's effect on missed invalidation where all print 0.0
-MISSED_LINE = (
-    r"$D$'s effect on missed invalidation, its largest absolute value over both keys and the "
-    r"three shifts, was 0.0"
-)
-
-
 READER_ROWS = (  # label, contrast in the reader analysis, branch
     (r"$B$ effect on Update, $\Ssrc$", "B_effect_update_pooled_source", "src"),
     (r"$B$ effect on Update, $\Sdef$", "B_effect_update_pooled_source", "def"),
@@ -451,53 +335,17 @@ READER_ROWS = (  # label, contrast in the reader analysis, branch
 READER_MISSED = "D_effect_missed_source"  # rows folded into the notes where all print 0.0
 
 
-def _largest_paired(rendered: Mapping[str, Any] | None, which: str) -> str:
-    """The largest absolute D effect on missed invalidation of the rendered-world analysis
-    (`which`: rendered or template) as the cells of an estimate-and-interval pair."""
-    rows = [p for p in (rendered or {}).get("paired") or [] if p.get("check") == "i"]
-    if not rows:
-        return _span(MISSING)
-    return _alone(_num(max(abs(p[which]["est"]) for p in rows)))
-
-
-def largest_missed(e1: dict[str, Any] | None) -> float | None:
-    """The largest absolute D effect on missed invalidation of one E1-style analysis, over both
-    keys and the three shifts (None when the analysis is not staged)."""
-    if not e1 or "contrasts" not in e1:
-        return None
-    checks = path2(e1)["checks"].values()
-    return max((abs(c["estimate"]["est"]) for c in checks), default=None)
-
-
-def family_missed(root: Path, sources: Mapping[str, str]) -> dict[str, float | None]:
-    """Family key -> its largest absolute D effect on missed invalidation (`largest_missed` of
-    the family's staged E1 analysis, None where it is not staged)."""
-    return {
-        f.key: largest_missed(stage_json(root, dict(sources), f"m2_{f.key}", "e1_metrics.json"))
-        for f in FAMILIES
-    }
-
-
-def tab_families(
-    m1: dict[str, Any] | None,
-    families: Mapping[str, Any],
-    readers: Mapping[str, Any],
-    missed: Mapping[str, float | None] | None = None,
-    rendered: Mapping[str, Any] | None = None,
-) -> str:
-    """Blocks M1-M3 as two tables: the writer switches (M1, `tab:switches`), and the other
-    families as writer and reader (M2) and as reader of the main writer's stores (M3) in one column
-    grid (`tab:families`), each beside Qwen3.5-9B on the same worlds: in (a) the main writer and
-    reader on the template worlds of block L (the families' worlds), in (b) the main reader.
-    `missed` gives each family's largest absolute D effect on missed invalidation
-    (`largest_missed` of its E1 analysis). The rows of D's effect on missed invalidation are a
-    line of the notes where every one of their cells prints 0.0."""
+def tab_families(m1: dict[str, Any] | None, readers: Mapping[str, Any]) -> str:
+    """Blocks M1 and M3 as two tables: the writer switches (M1, `tab:switches`), and the other
+    families as reader of the main writer's stores (M3, `tab:families`) beside Qwen3.5-9B, the
+    main reader, on the same worlds (the families as writer and reader, block M2, are in the main
+    text's results table). The rows of D's effect on missed invalidation are a line of the notes
+    where every one of their cells prints 0.0."""
     m1 = m1 or {}
     p3 = m1.get("path3") or {}
-    missed = missed or {}
     gap = r"@{\hspace{12pt}}"  # before the two pp column pairs
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{Writer switches: how well writer agreement predicts survival of the switch, and "
         r"what the switch does to retention.}",
         r"\label{tab:switches}",
@@ -527,17 +375,8 @@ def tab_families(
             )
         )
     sl, au = p3.get("pooled_slope"), _get(p3, "pooled_auroc", "est")
-    m2_worlds = {f.get("n_worlds") for f in families.values() if f} - {None}
     m3_worlds = {len(r.get("worlds") or []) for r in readers.values() if r} - {0}
     pairs = " ".join([PAIR] * (len(FAMILIES) + 1))
-
-    def head(panel: str, last: str) -> str:
-        return (
-            f"{panel} & "
-            + " & ".join(_span(f.label) for f in FAMILIES)
-            + rf" & \multicolumn{{2}}{{c@{{}}}}{{{last}}} \\"
-        )
-
     lines += [
         r"\midrule",
         _row(
@@ -554,44 +393,22 @@ def tab_families(
             r"point estimates. $D$ surv.: "
             r"survival of $D{=}1$ minus $D{=}0$ items. Retention $\Delta$: the change in retention "
             r"of \holdmem{}(1,1) (90\% interval). $^\ast$~Almost no item failed, so the slope "
-            r"(grey) is not usable."
+            r"(gray) is not usable."
         ),
-        r"\end{table}",
+        r"\end{table*}",
         "",
-        r"\begin{table}[t]",
-        r"\caption{Other model families as writer and reader of the main experiment (a, "
-        rf"{_worlds(m2_worlds)} test worlds) and as reader of the main writer's stores (b, "
-        rf"{_worlds(m3_worlds)} test worlds), beside Qwen3.5-9B on the same worlds.}}",
+        r"\begin{table*}[t]",
+        r"\caption{Other model families as reader of the main writer's stores "
+        rf"({_worlds(m3_worlds)} test worlds), beside Qwen3.5-9B on the same worlds. "
+        r"\Cref{tab:main}b gives them as writer and reader.}",
         r"\label{tab:families}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{3.5pt}",
         rf"\begin{{mttabular}}{{@{{}}l {pairs}@{{}}}}",
         r"\toprule",
-        head("(a) As writer and reader (pp)", "Qwen3.5-9B"),
-        r"\midrule",
-    ]
-    template = (rendered or {}).get("template_same_seeds")  # Qwen3.5-9B on the families' worlds
-    folded_a = False
-    for label, name in FAMILY_ROWS:
-        cells = []
-        for fam in FAMILIES:
-            f = families.get(fam.key) or {}
-            if name is None:
-                largest = missed.get(fam.key)
-                cells.append(_alone(_num(largest)) if f and largest is not None else _span(MISSING))
-            else:
-                cells.append(mt_ci_cells(_get(f, "estimates", name), sign=True))
-        if name is None:
-            cells.append(_largest_paired(rendered, "template"))
-            if all(c == ZERO_ALONE for c in cells):
-                folded_a = True
-                continue
-        else:
-            cells.append(mt_ci_cells(_get(template, "estimates", name), sign=True))
-        lines.append(_row(label, *cells))
-    lines += [
-        r"\midrule",
-        head("(b) As reader only (pp)", "Qwen3.5-9B"),
+        "As reader only (pp) & "
+        + " & ".join(_span(f.label) for f in FAMILIES)
+        + r" & \multicolumn{2}{c@{}}{Qwen3.5-9B} \\",
         r"\midrule",
     ]
     # every family's run reads the same stores with the main reader as well: its values are
@@ -606,11 +423,11 @@ def tab_families(
         )
         for label, name, b in READER_ROWS
     ]
-    folded_b = all(
+    folded = all(
         c == ZERO_ALONE for _, name, cells in reader_rows if name == READER_MISSED for c in cells
     )
     for label, name, cells in reader_rows:
-        if not (folded_b and name == READER_MISSED):
+        if not (folded and name == READER_MISSED):
             lines.append(_row(label, *cells))
     contract_valid = (
         _get(sw, "def", "systems", "holdmem_D1B1_source", arm, "ContractValid_post")
@@ -622,30 +439,24 @@ def tab_families(
             *(_alone(_est(cv)) for cv in contract_valid),
         )
     )
-    if folded_a and folded_b:
-        missed_note = (
-            r"$D$'s effect on missed invalidation was 0.0 in every column, in (a) its "
-            r"largest absolute value over both keys and the three shifts. "
-        )
-    elif folded_a:
-        missed_note = f"(a): {MISSED_LINE} in every column. "
-    elif folded_b:
-        missed_note = r"(b): $D$'s effect on missed invalidation was 0.0 in every column. "
-    else:
-        missed_note = (
-            r"$D$ effect on missed invalidation in (a): its largest absolute value "
-            r"over both keys and the three shifts. "
-        )
+    missed_note = r"$D$'s effect on missed invalidation was 0.0 in every column. " if folded else ""
     lines += [
         r"\bottomrule",
         r"\end{mttabular}",
         notes(
-            missed_note + r"\holdmem{}(1,1) accuracy: point estimates. Qwen3.5-9B: in (a) the main "
-            r"writer and reader, in (b) the main reader, on the same worlds."
+            missed_note + r"\holdmem{}(1,1) accuracy: point estimates. Qwen3.5-9B: the main "
+            r"reader, on the same worlds."
         ),
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
+
+
+def split_families(tex: str) -> tuple[str, str]:
+    """The two tables of `tab_families`, the writer switches and the other families as reader,
+    each for the subsection that cites it (tab_switches.tex, tab_families.tex)."""
+    switches, families = tex.split("\n\n\\begin{table*}")
+    return switches + "\n", "\\begin{table*}" + families
 
 
 def _worlds(counts: set[int]) -> str:
@@ -663,58 +474,6 @@ def _alone(est: str) -> str:
     return f"{est} & "
 
 
-def tab_rendered(m: dict[str, Any] | None) -> str:
-    """Block L: the five contrasts of the other families on LLM-rendered worlds beside the
-    same-seed template worlds, and the paired differences (the rendering descriptives are in the
-    text, from the macros of `paper_numbers`)."""
-    m = m or {}
-    rend, temp = m.get("rendered") or {}, m.get("template_same_seeds") or {}
-    paired = {p["name"]: p for p in m.get("paired") or []}
-    gap = r"@{\hspace{12pt}}"  # between the three column pairs
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{The contrasts of Table~\ref{tab:families}a on rewritten worlds and on "
-        rf"template worlds of the same seeds ({len(m.get('worlds', [])) or MISSING} worlds).}}",
-        r"\label{tab:rendered}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{mttabular}}{{@{{}}l {PAIR} {gap} {PAIR} {gap} {PAIR}@{{}}}}",
-        r"\toprule",
-        r"Contrast (pp) & \multicolumn{2}{c}{Rewritten} & \multicolumn{2}{c}{Template} "
-        r"& \multicolumn{2}{c@{}}{Difference} \\",
-        r"\midrule",
-    ]
-    folded = False
-    for label, name in FAMILY_ROWS:
-        if name is None:  # the largest D effect on missed invalidation: no paired difference
-            largest = [_largest_paired(m, "rendered"), _largest_paired(m, "template")]
-            if all(c == ZERO_ALONE for c in largest):
-                folded = True
-                continue
-            cells = [label, *largest, centred(UNDEFINED, last=True, cols=2)]
-        else:
-            p = paired.get(name) or {}
-            cells = [
-                label,
-                mt_ci_cells(_get(rend, "estimates", name), sign=True),
-                mt_ci_cells(_get(temp, "estimates", name), sign=True),
-                mt_ci_cells(p.get("diff"), sign=True),
-            ]
-        lines.append(_row(*cells))
-    missed = (
-        f" {MISSED_LINE} on both kinds of worlds."
-        if folded
-        else rf" The $D$ effect on missed invalidation has no paired difference ({UNDEFINED})."
-    )
-    lines += [
-        r"\bottomrule",
-        r"\end{mttabular}",
-        notes(r"Difference: rewritten minus template, paired by item." + missed),
-        r"\end{table}",
-    ]
-    return "\n".join(lines) + "\n"
-
-
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root", type=Path, default=Path("."))
@@ -725,13 +484,12 @@ def main() -> None:
     a.out.mkdir(parents=True, exist_ok=True)
     head = "% generated by memshift.analysis.paper_tables; do not edit\n"
     inp = load_stage4(a.root, sources)
-    missed = family_missed(a.root, sources)
     outputs = {
         "tab_replication.tex": tab_replication(replication_view(inp["orig"], inp["rep"])),
-        "tab_construct.tex": tab_construct(inp["c"]),
-        "tab_families.tex": tab_families(inp["m1"], inp["m2"], inp["m3"], missed, inp["rendered"]),
-        "tab_rendered.tex": tab_rendered(inp["rendered"]),
     }
+    outputs["tab_switches.tex"], outputs["tab_families.tex"] = split_families(
+        tab_families(inp["m1"], inp["m3"])
+    )
     # the further analyses of the main-study outputs
     from memshift.analysis import (
         ex_e1_paper,  # lazy: it imports this module's formatters
@@ -742,9 +500,6 @@ def main() -> None:
     outputs |= ex_e1_paper.tables(ex_e1_paper.load(a.root, sources))
     outputs |= ex_review_paper.tables(ex_review_paper.load(a.root, sources))
     outputs |= ex_tables.build(a.root, sources, inp)
-    from memshift.analysis import controls_paper  # lazy, as above
-
-    outputs |= controls_paper.tables(controls_paper.load(a.root, sources))  # control cells
     from memshift.analysis import key_audit  # lazy, as above
 
     outputs |= key_audit.tables(key_audit.load(a.root, sources))  # offline key audit

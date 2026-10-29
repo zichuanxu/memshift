@@ -819,10 +819,13 @@ SWITCH_PROSE = {  # the three tiers in running prose (the tables keep `Tier.labe
 
 
 def _and(items: list[str]) -> str:
-    """A list in prose ("a", "a and b", "a, b and c"); "none" when empty."""
+    """A list in prose with the serial comma ("a", "a and b", "a, b, and c"); "none" when
+    empty."""
     if not items:
         return "none"
-    return items[0] if len(items) == 1 else f"{', '.join(items[:-1])} and {items[-1]}"
+    if len(items) < 3:
+        return " and ".join(items)
+    return f"{', '.join(items[:-1])}, and {items[-1]}"
 
 
 def m1_numbers(m: dict[str, Any]) -> dict[str, str]:

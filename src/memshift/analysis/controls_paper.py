@@ -1,7 +1,7 @@
-"""Paper numbers and the table of the control cells (analysis in
+"""Paper numbers of the control cells (analysis in
 `analysis.controls`). Every macro name starts with `Ctl`; the source is the staged analysis named
 `ctl` in results/sources.json (`analysis/ctl_metrics.json`). A stage that is not staged
-renders every macro and table cell as the MISSING marker.
+renders every macro as the MISSING marker.
 
 Macro names (letters only, digits spelled as in the other blocks):
 
@@ -22,18 +22,11 @@ Macro names (letters only, digits spelled as in the other blocks):
                               definition (CtlFullCloseFriendTruncatedSrc) and per definition and
                               declared source (CtlFullCloseFriendMessagesDroppedSrc);
                               CtlFullWhichTruncated names the definitions that were cut
-
-tab_controls        the contrasts of the control arms of the paper (oracle, add-only, template,
-                    scope, full access) on definition items and all items for the three branches,
-                    as point estimates; the other items' contrasts and the view before the shift
-                    in the notes (the view: tab_view; the add-only refresh on the 20 worlds of
-                    block U: tab_refresh_upsert)
 """
 
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -41,10 +34,8 @@ from memshift.analysis import controls
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, camel, stage_json
 from memshift.analysis.paper_data import get as _get
 from memshift.analysis.paper_numbers import _macro, ci, num, pct, pp
-from memshift.analysis.paper_tables import _num, _row, notes
 from memshift.gen.kappa import KAPPA_DEFS
 
-UNDEFINED = "---"
 CLASS_TAGS = (
     ("all", "All"),
     ("definition", "Definition"),
@@ -278,181 +269,3 @@ def numbers(view: Mapping[str, Any] | None) -> dict[str, str]:
     for name, value in out.items():
         _macro(name, value)  # letters-only names
     return dict(out)
-
-
-# ------------------------------------------------------------------------------------- tables
-GROUPS = ("definition", "all")  # the other items' few contrasts are stated in the notes
-NOT_TAKEN = ""  # a contrast the table does not take on that item class: an empty cell
-SUB = r"\mtin "  # a variant of the contrast above, indented under it
-CAPTION = (
-    r"Contrasts of the control cells after $\Ssrc$, $\Sdef$ and $\Sdel$ ({n} worlds, point "
-    r"estimates)."
-)
-COMPACT_NOTE = (  # the notes under the table; {cited} to {before}: values of the analysis
-    r"The arms are those of \cref{{app:controls}}. \Cref{{tab:refresh-upsert}} gives the "
-    r"add-only refresh on \RThreeUWorlds{{}} worlds, and \cref{{tab:view}} gives the view. "
-    r"Source, cited: the source key and the citation key. Full access: the full-access writer, "
-    r"run after $\Ssrc$ and $\Sdef$ only ({undef}). Acc.\ on re-derived: accuracy on re-derived "
-    r"items. Value equals gold: the share of re-derived values that equal gold. On the other "
-    r"items, scope $-$ cited was {cited}\,pp after the three shifts, and view $-$ no-store BM25 "
-    r"on Update was {rule}\,pp on single-field and {free}\,pp on free-text items. Before the "
-    r"shift, view $-$ no-store BM25 on accuracy was {before}."
-)
-
-
-@dataclass(frozen=True)
-class CompactRow:
-    arm: str
-    label: str
-    cells: Mapping[str, str]  # group -> key template with {br}
-    unit: str = "pp"
-    source: str = "contrast"  # contrast | scope_missed
-    run: tuple[str, ...] = ("src", "def", "orphan")  # the branches the row's cells were run on
-
-
-SD = ("src", "def")
-ROWS = (  # the control arms, each with its contrasts (the view: tab_view)
-    CompactRow("oracle", r"Update, oracle $-$ source, $D{=}0$",
-               {"definition": "G_upd_D0_{br}_definition", "all": "G_upd_D0_{br}_all"}),
-    CompactRow("", rf"{SUB}$D{{=}}1$",
-               {"definition": "G_upd_D1_{br}_definition", "all": "G_upd_D1_{br}_all"}),
-    CompactRow("", r"Stability, oracle $-$ source, $D{=}0$",
-               {"definition": "G_stab_D0_{br}_definition", "all": "G_stab_D0_{br}_all"}),
-    CompactRow("", rf"{SUB}$D{{=}}1$",
-               {"definition": "G_stab_D1_{br}_definition", "all": "G_stab_D1_{br}_all"}),
-    CompactRow("add-only", r"Update, add-only $-$ $B{=}0$ ($D{=}1$)",
-               {"definition": "R_ref_{br}_definition", "all": "R_ref_{br}_all"}),
-    CompactRow("", rf"{SUB}$B{{=}}1$ $-$ add-only",
-               {"definition": "R_gap_{br}_definition", "all": "R_gap_{br}_all"}),
-    CompactRow("template", r"Update, template $-$ $D{=}0$ ($B{=}1$)",
-               {"definition": "T_upd_{br}_definition", "all": "T_upd_{br}_all"}),
-    CompactRow("scope", r"Update, scope $-$ source ($D{=}1$)",
-               {"definition": "K_upd_{br}_definition", "all": "K_upd_{br}_all"}),
-    CompactRow("", r"Update, scope $-$ cited ($D{=}1$)",
-               {"definition": "K_cited_{br}_definition", "all": "K_cited_{br}_all"}),
-    CompactRow("", rf"{SUB} missed invalidation, scope cell (\%)",
-               {"definition": "definition", "all": "all"}, "pct", "scope_missed"),
-    CompactRow("full access", r"Acc.\ on re-derived, $D{=}1$ $-$ full-access $D{=}0$",
-               {"definition": "F_rep_{br}_definition", "all": "F_rep_{br}_all"}, run=SD),
-    CompactRow("", rf"{SUB} value equals gold",
-               {"definition": "F_repmech_{br}_definition", "all": "F_repmech_{br}_all"},
-               run=SD),
-)  # fmt: skip
-
-
-def _row_value(
-    view: Mapping[str, Any] | None, row: CompactRow, group: str, br: str
-) -> float | None:
-    """The point value shown in one cell, or None (not staged, or the contrast is missing)."""
-    if row.source == "scope_missed":
-        cls = row.cells[group]
-        e = _get(view, "cells", controls.CELLS["D1B1scope"], br, cls, "MissedInvalidation")
-    else:
-        e = _get(view, "contrasts", row.cells[group].format(br=br))
-    return e["est"] if e and _ok(e.get("est")) else None
-
-
-def _compact_cell(x: float | None, row: CompactRow) -> str:
-    if x is None:
-        return MISSING
-    if row.unit == "pct":  # a whole percent, its units digit under those of the pp values
-        return _num(x, digits=0) + r"\phantom{.0}"
-    return _num(x, sign=True)
-
-
-def _centred(text: str, cols: int = 1, last: bool = False) -> str:
-    """`text` centred across `cols` columns (closed with `@{}` in the table's last column)."""
-    return rf"\multicolumn{{{cols}}}{{c{'@{}' if last else ''}}}{{{text}}}"
-
-
-def _not_run(last: bool) -> str:
-    """The dash of a branch the arm did not run on, centred in its column."""
-    return _centred(UNDEFINED, last=True) if last else r"\mtna{}"
-
-
-def _points(view: Mapping[str, Any] | None, key: str) -> list[str]:
-    """The point values of a contrast after the three shifts (`key` with {br}) in signed pp
-    without the unit, MISSING where one is not there."""
-    vals = [_get(view, "contrasts", key.format(br=b)) for b, _ in BRANCH_TAGS]
-    return [_num(e["est"], sign=True) if e and _ok(e.get("est")) else MISSING for e in vals]
-
-
-def _listed(view: Mapping[str, Any] | None, key: str) -> str:
-    """`_points` as `a, b and c`."""
-    out = _points(view, key)
-    return f"{', '.join(out[:-1])} and {out[-1]}"
-
-
-def _before(view: Mapping[str, Any] | None) -> str:
-    """The view minus no-store BM25 on the accuracy before the shift, on definition items and on
-    all items: once per class when the three shifts agree (they share the state before the
-    shift), else per shift."""
-    parts = []
-    for cls, name in (("definition", "definition items"), ("all", "all items")):
-        out = _points(view, f"Z0_upd_{{br}}_{cls}")
-        text = out[0] if len(set(out)) == 1 else _listed(view, f"Z0_upd_{{br}}_{cls}")
-        parts.append(rf"{text}\,pp on {name}")
-    return " and ".join(parts)
-
-
-GROUP_NAMES = {"definition": "Definition items", "all": "All items"}
-BRANCH_NAMES = {"src": r"$\Ssrc$", "def": r"$\Sdef$", "orphan": r"$\Sdel$"}
-# three value columns per item class (one per shift), centred in boxes as wide as a signed pp value
-VALUES = " @{\\hspace{14pt}} ".join(["N{$+$00.0}" * len(BRANCH_TAGS)] * len(GROUPS))
-
-
-def tab_controls(view: Mapping[str, Any] | None) -> str:
-    """One row per contrast of a control arm (sub-rows for its variants), on definition items and
-    all items, per branch: the arm's name on its first row, a dash for a branch the arm did not
-    run on. The view is in `tab_view`, and the notes point to the same add-only refresh on the
-    worlds of block U (`tab_refresh_upsert`); the few contrasts on the other items and the
-    view's accuracy before the shift are in the notes."""
-    n = _get(view, "n_worlds") or MISSING
-    columns = [(g, b) for g in GROUPS for b, _ in BRANCH_TAGS]
-    shifts = [
-        _centred(BRANCH_NAMES[b], last=i == len(columns) - 1) for i, (_, b) in enumerate(columns)
-    ]
-    ncols = len(BRANCH_TAGS)
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{" + CAPTION.format(n=n) + "}",
-        r"\label{tab:controls}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{3.5pt}",
-        rf"\begin{{mttabular}}{{@{{}}l l {VALUES}@{{}}}}",
-        r"\toprule",
-        "& & "
-        + " & ".join(_centred(GROUP_NAMES[g], ncols, last=g == GROUPS[-1]) for g in GROUPS)
-        + r" \\",
-        rf"\cmidrule(lr){{3-{2 + ncols}}}\cmidrule(l){{{3 + ncols}-{2 + 2 * ncols}}}",
-        _row("Arm", "Contrast (pp)", *shifts),
-        r"\midrule",
-    ]
-    last = columns[-1]
-    for k, row in enumerate(ROWS):
-        if row.arm and k > 0:
-            lines.append(r"\mtgap")
-        cells = [
-            NOT_TAKEN
-            if g not in row.cells
-            else _not_run((g, b) == last)
-            if b not in row.run
-            else _compact_cell(_row_value(view, row, g, b), row)
-            for g, b in columns
-        ]
-        lines.append(_row(row.arm, row.label, *cells))
-    note = COMPACT_NOTE.format(
-        undef=UNDEFINED,
-        cited=_listed(view, "K_cited_{br}_other"),
-        rule=_listed(view, "Z_upd_{br}_rule"),
-        free=_listed(view, "Z_upd_{br}_free"),
-        before=_before(view),
-    )
-    lines += [r"\bottomrule", r"\end{mttabular}", notes(note), r"\end{table}"]
-    return "\n".join(lines) + "\n"
-
-
-def tables(view: Mapping[str, Any] | None) -> dict[str, str]:
-    return {
-        "tab_controls.tex": tab_controls(view),
-    }

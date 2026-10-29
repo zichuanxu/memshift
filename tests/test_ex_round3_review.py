@@ -1,5 +1,5 @@
 """The analyses of `analysis.ex_round3_review`: read from the staged analyses, they reproduce the
-published values they build on (tab:cause, the class split, tab_refresh_upsert, the Eq. (1)
+published values they build on (tab:cause, the class split, tab:refresh-upsert, the Eq. (1)
 terms, block H's r_0, the full-access control), the pinned anchor values hold, and the committed
 numbers.tex carries every macro of the block."""
 

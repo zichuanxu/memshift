@@ -403,10 +403,15 @@ def test_replication_table_gives_both_estimates_with_their_intervals():
     shown = [c[0] for c in rows if c[0]]
     assert r"\mtin $B$ effect, detection (either $D$)" in shown
     assert not any("missed" in lab or "{=}0$)" in lab for lab in shown)
-    assert len(rows) == 2 * 2 * (len(pt.REP_ROWS) - 2)  # both keys, both studies per contrast
+    # both studies per contrast; the source key leaves two contrasts to the class split
+    shown_rows = 2 * (len(pt.REP_ROWS) - 2)
+    assert len(rows) == 2 * shown_rows - 2 * len(pt.IN_CLASSSPLIT)
     assert "$D$'s effect on missed invalidation was 0.0 with both keys" in tab
+    assert r"$B{\times}D$: \cref{tab:classsplit}." in tab
+    source = _first_body(tab).split(r"\mtgroup{8}{Citation key}")[0]
+    assert r"$B{\times}D$ interaction" not in source and "Update ($D{=}1$)" not in source
     label = r"\mtin $B{\times}D$ interaction, Update"
-    for g, k in zip(("source", "cited"), [i for i, c in enumerate(rows) if c[0] == label],
+    for g, k in zip(("cited",), [i for i, c in enumerate(rows) if c[0] == label],
                     strict=True):  # fmt: skip
         main, fresh = rows[k], rows[k + 1]
         assert (main[1], fresh[0], fresh[1]) == ("main study", "", "replication")
@@ -426,7 +431,8 @@ def test_replication_table_without_marks_and_partial_stage():
     assert "path~" not in full and "block R" not in full and "App.~" not in full
     assert MISSING not in _first_body(full)  # the contrast rows need only E1
     empty = pt.tab_replication({})
-    assert _first_body(empty).count(MISSING) == 2 * 2 * len(pt.REP_ROWS) * 3
+    rows = 2 * len(pt.REP_ROWS) - len(pt.IN_CLASSSPLIT)  # both keys; the source key's in Table 11
+    assert _first_body(empty).count(MISSING) == 2 * rows * 3
 
 
 # ------------------------------------------------------------------------------------- block C
@@ -472,47 +478,6 @@ def test_construct_macros():
     want = sum(e["exec_t0"]["est"] * e["n"] for e in group) / sum(e["n"] for e in group)
     assert out["SynthExecGroupDefinition"] == pn.pct(want)
     assert set(paper_data.ITEM_TYPES) == set(sp) - {"all"}  # the static list is the data's
-
-
-def test_construct_table_and_missing():
-    tab = pt.tab_construct(C_E1)
-    # the contrasts with their intervals after each shift, without marks
-    assert r"\pass" not in tab and r"\fail" not in tab and "pred." not in tab
-    c3 = next(line for line in tab.splitlines() if line.startswith("$B{\\times}D$ on Update"))
-    # label, an empty count, then per shift an estimate and its interval in one centred cell
-    cells = re.split(r"\s*&\s*", c3.removesuffix(r" \\"))
-    assert len(cells) == 5 and cells[1] == ""
-    assert all(re.fullmatch(r"\\mtpair\{.+\}\{\[.+\]\}", c) for c in cells[2:]), cells
-    caption = tab.split(r"\label{tab:construct}")[0]
-    assert "regist" not in caption and "exploratory" not in caption
-    assert "block" not in caption and not re.search(r"\bC[1-4]\b", tab)  # no block or IDs
-    assert "$+$7.2" in tab and "47.3" in tab and "960" in tab
-    # the share is an em dash where C1 is not positive (orphan: D_m falls below D=0)
-    share = next(line for line in tab.splitlines() if line.startswith("share of the $D$ effect"))
-    assert share.count("---") == 1
-    assert share.split(" & ")[-1].startswith(r"\multicolumn{1}{c@{}}{---}")  # centred
-    assert "182.9" not in tab and "35.7" in share
-    assert C_E1["contrasts"]["orphan"]["C1_repair_D1s_minus_D0_source"]["est"] < 0
-    # the D1s cell is displayed as D_m; no display string spells it D1s
-    assert r"$D_{\mathrm{m}}-D_0$" in tab and r"$D_1-D_{\mathrm{m}}$" in tab
-    assert "D1s" not in tab
-    flipped = copy.deepcopy(C_E1)
-    flipped["contrasts"]["src"]["C1_repair_D1s_minus_D0_source"]["est"] = -0.01
-    assert (
-        next(
-            line
-            for line in pt.tab_construct(flipped).splitlines()
-            if line.startswith("share of the $D$ effect")
-        ).count("---")
-        == 2
-    )
-    empty = pt.tab_construct(None)
-    assert MISSING in empty and r"\pass" not in _first_body(empty)
-    bad = copy.deepcopy(C_E1)
-    bad["contrasts"]["def"]["C1_repair_D1s_minus_D0_source"].update(est=0.01, lo=-0.01)
-    assert r"\mtpair{$+$1.0}{[$-$1.0," in pt.tab_construct(bad)
-    c1 = bad["contrasts"]["def"]["C1_repair_D1s_minus_D0_source"]
-    assert pn.synth_numbers(bad)["SynthCOneDef"] == pn.ci(c1, pn.pp)
 
 
 # ------------------------------------------------------------------------------------ block M1
@@ -561,10 +526,10 @@ def test_m1_macros_per_switch_and_pooled(tmp_path):
     caveat = tier_name("cross:meta-llama/Llama-3.1-8B-Instruct")  # its underscores are escaped
     m["path3"]["tier_caveats"] = ["downgrade", caveat, "cross_unknown_model"]
     assert pn.m1_numbers(m)["MOneCaveats"] == (
-        r"the switch down from Qwen3.8-27B, the switch to Llama-3.1-8B and cross\_unknown\_model"
+        r"the switch down from Qwen3.8-27B, the switch to Llama-3.1-8B, and cross\_unknown\_model"
     )
     assert out["MOneSlopeGemma"] != MISSING and out["MOneAurocGemma"] != MISSING
-    tab = pt.tab_families(m, {f.key: None for f in FAMILIES}, {})
+    tab = pt.tab_families(m, {})
     assert "Ministral-3-14B" in tab and "pooled, 8 switches" in tab
     assert r"\pass" not in tab and r"\fail" not in tab and "triggered" not in tab
     down = next(ln for ln in tab.splitlines() if ln.startswith("downgrade"))
@@ -579,7 +544,7 @@ def test_m1_partial_stage_counts_only_when_all_eight_are_staged(tmp_path):
     assert out["MOneSlopeLlama"] == MISSING and out["MOneMBGemma"] == MISSING
     assert out["MOneMBHolding"] == out["MOneTOneHolding"] == MISSING
     assert out["MOneMBSame"] != MISSING  # the staged switches still render
-    tab = pt.tab_families(m, {f.key: None for f in FAMILIES}, {})
+    tab = pt.tab_families(m, {})
     assert "same tier" in tab and MISSING in tab
 
 
@@ -605,14 +570,6 @@ def test_m2_macros_estimates_and_family_count():
     assert out["MTwoStaged"] == "3"
     no_verdicts(out)
     assert out["MTwoLlamaWorlds"] == "20"
-    tab = pt.tab_families(None, fams, {}, {"llama": 0.0})
-    assert "families where" not in tab and r"\pass" not in tab
-    assert pt.mt_ci_cells(fams["llama"]["estimates"]["BxD_def"], sign=True) in tab
-    largest = next(ln for ln in tab.splitlines() if ln.startswith("$D$ effect on missed inv"))
-    missing = rf"\multicolumn{{2}}{{c}}{{{MISSING}}}"
-    # Llama alone, the two families and Qwen3.5-9B on their worlds not staged: the row stays
-    cells = re.split(r"\s*&\s*", largest.removesuffix(r" \\"))
-    assert cells[1:] == ["0.0", "", missing, missing, missing]
 
 
 def test_m2_count_needs_all_three_families():
@@ -690,12 +647,12 @@ def test_m3_flipped_sign_and_the_reader_table():
     swap = flipped["def"]["contrasts"]["BxD_interaction_update_source"]["swap"]
     assert out["MThreeGemmaBxDSwapDef"] == pn.ci(swap, pn.pp)
     assert out["MThreeStaged"] == "3"
-    tab = pt.tab_families(None, {f.key: None for f in FAMILIES}, {"llama": THETA_R})
+    tab = pt.tab_families(None, {"llama": THETA_R})
     missed = THETA_R["src"]["contrasts"]["D_effect_missed_source"]["swap"]
     assert "6/6" not in tab and "triggered" not in tab
     assert pt.mt_ci_cells(missed, sign=True).split(" & ")[0] in tab  # 0.0: no interval
     # one row per quantity: the swapped reader of each family, then the main reader
-    readers = tab.split("(b) As reader only", 1)[1].splitlines()
+    readers = tab.split("As reader only", 1)[1].splitlines()
     assert readers[0].split(" & ")[1:] == [
         *(rf"\multicolumn{{2}}{{c}}{{{f.label}}}" for f in FAMILIES),
         r"\multicolumn{2}{c@{}}{Qwen3.5-9B} \\",
@@ -943,11 +900,6 @@ def test_rendered_macros_checks_differences_and_descriptives(tmp_path):
     assert out["RendKeptTemplate"] == "2.0\\%" and out["RendRetriedEmail"] == "4.0\\%"
     assert out["RendFidelityMin"] == "100.0\\%" and out["RendFidelityAllOne"] == "yes"
     assert out["RendFidelityChecked"] == "5,000" and out["RendModel"] == "google/gemma-4-12B-it"
-    tab = pt.tab_rendered(m)
-    assert "surface forms" not in tab  # the rendering descriptives are in the text (macros)
-    assert "first attempt" not in tab and "Probes identical" not in tab and ": yes" not in tab
-    assert r"\pass" not in tab and r"\fail" not in tab and "block" not in tab
-    assert pt.mt_ci_cells(m["rendered"]["estimates"]["D_repair_src"], sign=True) in tab
 
 
 def test_rendered_without_render_reports_leaves_the_descriptives_missing(tmp_path):
@@ -956,7 +908,6 @@ def test_rendered_without_render_reports_leaves_the_descriptives_missing(tmp_pat
     assert out["RendKeptTemplate"] == MISSING and out["RendFidelityMin"] == MISSING
     assert out["RendKeptEmail"] == MISSING and out["RendModel"] == MISSING
     assert out["RendDRepairSrc"] != MISSING  # the estimates do not depend on the reports
-    assert MISSING not in pt.tab_rendered(m)  # the table needs no report
 
 
 # --------------------------------------------------------------------------------- section 6
@@ -1144,6 +1095,7 @@ def table_style(tmp_path: Path) -> str:
 # and H{width}{indent}; P{width} and C{width} as a table defines them with \newcolumntype
 COLUMN_ARGS = {"p": 1, "N": 1, "P": 1, "C": 1, "H": 2}
 ENVIRONMENTS = ("tabular", "tabular*", "mttabular", "mttabular*")
+FLOATS = ("table", "table*")  # a table in one column or across both
 
 
 def _columns(spec: str) -> int:
@@ -1177,9 +1129,12 @@ def _tabulars(tex: str) -> list[tuple[int, list[str]]]:
     return out
 
 
-def check_tex(tex: str) -> None:
-    """Environments balance, and every table row has as many cells as its tabular has columns."""
-    assert tex.count("\\begin{table}") == tex.count("\\end{table}") >= 1
+def check_tex(tex: str, panel: bool = False) -> None:
+    """Environments balance, and every table row has as many cells as its tabular has columns.
+    `panel`: a panel of a table whose float is in the paper's source, so it has none of its own."""
+    floats = sum(tex.count(f"\\begin{{{env}}}") for env in FLOATS)
+    assert floats == sum(tex.count(f"\\end{{{env}}}") for env in FLOATS) >= (0 if panel else 1)
+    assert not (panel and floats), "a panel has no float of its own"
     begins = sum(tex.count(f"\\begin{{{env}}}") for env in ENVIRONMENTS)
     assert begins == sum(tex.count(f"\\end{{{env}}}") for env in ENVIRONMENTS) >= 1
     assert tex.count("{") == tex.count("}")
@@ -1198,36 +1153,22 @@ def check_tex(tex: str) -> None:
 
 
 def _all_tables() -> dict[str, str]:
-    fams = {"llama": _family(), "gemma": _family(zero_cv=1), "gptoss": _family(True)}
     return {
         "replication": pt.tab_replication(paper_data.replication_view(ORIG, REP_PARTIAL)),
-        "construct": pt.tab_construct(C_E1),
-        "families": pt.tab_families(None, fams, {"llama": THETA_R}),
+        "families": pt.tab_families(None, {"llama": THETA_R}),
     }
 
 
 def test_tables_are_wellformed_with_data_and_without():
     for name, tex in _all_tables().items():
         check_tex(tex)
-        assert tex.startswith("\\begin{table}") and f"\\label{{tab:{name}}}" in tex
+        assert tex.startswith("\\begin{table*}") and f"\\label{{tab:{name}}}" in tex
     for tex in (
         pt.tab_replication({}),
-        pt.tab_construct(None),
-        pt.tab_families(None, {f.key: None for f in FAMILIES}, {}),
-        pt.tab_rendered(None),
+        pt.tab_families(None, {}),
     ):
         check_tex(tex)
         assert MISSING in tex
-
-
-def test_rendered_table_wellformed(tmp_path):
-    tex = pt.tab_rendered(_rendered(tmp_path))
-    check_tex(tex)
-    assert (
-        "\n$D$ effect on accuracy on re-derived items, $\\Sdef$ & " in tex
-        and "\\label{tab:rendered}" in tex
-        and "(iii)" not in tex
-    )
 
 
 def test_tables_and_macros_are_deterministic(tmp_path):
@@ -1243,10 +1184,10 @@ def test_tables_and_macros_are_deterministic(tmp_path):
 @pytest.mark.paper  # the table style, paper/memtab-style.tex
 @pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
 def test_tables_compile(tmp_path):
-    tables = _all_tables() | {"rendered": pt.tab_rendered(_rendered(tmp_path))}
+    tables = _all_tables()
     tables |= {f"{k}_missing": v for k, v in {
         "replication": pt.tab_replication({}),
-        "families": pt.tab_families(None, {f.key: None for f in FAMILIES}, {}),
+        "families": pt.tab_families(None, {}),
     }.items()}  # fmt: skip
     body = "".join(f"\\input{{{name}.tex}}\n" for name in tables)
     for name, tex in tables.items():
@@ -1261,7 +1202,8 @@ def test_tables_compile(tmp_path):
                 r"\newcommand{\holdmem}{\textsc{HoldMem}}\newcommand{\pass}{\checkmark}",
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
-                r"\newcommand{\fail}{$\times$}",
+                r"\newcommand{\fail}{$\times$}\newcommand{\Cref}[1]{Table~1}"
+                r"\newcommand{\cref}[1]{Table~1}",
                 r"\begin{document}",
                 body,
                 r"\end{document}",
@@ -1420,12 +1362,10 @@ def test_committed_generated_files_are_current():
         "tab_replication.tex": pt.tab_replication(
             paper_data.replication_view(inp["orig"], inp["rep"])
         ),
-        "tab_construct.tex": pt.tab_construct(inp["c"]),
-        "tab_families.tex": pt.tab_families(
-            inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, sources), inp["rendered"]
-        ),
-        "tab_rendered.tex": pt.tab_rendered(inp["rendered"]),
     }
+    want["tab_switches.tex"], want["tab_families.tex"] = pt.split_families(
+        pt.tab_families(inp["m1"], inp["m3"])
+    )
     for name, tex in want.items():
         assert (ROOT / "paper/generated" / name).read_text() == head + tex, name
 
@@ -1485,40 +1425,30 @@ def test_stage4_captions_and_notes_define_their_rows_marks_and_cells():
     assert "$D$'s effect on missed invalidation was 0.0" in _notes(rep)
     assert "behavioural" not in rep and "mechanistic" not in rep
     assert "the retention test in" not in rep and "Membership" not in rep
-    tab = pt.tab_construct(inp["c"])
-    con = tab.split(r"\label{tab:construct}")[0]
-    for term in ("against exact recomputation", "$t_0$, before any shift"):
-        assert term in con, term
-    for term in (
-        "$D_1$, $D_0$: the $D{=}1$ and $D{=}0$ cells",
-        r"only exact recomputation gives: $(D_1-D_{\mathrm{m}})/(D_1-D_0)$",
-        r"$D_{\mathrm{m}}$'s effect on missed invalidation was 0.0 after every shift",
-        "Groups: point estimates",
-    ):
-        assert term in _notes(tab), term
-    assert "on missed invalidation, $D_{" not in con.split(r"\mtnotes")[0]  # a line of the notes
-    assert "benchmark-authored" not in tab
-    fam = pt.tab_families(
-        inp["m1"], inp["m2"], inp["m3"], pt.family_missed(ROOT, SOURCES), inp["rendered"]
-    )
-    switches, families_ = fam.split("\n\n\\begin{table}")  # two tables
+    fam = pt.tab_families(inp["m1"], inp["m3"])
+    switches, families_ = fam.split("\n\n\\begin{table*}")  # two tables
     assert r"\label{tab:switches}" in switches and r"\label{tab:families}" in families_
-    for term in ("slope (grey) is not usable", "(90\\% interval)", "AUROC: point estimates"):
+    for term in ("slope (gray) is not usable", "(90\\% interval)", "AUROC: point estimates"):
         assert term in _notes(switches), term
     for term in (
         "$D$'s effect on missed invalidation was 0.0 in every column",
-        "largest absolute value over both keys and the three shifts",
-        "Qwen3.5-9B: in (a) the main writer and reader, in (b) the main reader, on the same",
+        "Qwen3.5-9B: the main reader, on the same worlds",
         r"\holdmem{}(1,1) accuracy: point estimates",
     ):
         assert term in _notes(families_), term
+    # the families as writer and reader are in Table 4(b) of the main text, not here
+    caption = families_.split(r"\label{tab:families}")[0]
+    assert r"\Cref{tab:main}b gives them as writer and reader" in caption
     for label in ("\n$B$ effect on Update, $\\Ssrc$, pooled over $D$ & ", "\nNo-store BM25 $-$"):
-        assert label in families_, label
+        assert label not in families_, label
     assert "(i)" not in families_ and "(ii)" not in families_
-    # Qwen3.5-9B as writer and reader on the families' worlds: the template worlds of block L
-    bxd = next(ln for ln in families_.splitlines() if ln.startswith("$B{\\times}D$ on Update"))
-    template = inp["rendered"]["template_same_seeds"]["estimates"]["BxD_def"]
-    assert bxd.removesuffix(r" \\").endswith(pt.mt_ci_cells(template, sign=True))
+    # Qwen3.5-9B: the main reader of the same stores, in the last column pair
+    bxd = next(
+        ln for ln in families_.splitlines() if ln.startswith("$B{\\times}D$ on Update, $\\Sdef$")
+    )
+    main = next(r for f in FAMILIES if (r := inp["m3"].get(f.key)))
+    main_bxd = main["def"]["contrasts"]["BxD_interaction_update_source"]["main"]
+    assert bxd.removesuffix(r" \\").endswith(pt.mt_ci_cells(main_bxd, sign=True))
     text = _notes(fam) + fam.split(r"\label{tab:families}")[0]
     assert "same sign" not in fam and "keep the main reader's sign" not in text
     assert r"$\pm3$" not in text and "regist" not in text and "check" not in text
@@ -1531,8 +1461,3 @@ def test_stage4_captions_and_notes_define_their_rows_marks_and_cells():
     # the main study's three tiers, then the five other writers
     assert switches.count(r"\mtgap") == 1
     assert switches.index("downgrade") < switches.index(r"\mtgap") < switches.index("Llama")
-    ren = pt.tab_rendered(inp["rendered"])
-    assert "(i)" not in ren and not any(
-        ln.startswith("$D$ effect on missed") for ln in ren.splitlines()
-    )
-    assert "was 0.0 on both kinds of worlds" in _notes(ren)

@@ -28,7 +28,8 @@ items only, so it has the classes All (the same items) and Definition):
 tab_keyaudit        appendix table: the changed and unchanged item-times per branch, false
                     invalidation by class, the re-derivations summed over the worlds (all,
                     definition and single-field items; the text quotes the single-field ones) and
-                    the definition-item share, per branch and key
+                    the definition-item share, per branch and key; panel (a) of the key table
+                    (no float)
 """
 
 from __future__ import annotations
@@ -158,11 +159,9 @@ def numbers(view: Mapping[str, Any] | None) -> dict[str, str]:
 
 
 # ------------------------------------------------------------------------------------- table
-CAPTION = (
-    r"What each key invalidates on the test worlds, audited without a model. Counted since the "
-    r"fork, no key missed a changed item-time (the largest share not invalidated is {missed})."
-)
 NOTES = (
+    r"Counted since the fork, no key missed a changed item-time (the largest share not "
+    r"invalidated is {missed}). "
     r"Re-derivations: invalidations over the four checkpoints, one writer request each, summed "
     r"over the {worlds} worlds. Def.\ share: share of the {cp} definition item-times of a shift "
     r"that were re-derived. ---: the scope key is built for definition items only."
@@ -191,23 +190,19 @@ def _head(name: str, second: str, last: bool = False) -> str:
 def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
     """The audit per shift and key: the shift's changed and unchanged item-times (the same for
     every key), false invalidation by class, and the re-derivations summed over the worlds (the
-    basis of the counts the text quotes) with the share of definition item-times re-derived."""
+    basis of the counts the text quotes) with the share of definition item-times re-derived. Panel
+    (a) of the key table: the tabular and its notes, without a float (the float, its caption,
+    panel (b) and the labels tab:keyaudit and tab:oracle-key are in the appendix source)."""
     m = numbers(view)
-    caption = CAPTION.format(missed=m["KeyAuditMissedMax"])
     pct = r"(\%)"
     lines = [
-        r"\begin{table}[t]",
-        rf"\caption{{{caption}}}",
-        r"\label{tab:keyaudit}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
         rf"\begin{{mttabular}}{{{COLUMNS}}}",
         r"\toprule",
         r"& \multicolumn{2}{c}{Item-times} & & \multicolumn{4}{c}{Unchanged item-times "
         r"invalidated} & \multicolumn{4}{c@{}}{Re-derivations} \\",
         r"\cmidrule(lr){2-3}\cmidrule(lr){5-8}\cmidrule(l){9-12}",
         _row(
-            "Shift",
+            "(a) Shift",
             r"\multicolumn{1}{c}{Changed}",
             r"\multicolumn{1}{c}{Unchanged}",
             "Key",
@@ -239,8 +234,13 @@ def tab_keyaudit(view: Mapping[str, Any] | None) -> str:
     lines[-1] = r"\bottomrule"
     lines += [
         r"\end{mttabular}",
-        notes(NOTES.format(worlds=m["KeyAuditWorlds"], cp=m["KeyAuditDefCheckpointsSrc"])),
-        r"\end{table}",
+        notes(
+            NOTES.format(
+                missed=m["KeyAuditMissedMax"],
+                worlds=m["KeyAuditWorlds"],
+                cp=m["KeyAuditDefCheckpointsSrc"],
+            )
+        ),
     ]
     return "\n".join(lines)
 

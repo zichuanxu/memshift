@@ -1,24 +1,20 @@
-"""Paper numbers and the table of the control cells (`analysis.controls_paper`): a stage that is
-not staged renders only MISSING markers, a staged one carries the estimates and counts the
-analysis produced, the table is well-formed and compiles, and the committed generated files are
-current."""
+"""Paper numbers of the control cells (`analysis.controls_paper`): a stage that is not staged
+renders only MISSING markers, and a staged one carries the estimates and counts the analysis
+produced."""
 
 import json
 import re
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
 
 from memshift.analysis import controls as ctl
 from memshift.analysis import controls_paper as cp
-from memshift.analysis import paper_tables
 from memshift.analysis.paper_data import MISSING, camel
 from memshift.analysis.paper_numbers import _macro, with_estimates
 from tests.test_controls import Builder, ev
-from tests.test_paper_stage4 import PAPER_PAGE, check_tex, table_style
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = json.loads((ROOT / "results/sources.json").read_text())
@@ -201,100 +197,6 @@ def test_macro_values_compile_as_text(staged, tmp_path):
     assert done.returncode == 0, done.stdout[-1500:]
 
 
-# ---------------------------------------------------------------------------------- tables
-def test_tables_are_wellformed_staged_partly_staged_and_unstaged(staged, partial):
-    for view in (staged, partial, None):
-        assert set(cp.tables(view)) == {"tab_controls.tex"}
-        for tex in cp.tables(view).values():
-            check_tex(tex)
-            assert tex.count("\\begin{table}") == 1
-    assert MISSING in cp.tab_controls(None)
-    # a table cell that cannot be computed is MISSING, the rest stay
-    assert cp.tab_controls(partial).count(MISSING) > 10
-    assert cp.tab_controls(partial).count(MISSING) < cp.tab_controls(None).count(MISSING)
-
-
-def test_compact_table_rows_are_the_control_arms_with_their_contrasts(staged):
-    tex = cp.tab_controls(staged)
-    for arm, contrast in (  # the arm's name on the first row of its block, once
-        ("oracle", "Update, oracle"),
-        ("", "Stability, oracle"),
-        ("add-only", "Update, add-only $-$ $B{=}0$"),
-        ("", rf"{cp.SUB}$B{{=}}1$ $-$ add-only"),
-        ("template", "Update, template"),
-        ("scope", "Update, scope $-$ source"),
-        ("", "Update, scope $-$ cited"),
-        ("", rf"{cp.SUB} missed invalidation, scope cell"),
-        ("full access", "Acc.\\ on re-derived, $D{=}1$ $-$ full-access"),
-    ):
-        assert f"\n{arm} & {contrast}" in tex, (arm, contrast)
-    body = tex.split("\\midrule")[1].split("\\bottomrule")[0]
-    assert body.count(" \\\\") == 12  # twelve contrasts, two item classes of three shifts each
-    # the view is in tab_view; the same add-only refresh on the worlds of block U is in
-    # tab_refresh_upsert, and the ratios follow from the two add-only rows
-    assert "\nview &" not in tex and "ratio" not in body
-    assert "\\cref{tab:view}" in tex and "\\Cref{tab:refresh-upsert}" in tex
-    assert "add-only refresh on \\RThreeUWorlds{} worlds" in tex
-    # the two arms that could not be tested as designed are not in the table
-    assert "deletion-aware" not in tex and "thinking" not in tex.lower()
-    assert "P-" not in tex and "prereg" not in tex and "regist" not in tex
-    assert "verdict" not in tex and "\\pass" not in tex and "\\fail" not in tex
-    assert "\\textbf{" not in tex.replace(MISSING, "") and "n.j." not in tex
-    assert "Implementation checks" not in tex
-    # the view's contrast on the other items and before the shift are in the notes
-    notes = tex.split("\\mtnotes{", 1)[1]
-    for key in ("K_cited_{br}_other", "Z_upd_{br}_rule", "Z_upd_{br}_free"):
-        assert f"{cp._listed(staged, key)}\\,pp" in notes, key
-    assert MISSING not in notes
-
-
-def split_row(line: str) -> list[str]:
-    return [c.strip() for c in line.removesuffix(r"\\").split(" & ")]
-
-
-def cells_of(tex: str, start: str) -> list[str]:
-    """The cells of the table row that begins with `start`."""
-    return split_row(next(line for line in tex.splitlines() if line.startswith(start)))
-
-
-def test_compact_table_has_the_full_access_rows_for_src_and_def_only(staged):
-    cells = cells_of(cp.tab_controls(staged), "full access &")
-    # arm, contrast, definition items (3 branches), all items (3)
-    assert len(cells) == 8 and cells[0] == "full access" and "full-access" in cells[1]
-    assert cells[2:5] == ["$+$66.0", "$+$66.0", cp._not_run(last=False)]
-    assert cells[5:8] == ["$+$32.2", "$+$32.2", cp._not_run(last=True)]  # the last column
-    lines = cp.tab_controls(staged).splitlines()
-    mech = split_row(
-        lines[lines.index(next(x for x in lines if x.startswith("full access &"))) + 1]
-    )
-    assert mech[:2] == ["", rf"{cp.SUB} value equals gold"]  # the row after the full-access row
-    assert mech[2:5] == ["$+$66.0", "$+$66.0", cp._not_run(last=False)]
-    assert cp._not_run(last=False) == r"\mtna{}"  # a centred dash, defined in the notes
-    assert "and $\\Sdef$ only ({undef})" in cp.COMPACT_NOTE
-
-
-def test_the_full_access_rows_are_missing_when_unstaged_or_without_the_cell():
-    cells = cells_of(cp.tab_controls(None), "full access &")
-    assert cells[2:4] == [MISSING, MISSING] and cells[4] == cp._not_run(last=False)
-    b = Builder()
-    b.drop |= {"D0fullB1"}
-    cells = cells_of(cp.tab_controls(ev(b.table())), "full access &")
-    assert cells[2:4] == [MISSING, MISSING] and cells[4] == r"\mtna{}"  # `---`: no orphan run
-    m = cp.numbers(ev(b.table()))
-    assert m["CtlFRepSrcDefinition"] == MISSING and m["CtlFullTruncatedAll"] == MISSING
-    assert m["CtlFullCloseFriendMessagesTruncatedSrc"] == MISSING
-
-
-def test_compact_table_shows_the_estimates_of_every_arm():
-    b = Builder({("D1B1gold", "definition", "orphan"): 0.50})
-    b.drop |= {"zeroDm"}
-    res = ev(b.table())
-    tex = cp.tab_controls(res)
-    g = cells_of(tex, "oracle & Update, oracle")
-    assert len(g) == 8 and "\\fail" not in tex and "n.j." not in tex
-    assert MISSING not in g
-
-
 def test_check_macros_mark_each_check():
     anchors = {"r": {"holdmem_D0B1_source": {"share": 0.05, "answers": 100}}}
     audit_cell = {"pass": True, "branches": {"src": {"definition": {"pass": True}}}}
@@ -316,100 +218,11 @@ def test_check_macros_mark_each_check():
     assert m["CtlCheckAnchorWorst"].startswith("5.0\\%") and m["CtlChecksPassed"] == "3 of 5"
 
 
-@pytest.mark.paper  # the table style, paper/memtab-style.tex
-@pytest.mark.skipif(shutil.which("pdflatex") is None, reason="no LaTeX")
-def test_tables_compile_and_fit_the_page(staged, tmp_path):
-    for name, tex in cp.tables(staged).items():
-        (tmp_path / name).write_text(tex)
-    (tmp_path / "t.tex").write_text(
-        "\n".join(
-            [
-                r"\documentclass[11pt]{article}\usepackage[T1]{fontenc}",
-                PAPER_PAGE,
-                r"\usepackage{amsmath,newtxtext,newtxmath,xcolor,booktabs,array}",
-                table_style(tmp_path),
-                r"\usepackage[font=small,labelfont=bf,skip=5pt]{caption}",
-                r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
-                r"\newcommand{\Sdel}{S_{\mathrm{del}}}",
-                r"\newcommand{\pass}{\checkmark}\newcommand{\fail}{$\times$}"
-                r"\newcommand{\cref}[1]{Appendix~A}\newcommand{\Cref}[1]{Table~1}",
-                r"\newcommand{\RThreeUWorlds}{20}",  # a macro of the refresh block, numbers.tex
-                r"\begin{document}\input{tab_controls.tex}",
-                r"\end{document}",
-            ]
-        )
-    )
-    done = subprocess.run(
-        ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "t.tex"],
-        cwd=tmp_path,
-        capture_output=True,
-        text=True,
-    )
-    assert done.returncode == 0, done.stdout[-1500:]
-    assert not re.search(r"Overfull \\hbox \(([5-9]|\d{2,})\.", done.stdout)  # nothing sticks out
-
-
-def test_compact_caption_defines_every_arm_and_term(staged):
-    tex = cp.tab_controls(staged)
-    caption, rest = tex.split("\\label{tab:controls}")
-    notes = rest.split(r"\end{mttabular}")[1]  # the definitions, under the table
-    assert r"$\Ssrc$, $\Sdef$ and $\Sdel$" in caption and "point estimates" in caption
-    for text in (caption, notes):
-        assert "prereg" not in text and "P-" not in text and "regist" not in text
-    for term in (
-        "Full access: the full-access writer, run after $\\Ssrc$ and $\\Sdef$ only (---)",
-        "The arms are those of \\cref{app:controls}",  # defined once, in the appendix
-        "Source, cited: the source key and the citation key",
-        "Acc.\\ on re-derived: accuracy on re-derived items",
-        "Value equals gold: the share of re-derived values that equal gold",
-        "Before the shift, view $-$ no-store BM25 on accuracy was",
-    ):
-        assert term in notes, term
-    assert "Deletion-aware" not in caption + notes and "Thinking" not in caption + notes
-    assert "retraction" not in tex and "gold $-$" not in tex and "refresh $-$" not in tex
-    t = cells_of(tex, "template & Update, template")
-    assert len(t) == 8  # arm, contrast and the six cells
-
-
-def test_the_notes_list_a_contrast_per_shift_with_a_typeset_minus():
-    view = {
-        "contrasts": {
-            f"Z_upd_{b}_rule": {"est": x}
-            for b, x in zip(("src", "def", "orphan"), (-0.2, 0.0, 0.137), strict=True)
-        }
-    }
-    assert cp._listed(view, "Z_upd_{br}_rule") == "$-$20.0, 0.0 and $+$13.7"
-    same = {
-        "contrasts": {
-            f"Z0_upd_{b}_{c}": {"est": 0.05}
-            for b in ("src", "def", "orphan")
-            for c in ("definition", "all")
-        }
-    }
-    assert cp._before(same) == "$+$5.0\\,pp on definition items and $+$5.0\\,pp on all items"
-
-
-# --------------------------------------------------------------------- sources and generated files
+# ------------------------------------------------------------------------------------- sources
 def test_results_sources_name_the_control_stage_and_it_is_not_staged_yet():
     assert SOURCES["ctl"] == "runs/stage5_controls"
     if not (ROOT / SOURCES["ctl"] / "analysis" / "ctl_metrics.json").exists():
         assert cp.load(ROOT, SOURCES) is None
-
-
-@pytest.mark.paper
-def test_committed_generated_files_are_current():
-    head = "% generated by memshift.analysis.paper_tables; do not edit\n"
-    for name, tex in cp.tables(cp.load(ROOT, SOURCES)).items():
-        assert (ROOT / "paper/generated" / name).read_text() == head + tex, name
-
-
-def test_paper_tables_generator_writes_the_control_tables(tmp_path, monkeypatch, capsys):
-    monkeypatch.setattr(sys, "argv", ["paper_tables", "--root", str(ROOT), "--out", str(tmp_path)])
-    paper_tables.main()
-    capsys.readouterr()
-    head = "% generated by memshift.analysis.paper_tables; do not edit\n"
-    for name, tex in cp.tables(cp.load(ROOT, SOURCES)).items():
-        assert (tmp_path / name).read_text() == head + tex
 
 
 def test_the_number_generator_hook_adds_the_control_macros():

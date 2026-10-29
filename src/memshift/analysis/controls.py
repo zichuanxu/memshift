@@ -29,8 +29,8 @@ expands to the source runs its manifest lists. The comparison cells missing from
 come from the published runs (`D1B1_source`, the comparison cell of F1, from the main-study E1
 runs), paired by (world, branch, fact id, checkpoint k); `analysis/ctl_metrics.json`,
 `analysis/ctl_item_table.jsonl` (not committed) and `manifest.json` are written to the stage
-directory. `python -m memshift.analysis.paper_numbers` and `paper_tables` then render the `Ctl`
-macros and `tab_controls.tex` (every macro is MISSING until this stage exists).
+directory. `python -m memshift.analysis.paper_numbers` then renders the `Ctl` macros (every
+macro is MISSING until this stage exists).
 
 What the stage does, in order (`controls_data` holds the first two):
 

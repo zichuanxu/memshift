@@ -1,7 +1,8 @@
 """Shared test configuration.
 
-The `paper` marker tags a test that reads the paper sources: paper/main.tex, paper/sections, the
-generated tables and numbers in paper/generated, the figures or the bibliography. The public release
+The `paper` marker tags a test that reads the paper sources: paper/main.tex, paper/sections,
+paper/appendix, the generated tables and numbers in paper/generated, the figures or the
+bibliography. The public release
 ships no paper/ directory, so these tests skip there and run wherever paper/ is present. The data
 they compare against (results/sources.json, audit/, runs/*/analysis) is shipped with the release.
 """

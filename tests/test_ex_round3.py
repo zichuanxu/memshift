@@ -14,6 +14,7 @@ from memshift.analysis import paper_numbers as pn
 from memshift.analysis.ex_e1_paper import UNDEFINED
 from memshift.analysis.paper_data import MISSING
 from memshift.runinfo import file_sha256
+from tests.paper_sources import paper_text
 from tests.test_ex_e1_paper import check_mt_tex, memtab_preamble
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -205,7 +206,7 @@ def test_tables_are_wellformed_with_data_and_without():
         assert set(r3.tables(inp)) == set(LABELS)
         for name, tex in r3.tables(inp).items():
             check_mt_tex(tex)
-            assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
+            assert tex.startswith("\\begin{table*}") and f"\\label{{{LABELS[name]}}}" in tex
     for name, tex in r3.tables(EMPTY).items():
         assert MISSING in tex, name
     for name, tex in r3.tables(INP).items():
@@ -234,12 +235,15 @@ def test_tables_set_each_value_in_a_box_of_its_column_widest_value():
     assert store.count("\\multicolumn{1}{c@{}}{---}") == 6 and "\\mtna{}" in store
     view = r3.tab_view(INP)
     assert view.count(">{\\mtpairwidths{") == 2  # one box width per column of paired differences
-    assert view.count("\\mtpair{") == 2 * 4 * 3 * 2  # metrics x groups x classes x differences
+    # Update by shift and pooled, Stability pooled only: (4 + 1) groups x classes x differences
+    assert view.count("\\mtpair{") == (4 + 1) * 3 * 2
     assert "D_{\\mathrm{m}}$ $-$ no-store" not in view  # the difference of the two shown
-    assert view.count("$^{\\dagger}$") == 2  # the row on five item-times, and its note
+    stability = view.split("\\mtgroup{9}{Stability (unchanged item-times)}")[1]
+    assert stability.count("\\mtin pooled & ") == 1 and "\\mtin $\\S" not in stability
+    assert "$^{\\dagger}$" not in view  # the row on five item-times was a Stability row
     assert "Levels: point estimates, rounded to whole percent." in view
     dm = r3.tab_dm_deletion(INP)
-    assert dm.count("\\begin{table}") == 1 and "tab:dm-programs" not in dm
+    assert dm.count("\\begin{table*}") == 1 and "tab:dm-programs" not in dm
     assert "the 1,365 changed item-times" in dm.split("\\label")[0]  # the caption
     notes = dm.split("\\mtnotes{")[1]
     assert "Value stored: a value stored where gold is no value." in notes
@@ -293,8 +297,7 @@ def test_committed_generated_files_are_current():
 
 @pytest.mark.paper
 def test_the_text_uses_defined_macros():
-    sections = ROOT / "paper/sections"
-    text = "\n".join(p.read_text() for p in sorted(sections.glob("*.tex")))
+    text = paper_text()
     used = set(re.findall(r"\\(ExRThree[A-Za-z]+)", text))
     assert used, "the text cites no round-3 macro"
     defined = set(MACROS) | {f"{k}Est" for k, v in MACROS.items() if " [" in v}

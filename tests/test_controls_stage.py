@@ -242,8 +242,6 @@ def test_the_paper_renders_the_staged_result(staged):
     assert macros["CtlChecksPassed"] == "5 of 5"
     assert macros["CtlCheckAuditPass"] == "pass" and macros["CtlWorlds"] == "1"
     assert not any(k.endswith("Verdict") for k in macros)
-    tex = cp.tab_controls(res)
-    assert r"\pass" not in tex and "oracle & Update, oracle" in tex
 
 
 def test_worlds_the_runs_do_not_have_are_listed(runs, tmp_path):

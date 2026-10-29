@@ -78,7 +78,7 @@ the files of this repository alone they print a visible placeholder (`??`):
 
 - Table 7 (worked example): `probes.jsonl`, `answers.jsonl` and `items.jsonl` of
   `runs/e1_test_s1000-1003_20260928T202242Z`.
-- Table 13 and the `ExAttr*` macros (changed item-times by cause, and `\ExAttrWorldSlots`, the
+- Table 12 and the `ExAttr*` macros (changed item-times by cause, and `\ExAttrWorldSlots`, the
   number of items per world that the abstract and the benchmark section print):
   `runs/stage2_e1/analysis/e1_item_table.jsonl` and `probes.jsonl` of the five
   `runs/e1_test_s1*_20260928T*` runs.
@@ -121,33 +121,33 @@ runs named in its stage manifest.
 
 | Paper | Generator | Stage keys | Tier 2 driver |
 |---|---|---|---|
-| Fig. 1, Table 4 (main experiment, the identity, detection counted from the latest change) | `paper_numbers` | `ex_round4_detection` (stage10_ex_round4_detection), `ex_account` (stage5_ex_account), `ex_round3_review` (stage8_ex_round3_review), `e1` (stage2_e1) | `experiments.e1 --branches src,def,orphan` with D0B0,D1B0,D0B1_source,D1B1_source,D0B1_cited,D1B1_cited |
+| Fig. 1, Table 4a (main experiment, the identity, detection counted from the latest change) | `paper_numbers` | `ex_round4_detection` (stage10_ex_round4_detection), `ex_account` (stage5_ex_account), `ex_round3_review` (stage8_ex_round3_review), `e1` (stage2_e1) | `experiments.e1 --branches src,def,orphan` with D0B0,D1B0,D0B1_source,D1B1_source,D0B1_cited,D1B1_cited |
 | Table 3 (overview) | `paper_extras` | `e1`, `c` (stage4_c_e1), `n` (stage4_n_e5), `m2_llama`, `m2_gemma`, `m2_gptoss`, and `ex_round4_detection` for the item counts | as the main experiment, the writer's programs, other model families and native systems |
-| Figs. 3, 5, 6, Tables 12, 20, 31, 37, 39 (main experiment by item class, JSON arm, account by writer, misses of the citation key against a forced re-derivation, no-store BM25 after the shift) | `paper_tables`, `figures` | `ex` (stage5_ex_e1), `ex_account`, `ex_more` (stage5_ex_more), `ex_misses` (stage5_ex_misses), `ex_round3_review`, `e1`, `rep_e1` (stage4_rep_e1) | as the main experiment |
-| Tables 13, 16 (changed item-times by cause, per definition) | `paper_tables` | `e1` | as the main experiment |
-| Tables 14, 26, 27, 34, 36, 38 (cause of the change, evidence coverage, typed-input sizes, the key against the refresh, misses of the citation key, changes from the clock alone) | `paper_numbers` | `ex_round3_review`, and `ex_round4_detection` for Table 38 | none (`analysis.ex_round3_review` and `analysis.ex_round4_detection` on the raw outputs) |
-| Table 33 (oracle key) | `paper_numbers` | `ex_round4_detection` | as the controls (Table 29), then `analysis.ex_round4_detection` on the raw outputs |
-| Tables 21, 22, 48, 49 (the writer's programs, by item class, after a deletion) | `paper_tables` | `c`, `ex_round3` (stage6_ex_round3) | `experiments.e1 --no-baselines --branches src,def,orphan` with D0B0,D1B0,D0B1_source,D1B1_source,D0B1_cited,D1B1_cited,D1sB0,D1sB1_source,D1sB1_cited |
-| Tables 18, 19, 30 (store and reader, query-time view) | `paper_tables` | `ex_round3`, `ctl` (stage5_controls) | as the main experiment, the writer's programs and the controls |
-| Table 29 (controls) | `paper_tables` | `ctl` | `experiments.e1 --no-baselines` with D0B1_source,D0B1_gold,D1B1_gold,D1B1_scope,D1B0_refresh,D0tB1_source, with zero_Dm (query-time view) and with D0B1_source,D0fullB1_source (`--branches src,def`) |
-| Table 32 (offline key audit) | `paper_tables` | `keyaudit` (stage5_key_audit) | none (`analysis.e1_keys`, no model) |
-| Table 35 (refresh and upsert) | `paper_tables` | `round3` (stage7_round3) | `experiments.e1 --no-baselines` with D0B0,D0B0_refresh,D1B0_refresh,D1sB0_refresh and D0B0,D0B0_upsert,D1B0_upsert,D1sB0_upsert; for three other model families `--writer MODEL --reader MODEL --post-probes definition` with D0B0,D0B0_refresh,D1B0_refresh,D0B0_upsert,D1B0_upsert |
-| Table 15 (unshifted branch) | `paper_tables` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --branches natural` with D0B0,D0B1_source,D1B0,D1B1_source |
-| Table 17 (held-out definitions) | `paper_tables` | `round3` | `experiments.e1 --no-baselines --kappa-set heldout:SEED --post-probes definition` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
-| Table 18, Fig. 4 (Claude reader) | `paper_tables`, `figures` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --reader claude-sonnet-5-5` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
-| Table 25 (definitions in the user's own words) | `paper_tables` | `round3` | `experiments.e1 --no-baselines --program-user-words --program-model MODEL --program-temperature 0.7 --program-sample I` with D1sB0,D1sB1_source (temperature 0 and `--post-probes definition` for Claude) |
+| Figs. 3, 5, 6, Tables 11, 16, 21, 26 (main experiment by item class, JSON arm, account by writer, misses of the citation key by cause, no-store BM25 after the shift) | `paper_tables`, `figures` | `ex` (stage5_ex_e1), `ex_account`, `ex_more` (stage5_ex_more), `ex_misses` (stage5_ex_misses), `ex_round3_review`, `e1`, `rep_e1` (stage4_rep_e1) | as the main experiment |
+| Table 13a (per definition) | `paper_tables` | `e1` | as the main experiment |
+| Tables 2, 12a, 18, 23a, 24 (changes from the clock alone, cause of the change, evidence coverage and typed-input sizes, the key against the refresh, misses of the citation key) | `paper_numbers` | `ex_round3_review`, and `ex_round4_detection` for the clock alone | none (`analysis.ex_round3_review` and `analysis.ex_round4_detection` on the raw outputs) |
+| Table 22b (oracle key) | `paper_numbers` | `ex_round4_detection` | as the controls, then `analysis.ex_round4_detection` on the raw outputs |
+| Table 32 and the numbers of Section 5.2 (the writer's programs, by item class, after a deletion) | `paper_tables`, `paper_numbers` | `c`, `ex_round3` (stage6_ex_round3) | `experiments.e1 --no-baselines --branches src,def,orphan` with D0B0,D1B0,D0B1_source,D1B1_source,D0B1_cited,D1B1_cited,D1sB0,D1sB1_source,D1sB1_cited |
+| Tables 14, 15, 20 (store and reader, query-time view) | `paper_tables` | `ex_round3`, `ctl` (stage5_controls) | as the main experiment, the writer's programs and the controls |
+| The controls (numbers in Appendix F.4) | `paper_numbers` | `ctl` | `experiments.e1 --no-baselines` with D0B1_source,D0B1_gold,D1B1_gold,D1B1_scope,D1B0_refresh,D0tB1_source, with zero_Dm (query-time view) and with D0B1_source,D0fullB1_source (`--branches src,def`) |
+| Table 22a (offline key audit) | `paper_tables` | `keyaudit` (stage5_key_audit) | none (`analysis.e1_keys`, no model) |
+| Table 23b (refresh and upsert) | `paper_numbers` | `round3` (stage7_round3) | `experiments.e1 --no-baselines` with D0B0,D0B0_refresh,D1B0_refresh,D1sB0_refresh and D0B0,D0B0_upsert,D1B0_upsert,D1sB0_upsert; for three other model families `--writer MODEL --reader MODEL --post-probes definition` with D0B0,D0B0_refresh,D1B0_refresh,D0B0_upsert,D1B0_upsert |
+| Table 12b (unshifted branch) | `paper_numbers` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --branches natural` with D0B0,D0B1_source,D1B0,D1B1_source |
+| Table 13b (held-out definitions) | `paper_tables` | `round3` | `experiments.e1 --no-baselines --kappa-set heldout:SEED --post-probes definition` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
+| Table 14, Fig. 4 (Claude reader) | `paper_tables`, `figures` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --reader claude-sonnet-5-5` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
+| Table 17c (definitions in the user's own words) | `paper_tables` | `round3` | `experiments.e1 --no-baselines --program-user-words --program-model MODEL --program-temperature 0.7 --program-sample I` with D1sB0,D1sB1_source (temperature 0 and `--post-probes definition` for Claude) |
 | Fig. 2 (program sets from six writers, Claude writers) | `figures` | `round3`, `ex_round3` | `experiments.e1 --no-baselines --program-model MODEL --program-temperature 0.7 --program-sample I` with D1sB0,D1sB1_source (`--post-probes definition` for the five writers other than Qwen3.5-9B, temperature 0 for Claude); `--defwriter MODEL --program-model MODEL` with D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source |
-| Table 28 (every record as typed fields) | `paper_round3b` | `round3b` (stage9_round3b) | `experiments.e1 --no-baselines --branches src,def` with D0B1_source,D1B1_source,D0typedB1_source; Claude Sonnet 5.5 as writer of the definition items with `--defwriter claude-sonnet-5-5` |
-| Table 23 (execution feedback) | `paper_round3b` | `round3b` | `experiments.e1 --no-baselines --branches src,def,orphan` with D0B0,D0B1_source,D1sB0,D1sB1_source,D1sfbB0,D1sfbB1_source |
-| Table 24 (extracted fields) | `paper_round3b` | `round3b` | `experiments.e1 --no-baselines --branches src,def` with D0B0,D0B1_source,D1sB0,D1sB1_source,D1sxB0,D1sxB1_source |
+| Table 19 (every record as typed fields) | `paper_round3b` | `round3b` (stage9_round3b) | `experiments.e1 --no-baselines --branches src,def` with D0B1_source,D1B1_source,D0typedB1_source; Claude Sonnet 5.5 as writer of the definition items with `--defwriter claude-sonnet-5-5` |
+| Table 17a (execution feedback) | `paper_round3b` | `round3b` | `experiments.e1 --no-baselines --branches src,def,orphan` with D0B0,D0B1_source,D1sB0,D1sB1_source,D1sfbB0,D1sfbB1_source |
+| Table 17b (extracted fields) | `paper_round3b` | `round3b` | `experiments.e1 --no-baselines --branches src,def` with D0B0,D0B1_source,D1sB0,D1sB1_source,D1sxB0,D1sxB1_source |
 | Fig. 8 (writer switch) | `figures` | `e2` (stage2_e2) | `experiments.e2 --tiers same,upgrade,downgrade` |
 | Fig. 7 (horizon) | `figures` | `e3` (stage2_e3) | `experiments.e3` |
-| Table 40 (diagnostic tests) | `figures` | `e1`, `e2`, `e3`, `rep_e2`, `rep_e3`, `m1`, `n`, `e6` (stage3_e6) | as those experiments |
-| Tables 41, 42 (switches to other writers, other model families) | `paper_tables` | `m1` (stage4_m1_e2), `m2_llama`, `m2_gemma`, `m2_gptoss`, `m3` (stage4_m3) | `experiments.e2 --tiers cross:MODEL` (new writer); `experiments.e1 --writer MODEL --reader MODEL`; `experiments.e1 --reader MODEL --branches src,def` |
-| Table 43 (replication) | `paper_tables` | `rep_e1`, `rep_e2`, `rep_e3` and `e1`, `e2`, `e3` | `experiments.e1`, `e2` and `e3` on worlds 1020-1039 |
-| Table 44 (rewritten worlds) | `paper_tables` | `l` (stage4_l_rendered), `ltokens` | `experiments.e1 --render google/gemma-4-12B-it` |
-| Fig. 9, Tables 45, 46 (native systems) | `figures`, `paper_tables` | `n`, `ncost`, `e5` (stage3_e5), `e5cost`, `e5wbshort` | `experiments.e5 --months 3 --systems SYSTEM`; the cells and baselines with `experiments.e1 --months 3` |
-| Table 47 (Mem0 interventions) | `paper_tables` | `round3` | `experiments.x_mem0` |
+| Table 25 (diagnostic tests) | `figures` | `e1`, `e2`, `e3`, `rep_e2`, `rep_e3`, `m1`, `n`, `e6` (stage3_e6) | as those experiments |
+| Tables 4b, 27, 29 (other model families, switches to other writers) | `paper_numbers`, `paper_tables` | `m1` (stage4_m1_e2), `m2_llama`, `m2_gemma`, `m2_gptoss`, `m3` (stage4_m3) | `experiments.e2 --tiers cross:MODEL` (new writer); `experiments.e1 --writer MODEL --reader MODEL`; `experiments.e1 --reader MODEL --branches src,def` |
+| Table 28 (replication) | `paper_tables` | `rep_e1`, `rep_e2`, `rep_e3` and `e1`, `e2`, `e3` | `experiments.e1`, `e2` and `e3` on worlds 1020-1039 |
+| Rewritten worlds (numbers in Appendix F.8) | `paper_numbers` | `l` (stage4_l_rendered), `ltokens` | `experiments.e1 --render google/gemma-4-12B-it` |
+| Fig. 9, Table 30 (native systems) | `figures`, `paper_tables` | `n`, `ncost`, `e5` (stage3_e5), `e5cost`, `e5wbshort` | `experiments.e5 --months 3 --systems SYSTEM`; the cells and baselines with `experiments.e1 --months 3` |
+| Table 31 (Mem0 interventions) | `paper_tables` | `round3` | `experiments.x_mem0` |
 | Table 7 (worked example) | `paper_extras` | raw outputs of `runs/e1_test_s1000-1003_20260928T202242Z` and the world generator | as the main experiment |
 | Table 9 (models) | `paper_extras` | `manifest.json` and `env.json` of every run under `runs/` | none |
 | Table 6 (neighbour audit), Table 8 (systems) | `neighbour_table`, `audit_table` | `audit/neighbours/properties.json`, `audit/system_audit.json` | none |
@@ -158,12 +158,12 @@ enter the paper as numbers of `paper_numbers`. They are rerun with `experiments.
 `experiments.e1 --no-baselines --probe-unnamed-defs --branches def`. So do the key's effect with
 Claude Sonnet 5.5 and Claude Opus 5.5 as writers of the definition items (`ex_round4_detection`, from
 the runs of `experiments.e1 --defwriter MODEL` on worlds 1000-1009 with
-D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source) and the rank correlations of Section 6 and
+D0B0,D0B1_source,D1B0,D1B1_source,D1sB0,D1sB1_source) and the rank correlations of Section 7 and
 Appendix F.9 (`rank`, stage4_rank_corr). The rank correlations are computed over every system on
 the three-month worlds and within three subsets, each with its own world bootstrap: the HoldMem
 cells, the native systems, and the native systems with no-store BM25 and plain RAG.
 `memshift.analysis.rank_corr` computes them from the raw runs of `experiments.e5` and of the HoldMem
-cells and baselines on the same worlds. The numbers in Tables 2, 5 and 11 are macros of
+cells and baselines on the same worlds. The numbers in Tables 2, 5 and 10 are macros of
 `paper_numbers`, `paper_round3b` and `neighbour_table`, and the compute facts (`setup_facts.tex`)
 come from `paper_extras`.
 

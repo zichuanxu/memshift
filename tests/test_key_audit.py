@@ -12,6 +12,7 @@ from memshift.analysis import key_audit as ka
 from memshift.analysis.e1_keys import audit, write_stage
 from memshift.analysis.paper_data import MISSING
 from memshift.analysis.paper_numbers import _macro
+from tests.paper_sources import paper_text
 from tests.test_paper_stage4 import check_tex
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,7 +35,7 @@ def test_unstaged_audit_renders_only_missing_markers():
         assert name.startswith("KeyAudit") and value == MISSING, (name, value)
     tex = ka.tab_keyaudit(None)
     assert MISSING in tex
-    check_tex(tex)
+    check_tex(tex, panel=True)
 
 
 def test_results_sources_name_the_staged_audit():
@@ -121,9 +122,9 @@ def test_the_macros_come_from_the_counts_not_the_stored_rates(staged):
 
 def test_table_is_wellformed_and_shows_the_staged_values(staged):
     tex = ka.tab_keyaudit(staged)
-    check_tex(tex)
+    check_tex(tex, panel=True)  # panel (a) of the key table; its float and labels are the paper's
     assert MISSING not in tex
-    assert r"\label{tab:keyaudit}" in tex
+    assert r"\label" not in tex and r"\caption" not in tex and "(a) Shift" in tex
     assert "99.7 & 98.6 & 99.7 & 100.0" in tex and "16.8 & 50.3 & 16.4 & 1.5" in tex
     # the changed and unchanged item-times of each shift are columns, on the shift's first line
     assert r"$\Ssrc$ & 1,168 & 2,672 & source key" in tex and "480 definition" in tex
@@ -136,7 +137,7 @@ def test_table_gives_the_single_field_totals_the_text_quotes(staged):
     rows = [ln.removesuffix(r" \\").split(" & ") for ln in tex.splitlines() if " & " in ln]
     src = next(r for r in rows if r[0] == r"$\Ssrc$" and r[3] == "source key")
     oracle = rows[rows.index(src) + 1]
-    # Section 5.3 quotes these two totals over the 20 worlds; they come from the same counts
+    # Appendix F.5 quotes these two totals over the 20 worlds; they come from the same counts
     assert src[10] == m["KeyAuditRederivSourceSrcRule"] == "2,930"
     assert oracle[:4] == ["", "", "", "oracle"]
     assert oracle[10] == m["KeyAuditRederivOracleSrcRule"] == "344"
@@ -153,18 +154,16 @@ def test_table_gives_the_single_field_totals_the_text_quotes(staged):
     assert "per world" not in tex
     assert r"\multicolumn{1}{c}{Def.} & \multicolumn{1}{c}{Field}" in tex
     assert tex.count(r"\mtna") == 3 * 5  # the scope key's dashes: five classes, three shifts
-    caption, rest = tex.split(r"\label{tab:keyaudit}")
-    for term in ("What each key invalidates", "audited without a model"):
-        assert term in caption, term
-    notes = rest.split(r"\end{mttabular}")[1]
+    notes = tex.split(r"\end{mttabular}")[1]
     for term in (
+        "Counted since the fork, no key missed a changed item-time",
         "Re-derivations:",
         "summed over the 20 worlds",
         "Def.\\ share:",
         "---: the scope key",
     ):
         assert term in notes, term
-    assert "item-checkpoint" not in tex and "item-time" in caption and "item-times" in notes
+    assert "item-checkpoint" not in tex and "item-times" in notes
 
 
 def test_stage_writer_records_command_seeds_and_code(tmp_path):
@@ -194,8 +193,7 @@ def test_the_number_generator_hook_adds_the_audit_macros():
 
 @pytest.mark.paper
 def test_the_text_uses_the_macros_and_no_marker_is_left():
-    sections = ROOT / "paper/sections"
-    text = "\n".join(p.read_text() for p in sections.glob("*.tex"))
+    text = paper_text()
     assert not re.search(r"TODO-MACRO: audit numbers", text)
     used = set(re.findall(r"\\(KeyAudit[A-Za-z]+)\{\}", text))
     assert {"KeyAuditDefShareOracleMin", "KeyAuditDefShareOracleMax"} <= used

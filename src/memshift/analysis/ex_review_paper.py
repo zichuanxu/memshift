@@ -9,16 +9,12 @@ name starts with `Ex` and every source is a staged analysis named in results/sou
                system after the shift
   ex_misses    analysis/ex_misses.json (`analysis.ex_misses`): why the cited-cluster key misses
   e1, rep_e1   analysis/e1_metrics.json (the post-shift JSON arm, `explore_json_arm`)
-  ex_round3_review   analysis/forced.json: what the cells answer on the changed item-times the
-               cited-cluster key missed (`tab_misses`)
 
 A stage that is not staged renders as the MISSING marker; a quantity that is undefined by
 construction (an accuracy over no item) renders as a dash.
 
 tab_writers      the Eq. (1) terms r0, r1 and B x D by writer, item class and branch, and the rank
                  correlation and least-squares line of B x D on the repair gap across the cells
-tab_misses       Update on the changes the cited-cluster key missed: the cited-cluster cell, the
-                 forced re-derivation of the source-epoch cell and the append-only cell
 tab_zero_after   Update and Stability of the zero system against HoldMem(1,1) and HoldMem(0,0)
 tab_json_arm     the post-shift JSON arm against the s_k arm
 fig_account      B x D against the repair gap r1 - r0 of the same cell, one marker per writer, class
@@ -39,7 +35,6 @@ from memshift.analysis.ex_e1_paper import (
     fmt,
     mt_ci_cells,
     mt_ci_pair_cells,
-    n_template,
     point,
 )
 from memshift.analysis.paper_data import BRANCH_TAGS, MISSING, stage_json
@@ -156,7 +151,6 @@ def load(root: Path, sources: Mapping[str, str]) -> dict[str, Any]:
         "miss": stage_json(root, src, "ex_misses", "ex_misses.json"),
         "main": stage_json(root, src, "e1", "e1_metrics.json"),
         "rep": stage_json(root, src, "rep_e1", "e1_metrics.json"),
-        "forced": stage_json(root, src, "ex_round3_review", "forced.json"),
     }
 
 
@@ -455,7 +449,7 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
     )
     edge = head.replace("{2}{c}", "{2}{c@{}}")  # the last shift, at the right edge
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{The account by writer and item class: repair correctness $r_D$ at $D$ (\%) "
         r"and $B{\times}D$ on Update (pp).}",
         r"\label{tab:writers}",
@@ -489,7 +483,7 @@ def tab_writers(inp: Mapping[str, Any]) -> str:
         r"\mtnotes{Field: single-field items. Free text: free-text items. Other: both. $r_0$, "
         r"$r_1$: point estimates. Qwen3.5-9B ran on 20 worlds in the main study and in the "
         r"replication, the other writers on ten.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -500,66 +494,13 @@ def _share(e: dict[str, Any] | None) -> str:
     return UNDEFINED if e["est"] != e["est"] else _num(e["est"], digits=0)
 
 
-FORCED_CELLS = ("cited", "forced", "B0")  # the cells of `tab_misses`, in its column order
-
-
-def tab_misses(inp: Mapping[str, Any]) -> str:
-    """Appendix: Update on the changed item-times the cited-cluster key missed, per shift, item
-    class (definition, other) and D: the cited-cluster cell (which served the stale item), the
-    source-epoch cell (which re-derived the same item-times with the same request) and the
-    append-only cell, and the gain of the forced re-derivation over the cited-cluster cell
-    (`ex_round3_review`'s forced.json; the accuracies of the missed items of `ex_e1_more` are the
-    cited and B=0 columns at one decimal)."""
-    res = _get(inp.get("forced"), "results")
-    body: list[list[str] | str] = []  # rows of cells, and the gaps between the shifts
-    for i, (b, bt) in enumerate((("src", r"$\Ssrc$"), ("def", r"$\Sdef$"), ("orphan", r"$\Sdel$"))):
-        for k, cls in enumerate(("definition", "other")):  # the pooled rows are not cited
-            for j, d in enumerate(("D0", "D1")):
-                node = _get(res, d, b, cls)
-                update = _get(node, "update") or {}
-                cells = [
-                    *(mt_ci_pair_cells(update.get(c)) for c in FORCED_CELLS),
-                    mt_ci_pair_cells(_get(node, "forced_minus_cited"), sign=True, span="c@{}"),
-                ]
-                n = count(_get(node, "n_items"))
-                lead = [bt if k == j == 0 else "", cls, n] if j == 0 else ["", "", ""]
-                body.append([*lead, d[1], *cells])
-        if i < 2:
-            body.append(r"\mtgap")
-    n_box = n_template([r[2] for r in body if isinstance(r, list)])
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{Update on the changed item-times that the citation key did not invalidate.}",
-        r"\label{tab:forced}\label{tab:misses}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{mttabular}}{{@{{}}ll N{{{n_box}}} c {PAIR} {PAIR} {PAIR} {GROUP_GAP} "
-        rf"{PAIR}@{{}}}}",
-        r"\toprule",
-        r"& & & & \multicolumn{6}{c}{Update (\%)} & \multicolumn{2}{c@{}}{} \\",
-        r"\cmidrule(lr){5-10}",
-        r"Shift & Class & \multicolumn{1}{c}{$n$} & $D$ & \multicolumn{2}{c}{Cited} "
-        r"& \multicolumn{2}{c}{Forced} & \multicolumn{2}{c}{$B{=}0$} "
-        r"& \multicolumn{2}{c@{}}{Gain (pp)} \\",
-        r"\midrule",
-        *(r if isinstance(r, str) else _row(*r) for r in body),
-        r"\bottomrule",
-        r"\end{mttabular}",
-        r"\mtnotes{Cited: the citation-key cell, which served the stale item. Forced: the "
-        r"source-key cell, which re-derived the same item-times with the same request. "
-        r"$B{=}0$: the append-only cell. Gain: forced minus cited. $n$: missed item-times.}",
-        r"\end{table}",
-    ]
-    return "\n".join(lines) + "\n"
-
-
 def tab_zero_after(inp: Mapping[str, Any]) -> str:
     """Appendix: the zero system against HoldMem(1,1) and HoldMem(0,0) on Update and Stability after
     the shift, per branch and class (definition, other, all items), in the main study and R."""
     res = _get(inp.get("more"), "explore_zero_system") or {}
     share = f"N{{{PCT_BOX}}}"  # a column of whole percentages
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{Update and Stability of no-store BM25 (no-store), \holdmem{}(1,1) and "
         r"\holdmem{}(0,0) by item class after each shift, and no-store BM25 minus "
         r"\holdmem{}(1,1) on Update, paired.}",
@@ -600,7 +541,7 @@ def tab_zero_after(inp: Mapping[str, Any]) -> str:
         r"\bottomrule",
         r"\end{mttabular}",
         r"\mtnotes{Update and Stability levels: point estimates.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -615,7 +556,7 @@ def tab_json_arm(inp: Mapping[str, Any]) -> str:
         r"& \multicolumn{2}{c}{Stability}"
     )
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{The same $D{=}1$ store served as JSON records instead of statements ($s_k$), "
         r"in the main study and the replication.}",
         r"\label{tab:json-arm}",
@@ -658,7 +599,7 @@ def tab_json_arm(inp: Mapping[str, Any]) -> str:
         r"\mtnotes{Update on the changed item-times in percent, and the paired differences JSON "
         r"$-$ $s_k$ in Update and in Stability on the unchanged item-times. Update levels: point "
         r"estimates.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -666,7 +607,6 @@ def tab_json_arm(inp: Mapping[str, Any]) -> str:
 def tables(inp: Mapping[str, Any]) -> dict[str, str]:
     return {
         "tab_writers.tex": tab_writers(inp),
-        "tab_misses.tex": tab_misses(inp),
         "tab_zero_after.tex": tab_zero_after(inp),
         "tab_json_arm.tex": tab_json_arm(inp),
     }

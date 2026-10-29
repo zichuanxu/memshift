@@ -674,7 +674,7 @@ def tab_classsplit(inp: Mapping[str, Any]) -> str:
     pairs = " ".join([r"r@{\,}l"] * 2)
     ncols = 3 + 2 * len(CLASSSPLIT_CONTRASTS)
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{The contrasts on Update (pp) by shift and item class, with exact "
         r"recomputation and with the writer's programs as the $D{=}1$ arm.}",
         r"\label{tab:classsplit}",
@@ -721,7 +721,7 @@ def tab_classsplit(inp: Mapping[str, Any]) -> str:
         r"\mtnotes{Exact: exact recomputation as the $D{=}1$ arm. Programs: the writer's programs "
         r"($D_{\mathrm{m}}$) as the $D{=}1$ arm, so in their rows $D{=}1$ is $D_{\mathrm{m}}$. "
         r"The $D{=}0$ cells of the main study serve both of its arms.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 

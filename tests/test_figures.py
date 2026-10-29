@@ -303,11 +303,19 @@ def test_writers_plot_the_block_h_estimates_and_name_each_writer(monkeypatch, tm
     assert d.texts.count("exact recomputation, 95% interval") == 1
     assert f"{100 * ref['est']:+.1f}" in d.texts
     axa, axb = d.fig.axes[:2]
-    # (a): one square per program set, at its B x D
-    squares = [r for r in axa.patches if isinstance(r, Rectangle) and r.get_zorder() == 5.0]
-    assert sorted(r.get_y() + r.get_height() / 2 for r in squares) == pytest.approx(
-        sorted(100 * p["y"]["est"] for p in programs)
+
+    # (a): one square per spot at the sets' own share and B x D, one stripe per set on the spot
+    def white(r) -> bool:
+        return tuple(r.get_facecolor()[:3]) == (1, 1, 1)
+
+    sq = [r for r in axa.patches if isinstance(r, Rectangle) and 5.0 <= r.get_zorder() < 6]
+    spots = {(round(100 * p["x"]["est"], 6), round(100 * p["y"]["est"], 6)) for p in programs}
+    centres = [(r.get_x() + r.get_width() / 2, r.get_y() + r.get_height() / 2) for r in sq
+               if white(r)]  # fmt: skip
+    assert [v for c in sorted(centres) for v in c] == pytest.approx(
+        [v for s in sorted(spots) for v in s], abs=1e-6
     )
+    assert sum(not white(r) for r in sq) == len(programs)
     # (b): every mark within 3.0 pp of its values (a nudge stays small), every interval end
     # exact
     marks = {"def": [(r.get_x() + r.get_width() / 2, r.get_y() + r.get_height() / 2)

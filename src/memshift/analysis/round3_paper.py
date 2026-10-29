@@ -81,14 +81,12 @@ item-time or not evaluated as a dash):
                                         (DetEffect, RepEffect); worlds; store mutations after the
                                         fork per arm (Native, Det)
 
-tab_refresh_upsert  appendix: Update of the refresh and upsert cells with the share R of
-             binding's effect each recovers
-tab_natural  appendix: the natural-branch test by shift and class
-tab_reader   appendix: B x D on Update and its store and reader parts by shift, class and arm for
-             the committed reader, and in a second panel Claude Sonnet 5.5 as reader of the same
-             stores (labels tab:store-reader-bxd and tab:reader)
-tab_heldout  appendix: the 18 held-out definitions (`gen.kappa.heldout_draw`) with their own B x D
-tab_userwords  appendix: block V per program writer
+tab_reader   appendix: the store and reader parts of B x D on Update by shift, class and arm for
+             the committed reader and Claude Sonnet 5.5 as reader of the same stores, with the
+             latter's B x D (labels tab:store-reader-bxd and tab:reader)
+tab_heldout  appendix: the 18 held-out definitions (`gen.kappa.heldout_draw`) with their own B x D,
+             panel (b) of the per-definition table (no float)
+tab_userwords  appendix: block V per program writer, panel (c) of the programs table (no float)
 tab_mem0x    appendix: block X per branch and class
 """
 
@@ -931,137 +929,10 @@ def _r0_iv(e: Mapping[str, Any] | None) -> str:
     return interval(_num(e["est"]) + r"\%", _num(e["lo"]), _num(e["hi"]))
 
 
-def _refresh_cell(inp: Mapping[str, Any], arm: str, b: str, kind: str = "refresh") -> Any:
-    """The refresh (or upsert) node of the main writer's family for one arm and shift."""
-    node = _get(inp.get("u"), "quantities", "families", "main", "R", kind, b, arm, "definition")
-    return None if node is None else dict(node)
-
-
-def tab_refresh_upsert(inp: Mapping[str, Any]) -> str:
-    """Appendix: Update of the refresh and upsert cells beside the append-only (B=0) and bound
-    (B=1) cells on changed definition item-times, per shift and D, with the share R of binding's
-    effect each recovers (the estimate alone where every world gave the same value)."""
-    u = inp.get("u")
-
-    def r_of(arm: str, b: str, kind: str = "refresh") -> str:
-        last = kind == "upsert"  # the table's last column pair
-        if u is None:
-            return _span(MISSING, last)
-        q = _refresh_cell(inp, arm, b, kind)
-        r = None if q is None else q.get("R")
-        return _mt(ci_pair_cells(r, f=ratio)) if r else _span(UNDEFINED, last)
-
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{Update of the refresh and upsert cells on changed definition item-times, "
-        r"beside the append-only ($B{=}0$) and the $B{=}1$ cell.}",
-        r"\label{tab:refresh-upsert}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{mttabular}{@{}ll N{00.0}N{00.0}N{00.0}N{00.0} @{\hspace{14pt}} "
-        r"r@{\,}l r@{\,}l@{}}",
-        r"\toprule",
-        r"& & \multicolumn{4}{c}{Update (\%)} & \multicolumn{4}{c@{}}{$R$} \\",
-        r"\cmidrule(lr){3-6}\cmidrule(l){7-10}",
-        _row(
-            "Shift",
-            "$D$",
-            *(_head(h) for h in ("$B{=}0$", "Refresh", "Upsert", "$B{=}1$")),
-            _span("Refresh"),
-            _span("Upsert", last=True),
-        ),
-        r"\midrule",
-    ]
-    arms = (("0", "D0"), ("1", "D1"), (r"$D_{\mathrm{m}}$", "Dm"))
-    for k, (b, _) in enumerate(BRANCH_TAGS):
-        for i, (label, arm) in enumerate(arms):
-            lev = _get(_refresh_cell(inp, arm, b), "update")
-            ups = _get(_refresh_cell(inp, arm, b, "upsert"), "update", "x")
-            lines.append(
-                _row(
-                    BRANCH_LABELS[b] if i == 0 else "",
-                    label,
-                    *(_pc(_get(lev, key)) if u else MISSING for key in ("B0", "x")),
-                    _pc(ups) if u else MISSING,
-                    _pc(_get(lev, "B1")) if u else MISSING,
-                    r_of(arm, b),
-                    r_of(arm, b, "upsert"),
-                )
-            )
-        if k < len(BRANCH_TAGS) - 1:
-            lines.append(GAP)
-    lines += [
-        r"\bottomrule",
-        r"\end{mttabular}",
-        r"\mtnotes{Update: point estimates. $R$: the share of the effect of $B$ on Update that a "
-        r"$B{=}0$ variant recovers, $(x-B_0)/(B_1-B_0)$, not evaluated "
-        rf"({UNDEFINED}) when $B_1-B_0<5$\,pp.}}",
-        r"\end{table}",
-    ]
-    return "\n".join(lines) + "\n"
-
-
 def _span(text: str, last: bool = False) -> str:
     """One value across both cells of an estimate-and-interval column pair (`c@{}` at the
     table's right edge)."""
     return rf"\multicolumn{{2}}{{c{'@{}' if last else ''}}}{{{text}}}"
-
-
-def tab_natural(inp: Mapping[str, Any]) -> str:
-    """Appendix: the natural-branch test by shift and class: B x D on the item-times the shift
-    changed, taken on the natural branch (same events up to the fork, no shift), its paired
-    difference from the shifted branch and the share of these item-times that also moved without
-    the shift, each with its interval (the item-times and B x D on the shifted branch: the inline
-    table `tab:cause`)."""
-    n = inp.get("n")
-    cf = _get(n, "quantities", "counterfactual")
-    lines = [
-        r"\begin{table}[t]",
-        r"\caption{$B{\times}D$ without the shift on the changed item-times that the shift "
-        r"caused.}",
-        r"\label{tab:natural}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{mttabular}{@{}ll r@{\,}l @{\hspace{14pt}} r@{\,}l @{\hspace{14pt}} r@{\,}l@{}}",
-        r"\toprule",
-        _row(
-            "Shift",
-            "Class",
-            _span(r"$B{\times}D$, unshifted (pp)"),
-            _span(r"Shifted $-$ unshifted (pp)"),
-            _span(r"Moved (\%)", last=True),
-        ),
-        r"\midrule",
-    ]
-    moved = _get(n, "reported", "natural_also_changed")
-    for i, (b, _) in enumerate(BRANCH_TAGS):
-        for k, (cls, _) in enumerate(CLASSES[:2]):
-            node = _get(cf, b, "shift", cls)
-            if n is not None and not (node or {}).get("item_times_in_branch"):
-                continue  # a class the shift changes on no item-time (S_def: the other items)
-            if n is None:
-                vals = [MISSING_PAIR] * 2 + [_span(MISSING, last=True)]
-            else:
-                vals = [
-                    *(
-                        _mt(est_ci_cells(_get(node, key), sign=True))
-                        for key in ("natural", "difference")
-                    ),
-                    _mt(est_ci_cells(_get(moved, b, cls))),
-                ]
-            lines.append(_row(BRANCH_LABELS[b] if k == 0 else "", cls, *vals))
-        if i < len(BRANCH_TAGS) - 1:
-            lines.append(GAP)
-    lines += [
-        r"\bottomrule",
-        r"\end{mttabular}",
-        r"\mtnotes{Unshifted: on the unshifted branch, which has the same events up to the fork "
-        r"and no shift. Shifted $-$ unshifted: the paired difference from $B{\times}D$ on the same "
-        r"item-times with the shift (\cref{tab:cause}). Moved: the share of these item-times whose "
-        r"value also changed on the unshifted branch. $\Sdef$ changes only definition items.}",
-        r"\end{table}",
-    ]
-    return "\n".join(lines) + "\n"
 
 
 READER_ARMS = (  # the rows of each shift and class: label, arm of the split, arm of block Y
@@ -1071,29 +942,22 @@ READER_ARMS = (  # the rows of each shift and class: label, arm of the split, ar
 
 
 def tab_reader(inp: Mapping[str, Any]) -> str:
-    """Appendix: B x D on Update by shift, class and arm (authored D=1 and D_m) in two panels:
-    (a) the committed reader Qwen3.5-9B with the store and reader parts of B x D
-    (`analysis.ex_round3`), (b) Claude Sonnet 5.5 as reader of the same stores (block Y) with its
-    reader part and its B x D minus the committed reader's, paired; the store part is the same for
-    both readers, so (b) does not repeat it."""
+    """Appendix: the store and reader parts of B x D on Update by shift, class and arm (authored
+    D=1 and D_m) for two readers of the same stores, in one block: the store part (the same for
+    both readers), the reader part of the committed reader Qwen3.5-9B (`analysis.ex_round3`), and
+    for Claude Sonnet 5.5 (block Y) its reader part, its B x D and that B x D minus the committed
+    reader's, paired. The committed reader's B x D is the class split's (`tab:classsplit`), the sum
+    of its two parts, so it is not repeated."""
     y, sr = inp.get("y"), _get(inp.get("sr"), "results")
     con = _get(y, "quantities", "contrasts")
     ysr = _get(y, "quantities", "store_reader", "results")
-    pairs = " ".join([PAIR] * 3)
+    pairs = " ".join([PAIR] * 5)
 
-    def head(panel: str, *names: str) -> list[str]:
-        return [
-            rf"& & & \multicolumn{{6}}{{c@{{}}}}{{{panel}}} \\",
-            r"\cmidrule(l){4-9}",
-            _row("Shift", "Class", "Arm", *map(_span, names[:-1]), _span(names[-1], last=True)),
-            r"\midrule",
-        ]
-
-    def committed(b: str, cls: str, arm: str, _: str) -> list[str]:
+    def committed(b: str, cls: str, arm: str) -> list[str]:
         q = _get(sr, arm, b, cls, "interaction")
         return [
             _mt(est_ci_cells(_get(q, key), sign=True)) if sr else MISSING_PAIR
-            for key in ("interaction", "store", "reader")
+            for key in ("store", "reader")
         ]
 
     def claude(b: str, cls: str, arm: str, yarm: str) -> list[str]:
@@ -1101,13 +965,13 @@ def tab_reader(inp: Mapping[str, Any]) -> str:
         if y is None:
             return [MISSING_PAIR] * 2 + [_span(MISSING, last=True)]
         return [
-            _mt(est_ci_cells(_get(node, "reader"), sign=True)),
             _mt(est_ci_cells(_get(ysr, arm, b, cls, "interaction", "reader"), sign=True)),
+            _mt(est_ci_cells(_get(node, "reader"), sign=True)),
             _mt(est_ci_cells(_get(node, "difference"), sign=True)),
         ]
 
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{The $B{\times}D$ interaction on Update split into a store part and a reader "
         r"part, with two readers of the same stores.}",
         r"\label{tab:store-reader-bxd}\label{tab:reader}",
@@ -1115,40 +979,43 @@ def tab_reader(inp: Mapping[str, Any]) -> str:
         r"\setlength{\tabcolsep}{4pt}",
         rf"\begin{{mttabular}}{{@{{}}lll {pairs}@{{}}}}",
         r"\toprule",
+        r"& & & & & \multicolumn{2}{c}{Qwen3.5-9B} & \multicolumn{6}{c@{}}{Claude Sonnet 5.5} \\",
+        r"\cmidrule(lr){6-7}\cmidrule(l){8-13}",
+        _row(
+            "Shift",
+            "Class",
+            "Arm",
+            *map(_span, ("Store part", "Reader part", "Reader part", "$B{\\times}D$")),
+            _span(r"Sonnet $-$ Qwen", last=True),
+        ),
+        r"\midrule",
     ]
-    panels = (
-        (r"(a) Qwen3.5-9B as reader", ("$B{\\times}D$", "Store part", "Reader part"), committed),
-        (r"(b) Claude Sonnet 5.5 as reader",
-         ("$B{\\times}D$", "Reader part", r"Sonnet $-$ Qwen"), claude),
-    )  # fmt: skip
-    for p, (title, names, cells) in enumerate(panels):
-        if p:
-            lines.append(r"\midrule")
-        lines += head(title, *names)
-        for i, (b, _) in enumerate(BRANCH_TAGS):
-            for k, (cls, _) in enumerate(CLASSES):
-                for j, (label, arm, yarm) in enumerate(READER_ARMS):
-                    lines.append(
-                        _row(
-                            BRANCH_LABELS[b] if (k == 0 and j == 0) else "",
-                            cls if j == 0 else "",
-                            label,
-                            *cells(b, cls, arm, yarm),
-                        )
+    for i, (b, _) in enumerate(BRANCH_TAGS):
+        for k, (cls, _) in enumerate(CLASSES):
+            for j, (label, arm, yarm) in enumerate(READER_ARMS):
+                lines.append(
+                    _row(
+                        BRANCH_LABELS[b] if (k == 0 and j == 0) else "",
+                        cls if j == 0 else "",
+                        label,
+                        *committed(b, cls, arm),
+                        *claude(b, cls, arm, yarm),
                     )
-                if k < len(CLASSES) - 1:
-                    lines.append(GAP)
-            if i < len(BRANCH_TAGS) - 1:
-                lines.append(r"\midrule")
+                )
+            if k < len(CLASSES) - 1:
+                lines.append(GAP)
+        if i < len(BRANCH_TAGS) - 1:
+            lines.append(r"\midrule")
     lines += [
         r"\bottomrule",
         r"\end{mttabular}",
         r"\mtnotes{Store part: the same contrast of the shares of item-times whose stored value is "
-        r"right ($r_{\mathrm{store}}$ and $a_{\mathrm{store}}$ of \cref{tab:store-reader}). "
-        r"Reader part: the rest. $D_{\mathrm{m}}$: the writer's programs as the $D{=}1$ arm. Both "
-        r"readers read the same stores, so the store part in (b) is that of (a). Sonnet $-$ Qwen: "
+        r"right ($r_{\mathrm{store}}$ and $a_{\mathrm{store}}$ of \cref{tab:store-reader}), the "
+        r"same for both readers of the same stores. Reader part: the rest. $B{\times}D$ with "
+        r"Qwen3.5-9B is the store part plus its reader part (\cref{tab:classsplit}). "
+        r"$D_{\mathrm{m}}$: the writer's programs as the $D{=}1$ arm. Sonnet $-$ Qwen: "
         r"$B{\times}D$ with Claude Sonnet 5.5 minus that with Qwen3.5-9B, paired per item-time.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -1167,19 +1034,14 @@ def _rule(d: Any) -> tuple[str, str]:
 
 def tab_heldout(inp: Mapping[str, Any]) -> str:
     """Appendix: the held-out definitions of G-a (`gen.kappa.heldout_draw`, a function of the
-    sampler seeds) with each definition's own B x D at the authored D=1 per branch."""
+    sampler seeds) with each definition's own B x D at the authored D=1 per branch, as panel (b)
+    of the per-definition table: the tabular and its notes, without a float (the float, its
+    caption and the labels tab:perdef and tab:heldout are in the appendix source)."""
     from memshift.gen import kappa  # lazy: generates the ten rejection worlds once
 
     ga = inp.get("g_a")
     held = _get(ga, "quantities", "heldout")
     lines = [
-        r"\begin{table}[t]",
-        r"\caption{The 18 held-out definitions, in three draws of six, with each definition's "
-        r"own $B{\times}D$ on its changed item-times with exact recomputation as $D{=}1$ "
-        r"(10 worlds, point estimates).}",
-        r"\label{tab:heldout}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
         # v1 and v2 aligned on the arrow; B x D values in decimal-aligned boxes
         r"\begin{mttabular}{@{}c l l l l r@{\;$\to$\;}l "
         r"N{$+$000.0}N{$+$000.0}N{$+$000.0}@{}}",
@@ -1188,7 +1050,7 @@ def tab_heldout(inp: Mapping[str, Any]) -> str:
         r"& \multicolumn{3}{c@{}}{$B{\times}D$} \\",
         r"\cmidrule(lr){3-4}\cmidrule(l){8-10}",
         _row(
-            "Draw",
+            "(b) Draw",
             "Definition",
             "Source",
             "Predicate",
@@ -1231,39 +1093,32 @@ def tab_heldout(inp: Mapping[str, Any]) -> str:
         r"tasks. Span: the earliest start to the latest end of the meetings, in whole hours. v2 "
         r"changes the window or the threshold. A per-item double difference lies between $-$200 "
         r"and $+$200\,pp.}",
-        r"\end{table}",
     ]
     return "\n".join(lines) + "\n"
 
 
 def tab_userwords(inp: Mapping[str, Any]) -> str:
-    """Appendix: block V per program writer: B x D at D_m on definition items per branch, and V
-    minus G-b (the same writer's programs from the codified statement, same samples) in Update on
-    changed definition items at D1sB1_source (three branches pooled) and in agreement at t0."""
+    """Appendix: block V per program writer, as panel (c) of the programs table (the tabular and
+    its notes, without a float; the float, its caption and the labels are in the appendix
+    source): B x D at D_m on definition items per branch, and V minus G-b (the same writer's
+    programs from the codified statement, same samples) in Update on changed definition items at
+    D1sB1_source (three branches pooled) and in agreement at t0."""
     v = inp.get("v")
     q = _get(v, "quantities")
     prog = _get(q, "programs", "branches")
     names = {"Qwen": "Qwen3.5-9B", "Sonnet": "Claude Sonnet 5.5", "Opus": "Claude Opus 5.5"}
     lines = [
-        r"\begin{table}[t]",
-        r"\caption{Programs written from the definitions in the user's own words, per writer "
-        r"(three program sets each, definition items).}",
-        r"\label{tab:userwords}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
-        r"\begin{mttabular}{@{}l N{$+$00.0}N{$+$00.0}N{$+$00.0} @{\hspace{14pt}} N{00.0} r@{\,}l "
-        r"@{\hspace{14pt}} N{00.0} r@{\,}l@{}}",
+        r"\begin{mttabular}{@{}l N{$+$00.0}N{$+$00.0}N{$+$00.0} @{\hspace{14pt}} r@{\,}l "
+        r"@{\hspace{14pt}} r@{\,}l@{}}",
         r"\toprule",
-        r"& \multicolumn{3}{c}{$B{\times}D$ (pp)} & \multicolumn{3}{c}{Update} "
-        r"& \multicolumn{3}{c@{}}{Agreement} \\",
-        r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(l){8-10}",
+        r"& \multicolumn{3}{c}{$B{\times}D$ (pp)} "
+        r"& \multicolumn{4}{c@{}}{Words $-$ codified statement (pp)} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(l){5-8}",
         _row(
-            "Writer",
+            "(c) Writer",
             *(_head(BRANCH_LABELS[b]) for b, _ in BRANCH_TAGS),
-            _head(r"Words (\%)"),
-            _span("Difference (pp)"),
-            _head(r"Words (\%)"),
-            _span("Difference (pp)", last=True),
+            _span("Update"),
+            _span("Agreement", last=True),
         ),
         r"\midrule",
     ]
@@ -1272,26 +1127,24 @@ def tab_userwords(inp: Mapping[str, Any]) -> str:
         upd = _get(node, "update_D1sB1_source", "pooled")
         agree = _get(node, "agreement_t0")
         if v is None:
-            vals = [MISSING] * 4 + [MISSING_PAIR, MISSING, _span(MISSING, last=True)]
+            vals = [MISSING] * 3 + [MISSING_PAIR, _span(MISSING, last=True)]
         else:
             bxd = [_get(prog, b, "definition", "per_writer", model) for b, _ in BRANCH_TAGS]
             vals = [
                 *(_na(_num(e["est"], sign=True) if e else UNDEFINED) for e in bxd),
-                _na(_pc(_get(upd, "V"))),
                 _mt(est_ci_cells(_get(upd, "difference"), sign=True)),
-                _na(_pc(_get(agree, "V"))),
                 _mt(est_ci_cells(_get(agree, "difference"), sign=True)),
             ]
         lines.append(_row(names[wt], *vals))
     lines += [
         r"\bottomrule",
         r"\end{mttabular}",
-        r"\mtnotes{$B{\times}D$: the interaction at $D_{\mathrm{m}}$ (point estimates). Update: on "
-        r"the changed definition item-times at $D_{\mathrm{m}}$ with a key ($B{=}1$), the three "
-        r"shifts pooled. Agreement: the programs' values before the shift that equal gold. Words: "
-        r"the programs from the user's words. Difference: words minus the same writer's programs "
-        r"from the codified statement, same samples, paired per item.}",
-        r"\end{table}",
+        r"\mtnotes{$B{\times}D$: the interaction at $D_{\mathrm{m}}$ on definition items "
+        r"(point estimates). Words $-$ codified statement: the programs from the user's words "
+        r"minus the same writer's programs from the codified statement, same samples, paired per "
+        r"item. Update: on the changed definition item-times at $D_{\mathrm{m}}$ with a key "
+        r"($B{=}1$), the three shifts pooled. Agreement: the programs' values before the shift "
+        r"that equal gold.}",
     ]
     return "\n".join(lines) + "\n"
 
@@ -1304,7 +1157,7 @@ def tab_mem0x(inp: Mapping[str, Any]) -> str:
     cells = _get(x, "quantities", "cells")
     sources = _get(x, "pairing", "detail", "prefix_sources")
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{Two interventions on Mem0 on "
         rf"{_count(None if sources is None else len(sources))} of its three-month worlds: the "
         r"terms of $\mathrm{Update}=(1-m)\,r+m\,a$ on changed item-times (\%) and each "
@@ -1358,15 +1211,13 @@ def tab_mem0x(inp: Mapping[str, Any]) -> str:
         rf"\mtnotes{{Mem0 invalidates nothing ({constant} in every row), so its $r$ is undefined "
         r"and its Update is $a$. $a$, $m$, $r$: point estimates. Effect: Update minus Mem0's, "
         r"paired per item-time.}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
 
 def tables(inp: Mapping[str, Any]) -> dict[str, str]:
     return {
-        "tab_refresh_upsert.tex": tab_refresh_upsert(inp),
-        "tab_natural.tex": tab_natural(inp),
         "tab_reader.tex": tab_reader(inp),
         "tab_heldout.tex": tab_heldout(inp),
         "tab_userwords.tex": tab_userwords(inp),

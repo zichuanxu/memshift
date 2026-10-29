@@ -183,14 +183,14 @@ def _marks(rows: list[dict[str, Any]], columns: list[Column]) -> tuple[bool, boo
 
 
 # the key in the notes under the table: the marks, the world-text codes and the unit of the
-# MemShift row; the columns are defined in the text of the appendix (paper/sections/app_related.tex)
+# MemShift row; the columns are defined in the text of the appendix (paper/appendix/app_related.tex)
 KEY = (
     r"\checkmark{}~yes, $\sim$~partial, $\times$~no such element, n/s~not stated. World text: "
     r"LEGEND. \memshift{}: test worlds and graded probes over ITEMS knowledge items."
 )
 CAPTION = (
-    r"\memshift{} against its nearest neighbours on every property of the audit, each read from "
-    r"the neighbour's own paper."
+    r"\memshift{} against its nearest neighbors on every property of the audit, each read from "
+    r"the neighbor's own paper."
 )
 GAP_EVERY = 5  # neighbour rows between two small gaps
 
@@ -231,7 +231,7 @@ def table(rows: list[dict[str, Any]], groups: tuple[tuple[str, tuple[str, ...]],
 
     head = ["Benchmark"] + [header(i, c) for i, c in enumerate(columns)]
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         rf"\caption{{{CAPTION}}}",
         rf"\label{{{label}}}",
         r"\centering\mtsetup",
@@ -263,13 +263,13 @@ def table(rows: list[dict[str, Any]], groups: tuple[tuple[str, tuple[str, ...]],
         r"\bottomrule",
         r"\end{mttabular}",
         rf"\mtnotes{{{_key(rows, inferred)}}}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 
 
 def tab_neighbours_full(rows: list[dict[str, Any]]) -> str:
-    return table(rows, FULL, "tab:neighbours-full")
+    return table(rows, FULL, "tab:neighbors-full")
 
 
 def _number(s: str) -> int | None:

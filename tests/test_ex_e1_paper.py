@@ -232,7 +232,7 @@ def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
         for name, tex in xp.tables(inp).items():
             check_mt_tex(tex)
-            assert tex.startswith("\\begin{table}") and f"\\label{{tab:{name[4:-4]}}}" in tex
+            assert tex.startswith("\\begin{table*}") and f"\\label{{tab:{name[4:-4]}}}" in tex
     assert set(xp.tables(INP)) == {"tab_classsplit.tex"}
     assert MISSING in xp.tab_classsplit(EMPTY) and MISSING not in xp.tab_classsplit(INP)
 

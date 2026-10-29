@@ -13,7 +13,8 @@ import pytest
 from memshift.analysis import ex_review_paper as rp
 from memshift.analysis import paper_numbers as pn
 from memshift.analysis.ex_e1_paper import UNDEFINED, mt_ci_cells
-from memshift.analysis.paper_data import MISSING
+from memshift.analysis.paper_data import MISSING, stage_json
+from tests.paper_sources import paper_sources
 from tests.test_ex_e1_paper import check_mt_tex, memtab_preamble
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,7 +108,6 @@ def test_formatters():
 # -------------------------------------------------------------------------- tables, figure
 LABELS = {
     "tab_writers.tex": "tab:writers",
-    "tab_misses.tex": "tab:misses",
     "tab_zero_after.tex": "tab:zero-after",
     "tab_json_arm.tex": "tab:json-arm",
 }
@@ -118,7 +118,7 @@ def test_tables_are_wellformed_with_data_and_without():
         assert set(rp.tables(inp)) == set(LABELS)
         for name, tex in rp.tables(inp).items():
             check_mt_tex(tex)
-            assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
+            assert tex.startswith("\\begin{table*}") and f"\\label{{{LABELS[name]}}}" in tex
     for name, tex in rp.tables(EMPTY).items():
         assert MISSING in tex, name
     for name, tex in rp.tables(INP).items():
@@ -151,13 +151,8 @@ def test_writers_table_has_every_writer_and_class():
     assert "rule" not in re.sub(r"\\(top|mid|bottom|cmid)rule", "", tex)
 
 
-def test_misses_and_zero_tables_show_their_rows():
-    tex = rp.tab_misses(INP)
-    # every shift and class (definition, other: the pooled rows are not cited), each at both D,
-    # and n once per class
-    assert len(re.findall(r"\n(?:\$\\S\w+\$)? & (?:definition|other) & \d+ & 0 & ", tex)) == 6
-    assert len(re.findall(r"\n &  &  & 1 & ", tex)) == 6 and "& all &" not in tex
-    assert "{R}" not in tex and "R's" not in rp.tab_writers(INP)  # no block letter
+def test_zero_table_shows_its_rows():
+    assert "R's" not in rp.tab_writers(INP)  # no block letter
     zero = rp.tab_zero_after(INP)
     assert "\\mtgroup{10}{Main study}\n" in zero and "\\mtgroup{10}{Replication}\n" in zero
     # both studies with their totals over all items, which the text quotes
@@ -168,11 +163,12 @@ def test_misses_and_zero_tables_show_their_rows():
     assert "\\holdmem{}(0,0) by item class" in zero
 
 
-def test_misses_table_holds_the_accuracies_of_the_missed_items():
-    """The cited and B=0 columns of `tab_misses` (forced.json) are the accuracies of the missed
-    items of `ex_e1_more` at the printed precision, so the appendix prints them once."""
+def test_forced_analysis_holds_the_accuracies_of_the_missed_items():
+    """The cited and B=0 accuracies of forced.json (the citation-key table, panel b, prints them
+    from its macros) are the accuracies of the missed items of `ex_e1_more` at the printed
+    precision, so the appendix prints them once."""
     more = INP["more"]["explore_missed_items"]["main"]
-    forced = INP["forced"]["results"]
+    forced = stage_json(ROOT, SOURCES, "ex_round3_review", "forced.json")["results"]
     for b in ("src", "def", "orphan"):
         for d in ("D0", "D1"):
             for cls in ("definition", "other", "all"):
@@ -182,26 +178,10 @@ def test_misses_table_holds_the_accuracies_of_the_missed_items():
                     assert rp._num(f["update"][mine]["est"]) == rp._num(a[theirs]["est"])
 
 
-def test_misses_zero_and_json_tables_are_one_grid_each():
+def test_zero_and_json_tables_are_one_grid_each():
     # one tabular per table, so the blocks share their column widths (main study and R)
-    for tex in (rp.tab_misses(INP), rp.tab_zero_after(INP), rp.tab_json_arm(INP)):
+    for tex in (rp.tab_zero_after(INP), rp.tab_json_arm(INP)):
         assert tex.count("\\begin{mttabular}") == 1
-    assert "\\label{tab:forced}\\label{tab:misses}" in rp.tab_misses(INP)
-
-
-def test_misses_notes_define_its_columns():
-    tex = rp.tab_misses(INP)
-    caption = tex.split("\\label{tab:forced}")[0]
-    assert "that the citation key did not invalidate" in caption
-    notes = tex.split("\\mtnotes{", 1)[1]
-    for term in (
-        "Cited: the citation-key cell, which served the stale item",
-        "Forced: the source-key cell, which re-derived the same item-times",
-        "$B{=}0$: the append-only cell",
-        "Gain: forced minus cited",
-        "$n$: missed item-times",
-    ):
-        assert term in notes and term not in caption, term
 
 
 def test_interval_format_is_signed_small_and_muted_with_a_thin_space():
@@ -214,11 +194,7 @@ def test_interval_format_is_signed_small_and_muted_with_a_thin_space():
 
 
 def test_percentage_columns_are_as_wide_as_a_whole_share():
-    """The whole percentages sit in boxes as wide as 100 and the counts n in a box as wide as the
-    largest count, so every value fits its box."""
-    misses = rp.tab_misses(INP)
-    n = [int(m) for m in re.findall(r"\n(?:\$\\S\w+\$)? & \w+ & (\d+) & 0 & ", misses)]
-    assert f"N{{{'0' * len(str(max(n)))}}} c" in misses
+    """The whole percentages sit in boxes as wide as 100, so every value fits its box."""
     for tex in (rp.tab_writers(INP), rp.tab_zero_after(INP), rp.tab_json_arm(INP)):
         assert "N{100}" in tex and not re.search(r"N\{(?!100\})", tex)
 
@@ -316,7 +292,7 @@ def test_generated_files_carry_no_leftover_wording(path):
 
 def _inputs() -> set[str]:
     """The generated files the paper inputs."""
-    sources = [ROOT / "paper/main.tex", *sorted((ROOT / "paper/sections").glob("*.tex"))]
+    sources = [ROOT / "paper/main.tex", *paper_sources()]
     return {
         m
         for p in sources

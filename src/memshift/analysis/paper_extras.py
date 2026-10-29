@@ -290,9 +290,9 @@ def tab_overview(inp: Mapping[str, Any]) -> str:
         notes(
             rf"\holdmem{{}}($D$,$B$): $D{{=}}1$ exact recomputation, {DM} the writer's programs, "
             r"$B{=}1$ a key (the source key unless the citation key is named). $n$ per "
-            r"main-study \holdmem{} cell: \ExDetMainSrcUpdateItems{}, \ExDetMainDefUpdateItems{} "
+            r"main-study \holdmem{} cell: \ExDetMainSrcUpdateItems{}, \ExDetMainDefUpdateItems{}, "
             r"and \ExDetMainOrphanUpdateItems{} changed and \ExDetMainSrcStabilityItems{}, "
-            r"\ExDetMainDefStabilityItems{} and \ExDetMainOrphanStabilityItems{} unchanged items."
+            r"\ExDetMainDefStabilityItems{}, and \ExDetMainOrphanStabilityItems{} unchanged items."
         ),
         r"\end{table*}",
     ]
@@ -923,10 +923,10 @@ def tab_models(runs: list[Run]) -> str:
         f"Reasoning is off except in {_and(efforts)}." if efforts else "Reasoning is off."
     )
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{Models, with the context each was served with (tokens) and its roles in the "
         r"runs.}",
-        r"\label{tab:models}\label{tab:family-models}\label{tab:model-revisions}",
+        r"\label{tab:models}\label{tab:family-models}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
         # names and roles with a hanging indent; size and context right-aligned
@@ -942,7 +942,7 @@ def tab_models(runs: list[Run]) -> str:
             rf"at temperature~0 with JSON-schema decoding. {reasoning_on} The Claude models "
             r"think adaptively. ---: not disclosed."
         ),
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 

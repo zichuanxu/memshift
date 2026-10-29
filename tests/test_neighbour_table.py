@@ -8,6 +8,7 @@ from typing import Any
 import pytest
 
 from memshift.analysis import neighbour_table as nt
+from tests.paper_sources import paper_sources
 
 ROOT = Path(__file__).resolve().parents[1]
 PROPS = ROOT / "audit" / "neighbours" / "properties.json"
@@ -150,7 +151,7 @@ def test_cli_writes_the_table_and_the_counts(
     monkeypatch.setattr(sys, "argv", ["neighbour_table", str(PROPS), str(out)])
     nt.main()
     table = (out / "tab_neighbours_full.tex").read_text()
-    assert table.startswith(nt.HEAD + r"\begin{table}")
+    assert table.startswith(nt.HEAD + r"\begin{table*}")
     assert r"\newcommand{\NbrTotal}{15}" in (out / "neighbour_counts.tex").read_text()
     assert sorted(p.name for p in out.iterdir()) == [
         "neighbour_counts.tex",
@@ -227,8 +228,7 @@ def test_the_weaknesses_named_in_the_text_hold_in_the_counts() -> None:
 @pytest.mark.paper
 def test_every_count_macro_used_in_the_paper_is_defined() -> None:
     defined = set(nt.counts(nt.load(PROPS)))
-    sections = ROOT / "paper" / "sections"
-    for path in [sections / "related.tex", *sorted(sections.glob("app*.tex"))]:
+    for path in paper_sources():
         text = path.read_text()
         used = set(re.findall(r"\\((?:Nbr|Ms)[A-Za-z]+)\b", text))
         assert used <= defined, used - defined
@@ -269,7 +269,7 @@ def test_latex_special_characters_are_escaped() -> None:
 def test_the_notes_key_every_mark_and_code() -> None:
     rows = nt.load(PROPS)
     full = nt.tab_neighbours_full(rows)
-    caption, rest = full.split(r"\label{tab:neighbours-full}")
+    caption, rest = full.split(r"\label{tab:neighbors-full}")
     assert caption.endswith(r"\caption{" + nt.CAPTION + "}\n")  # one sentence; the key below
     notes = rest.split(r"\end{mttabular}")[1]
     assert notes.startswith("\n" + r"\mtnotes{")
@@ -291,7 +291,7 @@ def test_the_notes_key_every_mark_and_code() -> None:
 
 @pytest.mark.paper
 def test_the_appendix_text_defines_the_columns_the_key_leaves_out() -> None:
-    text = " ".join((ROOT / "paper" / "sections" / "app_related.tex").read_text().split())
+    text = " ".join((ROOT / "paper" / "appendix" / "app_related.tex").read_text().split())
     for term in (
         "has derived items when its graded items aggregate several records",
         "of a world's 48 items only the six definition items and the four recurring series",
@@ -299,7 +299,7 @@ def test_the_appendix_text_defines_the_columns_the_key_leaves_out() -> None:
         "Consent is revoked when the user withdraws consent or asks to forget",
         "counterfactual when it runs the same history with and without the change",
         "without long-context and plain RAG baselines",
-        "Histories (worlds, users or trajectories) and questions are counted as printed",
+        "Histories (worlds, users, or trajectories) and questions are counted as printed",
     ):
         assert term in text, term
 

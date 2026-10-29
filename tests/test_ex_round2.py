@@ -128,19 +128,19 @@ def test_leave_one_definition_out_range():
 
 
 # ------------------------------------------------------------------------------------ tables
-LABELS = {  # the class split with D_m is part of ex_e1_paper.tab_classsplit
-    "tab_perdef.tex": "tab:perdef",
-}
+# panel (a) of the per-definition table, whose float, caption and labels are in the appendix
+# source (the class split with D_m is part of ex_e1_paper.tab_classsplit)
+PANELS = ("tab_perdef.tex",)
 
 
 def test_tables_are_wellformed_with_data_and_without():
     for inp in (INP, EMPTY):
-        assert set(r2.tables(inp)) == set(LABELS)
+        assert set(r2.tables(inp)) == set(PANELS)
         for name, tex in r2.tables(inp).items():
-            check_memtab(tex)
-            assert tex.startswith("\\begin{table}") and f"\\label{{{LABELS[name]}}}" in tex
-            # the paper's table style: its type and rules, intervals as muted secondary text
-            assert "\\centering\\mtsetup" in tex and "\\begin{mttabular}" in tex, name
+            check_memtab(tex, panel=True)
+            assert tex.startswith("\\begin{mttabular}") and "\\label" not in tex, name
+            assert "\\caption" not in tex and "(a) Definition" in tex, name
+            # the paper's table style: intervals as muted secondary text, notes under the panel
             assert "\\scriptsize" not in tex and "\\mtnotes{" in tex, name
     for name, tex in r2.tables(EMPTY).items():
         assert MISSING in tex, name
@@ -176,6 +176,8 @@ def test_perdef_table_matches_the_per_definition_macros():
             assert f"{est} & " in tex, (d, b)  # its interval in the next cell, if it has width
     assert "$+$16.5 to $+$33.8" in tex
     assert "0.0 & \\mtint{[0.0,\\,0.0]}" not in tex  # every world the same: no interval
+    # the class value of all six definitions is the class split's, not repeated here
+    assert "all six" not in tex and "\\cref{tab:classsplit}" in tex
 
 
 @pytest.mark.paper  # the table style, paper/memtab-style.tex
@@ -196,7 +198,13 @@ def test_tables_compile_at_the_paper_width(tmp_path):
                 MEMTAB_PREAMBLE,
                 r"\newcommand{\Ssrc}{S_{\mathrm{src}}}\newcommand{\Sdef}{S_{\mathrm{def}}}"
                 r"\newcommand{\Sdel}{S_{\mathrm{del}}}\newcommand{\cref}[1]{Table~1}",
-                r"\begin{document}" + "".join(rf"\input{{{n}}}" for n in names) + r"\end{document}",
+                r"\begin{document}"
+                + "".join(
+                    r"\begin{table*}[t]\centering\mtsetup\setlength{\tabcolsep}{4pt}"
+                    rf"\input{{{n}}}\end{{table*}}"
+                    for n in names
+                )
+                + r"\end{document}",
             ]
         )
     )

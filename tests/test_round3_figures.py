@@ -111,22 +111,14 @@ def test_definition_writers_put_qwen_once_per_shift_on_the_same_worlds():
     assert d[4]["x"]["est"] == pytest.approx(1.45) and d[4]["y"]["est"] == pytest.approx(1.16)
 
 
-def test_sets_on_one_spot_sit_side_by_side_centred_on_it():
-    from memshift.analysis import figstyle as fs
-
+def test_sets_on_one_spot_share_one_square_at_their_own_values():
     pts = [p for p in rf.writer_points(hand_writers())["programs"] if p["x"]]
-    w_mm, h_mm = rf.WRITERS_PT[0] * fs.PT, rf.WRITERS_PT[1] * fs.PT
-    with fs.printed(rf.WRITERS_RC) as plt:
-        fig = plt.figure(figsize=(w_mm * fs.MM, h_mm * fs.MM))
-        p = rf._Plot(fig, rf.WRITERS_LEFT, rf.WRITERS_WA, rf.WRITERS_XA)
-        xs = rf._side_by_side(p, pts)
-        plt.close(fig)
-    opus = sorted(x for x, q in zip(xs, pts, strict=True) if q["writer"] == OPUS)
-    assert sum(opus) / 3 == pytest.approx(100.0)  # centred on their shared spot
-    steps = [b - a for a, b in zip(opus, opus[1:], strict=False)]
-    assert steps == pytest.approx([p.dx(rf.WRITERS_SLOT)] * 2)  # one square's pitch apart
-    llama = next(x for x, q in zip(xs, pts, strict=True) if q["writer"] == LLAMA)
-    assert llama == pytest.approx(12.5)  # a set alone stays at its value
+    spots = rf._spots(pts)
+    opus = [(x, y, mem) for x, y, mem in spots if pts[mem[0]]["writer"] == OPUS]
+    assert [(x, y, len(mem)) for x, y, mem in opus] == [(100.0, 39.0, 3)]  # one square, 3 sets
+    llama = next((x, y) for x, y, mem in spots if pts[mem[0]]["writer"] == LLAMA)
+    assert llama[0] == pytest.approx(12.5)  # every spot at its own share
+    assert sum(len(mem) for *_, mem in spots) == len(pts)
 
 
 def test_nudges_part_the_marks_that_collide_and_leave_the_rest():
@@ -318,7 +310,7 @@ def test_the_committed_diagnostic_tests_table_is_the_staged_one():
     tex = rf.tab_diagnostic_tests(rf.diagnostic_tests(INP))
     committed = (ROOT / "paper/generated/tab_diagnostic_tests.tex").read_text()
     assert committed == tex, "regenerate: figures --only tab_diagnostic_tests"
-    assert r"\label{tab:diagnostic-tests}" in tex and tex.count(r"\begin{table}") == 1
+    assert r"\label{tab:diagnostic-tests}" in tex and tex.count(r"\begin{table*}") == 1
     assert "Test & Systems or units & Estimate & Passes & Estimate & Passes" in tex
     assert r"\multicolumn{2}{c}{Main study} & \multicolumn{2}{c@{}}{Replication}" in tex
     for word in ("regist", "predict", "verdict", r"\bholds", "exploratory", "same in", "fresh"):
@@ -380,6 +372,20 @@ def test_the_diagnostic_tests_table_puts_the_replication_beside_the_main_study()
     assert "Thresholds: retention test x, leaving test y, utility floor z, cost ceiling w." in notes
     assert "Passing: W of the b." in notes
     assert "mtgroup" not in tex
+
+
+def test_the_passing_parts_are_kept_apart_by_semicolons():
+    """A part may itself contain "and" (its units "the native systems and the two baselines"),
+    so a comma between parts would read as one more passing unit."""
+    t = rf.DiagnosticTest
+    tex = rf.tab_diagnostic_tests([
+        t("Retention test, five other writers", "x", "1", "2/5", passing=("A", "B")),
+        t("Utility floor, native systems and the two baselines", "z", "2", "1/8", passing=("C",)),
+    ])  # fmt: skip
+    assert (
+        "Passing: A and B of the five other writers; C of the native systems and the two "
+        "baselines." in tex
+    )
 
 
 # --------------------------------------------------------------------------------- drawing

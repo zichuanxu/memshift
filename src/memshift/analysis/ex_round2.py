@@ -32,7 +32,8 @@ item as a dash):
 The D_m class split and the Eq. (1) levels already have macros (ExClsDm..., ExDecMain...,
 ExIntMain...MOneCited, ExClsMain...BxD, ExMixMain...Share; `analysis.ex_e1_paper`).
 
-tab_perdef         appendix: B x D per definition, with the leave-one-definition-out range
+tab_perdef         appendix: B x D per definition, with the leave-one-definition-out range;
+                   panel (a) of the per-definition table (no float)
 The counts by cause are in the notes of the inline table `tab:cause` (its macros: ExAttr...), and
 the class split with D_m is part of `ex_e1_paper.tab_classsplit`.
 """
@@ -454,23 +455,21 @@ def _mt(cells: str) -> str:
 
 
 def tab_perdef(inp: Mapping[str, Any]) -> str:
-    """Appendix: B x D on Update per definition (source-epoch key, main study), the definition class
-    as a whole, and the range of the class value with one definition left out."""
+    """Appendix: B x D on Update per definition (source-epoch key, main study) and the range of
+    the class value with one definition left out (the class value itself is the class split's,
+    tab:classsplit), as panel (a) of the per-definition table: the tabular and its notes, without
+    a float (the float, its caption and the labels tab:perdef and tab:heldout are in the appendix
+    source)."""
     main = inp.get("main")
     res = _get(main, "explore_per_definition", "D1") or {}
     lines = [
-        r"\begin{table}[t]",
-        r"\caption{$B{\times}D$ on Update per definition.}",
-        r"\label{tab:perdef}",
-        r"\centering\mtsetup",
-        r"\setlength{\tabcolsep}{4pt}",
         r"\begin{mttabular}{@{}l r@{\,}l N{000} @{\hspace{14pt}} r@{\,}l N{000} @{\hspace{14pt}} "
         r"r@{\,}l N{000}@{}}",
         r"\toprule",
         r"& \multicolumn{3}{c}{$\Ssrc$} & \multicolumn{3}{c}{$\Sdef$} "
         r"& \multicolumn{3}{c@{}}{$\Sdel$} \\",
         r"\cmidrule(r){2-4}\cmidrule(r){5-7}\cmidrule{8-10}",
-        r"Definition & \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{1}{c}{$n$} "
+        r"(a) Definition & \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{1}{c}{$n$} "
         r"& \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{1}{c}{$n$} "
         r"& \multicolumn{2}{c}{$B{\times}D$} & \multicolumn{1}{c@{}}{$n$} \\",
         r"\midrule",
@@ -482,13 +481,6 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
             cells += [_mt(est_ci_cells(e, sign=True)), _count(e.get("n_items")) if e else MISSING]
         lines.append(_row(*cells))
     lines.append(r"\midrule")
-    cells = ["all six"]
-    for b, _ in BRANCH_TAGS:
-        e = _get(
-            main, "explore_class_split", "D1", b, "source", "definition", "BxD_interaction_update"
-        )
-        cells += [_mt(est_ci_cells(e, sign=True)), _count(e.get("n_items")) if e else MISSING]
-    lines.append(_row(*cells))
     cells = ["leave one out"]
     for i, (b, _) in enumerate(BRANCH_TAGS):
         loo = _loo_range(main, b)
@@ -500,9 +492,8 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
         r"\bottomrule",
         r"\end{mttabular}",
         r"\mtnotes{$n$: the definition's changed item-times. Leave one out: the smallest and the "
-        r"largest $B{\times}D$ of the definition class with one definition removed. The intervals "
-        r"resample worlds, not definitions.}",
-        r"\end{table}",
+        r"largest $B{\times}D$ of the definition class (\cref{tab:classsplit}) with one definition "
+        r"removed. The intervals resample worlds, not definitions.}",
     ]
     return "\n".join(lines) + "\n"
 

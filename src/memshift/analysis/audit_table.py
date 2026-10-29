@@ -232,7 +232,7 @@ def table(audit: list[dict[str, Any]]) -> str:
         r" of its code that sets $B$."
     )
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table*}[t]",
         r"\caption{Memory systems on the $(D,B)$ grid: the audited systems, the further systems"
         r" that we run natively, and our cells.}",
         r"\label{tab:audit}\label{tab:native-labels}",
@@ -256,7 +256,7 @@ def table(audit: list[dict[str, Any]]) -> str:
         r"\bottomrule",
         r"\end{mttabular}",
         r"\mtnotes{" + " ".join([key, *notes]) + "}",
-        r"\end{table}",
+        r"\end{table*}",
     ]
     return "\n".join(lines) + "\n"
 

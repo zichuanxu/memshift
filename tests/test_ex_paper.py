@@ -333,74 +333,48 @@ def test_native_table_lists_every_system_and_the_references_that_hold_the_value(
     check_tex(tex)
 
 
-def test_native_table_defines_its_counts_and_gives_the_baselines_after_src_and_def(e5_res):
+def test_native_table_gives_each_systems_label_persistence_and_count(e5_res):
+    """One table for the native systems (it carries both labels): per system and comparison the
+    references that contain the native value and the paired differences, and in the system's
+    first column its inferred label, its deletion persistence P with the 95% interval and its
+    comparisons inside the interval of the label cell (k/n, or k, j/n where some inside are not
+    outside the cell with the other B)."""
     tex = ex_tables.tab_native_null(e5_res)
-    notes = " ".join(re.findall(r"\\mtnotes\{(.*)\}\n", tex))  # both tables
+    assert tex.count(r"\begin{table*}") == 1
+    assert r"\label{tab:native-diff}\label{tab:native-null}" in tex
+    notes = " ".join(re.findall(r"\\mtnotes\{(.*)\}\n", tex))
     for term in (
-        r"$k$ comparisons inside the 95\% interval of the \holdmem{} cell with the inferred label",
+        r"Inside $k$/$n$: $k$ comparisons inside the 95\% interval of the cell",
         r"$(D,B)$: \holdmem{} cell, c: citation key",
-        "the share of deleted items still answered",
+        "the share of deleted items still answered, with its 95\\% interval",
         "no-store: no-store BM25, RAG: plain RAG, oracle: oracle context",
-        r"$\Sdel$: the comparisons from which $B$ is inferred",
-        "Total: sums over the systems, each baseline counted once per system it is compared with",
         r"$^\circ$: after $\Sdel$, from which $B$ is inferred",
         "Difference: native minus the",
     ):
         assert term in notes, term
     for word in ("circular", "out-of-sample", "discriminating", "inflated", "exploratory"):
         assert word not in tex, word
-    assert "white-box" not in tex and "(d,b)" not in tex
-    head = next(ln for ln in tex.splitlines() if ln.startswith("System & Label"))
-    assert r"\multicolumn{2}{c}{$\Ssrc$, $\Sdef$}" in head and "Observed" not in tex
+    assert "white-box" not in tex and "(d,b)" not in tex and "Chance" not in tex
     assert "zero" not in tex.split(r"\label{tab:native-null}")[1]  # named as in the paper
-    # with all six systems: per system the native counts k/n (S_src and S_def, S_del, all six),
-    # the two baselines once under each label group (the clones share one label) and the sums
     six = _six(e5_res)
     ex = six["explore_native_null"]
-    j = not ex_tables._all_discriminating(ex)
-    body = ex_tables.tab_native_null(six).split(r"\label{tab:native-diff}")[0]
-    mem = next(ln for ln in body.splitlines() if ln.startswith("Mem0 &"))
-    total = next(ln for ln in body.splitlines() if ln.startswith("total &"))
-    # P: estimate and interval; each count in the two cells of a column pair (k | /n)
-    assert mem.count("&") == total.count("&") == 11
-
-    def counts(e: dict[str, Any], name: str | None = None) -> str:
-        """The three counts of one row: a system's (or the sums'), or a baseline's, muted."""
-        path = ("counts",) if name is None else ("baseline_counts", name, "baseline")
-        return " & ".join(
-            ex_tables._pair(pd.get(e, *path, part), j, muted=name is not None)
-            for part in ex_tables.PARTS
-        )
-
-    assert f" & {counts(ex['systems']['mem0'])} & " in mem
-    assert total.startswith(
-        rf"total &  & & & {ex['total']['b_identified']}/6 & " + counts(ex["total"]) + " & "
-    )
-    refs = [ln for ln in body.splitlines() if ln.startswith(r"\mtin\mtmuted{")]
-    assert [r.split(" & ")[0] for r in refs] == [
-        r"\mtin\mtmuted{no-store BM25}", r"\mtin\mtmuted{plain RAG}"
-    ] * 2  # fmt: skip
-    assert counts(ex["systems"]["mem0"], "rag") in refs[1]
-    assert counts(ex["total"], "zero") in refs[2]
-    # k/n where every comparison inside is also outside the other cell; k, j/n where one is not
-    assert ex_tables._pair(
-        {"inside_predicted": 5, "discriminating": 4, "comparisons": 6}, j=True
-    ) == ("5, 4 & /6")
-    assert (
-        ex_tables._pair({"inside_predicted": 2, "discriminating": 2, "comparisons": 4}) == "2 & /4"
-    )
-    assert ex_tables._pair({"comparisons": 4, "inside_predicted": 1}, muted=True) == (
-        r"\mtmuted{1} & \mtmuted{/4}"
-    )
+    lines = ex_tables.tab_native_null(six).splitlines()
+    first = next(i for i, ln in enumerate(lines) if ln.startswith("Mem0 & "))
+    stub = [ln.split(" & ")[0] for ln in lines[first : first + 6]]
+    mem = ex["systems"]["mem0"]
+    b, k = mem["b_identified"], mem["counts"]["all"]
+    assert stub[:2] == ["Mem0", "cell (0,0)"]
+    assert stub[2] == rf"$P$ {ex_tables._num(b['rate'])}\%"
+    assert stub[3] == rf"\mtint{{[{ex_tables._num(b['lo'])},\,{ex_tables._num(b['hi'])}]}}"
+    assert stub[4] == f"inside {k['inside_predicted']}/{k['comparisons']}" and stub[5] == ""
+    # k, j/n where one comparison inside is not outside the other cell
     some = next(
-        c
-        for c in (*ex["total"]["counts"].values(), *ex["systems"]["mem0"]["counts"].values())
-        if c["inside_predicted"]
+        c["counts"]["all"] for c in ex["systems"].values() if c["counts"]["all"]["inside_predicted"]
     )
     some["discriminating"] = some["inside_predicted"] - 1
-    assert r"$j$ of them also outside that of the cell with the other $B$" in (
-        ex_tables.tab_native_null(six)
-    )
+    tex = ex_tables.tab_native_null(six)
+    assert r"$j$ of them also outside that of the cell with the other $B$" in tex
+    assert f"inside {some['inside_predicted']}, {some['discriminating']}/" in tex
 
 
 @pytest.mark.paper  # the table style, paper/memtab-style.tex

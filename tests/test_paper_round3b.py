@@ -2,7 +2,7 @@
 (`analysis.paper_round3b`): every macro prints the analysis value it names (synthetic analyses with
 the structure of round3b_typed, round3b_feedback and round3b_extract, and the committed typed-input
 analysis when it is there), a block left out keeps the same macro names as placeholders and a
-table with the same label, and no output carries a verdict word."""
+table of the same layout, and no output carries a verdict word."""
 
 import json
 import re
@@ -22,9 +22,10 @@ ROOT = Path(__file__).resolve().parents[1]
 ANALYSIS = ROOT / "runs" / "stage9_round3b" / "analysis"
 LABELS = {
     "tab_typed.tex": r"\label{tab:typed}",
-    "tab_feedback.tex": r"\label{tab:feedback}",
-    "tab_extract.tex": r"\label{tab:extract}",
 }
+# panels (a) and (b) of the programs table, whose float, caption, panel (c) and labels are in the
+# appendix source
+PANELS = ("tab_programs.tex",)
 VERDICT = re.compile(
     r"regist|verdict|predict|threshold|\bholds?\b|\bfails?\b|exploratory|post hoc|not judged"
     r"|\b[TFW][1-3]\b",
@@ -328,22 +329,25 @@ def test_extract_macros_equal_the_analysis(full: dict[str, str]) -> None:
     assert m["FieldExWorlds"] == "10"
 
 
-def test_extract_table_names_the_fields_in_words_and_the_rewrite_as_asked(
-    full: dict[str, str],
-) -> None:
-    node = {"fields": {"appt_type": {"correct": 1.0}, "from_addr": {"correct": 0.661}}}
-    assert pr._weakest(node) == "sender address 66.1"  # the field with the fewest right values
-    assert pr._weakest({"fields": {"city": {"correct": 1.0}, "name": {"correct": 1.0}}}) == (
-        "all 100.0"
-    )
-    pooled = {"fields": {"tasks.title": {"correct": 0.4}, "calendar.title": {"correct": 0.9}}}
-    assert pr._weakest(pooled) == "tasks title 40.0"  # over all sources, with its source
-    assert pr._weakest({}) == MISSING
-    for code in ("appt_type", "duration_min", "from_addr", "from_name", "conversation_with"):
-        assert pr.FIELD_LABELS[code] and "_" not in pr.FIELD_LABELS[code], code
-    notes = full["tab_extract.tex"].split(r"\mtnotes{", 1)[1]  # the panels' descriptions
-    assert "the share of rewrites that miss a value" in notes  # the rewrite as asked, see text
-    assert "prose that keeps every value" not in full["tab_extract.tex"]
+def test_programs_panels_pair_the_same_programs(full: dict[str, str]) -> None:
+    """(a) without and with feedback, (b) on typed and on extracted fields: B x D and r on the
+    definition items, the valid runs of (a), and in the notes where the two inputs differed."""
+    text = full["tab_programs.tex"]
+    f, q = f_fixture(), w_fixture()["quantities"]
+    n, last = r"\multicolumn{1}{c}{$n$}", r"& \multicolumn{1}{c@{}}{Difference} \\"
+    assert f"(a) & & {n} & Without feedback & With feedback {last}" in text
+    assert f"(b) & & {n} & Typed fields & Extracted fields {last}" in text
+    panel_a, panel_b = text.split("(b) & &")
+    assert panel_a.count(r"$B{\times}D$ on Update (pp), definition items & ") == 1
+    assert panel_a.count(r" & $\S") == 5 and panel_b.count(r" & $\S") == 4  # shifts per row
+    runs = f["executability"]["definition"]["post"]["both"]
+    assert rf"valid runs (\%), definition items &  & {runs['n_runs']:,} & " in panel_a
+    assert "other items" not in text  # the other items' differences are in the text
+    node = q["bxd"]["src"]["definition"]
+    assert pr._pair(node["extracted"], sign=True) in panel_b
+    notes = text.split(r"\mtnotes{", 1)[1]
+    assert "(a) $B{\\times}D$ and $r$" in notes
+    assert "Values differed between the two inputs" in notes
 
 
 def test_a_block_left_out_keeps_the_names(
@@ -356,18 +360,12 @@ def test_a_block_left_out_keeps_the_names(
     for name, label in LABELS.items():
         assert placeholders[name].count(label) == 1
         assert MISSING in placeholders[name]
-    # the takeaway sentences need the analysis
-    for name, phrase in (
-        ("tab_typed.tex", "Claude Sonnet 5.5 raises"),
-        ("tab_feedback.tex", "Execution feedback lets more"),
-        ("tab_extract.tex", "On fields that the writer extracted from prose"),
-    ):
-        assert phrase in full[name]
-        assert phrase not in placeholders[name]
-    assert (
-        r"\caption{The writer's programs ($D_{\mathrm{m}}$) without"
-        in placeholders["tab_feedback.tex"]
-    )
+    for name in PANELS:
+        assert MISSING in placeholders[name] and MISSING not in full[name]
+        assert full[name].count(r"\\") == placeholders[name].count(r"\\")  # the same rows
+    # the takeaway sentence needs the analysis
+    assert "Claude Sonnet 5.5 raises" in full["tab_typed.tex"]
+    assert "Claude Sonnet 5.5 raises" not in placeholders["tab_typed.tex"]
 
 
 def test_takeaways_state_the_pattern_and_leave_the_numbers_to_the_table(
@@ -381,21 +379,9 @@ def test_takeaways_state_the_pattern_and_leave_the_numbers_to_the_table(
         "close to that of exact recomputation, while Qwen3.5-9B stays far below"
         in (full["tab_typed.tex"])
     )
-    assert (
-        "end with a valid typed value but repairs no more definition items"
-        in (full["tab_feedback.tex"])
-    )
-    assert (
-        r"keep $B{\times}D$ on Update positive on the definition items" in (full["tab_extract.tex"])
-    )
-    # panel (c) counts every failed attempt with feedback, the rewrites included
-    feedback = full["tab_feedback.tex"]
-    assert r"\multicolumn{1}{c}{Failed attempts} &" in feedback and "failed runs" not in feedback
-    # panels follow one another under a single rule, the descriptions in the notes below them
-    # (the typed-input table has its two panels as row groups of one tabular)
-    for name in LABELS:
-        if name != "tab_typed.tex":
-            assert r"\end{mttabular*}\nointerlineskip" in full[name], name
+    # one tabular each, the descriptions in the notes below it (the typed-input table has its two
+    # panels as row groups of one tabular, the programs panels (a) and (b) likewise)
+    for name in (*LABELS, *PANELS):
         assert full[name].count(r"\toprule") == 1, name
         assert full[name].count(r"\mtnotes{") == 1, name
 
@@ -408,17 +394,17 @@ def test_files_start_with_the_command_and_carry_their_labels(
         assert text.startswith("% generated by memshift.analysis.paper_round3b --blocks t,f,w;")
     for name, label in LABELS.items():
         assert full[name].count(label) == 1
-        assert r"\begin{table}[t]" in full[name] and r"\centering\mtsetup" in full[name]
+        assert r"\begin{table*}[t]" in full[name] and r"\centering\mtsetup" in full[name]
         assert MISSING not in full[name]
-        # panels of one width (the paper's table style), each estimate and its interval in one
-        # centred cell
-        assert full[name].count(r"\begin{mttabular*}{\linewidth}") == (
-            1 if name == "tab_typed.tex" else 2
-        )
+        # one width (the paper's table style), each estimate and its interval in one centred cell
+        assert full[name].count(r"\begin{mttabular*}{\linewidth}") == 1
         assert r"\mtpair{" in full[name] and "\\scriptsize" not in full[name]
-    for text in (*full.values(), *placeholders.values()):
-        if r"\begin{table}" in text:
-            check_memtab(text)
+    for name in PANELS:  # without a float, caption or label of its own
+        assert r"\begin{mttabular}" in full[name] and r"\mtpair{" in full[name]
+        assert "table*" not in full[name] and r"\label" not in full[name]
+    for name, text in (*full.items(), *placeholders.items()):
+        if r"\begin{table*}" in text or name in PANELS:
+            check_memtab(text, panel=name in PANELS)
 
 
 def test_no_verdict_words(full: dict[str, str], placeholders: dict[str, str]) -> None:
@@ -467,30 +453,25 @@ def test_committed_typed_analysis() -> None:
         assert m["TypedInTokensMaxAll"] == f"{tok['max']:,}"
 
 
-@pytest.mark.skipif(not (ANALYSIS / "f.json").exists(), reason="the execution-feedback analysis")
-def test_committed_feedback_failure_kinds() -> None:
-    """Panel (c) prints, per failure kind that occurred, the analysis's counts of the first
-    attempts and of every failed attempt with feedback (several kinds can share a count: one shared
-    program that fails the same way at every write); the kinds without a failed attempt are named
-    in the notes, and the runs with one and with two feedback rounds share a row."""
+@pytest.mark.skipif(
+    not (ANALYSIS / "f.json").exists() or not (ANALYSIS / "w.json").exists(),
+    reason="the execution-feedback and extracted-fields analyses",
+)
+def test_committed_programs_panels() -> None:
+    """The programs panels print the committed analyses: the valid runs of the definition items
+    after the fork and B x D on the definition items, without and with feedback and on typed and
+    extracted fields, each with its paired difference."""
     f = json.loads((ANALYSIS / "f.json").read_text())
-    table = pr.tab_feedback(f)
-    post = [f["executability"][c]["post"]["both"] for c in ("definition", "other")]
-    notes = table.split(r"\mtnotes{", 1)[1]
-    for kind in pr.FAILURE_KINDS:
-        counts = [
-            f"{node[k].get(kind, 0):,}"
-            for node in post
-            for k in ("first_attempt_kinds", "failed_run_kinds")
-        ]
-        row = f"{pr.KIND_LABELS[kind]} & {' & '.join(counts)} \\\\"
-        if set(counts) == {"0"}:
-            assert row not in table and pr.KIND_LABELS[kind] in notes, kind
-        else:
-            assert row in table, kind
-    rounds = [f"{n['rounds'].get('1', 0):,} / {n['rounds'].get('2', 0):,}" for n in post]
-    assert all(r in table for r in rounds) and "no feedback round &" not in table
-    # the definitions whose every run was valid share one row; the others keep their own
-    assert "\nworking hours & & " in table and "\nother five definitions & & 1,789 & " in table
-    m = macros(pr.numbers({"f": f}))
-    assert "?" not in "".join(v for k, v in m.items() if k.startswith("ExecFb"))
+    w = json.loads((ANALYSIS / "w.json").read_text())
+    table = pr.tab_programs(f, w)
+    runs = f["executability"]["definition"]["post"]["both"]
+    assert f"& {runs['n_runs']:,} & {pr._pair(runs['first_attempt'])} & " in table
+    for b in ("src", "def", "orphan"):
+        node = f["bxd"][b]["definition"]
+        cells = (node["Dm"], node["Dm_feedback"], node["paired"]["difference"])
+        assert " & ".join(pr._pair(e, sign=True) for e in cells) in table, b
+    for b in ("src", "def"):
+        node = w["quantities"]["bxd"][b]["definition"]
+        cells = (node["typed"], node["extracted"], node["difference"])
+        assert " & ".join(pr._pair(e, sign=True) for e in cells) in table, b
+    assert MISSING not in table and not VERDICT.findall(table)

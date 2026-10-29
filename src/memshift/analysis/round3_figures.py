@@ -1,7 +1,7 @@
 """Figures of the round-3 results and the diagnostic-tests table (regenerated from the staged
 analyses named in results/sources.json; nothing here calls a model or reads a raw run).
 
-fig_writers     Section 4.2: (a) per program set (round3 g_b.json), B x D at D_m on definition
+fig_writers     Section 5.2: (a) per program set (round3 g_b.json), B x D at D_m on definition
                 items after S_def against how often the set's programs computed the right value at
                 the fork, before any shift (ex_round3 writers.json), with the authored
                 derivation's B x D on the same items as reference (main study); (b) per
@@ -149,10 +149,11 @@ WRITERS_LEFT, WRITERS_RIGHT, WRITERS_TOP, WRITERS_BOTTOM, WRITERS_GAP = 11.6, 0.
 WRITERS_WA = 99.6
 WRITERS_YLIM, WRITERS_YTICKS = (-4.5, 56.5), (0, 10, 20, 30, 40)
 WRITERS_XA, WRITERS_XA_END, WRITERS_XB = (-4.5, 107.0), 104.4, (-2.0, 61.5)
-# marks (mm): squares and open circles of (a), smaller ones in (b), the pitch of sets side by
-# side (a hairline white gap) and the white edge of a mark (pt)
-WRITERS_SQ, WRITERS_CIRC, WRITERS_SQ_B, WRITERS_CIRC_B = 2.05, 2.25, 1.75, 1.95
-WRITERS_SLOT, WRITERS_HALO = 2.05 + 0.32, 0.55
+# marks (mm): squares and open circles of (a), smaller ones in (b), and the white edge of a
+# mark (pt)
+WRITERS_SQ, WRITERS_CIRC, WRITERS_SQ_B, WRITERS_CIRC_B = 1.75, 2.25, 1.75, 1.95
+WRITERS_HALO = 0.55
+WRITERS_SPLIT_GAP = 0.28  # (a): the white gap between the sets of one square (mm)
 WRITERS_ORDER = (OPUS, SONNET, GEMMA, QWEN, LLAMA, GPT)  # left to right among sets on one spot
 WRITERS_HULLS = ((LLAMA, GPT), (QWEN,), (GEMMA,))  # (a): one grey hull per group of writers
 WRITERS_HULL, WRITERS_BAND = "#EDEFF2", "#E3ECF8"  # hull fill; exact recomputation's band
@@ -257,43 +258,33 @@ def _w_ring(p: _Plot, x: float, y: float, c: str, z: float = 5.0,
                            zorder=z + 0.1))  # fmt: skip
 
 
-def _side_by_side(p: _Plot, pts: Sequence[Mapping[str, Any]]) -> list[float]:
-    """Drawn x (data units) of each program set in (a): sets whose squares would touch, or whose
-    interval would run behind another set's square, sit side by side as one compound mark
-    centred on their mean x, ordered by share and then by `WRITERS_ORDER`; each keeps its y."""
-    n, sq = len(pts), WRITERS_SQ
-    xs = [p.mm(q["x"]["est"] * 100, q["y"]["est"] * 100) for q in pts]
-    ends = [tuple(p.mm(0, 100 * q["y"][k])[1] for k in ("lo", "hi")) for q in pts]
-    parent = list(range(n))
+def _spots(pts: Sequence[Mapping[str, Any]]) -> list[tuple[float, float, list[int]]]:
+    """The spots of (a): (x, y, sets) per distinct share and B x D (data units), the sets of a spot
+    in the order of `WRITERS_ORDER`; sets that share both values share one square."""
+    by: dict[tuple[float, float], list[int]] = {}
+    for i, q in enumerate(pts):
+        by.setdefault((round(100 * q["x"]["est"], 9), round(100 * q["y"]["est"], 9)), []).append(i)
 
-    def root(i: int) -> int:
-        while parent[i] != i:
-            i = parent[i]
-        return i
-
-    for i in range(n):
-        for j in range(i):
-            (xi, yi), (xj, yj) = xs[i], xs[j]
-            close = abs(xi - xj) < sq and abs(yi - yj) < sq
-            behind = abs(xi - xj) < sq and (
-                ends[i][0] - sq / 2 < yj < ends[i][1] + sq / 2
-                or ends[j][0] - sq / 2 < yi < ends[j][1] + sq / 2
-            )
-            if close or behind:
-                parent[root(i)] = root(j)
-
-    def order(w: str) -> int:
+    def order(i: int) -> int:
+        w = pts[i]["writer"]
         return WRITERS_ORDER.index(w) if w in WRITERS_ORDER else len(WRITERS_ORDER)
 
-    out = [0.0] * n
-    for r in {root(i) for i in range(n)}:
-        mem = sorted((i for i in range(n) if root(i) == r),
-                     key=lambda i: (round(pts[i]["x"]["est"], 4),
-                                    order(pts[i]["writer"])))  # fmt: skip
-        cx = sum(xs[i][0] for i in mem) / len(mem)
-        for k, i in enumerate(mem):
-            out[i] = p.data(cx + (k - (len(mem) - 1) / 2) * WRITERS_SLOT, 0.0)[0]
-    return out
+    return [(x, y, sorted(mem, key=order)) for (x, y), mem in sorted(by.items())]
+
+
+def _w_split(p: _Plot, x: float, y: float, colours: Sequence[str], z: float = 5.0) -> None:
+    """The square of a spot in (a), centred on (x, y) with a white edge; with more than one set on
+    the spot it is split into equal vertical stripes with white gaps, one per colour (set)."""
+    from matplotlib.patches import Rectangle
+
+    n, gap, sq = len(colours), WRITERS_SPLIT_GAP, WRITERS_SQ
+    w = (sq - (n - 1) * gap) / n
+    x0, y0 = p.mm(x, y)
+    p.ax.add_patch(Rectangle(p.data(x0 - sq / 2, y0 - sq / 2), p.dx(sq), p.dy(sq), fc="white",
+                             ec="white", lw=WRITERS_HALO, zorder=z, joinstyle="miter"))  # fmt: skip
+    for k, c in enumerate(colours):
+        p.ax.add_patch(Rectangle(p.data(x0 - sq / 2 + k * (w + gap), y0 - sq / 2), p.dx(w),
+                                 p.dy(sq), fc=c, ec="none", zorder=z + 0.01))  # fmt: skip
 
 
 def _cross(o: Any, a: Any, b: Any) -> float:
@@ -336,7 +327,8 @@ def _hull(p: _Plot, centres: list[tuple[float, float]], pad: float) -> None:
 
 def _program_sets(p: _Plot, data: Mapping[str, Any]) -> None:
     """Panel (a): one square per program set after a redefinition, with its interval, at the
-    share of its programs right before the shift; a grey hull per group of `WRITERS_HULLS` (the
+    share of its programs right before the shift, sets with the same share and B x D splitting
+    one square (`_spots`); a grey hull per group of `WRITERS_HULLS` (the
     Claude writers' sets lie in exact recomputation's band, without a hull), each writer named
     beside its sets; exact recomputation as a line over its band, its value at the right end."""
     from matplotlib.patches import Rectangle
@@ -368,17 +360,19 @@ def _program_sets(p: _Plot, data: Mapping[str, Any]) -> None:
         ax.text(0.5, 0.5, "no program set staged", transform=ax.transAxes, ha="center",
                 fontsize=WRITERS_NAME_PT, color=WRITERS_MUTED)  # fmt: skip
         return
-    xd = _side_by_side(p, pts)
+    spots = _spots(pts)
     for group in WRITERS_HULLS:
-        cs = [(xd[i], 100 * q["y"]["est"]) for i, q in enumerate(pts) if q["writer"] in group]
+        cs = [(100 * q["x"]["est"], 100 * q["y"]["est"]) for q in pts if q["writer"] in group]
         if cs:
             _hull(p, cs, 1.0)
-    for i, q in enumerate(pts):
-        _w_interval(p, xd[i], 100 * q["y"]["lo"], 100 * q["y"]["hi"], _name_ink(q["writer"]))
-        _w_square(p, xd[i], 100 * q["y"]["est"], fs.model_style(q["writer"])[1])
+    for k, (x, y, mem) in enumerate(spots):  # every set at its own values; higher spots on top
+        for i in mem:
+            q = pts[i]
+            _w_interval(p, x, 100 * q["y"]["lo"], 100 * q["y"]["hi"], _name_ink(q["writer"]))
+        _w_split(p, x, y, [fs.model_style(pts[i]["writer"])[1] for i in mem], z=5.0 + 0.02 * k)
 
     def at(w: str) -> list[tuple[float, float]]:
-        return [(xd[i], 100 * q["y"]["est"]) for i, q in enumerate(pts) if q["writer"] == w]
+        return [(100 * q["x"]["est"], 100 * q["y"]["est"]) for q in pts if q["writer"] == w]
 
     def name(x: float, y: float, w: str, ha: str = "left", va: str = "center_baseline") -> None:
         ax.text(x, y, fs.model_style(w)[0], ha=ha, va=va, fontsize=WRITERS_NAME_PT,
@@ -732,11 +726,11 @@ def fig_writers(inp: Mapping[str, Any], out: Path) -> Path:
     """(a) G-b program sets after S_def; (b) the definition-item writers after both shifts, each
     writer's redefinition mark (square) joined to its source-revision mark (open circle): see the
     module docstring. One value axis (B x D on definition items) for both panels; colour is the
-    writer, intervals thin capped lines in the writer's ink. In (a) each set is one square, sets
-    on one spot side by side, a grey hull per group of writers and exact recomputation's line
-    over its band; in (b) marks whose crosshairs would collide are nudged apart by the least that
-    clears them, the interval ends exact (the caption says both). Each writer is named once per
-    panel, in its own colour."""
+    writer, intervals thin capped lines in the writer's ink. In (a) each set is one square at its
+    own values, sets on one spot one square split per set, a grey hull per group of writers and
+    exact recomputation's line over its band; in (b) marks whose crosshairs would collide are
+    nudged apart by the least that clears them, the interval ends exact. Each writer is named once
+    per panel, in its own colour."""
     data = writer_points(inp)
     w_mm, h_mm = WRITERS_PT[0] * fs.PT, WRITERS_PT[1] * fs.PT
     with fs.printed(WRITERS_RC) as plt:
@@ -760,7 +754,8 @@ def fig_writers(inp: Mapping[str, Any], out: Path) -> Path:
             ov.text(x, h_mm - 0.8, title, ha="left", va="top", fontsize=fs.T_TITLE, color=fs.INK,
                     weight="bold")  # fmt: skip
         fig.canvas.draw()
-        _subtitle(fig, ov, 0.9, h_mm - 6.9, [(None, "one square per program set")])
+        sub = "one square per program set, split where sets coincide"
+        _subtitle(fig, ov, 0.9, h_mm - 6.9, [(None, sub)])
         _subtitle(fig, ov, pb.x0, h_mm - 6.9, [(_key_glyph(s), lab) for s, lab in WRITERS_KEY])
         return fs.save_pdf(fig, out / "fig_writers.pdf")
 
@@ -1252,8 +1247,8 @@ def tab_diagnostic_tests(tests: Sequence[DiagnosticTest]) -> str:
     rows += [(None, t) for t in fresh.values()]  # a test of the replication only
     lines = [
         "% generated by memshift.analysis.figures --only tab_diagnostic_tests; do not edit",
-        r"\begin{table}[t]",
-        r"\caption{The four diagnostic tests (\cref{app:experiments}) per tier, switch, horizon "
+        r"\begin{table*}[t]",
+        r"\caption{The four diagnostic tests (\cref{app:experiments}) per tier, switch, horizon, "
         r"and system, in the main study and the replication.}",
         r"\label{tab:diagnostic-tests}",
         r"\centering\mtsetup",
@@ -1282,7 +1277,9 @@ def tab_diagnostic_tests(tests: Sequence[DiagnosticTest]) -> str:
     for t in tests:
         test, units = t.label.split(", ", 1)
         thresholds.setdefault(test, t.threshold)
-        if t.passing:  # named by the last part of its units ("five other writers")
+        # named by the last part of its units ("five other writers"); a semicolon between parts,
+        # since a part may itself contain "and" ("the native systems and the two baselines")
+        if t.passing:
             study = " in the replication" if t.fresh else ""
             passing.append(f"{' and '.join(t.passing)} of the {units.split(', ')[-1]}{study}")
     notes = (
@@ -1291,10 +1288,10 @@ def tab_diagnostic_tests(tests: Sequence[DiagnosticTest]) -> str:
         r"share of a full re-read, a range over the units. Passes: passing units, per system where "
         r"a row names several. "
         "Thresholds: " + ", ".join(f"{k[0].lower()}{k[1:]} {v}" for k, v in thresholds.items())
-        + ". " + (f"Passing: {', '.join(passing)}. " if passing else "")
+        + ". " + (f"Passing: {'; '.join(passing)}. " if passing else "")
         + "---: not run in the replication."
     )  # fmt: skip
-    lines += [r"\bottomrule", r"\end{mttabular}", rf"\mtnotes{{{notes}}}", r"\end{table}"]
+    lines += [r"\bottomrule", r"\end{mttabular}", rf"\mtnotes{{{notes}}}", r"\end{table*}"]
     return "\n".join(lines) + "\n"
 
 
