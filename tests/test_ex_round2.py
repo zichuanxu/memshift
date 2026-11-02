@@ -177,7 +177,7 @@ def test_perdef_table_matches_the_per_definition_macros():
     assert "$+$16.5 to $+$33.8" in tex
     assert "0.0 & \\mtint{[0.0,\\,0.0]}" not in tex  # every world the same: no interval
     # the class value of all six definitions is the class split's, not repeated here
-    assert "all six" not in tex and "\\cref{tab:classsplit}" in tex
+    assert "all six" not in tex and "\\cref{tab:classsplit}" not in tex
 
 
 @pytest.mark.paper  # the table style, paper/memtab-style.tex

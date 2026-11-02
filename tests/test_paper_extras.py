@@ -134,9 +134,12 @@ def test_the_results_text_states_the_native_block_item_counts() -> None:
                 assert (refs[base]["n_items"] < cells) == comp.endswith(":Stability")
     text = " ".join((ROOT / "paper" / "sections" / "results.tex").read_text().split())
     assert "scored on the half of the items" not in text
-    banner = "scored on the half of the items not used to infer the labels"
+    banner = "scored on the half of the items not used to infer the settings"
     assert banner in pe.tab_overview(pe.load(ROOT, SOURCES)).split(r"\label{tab:overview}")[1]
-    assert "In its native block the rows share the worlds but not all scored items." in text
+    assert (
+        "In its block of native systems, all rows use the same worlds, but not all of them are"
+        " scored on the same items."
+    ) in text
     caption = pe.tab_overview(pe.load(ROOT, SOURCES)).split(r"\label{tab:overview}")[0]
     assert "share the worlds" not in caption
 
@@ -179,7 +182,7 @@ def test_overview_separates_cells_of_one_kind_and_the_baselines() -> None:
     assert banner.startswith(
         r"\mtgroup{7}{Native systems: 15 three-month worlds, scored on the half"
     )
-    assert banner.endswith("of the items not used to infer the labels}")
+    assert banner.endswith("of the items not used to infer the settings}")
 
 
 def test_overview_without_stages_prints_the_marker() -> None:

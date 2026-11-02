@@ -1053,7 +1053,7 @@ def tab_heldout(inp: Mapping[str, Any]) -> str:
             "(b) Draw",
             "Definition",
             "Source",
-            "Predicate",
+            "Condition",
             "Aggregate",
             r"\multicolumn{1}{r@{\;$\to$\;}}{v1}",
             "v2",
@@ -1088,11 +1088,11 @@ def tab_heldout(inp: Mapping[str, Any]) -> str:
     lines += [
         r"\bottomrule",
         r"\end{mttabular}",
-        r"\mtnotes{Records: the source and the predicate the records pass. Count: the people or "
+        r"\mtnotes{Records: the source and the condition the records meet. Count: the people or "
         r"projects with at least the threshold of these records within the window. Members: the "
         r"tasks. Span: the earliest start to the latest end of the meetings, in whole hours. v2 "
-        r"changes the window or the threshold. A per-item double difference lies between $-$200 "
-        r"and $+$200\,pp.}",
+        r"changes the window or the threshold. $B{\times}D$: point estimates. A per-item double "
+        r"difference lies between $-$200 and $+$200\,pp.}",
     ]
     return "\n".join(lines) + "\n"
 

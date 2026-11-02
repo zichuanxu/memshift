@@ -283,7 +283,7 @@ def tab_overview(inp: Mapping[str, Any]) -> str:
         *groups("main", ([(s, label) for _, s, label in g] for g in MAIN_GROUPS)),
         r"\midrule",
         rf"\mtgroup{{7}}{{Native systems: {native_worlds} three-month worlds, scored on the half "
-        "of the items not used to infer the labels}",
+        "of the items not used to infer the settings}",
         *groups("native", (NATIVE_CELLS, BASELINES, NATIVE_SYSTEMS)),
         r"\bottomrule",
         r"\end{mttabular}",

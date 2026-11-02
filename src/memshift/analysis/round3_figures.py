@@ -1,7 +1,7 @@
 """Figures of the round-3 results and the diagnostic-tests table (regenerated from the staged
 analyses named in results/sources.json; nothing here calls a model or reads a raw run).
 
-fig_writers     Section 5.2: (a) per program set (round3 g_b.json), B x D at D_m on definition
+fig_writers     Section 6.2: (a) per program set (round3 g_b.json), B x D at D_m on definition
                 items after S_def against how often the set's programs computed the right value at
                 the fork, before any shift (ex_round3 writers.json), with the authored
                 derivation's B x D on the same items as reference (main study); (b) per

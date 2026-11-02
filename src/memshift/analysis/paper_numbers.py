@@ -120,21 +120,31 @@ def with_estimates(macros: dict[str, str]) -> dict[str, str]:
     return out
 
 
-def world_stats(seeds: list[int]) -> dict[str, str]:
-    events, tokens, rates = [], [], []
+# The size of a world is reported over the 40 evaluation worlds (test 1000-1019, replication
+# 1020-1039); the fidelity check runs on the development worlds, as the appendix states.
+EVAL_SEEDS = list(range(1000, 1040))
+
+
+def world_size(seeds: list[int]) -> dict[str, str]:
+    events, tokens = [], []
     for s in seeds:
         w = generate_branch(s, "natural")
         events.append(len(w.events))
         tokens.append(sum(approx_tokens(e.payload["text"]) for e in w.events if e.op != "delete"))
-        rates.append(check_world(w).rate)
+    return {
+        "WorldEventsMin": f"{min(events):,}",
+        "WorldEventsMax": f"{max(events):,}",
+        "WorldTokensM": f"{sum(tokens) / len(tokens) / 1e6:.1f}",
+    }
+
+
+def world_stats(seeds: list[int]) -> dict[str, str]:
+    rates = [check_world(generate_branch(s, "natural")).rate for s in seeds]
     from memshift.experiments.e7 import implicit_ceiling
 
     ceiling = implicit_ceiling(seeds)
     return {
         "EImplicitCeiling": f"{pct(ceiling['ceiling'])} of {ceiling['items']} items",
-        "WorldEventsMin": f"{min(events):,}",
-        "WorldEventsMax": f"{max(events):,}",
-        "WorldTokensM": f"{sum(tokens) / len(tokens) / 1e6:.1f}",
         "WorldFidelity": pct(min(rates)),
     }
 
@@ -1199,7 +1209,7 @@ def stage4_numbers(inp: dict[str, Any]) -> dict[str, str]:
 def build_macros(root: Path) -> dict[str, str]:
     src_file = root / "results" / "sources.json"
     sources = json.loads(src_file.read_text()) if src_file.exists() else {}
-    macros: dict[str, str] = world_stats(list(range(10)))
+    macros: dict[str, str] = world_stats(list(range(10))) | world_size(EVAL_SEEDS)
     groups: list[tuple[str, Callable[[dict[str, Any]], dict[str, str]], str]] = [
         ("e1", e1_numbers, "e1_metrics.json"),
         ("e1nofb", nofb_numbers, "e1_metrics.json"),

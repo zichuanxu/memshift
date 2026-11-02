@@ -407,7 +407,7 @@ def test_replication_table_gives_both_estimates_with_their_intervals():
     shown_rows = 2 * (len(pt.REP_ROWS) - 2)
     assert len(rows) == 2 * shown_rows - 2 * len(pt.IN_CLASSSPLIT)
     assert "$D$'s effect on missed invalidation was 0.0 with both keys" in tab
-    assert r"$B{\times}D$: \cref{tab:classsplit}." in tab
+    assert r"\cref{tab:classsplit}" not in tab
     source = _first_body(tab).split(r"\mtgroup{8}{Citation key}")[0]
     assert r"$B{\times}D$ interaction" not in source and "Update ($D{=}1$)" not in source
     label = r"\mtin $B{\times}D$ interaction, Update"
@@ -431,7 +431,7 @@ def test_replication_table_without_marks_and_partial_stage():
     assert "path~" not in full and "block R" not in full and "App.~" not in full
     assert MISSING not in _first_body(full)  # the contrast rows need only E1
     empty = pt.tab_replication({})
-    rows = 2 * len(pt.REP_ROWS) - len(pt.IN_CLASSSPLIT)  # both keys; the source key's in Table 11
+    rows = 2 * len(pt.REP_ROWS) - len(pt.IN_CLASSSPLIT)  # both keys; the source key's in Table 20
     assert _first_body(empty).count(MISSING) == 2 * rows * 3
 
 

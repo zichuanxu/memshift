@@ -65,7 +65,7 @@ def tab_native_null(res: dict[str, Any] | None) -> str:
     lines = [
         r"\begin{table*}[t]",
         r"\caption{Native values against their references per system and comparison, with each "
-        r"system's inferred label (three-month worlds).}",
+        r"system's inferred setting (three-month worlds).}",
         r"\label{tab:native-diff}\label{tab:native-null}",
         r"\centering\mtsetup",
         r"\setlength{\tabcolsep}{4pt}",
@@ -126,13 +126,13 @@ def tab_native_null(res: dict[str, Any] | None) -> str:
         r"\bottomrule",
         r"\end{mttabular}",
         notes(
-            r"Cell: the \holdmem{} cell with the label inferred from behavior. $P$: deletion "
+            r"Cell: the \holdmem{} cell with the setting inferred from behavior. $P$: deletion "
             r"persistence, the share of deleted items still answered, with its 95\% interval. "
             + inside
             + r"Contained by: the references whose 95\% interval contains the native value "
             r"($(D,B)$: \holdmem{} cell, c: citation key, no-store: no-store BM25, RAG: plain "
             r"RAG, oracle: oracle context). Difference: native minus the \holdmem{} cell with the "
-            r"inferred label, paired by item, with its 95\% interval. Widened: that interval "
+            r"inferred setting, paired by item, with its 95\% interval. Widened: that interval "
             r"widened by the variance between repeated ingestions. Native $-$ no-store: paired by "
             r"item, with its 95\% interval. $^\circ$: after $\Sdel$, from which $B$ is inferred."
         ),

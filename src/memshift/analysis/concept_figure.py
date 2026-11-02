@@ -593,9 +593,9 @@ def _panel_cells(cv: fs.MmCanvas, ic: Mapping[str, Any], data: Mapping[str, Any]
         _rbox(cv, col_x[d], hy0, cw, hy1 - hy0, fc, ec, lw=0.6, r=1.0, z=3)
         label = "exact recomputation" if d else "writer re-derives"
         lw_ = cv.text_width(label, S_HEAD, "bold")
-        xs = col_x[d] + cw / 2 - (lw_ + 1.8 + cv.text_width(r"$D$ = 0", S_HEAD)) / 2
+        xs = col_x[d] + cw / 2 - (lw_ + 1.8 + cv.text_width(r"$D$=0", S_HEAD)) / 2
         cv.text(xs, (hy0 + hy1) / 2, label, size=S_HEAD, weight="bold", color=tc, ha="left", z=5)
-        cv.text(xs + lw_ + 1.8, (hy0 + hy1) / 2, rf"$D$ = {d}", size=S_HEAD, color=tc, ha="left",
+        cv.text(xs + lw_ + 1.8, (hy0 + hy1) / 2, rf"$D$={d}", size=S_HEAD, color=tc, ha="left",
                 z=5)  # fmt: skip
     sy = hy0 - 1.75
     ch_top = sy - 1.3
@@ -619,7 +619,7 @@ def _panel_cells(cv: fs.MmCanvas, ic: Mapping[str, Any], data: Mapping[str, Any]
         _rbox(cv, rx0, t - CELL_H, rh_w, CELL_H, rl["soft"], rl["stroke"], lw=0.6, r=1.4, z=3)
         cv.text(rx0 + rh_w / 2, t - CELL_H / 2 + 1.7, "key" if b else "no key", size=S_HEAD,
                 weight="bold", color=rl["ink"], z=5)  # fmt: skip
-        cv.text(rx0 + rh_w / 2, t - CELL_H / 2 - 1.7, rf"$B$ = {b}", size=S_HEAD, color=rl["ink"],
+        cv.text(rx0 + rh_w / 2, t - CELL_H / 2 - 1.7, rf"$B$={b}", size=S_HEAD, color=rl["ink"],
                 z=5)  # fmt: skip
     # the key, column by column: an arrow with its effect, and B x D between them
     g_top, g_bot = rows[0] - CELL_H, rows[1]

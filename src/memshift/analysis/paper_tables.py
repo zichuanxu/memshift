@@ -69,7 +69,7 @@ REP_ROWS = (  # E1 contrast (without the granularity suffix), row label
     ("B_effect_detected_D0", r"$B$ effect, detection ($D{=}0$)"),
     ("B_effect_detected_D1", r"$B$ effect, detection ($D{=}1$)"),
     ("B_effect_update_D1", r"$B$ effect, Update ($D{=}1$)"),
-    ("B_effect_update_pooled", r"$B$ effect, Update (pooled $D$)"),
+    ("B_effect_update_pooled", r"$B$ effect, Update (averaged over $D$)"),
     ("D_effect_missed", r"$D$ effect, missed invalidation"),
     ("D_effect_repair", r"$D$ effect, accuracy on re-derived items"),
     ("D_effect_repair_mech", r"$D$ effect, re-derived value equals gold"),
@@ -280,8 +280,6 @@ def tab_replication(view: dict[str, Any]) -> str:
             r"Detection: share of the changed item-times the cell invalidated since the fork. "
             r"Value equals gold: share of the re-derived item-times whose value equals gold."
             + missed
-            + r" Source key, $B$ effect on Update ($D{=}1$) and $B{\times}D$: "
-            r"\cref{tab:classsplit}."
         ),
         r"\end{table*}",
     ]

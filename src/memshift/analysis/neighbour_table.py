@@ -189,8 +189,8 @@ KEY = (
     r"LEGEND. \memshift{}: test worlds and graded probes over ITEMS knowledge items."
 )
 CAPTION = (
-    r"\memshift{} against its nearest neighbors on every property of the audit, each read from "
-    r"the neighbor's own paper."
+    r"\memshift{} against the closest benchmarks on every property of the audit, each read from "
+    r"the benchmark's own paper."
 )
 GAP_EVERY = 5  # neighbour rows between two small gaps
 

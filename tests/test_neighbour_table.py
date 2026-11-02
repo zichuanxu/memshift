@@ -293,13 +293,13 @@ def test_the_notes_key_every_mark_and_code() -> None:
 def test_the_appendix_text_defines_the_columns_the_key_leaves_out() -> None:
     text = " ".join((ROOT / "paper" / "appendix" / "app_related.tex").read_text().split())
     for term in (
-        "has derived items when its graded items aggregate several records",
-        "of a world's 48 items only the six definition items and the four recurring series",
-        "An implicit conflict is conflicting information without an explicit replacement",
-        "Consent is revoked when the user withdraws consent or asks to forget",
-        "counterfactual when it runs the same history with and without the change",
+        r"has \emph{derived items} when its graded items aggregate several records",
+        "of a world's 48 items only the six definition items aggregate records",
+        r"An \emph{implicit conflict} is conflicting information without an explicit replacement",
+        r"\emph{Consent} is revoked when the user withdraws consent or asks to forget",
+        r"\emph{counterfactual} when it runs the same history with and without the change",
         "without long-context and plain RAG baselines",
-        "Histories (worlds, users, or trajectories) and questions are counted as printed",
+        "Histories (worlds, users, or trajectories) and questions are counted as the paper reports",
     ):
         assert term in text, term
 

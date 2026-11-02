@@ -492,8 +492,8 @@ def tab_perdef(inp: Mapping[str, Any]) -> str:
         r"\bottomrule",
         r"\end{mttabular}",
         r"\mtnotes{$n$: the definition's changed item-times. Leave one out: the smallest and the "
-        r"largest $B{\times}D$ of the definition class (\cref{tab:classsplit}) with one definition "
-        r"removed. The intervals resample worlds, not definitions.}",
+        r"largest $B{\times}D$ of the definition class with one definition removed. The intervals "
+        r"resample worlds, not definitions.}",
     ]
     return "\n".join(lines) + "\n"
 
