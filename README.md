@@ -1,6 +1,6 @@
 # MemShift: Separating Detection from Repair in LLM-Derived Personal Memory
 
-<!-- Add the paper link (arXiv) to this row when the preprint is out. -->
+[![arXiv](https://img.shields.io/badge/arXiv-2611.02338-b31b1b.svg)](https://arxiv.org/abs/2611.02338)
 [![Raw outputs on Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20raw%20outputs-zichuanxu%2Fmemshift-yellow)](https://huggingface.co/datasets/zichuanxu/memshift)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-blue)](LICENSE)
 [![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey)](https://creativecommons.org/licenses/by/4.0/)
@@ -177,10 +177,13 @@ the models again.
 
 ```bibtex
 @misc{xu2026memshift,
-  title  = {{MemShift}: Separating Detection from Repair in {LLM}-Derived Personal Memory},
-  author = {Xu, Zichuan and Zhang, Haochen and Dong, Yuyang and Onizuka, Makoto and Xiao, Chuan},
-  year   = {2026},
-  note   = {Preprint}
+  title         = {{MemShift}: Separating Detection from Repair in {LLM}-Derived Personal Memory},
+  author        = {Xu, Zichuan and Zhang, Haochen and Dong, Yuyang and Onizuka, Makoto and Xiao, Chuan},
+  year          = {2026},
+  eprint        = {2611.02338},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2611.02338}
 }
 ```
 

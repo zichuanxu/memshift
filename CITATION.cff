@@ -33,6 +33,11 @@ authors:
 preferred-citation:
   type: generic
   status: preprint
+  url: "https://arxiv.org/abs/2611.02338"
+  identifiers:
+    - type: other
+      value: "arXiv:2611.02338"
+      description: arXiv identifier
   title: "MemShift: Separating Detection from Repair in LLM-Derived Personal Memory"
   year: 2026
   authors:
