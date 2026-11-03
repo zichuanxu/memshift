@@ -183,6 +183,7 @@ the models again.
   eprint        = {2611.02338},
   archivePrefix = {arXiv},
   primaryClass  = {cs.CL},
+  doi           = {10.48550/arXiv.2611.02338},
   url           = {https://arxiv.org/abs/2611.02338}
 }
 ```

@@ -34,6 +34,7 @@ preferred-citation:
   type: generic
   status: preprint
   url: "https://arxiv.org/abs/2611.02338"
+  doi: "10.48550/arXiv.2611.02338"
   identifiers:
     - type: other
       value: "arXiv:2611.02338"
